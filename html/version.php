@@ -1,1 +1,1 @@
-<?php define("_VERSION", "1.0-beta2"); ?>
+<?php define("_VERSION", "svn-trunk"); ?>
