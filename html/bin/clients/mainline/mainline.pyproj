@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{99cfe73d-e28a-4d82-a41b-4cd9df74b8fd}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>mainline</RootNamespace>
+    <AssemblyName>mainline</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{229B3E77-97E9-4f6d-9151-E6D103EA4D4A};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{57B76CF8-F148-40c5-BE9B-5C5EFB1ACA14}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <PublishUrl>Publish\</PublishUrl>
+    <Name>mainline</Name>
+    <MainFile>Program.py</MainFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="IronPython" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BitTorrent" />
+    <Folder Include="BTL" />
+    <Folder Include="khashmir" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BitTorrent\AutoUpdateButler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\BandwidthManager.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\BandwidthManager2.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\BeautifulSupe.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\bitfield.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\btformats.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Choker.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\ClientIdentifier.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\configfile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\ConnectionManager.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Connector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\CurrentRateMeasure.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\defaultargs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Download.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\DownloadRateLimiter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\FeedManager.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\GetTorrent.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\HTTPConnector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\HTTPDownloader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\HTTPHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\InternetWatcher.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\IPC.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\launchmanycore.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\LaunchPath.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\LocalDiscovery.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\makemetafile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\MultiDownload.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\MultiTorrent.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\NamedMutex.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\NatCheck.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\NatTraversal.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\NewRateLimiter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\NewVersion.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\parseargs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\PeerID.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\PiecePicker.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\PieceSetBuckets.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\platform.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\PluginSupport.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\prefs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\pykill.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\RateLimiter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\RateMeasure.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\RawServer_twisted.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\RequestManager.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Rerequester.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\RTTMonitor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\RTTMonitor2.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\shortargs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\sparse_set.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\StatusLight.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Storage.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\StorageWrapper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Storage_base.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Storage_IOCP.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Storage_threadpool.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Torrent.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\TorrentButler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\TorrentPolicy.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\TorrentStats.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\track.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\translation.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\UI.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\uplatform.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\Upload.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\zurllib.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTorrent\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\asyncexecutor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\atexit_threads.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\auth_xmlrpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\bdistutils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\bencode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\bitfield.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\brpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\brpclib.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\btformats.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\btl_string.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\buffer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\cache.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\cache_map.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\circular_list.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\CMap.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\CMultiMap.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ConnectionRateLimitReactor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\connection_cache.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ConvertedMetainfo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\coro.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\cpu_meter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\crypto_message.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\CurrentRateMeasure.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\daemon.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\decorate.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\defer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\DictWithLists.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\dlock.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ebencode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ebrpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ebrpclib.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\epollreactor.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\EventLoop.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\exceptions.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\fileutils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\formatters.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\greenlet_coro.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\greenlet_yielddefer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\hash.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\HostIP.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ifaddrs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ipfree.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ipfreemmap.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\iphelp.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\IPTools.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\iptypes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\language.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\LIFOQueue.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\likewin32api.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\Lists.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\log.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\Luciana.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\Map.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\md5crypt.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\obsoletepythonsupport.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\opt.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\parsedir.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\platform.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\PMap.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\profile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\protocol.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\psapi.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\pycurllib.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\rand_tools.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\reactor_magic.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\replication.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\routes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\SaneThreadedResolver.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\sparse_set.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\stackthreading.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ThreadProxy.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\TimeLeftEstimator.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\torrent_health.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\translation.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\twisted_brpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\twisted_ebrpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\twisted_logger.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\ubencode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\win32icmp.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\xmlrpclib2.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\yielddefer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\yielddefer25.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BTL\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="changetracker-console.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\actions.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\const.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\defer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\hammerlock.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\inserter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\khash.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\khashmir.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\knet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\knode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\KRateLimiter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\krpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\kstore.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\ktable.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\node.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\setup.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\test_khashmir.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\test_krpc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\test_kstore.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\unet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\util.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\utkhashmir.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="khashmir\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="language_codes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="maketorrent-console.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tfmainline.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="torrentinfo-console.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Zeroconf.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\IronPython Studio\1.0\IronPython.targets" />
+</Project>

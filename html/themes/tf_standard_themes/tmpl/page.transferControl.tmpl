@@ -1,0 +1,150 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/transfer.js" type="text/javascript"></script>
+<table bgcolor="<tmpl_var name="body_data_bg">" width="100%" cellpadding="1">
+	<tr>
+		<td>
+			<div align="center">
+			<tmpl_if name="pageop" value="control">
+				<tmpl_if name="state" value="running">
+					<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+						<tr>
+							<td colspan="2" align="center">
+								Transfer running.<tmpl_if name="pid" op=">" value="0"> (pid: <tmpl_var name="pid">)</tmpl_if>
+							</td>
+						</tr>
+					</table>
+					<form name="controlForm" action="dispatcher.php?action=stop&riid=_referer_&transfer=<tmpl_var name="transfer">" method="post">
+						<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+							<tr>
+								<td colspan="2" align="center">
+									<input type="Submit" value="<tmpl_var name="_STOPTRANSFER">">
+								</td>
+							</tr>
+						</table>
+					</form>
+					<form name="controlForm" action="dispatcher.php?action=restart&riid=_referer_&transfer=<tmpl_var name="transfer">" method="post">
+						<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+							<tr>
+								<td colspan="2" align="center">
+									<input type="Submit" value="Restart Transfer">
+								</td>
+							</tr>
+						</table>
+					</form>
+				<tmpl_elseif name="state" value="queued">
+					<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+						<tr>
+							<td colspan="2" align="center">
+								Transfer queued.
+							</td>
+						</tr>
+					</table>
+					<form name="controlForm" action="dispatcher.php?action=deQueue&riid=_referer_&transfer=<tmpl_var name="transfer">" method="post">
+						<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+							<tr>
+								<td colspan="2" align="center">
+									<input type="Submit" value="<tmpl_var name="_DELQUEUE">">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</tmpl_if>
+			<tmpl_elseif name="pageop" value="start">
+				<tmpl_if name="enableClientChooser" value="1">
+					<tmpl_if name="enableBtclientChooser" value="1">
+						<form name="clientForm" action="index.php?iid=transferControl&transfer=<tmpl_var name="transfer">" method="post">
+							<tmpl_if name="profile">
+								<input type="hidden" name="profile" value="<tmpl_var name="profile">" />
+							</tmpl_if>
+							<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+								<tr>
+									<td align="center" colspan="2">
+										<label for="client">BitTorrent-Client:</label> <tmpl_include name="inc.clientSelectForm.tmpl">
+									</td>
+								</tr>
+							</table>
+						</form>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name="with_profiles" value="1">
+					<form name="profileForm" action="index.php?iid=transferControl&transfer=<tmpl_var name="transfer">" method="post">
+						<tmpl_if name="client">
+							<input type="hidden" name="client" value="<tmpl_var name="client">" />
+						</tmpl_if>
+						<tmpl_include name="inc.transferProfile.tmpl">
+					</form>
+				</tmpl_if>
+				<form name="theForm" action="dispatcher.php?action=start&riid=_referer_&transfer=<tmpl_var name="transfer">" method="post" onsubmit="return validateSettings('<tmpl_var name="type">')">
+					<input type="hidden" name="interactive" value="1">
+					<table border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">" width="100%">
+						<tmpl_include name="inc.transferSettings.tmpl">
+						<tmpl_if name="file_priority_enabled" value="1">
+							<tr>
+								<td colspan="2" align="left">
+									<tmpl_var name="filePrio">
+								</td>
+							</tr>
+						</tmpl_if>
+						<tmpl_if name="showdirtree">
+							<tr>
+								<td colspan="2" align="right">
+									<table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tr>
+											<td align="left" valign="top" rowspan="2"><label for="savepath">Save Path:</label></td>
+											<td align="right" valign="top">
+												<input type="text" name="savepath" id="savepath" style="width:300px" value="<tmpl_var name="savepath">">
+											</td>
+										</tr>
+										<tr>
+											<td align="right" valign="top">
+												<select style="width:300px" size="5" onchange="savepath.value= this.options[this.selectedIndex].value;"><tmpl_include name="inc.dirTree.tmpl"></select>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</tmpl_if>
+						<tmpl_if name="skip_hash_check_enabled" value="1">
+							<tr>
+								<td colspan="2" align="right">
+									<tmpl_if name="transfer_exists">
+										<input type="checkbox" name="skiphashcheck" id="skiphashcheck"<tmpl_if name="is_skip"> checked</tmpl_if>>
+									<tmpl_else>
+										<input type="checkbox" name="skiphashcheck" disabled>
+									</tmpl_if>
+									<label for="skiphashcheck">Don't check hashes</label>
+								</td>
+							</tr>
+						</tmpl_if>
+						<tmpl_if name="is_queue" value="1">
+							<tmpl_if name="isAdmin">
+								<tr>
+									<td colspan="2" align="right">
+										<input type="checkbox" name="queue" id="queue" value="1">
+										<label for="queue">Enqueue</label>
+									</td>
+								</tr>
+							</tmpl_if>
+						</tmpl_if>
+						<tr>
+							<td colspan="2" align="right">
+								<input type="checkbox" value="1" name="close" id="close">
+								<label for="close">Close Window</label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<input type="Submit" value="<tmpl_var name="_RUNTRANSFER">">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</tmpl_if>
+			</div>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

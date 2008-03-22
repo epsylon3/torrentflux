@@ -1,0 +1,20 @@
+<table style="width:100%;" cellspacing="0">
+<tbody>
+	<tr>
+		<td class="titleleft"><tmpl_var name="titleBar_title"></td>
+		<tmpl_if name="titleBar_showButtons">
+			<td class="titleright">
+				<a href="index.php?iid=index" class="titlebarbutton">Transfer</a>
+				<a href="index.php?iid=dir" class="titlebarbutton">Directory</a>
+				<a href="index.php?iid=history" class="titlebarbutton">History</a>
+				<a href="index.php?iid=profile" class="titlebarbutton">Profile</a>
+				<a href="index.php?iid=readmsg" class="titlebarbutton"><tmpl_if name="titleBar_number_messages">Messages(new)<tmpl_else>Messages</tmpl_if></a>
+				<tmpl_if name="isAdmin">
+					<a href="admin.php" class="titlebarbutton">Admin</a>
+				</tmpl_if>
+				<a href="index.php?iid=logout" class="titlebarbutton"><img src="themes/<tmpl_var name="theme">/images/logout.gif" title="Logout" alt="Logout" /></a>
+			</td>
+		</tmpl_if>
+	</tr>
+</tbody>
+</table>

@@ -1,0 +1,385 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_if name="index_ajax_update">
+	<script src="js/ajax.js" type="text/javascript"></script>
+	<script src="js/ajax_index.js" type="text/javascript"></script>
+</tmpl_if>
+<tmpl_if name="enable_jswarning" value="1">
+	<script language="JavaScript">
+		alert('<tmpl_var name="_WARNING">: <tmpl_var name="drivespace">% <tmpl_var name="_DRIVESPACEUSED">');
+	</script>
+</tmpl_if>
+<body onLoad="actionInProgress = false<tmpl_if name="onLoad">; <tmpl_var name="onLoad"></tmpl_if>">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<tmpl_if name="enable_bigboldwarning" value="1">
+		<div id="warning">
+			<div id="warningLast"></div>
+			<div id="warningFirst">
+				<span id="warningText">
+					Warning! <tmpl_var name="drivespace">% drivespace is used! You have <tmpl_var name="freeSpaceFormatted"> left!
+				</span>
+			</div>
+		</div>
+	</tmpl_if>
+	<div id="action_in_progress" style="display: none;">
+		<span id="warningText">
+			Processing Request...
+		</span>
+	</div>
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload_first">
+				<a class="upload" href="javascript:slider('fileUpload','toggle'); slider('torrentUrl','hide'); slider('nzbUrl','hide'); slider('wgetUrl','hide'); slider('search','hide')">File Upload</a>
+			</span>
+			<span class="upload">
+				<a class="upload" href="javascript:slider('fileUpload','hide'); slider('torrentUrl','toggle'); slider('nzbUrl','hide'); slider('wgetUrl','hide'); slider('search','hide')">URL (Torrent)</a>
+			</span>
+			<tmpl_if name="enable_nzbperl">
+				<span class="upload">
+					<a class="upload" href="javascript:slider('fileUpload','hide'); slider('torrentUrl','hide'); slider('nzbUrl','toggle'); slider('wgetUrl','hide'); slider('search','hide')">URL (nzb)</a>
+				</span>
+			</tmpl_if>
+			<tmpl_if name="enable_wget">
+				<span class="upload">
+					<a class="upload" href="javascript:slider('fileUpload','hide'); slider('torrentUrl','hide'); slider('nzbUrl','hide'); slider('wgetUrl','toggle'); slider('search','hide')">URL (Wget)</a>
+				</span>
+			</tmpl_if>
+			<tmpl_if name="enable_search">
+				<span class="upload_last">
+					<a class="upload" href="javascript:slider('fileUpload','hide'); slider('torrentUrl','hide'); slider('nzbUrl','hide'); slider('wgetUrl','hide'); slider('search','toggle')">Search</a>
+				</span>
+			</tmpl_if>
+		</div>
+	</div>
+	<div id="fileUpload" class="uploadClass" style="display: none; height: 0px">
+		<form name="form_file" action="dispatcher.php?action=fileUpload" method="post" enctype="multipart/form-data" onsubmit="return actionSubmit()">
+			<label for="upload_files_first"><tmpl_var name="_SELECTFILE"> (<tmpl_var name="file_types_label">):</label><br>
+			<input type="File" name="upload_files[]" id="upload_files_first" size="40"><span id="fileUploadSpan"></span>
+			<select name="aid" size="1">
+				<option value="1" selected><tmpl_var name="_UPLOAD"></option>
+				<tmpl_if name="queueActive" value="1">
+					<tmpl_if name="isAdmin">
+						<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+					</tmpl_if>
+					<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
+				<tmpl_else>
+					<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+				</tmpl_if>
+			</select>
+			<input type="Submit" value="Go">
+			<tmpl_if name="enable_multiupload">
+				<script src="js/multiup.js" type="text/javascript"></script>
+				<a href="JavaScript:addUploadField()" id="addUploadField">More...</a>
+			</tmpl_if>
+		</form>
+	</div>
+	<div id="torrentUrl" class="uploadClass" style="display: none; height: 0px">
+		<form name="form_url_torrent" action="dispatcher.php?action=urlUpload" method="post" onsubmit="return actionSubmit()">
+			<label for="url_torrent"><tmpl_var name="_URLFILE">:</label><br>
+			<input type="hidden" name="type" value="torrent">
+			<input type="text" name="url" id="url_torrent" size="40">
+			<select name="aid" size="1">
+				<option value="1" selected><tmpl_var name="_GETFILE"></option>
+				<tmpl_if name="queueActive" value="1">
+					<tmpl_if name="isAdmin">
+						<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+					</tmpl_if>
+					<option value="3"><tmpl_var name="_GETFILE">+Queue</option>
+				<tmpl_else>
+					<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+				</tmpl_if>
+			</select>
+			<input type="Submit" value="Go">
+		</form>
+	</div>
+	<tmpl_if name="enable_nzbperl">
+		<div id="nzbUrl" class="uploadClass" style="display: none; height: 0px">
+			<form name="form_url_nzb" action="dispatcher.php?action=urlUpload" method="post" onsubmit="return actionSubmit()">
+				<label for="url_nzb">URL for the nzb-File:</label><br>
+				<input type="hidden" name="type" value="nzb">
+				<input type="text" name="url" id="url_nzb" size="40">
+				<select name="aid" size="1">
+					<option value="1" selected><tmpl_var name="_GETFILE"></option>
+					<tmpl_if name="queueActive" value="1">
+						<tmpl_if name="isAdmin">
+							<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+						</tmpl_if>
+						<option value="3"><tmpl_var name="_GETFILE">+Queue</option>
+					<tmpl_else>
+						<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+					</tmpl_if>
+				</select>
+				<input type="Submit" value="Go">
+			</form>
+		</div>
+	</tmpl_if>
+	<tmpl_if name="enable_wget">
+		<div id="wgetUrl" class="uploadClass" style="display: none; height: 0px">
+			<form name="form_wget" action="dispatcher.php?action=wget" method="post" onsubmit="return actionSubmit()">
+				<label for="url_wget">URL for the File to wget:</label><br>
+				<input type="text" name="url" id="url_wget" size="40">
+				<select name="aid" size="1">
+					<option value="1" selected>Inject</option>
+					<tmpl_if name="queueActive" value="1">
+						<tmpl_if name="isAdmin">
+							<option value="2">Inject+Start</option>
+						</tmpl_if>
+						<option value="3">Inject+Queue</option>
+					<tmpl_else>
+						<option value="2">Inject+Start</option>
+					</tmpl_if>
+				</select>
+				<input type="Submit" value="Go">
+			</form>
+		</div>
+	</tmpl_if>
+	<tmpl_if name="enable_search">
+		<div id="search" class="uploadClass" style="display: none; height: 0px">
+			<form name="form_search" action="index.php" method="get" onsubmit="return actionSubmit()">
+				<input type="hidden" name="iid" value="torrentSearch">
+				<label for="searchterm">Torrent <tmpl_var name="_SEARCH">:</label><br>
+				<input type="text" name="searchterm" id="searchterm" size="40" maxlength="50">
+				<select name="searchEngine" style="width: 125px">
+					<tmpl_loop name="Engine_List">
+						<option <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="Engine"></option>
+					</tmpl_loop>
+				</select>
+				<input type="Submit" value="<tmpl_var name="_SEARCH">">
+			</form>
+		</div>
+	</tmpl_if>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<form action="dispatcher.php" method="POST" onsubmit="return actionSubmit()">
+		<table class="sortabl" id="transfer_table">
+			<tmpl_include name="inc.transferList.tmpl">
+		</table>
+		<table id="multiops">
+			<tr>
+				<td class="transfer_table_left">
+				</td>
+				<td class="transfer_table_basic">
+					<a href="dispatcher.php?action=cacheFlush" onclick="return actionClick(true)">
+						<img src="themes/default/images/cache.gif" height="12" alt="Flush Cache">
+					</a>
+					<a href="dispatcher.php?action=maintenance" onclick="return actionClick(true)">
+						<img src="themes/default/images/maintenance.gif" height="12" alt="Maintenance">
+					</a>
+					<tmpl_if name="enable_bulkops">
+						<td class="transfer_table_ops">
+							<a href="dispatcher.php?action=bulkStart" onclick="return actionConfirm('Start All Transfers ?')">
+								<img src="themes/default/images/bulkstart.gif" height="12" alt="Start All Transfers">
+							</a>
+							<a href="dispatcher.php?action=bulkResume" onclick="return actionConfirm('Resume All Transfers ?')">
+								<img src="themes/default/images/bulkresume.gif" height="12" alt="Resume All Transfers">
+							</a>
+							<a href="dispatcher.php?action=bulkStop" onclick="return actionConfirm('Stop All Transfers ?')">
+								<img src="themes/default/images/bulkstop.gif" height="12" alt="Stop All Transfers">
+							</a>
+						</td>
+					</tmpl_if>
+					<tmpl_if name="enable_multiops">
+						<td class="transfer_table_ops">
+							<select name="action" size="1">
+								<option value="---" selected>---</option>
+								<option value="transferStart" style="background-color: #00EC00">Start</option>
+								<option value="transferStop" style="background-color: #94ABC0">Stop</option>
+								<tmpl_if name="queueActive" value="1">
+									<option value="transferEnQueue" style="background-color: #FFFC00">EnQueue</option>
+									<option value="transferDeQueue" style="background-color: #FFFC00">DeQueue</option>
+								</tmpl_if>
+								<option value="transfer" style="background-color: #DDAAAA">Delete</option>
+								<option value="transferData" style="background-color: #DDAAAA">Delete with Data</option>
+								<option value="transferResetTotals" style="background-color: #DDAAAA">Reset Totals</option>
+								<option value="transferWipe" style="background-color: #DDAAAA">Wipe</option>
+							</select>
+							<input type="submit" value="Go">
+							<input type="checkbox" name="bulkBox" onclick="bulkCheck(this);">
+						</td>
+					</tmpl_if>
+				</td>
+				<td class="transfer_table_right">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div id="stats">
+	<div id="bandwidthTitle">
+		<a class="mainMenu" href="javascript:slider('statsBandwidth','toggle')">Bandwidth</a>
+	</div>
+	<div id="statsBandwidth">
+		<div id="statsBandwidthBars">
+			<div id="statsBandwidthUpload">
+				<img src="themes/<tmpl_var name="theme">/pics/bandwidthUp.jpg" style="position: absolute; clip: rect(<tmpl_var name="bandwidthbars_upload_percent2">px 30px 100px 0px);">
+			</div>
+			<div id="statsBandwidthDownload">
+				<img src="themes/<tmpl_var name="theme">/pics/bandwidthDown.jpg" style="position: absolute; clip: rect(<tmpl_var name="bandwidthbars_download_percent2">px 30px 100px 0px);">
+			</div>
+		</div>
+		<div id="bandwidth">
+			<span id="bandwidthUp">
+				<tmpl_var name="uploadspeed1"> kB/s
+			</span>
+			<span id="bandwidthDown">
+				<tmpl_var name="downloadspeed1"> kB/s
+			</span>
+		</div>
+	</div>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="javascript:slider('statsDrivespace','toggle')">Drivespace</a>
+	</div>
+	<div id="statsDrivespace">
+		<div id="statsDiskspaceBar">
+			<img src="themes/<tmpl_var name="theme">/pics/diskspace.jpg" style="position: absolute; clip: rect(0px <tmpl_var name="drivespacebar_space">px 30px 0px);">
+		</div>
+		<div class="serverStatsBottom">
+			<span id="diskspace"><tmpl_var name="drivespacebar_space2">% (<tmpl_var name="drivespacebar_freeSpace">) Free</span>
+		</div>
+	</div>
+	<tmpl_if name="ui_displaylinks" value="1">
+		<div class="linksTitle">
+			<a class="mainMenu" href="javascript:slider('statsLinks','toggle')"><tmpl_var name="_LINKS"></a>
+		</div>
+		<div id="statsLinks" style="display: none; height: 0px;">
+			<ul>
+				<tmpl_loop name="linklist">
+					<tmpl_if name="enable_dereferrer">
+						<li class="menu <tmpl_if name='__LAST__'>menu_last</tmpl_if>"><a class="menu" href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="link_url">"><tmpl_var escape="html" name="link_sitename"></a></li>
+					<tmpl_else>
+						<li class="menu <tmpl_if name='__LAST__'>menu_last</tmpl_if>"><a class="menu" href="<tmpl_var escape="html" name="link_url">"><tmpl_var escape="html" name="link_sitename"></a></li>
+					</tmpl_if>
+				</tmpl_loop>
+			</ul>
+		</div>
+	</tmpl_if>
+	<tmpl_if name="ui_displayusers">
+		<tmpl_if name="arOnlineUsers">
+			<div class="linksTitle">
+				<a class="mainMenu" href="javascript:slider('statsUsersOnline','toggle')">Users - <tmpl_var name="_ONLINE"></a>
+			</div>
+			<div id="statsUsersOnline" style="display: none; height: 0px;">
+				<ul>
+					<tmpl_loop name="arOnlineUsers">
+						<li class="menu <tmpl_if name='__LAST__'>menu_last</tmpl_if>"><a class="menu" href="index.php?iid=message&to_user=<tmpl_var name="user">"><tmpl_var name="user"></a></li>
+					</tmpl_loop>
+				</ul>
+			</div>
+		</tmpl_if>
+		<tmpl_if name="hide_offline" value="0">
+			<tmpl_if name="arOfflineUsers">
+				<div class="linksTitle">
+					<a class="mainMenu" href="javascript:slider('statsUsersOffline','toggle')">Users - <tmpl_var name="_OFFLINE"></a>
+				</div>
+				<div id="statsUsersOffline" style="display: none; height: 0px;">
+					<ul>
+						<tmpl_loop name="arOfflineUsers">
+							<li class="menu <tmpl_if name='__LAST__'>menu_last</tmpl_if>"><a class="menu" href="index.php?iid=message&to_user=<tmpl_var name="user">"><tmpl_var name="user"></a></li>
+						</tmpl_loop>
+					</ul>
+				</div>
+			</tmpl_if>
+		</tmpl_if>
+	</tmpl_if>
+	<tmpl_if name="xfer_realtime">
+		<div class="linksTitle">
+			<a class="mainMenu" href="javascript:slider('statsGlobalXfer','toggle')"><tmpl_var name="_SERVERXFERSTATS"></a>
+		</div>
+		<div id="statsGlobalXfer" style="display: none; height: 0px;">
+			<span class="serverStats">Total: <tmpl_var name="totalxfer1"></span><br>
+			<span class="serverStats">Month: <tmpl_var name="monthxfer1"></span><br>
+			<span class="serverStats">Week: <tmpl_var name="weekxfer1"></span><br>
+			<div class="serverStatsBottom">
+				<span class="serverStats">Today: <tmpl_var name="dayxfer1"></span>
+			</div>
+		</div>
+		<div class="linksTitle">
+			<a class="mainMenu" href="javascript:slider('statsUserXfer','toggle')"><tmpl_var name="_YOURXFERSTATS"></a>
+		</div>
+		<div id="statsUserXfer" style="display: none; height: 0px;">
+			<span class="serverStats">Total: <tmpl_var name="total2"></span><br>
+			<span class="serverStats">Month: <tmpl_var name="month2"></span><br>
+			<span class="serverStats">Week: <tmpl_var name="week2"></span><br>
+			<div class="serverStatsBottom">
+				<span class="serverStats">Today: <tmpl_var name="day2"></span>
+			</div>
+		</div>
+	</tmpl_if>
+	<div class="linksTitle">
+		<a class="mainMenu" href="javascript:slider('serverStats','toggle')"><tmpl_var name="_OTHERSERVERSTATS"></a>
+	</div>
+	<div id="serverStats" style="display: none; height: 0px;">
+		<span class="serverStats"><tmpl_var name="_ID_CONNECTIONS">: <tmpl_var name="id_connections1"></span><br>
+		<span class="serverStats"><tmpl_var name="_SERVERLOAD">:</span><br>
+		<div class="serverStatsBottom">
+			<span class="serverStats2"><tmpl_var name="serverload1"></span>
+		</div>
+	</div>
+	<tmpl_if name="fluxlink_display">
+		<div class="linksTitle">
+			<script language="JavaScript">
+				function SuperAdmin(name_file) {
+					window.open (name_file,"_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600")
+				}
+			</script>
+			<a class="mainMenu" href="JavaScript:SuperAdmin('superadmin.php?z=1')">check Version</a>
+		</div>
+	</tmpl_if>
+	<div class="linksTitle">
+		<a class="mainMenu" href="javascript:slider('seedingTorrents','toggle')">Seeding Torrents</a>
+	</div>
+	<div id="seedingTorrents" style="display: none; height: 0px;">
+		<div class="serverStatsBottom">
+			<tmpl_if name="index_show_seeding">
+				<a class="menu" href="dispatcher.php?action=set&key=index_show_seeding&val=0" onclick="return actionClick(true)">
+					Hidden (change)
+				</a>
+			<tmpl_else>
+				<a class="menu" href="dispatcher.php?action=set&key=index_show_seeding&val=1" onclick="return actionClick(true)">
+					Shown (change)
+				</a>
+			</tmpl_if>
+		</div>
+	</div>
+	<div class="linksTitle">
+		<a class="mainMenu" href="javascript:slider('pageRefresh','toggle')">Page Refresh</a>
+	</div>
+	<div id="pageRefresh" style="display: none; height: 0px;">
+		<tmpl_if name="onLoad">
+			<a class="menu" href="dispatcher.php?action=set&key=_refresh_&val=0" onclick="return actionClick(true)">
+				Turn both off
+			</a>
+			<br />
+		</tmpl_if>
+		<tmpl_if name="page_refresh">
+			<a class="menu" href="dispatcher.php?action=set&key=index_meta_refresh&val=0" onclick="return actionClick(true)">
+				Page refresh on (<span id='span_refresh'><tmpl_var name="page_refresh"></span>)
+			</a>
+		<tmpl_else>
+			<a class="menu" href="dispatcher.php?action=set&key=index_meta_refresh&val=1" onclick="return actionClick(true)">
+				Page refresh off
+			</a>
+		</tmpl_if>
+		<div class="serverStatsBottom">
+			<tmpl_if name="index_ajax_update">
+				<a class="menu" href="dispatcher.php?action=set&key=index_ajax_update&val=0" onclick="return actionClick(true)">
+					AJAX refresh on
+				</a>
+			<tmpl_else>
+				<a class="menu" href="dispatcher.php?action=set&key=index_ajax_update&val=1" onclick="return actionClick(true)">
+					AJAX refresh off
+				</a>
+			</tmpl_if>
+		</div>
+	</div>
+</div>
+<tmpl_if name="IsForceReadMsg">
+	<script language="JavaScript">
+		if (confirm("<tmpl_var name="_ADMINMESSAGE">")) {
+			document.location = "index.php?iid=readmsg";
+		}
+	</script>
+</tmpl_if>
+</body>
+</html>

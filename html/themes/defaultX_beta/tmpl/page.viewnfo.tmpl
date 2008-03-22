@@ -1,0 +1,11 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<div align="center" style="width: 740px;">
+	<a href="index.php?iid=viewnfo&path=<tmpl_var name="file">&dos=1">DOS Format</a> :-:
+	<a href="index.php?iid=viewnfo&path=<tmpl_var name="file">&win=1">WIN Format</a> :-:
+	<a href="index.php?iid=dir&dir=<tmpl_var name="folder">">Back</a>
+</div>
+<pre style="font-size: 10pt; font-family: 'Courier New', monospace;">
+<tmpl_var name="output">
+</pre>
+<tmpl_include name="inc.subfoot.tmpl">

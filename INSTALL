@@ -1,0 +1,439 @@
+=================================================================
+$Id$
+=================================================================
+
+torrentflux-b4rt 1.0
+
+http://tf-b4rt.berlios.de
+
+
+-----------------------------------------------------------------
+System Requirements
+-----------------------------------------------------------------
+
+-- A Linux or FreeBSD Box installed and working properly.
+   (tested on Debian, Ubuntu, Gentoo, RedHat, Fedora and others)
+
+-- Web Server.
+   * Apache (http://www.apache.org)
+   * LightTPD (http://www.lighttpd.net)
+
+-- SQL-Database. Supported are :
+   * MySQL (http://www.mysql.com)
+   * SQLite (http://www.sqlite.org)
+   * PostgreSQL (http://www.postgresql.org)
+
+-- PHP Version 4.3.x or higher with Session and PCRE support
+   enabled. Socket-Support is required for fluxd.
+   (http://www.php.net)
+
+-- Python 2.2 or higher for BitTornado and Python 2.4 or
+   higher for Mainline (BitTorrent).
+   (http://www.python.org)
+
+-- Azureus 2.5.0.0 or higher with the XML/HTTP Plugin to use
+   an Azureus-Server as Client within tfb (with fluazu).
+   * Azureus (http://azureus.sourceforge.net)
+   * XML/HTTP Plugin
+    (http://azureus.sourceforge.net/plugin_details.php?plugin=xml_http_if)
+
+-- Perl 5.6 or higher for fluxd, nzbperl, ttools.pl and
+   fluxpoller.pl (see Section "Perl-Modules" for Perl-Module-
+   Requirements)
+   (http://www.perl.org)
+
+-- Safe Mode must be turned off.
+   (php.ini : safe_mode = Off)
+   Allow Url fopen must be allowed.
+   (php.ini : allow_url_fopen = On)
+
+-- SELinux should be turned off.
+
+
+-----------------------------------------------------------------
+Installation with "setup.php"
+-----------------------------------------------------------------
+
+1. Untar the package into a directory then copy the contents of
+   the "html" folder into your web site directory.
+
+   tar -jxvf torrentflux-b4rt_1.0.tar.bz2
+
+2. ensure the files + dirs in the docroot are readable by your
+   webserver-user. if it is not the case one possible solution is
+   to "chown" the files to your webserver-user. this may be done
+   with a line like that :
+   chown -R username /path/to/torrentflux-docroot
+   change dir + username to fit your system so a possible line
+   would be :
+   chown -R www-data /var/www
+
+3. ensure the dir "inc/config/" in your torrentflux-docroot is
+   writable by your webserver-user.
+
+4. open "setup.php" in a browser and complete it step by step.
+
+5. IMPORTANT:  The first time you access the application, you
+   will be prompted for a user/password -- this is when you will
+   set the SUPER ADMIN user and password by what you enter.  For
+   example, you pull the site up for the first time, you will
+   be prompted to login and if you put in user: 'goombah' and
+   password: 'iama' then your super admin user account will
+   be set to goombah/iama.
+
+6. On your first login you should check all the admin settings
+   pages and configure your installation.
+
+
+-----------------------------------------------------------------
+Manual Installation
+-----------------------------------------------------------------
+
+1. Untar the package into a directory then copy the contents of
+   the "html" folder into your web site directory.
+
+   tar -jxvf torrentflux-b4rt_1.0.tar.bz2
+
+2. Create a database and import the sql-script.
+   You may specify the type of the database you want to use in
+   the file "config.db.php", but the examples here use MySQL.
+
+   mysqladmin create torrentflux
+
+   "mysql_torrentflux-b4rt-1.0.sql" contains the commands to
+   build the table structure and the default data. Import the
+   script into your torrentflux database.
+
+   mysql torrentflux < mysql_torrentflux-b4rt-1.0.sql
+   Or load the script with PHPMyAdmin (web interface)
+
+3. rename the file "config.db.php.dist" in the dir "inc/config/"
+   to "config.db.php" and set the database-settings to use your
+   torrentflux-database.
+   You may specify type of database you want to use, but
+   the examples here use MySQL.
+
+4. ensure the files + dirs in the docroot are readable by your
+   webserver-user. if it is not the case one possible solution is
+   to "chown" the files to your webserver-user. this may be done
+   with a line like that :
+   chown -R username /path/to/torrentflux-docroot
+   change dir + username to fit your system so a possible line
+   would be :
+   chown -R www-data /var/www
+
+5. Remove or rename the file /path/to/torrentflux-docroot/setup.php.
+   This is a security precaution to ensure a malicious user does not
+   attempt to overwrite your torrentflux-b4rt installation.  Your
+   installation will not run with setup.php in the document root folder.
+
+6. IMPORTANT:  The first time you access the application, you
+   will be prompted for a user/password -- this is when you will
+   set the SUPER ADMIN user and password by what you enter.  For
+   example, you pull the site up for the first time, you will
+   be prompted to login and if you put in user: 'goombah' and
+   password: 'iama' then your super admin user account will
+   be set to goombah/iama.
+
+7. On your first login you should check all the admin settings
+   pages and configure your installation.
+
+
+-----------------------------------------------------------------
+Upgrade from TorrentFlux 2.1-b4rt-9x with "upgrade.php"
+-----------------------------------------------------------------
+
+1. If QueueManager is running dequeue all torrents and stop it.
+
+2. Stop all transfers and delete them. (data-delete/reset/wipe is
+   not needed, delete is enough)
+
+3. Delete content of docroot of the v9x-installation. (recursive)
+
+4. Untar the package into a directory then copy the contents of
+   the "html" folder into your web site directory.
+
+   tar -jxvf torrentflux-b4rt_1.0.tar.bz2
+
+5. ensure the files + dirs in the docroot are readable by your
+   webserver-user. if it is not the case one possible solution is
+   to "chown" the files to your webserver-user. this may be done
+   with a line like that :
+   chown -R username /path/to/torrentflux-docroot
+   change dir + username to fit your system so a possible line
+   would be :
+   chown -R www-data /var/www
+
+6. ensure the dir "inc/config/" in your torrentflux-docroot is
+   writable by your webserver-user.
+
+7. copy the file "upgrade.php" from the dir "upgrade/v9x_1.0/" to
+   your torrentflux-docroot. choose the appropriate version.
+
+8. open the just copied file "upgrade.php" in a browser and
+   complete it step by step.
+
+9. Remove or rename the file /path/to/torrentflux-docroot/setup.php.
+   This is a security precaution to ensure a malicious user does not
+   attempt to overwrite your torrentflux-b4rt installation.  Your
+   installation will not run with setup.php in the document root folder.
+
+10. On your first login after the upgrade you should check all the
+    admin settings pages and configure your installation.
+
+
+-----------------------------------------------------------------
+Manual Upgrade from TorrentFlux 2.1-b4rt-98
+-----------------------------------------------------------------
+
+1. If QueueManager is running dequeue all torrents and stop it.
+
+2. Stop all transfers and delete them. (data-delete/reset/wipe is
+   not needed, delete is enough)
+
+3. Delete content of docroot of the v98-installation. (recursive)
+
+4. Untar the package into a directory then copy the contents of
+   the "html" folder into your web site directory.
+
+   tar -jxvf torrentflux-b4rt_1.0.tar.bz2
+
+5. Import the Update-sql-script.
+   You may specify the type of the database you want to use in
+   the file "config.db.php", but the examples here use MySQL.
+
+   "mysql_update_tf-b4rt-98.to.torrentflux-b4rt-1.0.sql"
+   contains the commands to update the table structure and the
+   default data.
+   Import the script into your torrentflux database.
+
+   mysql torrentflux < mysql_update_tf-b4rt-98.to.torrentflux-b4rt-1.0.sql
+   Or load the script with PHPMyAdmin (web interface)
+
+6. rename the file "config.db.php.dist" in the dir "inc/config/"
+   to "config.db.php" and set the database-settings to use your
+   torrentflux-database.
+   You may specify type of database you want to use, but
+   the examples here use MySQL.
+
+7. ensure the files + dirs in the docroot are readable by your
+   webserver-user. if it is not the case one possible solution is
+   to "chown" the files to your webserver-user. this may be done
+   with a line like that :
+   chown -R username /path/to/torrentflux-docroot
+   change dir + username to fit your system so a possible line
+   would be :
+   chown -R www-data /var/www
+
+8. rename the dir ".torrents" in your path to ".transfers".
+   on a default install this would be :
+   /usr/local/torrent/.torrents/
+    ->
+   /usr/local/torrent/.transfers/
+
+9. Remove or rename the file /path/to/torrentflux-docroot/setup.php.
+   This is a security precaution to ensure a malicious user does not
+   attempt to overwrite your torrentflux-b4rt installation.  Your
+   installation will not run with setup.php in the document root folder.
+
+10. On your first login after the upgrade you should check all the
+    admin settings pages and configure your installation.
+
+
+-----------------------------------------------------------------
+Upgrade from official TorrentFlux 2.1/2.2/2.3 with "upgrade.php"
+-----------------------------------------------------------------
+
+1. If QueueManager is running dequeue all torrents and stop it.
+
+2. Stop all transfers.
+
+3. Delete content of docroot of the 2.1/2.2/2.3 installation.
+  (recursive)
+
+4. Untar the package into a directory then copy the contents of
+   the "html" folder into your web site directory.
+
+   tar -jxvf torrentflux-b4rt_1.0.tar.bz2
+
+5. ensure the files + dirs in the docroot are readable by your
+   webserver-user. if it is not the case one possible solution is
+   to "chown" the files to your webserver-user. this may be done
+   with a line like that :
+   chown -R username /path/to/torrentflux-docroot
+   change dir + username to fit your system so a possible line
+   would be :
+   chown -R www-data /var/www
+
+6. ensure the dir "inc/config/" in your torrentflux-docroot is
+   writable by your webserver-user.
+
+7. copy the file "upgrade.php" from the dir "upgrade/TF21_1.0/" or
+   "upgrade/TF22_1.0/" or "upgrade/TF23_1.0/" to your docroot.
+   (choose the version of your current installation)
+
+8. open the just copied file "upgrade.php" in a browser and
+   complete it step by step.
+
+9. Remove or rename the file /path/to/torrentflux-docroot/setup.php.
+   This is a security precaution to ensure a malicious user does not
+   attempt to overwrite your torrentflux-b4rt installation.  Your
+   installation will not run with setup.php in the document root folder.
+
+10. On your first login after the upgrade you should check all the
+    admin settings pages and configure your installation.
+
+
+-----------------------------------------------------------------
+Manual Upgrade from official TorrentFlux 2.1/2.2/2.3
+-----------------------------------------------------------------
+
+1. If QueueManager is running dequeue all torrents and stop it.
+
+2. Stop all transfers.
+
+3. Delete content of docroot of the 2.1/2.2/2.3 installation.
+  (recursive)
+
+4. Untar the package into a directory then copy the contents of
+   the "html" folder into your web site directory.
+
+   tar -jxvf torrentflux-b4rt_1.0.tar.bz2
+
+5. Import the Update-sql-script.
+   You may specify the type of the database you want to use in
+   the file "config.db.php", but the examples here use MySQL for
+   update from TorrentFlux 2.3.
+
+   "mysql_update_torrentflux23.to.torrentflux-b4rt-1.0.sql"
+   contains the commands to update the table structure and the
+   default data.
+   Import the script into your torrentflux database.
+
+   mysql torrentflux < mysql_update_torrentflux23.to.torrentflux-b4rt-1.0.sql
+   Or load the script with PHPMyAdmin (web interface)
+
+6. rename the file "config.db.php.dist" in the dir "inc/config/"
+   to "config.db.php" and set the database-settings to use your
+   torrentflux-database.
+   You may specify type of database you want to use, but
+   the examples here use MySQL.
+
+7. ensure the files + dirs in the docroot are readable by your
+   webserver-user. if it is not the case one possible solution is
+   to "chown" the files to your webserver-user. this may be done
+   with a line like that :
+   chown -R username /path/to/torrentflux-docroot
+   change dir + username to fit your system so a possible line
+   would be :
+   chown -R www-data /var/www
+
+8. rename the dir ".torrents" in your path to ".transfers".
+   on a default install this would be :
+   /usr/local/torrent/.torrents/
+    ->
+   /usr/local/torrent/.transfers/
+
+9. rename stat-files and prio-files.
+   Note: it is also possible to just delete all transfers before upgrading and
+         then re-inject after upgrade. (then this point can be skipped)
+   change to your path-dir. (the dir just renamed in 8.) on a
+   default install this would be :
+   cd /usr/local/torrent/.transfers/
+   execute this commands (requires perl) in that dir :
+   ls -1 *.torrent | perl -e 'while(<STDIN>){chomp;$o=lc(((substr($_,0,(length($_))-7))))."stat";$n=$_.".stat";print $o."->".$n;print `mv $o $n;echo`;}'
+   ls -1 *.prio | perl -e 'while(<STDIN>){chomp;$o=$_;$n=((substr($_,0,(length($_))-4)))."torrent.prio";print $o."->".$n;print `mv $o $n;echo`;}'
+
+10. Remove or rename the file /path/to/torrentflux-docroot/setup.php.
+    This is a security precaution to ensure a malicious user does not
+    attempt to overwrite your torrentflux-b4rt installation.  Your
+    installation will not run with setup.php in the document root folder.
+
+11. On your first login after the upgrade you should check all the
+    admin settings pages and configure your installation.
+
+
+-----------------------------------------------------------------
+Additional / Optional
+-----------------------------------------------------------------
+
+-- PyCrypto (Python Cryptography Toolkit) is needed to run
+   BitTornado with encryption. (avail. since BitTornado 0.3.18)
+   PyCrypto is also required for Mainline (BitTorrent) Client.
+   PyCrypto can be found at :
+   http://www.amk.ca/python/code/crypto
+
+-- Twisted is needed to run Mainline (BitTorrent) Client.
+   It can be found at :
+   http://twistedmatrix.com
+   Twisted requires at least Zope Interface 3.0.1 or higher. It
+   can also work with ZopeX3 version 3.0.0c1 or higher.
+   Zope Interface is included in Twisted-source-tarball or can be
+   found at :
+   http://www.zope.org/Products/ZopeInterface
+
+-- UUDeview is needed for nzbperl.pl. UUDeview can be found at :
+   http://fpx.de/fp/Software/UUDeview/
+
+-- unrar (for Linux) and rarbsd (for FreeBSD) can be found at :
+   http://www.rarlab.com/rar/
+
+-- cksfv (needed for SFV check) can be found at :
+   http://zakalwe.virtuaalipalvelin.net/~shd/foss/cksfv/files/devel/
+
+-- vlc (needed for Streaming Feature) can be found at :
+   http://www.videolan.org/
+
+-- To compile Transmission on Mac OS X you need the Developer
+   Tools from Apple.
+
+-- To use wget on Mac OS X install :
+   http://www.statusq.org/images/wget.zip
+
+
+-----------------------------------------------------------------
+Perl-Modules
+-----------------------------------------------------------------
+
+-- fluxd.pl (part of fluxd)
+   * IO::Select       (perl -MCPAN -e "install IO::Select")
+   * IO::Socket::UNIX (perl -MCPAN -e "install IO::Socket::UNIX")
+   * IO::Socket::INET (perl -MCPAN -e "install IO::Socket::INET")
+   * POSIX            (perl -MCPAN -e "install POSIX")
+
+-- FluxDB.pm (part of fluxd) (only in dbi-mode)
+   * all database-types :
+     DBI              (perl -MCPAN -e "install Bundle::DBI")
+   * MySQL :
+     DBD::mysql       (perl -MCPAN -e "install DBD::mysql")
+   * SQLite :
+     DBD::SQLite      (perl -MCPAN -e "install DBD::SQLite")
+   * PostgreSQL :
+     DBD::Pg          (perl -MCPAN -e "install DBD::Pg")
+
+-- Fluxinet.pm (part of fluxd)
+   * IO::Select       (perl -MCPAN -e "install IO::Select")
+   * IO::Socket::INET (perl -MCPAN -e "install IO::Socket::INET")
+
+-- tfnzbperl.pl (usenet transfer-client)
+   Required :
+   * IO::File
+   * IO::Select
+   * IO::Socket::INET
+   * File::Basename
+   * Getopt::Long
+   * Cwd
+   * XML::Simple
+   * XML::DOM
+   Optional :
+   * threads
+   * Thread::Queue
+
+-- ttools.pl (metainfoclient)
+   * Digest::SHA1     (perl -MCPAN -e "install Digest::SHA1")
+   * LWP::UserAgent   (perl -MCPAN -e "install LWP::UserAgent")
+
+-----------------------------------------------------------------
+Known Issues
+-----------------------------------------------------------------
+Please check at: http://tf-b4rt.berlios.de

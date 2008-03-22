@@ -1,0 +1,26 @@
+<input type="hidden" name="transfer" value="<tmpl_var name="transfer">" />
+<table border="1" bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4" width="100%">
+	<tr>
+		<td align="center" colspan="2"><label for="profile">Profile:</label>
+			<select name="profile" id="profile" size="1" onChange="javascript:submit();">
+				<tmpl_if name="settings_exist">
+					<option value="last_used" selected>Last used Settings</option>
+				<tmpl_else>
+					<option value="">default</option>
+				</tmpl_if>
+				<tmpl_loop name="profiles">
+					<tmpl_if name="profiles">
+						<option value="<tmpl_var name="name">"<tmpl_if name="is_selected"> selected</tmpl_if>><tmpl_var name="name"></option>
+					</tmpl_if>
+				</tmpl_loop>
+				<tmpl_if name="public_profiles">
+					<optgroup label="Public" style="background-color: #00EC00">
+						<tmpl_loop name="public_profiles">
+							<option style="background-color: #FFFFFF" value="<tmpl_var name="name">"<tmpl_if name="is_selected"> selected</tmpl_if>><tmpl_var name="name"></option>
+						</tmpl_loop>
+					</optgroup>
+				</tmpl_if>
+			</select>
+		</td>
+	</tr>
+</table>

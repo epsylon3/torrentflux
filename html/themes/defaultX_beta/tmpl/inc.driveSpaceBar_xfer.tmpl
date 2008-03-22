@@ -1,0 +1,18 @@
+<tr>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;"><tmpl_var name="_STORAGE">:</div>
+	</td>
+	<td>
+		<table style="width:99%;" cellspacing="0">
+			<tr>
+				<td id="barDriveSpace2" style="height:12px;line-height:12px;background-color:<tmpl_var name="drivespacebar_bgcolor">;width:<tmpl_var name="drivespacebar_space2">%;">&nbsp;</td>
+				<td id="barDriveSpace1" style="height:12px;line-height:12px;background-color:#000000;width:<tmpl_var name="drivespacebar_space">%;">&nbsp;</td>
+			</tr>
+		</table>
+	</td>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;white-space:nowrap;">
+			<span id="barDriveSpacePercent"><tmpl_var name="drivespacebar_space2"></span>% (<span id="barFreeSpace"><tmpl_var name="drivespacebar_freeSpace"></span>) Free
+		</div>
+	</td>
+</tr>

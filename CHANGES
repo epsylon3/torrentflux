@@ -1,0 +1,426 @@
+================================================================================
+$Id$
+================================================================================
+
+
+torrentflux-b4rt 1.0 beta2
+http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=3366
+
+
+***** changes *****
+
+- Transmission-Transfer-Client updates
+
+- documentation updates (work in progress)
+
+- defaultX theme updates
+
+- icon updates
+
+- sqlite: better catch connection errors (e.g. when db-creation fails because 
+  of missing rights) (3304)
+
+- ajax update now uses %-value for updating the bar (3239)
+
+- index: modify run/seed tooltips to be different between advanced & quick
+  modes (3234)
+
+- torrent search: small tweak to display mininova results sorted by seed (3231)
+
+- MaintenanceAndRepair: added fluazu-maintenance (analog fluxd, delete leftovers
+  if found but no daemon running) (3214)
+
+- index: make "processing request"-div work on IE (3171)
+
+- admin/server:
+  * split code/html in file validation (3212, 3208)
+  * extend validation-check for transmissioncli, to check if file is really
+    tfb-specific version (3210, 3206)
+  * for incoming path, allow subdirs (3169)
+
+- formatBytestokBMBGBTB now also returns filessize in Bytes if
+  size < 1024 (3154)
+
+- admin/stats: move 'Use Compression' option directly before
+  'Compression Level' (3145)
+
+- SimpleHTTP:
+  * don't send empty cookie line (3250)
+  * added torrentspy support (3194)
+  * added demonoid support and fixed isohunt support (3172)
+  * handle https (requires php with openssl module) (3123)
+
+
+
+***** fixes *****
+
+- various theme-related bugfixes
+
+- netstat:
+  * Fixes a bug in detecting ports in use on BSD, which caused 
+    transmission to attempt to bind to the same port every time you 
+    started a new torrent. (3321)
+  * Fixed bug in netstatConnectionsSum for FreeBSD, altered system calls
+    to be more resource-efficient by having sockstat output the right
+    stuff and leave less for grep/awk to parse. (3322)
+  * Fixed a bug in the netstat code where fbsd machines might see the 
+    port of a running transmission transfer as 80, since transmission
+    opens both port 80 and a high-numbered port from the minport-maxport
+    range. (3323)
+  * Fixed a bug that would cause transmission not to select the next 
+    availible port if, and only if, there was no outgoing connection 
+    from the client on the previous port number, and you are using BSD. 
+    Now, we will always select a valid port number. (3326)
+
+- sqlite: fix some SQL queries with joins (use field aliases to get same 
+  behavior as other dbs) Thanks to Korax1 on IRC (3307)
+
+- fluxd rssad filter edit-page: fix superfluous HTML-encoding of 
+  filter entries (3305)
+
+- bandwidth-bar: fixed style-issue if up or download is above 100% (3295)
+
+- ui: emit appropriate charset depending on selected language (3293)
+
+- nzbperl:
+  * fix status messages (3301)
+  * add --keepbrokenbin when "Bad File Action" is "Download Anyway" (3298)
+  * fix 150 kB/s speed limit (3288)
+  * fix missing newline in output (3287)
+
+- xfer-display:
+  * fix B/MB mismatch when calculating % (3286)
+  * fix bar width in themes other than defaultX (3286)
+
+- fluxcli.php: fix xfer command (amounts in MB were handled as B) (3260)
+
+- wget-Transfer-Client: ps --pid switch does not exist on FreeBSD, use -p
+  instead (3237)
+
+- fluxd:
+  * fix "cannot determine peer address" on FreeBSD (3290, 3291, 3292, 3296)
+  * small fix in sub "set" (3233)
+
+- SimpleHTTP: accept URLs containing '+' (pass them thru, don't re-encode
+  them) (3232)
+
+- transfer-control: avoid pid file access if not needed (3222)
+
+- setup.php: small fix to detect sqlite correctly (3221)
+
+- admin/server: fix php-cli checks freezing if php binary path is a cgi/fcgi
+  php (3213)
+
+- fluazu/dopal: make it work even with -OO flag on all Python versions (3205)
+
+- prevent tf_log table from growing too much and loadavg from increasing
+  insanely (3193)
+
+- fluxd/fluxcli: maintenance with torrent-restart did not work (3179)
+
+- inserting empty cookie id (cid) value caused errors on PostgreSQL (3178)
+
+- dir view:
+  * support php-version without unicode- and/or xml-support (3225)
+  * convert UTF-8 names to ISO-8859-1 (3170)
+
+- torrent search:
+  * Search engine: fix for isohunt search engine, thanks to coneybeare (3311)
+  * TorrentSpy: switch to a download URL that works for now (3282)
+  * fix parsing of mininova results so the number of comments isn't displayed
+    as part of the torrent name (3231)
+  * broken if Transfer File Download was disabled (3166)
+
+- unified use of HTTP no-cache headers (pragma & cache-control) (3164)
+
+- added a line to allow for .prio files -- people were getting massive amounts
+  of "Invalid Transfer" errors without this line (3162)
+
+- index: new injected torrents now have &nbsp; again in columns t.up,
+  t.down (3160)
+
+- some php-versions report ini_get() as "on" or "off" (3159)
+
+- the size of a dir returned by dirsize() is now returned as float instead of
+  string (3158)
+
+- index: new torrents were showing "B" for total up/down (3157)
+
+- fluxd/fluxinet: stop warnings about undefined vbls in fluxinet.pm (3151)
+
+- index: in estimated time '00' fields were skipped even if not at front (3149)
+
+- stats.php: display usage when called with no _GET args and autologin cookie is
+  being used (3139)
+
+- fluxd/rssad:
+  * in admin pages, modify rssad filter templates so the correct page title is
+    displayed when adding/editing/saving/deleting filters (3150)
+  * links containing html entities were not handled properly (3134, 3130)
+
+- transmissioncli: use progress to indicate if torrent is finished or not (3128)
+
+- missing HTML-encoding: torrent comment (3125), superadmin changelog (3122)
+
+
+
+***** updates *****
+
+- Torrent Transfer-Clients:
+  * Transmission v1.06 -- modified for tf-b4rt
+  * Transmission v0.96 -- modified for tf-b4rt
+  * Mainline (BitTorrent) v5.2.0
+
+- ADOdb V4.98
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+  torrentflux-b4rt 1.0 beta1
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=3116
+
+
+***** changes *****
+
+- refactoring, code-cleanup and code-tidy in various parts
+
+- UI-cleanup and -tidy (including Readability, Usability and Consistency)
+
+- added Inline-Help
+
+- added a manual (doc/manual.txt, work in progress)
+
+- changed time- and date-format in language-files to the format used in the
+  rest of tfb (3111)
+
+- enlarge sharekill input fields (3 -> 4 chars)
+
+- extended checks to validate the selected theme
+
+- check-cli.php: added check that current interpreter is really the
+  cli-version of PHP (3081)
+
+- new "proccesing request"-divs in default theme (3064)
+
+- cleaned up code so more themes are able to use ajax (3061)
+
+- admin - serverSettings: extend the validation-check for PHP-binary.
+  also check if file is really the cli-version of PHP (3056)
+
+- added <label> elements to all form controls
+
+- new dispatcher single-transfer-ops wipe and deleteWithData (3017 + 3018)
+  * wipe:
+    http://tfb/dispatcher.php?action=wipe&transfer=tname.text
+  * deleteWithData:
+    http://tflux/dispatcher.php?action=deleteWithData&transfer=tname.text
+
+- Transfer-Profiles (2978, 2979, 2980)
+  details: https://tf-b4rt.berlios.de/forum/index.php/topic,614.0.html
+
+- image.php: removed referer-check from internal images (2918)
+
+- fluxd-refactoring (includes the use of config-files and pluggable
+  service-modules)
+
+- SimpleHTTP: detect early and log error if URL is not a valid HTTP URL (2820)
+
+- Added HTTP redirection following functionality. Follow up to n (5)
+  redirections (300, 301, 302, 303, 307 HTTP status codes).
+
+- removed some of the (in-)sanity checks to prevent invocation from web
+  from the php-cli-scripts (2768)
+
+- new icons and images
+
+- fluazu: minors (non-functional, eg print more exceptions) and code-tidy
+  fluazu-version: 0.06
+
+- various checks for requirements in various components
+
+
+***** fixes *****
+
+- various minor fixes in various parts
+
+- spelling and typos in various strings
+
+- fixed: undefined variable when updating search-engine-settings and nothing
+  is selected in form (3113)
+
+- fixed: endless-redirect-loop when db-config-file, setup- and upgrade-scripts
+  are missing (3110)
+
+- fixed: setup.php and upgrade.php login-checks (3109)
+
+- fixed: when using filepriority the *.prio file was written incorrectly.
+  (last folder was left out) (3074)
+
+- fixed: transfer-control page always showed "Last used Settings" profile,
+  instead of "default" if transfer had never been started before (3067)
+
+- fixed: the links in transfer-list to transfer-window was set twice in all
+  themes (<a><a></a></a>) (3063)
+
+- fixes in Authentication Type "Form Auth + Cookie" (3052 + 3053)
+  * flush users autologin-cookie when "performAuthentication" fails
+  * flush users autologin-cookie when user changed password
+
+- dtree.js: superfluous "</a>" was generated for root of file-prio tree (3033)
+
+- fixed: transferlist-template: seed button was showing for non uploadable
+  clients (3022)
+
+- fixed: filemanager: access dot-dir via direct url (3011)
+
+- fixes in AJAX-code (3005 + 3006 + 3008)
+  * ajax silent-mode was not working properly because of missing {}.
+  * added some checks so it is not possible to start an second update while
+    first still not finished.
+  * added an unload method, because it was possible to press F5 and before
+    reloading was started, an ajax request could be started because timer was
+	still running, which then produced errors in FF.
+  * if ajax_update() was called the second time, the ajax_HTTPRequest existed
+    already and so it aborted old request, which results in readystat = 0,
+	which calls the Callback.
+  * changed ajax_pageUpdate so it only updates the "span_update" if needed.
+
+- fixed: template-var transfer_exists was not set in tranfer-templates (3002)
+
+- superadmin pages: display webapp page-title, instead of always
+  'torrentflux-b4rt' (2991)
+
+- Modified backup list function to only list tfb backup archives found in
+  .backups folder, not every single file in the folder. (2985)
+
+- fixed webapp-lock-bug (cache was not flushed on set) (2977)
+
+- close adodb-connection to database on script-shutdown (2961)
+
+- common.js: don't return false from functions used in href attributes (2953)
+  (fixes browser displaying "false" after clicking on transfer-properties
+  or server-monitor while a request was already in progress)
+
+- fixed postgresql sql- and query-files (2952)
+  (use signed 4-byte ints where signed 2-byte ints are not enough)
+
+- fixed: "transmissioncli does not notice the tracker on shutdown" (2915)
+  details: https://tf-b4rt.berlios.de/forum/index.php/topic,587.0.html
+
+- sorttable.js: handle empty cells better (fixes bad behavior, and javascript
+  error under IE, when progress column has some) (2911)
+
+- fluxcli: if invoked synchronously by fluxd, don't call fluxd back (2908)
+  * Fluxd.php: delay-load modules list
+  * fluxcli: don't initialize FluxdQmgr if not needed
+  details: http://tf-b4rt.berlios.de/forum/index.php/topic,586.0.html
+
+- fixed a bug in xfer-stats-page (it was not possible to view monthly and
+  weekly stats for all users) (2895)
+
+- fluxd-Maintenance module: "Maintenance Transfer-Restart" setting
+  (fluxd_Maintenance_trestart) was ignored, like it was always true (2867)
+
+- clienthandler-stop: give transfer 1 more second time after waitForTransfer
+  ("Possible Hung Process" was logged as "just after waitForTransfer" there
+  is just the pid-file gone but not nec. the process (this log was irritating
+  as they were not "hung" but just in a graceful shutdown)) (2857)
+
+- fluxd.pl: fixed error message when pid-file exists but daemon is not
+  running (2838)
+
+- missing HTML- and URL-escaping
+
+- missing Shell-, SQL- and HTML-encoding of various strings
+
+- added the pattern modifier D in some preg_match calls (2824)
+
+- fixed problem that only the first file is uploaded when using the dynamic
+  multi-upload-form on index-page in browsers not IE (2811)
+
+- Fixed a bug in hide/show seeding torrents which caused a hidden torrent's
+  upload usage not to be shown in the bandwidth bars. (2805)
+
+- fix in TorrentSpy search engine: letters P/R (Pwd/Reg. needed) appeared
+  above the table instead of inline (2801)
+
+- add/edit/display links: fixed URL- or HTML-encoding of URLs and sitenames
+  edit links: fixed typos in default & tf templates (2800)
+
+- rss-links: fixed URL- or HTML-encoding of URLs (2799)
+
+- missing encoding of URLs in case they contain special chars (2798)
+
+- fix for upload of metafiles when their URLs contain special chars (2791)
+
+- wget-inject did not clean the transfer-filename (2789)
+
+- transfer profiles: when transfer_profiles was 1 (only admins), admins did
+  not see public profiles (only private) (2769)
+
+- fluazu: fixed problem not catching connect-problems on startup (2761)
+
+- fixed: js-string-trim (2758)
+
+- fluxd: fixed problems with paths with spaces (2757)
+
+- calculate share-ratio from amount downloaded while leeching and not size
+  (2741 + 2742)
+
+- fixed problems in checkDirectory (2739 + 2740)
+
+
+***** updates *****
+
+- Transmission-Transfer-Client:
+  * Transmission 0.80-svn (svn2076) / tfCLI svn3084
+  * Transmission 0.72 / tfCLI svn2950
+
+- ADOdb V4.95a
+
+- vLIB 4.1.0
+
+- Search-Engines:
+  * Pirate Bay 1.06
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha7
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=2735
+
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha6
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=2454
+
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha5-1
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=2007
+
+  torrentflux-b4rt 1.0 alpha5
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=1965
+
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha4
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=1800
+
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha3
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=1688
+
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha2
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=1522
+
+--------------------------------------------------------------------------------
+
+  torrentflux-b4rt 1.0 alpha1
+  http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=1452

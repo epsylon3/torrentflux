@@ -1,0 +1,78 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<tbody>
+	<tr>
+		<td style="text-align:center;" class="small">
+			<tmpl_var name="size">
+		</td>
+	</tr>
+	<tr>
+		<td style="text-align:center">
+			<div style="width:99%;height:12px;border-left:1px solid #000000;border-right:1px solid #000000;padding:0px;margin:0px auto;" class="clearfix">
+				<img id="barImage1" src="themes/<tmpl_var name="theme">/images/proglass.gif" style="height:12px;width:<tmpl_var name="graph_width1">%;float:left;" alt="" />
+				<img id="barImage2" src="themes/<tmpl_var name="theme">/images/noglass.gif" style="height:12px;width:<tmpl_var name="graph_width2">%;float:left;" alt="" />
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div align="center">
+				<table border="0" cellpadding="2" cellspacing="2" width="380">
+					<tr>
+						<td align="right"><div class="tiny"><tmpl_var name="_ESTIMATEDTIME">:</div></td>
+						<td colspan="3"><div class="tiny"><strong><label id="eta"><tmpl_if name="time_left" value="-">&#8734<tmpl_else><tmpl_var name="time_left"></tmpl_if></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny"><tmpl_var name="_PERCENTDONE">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="percentDone"><tmpl_var name="percent_done"></label>%</strong></div></td>
+						<td align="right"><div class="tiny"><tmpl_var name="_USER">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="transferowner"><tmpl_var name="transferowner"></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny"><tmpl_var name="_DOWNLOADSPEED">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="speedDown"><tmpl_var name="down_speed"></label></strong></div></td>
+						<td align="right"><div class="tiny"><tmpl_var name="_UPLOADSPEED">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="speedUp"><tmpl_var name="up_speed"></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny">Down:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="downCurrent"><tmpl_var name="downTotalCurrent"></label></strong></div></td>
+						<td align="right"><div class="tiny">Up:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="upCurrent"><tmpl_var name="upTotalCurrent"></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny">Down-Total:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="downTotal"><tmpl_var name="downTotal"></label></strong></div></td>
+						<td align="right"><div class="tiny">Up-Total:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="upTotal"><tmpl_var name="upTotal"></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny">Seeds:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="seeds"><tmpl_var name="seeds"></label></strong></div></td>
+						<td align="right"><div class="tiny">Peers:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="peers"><tmpl_var name="peers"></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny"><tmpl_var name="_ID_PORT">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="port"><tmpl_var name="port"></label></strong></div></td>
+						<td align="right"><div class="tiny"><tmpl_var name="_ID_CONNECTIONS">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="cons"><tmpl_var name="cons"></label></strong></div></td>
+					</tr>
+					<tr>
+						<td align="right"><div class="tiny"><tmpl_var name="_SHARING">:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="sharing"><tmpl_var name="sharing"></label>%</strong></div></td>
+						<td align="right"><div class="tiny">Seed Until:</div></td>
+						<td align="left"><div class="tiny"><strong><label id="sharekill"><tmpl_var name="sharekill"></label></strong></div></td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</tbody>
+</table>
+		</td>
+	</tr>
+</tbody>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

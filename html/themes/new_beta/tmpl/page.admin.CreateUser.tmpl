@@ -1,0 +1,84 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<form name="theForm" action="admin.php?op=addUser" method="post" onsubmit="return validateProfile(1, '<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="newUser"><tmpl_var name="_USER">:</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="newUser" id="newUser" type="Text" value="" size="15">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="pass1"><tmpl_var name="_PASSWORD">:</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="pass1" id="pass1" type="Password" value="" size="15">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="pass2"><tmpl_var name="_CONFIRMPASSWORD">:</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="pass2" id="pass2" type="Password" value="" size="15">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="userType"><tmpl_var name="_USERTYPE">:</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="userType" id="userType">
+							<option value="0"><tmpl_var name="_NORMALUSER"></option>
+							<option value="1"><tmpl_var name="_ADMINISTRATOR"></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+
+					</td>
+					<td class="settingsSetting">
+						<input type="Submit" value="<tmpl_var name="_CREATE">">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

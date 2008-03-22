@@ -1,0 +1,24 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<table bgcolor="#A2BED4" width="100%" cellpadding="1">
+	<tr>
+		<td>
+			<div align="center">
+				<table border="0" cellpadding="2" cellspacing="2" width="100%">
+					<tr>
+						<td align="center"><div class="tiny"><tmpl_var name="scrapeInfo"></div></td>
+					</tr>
+					<tmpl_if name="hasScrape" value="1">
+						<tr>
+							<td align="center">
+								<img src="image.php?i=pieTransferScrape&transfer=<tmpl_var name="transfer">" border="0" title="Scrape">
+							</td>
+						</tr>
+					</tmpl_if>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

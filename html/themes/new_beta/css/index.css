@@ -1,0 +1,193 @@
+#addUploadField {
+	color: #585858;
+	text-decoration: none;
+}
+#addUploadField:hover {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+#transfer_table {
+	width: 100%;
+}
+#statsBandwidthBars {
+	margin-left: 10px;
+	padding-top: 5px;
+	height: 102px;
+}
+#statsBandwidthUpload {
+	margin-left: 20px;
+	width: 30px;
+	height: 100px;
+	float: left;
+	background-image: url("../pics/bandwidthUpBack.jpg");
+	background-repeat: no-repeat;
+}
+#statsBandwidthDownload {
+	margin-left: 20px;
+	width: 30px;
+	height: 100px;
+	float: left;
+	background-image: url("../pics/bandwidthDownBack.jpg");
+	background-repeat: no-repeat;
+}
+#bandwidth {
+	height: 19px;
+	background-image: url("../pics/menu_box_bottom.jpg");
+	background-repeat: no-repeat;
+}
+#bandwidthUp {
+	margin-left: 26px;
+	font-size: 9px;
+	color: #585858;
+}
+#bandwidthDown {
+	margin-left: 4px;
+	font-size: 9px;
+	color: #585858;
+}
+div.linksTitle {
+	margin-top: 5px;
+	margin-left: 20px;
+	width: 160px;
+	height: 16px;
+	background-image: url("../pics/menu.jpg");
+	background-repeat: no-repeat;
+}
+#statsLinks {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#statsUsersOnline {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#statsUsersOffline {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#serverStats {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#statsUserXfer {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#statsGlobalXfer {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#seedingTorrents {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+#pageRefresh {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+span.serverStats2 {
+	color: #585858;
+	margin-left: 35px;
+}
+td.transfer_table_left {
+	width: 7px;
+	background-repeat: no-repeat;
+	height: 26px;
+	background-image: url(../pics/upload_left.jpg);
+}
+td.transfer_table_right {
+	width: 7px;
+	background-repeat: no-repeat;
+	height: 26px;
+	background-image: url(../pics/upload_right.jpg);
+}
+td.transfer_table_slider,
+td.transfer_table_metafile,
+td.transfer_table_dir {
+	padding-right: 2px;
+	padding-left: 2px;
+	width: 12px;
+	background-repeat: repeat-x;
+	height: 26px;
+	background-image: url(../pics/upload.jpg);
+}
+td.transfer_table_basic {
+	background-repeat: repeat-x;
+	height: 26px;
+	background-image: url(../pics/upload.jpg);
+}
+td.transfer_table_admin {
+	text-align: right;
+	padding-right: 2px;
+	padding-left: 2px;
+	width: 90px;
+	background-repeat: repeat-x;
+	height: 26px;
+	background-image: url(../pics/upload.jpg);
+}
+#transfer_table_details {
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	width: 100%;
+}
+td.transfer_table_details_text {
+	padding-bottom: 2px;
+	padding-top: 2px;
+	color: #FFFFFF;
+	font-size: 10px;
+	background-color: #c1b18d;
+	text-align: left;
+}
+td.transfer_table_details_value {
+	background-color: #c1b18d;
+	padding-left: 5px;
+	padding-bottom: 2px;
+	text-align: left;
+}
+td.transfer_table_details_empty {
+	background-color: #c1b18d;
+}
+td.transfer_table_details_left {
+	width: 10px;
+	background-color: #c1b18d;
+	background-image: url("../pics/upload_bottom_left.jpg");
+	background-repeat: no-repeat;
+	background-position: bottom left;
+}
+td.transfer_table_details_right {
+	width: 10px;
+	background-color: #c1b18d;
+	background-image: url(../pics/upload_bottom_right.jpg);
+	background-repeat: no-repeat;
+	background-position: bottom right;
+}
+#transferList_others {
+	padding-bottom: 10px;
+}
+td.transfer_table_name {
+	padding-bottom: 2px;
+	padding-left: 10px;
+	text-align: left;
+	font-weight: bold;
+	color: #585858;
+}
+#multiops {
+	padding-top: 27px;
+	position: absolute;
+		right: 0px;
+}
+td.transfer_table_ops {
+	padding-left: 25px;
+	background-repeat: repeat-x;
+	height: 26px;
+	background-image: url(../pics/upload.jpg);
+}

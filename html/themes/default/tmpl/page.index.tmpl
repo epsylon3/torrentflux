@@ -1,0 +1,505 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_if name="index_ajax_update">
+	<script src="js/ajax.js" type="text/javascript"></script>
+	<script src="js/ajax_index.js" type="text/javascript"></script>
+</tmpl_if>
+<tmpl_if name="enable_jswarning" value="1">
+	<script language="JavaScript">
+		alert('<tmpl_var name="_WARNING">: <tmpl_var name="drivespace">% <tmpl_var name="_DRIVESPACEUSED">');
+	</script>
+</tmpl_if>
+<body topmargin="8" bgcolor="#829FB5" onLoad="actionInProgress = false<tmpl_if name="onLoad">; <tmpl_var name="onLoad"></tmpl_if>">
+<div align="center">
+	<table border="0" cellpadding="0" cellspacing="0" width="<tmpl_var name="ui_dim_main_w">">
+		<tr>
+			<td>
+				<table border="1" bordercolor="#A2BED4" cellpadding="4" cellspacing="0" width="100%">
+					<tr>
+						<td colspan="2" background="themes/default/images/bar.gif">
+							<tmpl_include name="inc.titleBar.tmpl">
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="#A2BED4">
+							<table width="100%" cellpadding="1" cellspacing="0" border="0">
+								<tr>
+									<td>
+										<form name="form_file" action="dispatcher.php?action=fileUpload" method="post" enctype="multipart/form-data" onsubmit="return actionSubmit()">
+											<label for="upload_files_first"><tmpl_var name="_SELECTFILE"> (<tmpl_var name="file_types_label">):</label><br>
+											<table cellpadding="1" cellspacing="1" border="0">
+												<tr>
+													<td id="fileUploadCell">
+														<input type="file" name="upload_files[]" id="upload_files_first" size="40"><span id="fileUploadSpan"></span>
+													</td>
+													<td valign="top">
+														<select name="aid" size="1">
+															<option value="1" selected><tmpl_var name="_UPLOAD"></option>
+															<tmpl_if name="queueActive" value="1">
+																<tmpl_if name="isAdmin">
+																	<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+																</tmpl_if>
+																<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
+															<tmpl_else>
+																<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+															</tmpl_if>
+														</select>
+														<input type="Submit" value="Go">
+													</td>
+												</tr>
+												<tmpl_if name="enable_multiupload">
+													<tr>
+														<td>
+															<script src="js/multiup.js" type="text/javascript"></script>
+															<a href="JavaScript:addUploadField()">More...</a>
+															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+															<a href="index.php?iid=multiup"><img src="themes/default/images/arrow.gif" width="9" height="9" title="<tmpl_var name="_MULTIPLE_UPLOAD">" border="0"></a>&nbsp;
+															<a href="index.php?iid=multiup"><tmpl_var name="_MULTIPLE_UPLOAD"></a>
+														</td>
+														<td>
+															&nbsp;
+														</td>
+													</tr>
+												</tmpl_if>
+											</table>
+										</form>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<form name="form_url_torrent" action="dispatcher.php?action=urlUpload" method="post" onsubmit="return actionSubmit()">
+											<hr>
+											<label for="url_torrent"><tmpl_var name="_URLFILE">:</label><br>
+											<input type="hidden" name="type" value="torrent">
+											<input type="text" name="url" id="url_torrent" size="40">
+											<select name="aid" size="1">
+												<option value="1" selected><tmpl_var name="_GETFILE"></option>
+												<tmpl_if name="queueActive" value="1">
+													<tmpl_if name="isAdmin">
+														<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+													</tmpl_if>
+													<option value="3"><tmpl_var name="_GETFILE">+Queue</option>
+												<tmpl_else>
+													<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+												</tmpl_if>
+											</select>
+											<input type="Submit" value="Go">
+										</form>
+									</td>
+								</tr>
+								<tmpl_if name="enable_nzbperl">
+									<tr>
+										<td>
+											<form name="form_url_nzb" action="dispatcher.php?action=urlUpload" method="post" onsubmit="return actionSubmit()">
+												<hr>
+												<label for="url_nzb">URL for the nzb-File:</label><br>
+												<input type="hidden" name="type" value="nzb">
+												<input type="text" name="url" id="url_nzb" size="40">
+												<select name="aid" size="1">
+													<option value="1" selected><tmpl_var name="_GETFILE"></option>
+													<tmpl_if name="queueActive" value="1">
+														<tmpl_if name="isAdmin">
+															<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+														</tmpl_if>
+														<option value="3"><tmpl_var name="_GETFILE">+Queue</option>
+													<tmpl_else>
+														<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+													</tmpl_if>
+												</select>
+												<input type="Submit" value="Go">
+											</form>
+										</td>
+									</tr>
+								</tmpl_if>
+								<tmpl_if name="enable_wget">
+									<tr>
+										<td>
+											<form name="form_wget" action="dispatcher.php?action=wget" method="post" onsubmit="return actionSubmit()">
+												<hr>
+												<label for="url_wget">URL for the File to wget:</label><br>
+												<input type="text" name="url" id="url_wget" size="40">
+												<select name="aid" size="1">
+													<option value="1" selected>Inject</option>
+													<tmpl_if name="queueActive" value="1">
+														<tmpl_if name="isAdmin">
+															<option value="2">Inject+Start</option>
+														</tmpl_if>
+														<option value="3">Inject+Queue</option>
+													<tmpl_else>
+														<option value="2">Inject+Start</option>
+													</tmpl_if>
+												</select>
+												<input type="Submit" value="Go">
+											</form>
+										</td>
+									</tr>
+								</tmpl_if>
+								<tmpl_if name="enable_search">
+									<tr>
+										<td>
+											<form name="form_search" action="index.php" method="get" onsubmit="return actionSubmit()">
+												<hr>
+												<label for="searchterm">Torrent <tmpl_var name="_SEARCH">:</label><br>
+												<input type="hidden" name="iid" value="torrentSearch">
+												<input type="text" name="searchterm" id="searchterm" size="40" maxlength="50">
+												<select name="searchEngine" style="width: 125px">
+												<tmpl_loop name="Engine_List">
+													<option <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="Engine"></option>
+												</tmpl_loop>
+												</select>
+												<input type="Submit" value="<tmpl_var name="_SEARCH">">
+											</form>
+										</td>
+									</tr>
+								</tmpl_if>
+						</table>
+					</td>
+					<td width="<tmpl_var name="stats_cell_width">" align="right" bgcolor="#A2BED4" valign="top">
+						<table cellpadding="6" border="0">
+							<tr>
+								<tmpl_if name="ui_displaylinks" value="1">
+									<td width="200" valign="top" nowrap>
+										<b><tmpl_var name="_LINKS">:</b><br>
+										<tmpl_loop name="linklist">
+											<tmpl_if name="enable_dereferrer">
+												<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="link_url">" target="_blank"><img src="themes/default/images/arrow.gif" width=9 height=9 title="<tmpl_var escape="html" name="link_url">" border=0 align="baseline"><tmpl_var escape="html" name="link_sitename"></a><br>
+											<tmpl_else>
+												<a href="<tmpl_var escape="html" name="link_url">" target="_blank"><img src="themes/default/images/arrow.gif" width=9 height=9 title="<tmpl_var escape="html" name="link_url">" border=0 align="baseline"><tmpl_var escape="html" name="link_sitename"></a><br>
+											</tmpl_if>
+										</tmpl_loop>
+									</td>
+								</tmpl_if>
+								<tmpl_if name="ui_displayusers">
+									<td width="100" bgcolor="#A2BED4" valign="top">
+										<table width="100%" cellpadding="0" border="0">
+											<tr>
+										    	<td><img src="themes/default/images/user.gif" width=17 height=14 title="" border=0 align="bottom"></td>
+										    	<td><b><tmpl_var name="_ONLINE">:</b></td>
+										    </tr>
+										    <tr>
+										    	<td>&nbsp;</td>
+										    	<td id="usersOnline">
+										    		<tmpl_if name="arOnlineUsers">
+													    <tmpl_loop name="arOnlineUsers">
+															<a href="index.php?iid=message&to_user=<tmpl_var name="user">"><tmpl_var name="user"></a><br>
+													    </tmpl_loop>
+												    </tmpl_if>
+											    </td>
+										    </tr>
+		    								<tmpl_if name="hide_offline" value="0">
+												<tr>
+			    									<td><img src="themes/default/images/user_offline.gif" width=17 height=14 title="" border=0 align="bottom"></td>
+			    									<td><b><tmpl_var name="_OFFLINE">:</b></td>
+											    </tr>
+										    	<tr>
+											    	<td>&nbsp;</td>
+											    	<td id="usersOffline">
+											    		<tmpl_if name="arOfflineUsers">
+					    									<tmpl_loop name="arOfflineUsers">
+					    										<a href="index.php?iid=message&to_user=<tmpl_var name="user">"><tmpl_var name="user"></a><br>
+					    								    </tmpl_loop>
+				    								    </tmpl_if>
+			    								    </td>
+												</tr>
+		    								</tmpl_if>
+	    								</table>
+    								</td>
+								</tmpl_if>
+								<tmpl_if name="enable_goodlookstats">
+									<td width="140" bgcolor="#A2BED4" valign="top">
+										<tmpl_if name="settingsHackStats1">
+											<b><tmpl_var name="_DOWNLOADSPEED">:</b><br>
+											<a href="index.php?iid=serverStats&type=who"><img src="themes/default/images/download.gif" width="16" height="16" border="0" title="" align="absmiddle"><label id="g_speedDown"><tmpl_var name="settingsHackStats11"></label> kB/s</a><br>
+										</tmpl_if>
+										<tmpl_if name="settingsHackStats2">
+											<b><tmpl_var name="_UPLOADSPEED">:</b><br>
+											<a href="index.php?iid=serverStats&type=who"><img src="themes/default/images/upload.gif" width="16" height="16" border="0" title="" align="absmiddle"><label id="g_speedUp"><tmpl_var name="settingsHackStats22"></label> kB/s</a><br>
+										</tmpl_if>
+										<tmpl_if name="settingsHackStats3">
+											<b><tmpl_var name="_TOTALSPEED">:</b><br>
+											<a href="index.php?iid=serverStats&type=who"><img src="themes/default/images/updown.gif" width="16" height="16" border="0" title="" align="absmiddle"><label id="g_speedTotal"><tmpl_var name="settingsHackStats33"></label> kB/s</a><br>
+										</tmpl_if>
+										<tmpl_if name="settingsHackStats4">
+											<b><tmpl_var name="_ID_CONNECTIONS">:</b><br>
+											<a href="index.php?iid=serverStats&type=all"><img src="themes/default/images/all.gif" width="16" height="16" border="0" title="" align="absmiddle"><label id="g_cons"><tmpl_var name="settingsHackStats44"></label></a><br>
+										</tmpl_if>
+										<tmpl_if name="settingsHackStats5">
+											<b><tmpl_var name="_DRIVESPACE">:</b><br>
+											<a href="index.php?iid=serverStats&type=drivespace"><img src="themes/default/images/hdd.gif" width="16" height="16" border="0" title="" align="absmiddle"><label id="g_freeSpace"><tmpl_var name="settingsHackStats55"></label></a><br>
+										</tmpl_if>
+										<tmpl_if name="settingsHackStats6">
+											<b><tmpl_var name="_SERVERLOAD">:</b><br>
+											<a href="index.php?iid=serverStats&type=who"><img src="themes/default/images/who.gif" width="16" height="16" border="0" title="" align="absmiddle"><label id="g_loadavg"><tmpl_var name="settingsHackStats66"></label></a><br>
+										</tmpl_if>
+									</td>
+								</tmpl_if>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#A2BED4" colspan="2" nowrap>
+					<div align="center">
+						<font face="Arial" size="2">
+							<a href="index.php?iid=readrss">
+								<img src="themes/default/images/download_owner.gif" width="16" height="16" border="0" title="RSS Torrents" align="absmiddle">RSS Torrents</a>
+							|
+							<a href="index.php?iid=serverStats">
+								<img src="themes/default/images/serverStats.gif" width="16" height="16" title="" border="0" align="absmiddle">Server Stats</a>
+							|
+							<a href="index.php?iid=images">
+								<img src="themes/default/images/images.gif" width="16" height="16" title="" border="0" align="absmiddle"><tmpl_var name="_ID_IMAGES"></a>
+							|
+							<a href="index.php?iid=dir">
+								<img src="themes/default/images/folder.gif" title="" border="0" align="absmiddle"><tmpl_var name="_DIRECTORYLIST"></a>
+							|
+							<a href="index.php?iid=dir&dir=<tmpl_var name="path_incoming">">
+								<img src="themes/default/images/incomming.gif" width="16" height="16" title="Incoming" border="0" align="absmiddle">Incoming</a>
+							|
+							<a href="JavaScript:openServerMonitor()">
+								<img src="themes/default/images/servmon.gif" width="16" height="16" title="Server Monitor" border="0" align="absmiddle">Server Monitor</a>
+							|
+							<a href="stats.php?t=all&f=rss" title="RSS - Stats" target="_blank">
+								<img src="themes/default/images/rss.png" width="14" height="14" border="0" alt="RSS - Stats" title="RSS - Stats" align="absmiddle">RSS Stats</a>
+						</font>
+					</div>
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#A2BED4" colspan="2">
+					<tmpl_if name="drivespacebar_type" value="xfer">
+					    <tmpl_include name="inc.driveSpaceBar_xfer.tmpl">
+					<tmpl_else>
+					    <tmpl_include name="inc.driveSpaceBar_tf.tmpl">
+					</tmpl_if>
+					<tmpl_if name="xfer_realtime">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<tmpl_var name="xfer_day">
+								<tmpl_var name="xfer_week">
+								<tmpl_var name="xfer_month">
+								<tmpl_var name="xfer_total">
+							</tr>
+						</table>
+					</tmpl_if>
+					</td>
+				</tr>
+				<tmpl_if name="ui_displaybandwidthbars">
+					<tr><td bgcolor="#A2BED4" colspan="2">
+						<tmpl_if name="bandwidthbars_type" value="xfer">
+						    <tmpl_include name="inc.bandwidthBars_xfer.tmpl">
+						<tmpl_else>
+						    <tmpl_include name="inc.bandwidthBars_tf.tmpl">
+						</tmpl_if>
+					</td></tr>
+				</tmpl_if>
+				<tmpl_if name="enable_bigboldwarning" value="1">
+					<tr>
+						<td bgcolor="#A2BED4" colspan="2" nowrap>
+							<div align="center">
+								<font face="Arial" size="2" color="red"><strong>
+									Warning! <tmpl_var name="drivespace">% drivespace is used! You have <tmpl_var name="freeSpaceFormatted"> left!
+								</strong></font>
+							</div>
+						</td>
+					</tr>
+				</tmpl_if>
+			</table>
+		<form action="dispatcher.php" method="POST" onsubmit="return actionSubmit()">
+			<div id="transferList"><tmpl_include name="inc.transferList.tmpl"></div>
+			<table bgcolor="<tmpl_var name="table_data_bg">" width="100%" bordercolor="<tmpl_var name="table_border_dk">" border="0" cellpadding=3 cellspacing=0>
+				<tr>
+					<td bgcolor="<tmpl_var name="table_header_bg">">
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td valign="top">
+									<div align="right">
+										<table width="100%">
+											<tr>
+												<td align="left">
+													<table><tr>
+														<tmpl_if name="enable_metafile_download">
+															<td>
+																<img src="themes/default/images/down.gif" width="16" height="16" title="Download Metafile">
+															</td>
+															<td class="tiny">Download Metafile</td>
+														</tmpl_if>
+														<td>
+															<img src="themes/default/images/datadir.gif" title="Transfer-Data">
+														</td>
+														<td class="tiny">Data</td>
+														<td nowrap>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+														<td>
+															<img src="themes/default/images/bulkstart.gif" width="16" height="16" title="<tmpl_var name="_RUNTRANSFER"> (Advanced)">
+															<img src="themes/default/images/bulkresume.gif" width="16" height="16" title="<tmpl_var name="_RUNTRANSFER"> (Quick)">
+														</td>
+														<td class="tiny"><tmpl_var name="_RUNTRANSFER"></td>
+														<td>
+															<img src="themes/default/images/bulkstop.gif" width="16" height="16" title="<tmpl_var name="_STOPTRANSFER">">
+														</td>
+														<td class="tiny"><tmpl_var name="_STOPTRANSFER"></td>
+														<tmpl_if name="queueActive" value="1">
+															<td><img src="themes/default/images/queued.gif" width="16" height="16" title="<tmpl_var name="_DELQUEUE">">
+														</td>
+															<td class="tiny"><tmpl_var name="_DELQUEUE"></td>
+														</tmpl_if>
+														<td>
+															<img src="themes/default/images/seed.gif" title="<tmpl_var name="_SEEDTRANSFER"> (Advanced)">
+															<img src="themes/default/images/seedstart.gif" title="<tmpl_var name="_SEEDTRANSFER"> (Quick)">
+														</td>
+														<td class="tiny"><tmpl_var name="_SEEDTRANSFER"></td>
+														<td>
+															<img src="themes/default/images/delete_on.gif" width="16" height="16" title="<tmpl_var name="_DELETE">">
+														</td>
+														<td class="tiny"><tmpl_var name="_DELETE"></td>
+													</tr></table>
+												</td>
+												<td align="right">
+													<table><tr>
+														<td class="tiny" align="right" nowrap>
+															<a href="dispatcher.php?action=cacheFlush" onclick="return actionClick(true)"><img src="themes/default/images/cache.gif" width="16" height="16" border="0" title="Flush Cache"></a>
+														</td>
+														<td class="tiny" align="left" nowrap>
+															<a href="dispatcher.php?action=maintenance" onclick="return actionClick(true)"><img src="themes/default/images/maintenance.gif" width="16" height="16" border="0" title="Maintenance"></a>
+														</td>
+														<tmpl_if name="enable_bulkops">
+															<td nowrap>&nbsp;&nbsp;&nbsp;</td>
+															<td class="tiny" align="right" nowrap>
+																<a href="dispatcher.php?action=bulkStart" onclick="return actionConfirm('Start All Transfers ?')"><img src="themes/default/images/bulkstart.gif" width="16" height="16" border="0" title="Start All Transfers"></a>
+																<a href="dispatcher.php?action=bulkResume" onclick="return actionConfirm('Resume All Transfers ?')"><img src="themes/default/images/bulkresume.gif" width="16" height="16" border="0" title="Resume All Transfers"></a>
+																<a href="dispatcher.php?action=bulkStop" onclick="return actionConfirm('Stop All Transfers ?')"><img src="themes/default/images/bulkstop.gif" width="16" height="16" border="0" title="Stop All Transfers"></a>
+															</td>
+														</tmpl_if>
+														<tmpl_if name="enable_multiops">
+															<td nowrap>&nbsp;&nbsp;&nbsp;</td>
+															<td class="tiny" align="right" nowrap>
+																<select name="action" size="1">
+																	<option value="---" selected>---</option>
+																	<option value="transferStart" style="background-color: #00EC00">Start</option>
+																	<option value="transferStop" style="background-color: #94ABC0">Stop</option>
+																	<tmpl_if name="queueActive" value="1">
+																		<option value="transferEnQueue" style="background-color: #FFFC00">EnQueue</option>
+																		<option value="transferDeQueue" style="background-color: #FFFC00">DeQueue</option>
+																	</tmpl_if>
+																	<option value="transfer" style="background-color: #DDAAAA">Delete</option>
+																	<option value="transferData" style="background-color: #DDAAAA">Delete with Data</option>
+																	<option value="transferResetTotals" style="background-color: #DDAAAA">Reset Totals</option>
+																	<option value="transferWipe" style="background-color: #DDAAAA">Wipe</option>
+																</select>
+																<input type="submit" value="Go">
+																<input type="checkbox" name="bulkBox" onclick="bulkCheck(this);">
+															</td>
+														</tmpl_if>
+													</tr></table>
+												</td>
+											</tr>
+										</table>
+									</form>
+								</div>
+								<div align="center" class="tiny">
+									<tmpl_if name="page_refresh">
+										<a href="dispatcher.php?action=set&key=index_meta_refresh&val=0" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											<tmpl_var name="_PAGEWILLREFRESH"> <span id='span_refresh'><tmpl_var name="page_refresh"></span> <tmpl_var name="_SECONDS">
+										</a>
+										<br>
+									<tmpl_else>
+										<a href="dispatcher.php?action=set&key=index_meta_refresh&val=1" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											<tmpl_var name="_TURNONREFRESH">
+										</a>
+										<br>
+									</tmpl_if>
+									<tmpl_if name="index_ajax_update">
+										<a href="dispatcher.php?action=set&key=index_ajax_update&val=0" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											<span id='span_update'>Next AJAX-Update in <tmpl_var name="index_ajax_update"> seconds</span>
+										</a>
+										<br>
+									<tmpl_else>
+										<a href="dispatcher.php?action=set&key=index_ajax_update&val=1" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											Turn ON AJAX-Update
+										</a>
+										<br>
+									</tmpl_if>
+									<tmpl_if name="onLoad">
+										<a href="dispatcher.php?action=set&key=_refresh_&val=0" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											<tmpl_var name="_TURNOFFREFRESH"> AND AJAX-Update
+										</a>
+										<br>
+									</tmpl_if>
+									<tmpl_if name="index_show_seeding">
+										<a href="dispatcher.php?action=set&key=index_show_seeding&val=0" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											Hide Seeding Torrents
+										</a>
+										<br>
+									<tmpl_else>
+										<a href="dispatcher.php?action=set&key=index_show_seeding&val=1" onclick="return actionClick(true)" style="font-size:10px; text-decoration:none;">
+											Show Seeding Torrents
+										</a>
+										<br>
+									</tmpl_if>
+								</div>
+								<tmpl_if name="index_page_stats">
+									<div align="center">
+										<table width="100%">
+											<tr>
+												<tmpl_if name="xfer_realtime">
+													<td class="tiny" align="left" valign="bottom">
+														<b><tmpl_var name="_SERVERXFERSTATS"></b><br>
+														<tmpl_var name="_TOTALXFER">: <strong><label id="xferGlobalTotal"><tmpl_var name="totalxfer1"></label></strong><br>
+														<tmpl_var name="_MONTHXFER">: <strong><label id="xferGlobalMonth"><tmpl_var name="monthxfer1"></label></strong><br>
+														<tmpl_var name="_WEEKXFER">: <strong><label id="xferGlobalWeek"><tmpl_var name="weekxfer1"></label></strong><br>
+														<tmpl_var name="_DAYXFER">: <strong><label id="xferGlobalDay"><tmpl_var name="dayxfer1"></label></strong><br>
+													</td>
+												</tmpl_if>
+												<tmpl_if name="queueActive" value="1">
+													<td align="center" valign="bottom">
+														<div class="tiny">
+															<b><tmpl_var name="_QUEUEMANAGER"></b><br>
+															<strong><label id="running"><tmpl_var name="runningTransferCount"></label></strong> transfer(s) running and <strong><label id="queued"><tmpl_var name="countQueuedTransfers"></label></strong> queued.<br>
+															Total transfers server will run: <strong><tmpl_var name="limitGlobal"></strong><br>
+															Total transfers a user may run: <strong><tmpl_var name="limitUser"></strong><br>
+														</div>
+													</td>
+												</tmpl_if>
+												<td class="tiny" align="center" valign="bottom">
+													<b><tmpl_var name="_OTHERSERVERSTATS"></b><br>
+													<tmpl_var name="_DOWNLOADSPEED">: <strong><label id="b_speedDown"><tmpl_var name="downloadspeed1"></label> (<tmpl_var name="downloadspeed11">)</strong> kB/s<br>
+													<tmpl_var name="_UPLOADSPEED">: <strong><label id="b_speedUp"><tmpl_var name="uploadspeed1"></label> (<tmpl_var name="uploadspeed11">)</strong> kB/s<br>
+													<tmpl_var name="_TOTALSPEED">: <strong><label id="b_speedTotal"><tmpl_var name="totalspeed1"></label> (<tmpl_var name="totalspeed11">)</strong> kB/s<br>
+													<tmpl_var name="_ID_CONNECTIONS">: <strong><label id="b_cons"><tmpl_var name="id_connections1"></label> <tmpl_var name="id_connections11"></strong><br>
+													<tmpl_var name="_DRIVESPACE">: <strong><label id="b_freeSpace"><tmpl_var name="drivespace1"></label></strong><br>
+													<tmpl_var name="_SERVERLOAD">: <strong><label id="b_loadavg"><tmpl_var name="serverload1"></label></strong>
+												</td>
+												<tmpl_if name="xfer_realtime">
+													<td class="tiny" align="right" valign="bottom">
+														<b><tmpl_var name="_YOURXFERSTATS"></b><br>
+														<tmpl_var name="_TOTALXFER">: <strong><label id="xferUserTotal"><tmpl_var name="total2"></label></strong><br>
+														<tmpl_var name="_MONTHXFER">: <strong><label id="xferUserMonth"><tmpl_var name="month2"></label></strong><br>
+														<tmpl_var name="_WEEKXFER">: <strong><label id="xferUserWeek"><tmpl_var name="week2"></label></strong><br>
+														<tmpl_var name="_DAYXFER">: <strong><label id="xferUserDay"><tmpl_var name="day2"></label></strong><br>
+													</td>
+												</tmpl_if>
+											</tr>
+										</table>
+									</div>
+								</tmpl_if>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<tmpl_include name="inc.fluxlink.tmpl">
+		<tmpl_if name="IsForceReadMsg">
+			<script language="JavaScript">
+				if (confirm("<tmpl_var name="_ADMINMESSAGE">")) {
+					document.location = "index.php?iid=readmsg";
+				}
+			</script>
+		</tmpl_if>
+	</td>
+	</tr>
+	</table>
+</div>
+<div id="action_in_progress" class="hidden"><img src="themes/<tmpl_var name="theme">/images/loading_small.gif" alt="" style="vertical-align:middle;" />&nbsp;<span id="progress_label">Processing Request</span></div>
+<div id="grey_out" class="hidden"></div>
+</body>
+</html>

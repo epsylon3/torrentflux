@@ -1,0 +1,84 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="login_in_progress" style="display: none;">Login...</div>
+<div id="content">
+	<tmpl_if name="login_failed">
+		<div align="center">Login failed.<br />Please try again.</div>
+	</tmpl_if>
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<form name="cookieLogin" action="login.php" method="post">
+				<span class="upload_first">
+					Login
+					<tmpl_if name="auth_type" value="1">
+						<tmpl_if name="cookie_set" value="1">
+							<input name="docookielogin" type="Hidden" value="true">
+							<input name="username" type="Hidden" value="<tmpl_var name="cookieuser">">
+							<input name="md5pass" type="Hidden" value="<tmpl_var name="cookiepass">">
+							<input class="button" type="submit" value="Login as <tmpl_var name="cookieuser">" />
+						</tmpl_if>
+					</tmpl_if>
+				</span>
+			</form>
+		</div>
+	</div>
+	<div id="fileUpload" class="uploadClass">
+		<tmpl_if name="auth_type" value="1">
+			<tmpl_if name="cookie_set" value="1">
+				<div class="cookie">Login as different User:</div>
+				<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(0)">
+					<input name="docookieloginnew" type="Hidden" value="true">
+					<label for="username">Username:</label>
+					<input type="text" name="username" id="username" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000;" /><br />
+					<label for="iamhim">Password:</label>
+					<input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+					<label for="setcookie">Set "Auto-Login" Cookie</label>
+					<input type="checkbox" name="setcookie" id="setcookie" value="true" checked size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+					<input class="button" type="submit" value="Login" />
+				</form>
+			<tmpl_else>
+				<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(0)">
+					<input name="docookieloginnew" type="Hidden" value="true">
+					<label for="username">Username:</label>
+					<input type="text" name="username" id="username" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000;" /><br />
+					<label for="iamhim">Password:</label>
+					<input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+					<label for="setcookie">Set "Auto-Login" Cookie</label>
+					<input type="checkbox" name="setcookie" id="setcookie" value="true" checked size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+					<input class="button" type="submit" value="Login" />
+				</form>
+			</tmpl_if>
+		<tmpl_elseif name="auth_type" value="4">
+			<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(<tmpl_var name="imageSupported">)">
+				<label for="username">Username:</label>
+				<input type="text" name="username" id="username" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000;" /><br />
+				<label for="iamhim">Password:</label>
+				<input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+				<tmpl_if name="imageSupported" value="1">
+					<label for="security"><img border="1" align="middle" src="image.php?i=login&rnd=<tmpl_var name="rnd">"></label>
+					<input type="text" name="security" id="security" value="" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+					<input type="Hidden" name="rnd_chk" value="<tmpl_var name="rnd">">
+				<tmpl_else>
+					<img border="0" align="middle" src="image.php?i=notsup"><br />
+				</tmpl_if>
+				<input class="button" type="submit" value="Login" />
+			</form>
+		<tmpl_else>
+			<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(0)">
+				<label for="username">Username:</label>
+				<input type="text" name="username" id="username" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000;" /><br />
+				<label for="iamhim">Password:</label>
+				<input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+				<input class="button" type="submit" value="Login" />
+			</form>
+		</tmpl_if>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+<div id="content">
+<script type="text/javascript">
+	document.theForm.username.focus();
+</script>
+</body>
+</html>

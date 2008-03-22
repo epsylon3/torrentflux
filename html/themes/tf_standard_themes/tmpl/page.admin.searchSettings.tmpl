@@ -1,0 +1,105 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<div align="center">
+	<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+				<img src="themes/tf_standard_themes/images/properties.png" width=18 height=13 border=0>&nbsp;&nbsp;<font class="title">Search Settings</font>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<div align="center">
+					<form name="theForm" action="admin.php?op=searchSettings" method="post">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td align="right" width="350">
+									<label for="searchEngine"><strong>Select Search Engine</strong></label>
+								</td>
+								<td>
+									<select name="searchEngine" id="searchEngine" <tmpl_if name="autoSubmit">onchange="this.form.submit();"</tmpl_if> STYLE="width: 125px">
+									<tmpl_loop name="Engine_List">
+										<option <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="Engine"></option>
+									</tmpl_loop>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</form>
+					<tmpl_if name="is_file">
+						<form name="theSearchEngineSettings" action="admin.php?op=updateSearchSettings" method="post">
+							<input type="hidden" name="searchEngine" value="<tmpl_var name="searchEngine">">
+							<table cellpadding="0" cellspacing="0" border="0" width="100%">
+								<tr>
+									<td>
+										<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+											<tr>
+												<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/"<tmpl_var name="theme">/images/bar.gif"><img src="themes/tf_standard_themes/images/properties.png" width=18 height=13 border=0>&nbsp;&nbsp;<font class="title"><tmpl_var name="mainTitle"> Search Settings</font></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<table cellpadding="5" cellspacing="0" border="0" width="100%">
+											<tr>
+												<td align="left" width="350" valign="top"><strong>Search Engine URL:</strong></td>
+												<td valign="top">
+													<a href="http://<tmpl_var name="mainURL">" target="_blank"><tmpl_var name="mainTitle"></a>
+												</td>
+											</tr>
+											<tr>
+												<td align="left" width="350" valign="top"><strong>Search Module Author:</strong></td>
+												<td valign="top">
+													<tmpl_var name="author">
+												</td>
+											</tr>
+											<tr>
+												<td align="left" width="350" valign="top"><strong>Version:</strong></td>
+												<td valign="top">
+													<tmpl_var name="version">
+												</td>
+											</tr>
+											<tmpl_if name="update_pos">
+												<tr>
+													<td align="left" width="350" valign="top"><strong>Update Location:</strong></td>
+													<td valign="top">
+														<a href="<tmpl_var name="updateURL">" target="_blank">Check for Update</a>
+													</td>
+												</tr>
+											</tmpl_if>
+											<tmpl_if name="cat_pos">
+												<tr>
+													<td align="left" width="350" valign="top">
+														<label for="catsselect"><strong>Search Filter:</strong></label><br/>
+														Select the items that you DO NOT want to show in the torrent search:
+													</td>
+													<td valign="top">
+														<select multiple name="<tmpl_var name="catFilterName">[]" id="catsselect" size="8" STYLE="width: 125px">
+															<option value="">[NO FILTER]</option>
+															<tmpl_loop name="cats">
+																<option value="<tmpl_var name="mainId">"
+																<tmpl_if name="in_array">
+																	 selected
+																</tmpl_if>
+																><tmpl_var name="mainName"></option>
+															</tmpl_loop>
+														</select>
+													</td>
+												</tr>
+											</tmpl_if>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<input type="Submit" value="Update Settings">
+						</form>
+					</tmpl_if>
+				</div>
+				<br>
+			</td>
+		</tr>
+	</table>
+</div>
+<tmpl_include name="inc.subfoot.tmpl">

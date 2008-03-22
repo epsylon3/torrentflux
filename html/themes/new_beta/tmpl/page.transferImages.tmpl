@@ -1,0 +1,34 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<table bgcolor="#A2BED4" width="100%" cellpadding="1">
+	<tr>
+		<td>
+			<div align="center">
+				<table border="0" cellpadding="2" cellspacing="2" width="100%">
+					<tr>
+						<td align="center">
+							<strong>Totals</strong>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<img src="image.php?i=pieTransferTotals&transfer=<tmpl_var name="transfer">" border="0" title="Totals">
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<strong>Peers</strong>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<img src="image.php?i=pieTransferPeers&transfer=<tmpl_var name="transfer">" border="0" title="Peers">
+						</td>
+					</tr>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

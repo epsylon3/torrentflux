@@ -1,0 +1,23 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				<tmpl_var name="_TRYDIFFERENTUSERID">
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<span id="newUser"><tmpl_var name="user_id"></span>
+		<tmpl_var name="_HASBEENUSED">
+		<br /><br />
+		[<a id="closeLink" href="admin.php?op=editUser&user_id=<tmpl_var name="org_user_id">"><tmpl_var name="_RETURNTOEDIT"> <span id="newUser"><tmpl_var name="org_user_id"></span></a>]
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

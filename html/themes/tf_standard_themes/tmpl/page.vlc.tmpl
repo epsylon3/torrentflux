@@ -1,0 +1,136 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+						<tmpl_if name="pageop" value="default">
+							<div align="center">
+								<tmpl_if name="is_streaming" value="1">
+									<br>
+									<p>
+										<strong><font color="red">Attention !</font></strong>
+										<br>
+										<tmpl_if name="current_stream">
+											<em><tmpl_var name="current_stream"></em> is running.
+										<tmpl_else>
+											Stream is running.
+										</tmpl_if>
+										<br>
+										Be careful and do not disrupt anyone.
+									</p>
+									<p>
+										<a href="mms://<tmpl_var name="addr">:<tmpl_var name="port">" style="font-size:10px; text-decoration:none;">Click here to watch current stream - Windows Media Player</a>
+										<br>
+										<a href="mmsh://<tmpl_var name="addr">:<tmpl_var name="port">" style="font-size:10px; text-decoration:none;">Click here to watch current stream - VLC</a>
+									</p>
+									<p>
+										<form method="POST" action="index.php?iid=vlc" name="vlc_form_stop">
+											<input type="submit" value="Stop Stream" name="OK">
+											<input type="hidden" name="pageop" value="stop">
+										</form>
+									</p>
+									<br>
+								<tmpl_else>
+									<form method="POST" action="index.php?iid=vlc" name="vlc_form_start">
+										<p>
+											<strong><tmpl_var name="file"></strong>
+										</p>
+										<label for="vidc">Video Codec</label>
+										<select id="vidc" name="vidc">
+											<tmpl_loop name="list_vidc">
+												<option value="<tmpl_var name="name">"><tmpl_var name="name"></option>
+											</tmpl_loop>
+										</select>
+										<label for="vbit">Video Bitrate (kB/s)</label>
+										<select id="vbit" name="vbit">
+											<tmpl_loop name="list_vbit">
+												<option value="<tmpl_var name="name">"><tmpl_var name="name"></option>
+											</tmpl_loop>
+										</select>
+										<br>
+										<label for="audc">Audio Codec</label>
+										<select id="audc" name="audc">
+											<tmpl_loop name="list_audc">
+												<option value="<tmpl_var name="name">"><tmpl_var name="name"></option>
+											</tmpl_loop>
+										</select>
+										<label for="abit">Audio Bitrate (kB/s)</label>
+										<select id="abit" name="abit">
+											<tmpl_loop name="list_abit">
+												<option value="<tmpl_var name="name">"><tmpl_var name="name"></option>
+											</tmpl_loop>
+										</select>
+										<br><br>
+										<input type="submit" value="Start Stream" name="OK">
+										<input type="hidden" name="target" value="<tmpl_var name="target">">
+										<input type="hidden" name="file" value="<tmpl_var name="file">">
+										<input type="hidden" name="pageop" value="start">
+									</form>
+									<p>
+										<div class="tiny">
+											Please Click "Stop Stream" after you have finished.
+											<br>
+											Remember that the current stream must be stopped before a new one can be opened.
+										</div>
+									</p>
+								</tmpl_if>
+							</div>
+						<tmpl_elseif name="pageop" value="start">
+								<br>
+								<div align="center">
+									<p>
+										<strong>Stream started.</strong>
+									</p>
+									<table>
+										<tr>
+											<td align="right" nowrap>Stream :</td>
+											<td align="right" nowrap><tmpl_var name="addr">:<tmpl_var name="port"></td>
+										</tr>
+										<tr>
+											<td align="right" nowrap>File :</td>
+											<td align="right" nowrap><tmpl_var name="file"></td>
+										</tr>
+										<tr>
+											<td align="right" nowrap>Video Codec :</td>
+											<td align="right" nowrap><tmpl_var name="vidc"></td>
+										</tr>
+										<tr>
+											<td align="right" nowrap>Video Bitrate :</td>
+											<td align="right" nowrap><tmpl_var name="vbit"></td>
+										</tr>
+										<tr>
+											<td align="right" nowrap>Audio Codec :</td>
+											<td align="right" nowrap><tmpl_var name="audc"></td>
+										</tr>
+										<tr>
+											<td align="right" nowrap>Audio Bitrate :</td>
+											<td align="right" nowrap><tmpl_var name="abit"></td>
+										</tr>
+									</table>
+									<p>
+										<a href="mms://<tmpl_var name="addr">:<tmpl_var name="port">" style="font-size:10px; text-decoration:none;">Click here to watch your stream - Windows Media Player</a>
+										<br>
+										<a href="mmsh://<tmpl_var name="addr">:<tmpl_var name="port">" style="font-size:10px; text-decoration:none;">Click here to watch your stream - VLC</a>
+									</p>
+									<p>
+										<form method="POST" action="index.php?iid=vlc" name="vlc_form_stop">
+											<input type="submit" value="Stop Stream" name="OK">
+											<input type="hidden" name="pageop" value="stop">
+										</form>
+									</p>
+								</div>
+								<br>
+						<tmpl_elseif name="pageop" value="stop">
+							<br>
+							<p align="center">
+								<strong>Stream stopped.</strong>
+							</p>
+							<br>
+						</tmpl_if>
+					</td>
+				</tr>
+			</table>
+			[<a href="#" onclick="window.opener.location.reload();window.close();">Close Window</a>]
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.fluxlink.tmpl">
+</body>
+</html>

@@ -1,0 +1,37 @@
+<tmpl_if name="type" value="xfer">
+	<tr>
+		<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+			<div class="small" style="text-align:left;"><tmpl_var name="title"></div>
+		</td>
+		<td>
+			<table style="width:99%;" cellspacing="0">
+				<tr>
+					<td style="height:12px;line-height:12px;background-color:<tmpl_var name="bgcolor">;width:<tmpl_var name="percent_100">%;">&nbsp;</td>
+					<td style="height:12px;line-height:12px;background-color:#000000;width:<tmpl_var name="percent">%;">&nbsp;</td>
+				</tr>
+			</table>
+		</td>
+		<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+			<div class="small" style="text-align:left;white-space:nowrap;">
+				<tmpl_var name="percent">%<tmpl_var name="text">
+			</div>
+		</td>
+	</tr>
+<tmpl_else>
+	<tr>
+		<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+			<div class="small" style="text-align:left;"><tmpl_var name="title"></div>
+		</td>
+		<td>
+			<div style="width:99%;height:12px;border-left:1px solid #000000;border-right:1px solid #000000;padding:0px;" class="clearfix">
+				<img src="themes/<tmpl_var name="theme">/images/proglass.gif" style="height:12px;width:<tmpl_var name="percent_100">%;float:left;" alt="" />
+				<img src="themes/<tmpl_var name="theme">/images/noglass.gif" style="height:12px;width:<tmpl_var name="percent">%;float:left;" alt="" />
+			</div>
+		</td>
+		<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+			<div class="small" style="text-align:left;white-space:nowrap;">
+				<tmpl_var name="percent">%<tmpl_var name="text">
+			</div>
+		</td>
+	</tr>
+</tmpl_if>

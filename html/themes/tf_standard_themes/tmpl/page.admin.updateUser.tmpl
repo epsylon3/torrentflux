@@ -1,0 +1,14 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<br>
+<div align="center">
+	<tmpl_var name="_TRYDIFFERENTUSERID">
+	<br>
+	<strong><tmpl_var name="user_id"></strong>
+	<tmpl_var name="_HASBEENUSED">
+	<br><br><br>
+	[<a href="admin.php?op=editUser&user_id=<tmpl_var name="org_user_id">"><tmpl_var name="_RETURNTOEDIT"> <tmpl_var name="org_user_id"></a>]
+</div>
+<br><br><br>
+<tmpl_include name="inc.subfoot.tmpl">

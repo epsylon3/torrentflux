@@ -1,0 +1,109 @@
+<tmpl_if name="transferStatsType" value="ajax">
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+	<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<title><tmpl_var name="pagetitle"> - <tmpl_var name="_DOWNLOADDETAILS"></title>
+		<link rel="icon" href="themes/default/images/favicon.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="themes/default/images/favicon.ico" type="image/x-icon" />
+		<link rel="StyleSheet" href="themes/<tmpl_var name="theme">/css/default.css" type="text/css" />
+		<script src="js/ajax.js" type="text/javascript"></script>
+		<script src="js/ajax_transferStats.js" type="text/javascript"></script>
+	</head>
+	<body topmargin="8" leftmargin="5" bgcolor="#829FB5" onLoad="<tmpl_var name="onLoad">">
+	<div align="center">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr>
+				<td>
+					<table border="1" bordercolor="#A2BED4" cellpadding="4" cellspacing="0" width="100%">
+						<tr>
+							<td bgcolor="#829FB5" background="themes/default/images/bar.gif">
+								<tmpl_include name="inc.titleBar.tmpl">
+							</td>
+						</tr>
+						<tr>
+							<td bgcolor="#A2BED4">
+								<div align="center">
+									<table width="100%" bgcolor="#A2BED4">
+										<tr>
+											<td>
+<tmpl_else>
+	<tmpl_include name="inc.head.tmpl">
+	<tmpl_include name="inc.transferHead.tmpl">
+</tmpl_if>
+											<tmpl_include name="inc.transferNavi.tmpl">
+											<table width="100%" cellpadding="3" cellspacing="0" border="0">
+												<tr>
+													<td align="center">
+														<font class="tiny"><tmpl_var name="size"></font>
+													</td>
+												</tr>
+											</table>
+											<table bgcolor="#A2BED4" width="100%" cellpadding="1">
+												<tr>
+													<td>
+														<table width="100%" cellpadding="0" cellspacing="0" border="0">
+															<tr>
+																<td background="themes/default/images/proglass.gif"><img id="barImage1" name="barImage1" src="themes/default/images/blank.gif" width="<tmpl_var name="graph_width1">" height="12" border="0"></td>
+																<td background="themes/default/images/noglass.gif" bgcolor="<tmpl_var name="background">"><img id="barImage2" name="barImage2" src="themes/default/images/blank.gif" width="<tmpl_var name="graph_width2">" height="12" border="0"></td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<div align="center">
+															<table border="0" cellpadding="2" cellspacing="2" width="380">
+																<tr>
+																	<td align="right"><div class="tiny"><tmpl_var name="_ESTIMATEDTIME">:</div></td>
+																	<td colspan="3" bgcolor="#A2BED4"><div class="tiny"><strong><label id="eta"><tmpl_if name="time_left" value="-">&#8734<tmpl_else><tmpl_var name="time_left"></tmpl_if></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_PERCENTDONE">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="percentDone"><tmpl_var name="percent_done"></label>%</strong></div></td>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_USER">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="transferowner"><tmpl_var name="transferowner"></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_DOWNLOADSPEED">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="speedDown"><tmpl_var name="down_speed"></label></strong></div></td>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_UPLOADSPEED">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="speedUp"><tmpl_var name="up_speed"></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny">Down:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="downCurrent"><tmpl_var name="downTotalCurrent"></label></strong></div></td>
+																	<td align="right" nowrap><div class="tiny">Up:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="upCurrent"><tmpl_var name="upTotalCurrent"></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny">Down-Total:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="downTotal"><tmpl_var name="downTotal"></label></strong></div></td>
+																	<td align="right" nowrap><div class="tiny">Up-Total:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="upTotal"><tmpl_var name="upTotal"></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny">Seeds:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="seeds"><tmpl_var name="seeds"></label></strong></div></td>
+																	<td align="right" nowrap><div class="tiny">Peers:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="peers"><tmpl_var name="peers"></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_ID_PORT">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="port"><tmpl_var name="port"></label></strong></div></td>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_ID_CONNECTIONS">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="cons"><tmpl_var name="cons"></label></strong></div></td>
+																</tr>
+																<tr>
+																	<td align="right" nowrap><div class="tiny"><tmpl_var name="_SHARING">:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="sharing"><tmpl_var name="sharing"></label>%</strong></div></td>
+																	<td align="right" nowrap><div class="tiny">Seed Until:</div></td>
+																	<td align="left" bgcolor="#A2BED4" nowrap><div class="tiny"><strong><label id="sharekill"><tmpl_var name="sharekill"></label></strong></div></td>
+																</tr>
+															</table>
+														</div>
+													</td>
+												</tr>
+											</table>
+<tmpl_include name="inc.transferFoot.tmpl">

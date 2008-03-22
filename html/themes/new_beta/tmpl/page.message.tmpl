@@ -1,0 +1,19 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<form name="theForm" method="post" action="index.php?iid=message">
+		<label for="to_user"><tmpl_var name="_TO">:</label> <input type="Text" name="to_user" id="to_user" value="<tmpl_var name="to_user">" size="20" readonly="true"><br />
+		<label for="from_user"><tmpl_var name="_FROM">:</label> <input type="Text" name="from_user" id="from_user" value="<tmpl_var name="user">" size="20" readonly="true"><br />
+		<label for="message"><tmpl_var name="_YOURMESSAGE">:</label><br />
+		<textarea cols="72" rows="10" name="message" id="message" wrap="hard" tabindex="1"><tmpl_var name="message"></textarea><br />
+		<input type="Checkbox" name="to_all" id="to_all" value=1><label for="to_all"><tmpl_var name="_SENDTOALLUSERS"></label><br />
+		<tmpl_if name="isAdmin">
+			<input type="Checkbox" name="force_read" id="force_read" value=1><label for="force_read"><tmpl_var name="_FORCEUSERSTOREAD"></label><br />
+		</tmpl_if>
+		<input type="Submit" name="Submit" value="<tmpl_var name="_SEND">">
+	</form>
+	<script>document.theForm.message.focus();</script>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

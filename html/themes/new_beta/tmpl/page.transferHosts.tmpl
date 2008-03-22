@@ -1,0 +1,35 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<table width="100%" cellpadding="3" cellspacing="0" border="0">
+	<tr>
+		<td align="center">
+			<font class="tiny"><tmpl_var name="cons_hosts"> Hosts</font>
+		</td>
+	</tr>
+</table>
+<table bgcolor="#A2BED4" width="100%" cellpadding="1">
+	<tr>
+		<td>
+			<div align="center">
+				<table border="0" cellpadding="2" cellspacing="2" width="90%">
+					<tmpl_if name="transfer_hosts_aval">
+						<tr>
+							<td><div class="tiny"><strong><tmpl_var name="_ID_HOST"></strong></div></td>
+							<td><div class="tiny"><strong><tmpl_var name="_ID_PORT"></strong></div></td>
+						</tr>
+						<tmpl_if name="hosts">
+							<tmpl_loop name="list_host">
+								<tr>
+									<td nowrap><div class="tiny"><tmpl_var name="host"></div></td>
+									<td nowrap><div class="tiny"><tmpl_var name="port"></div></td>
+								</tr>
+							</tmpl_loop>
+						</tmpl_if>
+					</tmpl_if>
+				</table>
+			</div>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

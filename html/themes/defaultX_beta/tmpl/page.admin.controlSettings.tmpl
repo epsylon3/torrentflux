@@ -1,0 +1,117 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<div align="center">
+	<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/default/images/bar.gif">
+				<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Control Settings</font>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<div align="center">
+					<form name="theForm" action="admin.php?op=updateControlSettings" method="post" onsubmit="return validateSettings('control')">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="transfer_customize_settings"><strong>Customize Transfer Settings:</strong></label><br/>
+									Define who can customize transfer settings.
+								</td>
+								<td valign="top">
+									<select name="transfer_customize_settings" id="transfer_customize_settings">
+										<option value="2">All Users</option>
+										<option value="1"
+										<tmpl_if name="transfer_customize_settings" value="1">
+											 selected
+										</tmpl_if>
+										>Only Admins</option>
+										<option value="0"
+										<tmpl_if name="transfer_customize_settings" value="0">
+											 selected
+										</tmpl_if>
+										>Disabled</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="transfer_profiles"><strong>Transfer Profiles:</strong></label><br/>
+									Define who can use transfer profiles.
+								</td>
+								<td valign="top">
+									<select name="transfer_profiles" id="transfer_profiles">
+										<option value="3">All Users</option>
+										<option value="2"
+										<tmpl_if name="transfer_profiles" value="2">
+											 selected
+										</tmpl_if>
+										>Only Predefined</option>
+										<option value="1"
+										<tmpl_if name="transfer_profiles" value="1">
+											 selected
+										</tmpl_if>
+										>Only Admins</option>
+										<option value="0"
+										<tmpl_if name="transfer_profiles" value="0">
+											 selected
+										</tmpl_if>
+										>Disabled</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="enable_btclient_chooser"><strong>Enable Client Chooser:</strong></label><br/>
+									When enabled, allow users to choose which transfer client to use.
+								</td>
+								<td valign="top">
+									<select name="enable_btclient_chooser" id="enable_btclient_chooser">
+										<option value="1">True</option>
+										<option value="0"
+										<tmpl_if name="enable_btclient_chooser" value="0">
+											 selected
+										</tmpl_if>
+										>False</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="showdirtree"><strong>Enable Save Path Chooser:</strong></label><br/>
+									When enabled, displays a directory tree to allow users to save downloaded transfers to any existing folder under their home directory.
+								</td>
+								<td valign="top">
+									<select name="showdirtree" id="showdirtree">
+										<option value="1">True</option>
+										<option value="0"
+										<tmpl_if name="showdirtree" value="0">
+											 selected
+										</tmpl_if>
+										>False</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="maxdepth"><strong>Save Path Chooser Max Depth:</strong></label><br/>
+									Set the maximum depth of subfolders to display in the save path chooser directory tree (set to '0' to display all subfolders).
+								</td>
+								<td valign="top">
+									<input name="maxdepth" id="maxdepth" type="Text" maxlength="1" value="<tmpl_var name="maxdepth">" size="1">
+								</td>
+							</tr>
+
+						</table>
+						<br>
+						<input type="Submit" value="Update Settings">
+					</form>
+				</div>
+				<br>
+			</td>
+		</tr>
+	</table>
+</div>
+<tmpl_include name="inc.subfoot.tmpl">

@@ -1,0 +1,287 @@
+=======================================================================
+$Id$
+vim: set comments=fb\:o,fb\:#,fb\:-,fb\:*,fb\:A.,fb\:Q. et tw=72 sw=4:
+=======================================================================
+
+/**********************************************************************
+Torrentflux-b4rt Fluazu Setup Guide
+**********************************************************************/
+
+Introduction
+
+    Fluazu provides support for Azureus in Torrentflux-b4rt.  The
+    azureus server runs in the background and the fluazu interface
+    communicates with the azureus server to control the torrents running
+    under Azureus.
+
+    This guide covers:
+
+    *   Requirements
+
+    *   Installation and initial configuration of a working console
+        based Azureus - no X required - plus installation of the Azureus
+        XML over HTTP plugin.
+
+        With thanks to 'Jessy' on the forums:
+        https://tf-b4rt.berlios.de/forum/index.php?topic=903.msg3493
+
+    *   Configuring Fluazu within Torrentflux-b4rt.
+
+    *   Fluazu Limitations
+
+    *   Checking Azureus Works
+
+
+Requirements
+
+    *   Python 2.2.1 or higher for fluazu-daemon
+
+        http://www.python.org
+
+    *   Azureus 2.5.0.0 or higher
+
+        http://azureus.sourceforge.net
+
+    *   The Azureus XML/HTTP Plugin
+
+        http://azureus.sourceforge.net/plugin_details.php?plugin=xml_http_if
+
+
+Installation And Initial Configuration Of Azureus Without X
+
+    --
+    Submitted by Jessy with thanks:
+    https://tf-b4rt.berlios.de/forum/index.php?topic=903.msg3493
+    --
+
+    This HOWTO assumes you already have java installed.
+
+    You should chown all the files you have created/downloaded to the
+    user Azureus will run as.
+
+    1.  Download necessary files:
+
+        Go to:
+
+        http://azureus.sourceforge.net/index_CVS.php
+
+        Download:
+
+        *   AzureusXXXX-XXX.jar
+        *   log4j.jar
+        *   commons-cli.jar
+
+        Go to:
+
+        http://azureus.sourceforge.net/plugin_details.php?plugin=xml_http_if
+
+        Download the XML over HTTP plugin.
+
+        Save all downloaded files in the same directory and rename
+        AzureusXXXX-XXX.jar into Azureus2.jar
+
+        Note:
+        -----
+        While it doesn't matter where you install Azureus, it is
+        important that a directory called /var/www/.azureus exists and
+        is writable by Azureus. It stores its configuration there (i
+        think this is a bug?).
+
+    2.  Run Azureus on the commandline and do some basic configuration
+        (optional).  On the shell commandline run:
+
+        java -jar Azureus2.jar --ui=console
+
+        When Azureus shows up type this at the console to set ports:
+
+        set TCP.Listen.Port 50000
+        set UDP.Listen.Port 50001
+        set UDP.NonData.Listen.Port 50002
+
+        You may also want to check if the port configuration is ok with
+        the following command in the azureus console:
+
+        show nat
+
+        Finally, exit out of Azureus for now:
+
+        quit
+
+    3.  Install XML over HTTP plugin:
+
+        Make a directory called xml_http_if in your plugins directory,
+        which should be where you installed Azureus.
+
+        Unpack xml_http_if_1.0.zip into that directory.
+
+    4.  Create a script that runs Azureus in background:
+
+        Create an executable (+x) azureusd.pl file containing the
+        following code:
+
+        #!/usr/bin/perl
+
+        use POSIX 'setsid';
+        open STDIN, "/dev/null";
+        open STDOUT,">/dev/null";
+        open STDERR,">/dev/null";
+        exit if fork > 0;
+        setsid;
+        exec("java -jar Azureus2.jar --ui=console");
+
+    5.  Start up Azureus using the script created above.
+
+        IMPORTANT:
+        ----------
+        Ensure the azureus server is run as the webserver user - use su
+        or sudo if necessary.
+
+    Notes:
+    ------
+    Useful links for installation / configuration of console azureus:
+
+    http://azureuswiki.com/index.php/Daemonized_Azureus
+    http://www.azureuswiki.com/index.php/ConsoleUI
+    http://tf-b4rt.berlios.de/azureus
+
+
+Configuring Fluazu within Torrentflux-b4rt.
+
+    1.  Login to torrentflux-b4rt web interface as an admin user:
+        + admin
+            + transfer
+                + fluazu-settings
+
+    2.  Enter the required Azureus server settings in the form and on
+        the fluazu settings page and save.
+
+        Example:
+        -----
+        Note this is only an example, enter the settings appropriate for
+        your own Azureus server setup:
+
+        Host: localhost
+        Port: 6884
+        Secure: false
+        Username: none (leave empty)
+        Password: none (leave empty)
+
+    3.  Start fluazu-daemon - goto the following menu item:
+
+        + admin
+            + transfer
+                + fluazu-settings
+
+        and click the 'start' button.
+
+        Fluazu will start up and connect to the Azureus server. After
+        connecting to the Azureus server, the Fluazu settings page will
+        show an additional form which makes it possible to see and set
+        some additional settings for the Azureus server - eg global
+        bandwidth and connection limits.
+
+    Fluazu is now ready to use just like any other client within
+    torrentflux-b4rt - just select 'azureus' as the transfer client when
+    starting up new transfers.
+
+
+Fluazu Limitations
+
+    Due to the design of fluazu there are some limitations on what
+    features are available when using Azureus in conjunction with
+    Torrentflux-b4rt - all features that depend on process-list or
+    netstat-per-transfer-code:
+
+    -   The transfer hosts page within Torrentflux-b4rt will not display
+        any connection information.
+
+    -   The process list displayed in the superadmin window in
+        Torrentflux-b4rt will not include any Azureus based transfers.
+
+    -   The force stop feature within the superadmin pages will also not
+        work with transfers running under Azureus.
+
+    -   The maintenance feature in Torrentflux-b4rt (auto-restart of
+        dead transfer client process) does not currently work.
+
+
+Checking Azureus Works
+
+    1.  Open a shell on the server and cd to the dir
+        "bin/clients/fluazu" in your tfb-installation.
+
+        For example if torrentflux-b4rt is installed in "/var/www" this
+        would be "/var/www/bin/clients/fluazu"
+
+    2.  Start a python shell. If python is in the path, just enter
+        "python" and hit enter.  This should open up a interactive
+        python shell:
+
+       $:/var/www/bin/clients/fluazu# python
+       Python 2.5 (r25:51908, Sep 19 2006, 23:00:51)
+       [GCC 2.95.4 20011002 (Debian prerelease)] on linux2
+       Type "help", "copyright", "credits" or "license" for more information.
+       >>>
+
+    3.  At the python shell, start the dopal.interact module using the
+        following commands:
+
+        import dopal.interact
+        dopal.interact.main()
+
+        When prompted to enter the Azureus server settings in the python
+        shell, do so:
+
+        Enter host: localhost
+        Enter port (default is 6884): 6884
+        Enter user name (leave blank if not applicable): foobar
+
+    Success!
+    -------
+    If the steps above succeeded, you will be connected to the
+    server successfully and should see:
+
+    ------------------------
+
+    DOPAL 0.60 - interact module
+
+    Connection object stored in 'connection' variable.
+    Plugin interface stored in 'interface' variable.
+
+    >>>
+
+    You can now as further test print the connection using the
+    command "print connection":
+
+    >>> print connection
+    DopalConnection for localhost [Azureus 2.5.0.4]
+
+    For further information, check the examples-page for dopal:
+
+    http://dopal.sourceforge.net/examples.html
+
+
+    Failure!
+    --------
+    If the configuration failed, you will be unable to connect to the
+    server correctly and should see something like:
+
+    ------------------------
+
+    DOPAL 0.60 - interact module
+
+    Connection object stored in 'connection' variable.
+
+    Error getting plugin interface object - could not connect to
+    Azureus, error:
+    URLError: <urlopen error (111, 'Connection refused')>
+    ('http://localhost:6884/process.cgi')
+    >>>
+
+    The message is 'Connection refused' and in this test case the
+    Azureus server at localhost was not running.
+
+    For full troubleshooting please check the requirements page for
+    Dopal:
+
+    http://dopal.sourceforge.net/requirements.html

@@ -1,0 +1,82 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<style>.tinyRow {font-size:2px;height:2px;}</style>
+<script language="JavaScript">
+	function getLatest() {
+		var selectedItem = document.searchForm.searchEngine.selectedIndex;
+		document.searchForm.searchterm.value = '';
+		document.location.href = 'index.php?iid=torrentSearch&searchEngine='+document.searchForm.searchEngine.options[selectedItem].text+'&LATEST=1';
+		return true;
+	}
+</script>
+<a name="top"></a>
+<div align="center">
+	<table border="0" cellspacing="0" width="760" cellpadding="5">
+		<tr>
+			<td bgcolor="#A2BED4">
+				<form id="searchForm" name="searchForm" action="index.php" method="get">
+					<input type="hidden" name="iid" value="torrentSearch">
+					<label for="searchterm"><tmpl_var name="_SEARCH"> Torrents:</label><br>
+					<input type="text" name="searchterm" id="searchterm" value="<tmpl_var name="searchterm">" size=30 maxlength=50>
+					<select name="searchEngine" <tmpl_if name="autoSubmit">onchange="this.form.submit();"</tmpl_if> STYLE="width: 125px">
+					<tmpl_loop name="Engine_List">
+						<option <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="Engine"></option>
+					</tmpl_loop>
+					</select>
+					<input type="Submit" value="<tmpl_var name="_SEARCH">">&nbsp;&nbsp;
+
+					&nbsp;&nbsp;<a href="#" onclick="javascript:getLatest()");"><img src="themes/default/images/properties.png" title="Show Latest Torrents" align="absmiddle" border=0>Show Latest Torrents</a>
+				</form><br>
+				* Click on Torrent Links to add them to the Torrent Download List
+			</td>
+			<td bgcolor="#A2BED4" align=right valign=top>Visit:<br>
+				<tmpl_loop name="Engine_List">
+					<a href="http://<tmpl_var name="hreflink">" target="_blank">
+						<tmpl_if name="selected">
+							<b><tmpl_var name="hreflink"></b>
+						<tmpl_else>
+							<tmpl_var name="hreflink">
+						</tmpl_if>
+					</a><br>
+				</tmpl_loop>
+			</td>
+		</tr>
+		<tmpl_if name="sEngine_error">
+			</td></tr>
+				<tr><td><br><br><div align=center><strong><tmpl_var name="sEngine_msg"></strong></div><br><br></td></tr>
+			</table></div>
+		<tmpl_else>
+		<tr>
+			<td>
+				<div align="center" valign="top">
+					<tmpl_if name="link_list">
+						<tmpl_loop name="link_list">
+							<a href="index.php?iid=torrentSearch&searchEngine=<tmpl_var name="searchEngine">&mainGenre=<tmpl_var name="mainId">"><tmpl_var name="mainName"></a>
+							<tmpl_unless name="__LAST__"> | </tmpl_unless>
+						</tmpl_loop>
+					</tmpl_if>
+					<br><br>
+				</div>
+			</td>
+		</tr>
+		<tmpl_if name="no_genre">
+			</td></tr>
+			</table></div>
+			<tmpl_var name="performSearch">
+		<tmpl_else>
+			<tr bgcolor="#A2BED4">
+				<td colspan=6>
+					<form method=get id="subLatest" name="subLatest" action=index.php>
+						<input type=hidden name="iid" value="torrentSearch">
+						<input type=hidden name="searchEngine" value="<tmpl_var name="searchEngine">">
+						Category: <b><tmpl_var name="mainGenreName"></a></b> -&gt;
+						<select name=subGenre>
+							<tmpl_loop name=list_cats">
+								<option value="<tmpl_var name="subId">#"><tmpl_var name="subName"></option>
+							</tmpl_loop>
+						</select>
+						<input type=submit value='Show Latest'>
+					</form>
+		</tmpl_if>
+</tmpl_if>
+<tmpl_include name="inc.subfoot.tmpl">

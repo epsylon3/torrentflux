@@ -1,0 +1,14 @@
+.login_td
+{
+	padding:1px;
+	font-size:90%;
+}
+
+#login_in_progress
+ { 
+	color: #FFFFFF; 
+	text-align: center; 
+	font-weight: bold;
+	font-size:130%;
+	width: 100%;
+}

@@ -1,0 +1,20 @@
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+	<tr>
+		<td>
+			<tmpl_if name="clientType" value="torrent">
+				<pre><tmpl_var name="transferMetaInfo"></pre>
+			<tmpl_elseif name="clientType" value="wget">
+				<table width="100%">
+					<tr><td align="left"><div class="tiny"><strong>Metainfo File:</strong></div></td><td align="left" width="90%"><div class="tiny"><tmpl_var name="transfer"></div></td></tr>
+					<tr><td align="left"><div class="tiny"><strong>URL:</strong></div></td><td align="left" width="90%"><div class="tiny"><tmpl_var name="transferUrl"></div></td></tr>
+				</table>
+			<tmpl_elseif name="clientType" value="nzb">
+				<table width="100%">
+					<tr><td align="left"><div class="tiny"><strong>Metainfo File:</strong></div></td><td align="left" width="90%"><div class="tiny"><tmpl_var name="transfer"></div></td></tr>
+					<tr><td colspan="2" align="left"><div class="tiny"><strong>Content:</strong></div></td></tr>
+					<tr><td colspan="2" align="left"><pre><tmpl_var name="transferMetaInfo"></pre></td></tr>
+				</table>
+			</tmpl_if>
+		</td>
+	</tr>
+</table>

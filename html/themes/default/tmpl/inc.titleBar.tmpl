@@ -1,0 +1,18 @@
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td align="left"><font class="title"><tmpl_var name="titleBar_title"></font></td>
+		<tmpl_if name="titleBar_showButtons">
+			<td align=right>
+				<a href="index.php?iid=index"><img src="themes/default/images/home.gif" width=49 height=13 title="<tmpl_var name="_TORRENTS">" border=0></a>
+				<a href="index.php?iid=dir"><img src="themes/default/images/directory.gif" width=49 height=13 title="<tmpl_var name="_DIRECTORYLIST">" border=0></a>
+				<a href="index.php?iid=history"><img src="themes/default/images/history.gif" width=49 height=13 title="<tmpl_var name="_UPLOADHISTORY">" border=0></a>
+				<a href="index.php?iid=profile"><img src="themes/default/images/profile.gif" width=49 height=13 title="<tmpl_var name="_MYPROFILE">" border=0></a>
+				<a href="index.php?iid=readmsg"><tmpl_if name="titleBar_number_messages"><img src="themes/default/images/messages_on.gif" border=0><tmpl_else><img src="themes/default/images/messages_off.gif" border=0></tmpl_if></a>
+				<tmpl_if name="isAdmin">
+					<a href="admin.php"><img src="themes/default/images/admin.gif" width=49 height=13 title="<tmpl_var name="_ADMINISTRATION">" border=0></a>
+				</tmpl_if>
+				<a href="index.php?iid=logout"><img src="themes/default/images/logout.gif" width=13 height=12 title="Logout" border=0></a>
+			</td>
+		</tmpl_if>
+	</tr>
+</table>

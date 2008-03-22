@@ -1,0 +1,16 @@
+		<tmpl_include name="inc.fluxlink.tmpl">
+		<tmpl_if name="IsForceReadMsg">
+			<script language="JavaScript">
+				if (confirm("<tmpl_var name="_ADMINMESSAGE">")) {
+					document.location = "index.php?iid=readmsg";
+				}
+			</script>
+		</tmpl_if>
+
+		</td>
+	</tr>
+	</tbody>
+	</table>
+</center>
+</body>
+</html>

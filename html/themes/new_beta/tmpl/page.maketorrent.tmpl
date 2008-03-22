@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=<tmpl_var name="_CHARSET">" />
+	<META HTTP-EQUIV="Pragma" CONTENT="no-cache" />
+	<TITLE><tmpl_var name="pagetitle"> - Torrent Maker</TITLE>
+	<LINK REL="icon" HREF="themes/default/images/favicon.ico" TYPE="image/x-icon" />
+	<LINK REL="shortcut icon" HREF="themes/default/images/favicon.ico" TYPE="image/x-icon" />
+	<LINK REL="StyleSheet" HREF="themes/<tmpl_var name="theme">/css/default.css" TYPE="text/css" />
+</HEAD>
+<SCRIPT SRC="js/maketorrent.js" TYPE="text/javascript"></SCRIPT>
+<tmpl_if name="client" value="tornado">
+	<SCRIPT SRC="js/tooltip.js" TYPE="text/javascript"></SCRIPT>
+	<body topmargin="8" leftmargin="5" bgcolor="#829FB5" style="font-family:Tahoma, 'Times New Roman'; font-size:12px;" onLoad="
+	<tmpl_if name="is_private">
+		toggleDHT(true);
+	<tmpl_else>
+		toggleDHT(false);
+	</tmpl_if>
+	<tmpl_if name="onLoad">
+		<tmpl_var name="onLoad">
+	</tmpl_if>
+	">
+<tmpl_else>
+	<body topmargin="8" leftmargin="5" bgcolor="#829FB5" style="font-family:Tahoma, 'Times New Roman'; font-size:12px;"
+	onLoad="toggleTracker(<tmpl_var name="use_tracker">);
+	<tmpl_if name="onLoad">
+		<tmpl_var name="onLoad">
+	</tmpl_if>
+	">
+</tmpl_if>
+<div align="center">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td>
+				<table border="1" bordercolor="#A2BED4" cellpadding="4" cellspacing="0">
+					<tr>
+						<td bgcolor="#829FB5" background="themes/default/images/bar.gif">
+							<tmpl_include name="inc.titleBar.tmpl">
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="#A2BED4">
+						<form action="<tmpl_var name="client_select_action">" method="post" id="clientselect" name="clientselect">
+						<table>
+							<tr>
+								<td align="left"><strong><label for="client">Client:</label></strong></td>
+								<td>
+									<select name="client" id="client" onchange="submit();">
+										<option value="tornado">tornado</option>
+										<option value="mainline"<tmpl_if name="client" value="mainline"> selected</tmpl_if>>mainline</option>
+									</select>
+									<input type="hidden" name="path" value="<tmpl_var escape="html" name="path">">
+								</td>
+							</tr>
+						</table>
+						</form>
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="#A2BED4">
+							<div align="left">
+								<table width="100%" bgcolor="#A2BED4">
+									<tr>
+										<td>
+											<form action="<tmpl_var name="form_action">" method="post" id="maketorrent" name="maketorrent">
+											<input type="hidden" name="path" value="<tmpl_var escape="html" name="path">">
+												<table>
+												<tmpl_if name="client" value="tornado">
+													<input type="hidden" name="client" value="tornado">
+													<tr>
+														<td><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(tornt);" hspace="1" /><label for="torrent">Torrent name:</label></td>
+														<td><input type="text" id="torrent" name="torrent" size="55" value="<tmpl_var name="torrent">" /> <label id="ttag"></label></td>
+													</tr>
+													<tr>
+														<td><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(annce);" hspace="1" /><label for="announce">Announcement URL:</label></td>
+														<td><input type="text" id="announce" name="announce" size="55" value="<tmpl_var name="announce">" /> <label id="atag"></label></td>
+													</tr>
+													<tr>
+														<td><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(anlst);" hspace="1" /><label for="announcelist">Announce List:</label></td>
+														<td><input type="text" id="announcelist" name="announcelist" size="55" value="<tmpl_var name="ancelist">" /> <label id="altag"></label></td>
+													</tr>
+													<tr>
+														<td><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(piece);" hspace="1" /><label for="piecesize">Piece size:</label></td>
+														<td>
+															<select id="piecesize" name="piecesize">
+		                                                        <option id="0" value="0" selected>0 (Auto)</option>
+		                                                        <option id="256" value="18">256</option>
+		                                                        <option id="512" value="19">512</option>
+		                                                        <option id="1024" value="20">1024</option>
+		                                                        <option id="2048" value="21">2048</option>
+															</select> bytes
+														</td>
+													</tr>
+													<tr>
+														<td valign="top"><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(comnt);" hspace="1" /><label for="comments">Comments:</label></td>
+														<td><textarea cols="50" rows="3" id="comments" name="comments"><tmpl_var name="comment"></textarea></td>
+													</tr>
+													<tr>
+														<td><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(prvte);" hspace="1" /><label for="PrivateY">Private Torrent:</label></td>
+														<td>
+															<input type="radio" id="PrivateY" name="Private" value="Private" onClick="toggleDHT(true);"<tmpl_if name="is_private"> checked</tmpl_if>><label for="PrivateY">Yes</label></input>
+															<input type="radio" id="PrivateN" name="Private" value="NotPrivate" onClick="toggleDHT(false);"<tmpl_if name="is_private" value="0"> checked</tmpl_if>><label for="PrivateN">No</label></input>
+														</td>
+													</tr>
+													<tr>
+														<td><img align="absmiddle" src="themes/default/images/info.gif" onmouseover="return escape(dhtbl);" hspace="1" /><label for="DHT">DHT Support:</label></td>
+														<td><input type="checkbox" id="DHT" name="DHT"<tmpl_if name="dht"> checked</tmpl_if> value="DHT"></input></td>
+													</tr>
+												<tmpl_else>
+													<input type="hidden" name="client" value="mainline">
+													<tr>
+														<td><label for="torrent">Torrent name:</label></td>
+														<td><input type="text" id="torrent" name="torrent" size="55" value="<tmpl_var name="torrent">" /> <label id="ttag"></label></td>
+													</tr>
+													<!--
+													<tr>
+														<td><label for="use_tracker_Y">Use Tracker:</label></td>
+														<td>
+															<input type="radio" id="use_tracker_Y" name="use_tracker" value="1" onClick="toggleTracker(1);"<tmpl_if name="use_tracker"> checked</tmpl_if>><label for="use_tracker_Y">Yes</label></input>
+															<input type="radio" id="use_tracker_N" name="use_tracker" value="0" onClick="toggleTracker(0);"<tmpl_if name="use_tracker" value="0"> checked</tmpl_if>><label for="use_tracker_N">No</label></input>
+														</td>
+													</tr>
+													-->
+													<tr>
+														<td><label for="tracker_name">Tracker:</label></td>
+														<td><input type="text" id="tracker_name" name="tracker_name" size="55" value="<tmpl_var name="tracker_name">" /> <label id="trtag"></label></td>
+													</tr>
+													<tr>
+														<td><label for="piecesize">Piece size:</label></td>
+														<td>
+															<select id="piecesize" name="piecesize">
+		                                                        <option id="0" value="0" selected>0 (Auto)</option>
+		                                                        <option id="256" value="18">256</option>
+		                                                        <option id="512" value="19">512</option>
+		                                                        <option id="1024" value="20">1024</option>
+		                                                        <option id="2048" value="21">2048</option>
+															</select> bytes
+														</td>
+													</tr>
+													<tr>
+														<td valign="top"><label for="comments">Comments:</label></td>
+														<td><textarea cols="50" rows="3" id="comments" name="comments"><tmpl_var name="comment"></textarea></td>
+													</tr>
+												</tmpl_if>
+													<tr>
+														<td>&nbsp;</td>
+														<td>
+															<input type="submit" id="tsubmit" name="tsubmit" onClick="return doSubmit(this, '<tmpl_var name="client">');" value="Create" />
+															<input type="button" id="Cancel" name="close" value="Close" onClick="window.close();" />
+															<label for="alert" title="Send alert message box when torrent has been completed.">
+															<input type="checkbox" id="alert" name="alert"<tmpl_if name="alert"> checked</tmpl_if> value="AlertMe" />
+																Notify me of completion
+															</label>
+														</td>
+													</tr>
+													<tr>
+														<td colspan="2">
+															<div id="progress" name="progress" align="center" style="display: none;"><img src="themes/default/images/progress_bar.gif" width="200" height="20" /></div>
+															<label id="output"></label>
+														</td>
+													</tr>
+												</table>
+											</form>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+<tmpl_if name="client" value="tornado">
+	<script language="javascript">tt_Init();</script>
+</tmpl_if>
+</body>
+</html>

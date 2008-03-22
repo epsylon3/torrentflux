@@ -1,0 +1,56 @@
+<div id="titleBar">
+	<span id="title">
+		<tmpl_var name="titleBar_title">
+	</span>
+	<span id="logout">
+		<a id="logoutButton" href="index.php?iid=logout"></a>
+	</span>
+</div>
+<tmpl_if name="titleBar_showButtons">
+	<div id="mainMenu">
+		<li class="mainMenu"><a class="mainMenu <tmpl_if name="mainMenu" value="home">mainMenuActive</tmpl_if>" href="index.php?iid=index">Home</a></li>
+		<tmpl_if name="mainMenu" value="home">
+			<ul class="menu">
+				<tmpl_if name="enable_multiupload">
+					<li class="menu"><a class="menu" href="index.php?iid=multiup"><tmpl_var name="_MULTIPLE_UPLOAD"></a></li>
+				</tmpl_if>
+				<li class="menu"><a class="menu" href="index.php?iid=readrss">RSS Torrents</a></li>
+				<li class="menu"><a class="menu" href="index.php?iid=serverStats">Server Stats</a></li>
+				<li class="menu"><a class="menu" href="index.php?iid=images"><tmpl_var name="_ID_IMAGES"></a></li>
+				<li class="menu_last"><a class="menu" href="index.php?iid=dir&dir=<tmpl_var name="path_incoming">">Incoming</a></li>
+			</ul>
+		</tmpl_if>
+		<li class="mainMenu"><a class="mainMenu <tmpl_if name="mainMenu" value="dir">mainMenuActive</tmpl_if>" href="index.php?iid=dir">Directory</a></li>
+		<li class="mainMenu"><a class="mainMenu <tmpl_if name="mainMenu" value="history">mainMenuActive</tmpl_if>" href="index.php?iid=history">History</a></li>
+		<li class="mainMenu"><a class="mainMenu <tmpl_if name="mainMenu" value="profile">mainMenuActive</tmpl_if>" href="index.php?iid=profile">Profile</a></li>
+		<tmpl_if name="mainMenu" value="profile">
+			<ul class="menu">
+				<li class="menu"><a class="menu" href="index.php?iid=profile&op=showCookies">Cookie Management</a></li>
+				<li class="menu_last"><a class="menu" href="index.php?iid=profile&op=showProfiles">Transfer Profiles</a></li>
+			</ul>
+		</tmpl_if>
+		<li class="mainMenu"><a class="mainMenu <tmpl_if name="mainMenu" value="msg">mainMenuActive</tmpl_if>" href="index.php?iid=readmsg">Messages</a></li>
+		<tmpl_if name="isAdmin">
+			<li class="mainMenu"><a class="mainMenu <tmpl_if name="mainMenu" value="admin">mainMenuActive</tmpl_if>" href="admin.php">Admin</a></li>
+			<tmpl_if name="mainMenu" value="admin">
+				<ul class="menu">
+					<li class="menu"><a class="menu" href="admin.php?op=serverSettings">Server</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=transferSettings">Transfer</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=controlSettings">Control</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=webappSettings">Webapp</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=indexSettings">Index</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=dirSettings">Dir</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=statsSettings">Stats</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=fluxdSettings">Fluxd</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=fluazuSettings">FluAzu</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=xferSettings">Xfer</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=searchSettings">Search</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=editLinks">Links</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=editRSS">RSS</a></li>
+					<li class="menu"><a class="menu" href="admin.php?op=showUsers">Users</a></li>
+					<li class="menu_last"><a class="menu" href="admin.php?op=showUserActivity">Activity</a></li>
+				</ul>
+			</tmpl_if>
+		</tmpl_if>
+	</div>
+</tmpl_if>

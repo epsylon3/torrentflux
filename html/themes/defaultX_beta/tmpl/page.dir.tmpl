@@ -1,0 +1,200 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_if name="enable_jswarning" value="1">
+	<script language="JavaScript">
+		alert('<tmpl_var name="_WARNING">: <tmpl_var name="drivespace">% <tmpl_var name="_DRIVESPACEUSED">');
+	</script>
+</tmpl_if>
+<tmpl_include name="inc.subhead.tmpl">
+<table style="width:100%;" cellspacing="0">
+<tbody>
+	<tmpl_if name="drivespacebar_type" value="xfer">
+	    <tmpl_include name="inc.driveSpaceBar_xfer.tmpl">
+	<tmpl_else>
+	    <tmpl_include name="inc.driveSpaceBar_tf.tmpl">
+	</tmpl_if>
+</tbody>
+</table>
+<br />
+<form action="index.php?iid=dir&amp;dir=<tmpl_var name="dir">&amp;multidel=1" method="post" name="multidir">
+	<table cellspacing="0" style="width:100%;text-align:left;">
+	<tbody>
+		<tr>
+			<td>
+				<img src="themes/<tmpl_var name="theme">/images/folder.gif" title="<tmpl_var name="entry">" alt="" />
+			</td>
+			<td colspan="3">
+				<tmpl_var name="parentdir"> (<tmpl_var name="duTotal">)
+			</td>
+			<tmpl_if name="enable_dirstats" value="1">
+				<td colspan="3">&nbsp;</td>
+			</tmpl_if>
+			</tr>
+		<tmpl_if name="showparentURL">
+			<tr class="tablecontent_alt small">
+				<td style="width:18px;">
+					<tmpl_if name="list">
+						<img src="themes/<tmpl_var name="theme">/images/dtree/join.gif" alt="" />
+					<tmpl_else>
+						<img src="themes/<tmpl_var name="theme">/images/dtree/joinbottom.gif" alt="" />
+					</tmpl_if>
+				</td>
+				<td colspan="2">
+					<tmpl_if name="showparentURL">
+						<a href="<tmpl_var name="parentURL">"><img src="themes/<tmpl_var name="theme">/images/up_dir.gif" title="<tmpl_var name="_BACKTOPARRENT">" style="vertical-align:absmiddle;" alt="" />[<tmpl_var name="_BACKTOPARRENT">]</a>
+					<tmpl_else>
+						&nbsp;
+					</tmpl_if>
+				</td>
+				<tmpl_if name="enable_dirstats" value="1">
+					<td colspan="3">&nbsp;</td>
+				</tmpl_if>
+				<td style="text-align:right;">
+					<tmpl_if name="show_chmod" value="1">
+						<a href="index.php?iid=dir&amp;chmod=1&amp;dir=<tmpl_var name="dir">"><img src="themes/<tmpl_var name="theme">/images/chmod.gif" title="chmod Directory" style="vertical-align:absmiddle;" alt="" />[chmod Directory]</a>
+					<tmpl_else>
+						&nbsp;
+					</tmpl_if>
+				</td>
+			</tr>
+		</tmpl_if>
+	<tmpl_if name="list">
+		<tmpl_loop name="list">
+			<tmpl_if name="__EVEN__">
+				<tr class="tablecontent_alt small">
+			<tmpl_else>
+				<tr class="tablecontent small">
+			</tmpl_if>
+				<td style="width:18px;">
+					<tmpl_if name="__LAST__">
+						<tmpl_if name="is_link">
+							<img src="themes/<tmpl_var name="theme">/images/dtree/joinbottom.gif" alt="" />
+						<tmpl_elseif name="is_dir">
+							<img src="themes/<tmpl_var name="theme">/images/dtree/plusbottom.gif" alt="" />
+						<tmpl_else>
+							<img src="themes/<tmpl_var name="theme">/images/dtree/joinbottom.gif" alt="" />
+						</tmpl_if>
+					<tmpl_else>
+						<tmpl_if name="is_link">
+							<img src="themes/<tmpl_var name="theme">/images/dtree/join.gif" alt="" />
+						<tmpl_elseif name="is_dir">
+							<img src="themes/<tmpl_var name="theme">/images/dtree/plus.gif" alt="" />
+						<tmpl_else>
+							<img src="themes/<tmpl_var name="theme">/images/dtree/join.gif" alt="" />
+						</tmpl_if>
+					</tmpl_if>
+				</td>
+			<tmpl_if name="is_link" value="0">
+				<td style="width:18px;">
+					<tmpl_if name="is_dir">
+						<a href="index.php?iid=dir&amp;dir=<tmpl_var name="urlencode1">"><img src="themes/<tmpl_var name="theme">/images/folder.gif" title="<tmpl_var name="entry">" alt="" /></a>
+					<tmpl_else>
+						<tmpl_if name="enable_file_download" value="1">
+							<a href="index.php?iid=dir&amp;down=<tmpl_var name="urlencode1">"><img src="<tmpl_var name="image">" title="<tmpl_var name="entry">" alt="" /></a>
+						<tmpl_else>
+							<img src="<tmpl_var name="image">" title="<tmpl_var name="entry">" alt="" />
+						</tmpl_if>
+					</tmpl_if>
+				</td>	
+				<td>
+					<tmpl_if name="is_dir">
+						<a href="index.php?iid=dir&amp;dir=<tmpl_var name="urlencode1">"><tmpl_var name="entry"></a>
+					<tmpl_else>
+						<tmpl_if name="enable_file_download" value="1">
+							<a href="index.php?iid=dir&amp;down=<tmpl_var name="urlencode1">"><tmpl_var name="entry"></a>
+						<tmpl_else>
+							<tmpl_var name="entry">
+						</tmpl_if>
+					</tmpl_if>					
+				</td>
+				<tmpl_if name="enable_dirstats" value="1">
+					<td style="text-align:right;"><tmpl_var name="permission"></td>
+					<td style="text-align:right;"><tmpl_var name="size"></td>
+					<td style="text-align:right;"><tmpl_var name="date"></td>
+				</tmpl_if>
+			<tmpl_else>
+				<td style="width:18px;">
+					<tmpl_if name="is_dir">
+						<img src="themes/<tmpl_var name="theme">/images/folder.gif" title="<tmpl_var name="entry">" alt="" />
+					<tmpl_else>
+						<img src="<tmpl_var name="image">" title="<tmpl_var name="entry">" alt="" />
+					</tmpl_if>
+				</td>	
+				<tmpl_if name="enable_dirstats" value="1">
+					<td colspan="4">
+				<tmpl_else>
+					<td>
+				</tmpl_if>
+					<tmpl_var name="entry"> (symbolic link to <tmpl_var name="real_entry">)
+				</td>
+			</tmpl_if>
+			<td style="text-align:right;">
+				<tmpl_if name="enable_sfvcheck" value="1">
+					<tmpl_if name="show_sfv" value="1">
+						<a href="javascript:CheckSFV('<tmpl_var escape="url" name="sfvdir">','<tmpl_var escape="url" name="sfvsfv">')"><img src="themes/default/images/sfv_enabled.gif" title="sfv check" alt="" /></a>
+					<tmpl_else>
+						<img src="themes/default/images/sfv_disabled.gif" title="sfv check disabled, check admin settings to enable" alt="" />
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name="is_dir" value="0">
+					<tmpl_if name="show_rar" value="1">
+						<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode2">&amp;type=rar')"><img src="themes/default/images/rar_enabled.gif" title="Unrar" alt="" /></a>
+					<tmpl_elseif name="show_rar" value="2">
+						<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode2">&amp;type=zip')"><img src="themes/default/images/zip.png" title="Unzip" alt="" /></a>
+					</tmpl_if>
+					<tmpl_if name="show_nfo" value="1">
+						<a href="index.php?iid=viewnfo&amp;path=<tmpl_var escape="url" name="urlencode1">"><img src="themes/default/images/view_nfo.gif" title="View <tmpl_var name="entry">" alt="" /></a>
+					</tmpl_if>
+					<tmpl_if name="enable_vlc" value="1">
+						<a href="JavaScript:StreamMultimedia('index.php?iid=vlc&amp;dir=<tmpl_var name="urlencode2">&amp;file=<tmpl_var name="urlencode3">')"><img src="themes/default/images/vlc.png" title="Stream Multimedia (vlc)" alt="" /></a>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name="enable_rename" value="1">
+					<a href="JavaScript:rename('index.php?iid=rename&amp;dir=<tmpl_var escape="url" name="urlencode2">&amp;file=<tmpl_var escape="url" name="urlencode3">&amp;start=true')"><img src="themes/default/images/rename.gif" title="<tmpl_var name="_DIR_REN_LINK">" alt="" /></a>
+				</tmpl_if>
+				<tmpl_if name="enable_move" value="1">
+					<a href="JavaScript:moveFile('index.php?iid=move&amp;path=<tmpl_var escape="url" name="urlencode1">&amp;start=true')"><img src="themes/default/images/_move.gif" title="<tmpl_Var name="_DIR_MOVE_LINK">" alt="" /></a>
+				</tmpl_if>
+				<tmpl_if name="enable_maketorrent" value="1">
+					<a href="JavaScript:MakeTorrent('index.php?iid=maketorrent&amp;path=<tmpl_var escape="url" name="urlencode1">')"><img src="themes/default/images/make.gif" title="Make Torrent" alt="" /></a>
+				</tmpl_if>
+				<tmpl_if name="enable_file_download" value="1">
+					<tmpl_if name="is_dir">
+						<a href="index.php?iid=dir&amp;tar=<tmpl_var name="urlencode1">"><img src="themes/default/images/tar_down.gif" title="Download as <tmpl_var name="package_type">" alt="" /></a>
+					<tmpl_else>
+						<a href="index.php?iid=dir&amp;down=<tmpl_var name="urlencode1">"><img src="themes/default/images/download_owner.gif" title="Download" alt="" /></a>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name="aclWrite" value="1">
+					<a href="index.php?iid=dir&amp;del=<tmpl_var name="urlencode1">" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : <tmpl_var name="addslashes1">')"><img src="themes/default/images/delete_on.gif" title="<tmpl_var name="_DELETE">" alt="" /></a>
+					<input type="checkbox" name="file[]" value="<tmpl_var name="urlencode1">" />
+				<tmpl_else>
+					<img src="themes/default/images/delete_off.gif" title="<tmpl_var name="_DELETE">" />
+					<input type="checkbox" name="file[]" disabled="disabled" />
+				</tmpl_if>
+			</td>
+		</tr>
+		</tmpl_loop>
+		<tmpl_if name="__EVEN__">
+				<tr class="tablecontent small">
+			<tmpl_else>
+				<tr class="tablecontent_alt small">
+			</tmpl_if>
+			<tmpl_if name="enable_dirstats" value="1">
+				<td align="right" colspan="7">
+			<tmpl_else>
+				<td align="right" colspan="4">
+			</tmpl_if>
+					<a href="javascript:document.multidir.submit()" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : Multiple Files')"><img src="themes/default/images/delete_on.gif" title="Delete"  alt="" /></a>
+					<input type="checkbox" onclick="checkCheck(this);" />
+				</td>
+		</tr>
+	</tmpl_if>
+</tbody>
+</table>
+<input type="hidden" name="action" value="fileDelete" />
+</form>
+</td>
+</tr>
+</tbody>
+</table>
+<tmpl_include name="inc.subfoot.tmpl">

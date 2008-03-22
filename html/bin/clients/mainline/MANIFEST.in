@@ -1,0 +1,41 @@
+# include anything in here that is not automatically picked up by distutils
+include BitTorrent/__init__.py
+
+# images and icons
+include images/bittorrent.ico 
+include images/flags/*png
+include images/logo/*.png
+include images/themes/default/*.png
+include images/themes/default/*/*.png 
+
+# documentation files
+include credits.txt LICENSE.txt README.txt redirdonate.html INSTALL.unix.txt TRACKERLESS.txt MANIFEST.in public.key
+
+# BTL data
+include BTL/*.dat
+
+# include windows build files in the source
+include windows_installer/*
+
+# localization stuffs
+include makei18n.sh language_codes.py po/*po
+include locale/*/LC_MESSAGES/bittorrent.mo
+
+# unix install stuffs
+include build_nix_pkg.sh debian/control install_nix.sh
+
+# include all top level scripts
+include bittorrent.py
+include bittorrent-console.py
+include bittorrent-curses.py
+
+include maketorrent.py
+include maketorrent-console.py
+
+include launchmany-console.py
+include launchmany-curses.py
+
+include bittorrent-tracker.py
+
+include changetracker-console.py
+include torrentinfo-console.py

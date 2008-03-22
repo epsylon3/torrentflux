@@ -1,0 +1,148 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<form name="theForm" action="admin.php?op=updateUser" method="post" onsubmit="return validateUser('<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+			<table id="statusInfos">
+				<tr>
+					<td class="statusInfos">
+						<table>
+							<tr>
+								<td class="buttonLinks">
+									<span id="newUser"><tmpl_var name="user_id"></span> <tmpl_var name="_JOINED">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="time_created">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_LASTVISIT">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="last_visit">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_UPLOADS">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="user_activity">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_PERCENTPARTICIPATION">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="user_percent">%
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_TOTALPAGEVIEWS">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="hits">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_THEME">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="theme">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_LANGUAGE">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="language_file">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<tmpl_var name="_USERTYPE">:
+								</td>
+								<td class="buttonLinks">
+									<tmpl_var name="user_type">
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td class="statusInfos">
+						<table>
+							<tr>
+								<td class="buttonLinks">
+									<label for="user_id"><tmpl_var name="_USER">:</label>
+								</td>
+								<td class="buttonLinks">
+									<input name="user_id" id="user_id" type="Text" value="<tmpl_var name="user_id">" size="15"><input name="org_user_id" type="Hidden" value="<tmpl_var name="user_id">">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks" rowspan="2">
+									<label for="pass1"><tmpl_var name="_NEWPASSWORD">:</label>
+								</td>
+								<td class="buttonLinks">
+									<input name="pass1" id="pass1" type="Password" value="" size="15">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<input name="pass2" id="pass2" type="Password" value="" size="15">
+								</td>
+							</tr>
+							<tr>
+								<td class="buttonLinks">
+									<label for="userType"><tmpl_var name="_USERTYPE">:</label>
+								</td>
+								<td class="buttonLinks">
+									<tmpl_if name="user_level" op="<=" value="1">
+										<select name="userType" id="userType">
+											<option value="0" <tmpl_var name="selected_n">><tmpl_var name="_NORMALUSER"></option>
+											<option value="1" <tmpl_var name="selected_a">><tmpl_var name="_ADMINISTRATOR"></option>
+										</select>
+									<tmpl_else>
+										<tmpl_var name="_SUPERADMIN">
+										<input type="Hidden" name="userType" value="2">
+									</tmpl_if>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<input name="hideOffline" id="hideOffline" type="Checkbox" value="1" <tmpl_var name="hide_checked">> <label for="hideOffline"><tmpl_var name="_HIDEOFFLINEUSERS"></label>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="center">
+						[<a class="outlinks" href="admin.php?op=showUserActivity&user_id=<tmpl_var name="user_id">"><tmpl_var name="_USERSACTIVITY"></a>]
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="center">
+						<input type="Submit" value="<tmpl_var name="_UPDATE">">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>

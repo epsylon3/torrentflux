@@ -1,0 +1,20 @@
+<tmpl_loop name="process_list">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				<tmpl_var name="client">
+			</span>
+		</div>
+	</div>
+	<div id="fileUpload" class="uploadClass">
+		<pre>
+			<tmpl_var name="RunningProcessInfo">
+			<br />
+			--------------- Process-List ---------------
+			<tmpl_var name="pinfo">
+		</pre>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+</tmpl_loop>

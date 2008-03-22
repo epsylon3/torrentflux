@@ -1,0 +1,11 @@
+<tmpl_if name="fluxlink_display">
+	<div style="text-align:right;float:right;">
+		<a href="<tmpl_var name="fluxlink_url">" target="_blank" class="fluxlink">
+			<tmpl_var name="fluxlink_name">
+		</a>
+		&nbsp;
+		<a onclick="window.open ('superadmin.php','_blank','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600');" style="cursor:pointer;">
+			<img src="themes/<tmpl_var name="theme">/images/arrow.gif" title="Version" alt="" class="vmiddle" />
+		</a>
+	</div>
+</tmpl_if>

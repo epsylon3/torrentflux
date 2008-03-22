@@ -1,0 +1,422 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<table class="profilesubtable" cellspacing="0">
+<thead>
+<tr class="subtableheading">
+	<th>
+		<a href="index.php?iid=profile">Personal Settings</a>
+		&nbsp;|&nbsp;
+		<a href="index.php?iid=profile&amp;op=showCookies">Cookie Management</a>
+		&nbsp;|&nbsp;
+		<a href="index.php?iid=profile&amp;op=showProfiles">Transfer Profiles Management</a>
+		&nbsp;|&nbsp;
+		<a href="dispatcher.php?action=cookieFlush&amp;riid=profile" onclick="return confirm('Delete Auto-Login-Cookie ?');">Delete Login-Cookie</a>
+		&nbsp;|&nbsp;
+		<a href="index.php?iid=profile&amp;op=resetSettingsUser" onclick="return confirm('Reset Personal Settings ?')">Reset</a>
+	</th>
+</tr>
+</thead>
+<tmpl_if name="showIndex">
+	<tbody>
+	<tr>
+		<td>
+			<table style="width:100%;" cellspacing="0">
+			<tbody>
+				<tr>
+					<!-- left column -->
+					<td style="vertical-align:top;width:50%;padding:3px;">
+						<table style="width:100%;border-style:none;padding:0px;" cellspacing="0">
+						<tbody>
+							<tr>
+								<td style="text-align:right;padding-bottom:15px;"><tmpl_var name="_JOINED">:&nbsp;</td>
+								<td style="font-weight:bold;padding-bottom:15px;"><tmpl_var name="time_created1"></td>
+							</tr>
+							<tr>
+								<td style="text-align:right;">
+									<tmpl_var name="_UPLOADPARTICIPATION">:&nbsp;
+								</td>
+								<td>
+									<div style="width:200px;height:12px;border-left:1px solid #000000;border-right:1px solid #000000;" class="clearfix">
+										<img src="themes/<tmpl_var name="theme">/images/proglass.gif" style="height:12px;width:<tmpl_var name="width1">px;float:left;" alt="" />
+										<img src="themes/<tmpl_var name="theme">/images/noglass.gif" style="height:12px;width:<tmpl_var name="width2">px;float:left;" alt="" />
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align:right;">
+									<tmpl_var name="_PERCENTPARTICIPATION">:&nbsp;
+								</td>
+								<td style="font-weight:bold;">
+									<tmpl_var name="user_percent">%
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align:right;"><tmpl_var name="_UPLOADS">:&nbsp;</td>
+								<td style="font-weight:bold;"><tmpl_var name="user_activity"></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align:center;padding-bottom:15px;" class="small">
+										(<tmpl_var name="_PARTICIPATIONSTATEMENT"> <tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS">)
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align:right;"><tmpl_var name="_TOTALPAGEVIEWS">:&nbsp;</td>
+								<td style="font-weight:bold;"><tmpl_var name="hits"></td>
+							</tr>
+							<tr>
+								<td style="text-align:right;"><tmpl_var name="_USERTYPE">:&nbsp;</td>
+								<td style="font-weight:bold;"><tmpl_var name="user_type"></td>
+							</tr>
+						</tbody>
+						</table>
+					</td>
+					<!-- right column -->
+					<td style="vertical-align:top;width:50%;padding:3px;">
+						<form name="theForm" action="index.php?iid=profile&amp;op=updateProfile" method="post" onsubmit="return validateProfile(0, '<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+							<table style="width:100%;border-style:none;padding:0px;" cellspacing="0">
+							<tbody>
+								<tr>
+									<td style="text-align:right;"><label for="user"><tmpl_var name="_USER">:</label></td>
+									<td>
+										<input readonly="readonly" id="user" type="text" value="<tmpl_var name="user">"style="width:137px;" />
+									</td>
+								</tr>
+								<tr>
+									<td style="text-align:right;"><label for="pass1"><tmpl_var name="_NEWPASSWORD">:</label></td>
+									<td>
+										<input name="pass1" id="pass1" type="password" value=""style="width:137px;" />
+									</td>
+								</tr>
+								<tr>
+									<td style="text-align:right;"><label for="pass2"><tmpl_var name="_CONFIRMPASSWORD">:</label></td>
+									<td>
+										<input name="pass2" id="pass2" type="password" value="" style="width:137px;" />
+									</td>
+								</tr>
+								<tr>
+									<td style="text-align:right;"><label for="theme"><tmpl_var name="_THEME">:</label></td>
+									<td>
+										<select name="theme" id="theme" style="width:137px;">
+											<tmpl_loop name="theme_list">
+												<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected">><tmpl_var name="arThemes"></option>
+											</tmpl_loop>
+											<optgroup label="Old TF Themes">
+												<tmpl_loop name="tfstandard_theme_list">
+													<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected">><tmpl_var name="arThemes"></option>
+												</tmpl_loop>
+											</optgroup>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td style="text-align:right;"><label for="language"><tmpl_var name="_LANGUAGE">:</label></td>
+									<td>
+										<select name="language" id="language" style="width:137px;">
+											<tmpl_loop name="language_list">
+												<option value="<tmpl_var name="arLanguage">" <tmpl_var name="selected">><tmpl_var name="language_file"></option>
+											</tmpl_loop>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2" style="text-align:center;">
+										<input name="hideOffline" id="hideOffline" type="checkbox" value="1" <tmpl_var name="hideChecked"> /> <label for="hideOffline"><tmpl_var name="_HIDEOFFLINEUSERS"></label><br />
+									</td>
+								</tr>
+								<tr>
+									<td align="center" colspan="2">
+										<input type="submit" value="<tmpl_var name="_UPDATE">" />
+									</td>
+								</tr>
+							</tbody>
+							</table>
+						</form>
+					</td>
+				</tr>
+				<tmpl_if name="enable_personal_settings" value="1">
+					<!-- user-settings -->
+					<tr class="subtableheading">
+						<th colspan="2">Personal Settings</th>
+					</tr>
+					<tr>
+						<td colspan="2" style="padding:3px;">
+							<tmpl_include name="inc.personalSettingsForm.tmpl">
+						</td>
+					</tr>
+				</tmpl_if>
+			</tbody>
+			</table>
+		</td>
+	</tr>
+	</tbody>
+</tmpl_if>
+<tmpl_if name="updateProfile">
+	<tbody>
+		<tr>
+			<td style="text-align:center;padding:20px;">
+				<tmpl_var name="_PROFILEUPDATEDFOR"> <tmpl_var name="user">
+			</td>
+		</tr>
+	</tbody>
+</tmpl_if>
+<tmpl_if name="ShowCookies">
+	<tbody>
+		<tr>
+			<td style="text-align:center;padding:15px 5px 10px 5px;">
+				<form action="index.php?iid=profile&amp;op=addCookie" method="post">
+					<table style="text-align:left;width:100%;" cellspacing="0">
+					<tbody>
+						<tr>
+							<td style="text-align:right;width:80px;">
+								<label for="host">Host:</label>
+							</td>
+							<td style="width:270px;padding:2px;">
+								<input type="text" maxlength="255" style="width:265px;" name="host" id="host"<tmpl_var name="hostvalue"> />
+							</td>
+							<td class="small">
+								www.host.com
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:right;width:200px;">
+								<label for="data">Data:</label>
+							</td>
+							<td style="width:270px;padding:2px;">
+								<input type="text" maxlength="255" style="width:265px;" name="data" id="data"<tmpl_var name="datavalue"> />
+							</td>
+							<td class="small">
+								uid=123456;pass=a1b2c3d4e5f6g7h8i9j0
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td colspan="2">
+								<input type="submit" value="<tmpl_var name="add1">" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="text-align:center;">
+									<a style="cursor:help;" onclick="window.open('index.php?iid=cookiehelp','help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=800,height=600');">How to get cookie information....</a>
+							</td>
+						</tr>
+					<tmpl_if name="empty_cid" value="0">
+						<tr>
+							<td colspan="3">
+								<table cellspacing="0" style="width:100%;border-style:none;">
+								<thead>
+									<tr class="tableheading_alt">
+										<td style="font-weight:bold;padding-left:3px;width:50px;text-align:center;">Action</td>
+										<td style="font-weight:bold;padding-left:3px;">Host</td>
+										<td style="font-weight:bold;padding-left:3px;">Data</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tmpl_if name="empty_dat">
+										<tr>
+											<td colspan="3">No cookie entries exist.</td>
+										</tr>
+									<tmpl_else>
+										<tmpl_loop name="cookie_data">
+											<tr>
+												<td style="text-align:center;">
+													<a href="index.php?iid=profile&amp;op=deleteCookie&amp;cid=<tmpl_var name="cid">"><img src="themes/<tmpl_var name="theme">/images/delete_on.gif" alt="" title="<tmpl_var name="_DELETE"> <tmpl_var name="host">" /></a>
+													<a href="index.php?iid=profile&amp;op=editCookies&amp;cid=<tmpl_var name="cid">"><img src="themes/<tmpl_var name="theme">/images/properties.png" alt="" title="<tmpl_var name="_EDIT"> <tmpl_var name="host">" /></a>
+												</td>
+												<td><tmpl_var name="host"></td>
+												<td><tmpl_var name="data"></td>
+											</tr>
+										</tmpl_loop>
+									</tmpl_if>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tmpl_if>
+					</tbody>
+					</table>
+				</form>
+			</td>
+		</tr>
+	</tbody>
+</tmpl_if>
+<tmpl_if name="ShowProfiles">
+	<tbody>
+		<tr>
+			<td style="text-align:center;padding:15px 5px 10px 5px;">
+				<script src="js/profile.js" type="text/javascript"></script>
+				<form name="theForm" action="index.php?iid=profile&amp;op=<tmpl_var name="op">" method="post" onsubmit="return validateProfileSettings();">
+					<input type="hidden" name="pid" value="<tmpl_var name="pid">" />
+					<table cellspacing="0" style="width:100%;text-align:left;">
+					<tbody>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="name">Name:</label></td>
+							<td colspan="2" style="white-space:nowrap;">
+								<input type="text" size="45" maxlength="255" name="name" id="name" <tmpl_var name="name"> />
+							</td>
+						</tr>
+					<tmpl_if name="isAdmin">
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="public">Public Profile:</label></td>
+							<td style="width:180px;">
+								<input name="public" id="public" type="checkbox" value="1" <tmpl_var name="public"> />
+							</td>
+							<td style="width:200px;">
+								&nbsp;
+							</td>
+						</tr>
+					</tmpl_if>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="rate">Max Upload Rate:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="rate" id="rate" <tmpl_var name="rate"> /> kB/second
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_rate">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="drate">Max Download Rate:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="drate" id="drate" <tmpl_var name="drate"> /> kB/second
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_drate">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="maxuploads">Max Upload Connections:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="maxuploads" id="maxuploads" <tmpl_var name="maxuploads"> />
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_maxuploads">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="maxcons">Max Cons:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="maxcons" id="maxcons" <tmpl_var name="maxcons"> />
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_maxcons">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="runtime">Completion Activity:</label></td>
+							<td style="width:180px;">
+								<select name="runtime" id="runtime">
+									<option value="True">Die When Done</option>
+									<option value="False"<tmpl_if name="runtime" value="False"> selected="selected"</tmpl_if>>Keep Seeding</option>
+								</select>
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_if name="default_runtime" value="False">Keep Seeding<tmpl_else>Die When Done</tmpl_if>)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="sharekill">Percentage When Seeding should Stop:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="4" maxlength="4" name="sharekill" id="sharekill" <tmpl_var name="sharekill"> />%
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_sharekill">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="rerequest">Rerequest Interval:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="rerequest" id="rerequest" <tmpl_var name="rerequest"> />
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_rerequest">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="superseeder">Superseeder:</label></td>
+							<td style="width:180px;">
+								<select name="superseeder" id="superseeder">
+									<option value="1">true</option>
+									<option value="0"<tmpl_if name="superseeder" value="0"> selected="selected"</tmpl_if>>false</option>
+								</select>
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_if name="default_superseeder" value="0">false<tmpl_else>true</tmpl_if>)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="minport">Min Port:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="minport" id="minport" <tmpl_var name="minport"> />
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_minport">)
+							</td>
+						</tr>
+						<tr>
+							<td style="width:300px;text-align:right;padding-right:3px;"><label for="maxport">Max Port:</label></td>
+							<td style="width:180px;">
+								<input type="text" size="5" maxlength="5" name="maxport" id="maxport" <tmpl_var name="maxport"> />
+							</td>
+							<td style="width:200px;">
+								(default: <tmpl_var name="default_maxport">)
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;</td>
+							<td colspan="2" style="padding:5px;">
+								<input type="submit" value="<tmpl_var name="add1">" />
+								<tmpl_if name="empty_pid">
+									&nbsp;&nbsp;<input type="button" value="Cancel" onclick="window.location='index.php?iid=profile&amp;op=showProfiles';" />
+								</tmpl_if>
+							</td>
+						</tr>
+					<tmpl_unless name="empty_pid">
+						<tr>
+							<td colspan="3">
+								<table cellspacing="0" style="width:100%;border-style:none;">
+									<thead>
+										<tr class="tableheading_alt">
+											<td style="font-weight:bold;padding-left:3px;width:50px;text-align:center;">Action</td>
+											<td style="font-weight:bold;padding-left:3px;">Title</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tmpl_if name="empty_dat">
+											<tr>
+												<td colspan="2">No profile entries exist.</td>
+											</tr>
+										<tmpl_else>
+											<tmpl_loop name="profile_data">
+												<tr>
+													<td style="text-align:center;">
+														<a href="index.php?iid=profile&amp;op=deleteProfile&amp;pid=<tmpl_var name="pid">"><img src="themes/<tmpl_var name="theme">/images/delete_on.gif" title="<tmpl_var name="_DELETE"> <tmpl_var name="name">" alt="" /></a>
+														<a href="index.php?iid=profile&amp;op=editProfiles&amp;pid=<tmpl_var name="pid">"><img src="themes/<tmpl_var name="theme">/images/properties.png" title="<tmpl_var name="_EDIT"> <tmpl_var name="name">" alt="" /></a>
+													</td>
+													<td><tmpl_var name="name"></td>
+												</tr>
+											</tmpl_loop>
+										</tmpl_if>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tmpl_unless>
+					</tbody>
+				</table>
+			</form>
+		</td>
+	</tr>
+</tbody>
+</tmpl_if>
+
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<tmpl_include name="inc.subfoot.tmpl">

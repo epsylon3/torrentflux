@@ -1,0 +1,13 @@
+<tmpl_if name="fluxlink_display">
+	<div align="right">
+		<a href="<tmpl_var name="fluxlink_url">" target="_blank"><font class="tinywhite"><tmpl_var name="fluxlink_name"></font></a>&nbsp;&nbsp;
+		<script language="JavaScript">
+			function SuperAdmin(name_file) {
+				window.open (name_file,"_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600")
+			}
+		</script>
+		<a href="JavaScript:SuperAdmin('superadmin.php?z=1')">
+			<img src="themes/tf_standard_themes/images/arrow.gif" width="9" height="9" title="Version" border="0">
+		</a>
+	</div>
+</tmpl_if>

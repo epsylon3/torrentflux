@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title><tmpl_var name="pagetitle"></title>
+	<link rel="icon" href="themes/<tmpl_var name="theme">/images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="themes/<tmpl_var name="theme">/images/favicon.ico" type="image/x-icon" />
+	<link rel="StyleSheet" href="themes/<tmpl_var name="theme">/css/default.css" type="text/css" />
+	<link rel="StyleSheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+	<link rel="alternate" title="Transfer-Stats" href="stats.php?f=rss" type="application/rss+xml" />
+	<meta http-equiv="Pragma" content="no-cache; charset=<tmpl_var name="_CHARSET">" />
+	<tmpl_if name="meta_refresh">
+		<meta http-equiv="REFRESH" content="<tmpl_var name="meta_refresh">" />
+	</tmpl_if>
+	<script src="js/common.js" type="text/javascript"></script>
+	 <script src="themes/<tmpl_var name="theme">/scripts/common.js" type="text/javascript"></script>
+	<script src="themes/<tmpl_var name="theme">/scripts/<tmpl_var name="iid">.js" type="text/javascript"></script>
+	<tmpl_if name="enable_sorttable">
+		<script src="js/sorttable.js" type="text/javascript"></script>
+		<style type="text/css">
+			table.sortable a.sortheader { color: white; text-decoration: none; font-weight: bold; }
+			table.sortable span.sortarrow { color: white; text-decoration: none; }
+		</style>
+	</tmpl_if>
+</head>
+<body>

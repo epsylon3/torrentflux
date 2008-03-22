@@ -1,0 +1,163 @@
+<div id="overDiv" style="position:absolute;visibility:hidden;z-index:1000;"></div>
+<script language="JavaScript">
+	var ol_closeclick = "1";
+	var ol_close = "<font color=#ffffff><b>X</b></font>";
+	var ol_fgclass = "fg";
+	var ol_bgclass = "bg";
+	var ol_captionfontclass = "overCaption";
+	var ol_closefontclass = "overClose";
+	var ol_textfontclass = "overBody";
+	var ol_cap = "&nbsp;IP Info";
+</script>
+<script src="js/overlib.js" type="text/javascript"></script>
+<form action="admin.php?op=showUserActivity" name="searchForm" method="post">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				<tmpl_var name="_ACTIVITYSEARCH">
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<table id="settings">
+			<tr>
+				<td class="settingsTitle">
+					<label for="srchFile"><tmpl_var name="_FILE"></label>
+				</td>
+				<td class="settingsSetting">
+					<input type="Text" name="srchFile" id="srchFile" value="<tmpl_var name="activity_srchFile">" width="30">
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsTitle">
+					<label for="srchAction"><tmpl_var name="_ACTION"></label>
+				</td>
+				<td class="settingsSetting">
+					<select name="srchAction" id="srchAction">
+						<option value="">-- <tmpl_var name="_ALL"> --</option>
+						<tmpl_loop name="activity_action_list">
+							<option value="<tmpl_var name="action">" <tmpl_var name="selected">><tmpl_var name="action"></option>
+						</tmpl_loop>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsTitle">
+					<label for="user_id"><tmpl_var name="_USER"></label>
+				</td>
+				<td class="settingsSetting">
+					<select name="user_id" id="user_id">
+						<option value="">-- <tmpl_var name="_ALL"> --</option>
+						<tmpl_loop name="activity_user_list">
+							<option value="<tmpl_var name="user">" <tmpl_var name="selected">><tmpl_var name="user"></option>
+						</tmpl_loop>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="settingsTitle">
+				</td>
+				<td class="settingsSetting">
+					<input type="Submit" value="<tmpl_var name="_SEARCH">">
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+<div id="uploadBottom"></div>
+<div id="uploadBottomEnd"></div>
+<div id="upload">
+	<div id="uploadLast"></div>
+	<div id="uploadFirst">
+		<span class="upload">
+			<tmpl_var name="_ACTIVITYLOG"> <tmpl_var name="activity_days_to_keep"> <tmpl_var name="_DAYS"> (<tmpl_var name="activity_userdisplay">)
+		</span>
+	</div>
+</div>
+<div class="uploadClass">
+	<table id="statusInfos">
+		<tr>
+			<tmpl_if name="activity_is_prev">
+				<td class="buttonLinks">
+					<a id="closeLink" href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_prev">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><tmpl_var name="_SHOWPREVIOUS">]</a>
+				</td>
+			</tmpl_if>
+			<tmpl_if name="activity_is_more">
+				<td class="buttonLinks">
+					<a id="closeLink" href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_max">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">">[<tmpl_var name="_SHOWMORE"></a>
+				</td>
+			</tmpl_if>
+		</tr>
+	</table>
+	<table id="statusInfos">
+		<tr>
+			<td class="buttonLinks">
+				<span id="newUser"><tmpl_var name="_USER"></span>
+			</td>
+			<td class="buttonLinks">
+				<span id="newUser"><tmpl_var name="_ACTION"></span>
+			</td>
+			<td class="outlinks">
+				<span id="newUser"><tmpl_var name="_FILE"></span>
+			</td>
+			<td class="buttonLinks">
+				<span id="newUser"><tmpl_var name="_IP"></span>
+			</td>
+			<td class="buttonLinks">
+				<span id="newUser"><tmpl_var name="_TIMESTAMP"></span>
+			</td>
+		</tr>
+		<tmpl_loop name="activity_act_list">
+			<tmpl_if name="activity_act_list">
+				<tr>
+					<tmpl_if name="is_superuser">
+						<td class="buttonLinks">
+							<a id="closeLink" href="index.php?iid=message&to_user=<tmpl_var name="user_id">"><tmpl_var name="user_id"></a>
+						</td>
+					<tmpl_else>
+						<td class="buttonLinks">
+							<tmpl_var name="user_id">
+						</td>
+					</tmpl_if>
+					<td class="buttonLinks">
+						<tmpl_var name="action">
+					</td>
+					<td class="outlinks">
+						<tmpl_var name="file">
+					</td>
+					<td class="buttonLinks">
+						<a id="closeLink" href="javascript:void(0)" onclick="return overlib('<tmpl_var name="ip_resolved"><br><tmpl_var name="user_agent"><br />', STICKY, CSSCLASS);" onmouseover="return overlib('<tmpl_var name="ip_resolved"><br><tmpl_var name="user_agent"><br>', CSSCLASS);" onmouseout="return nd();"><tmpl_var name="ip"></a>
+					</td>
+					<td class="buttonLinks">
+						<tmpl_var name="date">
+					</td>
+				</tr>
+			<tmpl_else>
+				<tr>
+					<td colspan="6">
+						<span id="newUser">-- <tmpl_var name="_NORECORDSFOUND"> --</span>
+					</td>
+				</tr>
+			</tmpl_if>
+		</tmpl_loop>
+		<tmpl_if name="activity_both_set">
+			<table id="statusInfos">
+				<tr>
+					<tmpl_if name="activity_is_prev">
+						<td class="buttonLinks">
+							<a id="closeLink" href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_prev">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><tmpl_var name="_SHOWPREVIOUS">]</a>
+						</td>
+					</tmpl_if>
+					<tmpl_if name="activity_is_more">
+						<td class="buttonLinks">
+							<a id="closeLink" href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_max">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">">[<tmpl_var name="_SHOWMORE"></a>
+						</td>
+					</tmpl_if>
+				</tr>
+			</table>
+		</tmpl_if>
+	</table>
+</div>
+<div id="uploadBottom"></div>
+<div id="uploadBottomEnd"></div>

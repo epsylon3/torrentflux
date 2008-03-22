@@ -1,0 +1,79 @@
+table.settings2 {
+	padding-top: 10px;
+	table-layout: fixed;
+	width: 100%;
+}
+td.settingsSetting2 {
+	padding-left: 10px;
+	width: 50%;
+	color: #FF0000;
+}
+td.settingsTitle3 {
+	padding-right: 10px;
+	width: 50%;
+	font-weight: 700;
+	text-align: right;
+}
+td.settingsSetting3 {
+	padding-left: 10px;
+	width: 50%;
+}
+#left {
+	float: left;
+	width: 33%;
+}
+#middle {
+	float: left;
+	width: 34%;
+}
+#right {
+	
+	width: 33%;
+}
+#status {
+	margin-left: 10px;
+	margin-right: 10px;
+	background-color: #c1b18d;
+}
+#statusTitle {
+	padding-top: 5px;
+	width: 100%;
+}
+td.status {
+	width: 33%;
+	text-align: center;
+	color: #585858;
+}
+td.statusInfos {
+	vertical-align: top;
+}
+td.outlinks2 {
+	height: 18px;
+	padding-left: 5px;
+	width: 100%;
+	font-weight: 700;
+	vertical-align: top;
+}
+a.outlinks {
+	color: #000000;
+}
+a.outlinks:hover {
+	color: #FFFFFF;
+}
+div.linksClass {
+	text-align: left;
+}
+td.buttonLinks2 {
+	height: 18px;
+	padding-left: 1px;
+	padding-right: 1px;
+	font-weight: 700;
+	vertical-align: top;
+}
+td.center {
+	text-align: center;
+	padding-top: 5px;
+}
+#fluazuStart {
+	padding-left: 100px;
+}

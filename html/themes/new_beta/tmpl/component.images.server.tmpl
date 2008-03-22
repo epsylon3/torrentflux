@@ -1,0 +1,24 @@
+<tmpl_if name="image_list">
+	<table width="100%">
+		<tr>
+			<td>
+				<div align="center">
+					<table width="100%">
+						<tmpl_loop name="image_list">
+							<tr>
+								<td align="center">
+									<span id="newUser"><tmpl_var name="title"></span>
+								</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<img src="<tmpl_var name='src'>" alt="<tmpl_var name='title'>">
+								</td>
+							</tr>
+						</tmpl_loop>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+</tmpl_if>

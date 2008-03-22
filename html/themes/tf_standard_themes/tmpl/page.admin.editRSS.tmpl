@@ -1,0 +1,46 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<div align="center">
+	<table border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0">
+		<tr>
+			<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+				<img src="themes/tf_standard_themes/images/properties.png" width=18 height=13 border=0>&nbsp;&nbsp;<font class="title">RSS Feeds</font>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<div style="width:600px">
+			<strong>Overview:</strong><br/>
+			Configure the RSS feeds you want to be included in the 'RSS Torrents' page for torrentflux-b4rt users to browse through.<br/><br/>
+			<strong>Note:</strong><br/>
+			RSS feed URLs added here must contain 'direct download' torrent links otherwise users will not be able to download the torrent files directly into torrentflux-b4rt.
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<form action="admin.php?op=addRSS" method="post">
+					<label for="newRSS"><tmpl_var name="_FULLURLLINK">:</label>
+					<input type="Text" size="50" maxlength="255" name="newRSS" id="newRSS">
+					<input type="Submit" value="<tmpl_var name="_UPDATE">"><br>
+				</form>
+			</td>
+		</tr>
+		<tmpl_loop name="link_rss">
+			<tmpl_if name="true">
+				<tr>
+					<td><a href="admin.php?op=deleteRSS&rid=<tmpl_var name="rid">"><img src="themes/tf_standard_themes/images/delete_on.gif" width=16 height=16 border=0 title="<tmpl_var name="_DELETE"> <tmpl_var name="rid">" align="absmiddle"></a>&nbsp;
+						<tmpl_if name="enable_dereferrer">
+							<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="link">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="link"></a>
+						<tmpl_else>
+							<a href="<tmpl_var escape="html" name="link">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="link"></a>
+						</tmpl_if>
+					</td>
+				</tr>
+			</tmpl_if>
+		</tmpl_loop>
+	</table>
+</div>
+<br><br><br>
+<tmpl_include name="inc.subfoot.tmpl">

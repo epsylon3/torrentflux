@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title><tmpl_var name="pagetitle"></title>
+	<link rel="StyleSheet" href="themes/<tmpl_var name="theme">/css/default.css" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta content="charset=<tmpl_var name="_CHARSET">" />
+</head>
+<body>
+	<div id="content">
+		<div id="errorTitle">Error</div>
+		<div id="errorMessage"><tmpl_var name="message"></div>
+		<tmpl_if name="messages">
+			<pre><tmpl_var name="messages"></pre>
+		</tmpl_if>
+		<tmpl_if name="link">
+			[<a id="closeLink" href="<tmpl_var name="link">"><tmpl_var name="linklabel"></a>]
+		</tmpl_if>
+	</div>
+</body>
+</html>

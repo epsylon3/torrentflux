@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title><tmpl_var name="pagetitle"></title>
+	<link rel="StyleSheet" href="themes/default/css/default.css" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta content="charset=<tmpl_var name="_CHARSET">" />
+</head>
+<body bgcolor="#829FB5">
+<br /><br /><br />
+<div align="center">
+	<table border="1" bordercolor="#A2BED4" cellpadding="0" cellspacing="0">
+		<tr>
+			<td>
+			<table border="0" cellpadding="4" cellspacing="0" width="100%">
+				<tr>
+					<td align="left" background="themes/default/images/bar.gif" bgcolor="#829FB5">
+						<font color="red"><strong>Error<strong></font>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td bgcolor="#A2BED4">
+				<div align="center">
+					<table width="100%" bgcolor="#A2BED4">
+						<tr>
+							<td>
+								<table bgcolor="#A2BED4" width="740" cellpadding="1">
+									<tr>
+										<td>
+											<div align="center">
+												<table border="0" cellpadding="4" cellspacing="0" width="90%">
+													<tr>
+														<td>
+															<strong><tmpl_var name="message"></strong>
+															<tmpl_if name="messages">
+																<p><div align="left"><pre><tmpl_var name="messages"></pre></div></p>
+															</tmpl_if>
+															<tmpl_if name="link">
+																<p>[<a href="<tmpl_var name="link">"><tmpl_var name="linklabel"></a>]</p>
+															</tmpl_if>
+														</td>
+													</tr>
+												</table>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

@@ -1,0 +1,207 @@
+<div id="upload">
+	<div id="uploadLast"></div>
+	<div id="uploadFirst">
+		<span class="upload">
+			Server
+		</span>
+	</div>
+</div>
+<div id="fileUpload" class="uploadClass">
+	<table id="settings">
+		<tr>
+			<tmpl_if name="xfer_day">
+				<tmpl_var name="xfer_day">
+			</tmpl_if>
+			<tmpl_if name="xfer_week">
+				<tmpl_var name="xfer_week">
+			</tmpl_if>
+			<tmpl_if name="xfer_month">
+				<tmpl_var name="xfer_month">
+			</tmpl_if>
+			<tmpl_if name="xfer_total">
+				<tmpl_var name="xfer_total">
+			</tmpl_if>
+		</tr>
+	</table>
+</div>
+<div id="uploadBottom"></div>
+<div id="uploadBottomEnd"></div>
+<tmpl_if name="show_xfer">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				Server
+			</span>
+		</div>
+	</div>
+	<div id="fileUpload" class="uploadClass">
+		<table id="settings">
+			<tr>
+				<td>
+					<tmpl_var name="_USER">
+				</td>
+				<td>
+					<tmpl_var name="_TOTALXFER">
+				</td>
+				<td>
+					<tmpl_var name="_MONTHXFER">
+				</td>
+				<td>
+					<tmpl_var name="_WEEKXFER">
+				</td>
+				<td>
+					<tmpl_var name="_DAYXFER">
+				</td>
+			</tr>
+			<tmpl_loop name="user_list">
+				<tr>
+					<td>
+						<a id="closeLink" href="index.php?iid=serverStats&type=xfer&op=xfer&user=<tmpl_var name="user_id">"><tmpl_var name="user_id"></a>
+					</td>
+					<td>
+						<tmpl_var name="total">
+					</td>
+					<td>
+						<tmpl_var name="month">
+					</td>
+					<td>
+						<tmpl_var name="week">
+					</td>
+					<td>
+						<tmpl_var name="day">
+					</td>
+				</tr>
+			</tmpl_loop>
+			<tr>
+				<td>
+					<a id="closeLink" href="index.php?iid=serverStats&type=xfer&op=xfer&user=%"><tmpl_var name="_TOTAL"></a>
+				</td>
+				<td>
+					<tmpl_var name="total_total">
+				</td>
+				<td>
+					<tmpl_var name="total_month">
+				</td>
+				<td>
+					<tmpl_var name="total_week">
+				</td>
+				<td>
+					<tmpl_var name="total_day">
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_if name="user">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					<tmpl_if name="user" value="%">
+						<tmpl_var name="_SERVERXFERSTATS">
+					<tmpl_else>
+						<tmpl_var name="_USERDETAILS">: <tmpl_var name="user">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div id="fileUpload" class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td>
+						Month Starting
+					</td>
+					<td>
+						<tmpl_var name="_TOTAL">
+					</td>
+					<td>
+						<tmpl_var name="_DOWNLOAD">
+					</td>
+					<td>
+						<tmpl_var name="_UPLOAD">
+					</td>
+				</tr>
+				<tmpl_loop name="month_list">
+					<tr>
+						<td>
+							<a id="closeLink" href="index.php?iid=serverStats&type=xfer&op=xfer&user=<tmpl_var name="user_id">&month=<tmpl_var name="month">"><tmpl_var name="start"></a>
+						</td>
+						<td>
+							<tmpl_var name="totalstr">
+						</td>
+						<td>
+							<tmpl_var name="downloadstr">
+						</td>
+						<td>
+							<tmpl_var name="uploadstr">
+						</td>
+					</tr>
+				</tmpl_loop>
+				<tr>
+					<td>
+						Week Starting
+					</td>
+					<td>
+						<tmpl_var name="_TOTAL">
+					</td>
+					<td>
+						<tmpl_var name="_DOWNLOAD">
+					</td>
+					<td>
+						<tmpl_var name="_UPLOAD">
+					</td>
+				</tr>
+				<tmpl_loop name="week_list">
+					<tr>
+						<td>
+							<a id="closeLink" href="index.php?iid=serverStats&type=xfer&op=xfer&user=<tmpl_var name="user_id">&month=<tmpl_var name="month">&week=<tmpl_var name="week">"><tmpl_var name="start"></a>
+						</td>
+						<td>
+							<tmpl_var name="totalstr">
+						</td>
+						<td>
+							<tmpl_var name="downloadstr">
+						</td>
+						<td>
+							<tmpl_var name="uploadstr">
+						</td>
+					</tr>
+				</tmpl_loop>
+				<tr>
+					<td>
+						Day
+					</td>
+					<td>
+						<tmpl_var name="_TOTAL">
+					</td>
+					<td>
+						<tmpl_var name="_DOWNLOAD">
+					</td>
+					<td>
+						<tmpl_var name="_UPLOAD">
+					</td>
+				</tr>
+				<tmpl_loop name="day_list">
+					<tr>
+						<td>
+							<tmpl_var name="start">
+						</td>
+						<td>
+							<tmpl_var name="totalstr">
+						</td>
+						<td>
+							<tmpl_var name="downloadstr">
+						</td>
+						<td>
+							<tmpl_var name="uploadstr">
+						</td>
+					</tr>
+				</tmpl_loop>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+	</tmpl_if>
+</tmpl_if>

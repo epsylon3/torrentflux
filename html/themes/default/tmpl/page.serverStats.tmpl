@@ -1,0 +1,34 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<div align="center">
+	<table width="740" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td align="center">
+				<form name="typeSelector" action="index.php?iid=serverStats" method="post">
+					<strong><label for="type">Type:</label></strong>
+					<select name="type" id="type" onChange="javascript:submit();">
+						<tmpl_loop name="type_list">
+							<option value="<tmpl_var name="name">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="name"></option>
+						</tmpl_loop>
+					</select>
+					<input type="submit" value="Change Type">
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>
+<p>
+<tmpl_if name="type" value="all">
+	<tmpl_include name="inc.serverStats.all.tmpl">
+<tmpl_elseif name="type" value="drivespace">
+	<tmpl_include name="inc.serverStats.drivespace.tmpl">
+<tmpl_elseif name="type" value="who">
+	<tmpl_include name="inc.serverStats.who.tmpl">
+<tmpl_elseif name="type" value="ps">
+	<tmpl_include name="inc.serverStats.ps.tmpl">
+<tmpl_elseif name="type" value="netstat">
+	<tmpl_include name="inc.serverStats.netstat.tmpl">
+<tmpl_elseif name="type" value="xfer">
+	<tmpl_include name="inc.serverStats.xfer.tmpl">
+</tmpl_if>
+<tmpl_include name="inc.subfoot.tmpl">

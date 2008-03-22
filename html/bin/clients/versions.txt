@@ -1,0 +1,3 @@
+tornado  : BitTornado 0.3.18
+mainline : BitTorrent 5.2.0
+nzbperl  : nzbperl.pl 0.6.8

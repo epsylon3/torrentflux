@@ -1,0 +1,78 @@
+<table width="760" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+	<tr><td colspan="<tmpl_var name="userSection_colspan">" bgcolor="#A2BED4" background="themes/default/images/bar.gif"><img src="themes/default/images/user_group.gif" width=17 height=14 border=0><font class="title"><tmpl_var name="_USERDETAILS"></font></div></td></tr>
+	<tr>
+		<td bgcolor="#A2BED4" width="15%"><div align=center class="title"><tmpl_var name="_USER"></div></td>
+		<td bgcolor="#A2BED4" width="6%"><div align=center class="title">Disk</div></td>
+		<tmpl_if name="enable_xfer">
+			<td bgcolor="#A2BED4" width="6%"><div align=center class="title">xfer</div></td>
+		</tmpl_if>
+		<td bgcolor="#A2BED4" width="6%"><div align=center class="title"><tmpl_var name="_HITS"></div></td>
+		<td bgcolor="#A2BED4"><div align=center class="title"><tmpl_var name="_UPLOADACTIVITY"> (<tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS">)</div></td>
+		<td bgcolor="#A2BED4" width="6%"><div align=center class="title"><tmpl_var name="_JOINED"></div></td>
+		<td bgcolor="#A2BED4" width="15%"><div align=center class="title"><tmpl_var name="_LASTVISIT"></div></td>
+		<td bgcolor="#A2BED4" width="8%"><div align=center class="title"><tmpl_var name="_ADMIN"></div></td>
+	</tr>
+	<tmpl_loop name="user_details_list">
+		<tr>
+			<tmpl_if name="is_user">
+				<td><a href="index.php?iid=message&to_user=<tmpl_var name="user_id">"><img src="<tmpl_var name="user_icon">" width=17 height=14 title="<tmpl_var name="_SENDMESSAGETO"> <tmpl_var name="user_id">" border=0 align="bottom"><tmpl_var name="user_id"></a></td>
+			<tmpl_else>
+				<td><img src="<tmpl_var name="user_icon">" width=17 height=14 title="n/a" border=0 align="bottom"><tmpl_var name="user_id"></td>
+			</tmpl_if>
+			<td align="right" nowrap>
+				<a href="index.php?iid=dir&dir=<tmpl_var name="user_id">"><tmpl_var name="disk_usage"></a>
+			</td>
+			<tmpl_if name="enable_xfer">
+				<td align="right" nowrap>
+					<a href="index.php?iid=serverStats&type=xfer&user=<tmpl_var name="user_id">"><tmpl_var name="xfer_usage"></a>
+				</td>
+			</tmpl_if>
+			<td><div class="tiny" align="right"><tmpl_var name="hits"></div></td>
+			<td><div align=center>
+				<table width="310" border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="200">
+							<table width="200" border="0" cellpadding="0" cellspacing="0">
+								<tr>
+									<td background="themes/default/images/proglass.gif" width="<tmpl_var name="user_percent2">"><img src="themes/default/images/blank.gif" width="1" height="12" border="0"></td>
+									<td background="themes/default/images/noglass.gif" width="<tmpl_var name="user_percent3">"><img src="themes/default/images/blank.gif" width="1" height="12" border="0"></td>
+								</tr>
+							</table>
+						</td>
+						<td align="right" width="40"><div class="tiny" align="right"><tmpl_var name="user_activity"></div></td>
+						<td align="right" width="40"><div class="tiny" align="right"><tmpl_var name="user_percent">%</div></td>
+						<td align="right"><a href="admin.php?op=showUserActivity&user_id=<tmpl_var name="user_id">">
+							<img src="themes/default/images/properties.png" title="<tmpl_var name="user_id">'s <tmpl_var name="_USERSACTIVITY">" border="0"></a></td>
+					</tr>
+				</table>
+			</td>
+			<td><div class="tiny" align="center" nowrap><tmpl_var name="time_created"></div></td>
+			<td><div class="tiny" align="center" nowrap><tmpl_var name="last_visit"></div></td>
+			<td><div align="right" class="tiny" nowrap>
+				<img src="<tmpl_var name="user_image">" title="<tmpl_var name="user_id"> - <tmpl_var name="type_user">">
+				<tmpl_if name="user_level" op="<=" value="1">
+					<tmpl_if name="user_state" value="1">
+						<a href="admin.php?op=setUserState&user_id=<tmpl_var name="user_id">&state=0"><img src="themes/default/images/green.gif" width="13" height="13" title="deactivate <tmpl_var name="user_id">" border="0"></a>
+					<tmpl_else>
+						<a href="admin.php?op=setUserState&user_id=<tmpl_var name="user_id">&state=1"><img src="themes/default/images/red.gif" width="13" height="13" title="activate <tmpl_var name="user_id">" border="0"></a>
+					</tmpl_if>
+				<tmpl_else>
+					<img src="themes/default/images/black.gif" width="13" height="13" title="superadmin always activated">
+				</tmpl_if>
+				<tmpl_if name="is_superadmin">
+					<a href="admin.php?op=editUser&user_id=<tmpl_var name="user_id">"><img src="themes/default/images/edit.png" width=12 height=13 title="<tmpl_var name="_EDIT"> <tmpl_var name="user_id">" border=0></a>
+				</tmpl_if>
+				<tmpl_if name="user_level" op="<=" value="1">
+					<a href="admin.php?op=deleteUser&user_id=<tmpl_var name="user_id">"><img src="themes/default/images/delete_on.gif" border=0 width=16 height=16 title="<tmpl_var name="_DELETE"> <tmpl_var name="user_id">" onclick="return ConfirmDeleteUser('<tmpl_var name="user_id">')"></a>
+				<tmpl_else>
+					<img src="themes/default/images/delete_off.gif" width=16 height=16 title="n/a">
+				</tmpl_if>
+			</div></td>
+		</tr>
+	</tmpl_loop>
+</table>
+<script language="JavaScript">
+	function ConfirmDeleteUser(user) {
+		return confirm("<tmpl_var name="_WARNING">: <tmpl_var name="_ABOUTTODELETE">: " + user)
+	}
+</script>

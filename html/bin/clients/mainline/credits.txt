@@ -1,0 +1,42 @@
+Inventor
+Bram Cohen
+
+Lead Developer
+Greg Hazel
+
+Developers
+Matt Chisholm • David Harrison • Steven Hazel • Andrew Loewenstern 
+
+The following people have all helped with BitTorrent in some way:
+
+Denis Ahrens
+Jeremy Avnet
+Michael Bibby
+Greg Broiles
+Bill Bumgarner
+Myers Carpenter
+Howard Chu
+Barry Cohen
+Ross Cohen
+David Creswick
+Francis Crick
+Jeff Darcy
+Kevin Drum
+Jeremy Evans
+John Gilmore
+John Hoffman
+Loring Holden
+Michael Janssen
+Steve Jenson
+www.jinx.com
+Pat Mahoney
+Jonathan Moore
+Petru Paler
+Henry Pi James
+Ed Savage-Jones
+sayke
+Robert Stone
+Eric Tiedemann
+Uoti Urpala
+Yann Vernier
+Boris Zbarsky

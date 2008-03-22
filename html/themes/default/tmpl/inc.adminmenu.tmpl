@@ -1,0 +1,23 @@
+<table width="760" border="2" bgcolor="#829FB5" bordercolor="#829FB5" cellpadding="2" cellspacing="0">
+	<tr nowrap>
+		<td nowrap><div align="center">
+			<tmpl_if name="is_superadmin">
+				<tmpl_var name="adminmenu_superAdminLink"> |
+			</tmpl_if>
+			<a href="admin.php?op=serverSettings"><font class="adminlink">server</font></a> |
+			<a href="admin.php?op=transferSettings"><font class="adminlink">transfer</font></a> |
+			<a href="admin.php?op=controlSettings"><font class="adminlink">control</font></a> |
+			<a href="admin.php?op=webappSettings"><font class="adminlink">webapp</font></a> |
+			<a href="admin.php?op=indexSettings"><font class="adminlink">index</font></a> |
+			<a href="admin.php?op=dirSettings"><font class="adminlink">dir</font></a> |
+			<a href="admin.php?op=statsSettings"><font class="adminlink">stats</font></a> |
+			<a href="admin.php?op=fluxdSettings"><font class="adminlink"><tmpl_var name="_FLUXD_MENU"></font></a> |
+			<a href="admin.php?op=xferSettings"><font class="adminlink">xfer</font></a> |
+			<a href="admin.php?op=searchSettings"><font class="adminlink"><tmpl_var name="_SEARCHSETTINGS_MENU"></font></a> |
+			<a href="admin.php?op=editLinks"><font class="adminlink"><tmpl_var name="_LINKS_MENU"></font></a> |
+			<a href="admin.php?op=editRSS"><font class="adminlink">rss</font></a> |
+			<a href="admin.php?op=showUsers"><font class="adminlink">users</font></a> |
+			<a href="admin.php?op=showUserActivity"><font class="adminlink"><tmpl_var name="_ACTIVITY_MENU"></font></a>
+		</div></td>
+	</tr>
+</table><br>

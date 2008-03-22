@@ -1,0 +1,377 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<div id="content">
+	<form name="theForm" action="admin.php?op=updateWebappSettings" method="post" onsubmit="return validateSettings('webapp')">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					WebApp Settings
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="auth_type">Select Authentication Type</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<tmpl_if name="auth_type_list">
+							<select name="auth_type" id="auth_type">
+								<tmpl_loop name="auth_type_list">
+									<option value="<tmpl_var name="avalue">"<tmpl_if name="aselected" value="1"> selected</tmpl_if>><tmpl_var name="atype"></option>
+								</tmpl_loop>
+							</select>
+						</tmpl_if>
+						<br /><br />
+						<img src="image.php?i=test" border="0" title="Test-Image">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						<ul>
+							<li><strong>Form Auth</strong><br/>Standard form based authentication.</li>
+							<li><strong>Form Auth + Cookie</strong><br/>Standard form based authentication using an 'autologin' cookie (expires after 30 days).</li>
+							<li><strong>Form Auth + Image</strong><br/>Standard form based authentication using image based captcha validation (user must enter the characters displayed in a dynamically created image to validate).</li>
+							<li><strong>Basic Auth</strong><br/>Use HTTP Basic Authentication scheme (browser will handle user/password input).</li>
+							<li><strong>Basic Auth + Passthrough</strong><br/>Pass the credentials of a user authenticated externally via basic auth to the webapp.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="auth_basic_realm">Basic Authentication Realm</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="auth_basic_realm" id="auth_basic_realm" type="Text" maxlength="64" value="<tmpl_var name="auth_basic_realm">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the realm name to use if Basic Authentication method is used.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="pagetitle">Default Page Title</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="pagetitle" id="pagetitle" type="Text" maxlength="64" value="<tmpl_var name="pagetitle">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the default page title.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_personal_settings">Enable Personal Settings</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_personal_settings" id="enable_personal_settings">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_personal_settings" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Allow users to change their personal settings.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="ui_displayfluxlink">Display Torrentflux-B4rt Site Link</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="ui_displayfluxlink" id="ui_displayfluxlink">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="fluxlink_display" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						When enabled, will display a small link to the Torrentflux-b4rt website at the bottom of all pages.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="drivespacebar">Drivespace Bar Style</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="drivespacebar" id="drivespacebar">
+							<option value="tf"
+							<tmpl_if name="drivespacebar" value="tf">
+								 selected
+							</tmpl_if>
+							>tf</option>
+							<option value="xfer"
+							<tmpl_if name="drivespacebar" value="xfer">
+								 selected
+							</tmpl_if>
+							>xfer</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Select the styling of the drivespace bar in the frontend.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="transferStatsType">Transfer Statistics Update Method</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="transferStatsType" id="transferStatsType">
+							<option value="standard">HTML Meta Refresh</option>
+							<option value="ajax"
+							<tmpl_if name="transferStatsType" value="ajax">
+								 selected
+							</tmpl_if>
+							>AJAX Update</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Choose the method used to update the transfer statistics window.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="transferStatsUpdate">Transfer Statistics Update Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="transferStatsUpdate" id="transferStatsUpdate" type="Text" maxlength="3" value="<tmpl_var name="transferStatsUpdate">" size="3">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the interval in seconds between updates in the transfer statistics window.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="transferHosts">Resolve Hostnames In Transfer Window Hosts Tab</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="transferHosts" id="transferHosts">
+							<option value="1">Hostnames</option>
+							<option value="0"
+							<tmpl_if name="transferHosts" value="0">
+								 selected
+							</tmpl_if>
+							>IPs</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Whether to resolve transfer peer hostnames to IP addresses in the Hosts tab of the transfer window - selecting Hostnames will add load to the server.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="servermon_update">Server Monitor Update Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="servermon_update" id="servermon_update" type="Text" maxlength="3" value="<tmpl_var name="servermon_update">" size="3">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the interval in seconds between updates in the Server Monitor window.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_dereferrer">Hide Referer When Following Links</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_dereferrer" id="enable_dereferrer">
+								<option value="1">True</option>
+								<option value="0"
+							<tmpl_if name="enable_dereferrer" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						When enabled, referer information will not be forwarded to websites visited by clicking on links within torrentflux-b4rt.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="default_theme">Default Theme.</label><br/>
+						<strong>Note:</strong> This theme will also be used for the login screen when a form based authentication method is used.
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="default_theme" id="default_theme">
+							<tmpl_loop name="theme_list">
+								<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected">><tmpl_var name="arThemes"></option>
+							</tmpl_loop>
+							<optgroup label="Standard TF Themes" style="background-color: #00EC00">
+								<tmpl_loop name="tfstandard_theme_list">
+									<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected"> style="background-color: #FFFFFF"><tmpl_var name="arThemes"></option>
+								</tmpl_loop>
+							</optgroup>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Select the default theme.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="default_language">Default Language</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="default_language" id="default_language">
+							<tmpl_loop name="lang_list">
+								<option value="<tmpl_var name="arLanguage">" <tmpl_var name="selected">><tmpl_var name="GetLanguageFromFile"></option>
+							</tmpl_loop>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Select the default language.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="days_to_keep">Days To Keep Logged Audit Actions</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="days_to_keep" id="days_to_keep" type="Text" maxlength="3" value="<tmpl_var name="days_to_keep">" size="3">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Number of days that audit actions will be held in the database.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="minutes_to_keep">Minutes To Keep User Online Status</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="minutes_to_keep" id="minutes_to_keep" type="Text" maxlength="2" value="<tmpl_var name="minutes_to_keep">" size="2">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Number of minutes after ending a browser session that user status changes to offline.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="rss_cache_min">Minutes To Cache RSS Feeds</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="rss_cache_min" id="rss_cache_min" type="Text" maxlength="3" value="<tmpl_var name="rss_cache_min">" size="3">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Number of minutes to cache RSS XML feeds on the server.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_tmpl_cache">Enable Template Cache</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_tmpl_cache" id="enable_tmpl_cache">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_tmpl_cache" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable caching of HTML template files.<br/>
+						<script language="JavaScript">
+							function SuperAdmin(name_file) {
+								window.open (name_file,"_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600")
+							}
+						</script>
+						<a id="closeLink" href="javascript:SuperAdmin('superadmin.php?m=35')">Clean Template Cache Now</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="debuglevel">Debug Level</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="debuglevel" id="debuglevel">
+							<option value="0"<tmpl_if name="debuglevel" value="0"> selected</tmpl_if>>0</option>
+							<option value="1"<tmpl_if name="debuglevel" value="1"> selected</tmpl_if>>1</option>
+							<option value="2"<tmpl_if name="debuglevel" value="2"> selected</tmpl_if>>2</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the debug level - higher values increase the debugging output in the logs.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="debug_sql">Show SQL Debug Statements</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="debug_sql" id="debug_sql">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="debug_sql" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						SQL Errors will always be displayed but when this feature is enabled the SQL Statement that caused the error will be displayed as well.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+					</td>
+					<td class="settingsSetting">
+						<input type="Submit" value="Update Settings">
+					</td>
+				</tr>
+			</table>
+		</div>
+	</form>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

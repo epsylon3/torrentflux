@@ -1,0 +1,657 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<div id="content">
+	<form name="theForm" action="admin.php?op=updateTransferSettings" method="post" onsubmit="return validateSettings('transfer')">
+		<div align="left"><strong>Legend:</strong><br/>B = BitTornado<br/>T = Transmission<br/>M = BitTorrent Mainline<br/>A = Azureus<br/>W = Wget<br/>N = Nzbperl<br/><br/></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					BitTorrent
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="btclient">Default BitTorrent Client</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="btclient" id="btclient">
+							<option value="tornado"
+							<tmpl_if name="btclient" value="tornado">
+								 selected
+							</tmpl_if>
+							>BitTornado</option>
+							<option value="transmission"
+							<tmpl_if name="btclient" value="transmission">
+								 selected
+							</tmpl_if>
+							>Transmission</option>
+							<option value="mainline"
+							<tmpl_if name="btclient" value="mainline">
+								selected
+							</tmpl_if>
+							>BitTorrent Mainline</option>
+							<option value="azureus"
+							<tmpl_if name="btclient" value="azureus">
+								selected
+							</tmpl_if>
+							>Azureus</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the client to use by default to start torrent transfers.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="metainfoclient">Torrent Metainfo Client</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="metainfoclient" id="metainfoclient">
+							<option value="btshowmetainfo.py"
+							<tmpl_if name="metainfoclient" value="btshowmetainfo.py">
+								 selected
+							</tmpl_if>
+							>btshowmetainfo.py</option>
+							<option value="transmissioncli"
+							<tmpl_if name="metainfoclient" value="transmissioncli">
+								 selected
+							</tmpl_if>
+							>transmissioncli</option>
+							<option value="torrentinfo-console.py"
+							<tmpl_if name="metainfoclient" value="torrentinfo-console.py">
+								 selected
+							</tmpl_if>
+							>torrentinfo-console.py</option>
+							<option value="ttools.pl"
+							<tmpl_if name="metainfoclient" value="ttools.pl">
+								 selected
+							</tmpl_if>
+							>ttools.pl</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the client to use to decode torrent meta data.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="btclient_tornado_options">BitTornado - Extra Commandline Options:</label>
+					</td>
+					<td class="settingsSetting">
+						<input name="btclient_tornado_options" id="btclient_tornado_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_tornado_options">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="btclient_transmission_options">Transmission - Extra Commandline Options:</label>
+					</td>
+					<td class="settingsSetting">
+						<input name="btclient_transmission_options" id="btclient_transmission_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_options">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="btclient_mainline_options">BitTorrent Mainline - Extra Commandline Options:</label>
+					</td>
+					<td class="settingsSetting">
+						<input name="btclient_mainline_options" id="btclient_mainline_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_mainline_options">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="max_upload_rate">Max Upload Rate (B+T+M+A)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="max_upload_rate" id="max_upload_rate" type="Text" maxlength="5" value="<tmpl_var name="max_upload_rate">" size="5"> kB/second
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default value for the max upload rate per transfer (0 for no limit).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="max_download_rate">Max Download Rate (B+T+M+A)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="max_download_rate" id="max_download_rate" type="Text" maxlength="5" value="<tmpl_var name="max_download_rate">" size="5"> kB/second
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default value for the max download rate per transfer (0 for no limit).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="max_uploads">Max Upload Connections (B+M)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="max_uploads" id="max_uploads" type="Text" maxlength="5" value="<tmpl_var name="max_uploads">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default value for the max number of upload connections per transfer (0 for no limit).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="maxcons">Max Connections (B+M)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="maxcons" id="maxcons" type="Text" maxlength="5" value="<tmpl_var name="maxcons">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the maximum number of concurrent connections allowed.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="minport">Port Range (B+T+M)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="minport" id="minport" type="Text" maxlength="5" value="<tmpl_var name="minport">" size="5">
+						-
+						<input name="maxport" id="maxport" type="Text" maxlength="5" value="<tmpl_var name="maxport">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default values for the for port range (min - max).<br/>
+						<strong>Note:</strong> One port is required per torrent; ensure the port range is large enough for the maximum number of torrents you will be running.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="rerequest_interval">Rerequest Interval (B+M)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="rerequest_interval" id="rerequest_interval" type="Text" maxlength="5" value="<tmpl_var name="rerequest_interval">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default value for the rerequest interval to the tracker (default 1800 seconds).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="die_when_done">Default Torrent Completion Activity (B+T+M+A)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="die_when_done" id="die_when_done">
+							<option value="True">Die When Done</option>
+							<option value="False"
+								<tmpl_if name="die_when_done" value="False">
+									 selected
+								</tmpl_if>
+							>Keep Seeding</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Select whether or not a torrent should keep seeding when download is complete (please seed your torrents).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="sharekill">Default Percentage When Seeding Should Stop (B+T+M+A)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="sharekill" id="sharekill" type="Text" maxlength="4" value="<tmpl_var name="sharekill">" size="4">%
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default share percentage at which torrents will die if 'Keep Seeding' is selected as completion activity above ('0' will seed forever).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_sharekill">Enable Cumulative Sharekill (B+T+M+A)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_sharekill" id="enable_sharekill">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_sharekill" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Recalculate the sharekill value passed to clients on restart based on the total amount uploaded - ie including previous sessions transfer totals.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_file_priority">Enable File Priority (B)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_file_priority" id="enable_file_priority">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_file_priority" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Allow users to select which files from a torrent to download.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="superseeder">Superseeder (B)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="superseeder" id="superseeder">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="superseeder" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set superseeder setting on torrent start by default.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="skiphashcheck">Skip HashCheck (B+M)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="skiphashcheck" id="skiphashcheck">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="skiphashcheck" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Skip hash checking by default when starting torrents.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Fluazu
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						Fluazu Daemon
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<a id="closeLink" href="admin.php?op=fluazuSettings">Edit Fluazu Settings</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Fluazu is a proxy to use an Azureus backend as client for torrents.<br>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Wget
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_wget">Enable Wget</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_wget" id="enable_wget">
+							<option value="0" <tmpl_if name="enable_wget" value="0"> selected</tmpl_if>>Wget Disabled</option>
+							<option value="1" <tmpl_if name="enable_wget" value="1"> selected</tmpl_if>>Only Admins</option>
+							<option value="2" <tmpl_if name="enable_wget" value="2"> selected</tmpl_if>>All Users</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set who can use wget.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="wget_limit_rate">Limit Download Rate</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="wget_limit_rate" id="wget_limit_rate" type="Text" maxlength="5" value="<tmpl_var name="wget_limit_rate">" size="5"> kB/second
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default value for the max download rate per transfer (0 for no limit).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="wget_limit_retries">Limit Number of Retries</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="wget_limit_retries" id="wget_limit_retries" type="Text" maxlength="5" value="<tmpl_var name="wget_limit_retries">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the max number of retries to attempt (0 for no limits).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="wget_ftp_pasv">Enable Passive FTP</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="wget_ftp_pasv" id="wget_ftp_pasv">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="wget_ftp_pasv" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable "passive" transfer mode for FTP.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Nzbperl
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						Nzbperl Requirements Check:
+					</td>
+					<td class="settingsSetting">
+						<script language="JavaScript">
+							function SuperAdmin(name_file) {
+								window.open (name_file,"_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600")
+							}
+						</script>
+						<a id="closeLink" href="javascript:SuperAdmin('superadmin.php?y=531')">Run Nzbperl Requirements Check</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_nzbperl">Enable Nzbperl</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_nzbperl" id="enable_nzbperl">
+							<option value="0" <tmpl_if name="enable_nzbperl" value="0"> selected</tmpl_if>>Nzbperl Disabled</option>
+							<option value="1" <tmpl_if name="enable_nzbperl" value="1"> selected</tmpl_if>>Only Admins</option>
+							<option value="2" <tmpl_if name="enable_nzbperl" value="2"> selected</tmpl_if>>All Users</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set who can use nzbperl.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_create">Use Subdirectories</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="nzbperl_create" id="nzbperl_create">
+							<option value="0" <tmpl_if name="nzbperl_create" value="0"> selected</tmpl_if>>No Extra Dir</option>
+							<option value="1" <tmpl_if name="nzbperl_create" value="1"> selected</tmpl_if>>Use Nzb Filename</option>
+							<option value="2" <tmpl_if name="nzbperl_create" value="2"> selected</tmpl_if>>Use Usenet Group Name</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Download nzbperl content into separate subdirectories.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_badAction">Bad File Action</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="nzbperl_badAction" id="nzbperl_badAction">
+							<option value="0" <tmpl_if name="nzbperl_badAction" value="0"> selected</tmpl_if>>Drop Bad Files</option>
+							<option value="1" <tmpl_if name="nzbperl_badAction" value="1"> selected</tmpl_if>>Download Anyway</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the action to perform on finding a bad entry in the nzb.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_rate">Download Rate</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="nzbperl_rate" id="nzbperl_rate" type="Text" maxlength="5" value="<tmpl_var name="nzbperl_rate">" size="5"> kB/second
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the default value for the max download rate per transfer (0 for no limit).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_server">Server</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="nzbperl_server" id="nzbperl_server" type="Text" maxlength="254" value="<tmpl_var name="nzbperl_server">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the NNTP server nzbperl should connect to.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_user">Username</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="nzbperl_user" id="nzbperl_user" type="Text" maxlength="254" value="<tmpl_var name="nzbperl_user">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the username to use when connecting to your NNTP server.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_pw">Password</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="nzbperl_pw" id="nzbperl_pw" type="password" maxlength="254" value="<tmpl_var name="nzbperl_pw">" size="30">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the password to use when connecting to your NNTP server.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_conn">Connections</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="nzbperl_conn" id="nzbperl_conn" type="text" maxlength="5" value="<tmpl_var name="nzbperl_conn">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						The number of simultaneous connections to the NNTP server nzbperl will create.<br/>
+						<strong>Note:</strong> You can only run conn/server_max nzb downloads at once.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_threads">Threads</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="nzbperl_threads" id="nzbperl_threads">
+							<tmpl_loop name="nzbperl_threadList">
+								<option value="<tmpl_var name="value">"<tmpl_if name="is_selected" value="1"> selected</tmpl_if>>
+									<tmpl_var name="name">
+								</option>
+							</tmpl_loop>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Use threading.<br/>
+						<strong>Note:</strong> Enable only if your Perl installation supports threads.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nzbperl_options">Nzbperl - Extra Commandline Options</label>
+					</td>
+					<td class="settingsSetting">
+						<input name="nzbperl_options" id="nzbperl_options" type="Text" maxlength="254" value="<tmpl_var name="nzbperl_options">" size="30">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Common
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_umask">Enable 0000 Umask (B+T+M+W+N)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_umask" id="enable_umask">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_umask" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable setting umask to 0000 when starting a client.<br/>
+						<strong>Note:</strong> Resulting permissions of created files will be 666 - readable and writable by everyone - and directories will be 777 - readable/writable/executable by everyone.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="nice_adjust">Use Nice (B+T+M+W+N)</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="nice_adjust" id="nice_adjust">
+							<tmpl_loop name="nice_list">
+								<option value="<tmpl_var name="i">"
+									<tmpl_if name="nice_adjust_true" value="1">
+										 selected
+									</tmpl_if>
+								>
+								<tmpl_if name="i" value="0">
+									Don't Use Nice
+								<tmpl_else name="i">
+									<tmpl_var name="i">
+								</tmpl_if>
+								</option>
+							</tmpl_loop>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Set the nice level to use for transfer processes.<br/>
+						<strong>Note:</strong> The highest nice level - 19 - gives processes the lowest possible priority over other processes on the server.
+					</td>
+				</tr>
+				<tr>
+						<td class="settingsTitle">
+						</td>
+						<td class="settingsSetting">
+							<input type="Submit" value="Update Settings">
+						</td>
+					</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+	</form>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				Overview
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<div align="left">
+			Configure the RSS feeds you want to be included in the 'RSS Torrents' page for torrentflux-b4rt users to browse through.<br/><br/>
+			<strong>Note:</strong><br/>
+			RSS feed URLs added here must contain 'direct download' torrent links otherwise users will not be able to download the torrent files directly into torrentflux-b4rt.
+		</div>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<form action="admin.php?op=addRSS" method="post">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					New RSS Feed
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<label for="newRSS"><tmpl_var name="_FULLURLLINK">:</label>
+			<input type="Text" size="50" maxlength="255" name="newRSS" id="newRSS">
+		<input type="Submit" value="<tmpl_var name="_UPDATE">">
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+	</form>
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				Links
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<table id="statusInfos">
+			<tmpl_loop name="link_rss">
+					<tr>
+						<td class="buttonLinks">
+							<a href="admin.php?op=deleteRSS&rid=<tmpl_var name="rid">"><img src='themes/<tmpl_var name="theme">/pics/delete.jpg' alt='<tmpl_var name="_DELETE"> <tmpl_var name="rid">'></a>
+						</td>
+						<td class="outlinks">
+							<tmpl_if name="enable_dereferrer">
+								<a class="outlinks" href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="link">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="link"></a>
+							<tmpl_else>
+								<a class="outlinks" href="<tmpl_var escape="html" name="link">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="link"></a>
+							</tmpl_if>
+						</td>
+					</tr>
+			</tmpl_loop>
+		</table>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

@@ -1,0 +1,303 @@
+body 
+{
+	font-family: Arial;
+	font-size: 75%; /* 12px */
+	margin-top: 10px;
+	background-color:#A7A38F;
+	text-align:center;
+}
+
+table,
+td
+{
+	border-style:none;
+	padding:0px;
+	margin:0px;
+	line-height:auto;
+}
+
+td img
+{
+	vertical-align:bottom;
+}
+
+input,select
+{
+	margin:0px 2px 0px 0px;
+}
+
+img
+{
+	border-style:none;
+}
+img.vmiddle
+{
+	vertical-align:baseline;
+}
+
+form ,
+span
+{
+	margin: 0px;
+	padding: 0px;
+	display: inline;
+}
+a:link ,
+a:active,
+a:visited,
+a:hover         
+{
+	color: #363636;
+	text-decoration: none;
+}
+input,
+select,
+textarea
+{
+	font-size:80%;
+}
+
+a.fluxlink,
+a:link.fluxlink,
+a:active.fluxlink,
+a:visited.fluxlink,
+a:hover.fluxlink
+{
+	font-size:80%;
+	color:#FFFFFF;
+}
+
+hr
+{
+	border: 1px solid #a0b9d8;
+}
+
+.small{
+	font-size:90%;
+}
+
+.clearfix:after 
+{
+    content: "."; 
+    display: block; 
+    height: 0px; 
+    clear: both; 
+    visibility: hidden;
+}
+
+.clearfix 
+{
+	display: inline-block;
+}
+
+/* Hides from IE-mac and IE7 \*/
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac and IE7 */
+
+/* TitleBar */
+.titleleft img,
+.titleright img
+{
+	vertical-align:bottom;
+}
+.titleleft
+{
+	font-weight: bold; 
+	color: #FFFFFF;
+	font-size:115%;
+	text-align:left;
+}
+.titleright
+{
+	text-align:right;
+}
+a.titlebarbutton,
+a:link.titlebarbutton,
+a:visited.titlebarbutton,
+a:active.titlebarbutton,
+a:hover.titlebarbutton
+{
+	font-size:80%;
+	font-weight:bold;
+}
+
+/* Table Styles */
+.tableheading,
+.tableheading_alt
+{
+	background-color:#a0b9d8;
+	font-size:100%;
+}
+
+.subtable
+{
+	width:100%;
+	text-align:left;
+}
+
+.subtableheading
+{
+	background-color:#98accd;
+	color:#FFFFFF;
+	font-weight:bold;
+	text-align:center;
+	font-size:90%;
+}
+.subtableheading thead td,
+.subtableheading thead th,
+.subtableheading tfoot td
+{
+	padding:3px 0px;
+}
+
+.table
+{
+	border:2px solid #a0b9d8;
+	width:100%;
+}
+
+.table thead td
+{
+	padding-left:2px;
+	padding-right:2px;
+	padding-bottom:2px;
+	padding-top:1px;
+}
+.table thead td td
+{
+	padding: 0px;
+}
+
+.tableheading_alt
+{
+	color:#FFFFFF;
+	font-weight:bold;
+}
+a.tableheadlink,
+a:link.tableheadlink,
+a:visited.tableheadlink,
+a:active.tableheadlink,
+a:hover.tableheadlink
+{
+	color:#FFFFFF;
+	font-size:100%;
+	font-weight:bold;
+}
+.tablecontent
+{
+	background-color:#BCCEED;
+}
+
+.tablecontent_alt
+{
+	background-color:#C8D7EE;
+}
+
+.tablecontent_hover
+{
+	background-color:#A2BED4;
+}
+
+.hidden
+{
+	visibility:hidden;
+}
+
+
+/*
+ * IE 5 to 7 don't support position: fixed (in quirks mode), so use expression(...) trick
+ * to dynamically adjust positions/sizes to emulate it. Prefix those CSS identifiers with
+ * '_' to hide them from other browsers (IE ignores the leading underscore, others don't).
+ *
+ * expression(...) are in separate classes to only activate them when needed
+ * (frequently evaluated JS: too CPU-intensive to keep active all the time).
+ */
+
+#action_in_progress 
+{ 
+	background: #DDDDFF;
+	border:3px solid #a0b9d8;
+	color: #EE2222;
+	text-align: center;
+	font-weight: bold;
+	font-size: 100%;
+	padding: 3px;
+	position: fixed;
+	top:0px;
+	left:0px;
+	/* --- IE-specific ---- */
+	_position: absolute;
+	_top:  0px;
+	_left: 0px;
+	/* -------------------- */
+	z-index:10102 !important;
+}
+#action_in_progress.active
+{
+	/* --- IE-specific ---- */
+	_top:  expression( ( flux_scrollTop()  + (flux_clientHeight() - /*this.*/offsetHeight) / 2 ) + 'px' );
+	_left: expression( ( flux_scrollLeft() + (flux_clientWidth()  - /*this.*/offsetWidth ) / 2 ) + 'px' );
+	/* -------------------- */
+}
+
+#grey_out
+{
+	position: fixed;
+	height:100%;
+	width:100%;
+	/* ---- IE-specific ---- */
+	_position: absolute;
+	_height: 0px;
+	_width:  0px;
+	/* --------------------- */
+	z-index:10100 !important;
+	top: 0px;
+	left: 0px;
+	background-color:#000000;
+	filter:alpha(opacity=50);
+	-moz-opacity: 0.5;
+	opacity: 0.5;
+}
+#grey_out.active
+{
+	/* ---- IE-specific ---- */
+	_height: expression( document.body.scrollHeight + 'px' );
+	_width:  expression( document.body.scrollWidth  + 'px' );
+	/* --------------------- */
+}
+.logfont
+{
+	font-family:Monospace;
+	overflow:scroll;
+	white-space:pre;
+	height:325px;
+	padding:3px;
+}
+
+
+/*INPUT 		{BORDER-TOP-COLOR: #000000; BORDER-LEFT-COLOR: #000000; BORDER-RIGHT-COLOR: #000000; BORDER-BOTTOM-COLOR: #000000; BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; FONT-FAMILY: Verdana,Helvetica; BORDER-RIGHT-WIDTH: 1px}
+TEXTAREA	{BORDER-TOP-COLOR: #000000; BORDER-LEFT-COLOR: #000000; BORDER-RIGHT-COLOR: #000000; BORDER-BOTTOM-COLOR: #000000; BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; FONT-FAMILY: Verdana,Helvetica; BORDER-RIGHT-WIDTH: 1px}
+SELECT 		{BORDER-TOP-COLOR: #000000; BORDER-LEFT-COLOR: #000000; BORDER-RIGHT-COLOR: #000000; BORDER-BOTTOM-COLOR: #000000; BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; FONT-FAMILY: Verdana,Helvetica; BORDER-RIGHT-WIDTH: 1px}
+*/
+/*
+.titleblack 		{BACKGROUND: none; COLOR: #000000; FONT-SIZE: 14px; FONT-WEIGHT: bold; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: none}
+.content 	{BACKGROUND: none; COLOR: #000000; FONT-SIZE: 12px; FONT-FAMILY: Verdana, Helvetica}
+.block-title	{BACKGROUND: none; COLOR: #FFFFFF; FONT-SIZE: 12px; FONT-FAMILY: Verdana, Helvetica}
+.storytitle 	{BACKGROUND: none; COLOR: #363636; FONT-SIZE: 12px; FONT-WEIGHT: bold; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: none}
+.storycat	{BACKGROUND: none; COLOR: #363636; FONT-SIZE: 12px; FONT-WEIGHT: bold; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: underline}
+.boxtitle 	{BACKGROUND: none; COLOR: #363636; FONT-SIZE: 12px; FONT-WEIGHT: bold; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: none}
+.boxcontent 	{BACKGROUND: none; COLOR: #000000; FONT-SIZE: 12px; FONT-FAMILY: Verdana, Helvetica}
+.option 	{BACKGROUND: none; COLOR: #000000; FONT-SIZE: 12px; FONT-WEIGHT: bold; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: none}
+.tinywhite		{BACKGROUND: none; COLOR: #ffffff; FONT-SIZE: 9px; FONT-WEIGHT: normal; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: none}
+.tinyunderline	{BACKGROUND: none; COLOR: #000000; FONT-SIZE: 9px; FONT-WEIGHT: normal; FONT-FAMILY: Verdana, Helvetica; TEXT-DECORATION: underline}
+.title {FONT-FAMILY: Verdana,Helvetica; FONT-WEIGHT: bold; COLOR: #ffffff; FONT-SIZE: 12px}
+.overCaption {font-family:arial; color:#ffffff; font-size:9pt; font-weight:bold;}
+.overClose {font-family:arial; background:#94ABC0; color:#000000; font-size:9pt; font-weight:bold;}
+.overBody {font-family:arial; background:#A2BED4; font-size:9pt; font-weight:normal;}
+.detailbar {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #000000;
+}*/
+/* #transferList { overflow: auto; } */

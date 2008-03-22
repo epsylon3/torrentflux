@@ -1,0 +1,555 @@
+<tmpl_if name="are_user_transfer">
+	<tr>
+		<td class="transfer_table_name" colspan="5">
+			Own Transfers
+		</td>
+	</tr>
+	<tmpl_loop name="arUserTorrent">
+		<tr>
+			<td class="transfer_table_left">
+			</td>
+			<td class="transfer_table_slider">
+				<a href="javascript:more_info('<tmpl_var name="entry">')">
+					<img id="more_Info_<tmpl_var name="entry">" src="themes/<tmpl_var name="theme">/pics/moreInfo_closed.jpg" alt="More Infos">
+				</a>
+			</td>
+			<tmpl_if name="enable_metafile_download">
+				<td class="transfer_table_metafile">
+					<a href="dispatcher.php?action=metafileDownload&transfer=<tmpl_var name="url_entry">">
+						<img src="themes/default/images/down.gif" title="Download Metafile" height="12">
+					</a>
+				</td>
+			</tmpl_if>
+			<td class="transfer_table_dir">
+				<a href="index.php?iid=dir&dir=<tmpl_var name="url_path">" onclick="return actionClick(true)">
+					<img src="themes/default/images/datadir.gif" title="<tmpl_var name="datapath">" height="12">
+				</a>
+			</td>
+			<td class="transfer_table_basic">
+				<a class="upload" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+					<tmpl_var name="displayname">
+				</a>
+			</td>
+			<td class="transfer_table_admin">
+				<tmpl_if name="is_owner">
+					<a href="JavaScript:showTransfer('index.php?iid=transferSettings&transfer=<tmpl_var name="url_entry">')">
+						<img src="themes/default/images/properties.png" alt="Transfer Settings" height="12">
+					</a>
+					<tmpl_if name="transferRunning" value="1">
+						<img src="themes/default/images/blank.gif" height="12">
+						<a href="dispatcher.php?action=stop&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+							<img src="themes/default/images/bulkstop.gif" alt="<tmpl_var name="_STOPTRANSFER">" height="12">
+						</a>
+						<img src="themes/default/images/delete_off.gif" height="12">
+						<tmpl_if name="enable_multiops">
+							<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;">
+						</tmpl_if>
+					<tmpl_else>
+						<tmpl_if name="transferowner" value="n/a">
+							<img src="themes/default/images/blank.gif" height="12">
+							<img src="themes/default/images/run_off.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+						<tmpl_else>
+							<tmpl_if name="transferRunning" value="3">
+								<img src="themes/default/images/blank.gif" height="12">
+								<a href="dispatcher.php?action=deQueue&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+									<img src="themes/default/images/queued.gif" alt="<tmpl_var name="_DELQUEUE">" height="12">
+								</a>
+							<tmpl_else>
+								<tmpl_if name="is_no_file">
+									<tmpl_if name="show_run" value="1">
+										<a href="#" onclick="showTransfer('index.php?iid=transferControl&transfer=<tmpl_var name="url_entry">')">
+											<img src="themes/default/images/bulkstart.gif" alt="<tmpl_var name="_RUNTRANSFER"> (Advanced)" height="12">
+										</a>
+									<tmpl_else>
+										<tmpl_if name="upload_support_enabled" value="1">
+											<a href="#" onclick="showTransfer('index.php?iid=transferControl&transfer=<tmpl_var name="url_entry">')">
+												<img src="themes/default/images/seed.gif" alt="<tmpl_var name="_SEEDTRANSFER"> (Advanced)" height="12">
+											</a>
+										<tmpl_else>
+											<img src="themes/default/images/blank.gif" height="12" border="0">
+										</tmpl_if>
+									</tmpl_if>
+									<tmpl_if name="show_run" value="1">
+										<a href="dispatcher.php?action=start&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+											<img src="themes/default/images/bulkresume.gif" alt="<tmpl_var name="_RUNTRANSFER"> (Quick)" height="12">
+										</a>
+									<tmpl_else>
+										<tmpl_if name="upload_support_enabled" value="1">
+											<a href="dispatcher.php?action=start&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+												<img src="themes/default/images/seedstart.gif" alt="<tmpl_var name="_SEEDTRANSFER"> (Quick)" height="12">
+											</a>
+										<tmpl_else>
+											<img src="themes/default/images/run_off.gif" alt="Done" height="12">
+										</tmpl_if>
+									</tmpl_if>
+								<tmpl_else>
+									<img src="themes/default/images/blank.gif" height="12">
+									<img src="themes/default/images/run_off.gif" alt="<tmpl_var name="_STOPPING">" height="12">
+								</tmpl_if>
+							</tmpl_if>
+						</tmpl_if>
+						<tmpl_if name="is_no_file">
+							<a href="dispatcher.php?action=delete&transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> ?')">
+								<img src="themes/default/images/delete_on.gif" alt="<tmpl_var name="_DELETE">" height="12">
+							</a>
+						<tmpl_else>
+							<img src="themes/default/images/delete_off.gif" alt="<tmpl_var name="_STOPPING">" height="12">
+						</tmpl_if>
+						<tmpl_if name="enable_multiops">
+							<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;">
+						</tmpl_if>
+					</tmpl_if>
+				<tmpl_else>
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<input type="checkbox" disabled="disabled">
+				</tmpl_if>
+			</td>
+			<td class="transfer_table_right">
+			</td>
+		</tr>
+		<tr id="<tmpl_var name="entry">" style="display: none; height: 0px;">
+			<td colspan="10">
+				<table id="transfer_table_details">
+					<tr>
+						<td class="transfer_table_details_empty"></td>
+						<tmpl_if name="settings_0">
+							<td class="transfer_table_details_text">
+								<tmpl_var name="_USER">
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_1">
+							<td class="transfer_table_details_text">
+								Size
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_2">
+							<td class="transfer_table_details_text">
+								T. Down
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_3">
+							<td class="transfer_table_details_text">
+								T. Up
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_4">
+							<td class="transfer_table_details_text">
+								<tmpl_var name="_STATUS">
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_5">
+							<td class="transfer_table_details_text">
+								Progress
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_6">
+							<td class="transfer_table_details_text">
+								Down
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_7">
+							<td class="transfer_table_details_text">
+								Up
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_8">
+							<td class="transfer_table_details_text">
+								Seeds
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_9">
+							<td class="transfer_table_details_text">
+								Peers
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_10">
+							<td class="transfer_table_details_text">
+								<tmpl_var name="_ESTIMATEDTIME">
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_11">
+							<td class="transfer_table_details_text">
+								Client
+							</td>
+						</tmpl_if>
+						<td class="transfer_table_details_empty"></td>
+					</tr>
+					<tr>
+						<td class="transfer_table_details_left"></td>
+						<tmpl_if name="settings_0">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="index.php?iid=message&to_user=<tmpl_var name="transferowner">">
+									<tmpl_var name="transferowner">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_1">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="format_af_size">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_2">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="format_downtotal">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_3">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="format_uptotal">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_4">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="statusStr">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_5">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="percentage">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_6">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="down_speed">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_7">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="up_speed">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_8">
+							<tmpl_if name="seeds" op="!=" value="">
+								<td class="transfer_table_details_value">
+									<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+										<tmpl_var name="seeds">
+									</a>
+								</td>
+							</tmpl_if>
+						</tmpl_if>
+						<tmpl_if name="settings_9">
+							<tmpl_if name="peers" op="!=" value="">
+								<td class="transfer_table_details_value">
+									<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+										<tmpl_var name="peers">
+									</a>
+								</td>
+							</tmpl_if>
+						</tmpl_if>
+						<tmpl_if name="settings_10">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="estTime">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_11">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="client">
+								</a>
+							</td>
+						</tmpl_if>
+						<td class="transfer_table_details_right"></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</tmpl_loop>
+</tmpl_if>
+<tmpl_if name="are_transfer">
+	<tr>
+		<td id="transferList_others"></td>
+	</tr>
+	<tr>
+		<td class="transfer_table_name" colspan="5">
+			Foreign Transfers
+		</td>
+	</tr>
+	<tmpl_loop name="arListTorrent">
+		<tr>
+			<td class="transfer_table_left">
+			</td>
+			<td class="transfer_table_slider">
+				<a href="javascript:more_info('<tmpl_var name="entry">')">
+					<img id="more_Info_<tmpl_var name="entry">" src="themes/<tmpl_var name="theme">/pics/moreInfo_closed.jpg" alt="More Infos">
+				</a>
+			</td>
+			<tmpl_if name="enable_metafile_download">
+				<td class="transfer_table_metafile">
+					<a href="dispatcher.php?action=metafileDownload&transfer=<tmpl_var name="url_entry">">
+						<img src="themes/default/images/down.gif" title="Download Metafile" height="12">
+					</a>
+				</td>
+			</tmpl_if>
+			<td class="transfer_table_dir">
+				<a href="index.php?iid=dir&dir=<tmpl_var name="url_path">" onclick="return actionClick(true)">
+					<img src="themes/default/images/datadir.gif" title="<tmpl_var name="datapath">" height="12">
+				</a>
+			</td>
+			<td class="transfer_table_basic">
+				<a class="upload" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+					<tmpl_var name="displayname">
+				</a>
+			</td>
+			<td class="transfer_table_admin">
+				<tmpl_if name="is_owner">
+					<a href="JavaScript:showTransfer('index.php?iid=transferSettings&transfer=<tmpl_var name="url_entry">')">
+						<img src="themes/default/images/properties.png" alt="Transfer Settings" height="12">
+					</a>
+					<tmpl_if name="transferRunning" value="1">
+						<img src="themes/default/images/blank.gif" height="12">
+						<a href="dispatcher.php?action=stop&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+							<img src="themes/default/images/bulkstop.gif" alt="<tmpl_var name="_STOPTRANSFER">" height="12">
+						</a>
+						<img src="themes/default/images/delete_off.gif" height="12">
+						<tmpl_if name="enable_multiops">
+							<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;">
+						</tmpl_if>
+					<tmpl_else>
+						<tmpl_if name="transferowner" value="n/a">
+							<img src="themes/default/images/blank.gif" height="12">
+							<img src="themes/default/images/run_off.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+						<tmpl_else>
+							<tmpl_if name="transferRunning" value="3">
+								<img src="themes/default/images/blank.gif" height="12">
+								<a href="dispatcher.php?action=deQueue&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+									<img src="themes/default/images/queued.gif" alt="<tmpl_var name="_DELQUEUE">" height="12">
+								</a>
+							<tmpl_else>
+								<tmpl_if name="is_no_file">
+									<tmpl_if name="show_run" value="1">
+										<a href="#" onclick="showTransfer('index.php?iid=transferControl&transfer=<tmpl_var name="url_entry">')">
+											<img src="themes/default/images/bulkstart.gif" alt="<tmpl_var name="_RUNTRANSFER">" height="12">
+										</a>
+									<tmpl_else>
+										<tmpl_if name="upload_support_enabled" value="1">
+											<a href="#" onclick="showTransfer('index.php?iid=transferControl&transfer=<tmpl_var name="url_entry">')">
+												<img src="themes/default/images/seed.gif" alt="<tmpl_var name="_SEEDTRANSFER">" height="12">
+											</a>
+										<tmpl_else>
+											<img src="themes/default/images/blank.gif" height="12" border="0">
+										</tmpl_if>
+									</tmpl_if>
+									<tmpl_if name="show_run" value="1">
+										<a href="dispatcher.php?action=start&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+											<img src="themes/default/images/bulkresume.gif" alt="<tmpl_var name="_RUNTRANSFER">" height="12">
+										</a>
+									<tmpl_else>
+										<tmpl_if name="upload_support_enabled" value="1">
+											<a href="dispatcher.php?action=start&transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true)">
+												<img src="themes/default/images/seedstart.gif" alt="<tmpl_var name="_SEEDTRANSFER">" height="12">
+											</a>
+										<tmpl_else>
+											<img src="themes/default/images/run_off.gif" alt="Done" height="12">
+										</tmpl_if>
+									</tmpl_if>
+								<tmpl_else>
+									<img src="themes/default/images/blank.gif" height="12">
+									<img src="themes/default/images/run_off.gif" alt="<tmpl_var name="_STOPPING">" height="12">
+								</tmpl_if>
+							</tmpl_if>
+						</tmpl_if>
+						<tmpl_if name="is_no_file">
+							<a href="dispatcher.php?action=delete&transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> ?')">
+								<img src="themes/default/images/delete_on.gif" alt="<tmpl_var name="_DELETE">" height="12">
+							</a>
+						<tmpl_else>
+							<img src="themes/default/images/delete_off.gif" alt="<tmpl_var name="_STOPPING">" height="12">
+						</tmpl_if>
+						<tmpl_if name="enable_multiops">
+							<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;">
+						</tmpl_if>
+					</tmpl_if>
+				<tmpl_else>
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<img src="themes/default/images/locked.gif" alt="<tmpl_var name="_NOTOWNER">" height="12">
+					<input type="checkbox" disabled="disabled">
+				</tmpl_if>
+			</td>
+			<td class="transfer_table_right">
+			</td>
+		</tr>
+		<tr id="<tmpl_var name="entry">" style="display: none; height: 0px;">
+			<td colspan="10">
+				<table id="transfer_table_details">
+					<tr>
+						<td class="transfer_table_details_empty"></td>
+						<tmpl_if name="settings_0">
+							<td class="transfer_table_details_text">
+								<tmpl_var name="_USER">
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_1">
+							<td class="transfer_table_details_text">
+								Size
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_2">
+							<td class="transfer_table_details_text">
+								T. Down
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_3">
+							<td class="transfer_table_details_text">
+								T. Up
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_4">
+							<td class="transfer_table_details_text">
+								<tmpl_var name="_STATUS">
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_5">
+							<td class="transfer_table_details_text">
+								Progress
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_6">
+							<td class="transfer_table_details_text">
+								Down
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_7">
+							<td class="transfer_table_details_text">
+								Up
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_8">
+							<td class="transfer_table_details_text">
+								Seeds
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_9">
+							<td class="transfer_table_details_text">
+								Peers
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_10">
+							<td class="transfer_table_details_text">
+								<tmpl_var name="_ESTIMATEDTIME">
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_11">
+							<td class="transfer_table_details_text">
+								Client
+							</td>
+						</tmpl_if>
+						<td class="transfer_table_details_empty"></td>
+					</tr>
+					<tr>
+						<td class="transfer_table_details_left"></td>
+						<tmpl_if name="settings_0">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="index.php?iid=message&to_user=<tmpl_var name="transferowner">">
+									<tmpl_var name="transferowner">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_1">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="format_af_size">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_2">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="format_downtotal">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_3">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="format_uptotal">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_4">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="statusStr">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_5">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="percentage">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_6">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="down_speed">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_7">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="up_speed">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_8">
+							<tmpl_if name="seeds" op="!=" value="">
+								<td class="transfer_table_details_value">
+									<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+										<tmpl_var name="seeds">
+									</a>
+								</td>
+							</tmpl_if>
+						</tmpl_if>
+						<tmpl_if name="settings_9">
+							<tmpl_if name="peers" op="!=" value="">
+								<td class="transfer_table_details_value">
+									<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+										<tmpl_var name="peers">
+									</a>
+								</td>
+							</tmpl_if>
+						</tmpl_if>
+						<tmpl_if name="settings_10">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="estTime">
+								</a>
+							</td>
+						</tmpl_if>
+						<tmpl_if name="settings_11">
+							<td class="transfer_table_details_value">
+								<a id="closeLink" href="JavaScript:showTransfer('index.php?iid=<tmpl_var name="twd">&transfer=<tmpl_var name="url_entry">')">
+									<tmpl_var name="client">
+								</a>
+							</td>
+						</tmpl_if>
+						<td class="transfer_table_details_right"></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</tmpl_loop>
+</tmpl_if>

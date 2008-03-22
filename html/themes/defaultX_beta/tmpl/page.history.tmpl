@@ -1,0 +1,106 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<table cellspacing="0" style="width:100%;text-align:left;">
+<thead>
+	<tr class="subtableheading">
+		<tmpl_if name="empty" value="1">
+			<th style="text-align:left;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="prev">">
+					&lt;&lt; <tmpl_var name="_SHOWPREVIOUS">
+				</a>
+			</th>
+			<th style="text-align:right;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="max">">
+					<tmpl_var name="_SHOWMORE">&gt;&gt;
+				</a>
+			</th>
+		<tmpl_elseif name="empty" value="2">
+			<th colspan="2" style="text-align:left;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="prev">">
+					&lt;&lt; <tmpl_var name="_SHOWPREVIOUS">
+				</a>
+			</th>
+		<tmpl_elseif name="empty" value="3">
+			<th colspan="2" style="text-align:right;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="max">">
+					<tmpl_var name="_SHOWMORE">&gt;&gt;
+				</a>
+			</th>
+		<tmpl_else>
+			<th colspan="2">
+				&nbsp;
+			</th>
+		</tmpl_if>
+	</tr>
+</thead>
+<tfoot>
+	<tr class="subtableheading">
+		<tmpl_if name="empty" value="1">
+			<td style="text-align:left;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="prev">">
+					&lt;&lt; <tmpl_var name="_SHOWPREVIOUS">
+				</a>
+			</td>
+			<td style="text-align:right;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="max">">
+					<tmpl_var name="_SHOWMORE">&gt;&gt;
+				</a>
+			</td>
+		<tmpl_elseif name="empty" value="2">
+			<td colspan="2" style="text-align:left;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="prev">">
+					&lt;&lt; <tmpl_var name="_SHOWPREVIOUS">
+				</a>
+			</td>
+		<tmpl_elseif name="empty" value="3">
+			<td colspan="2" style="text-align:right;font-weight:bold;">
+				<a href="index.php?iid=history&amp;min=<tmpl_var name="max">">
+					<tmpl_var name="_SHOWMORE">&gt;&gt;
+				</a>
+			</td>
+		<tmpl_else>
+			<td colspan="2">
+				&nbsp;
+			</td>
+		</tmpl_if>
+	</tr>
+</tfoot>
+<tbody>
+	<tr>
+		<td colspan="2" style="text-align:center;padding:15px 5px 10px 5px;">
+			<table cellspacing="0" style="width:100%;border-style:none;">
+			<thead>
+				<tr class="tableheading_alt">
+					<td style="font-weight:bold;padding-left:3px;"><tmpl_var name="_USER"></td>
+					<td style="font-weight:bold;padding-left:3px;"><tmpl_var name="_TIMESTAMP"></td>
+					<td style="font-weight:bold;padding-left:3px;"><tmpl_var name="_FILE"></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tmpl_if name="inx">
+					<tr>
+						<td colspan="3"><tmpl_var name="_NORECORDSFOUND"></td>
+					</tr>
+				<tmpl_else>
+					<tmpl_loop name="file_result">
+						<tr>
+							<td style="white-space:no-wrap;padding-right:5px;">
+								<a href="index.php?iid=message&amp;to_user=<tmpl_var name="user_id">"><img src="<tmpl_var name="user_icon">" title="<tmpl_var name="user_id">" alt="" />&nbsp;<tmpl_var name="user_id"></a>
+							</td>
+							<td style="padding-left:5px;white-space:no-wrap;"><tmpl_var name="date"></td>
+							<td class="small"><tmpl_var name="file"></td>
+							
+						</tr>
+					</tmpl_loop>
+				</tmpl_if>
+				</tbody>
+			</table>
+		</td>
+	</tr>	
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<tmpl_include name="inc.subfoot.tmpl">

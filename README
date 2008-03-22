@@ -1,0 +1,430 @@
+=======================================================================
+$Id$
+vim: set comments=fb\:o,fb\:#,fb\:-,fb\:*,fb\:A.,fb\:Q. et tw=72 sw=4:
+=======================================================================
+
+/**********************************************************************
+Torrentflux-b4rt 1.0 README file
+**********************************************************************/
+
+    Contents:
+    =========
+    1. Introduction
+    2. Features
+    3. Requirements
+        3.1 Minimum Requirements
+        3.2 Additional/Optional Feature Requirements
+        3.3 Fluxd Requirements
+    4. Installation
+    5. Support
+
+
+/**********************************************************************
+1. Introduction
+**********************************************************************/
+
+    Torrentflux-b4rt is a web based transfer control client.
+    Torrentflux-b4rt allows you to control your bittorrent transfers
+    from anywhere using a highly configurable web based front end.
+
+    Torrentflux-b4rt is very easy to install on a web server and includes
+    a simple setup script which can be accessed from a web browser.
+    Just upload the files to your web server, run the setup script and
+    your torrentflux-b4rt installation is ready to go.
+
+    Torrentflux-b4rt was originally based on the TorrentFlux BitTorrent
+    controller written by Qrome, although has recently undergone a major
+    rewrite to allow transparent integration with a number of transfer
+    clients and protocols:
+
+    Torrentflux-b4rt has builtin support for transfers via:
+
+        o BitTorrent - supported client(s) include:
+
+            * Original BitTorrent/Mainline - supports trackerless
+              torrents and encryption
+
+            * BitTornado - uses slightly less resources than the original
+              BT, allows file priority for downloading files selectively
+
+            * Transmission - much smaller memory footprint without much
+              loss in functionality
+
+            * Azureus - control a number of transfers from a single
+              control process, tighter control on total max bandwidth
+              for all torrents
+
+        o HTTP/FTP - supported client(s) include:
+
+            * wget - standard lightweight file transfer utility on
+              Linux, supported on many other platforms also
+
+        o Usenet - supported client(s) include:
+
+            * nzbperl - perl based application allowing multi-connection
+              news server downloads from nzb files with functionality
+              for bandwidth throttling.
+
+
+    Torrentflux-b4rt incorporates a huge number of advanced options to
+    allow you finer grained control of your transfers. The
+    administration panel in torrentflux-b4rt includes a large number of
+    options to allow you fine grained control over every aspect of your
+    bittorrent/transfers usage.
+
+    Torrentflux-b4rt is also a multi-user application, allowing you to
+    create individual accounts and assign restrictions to those accounts
+    as you wish.
+
+
+/**********************************************************************
+2. Features
+**********************************************************************/
+
+    Please see the FEATURES file for a comprehensive list of
+    Torrentflux-b4rt features.
+
+
+/**********************************************************************
+3. Requirements
+**********************************************************************/
+
+    Due to the extensible nature of torrentflux-b4rt, there are a
+    variety of 3rd party tools/utilities and extra functionality that
+    can be enabled from within the administration control panel.
+    Torrentflux-b4rt also features a service daemon called Fluxd which
+    can be used to schedule rss feed downloads, keep watch over running
+    torrents and restart them if they die.
+
+    The 3rd party utils/functionality and Fluxd all have their own
+    requirements.  For this reason the requirements section is split
+    into the following sections:
+
+        3.1 Minimum Requirements
+        3.2 Additional/Optional Feature Requirements
+        3.3 Fluxd Requirements
+
+    ALWAYS install the required items from the package installation
+    manager for your OS whenever possible.  This will save a lot of time
+    and headaches, and ensure all the dependencies are installed
+    correctly. See your OS documentation for details about the software
+    management systems available on your OS.
+
+
+/**********************************************************************
+3.1 Minimum Requirements
+**********************************************************************/
+
+    This section lists the minimum requirements required to operate
+    torrentflux-b4rt with the basic core functionality.  This list may
+    seem daunting, but most Unix like OSs have many of these features
+    available as part of their software distribution system.
+
+    /******************************************************************
+    Notes:
+    =====
+
+    - The following lists are NOT exhaustive - if you use a Unix like
+      OS/webserver/database/etc not listed below, basic functionality of
+      torrentflux-b4rt may well work.  Success reports installing
+      torrentflux-b4rt on other OSs other than those below above are
+      welcome on the forum:
+
+            http://tf-b4rt.berlios.de/forum/
+
+    - IT IS STRONGLY ADVISED THAT YOU INSTALL THE COMPONENTS LISTED
+      BELOW FROM THE SOFTWARE DISTRIBUTION SYSTEM INCLUDED WITH YOUR OS
+      (ie apt-get, rpm package management, FreeBSD ports system, etc).
+    ******************************************************************/
+
+
+    The core minimum requirements follow below:
+
+    o A Unix like OS (no Win32 support).
+      Current tested OSs include:
+
+        * Linux:
+            o Debian, Ubuntu, Gentoo, RedHat, Fedora, NSLU2,
+              ClarkConnect - amongst others
+
+            Note:
+            =====
+            SELinux should be turned off.
+
+        * BSD:
+            o FreeBSD, OpenBSD, NetBSD
+
+        * Apple:
+            o Mac OS X
+
+
+    o A Web Server.
+      Current tested webservers include:
+
+        * Apache
+            http://www.apache.org/
+
+        * LightTPD
+            http://www.lighttpd.net/
+
+
+    o An SQL-Database.
+      Currently Supported databases:
+
+        * MySQL
+            http://www.mysql.com/
+
+        * SQLite
+            http://www.sqlite.org/
+
+        * PostgreSQL
+            http://www.postgresql.org/
+
+
+    o PHP in 'web mode' (ie mod_php or php-cgi - preferably mod_php) >=
+      4.3.x built with database (MySQL, SQLite or PostgreSQL), session,
+      sockets and PCRE support enabled.  For image recognition/captcha
+	  support for logins, GD support must be enabled in PHP.
+
+    o PHP in 'commandline mode' (php-cli) >= 4.3.x built with database
+      (MySQL, SQLite or PostgreSQL), session, sockets and PCRE support
+      enabled.
+
+        http://www.php.net/
+
+        PHP Notes:
+        ==========
+        o Safe Mode must be turned off:
+            * php.ini: safe_mode = Off
+
+        o Allow Url fopen must be allowed:
+            * php.ini: allow_url_fopen = On
+
+        o open_basedir must be empty:
+            * php.ini: open_basedir = ''
+
+            Note: some web control panels like cPanel use
+            open_basedir to restrict users as to what they can do with
+            PHP.  torrentflux-b4rt does NOT officially support
+            installations on shared hosting platforms due to the
+            complications that arise (such as the use of open_basedir
+            amongst many other things).  However if you do choose to
+            attempt to install torrentflux-b4rt on a shared host running
+            a control panel such as cPanel, be aware of the problems
+            open_basedir can cause.
+
+            Please see:
+
+            http://php.net/manual/en/features.safe-mode.php#ini.open-basedir
+
+            for more info.
+
+        o As mentioned above, both the PHP web module and the
+          commandline / cli binary must be installed, both with support
+          for the database you plan to use and with support for PCRE and
+          sessions.  Check the package management system
+          documentation/website for your OS for more info on installing
+          PHP with support for web and cli.
+
+
+    o Python is required for the BitTorrent, BitTornado and Azureus
+      bittorrent clients:
+
+        * Python >= 2.2 for BitTornado
+        * Python >= 2.4 for BitTorrent Mainline (original 'BitTorrent client)
+        * Python >= 2.2.1 for Azureus
+
+
+    o Perl >= 5.6 or higher for fluxd, nzbperl.pl, ttools.pl and
+      fluxpoller.pl.  See section 3.2 below for extra info.
+
+
+    Once more(!), it is highly advisable to install these requirements
+    using the recommended package management system for your OS.
+
+
+/**********************************************************************
+3.2 Additional/Optional Feature Requirements
+**********************************************************************/
+
+    The following is a list of additional requirements needed before
+    enabling additional features and options in torrentflux-b4rt.  By
+    default these options or features are disabled and can be enabled
+    via the administration panel - please ensure the requirements are
+    installed before enabling additional features.
+
+    As mentioned above, it is strongly advised that these requirements
+    are installed from your OS's software distribution system to ensure
+    all dependencies are installed correctly.
+
+
+    Additional/optional feature requirements follow below:
+
+    o BitTorrent Mainline Client requirements:
+
+        * PyCrypto (Python Cryptography Toolkit)
+            http://sourceforge.net/projects/pycrypto/
+
+        * Twisted Python libs
+            http://twistedmatrix.com/trac/
+
+            Note:
+            =====
+            Twisted also requires Zope Interface >=3.0.1
+                http://www.zope.org/Products/ZopeInterface/
+
+            see Twisted installation docs for more info.
+
+
+    o Azureus Client requirements:
+
+        * Azureus 2.5.0.0 or higher with the XML/HTTP Plugin
+            http://azureus.sourceforge.net
+            http://azureus.sourceforge.net/plugin_details.php?plugin=xml_http_if
+
+        see azureus installation doc (doc/azureus.txt) for more info.
+
+
+    o wget transfer functionality requirements:
+        * wget
+            http://www.gnu.org/software/wget/
+
+
+    o nzbperl.pl requirements:
+
+        * UUDeview
+            http://fpx.de/fp/Software/UUDeview/
+
+        The following perl modules are also required for nzbperl:
+
+        * IO::File
+        * IO::Select
+        * IO::Socket::INET
+        * File::Basename
+        * Getopt::Long
+        * Cwd
+        * XML::Simple
+        * XML::DOM
+
+        Optional nzbperl perl modules:
+
+        * Threads
+        * Thread::Queue
+
+
+    o Archive (rar/zip) extraction functionality requirements:
+
+        * unrar
+            http://www.rarlab.com/rar/
+
+
+    o SFV file integrity checking functionality requirements:
+
+        * cksfv
+            http://zakalwe.fi/~shd/foss/cksfv/
+
+
+    o vlc streaming functionality requirements:
+        * vlc
+            http://www.videolan.org/
+
+
+    o ttools.pl is an alternative BitTorrent metadata client that
+      supports metadata scraping.  It can be enabled in the
+      Administration panel.  It requires the following modules:
+
+        * Digest::SHA1     (perl -MCPAN -e "install Digest::SHA1")
+        * LWP::UserAgent   (perl -MCPAN -e "install LWP::UserAgent")
+
+    o Mac OS X specific:
+
+        o Compilation of Transmission on Mac OS X requirements:
+            * Apple Developer Tools
+                http://developer.apple.com/tools/
+
+        o wget functionality on Mac OS X requirements:
+            * wget
+                http://www.statusq.org/images/wget.zip
+
+
+/**********************************************************************
+3.3 Fluxd Requirements
+**********************************************************************/
+
+    The fluxd daemon works as part of torrentflux-b4rt to run in the
+    background on your server performing various tasks that you
+    schedule.  Fluxd is started from the Administration control panel -
+    by default it is not running.
+
+    Fluxd is written in the Perl scripting language and requires a
+    number of perl modules to run.  In the following list, the perl
+    command is given for you to install the corresponding module from
+    CPAN.  HOWEVER, most of these modules should be available from your
+    OS's package management system and it is strongly advised that you
+    install the modules from there rather than directly using the perl
+    CPAN system.
+
+    The required perl modules are as follows:
+
+    o Core fluxd functionality:
+
+        * IO::Select       (perl -MCPAN -e "install IO::Select")
+        * IO::Socket::UNIX (perl -MCPAN -e "install IO::Socket::UNIX")
+        * IO::Socket::INET (perl -MCPAN -e "install IO::Socket::INET")
+        * POSIX            (perl -MCPAN -e "install POSIX")
+
+    IMPORTANT:
+    ==========
+    Additionally, Fluxd uses a PHP based helper script called
+    fluxcli.php and for this to run correctly the commandline (cli)
+    version of PHP must be installed with the correct extensions
+    (database, PCRE, socket and session support).  See the notes above
+    in section 3.1 for more information.
+
+
+    o (Optional) Fluxd database connectivity using Perl DBI - Perl DBI
+      db connectivity is not required to run Fluxd.  The option exists
+      to enable perl DBI however in the Admin panel.  The following
+      modules are required to run Fluxd in Perl DBI mode:
+
+       * all database-types:
+         DBI              (perl -MCPAN -e "install Bundle::DBI")
+
+       * MySQL:
+         DBD::mysql       (perl -MCPAN -e "install DBD::mysql")
+
+       * SQLite:
+         DBD::SQLite      (perl -MCPAN -e "install DBD::SQLite")
+
+       * PostgreSQL:
+         DBD::Pg          (perl -MCPAN -e "install DBD::Pg")
+
+
+    o (Optional) Fluxinet functionality requirements - Fluxinet allows
+      remote connections directly to the Fluxd daemon over TCP.  It
+      is not enabled by default:
+
+       * IO::Select       (perl -MCPAN -e "install IO::Select")
+
+       * IO::Socket::INET (perl -MCPAN -e "install IO::Socket::INET")
+
+
+/**********************************************************************
+4. Installation
+**********************************************************************/
+
+    Torrentflux-b4rt can be installed quickly from a web browser using
+    the included setup script. For full details of how to install
+    torrentflux-b4rt, please see the INSTALL file.
+
+    It is also possible to Upgrade an existing installation of 2.1-b4rt
+    or official TF (2.1 - 2.3) to torrentflux-b4rt. Details about
+    upgrades can be found in the INSTALL file.
+
+
+/**********************************************************************
+5. Support
+**********************************************************************/
+
+    Please see the SUPPORT file for information on getting help with
+    your Torrentflux-b4rt installation.

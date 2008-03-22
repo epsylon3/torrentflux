@@ -1,0 +1,53 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<a name="top"></a>
+<div align="center">
+	<table border=1 cellspacing=0 width="760" cellpadding=5>
+		<tr>
+			<td bgcolor="#A2BED4">RSS Feeds (jump list):
+				<ul>
+					<tmpl_loop name="rss_list">
+						<tmpl_if name="stat" value="1">
+							<li><a href="#<tmpl_var name="rid">" title="<tmpl_var name="title">"><tmpl_var name="title"></a></li>
+						<tmpl_elseif name="stat" value="2">
+							<li>* RSS feed URL active, but contains no active content * (<a href="<tmpl_var name="url">" title="<tmpl_var name="title">"><tmpl_var name="url"></a>)</li>
+						<tmpl_elseif name="stat" value="3">
+							<li>* RSS timed out * (<a href="<tmpl_var name="url">" title="<tmpl_var name="url">"><tmpl_var name="url"></a>)</li>
+						</tmpl_if>
+					</tmpl_loop>
+				</ul>
+				* Click on Torrent Links below to add them to the Torrent Download List</td>
+		</tr>
+	</table>
+</div>
+
+<tmpl_loop name="rss_list">
+<tmpl_if name="stat" value="1">
+<br/>
+<a name="<tmpl_var name="rid">"></a>
+<table width="760" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+	<tr>
+		<td colspan=2 bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+			<a href="<tmpl_var name="url">" target="_blank" title="Open <tmpl_var name="title"> RSS feed in browser"><img src="themes/default/images/properties.png" border=0 title="Open <tmpl_var name="title"> RSS feed in browser"></a>&nbsp;&nbsp;<strong><a href="<tmpl_var name="url">" target="_blank" title="Open <tmpl_var name="title"> RSS feed in browser"><font class="adminlink"><tmpl_var name="title"></font></a>&nbsp;&nbsp;<font class="tinywhite">[<a href="#" title="Top of page"><font class="tinywhite">top</font></a>]</font></strong>
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="#A2BED4"><div align=center class="title"><tmpl_var name="_TRANSFERFILE"></div></td>
+		<td bgcolor="#A2BED4" width="33%"><div align=center class="title"><tmpl_var name="_TIMESTAMP"></div></td>
+	</tr>
+
+<!-- Loop through each feed item for this feed -->
+<tmpl_loop name="feedItems">
+	<tr>
+		<td>
+			<a href="dispatcher.php?action=urlUpload&type=torrent&url=<tmpl_var name="link">" title="<tmpl_var name="label">"><img src="themes/default/images/download_owner.gif" width="16" height="16" border="0" title="<tmpl_var name="label">"></a>
+			&nbsp;&nbsp;
+			<a href="dispatcher.php?action=urlUpload&url=<tmpl_var name="link">" title="<tmpl_var name="label">"><tmpl_var name="title"></a>
+		</td>
+		<td><tmpl_var name="pubDate"></td>
+	</tr>
+</tmpl_loop>
+</table>
+</tmpl_if>
+</tmpl_loop>
+<tmpl_include name="inc.subfoot.tmpl">

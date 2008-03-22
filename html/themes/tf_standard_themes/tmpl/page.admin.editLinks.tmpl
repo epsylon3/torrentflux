@@ -1,0 +1,68 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<div align="center">
+	<table border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td colspan="2" bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+				<img src="themes/tf_standard_themes/images/properties.png" width=18 height=13 border=0>&nbsp;&nbsp;<font class="title"><tmpl_var name="_ADMINEDITLINKS"></font>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+			<div style="width:600px">
+			<strong>Overview:</strong><br/>
+			Edit the links you want displayed on the index page in the link list panel for all users.<br/><br/>
+			</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=2 align="center">
+				<form action="admin.php?op=addLink" method="post">
+					<label for="newLink"><tmpl_var name="_FULLURLLINK">:</label>
+					<input type="Text" size="30" maxlength="255" name="newLink" id="newLink">
+					<label for="newSite"><tmpl_var name="_FULLSITENAME">:</label>
+					<input type="Text" size="30" maxlength="255" name="newSite" id="newSite">
+					<input type="Submit" value="<tmpl_var name="_UPDATE">"><br>
+				</form>
+			</td>
+		</tr>
+		<tmpl_loop name="link_list">
+			<tr>
+				<tmpl_if name="is_edit">
+					<td colspan="2">
+						<form action="admin.php?op=editLink" method="post">
+							<input type="hidden" name="lid" value="<tmpl_var name="lid">">
+							<label for="editLink"><tmpl_var name="_FULLURLLINK">:</label>
+							<input type="Text" size="30" maxlength="255" name="editLink" id="editLink" value="<tmpl_var escape="html" name="url">">
+							<label for="editSite"><tmpl_var name="_FULLSITENAME">:</label>
+							<input type="Text" size="30" maxlength="255" name="editSite" id="editSite" value="<tmpl_var escape="html" name="sitename">">
+							<input type="Submit" value="<tmpl_var name="_UPDATE">"><br>
+						</form>
+					</td>
+				</tmpl_else>
+					<td>
+						<a href="admin.php?op=deleteLink&lid=<tmpl_var name="lid">" onclick="return confirm('Delete Link <tmpl_var name="sitename"> ?')"><img src="themes/tf_standard_themes/images/delete_on.gif" width=16 height=16 border=0 title="<tmpl_var name="_DELETE"> <tmpl_var name="lid">" align="absmiddle"></a>&nbsp;
+						<a href="admin.php?op=editLinks&edit=<tmpl_var name="lid">"><img src="themes/tf_standard_themes/images/edit.gif" width=16 height=16 border=0 title="<tmpl_var name="_EDIT"> <tmpl_var name="lid">" align="absmiddle"></a>&nbsp;
+						<tmpl_if name="enable_dereferrer">
+							<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="url">" target="_blank"><tmpl_var escape="html" name="sitename"></a>
+						<tmpl_else>
+							<a href="<tmpl_var escape="html" name="url">" target="_blank"><tmpl_var escape="html" name="sitename"></a>
+						</tmpl_if>
+					</td>
+					<td align=<tmpl_if name="last_link">left<tmpl_else>right</tmpl_if> width='36'>
+						<tmpl_if name="counter" value="2">
+							<a href='admin.php?op=moveLink&amp;direction=up&amp;lid=<tmpl_var name="lid">'><img src='themes/tf_standard_themes/images/uparrow.png' width='16' height='16' border='0' title='Move link up' align='absmiddle' alt='Up'></a><tmpl_elseif name="counter" value="1">
+							<img src='themes/tf_standard_themes/images/blank.gif' width='16' align='absmiddle'>
+						</tmpl_if>
+						<tmpl_if name="counter2">
+							<a href='admin.php?op=moveLink&amp;direction=down&amp;lid=<tmpl_var name="lid">'><img src='themes/tf_standard_themes/images/downarrow.png' width='16' height='16' border='0' title='Move link down' align='absmiddle' alt='Down'></a>
+						</tmpl_if>
+					</td>
+				</tmpl_if>
+			</tr>
+		</tmpl_loop>
+	</table>
+</div>
+<br><br><br>
+<tmpl_include name="inc.subfoot.tmpl">

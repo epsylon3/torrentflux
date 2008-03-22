@@ -1,0 +1,32 @@
+<tr>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;">Upload:</div>
+	</td>
+	<td>
+		<div style="width:99%;height:12px;border-left:1px solid #000000;border-right:1px solid #000000;padding:0px;" class="clearfix">
+			<img id="barSpeedUp1" src="themes/<tmpl_var name="theme">/images/proglass.gif" style="height:12px;width:<tmpl_var name="bandwidthbars_upload_percent">%;float:left;" alt="" />
+			<img id="barSpeedUp2" src="themes/<tmpl_var name="theme">/images/noglass.gif" style="height:12px;width:<tmpl_var name="bandwidthbars_upload_percent2">%;float:left;" alt="" />
+		</div>
+	</td>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;white-space:nowrap;">
+			<span id="barSpeedUpPercent"><tmpl_var name="bandwidthbars_upload_percent"></span>% (<span id="barSpeedUp"><tmpl_var name="bandwidthbars_upload_text"></span> kB/s)
+		</div>
+	</td>
+</tr>
+<tr>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;">Download:</div>
+	</td>
+	<td>
+		<div style="width:99%;height:12px;border-left:1px solid #000000;border-right:1px solid #000000;padding:0px;" class="clearfix">
+			<img id="barSpeedDown1" src="themes/<tmpl_var name="theme">/images/proglass.gif" style="height:12px;width:<tmpl_var name="bandwidthbars_download_percent">%;float:left;" alt="" />
+			<img id="barSpeedDown2" src="themes/<tmpl_var name="theme">/images/noglass.gif" style="height:12px;width:<tmpl_var name="bandwidthbars_download_percent2">%;float:left;" alt="" />
+		</div>
+	</td>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;white-space:nowrap;">
+			<span id="barSpeedDownPercent"><tmpl_var name="bandwidthbars_download_percent"></span>% (<span id="barSpeedDown"><tmpl_var name="bandwidthbars_download_text"></span> kB/s)
+		</div>
+	</td>
+</tr>

@@ -1,0 +1,105 @@
+=======================================================================
+$Id$
+=======================================================================
+
+/**********************************************************************
+Torrentflux-b4rt SUPPORT file
+**********************************************************************/
+
+	For support with your torrentflux-b4rt installation please see the
+	torrentflux-b4rt forum:
+
+		http://tf-b4rt.berlios.de/forum/
+
+	Please take the time to search the forum first for a solution to your
+	problem.  If you still can't find the solution after searching, please
+	leave a clear and concise subject/message:
+
+	1.	Ensure the subject of your message takes the format:
+
+			[torrentflux-b4rt-VersionXXX] Description
+
+		where:
+
+			VersionXXX is the version of torrentflux-b4rt you are
+			running
+			- ie 1.0-alpha7.
+
+			and
+
+			Description gives a concise description of your problem.
+			A message with a subject of 'HELP!!!' is NOT a good subject
+			and is likely to be ignored.
+
+		For example, a good subject for a message would be something
+		like:
+
+		[torrentflux-b4rt-alpha7] Transfers fail to start when template
+		caching enabled
+
+
+	2.	Ensure the content of your message describes:
+
+		a.	Your working environment if relevant
+
+			- ie OS, PHP/DB/Python/etc
+
+			(if in doubt, always include this info!)
+
+		b.	A clear and concise description of what the problem is, what
+			you did to see the problem and any additional info that you
+			think might be relevant to helping us help you fix the
+			problem.
+
+
+			IMPORTANT:
+			==========
+
+			Most useful of all are the torrentflux-b4rt logfiles for
+			troubleshooting.  Always check these logfiles first and
+			ALWAYS post the relevant info from them when posting on the
+			forum!:
+
+			- transfer logfiles - click on the logfile icon in the
+			  transfer list to view the transfer logfiles
+
+			- fluxd logfiles - the fluxd logs are located in the
+			  Administration section for fluxd, one for fluxd general
+			  messages and one for fluxd errors.  Check both of these
+			  when troubleshooting fluxd problems.
+
+
+		c.	What steps can be taken to reproduce the problem - this is
+			useful to help others test your problem out.
+
+		d.	A suggested fix for the problem if you think this is a bug -
+			these kind of posts are always welcome!!!
+
+			Please be very careful however before labelling something a
+			'bug' before you are absolutely positive it is!
+
+
+	3.	This is probably one of the most obvious important factors when
+		asking a question on a technical forum but is surprisingly
+		overlooked very often:
+
+		MAKE SURE YOU ACTUALLY ASK A QUESTION!
+
+		It's surprising how often people rock up on a forum with the
+		intention of getting help, but they don't actually ask a
+		question and only provide a load of information that leaves
+		potential helpers thinking 'And.... the question is...?'!
+
+		Also make sure you ask a question that doesn't just require a
+		yes/no answer.  Before you actually submit the post, use the
+		'Preview' feature to read over your message and check that any
+		questions you ask won't be simple 'yes/no' answers (unless of
+		course that's all you want!).
+
+
+	Finally, PLEASE PLEASE PLEASE take the time to read the following
+	document if you plan on asking a question on the forum. This is
+	recommended reading for all levels of users who wish to get help on
+	a technical forum:
+
+		http://catb.org/~esr/faqs/smart-questions.html

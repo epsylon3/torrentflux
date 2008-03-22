@@ -1,0 +1,101 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<tmpl_if name="mid">
+	<div id="content">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					<tmpl_var name="_FROM">: <span id="newUser"><tmpl_var name="from_user"></span>
+					<tmpl_var name="_DATE">: <span id="newUser"><tmpl_var name="date1"></span>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<blockquote><span id="newUser"><tmpl_var name="message"></span></blockquote>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<tmpl_include name="inc.subfoot.tmpl">
+	</div>
+	<div id="stats">
+		<div id="bandwidthTitle">
+			<a class="mainMenu" href="index.php?iid=readmsg"><tmpl_var name="_RETURNTOMESSAGES"></a>
+		</div>
+		<tmpl_if name="IsUser">
+			<div id="drivespaceTitle">
+				<a class="mainMenu" href="index.php?iid=message&to_user=<tmpl_var name="from_user">&rmid=<tmpl_var name="mid">"><tmpl_var name="_REPLY"></a>
+			</div>
+		</tmpl_if>
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="index.php?iid=readmsg&delete=<tmpl_var name="mid">"><tmpl_var name="_DELETE"></a>
+		</div>
+	</div>
+<tmpl_else>
+	<div id="content">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<form name="formMessage" action="index.php?iid=message" method="post">
+					<span class="upload">
+						<label for="to_user"><tmpl_var name="_SENDMESSAGETO"></label>
+						<select name="to_user" id="to_user">
+							<tmpl_loop name="messageList_user">
+								<option><tmpl_var name="user"></option>
+							</tmpl_loop>
+						</select>
+						<input type="Submit" value="<tmpl_var name="_COMPOSE">">
+					</span>
+				</form>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<tmpl_if name="no_inx">
+				<span id="newUser">-- <tmpl_var name="_NORECORDSFOUND">--</span>
+			<tmpl_else>
+				<table id="statusInfos">
+					<tr>
+						<td class="buttonLinks">
+							<span id="newUser"><tmpl_var name="_FROM"></span>
+						</td>
+						<td class="buttonLinks">
+							<span id="newUser"><tmpl_var name="_MESSAGE"></span>
+						</td>
+						<td class="buttonLinks">
+							<span id="newUser"><tmpl_var name="_DATE"></span>
+						</td>
+						<td class="buttonLinks">
+							<span id="newUser"><tmpl_var name="_ADMIN"></span>
+						</td>
+					</tr>
+					<tmpl_loop name="message_list">
+						<tr>
+							<td class="buttonLinks">
+								<a id="closeLink" href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><tmpl_var name="from_user"></a>
+							</td>
+							<td class="buttonLinks">
+								<a id="closeLink" href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><tmpl_var name="display_message"></a>
+							</td>
+							<td class="buttonLinks">
+								<a id="closeLink" href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><tmpl_var name="date2"></a>
+							</td>
+							<td class="buttonLinks">
+								<tmpl_if name="force_read" value="0">
+									<tmpl_if name="IsUser2">
+										<a id="closeLink" href="index.php?iid=message&to_user=<tmpl_var name="from_user">&rmid=<tmpl_var name="mid">"><tmpl_var name="_REPLY"></a>
+									</tmpl_if>
+									<a id="closeLink" href="index.php?iid=readmsg&delete=<tmpl_var name="mid">"><tmpl_var name="_DELETE"></a>
+								</tmpl_if>
+							</td>
+						</tr>
+					</tmpl_loop>
+				</table>
+			</tmpl_if>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<tmpl_include name="inc.subfoot.tmpl">
+	</div>
+</tmpl_if>
+</body>
+</html>

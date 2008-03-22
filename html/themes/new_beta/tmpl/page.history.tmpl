@@ -1,0 +1,79 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				<tmpl_var name="_UPLOADACTIVITY"> (<tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS">)
+			</span>
+		</div>
+	</div>
+	<div class="uploadClass">
+		<table id="statusInfos">
+			<tmpl_if name="inx">
+				<tr>
+					<td class="outlinks">
+						<span id="newUser">
+							-- <tmpl_var name="_NORECORDSFOUND"> --
+						</span>
+					</td>
+				</tr>
+			<tmpl_else>
+				<tr>
+					<td class="buttonLinks">
+						<span id="newUser">
+							<tmpl_var name="_USER">
+						</span>
+					</td>
+					<td class="buttonLinks">
+						<span id="newUser">
+							<tmpl_var name="_FILE">
+						</span>
+					</td>
+					<td class="buttonLinks">
+						<span id="newUser">
+							<tmpl_var name="_TIMESTAMP">
+						</span>
+					</td>
+				</tr>
+				<tmpl_loop name="file_result">
+					<tr>
+						<td class="buttonLinks">
+							<a id="closeLink" href="index.php?iid=message&to_user=<tmpl_var name="user_id">"><tmpl_var name="user_id"></a>
+						</td>
+						<td class="buttonLinks">
+							<tmpl_var name="file">
+						</td>
+						<td class="buttonLinks">
+							<tmpl_var name="date">
+						</td>
+					</tr>
+				</tmpl_loop>
+			</tmpl_if>
+		</table>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+<div id="stats">
+	<tmpl_if name="empty" value="1">
+		<div id="bandwidthTitle">
+			<a class="mainMenu" href="index.php?iid=history&min=<tmpl_var name="prev">"><< <tmpl_var name="min"> <tmpl_var name="_SHOWPREVIOUS"></a>
+		</div>
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="index.php?iid=history&min=<tmpl_var name="max">"><tmpl_var name="_SHOWMORE">>></a>
+		</div>
+	<tmpl_elseif name="empty" value="2">
+		<div id="bandwidthTitle">
+			<a class="mainMenu" href="index.php?iid=history&min=<tmpl_var name="prev">"><< <tmpl_var name="min"> <tmpl_var name="_SHOWPREVIOUS"></a>
+		</div>
+	<tmpl_elseif name="empty" value="3">
+		<div id="bandwidthTitle">
+			<a class="mainMenu" href="index.php?iid=history&min=<tmpl_var name="max">"><tmpl_var name="_SHOWMORE">>></a>
+		</div>
+	</tmpl_if>
+</div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<table width="760" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+	<tr>
+		<td colspan=6 bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+			<table width="100%" cellpadding=0 cellspacing=0 border=0>
+				<tr>
+					<td>
+						<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<strong><font class="title"><tmpl_var name="_UPLOADACTIVITY"> (<tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS">)</font></strong>
+			<tmpl_if name="empty" value="1">
+					</td>
+					<td align="right">
+						<a href="index.php?iid=history&min=<tmpl_var name="prev">">
+							<font class="TinyWhite">&lt;&lt;<tmpl_var name="min"> <tmpl_var name="_SHOWPREVIOUS">]</font>
+						</a> &nbsp;
+						<a href="index.php?iid=history&min=<tmpl_var name="max">">
+							<font class="TinyWhite">[<tmpl_var name="_SHOWMORE">&gt;&gt;</font>
+						</a>
+					</td>
+				</tr>
+			</table>
+			<tmpl_elseif name="empty" value="2">
+					</td>
+					<td align="right">
+						<a href="index.php?iid=history&min=<tmpl_var name="prev">">
+							<font class="TinyWhite">&lt;&lt;<tmpl_var name="min"> <tmpl_var name="_SHOWPREVIOUS">]</font>
+						</a> &nbsp;
+					</td>
+				</tr>
+			</table>
+			<tmpl_elseif name="empty" value="3">
+					</td>
+					<td align="right">
+						<a href="index.php?iid=history&min=<tmpl_var name="max">">
+							<font class="TinyWhite">[<tmpl_var name="_SHOWMORE">&gt;&gt;</font>
+						</a>
+					</td>
+				</tr>
+			</table>
+			<tmpl_else>
+					</td>
+					<td align="right"></td>
+				</tr>
+			</table>
+			</tmpl_if>
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="#A2BED4">
+			<div align=center class="title"><tmpl_var name="_USER"></div>
+		</td>
+		<td bgcolor="#A2BED4">
+			<div align=center class="title"><tmpl_var name="_FILE"></div>
+		</td>
+		<td bgcolor="#A2BED4" width="15%">
+			<div align=center class="title"><tmpl_var name="_TIMESTAMP"></div>
+		</td>
+	</tr>
+	<tmpl_if name="inx">
+		<tr>
+			<td colspan=6>
+				<center><strong>-- <tmpl_var name="_NORECORDSFOUND"> --</strong></center>
+			</td>
+		</tr>
+	<tmpl_else>
+		<tmpl_loop name="file_result">
+			<tr>
+				<td>
+					<a href="index.php?iid=message&to_user=<tmpl_var name="user_id">"><img src="<tmpl_var name="user_icon">" width=17 height=14 title="<tmpl_var name="user_id">" border=0 align="bottom"><tmpl_var name="user_id"></a>&nbsp;&nbsp;
+				</td>
+				<td>
+					<div align=center>
+						<div class="tiny" align="left">
+							<tmpl_var name="file">
+						</div>
+					</div>
+				</td>
+				<td>
+					<div class="tiny" align="center">
+						<tmpl_var name="date">
+					</div>
+				</td>
+			</tr>
+		</tmpl_loop>
+	</tmpl_if>
+	<tmpl_if name="empty">
+		<tr>
+			<td colspan=6 bgcolor="#A2BED4">
+				<table width="100%" cellpadding=0 cellspacing=0 border=0>
+					<tr>
+						<td align="left">
+							<tmpl_if name="empty" value="2">
+								<a href="index.php?iid=history&min=<tmpl_var name="prev">">
+									<font class="TinyWhite">&lt;&lt;<tmpl_var name="min"> <tmpl_var name="_SHOWPREVIOUS">]</font></a> &nbsp;
+							</tmpl_if>
+						</td>
+						<td align="right">
+
+							<tmpl_if name="empty" value="3">
+								<a href="index.php?iid=history&min=<tmpl_var name="max">">
+									<font class="TinyWhite">[<tmpl_var name="_SHOWMORE">&gt;&gt;</font></a>
+							</tmpl_if>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</tmpl_if>
+</table>
+<tmpl_include name="inc.subfoot.tmpl">

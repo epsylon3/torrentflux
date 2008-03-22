@@ -1,0 +1,143 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<script src="js/dir.js" type="text/javascript"></script>
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst"></div>
+	</div>
+	<div class="uploadClass">
+		<form action="index.php?iid=dir&dir=<tmpl_var name="dir">&multidel=1" method="post" name="multidir">
+			<table id="statusInfos">
+				<tmpl_if name="list">
+					<tmpl_loop name="list">
+						<tr>
+							<tmpl_if name="is_dir" value="1">
+								<td class="buttonLinks">
+									<a id="closeLink" href="index.php?iid=dir&dir=<tmpl_var name="urlencode1">"><span id="newUser"><img src="themes/default/images/datadir.gif" width="10" height="10" alt="<tmpl_var name="entry">" border="0"><tmpl_var name="entry"></span></a>
+								</td>
+								<tmpl_if name="enable_dirstats" value="1">
+									<td class="buttonLinks">
+										<tmpl_var name="size">
+									</td>
+									<td class="buttonLinks">
+										<tmpl_var name="date">
+									</td>
+								</tmpl_if>
+								<td class="buttonLinks">
+									<tmpl_if name="enable_sfvcheck" value="1">
+										<tmpl_if name="show_sfv" value="1">
+											<a href="javascript:CheckSFV('<tmpl_var escape="url" name="sfvdir">','<tmpl_var escape="url" name="sfvsfv">')"><img src="themes/default/images/sfv_enabled.gif" border="0" width="10" height="10" alt="sfv check"></a>
+										</tmpl_if>
+									</tmpl_if>
+									<tmpl_if name="enable_rename" value="1">
+										<a href="JavaScript:rename('index.php?iid=rename&dir=<tmpl_var escape="url" name="urlencode2">&file=<tmpl_var escape="url" name="urlencode3">&start=true')"><img src="themes/default/images/rename.gif" width="10" height="10" title="<tmpl_var name="_DIR_REN_LINK">" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_move" value="1">
+										<a href="JavaScript:moveFile('index.php?iid=move&path=<tmpl_var escape="url" name="urlencode1">&start=true')"><img src="themes/default/images/_move.gif" width="10" height="10" title="<tmpl_Var name="_DIR_MOVE_LINK">" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_maketorrent" value="1">
+										<a href="JavaScript:MakeTorrent('index.php?iid=maketorrent&path=<tmpl_var escape="url" name="urlencode1">')"><img src="themes/default/images/make.gif" width="10" height="10" title="Make Torrent" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_file_download" value="1">
+										<a href="index.php?iid=dir&tar=<tmpl_var name="urlencode1">"><img src="themes/default/images/tar_down.gif" width="10" height="10" title="Download as <tmpl_var name="package_type">" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="aclWrite" value="1">
+										<a href="index.php?iid=dir&del=<tmpl_var name="urlencode1">" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : <tmpl_var name="addslashes1">')"><img src="themes/default/images/delete_on.gif" width="10" height="10" title="<tmpl_var name="_DELETE">" border="0"></a>
+										<input type="checkbox" name="file[]" value="<tmpl_var name="urlencode1">">
+									</tmpl_if>
+								</td>
+							<tmpl_else>
+								<td class="buttonLinks">
+									<tmpl_if name="enable_file_download" value="1">
+										<a href="index.php?iid=dir&down=<tmpl_var name="urlencode1">"><img src="<tmpl_var name="image">" width="10" height="10" alt="<tmpl_var name="entry">" border="0"></a>
+							<a id="closeLink" href="index.php?iid=dir&down=<tmpl_var name="urlencode1">"><span id="newUser"><tmpl_var name="entry"></span></a>
+									</tmpl_if>
+								</td>
+								<tmpl_if name="enable_dirstats" value="1">
+									<td class="buttonLinks">
+										<tmpl_var name="size">
+									</td>
+									<td class="buttonLinks">
+										<tmpl_var name="date">
+									</td>
+								</tmpl_if>
+								<td class="buttonLinks">
+									<tmpl_if name="show_rar" value="1">
+										<a href="javascript:UncompDetails('index.php?iid=uncomp&file=<tmpl_var escape="url" name="urlencode1">&dir=<tmpl_var escape="url" name="urlencode2">&type=rar')"><img src="themes/default/images/rar_enabled.gif" width="10" height="10" title="Unrar" border="0"></a>
+									<tmpl_elseif name="show_rar" value="2">
+										<a href="javascript:UncompDetails('index.php?iid=uncomp&file=<tmpl_var escape="url" name="urlencode1">&dir=<tmpl_var escape="url" name="urlencode2">&type=zip')"><img src="themes/default/images/zip.png" width="10" height="10" title="Unzip" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="show_nfo" value="1">
+										<a href="index.php?iid=viewnfo&path=<tmpl_var escape="url" name="urlencode1">"><img src="themes/default/images/view_nfo.gif" width="10" height="10" title="View <tmpl_var name="entry">" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_vlc" value="1">
+										<a href="JavaScript:StreamMultimedia('index.php?iid=vlc&dir=<tmpl_var name="urlencode2">&file=<tmpl_var name="urlencode3">')"><img src="themes/default/images/vlc.png" width="10" height="10" title="Stream Multimedia (vlc)" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_rename" value="1">
+										<a href="JavaScript:rename('index.php?iid=rename&dir=<tmpl_var escape="url" name="urlencode2">&file=<tmpl_var name="urlencode3">&start=true')"><img src="themes/default/images/rename.gif" width="10" height="10" title="<tmpl_var name="_DIR_REN_LINK">" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_move" value="1">
+										<a href="JavaScript:moveFile('index.php?iid=move&path=<tmpl_var escape="url" name="urlencode1">&start=true')"><img src="themes/default/images/_move.gif" width="10" height="10" title="<tmpl_Var name="_DIR_MOVE_LINK">" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_maketorrent" value="1">
+										<a href="JavaScript:MakeTorrent('index.php?iid=maketorrent&path=<tmpl_var escape="url" name="urlencode1">')"><img src="themes/default/images/make.gif" width="10" height="10" title="Make Torrent" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="enable_file_download" value="1">
+										<a href="index.php?iid=dir&down=<tmpl_var name="urlencode1">"><img src="themes/default/images/download_owner.gif" width="10" height="10" title="Download" border="0"></a>
+									</tmpl_if>
+									<tmpl_if name="aclWrite" value="1">
+										<a href="index.php?iid=dir&del=<tmpl_Var name="urlencode1">" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : <tmpl_var name="addslashes1">')"><img src="themes/default/images/delete_on.gif" width="10" height="10" title="<tmpl_var name="_DELETE">" border="0"></a>
+										<input type="checkbox" name="file[]" value="<tmpl_var name="urlencode1">">
+									</tmpl_if>
+								</td>
+							</tmpl_if>
+						</tr>
+					</tmpl_loop>
+					<input type="hidden" name="action" value="fileDelete">
+					<tr>
+						<tmpl_if name="enable_dirstats" value="1">
+							<td colspan="4">
+						<tmpl_else>
+							<td colspan="2">
+						</tmpl_if>
+							<a href="javascript:document.multidir.submit()" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : Multiple Files')"><img src="themes/default/images/delete_on.gif" title="Delete" border="0" height="10" width="10"></a>
+							<input type="checkbox" onclick="checkCheck(this);" />
+						</td>
+					</tr>
+				</tmpl_if>
+				<tmpl_if name="enable_dirstats" value="1">
+					<tr>
+						<td colspan="4"><span id="newUser"><tmpl_var name="_TDDU"> <tmpl_var name="duTotal"></span></td>
+					</tr>
+				</tmpl_if>
+			</table>
+		</form>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+<div id="stats">
+	<div id="bandwidthTitle">
+		<a class="mainMenu" href="<tmpl_var name='parentURL'>"><tmpl_var name="_BACKTOPARRENT"></a>
+	</div>
+	<tmpl_if name="show_chmod" value="1">
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="index.php?iid=dir&chmod=1&dir=<tmpl_var name="dir">">chmod Directory</a>
+		</div>
+	</tmpl_if>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="javascript:slider('statsDrivespace','toggle')">Drivespace</a>
+	</div>
+	<div id="statsDrivespace">
+		<div id="statsDiskspaceBar">
+			<img src="themes/<tmpl_var name="theme">/pics/diskspace.jpg" style="position: absolute; clip: rect(0px <tmpl_var name="drivespacebar_space">px 30px 0px);">
+		</div>
+		<div class="serverStatsBottom">
+			<span id="diskspace"><tmpl_var name="drivespacebar_space2">% (<tmpl_var name="drivespacebar_freeSpace">) Free</span>
+		</div>
+	</div>
+</div>
+</body>
+</html>

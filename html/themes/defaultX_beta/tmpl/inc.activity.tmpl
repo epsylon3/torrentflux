@@ -1,0 +1,94 @@
+<div id="overDiv" style="position:absolute;visibility:hidden;z-index:1000;"></div>
+<script language="JavaScript">
+	var ol_closeclick = "1";
+	var ol_close = "<font color=#ffffff><b>X</b></font>";
+	var ol_fgclass = "fg";
+	var ol_bgclass = "bg";
+	var ol_captionfontclass = "overCaption";
+	var ol_closefontclass = "overClose";
+	var ol_textfontclass = "overBody";
+	var ol_cap = "&nbsp;IP Info";
+</script>
+<script src="js/overlib.js" type="text/javascript"></script>
+<div align="center">
+	<form action="admin.php?op=showUserActivity" name="searchForm" method="post">
+		<table>
+			<tr>
+				<td>
+					<strong><tmpl_var name="_ACTIVITYSEARCH"></strong>&nbsp;&nbsp;&nbsp;
+					<label for="srchFile"><tmpl_var name="_FILE"></label>
+					<input type="Text" name="srchFile" id="srchFile" value="<tmpl_var name="activity_srchFile">" width="30">&nbsp;&nbsp;
+					<label for="srchAction"><tmpl_var name="_ACTION"></label>
+					<select name="srchAction" id="srchAction">
+						<option value="">-- <tmpl_var name="_ALL"> --</option>
+						<tmpl_loop name="activity_action_list">
+							<option value="<tmpl_var name="action">" <tmpl_var name="selected">><tmpl_var name="action"></option>
+						</tmpl_loop>
+					</select>&nbsp;&nbsp;
+					<label for="user_id"><tmpl_var name="_USER"></label>
+					<select name="user_id" id="user_id">
+						<option value="">-- <tmpl_var name="_ALL"> --</option>
+						<tmpl_loop name="activity_user_list">
+							<option value="<tmpl_var name="user">" <tmpl_var name="selected">><tmpl_var name="user"></option>
+						</tmpl_loop>
+					</select>&nbsp;&nbsp;
+					<input type="Submit" value="<tmpl_var name="_SEARCH">">
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<table width="760" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+	<tr><td colspan=6 bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+		<table width="100%" cellpadding=0 cellspacing=0 border=0><tr><td>
+			<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title"><tmpl_var name="_ACTIVITYLOG"> <tmpl_var name="activity_days_to_keep"> <tmpl_var name="_DAYS"> (<tmpl_var name="activity_userdisplay">)</font>
+		</td>
+		<td align="right">
+			<tmpl_if name="activity_is_prev">
+				<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_prev">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><font class="TinyWhite">&lt;&lt;<tmpl_var name="activity_min"> <tmpl_var name="_SHOWPREVIOUS">]</font></a> &nbsp;
+			</tmpl_if>
+			<tmpl_if name="activity_is_more">
+				<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_max">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><font class="TinyWhite">[<tmpl_var name="_SHOWMORE">&gt;&gt;</font></a>
+			</tmpl_if>
+		</td></tr></table>
+	</td></tr>
+	<tr>
+		<td bgcolor="#A2BED4"><div align=center class="title"><tmpl_var name="_USER"></div></td>
+		<td bgcolor="#A2BED4"><div align=center class="title"><tmpl_var name="_ACTION"></div></td>
+		<td bgcolor="#A2BED4"><div align=center class="title"><tmpl_var name="_FILE"></div></td>
+		<td bgcolor="#A2BED4" width="13%"><div align=center class="title"><tmpl_var name="_IP"></div></td>
+		<td bgcolor="#A2BED4" width="15%"><div align=center class="title"><tmpl_var name="_TIMESTAMP"></div></td>
+	</tr>
+	<tmpl_loop name="activity_act_list">
+		<tmpl_if name="activity_act_list">
+			<tr>
+				<tmpl_if name="is_superuser">
+					<td><a href="index.php?iid=message&to_user=<tmpl_var name="user_id">"><img src="<tmpl_var name="user_icon">" width=17 height=14 title="<tmpl_var name="_SENDMESSAGETO"> <tmpl_var name="user_id">" border=0 align="bottom"><tmpl_var name="user_id"></a>&nbsp;&nbsp;</td>
+				<tmpl_else>
+					<td><img src="<tmpl_var name="user_icon">" width=17 height=14 title="n/a" border=0 align="bottom"><tmpl_var name="user_id">&nbsp;&nbsp;</td>
+				</tmpl_if>
+				<td><div class="tiny"><tmpl_var name="action"></div></td>
+				<td><div align=center><div class="tiny" align="left">
+					<tmpl_var name="file">
+				</div></td>
+				<td><div class="tiny" align="left"><a href="javascript:void(0)" onclick="return overlib('<tmpl_var name="ip_resolved"><br><tmpl_var name="user_agent"><br>', STICKY, CSSCLASS);" onmouseover="return overlib('<tmpl_var name="ip_resolved"><br><tmpl_var name="user_agent"><br>', CSSCLASS);" onmouseout="return nd();"><img src="themes/default/images/properties.png" border="0"><font class=tiny><tmpl_var name="ip"></font></a></div></td>
+				<td><div class="tiny" align="center"><tmpl_var name="date"></div></td>
+			</tr>
+		<tmpl_else>
+			<tr><td colspan=6><center><strong>-- <tmpl_var name="_NORECORDSFOUND"> --</strong></center></td></tr>
+		</tmpl_if>
+	</tmpl_loop>
+	<tmpl_if name="activity_both_set">
+		<tr><td colspan=6 bgcolor="#A2BED4">
+			<table width="100%" cellpadding=0 cellspacing=0 border=0><tr><td align="left">
+				<tmpl_if name="activity_is_prev">
+					<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_prev">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><font class="TinyWhite">&lt;&lt;<tmpl_var name="activity_min"> <tmpl_var name="_SHOWPREVIOUS">]</font></a> &nbsp;
+				</tmpl_if>
+				</td><td align="right">
+				<tmpl_if name="activity_is_more">
+					<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_max">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><font class="TinyWhite">[<tmpl_var name="_SHOWMORE">&gt;&gt;</font></a>
+				</tmpl_if>
+			</td></tr></table>
+		</td></tr>
+	</tmpl_if>
+</table>

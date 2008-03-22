@@ -1,0 +1,98 @@
+The easiest way to install BitTorrent is to run the install_nix.sh
+script included in the source code.  The rest of these directions are
+included for historical reasons.
+----------------------------------------
+
+Before installing BitTorrent 5.x, remove any older versions of the
+BitTorrent client that may be installed.  This command will tell you
+if you have an older version of BitTorrent installed:
+
+ls -dl /usr/lib/python*/site-packages/BitTorrent* /usr/lib/python*/site-packages/khashmir*
+
+Many of the following instructions require root privileges.
+
+
+Prerequisites for installing BitTorrent on any generic UNIX system:
+----------------------------------------
+Install Python, version 2.3 or later. (2.4 recommended)
+http://python.org/
+
+Install wxWidgets, version 2.6 or later, in the Unicode flavor.
+http://wxwidgets.org/
+
+Install wxPython, version 2.6 or later, in the Unicode flavor.
+http://wxpython.org/
+
+Install GTK, version 2.6 or later.
+http://gtk.org/
+
+Install Twisted, version 2 or later.
+http://twistedmatrix.com/trac/
+
+Install PyCrypto, version 2 or later.
+http://www.amk.ca/python/code/crypto
+
+Install Psyco.
+http://psyco.sourceforge.net/
+
+Install Zope.Interface.
+http://www.zope.org/Products/ZopeInterface
+
+In all cases, it is STRONGLY recommended that you install these
+packages using the standard package management system on your
+particular distribution.
+
+Next, be sure to remove any older versions of BitTorrent that may be
+installed.  
+
+
+How to install BitTorrent using Python's distutils system:
+----------------------------------------
+Install BitTorrent by running this from the root of the source code
+directory:
+
+$ python setup.py install
+
+
+How to build a .deb format Debian package and install it:
+----------------------------------------
+First, remove any older versions of BitTorrent that may be installed:
+(this command will also remove BitTornado)
+
+$ sudo apt-get remove bittorrent bittorrent-gui
+
+Build a proper deb using the following command:
+
+$ sh build_nix_pkg.sh deb
+
+then install the .deb:
+
+$ sudo dpkg -i dist/bittorrent_5.x.y_python2.z.deb
+
+
+How to build an .rpm format package and install it:
+----------------------------------------
+Generate an .rpm format package:
+
+$ python setup.py bdist_rpm
+
+Then install the .rpm:
+
+$ sudo rpm -i dist/BitTorrent-5.x.y-1.noarch.rpm 
+
+
+How to add BitTorrent as the default mime-type handler:
+----------------------------------------
+This step is optional.  Put a line in /etc/mailcap which is similar to
+the following, only replace the path to /usr/bin/bittorrent.py with
+the one it's actually in.
+
+application/x-bittorrent; /usr/bin/bittorrent.py %s; test=test -n "$DISPLAY"
+
+You may have to restart your web browser for it to start using
+BitTorrent.
+
+If you're using a web browser which doesn't respect /etc/mailcap you
+can go into the mime-type configuration for your web browser and
+manually associate application/x-bittorrent with btdownloadgui.py
+(with the appropriate path, of course.)

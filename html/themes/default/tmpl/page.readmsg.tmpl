@@ -1,0 +1,77 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_if name="mid">
+	<a href="index.php?iid=readmsg"><img src="themes/default/images/up_dir.gif" width=16 height=16 title="<tmpl_var name="_RETURNTOMESSAGES">" border=0><tmpl_var name="_RETURNTOMESSAGES"></a><br>
+	<table width="740" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0">
+		<tr>
+			<td bgcolor="#A2BED4" colspan=2>
+				<table width="100%" cellpadding=0 cellspacing=0 border=0>
+					<tr>
+						<td>
+							<tmpl_var name="_FROM">: <strong><tmpl_var name="from_user"></strong>
+						</td>
+						<td align="right">
+							<tmpl_if name="IsUser">
+								<a href="index.php?iid=message&to_user=<tmpl_var name="from_user">&rmid=<tmpl_var name="mid">"><img src="themes/default/images/reply.gif" width=16 height=16 title="<tmpl_var name="_REPLY">" border=0></a>
+							</tmpl_if>
+							<a href="index.php?iid=readmsg&delete=<tmpl_var name="mid">"><img src="themes/default/images/delete_on.gif" width=16 height=16 title="<tmpl_var name="_DELETE">" border=0></a>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan=2><tmpl_var name="_DATE">: <strong><tmpl_var name="date1"></strong></td>
+		</tr>
+		</tr>
+			<td colspan=2 bgcolor="#A2BED4"><tmpl_var name="_MESSAGE">:<blockquote><strong><tmpl_var name="message"></strong></blockquote></td>
+		</tr>
+	</table>
+<tmpl_else>
+	<div align="center">
+		<table border="0" cellpadding="0" cellspacing="0">
+			<tr><td><label for="to_user"><tmpl_var name="_SENDMESSAGETO"></label>
+				<form name="formMessage" action="index.php?iid=message" method="post">
+					<select name="to_user" id="to_user">
+						<tmpl_loop name="messageList_user">
+							<option><tmpl_var name="user"></option>
+						</tmpl_loop>
+					</select>&nbsp;&nbsp;
+					<input type="Submit" value="<tmpl_var name="_COMPOSE">">
+				</form>
+			</td></tr>
+		</table>
+	</div>
+	<table width="760" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+		<tr>
+			<td bgcolor="#A2BED4" width="20%"><div align=center class="title"><tmpl_var name="_FROM"></div></td>
+			<td bgcolor="#A2BED4"><div align=center class="title"><tmpl_var name="_MESSAGE"></div></td>
+			<td bgcolor="#A2BED4" width="20%"><div align=center class="title"><tmpl_var name="_DATE"></div></td>
+			<td bgcolor="#A2BED4" width="10%"><div align=center class="title"><tmpl_var name="_ADMIN"></div></td>
+		</tr>
+		<tmpl_loop name="message_list">
+			<tr>
+				<td>
+					&nbsp;&nbsp;<a href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><img src="<tmpl_var name="mail_image">" width=14 height=11 title="" border=0 align="absmiddle"></a>&nbsp;&nbsp; <a href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><tmpl_var name="from_user"></a>
+				</td>
+				<td><a href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><tmpl_var name="display_message"></a>
+				</td>
+				<td align="center"><a href="index.php?iid=readmsg&mid=<tmpl_var name="mid">"><tmpl_var name="date2"></a></td>
+				<td align="right">
+					<tmpl_if name="force_read">
+						<img src="themes/default/images/delete_off.gif" width=16 height=16 title="" border=0>
+					<tmpl_else>
+						<tmpl_if name="IsUser2">
+							<a href="index.php?iid=message&to_user=<tmpl_var name="from_user">&rmid=<tmpl_var name="mid">"><img src="themes/default/images/reply.gif" width=16 height=16 title="<tmpl_var name="_REPLY">" border=0></a>
+						</tmpl_if>
+						<a href="index.php?iid=readmsg&delete=<tmpl_var name="mid">"><img src="themes/default/images/delete_on.gif" width=16 height=16 title="<tmpl_var name="_DELETE">" border=0></a>
+					</tmpl_if>
+				</td>
+			</tr>
+		</tmpl_loop>
+	</table>
+	<tmpl_if name="no_inx">
+		<div align="center"><strong>-- <tmpl_var name="_NORECORDSFOUND">--</strong></div>
+	</tmpl_if>
+</tmpl_if>
+<tmpl_include name="inc.subfoot.tmpl">

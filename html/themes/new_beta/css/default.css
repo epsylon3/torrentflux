@@ -1,0 +1,354 @@
+* {
+	padding:0px;
+	margin: 0px;
+	border: none;
+	border-spacing: 0px;
+	font-family: Verdana, Helvetica;
+	font-size: 12px;
+}
+#titleBar {
+	background-color: #c1b18d;
+	background-image: url("../pics/title_background_left.jpg");
+	background-repeat: no-repeat;
+}
+#title {
+	font-size: 1.5em;
+	font-weight: 700;
+	color: #585858;
+	position: relative;
+		top: 9px;
+		left: 10px;
+}
+#logout {
+	padding-right: 5px;
+	position: absolute;
+		right: 0px;
+	background-image: url("../pics/title_background_right.jpg");
+	background-repeat: no-repeat;
+	background-position: right;
+}
+#logoutButton{
+	height: 22px;
+	width: 22px;
+	display:block;
+	background-image: url("../pics/logout.jpg");
+	}
+#logoutButton:hover{
+	background-image: url("../pics/logout_hover.jpg");
+}
+#mainMenu {
+	position: absolute;
+		left: 0px;
+	width: 180px;
+	padding-top: 10px;
+	float: left;
+}
+li.mainMenu {
+	margin-top: 5px;
+	width: 160px;
+	height: 16px;
+	list-style-type: none;
+	background-image: url("../pics/menu.jpg");
+	background-repeat: no-repeat;
+}
+a.mainMenu {
+	margin-left: 10px;
+	font-weight: bold;
+	color: #585858;
+	text-decoration: none;
+}
+a.mainMenu:hover {
+	color: #FFFFFF;
+}
+a.mainMenuActive {
+	color: #FFFFFF;
+}
+ul.menu {
+	position: relative;
+		left: 8px;
+}
+li.menu {
+	list-style-type: none;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+li.menu_last {
+	height: 19px;
+	list-style-type: none;
+	background-image: url("../pics/menu_box_bottom.jpg");
+	background-repeat: no-repeat;
+	background-position: bottom left;
+}
+a.menu {
+	margin-left: 10px;
+	color: #585858;
+	text-decoration: none;
+}
+a.menu:hover {
+	color: #c1b18d;
+}
+#content {
+	margin: 15px 180px 0px 180px;
+	float: left;
+	text-align: center;
+	position: absolute;
+		right: 0px;
+		left: 0px;
+}
+#transfer_content {
+	margin: 15px 0px 0px 0px;
+	float: left;
+	text-align: center;
+	position: absolute;
+		right: 0px;
+		left: 0px;
+}
+#upload {
+	height: 26px;
+	text-align: center;
+	background-image: url("../pics/upload.jpg");
+	background-repeat: repeat-x;
+}
+span.upload_first {
+	padding-right: 10px;
+	position: relative;
+		top: 5px;
+	color: #585858;
+}
+span.upload {
+	padding-left: 10px;
+	padding-right: 10px;
+	position: relative;
+		top: 5px;
+	color: #585858;
+}
+span.upload_last {
+	padding-left: 10px;
+	position: relative;
+		top: 5px;
+	color: #585858;
+}
+a.upload {
+	color: #585858;
+	text-decoration: none;
+}
+a.upload:hover {
+	color: #c1b18d;
+	text-decoration: none;
+}
+#uploadFirst {
+	position: relative;
+		top: -26px;
+	height: 26px;
+	background-image: url("../pics/upload_left.jpg");
+	background-repeat: no-repeat;
+}
+#uploadLast {
+	height: 26px;
+	background-image: url("../pics/upload_right.jpg");
+	background-repeat: no-repeat;
+	background-position: right;
+}
+div.uploadClass {
+	margin-left: 10px;
+	margin-right: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	background-color: #c1b18d;
+}
+#uploadBottom {
+	height: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	background-color: #c1b18d;
+	background-image: url("../pics/upload_bottom_left.jpg");
+	background-repeat: no-repeat;
+}
+#uploadBottomEnd {
+	height: 10px;
+	margin-right: 10px;
+	margin-left: 20px;
+	position: relative;
+		top: -10px;
+	background-color: #c1b18d;
+	background-image: url("../pics/upload_bottom_right.jpg");
+	background-repeat: no-repeat;
+	background-position: right;
+}
+#stats {
+	position: absolute;
+		right: 0px;
+	width: 180px;
+	margin-top: 15px;
+	float: left;
+}
+#bandwidthTitle {
+	margin-left: 20px;
+	width: 160px;
+	height: 16px;
+	background-image: url("../pics/menu.jpg");
+	background-repeat: no-repeat;
+}
+#drivespaceTitle {
+	margin-top: 5px;
+	margin-left: 20px;
+	width: 160px;
+	height: 16px;
+	background-image: url("../pics/menu.jpg");
+	background-repeat: no-repeat;
+}
+#close {
+	padding-top: 10px;
+	text-align: center;
+	width: 100%;
+	float: left;
+}
+#closeLink {
+	color: #000000;
+	text-decoration: none;
+}
+#errorTitle {
+	color: #FF0000;
+	font-size: 2em;
+	font-weight: 700;
+	padding-bottom: 10px;
+}
+#errorMessage {
+	font-weight: 700;
+	padding-bottom: 5px;
+}
+#statsDrivespace {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+div.serverStatsBottom {
+	height: 19px;
+	background-image: url("../pics/menu_box_bottom.jpg");
+	background-repeat: no-repeat;
+}
+span.serverStats {
+	margin-left: 10px;
+	color: #585858;
+}
+#warning {
+	height: 26px;
+	margin-bottom: 5px;
+	text-align: center;
+	background-image: url("../pics/warning.jpg");
+	background-repeat: repeat-x;
+}
+#warningFirst {
+	position: relative;
+		top: -26px;
+	height: 26px;
+	background-image: url("../pics/warning_left.jpg");
+	background-repeat: no-repeat;
+}
+#warningLast {
+	height: 26px;
+	background-image: url("../pics/warning_right.jpg");
+	background-repeat: no-repeat;
+	background-position: right;
+}
+#warningText {
+	position: relative;
+		top: 3px;
+	color: #585858;
+	font-size: 12pt;
+	font-weight: 700;
+}
+#action_in_progress {
+	height: 26px;
+	margin-bottom: 5px;
+	text-align: center;
+}
+#statsDiskspaceBar {
+	padding-top: 5px;
+	margin-left: 20px;
+	margin-bottom: 2px;
+	width: 100px;
+	height: 30px;
+	background-image: url("../pics/diskspaceBackground.jpg");
+	background-repeat: no-repeat;
+	background-position: bottom;
+}
+#statsDiskspaceBar2 {
+	padding-top: 5px;
+	margin-left: 20px;
+	margin-bottom: 2px;
+	width: 100px;
+	height: 30px;
+}
+#diskspace {
+	font-size: 9px;
+	margin-left: 22px;
+	color: #585858;
+}
+#statusInfos {
+	width: 100%;
+}
+td.buttonLinks {
+	height: 18px;
+	padding-left: 5px;
+	padding-right: 5px;
+	vertical-align: top;
+}
+td.outlinks {
+	height: 18px;
+	padding-left: 5px;
+	width: 100%;
+	vertical-align: top;
+}
+#newUser {
+	font-weight: 700;
+}
+#statsBandwidth {
+	margin-left: 30px;
+	background-image: url("../pics/menu_box.jpg");
+	background-repeat: repeat-y;
+}
+div.cookie {
+	font-weight: 700;
+}
+#settings {
+	width: 100%;
+	table-layout: fixed;
+	padding-bottom: 5px;
+}
+#settings2 {
+	width: 100%;
+	table-layout: fixed;
+	padding-bottom: 5px;
+	padding-top: 10px;
+}
+td.settingsTitle {
+	padding-top: 2px;
+	padding-right: 10px;
+	width: 70%;
+	font-weight: 700;
+	text-align: right;
+}
+td.settingsSetting {
+	padding-top: 2px;
+	padding-left: 10px;
+	width: 30%;
+}
+td.settingsText {
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	width: 50%;
+	text-align: right;
+}
+#statsUploadBar {
+	padding-top: 5px;
+	margin-left: 20px;
+	margin-bottom: 2px;
+	width: 100px;
+	height: 30px;
+	background-image: url("../pics/uploadBarBack.jpg");
+	background-repeat: no-repeat;
+	background-position: bottom;
+}

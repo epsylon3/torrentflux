@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{a53b05fb-da45-4016-86be-d12bd23663e2}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>tornado</RootNamespace>
+    <AssemblyName>tornado</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{229B3E77-97E9-4f6d-9151-E6D103EA4D4A};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{57B76CF8-F148-40c5-BE9B-5C5EFB1ACA14}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <PublishUrl>Publish\</PublishUrl>
+    <Name>tornado</Name>
+    <MainFile>Program.py</MainFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="IronPython" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BitTornado" />
+    <Folder Include="BitTornado\BT1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BitTornado\bencode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\bitfield.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\btformats.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Choker.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Connecter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Downloader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\DownloaderFeedback.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Encrypter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\fakeopen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\FileSelector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Filter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\HTTPDownloader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\makemetafile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\NatCheck.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\PiecePicker.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Rerequester.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Statistics.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Storage.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\StorageWrapper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\StreamCheck.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\T2T.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\track.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\Uploader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BT1\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\BTcrypto.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\clock.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\ConfigDir.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\ConfigReader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\ConnChoice.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\CreateIcons.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\CurrentRateMeasure.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\download_bt1.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\HTTPHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\inifile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\iprangeparse.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\launchmanycore.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\natpunch.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\parseargs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\parsedir.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\piecebuffer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\PSYCO.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\RateLimiter.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\RateMeasure.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\RawServer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\selectpoll.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\ServerPortHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\SocketHandler.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\subnetparse.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\torrentlistparse.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\zurllib.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BitTornado\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="btmakemetafile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="btshowmetainfo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tftornado.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\IronPython Studio\1.0\IronPython.targets" />
+</Project>

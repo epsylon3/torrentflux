@@ -1,0 +1,28 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<tbody>
+	<tr>
+		<td style="height:100%;">
+			<tmpl_include name="inc.transferFiles.tmpl">
+			<span class="small"><tmpl_var name="transferFileCount"> Files (<tmpl_var name="transferSizeSum">)</span>
+			<tmpl_if name="file_priority_enabled" value="1">
+				<table style="width:100%;" cellspacing="0">
+					<tr>
+						<td>
+							<div style="text-align:left;">
+								<tmpl_var name="filePrio">
+							</div>
+						</td>
+					</tr>
+				</table>
+			</tmpl_if>
+		</td>
+	</tr>
+</tbody>
+</table>
+		</td>
+	</tr>
+</tbody>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

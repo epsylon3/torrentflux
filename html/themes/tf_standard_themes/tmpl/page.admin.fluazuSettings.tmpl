@@ -1,0 +1,252 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<tmpl_if name="message">
+	<table cellpadding="5" cellspacing="0" border="0" width="100%">
+		<tr>
+			<td align="center" bgcolor="<tmpl_var name="table_header_bg">">
+				<strong><tmpl_var name="message"></strong>
+			</td>
+		</tr>
+	</table>
+</tmpl_if>
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<div align="center">
+	<a name="fluazu" id="fluazu"></a>
+	<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+				<font class="title">
+					<tmpl_if name="fluazuRunning">
+						&nbsp;&nbsp;<img src="themes/tf_standard_themes/images/green.gif" align="absmiddle" align="absmiddle"> Fluazu Running - pid: <tmpl_var name="fluazuPid">
+					<tmpl_else>
+						&nbsp;&nbsp;<img src="themes/tf_standard_themes/images/black.gif" align="absmiddle"> Fluazu Off
+					</tmpl_if>
+				</font>
+			</td>
+		</tr>
+		<tmpl_if name="fluazuRunning">
+		<tr>
+			<td align="center">
+				<div align="center">
+					<form name="azuForm" action="admin.php?op=updateAzureusSettings" method="post" onsubmit="return validateSettings('azureus')">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr bgcolor="<tmpl_var name="table_header_bg">">
+								<td align="center" colspan="2">
+									<strong>Connected to <tmpl_var name="azu_host">:<tmpl_var name="azu_port"> (Azureus <tmpl_var name="azu_version">)</strong>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_ACTIVE"><strong>Max Active Torrents</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_ACTIVE" id="CORE_PARAM_INT_MAX_ACTIVE" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_ACTIVE">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_ACTIVE_SEEDING"><strong>Max Active Torrents When Only Seeding</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_ACTIVE_SEEDING" id="CORE_PARAM_INT_MAX_ACTIVE_SEEDING" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_ACTIVE_SEEDING">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL"><strong>Max Connections Global</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL" id="CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT"><strong>Max Connections Per Torrent</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT" id="CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC"><strong>Max Download Speed KBs</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC" id="CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_DOWNLOADS"><strong>Max Downloads</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_DOWNLOADS" id="CORE_PARAM_INT_MAX_DOWNLOADS" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_DOWNLOADS">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC"><strong>Max Upload Speed KBs</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC" id="CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC"><strong>Max Upload Speed When Only Seeding KBs</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC" id="CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_UPLOADS"><strong>Max Uploads</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_UPLOADS" id="CORE_PARAM_INT_MAX_UPLOADS" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_UPLOADS">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="CORE_PARAM_INT_MAX_UPLOADS_SEEDING"><strong>Max Uploads Seeding</strong></label>
+								</td>
+								<td align="left" valign="top">
+									<input name="CORE_PARAM_INT_MAX_UPLOADS_SEEDING" id="CORE_PARAM_INT_MAX_UPLOADS_SEEDING" type="Text" maxlength="10" value="<tmpl_var name="CORE_PARAM_INT_MAX_UPLOADS_SEEDING">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2">
+								<input type="Submit" value="Update Settings">
+								</td>
+							</tr>
+						</table>
+						</form>
+					</div>
+				</td>
+			</tr>
+		</tmpl_if>
+		<tr>
+			<td align="center">
+				<div align="center">
+					<form name="controlForm" action="admin.php?op=controlFluAzu" method="post">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tmpl_if name="pythonMissing">
+								<tr>
+									<td align="center" colspan="2">
+										<strong><font color="red">Python Missing</font></strong>
+										<br><br>
+										Check <a href="admin.php?op=serverSettings">Server-Settings</a> Page.
+									</td>
+								</tr>
+							<tmpl_else>
+								<tmpl_if name="fluazuRunning">
+									<input type="Hidden" name="a" value="stop">
+									<tr>
+										<td align="center" colspan="2">
+											<input type="Submit" value="Stop Fluazu">
+											<br><br>
+										</td>
+									</tr>
+								<tmpl_else>
+									<input type="Hidden" name="a" value="start">
+									<tr>
+										<td align="left" width="350" valign="top" colspan="2"><strong>Start Fluazu:</strong><br></td>
+									</tr>
+									<tr>
+										<td align="center" colspan="2">
+											<input type="Submit" value="Start fluazu">
+											<br><br>
+										</td>
+									</tr>
+								</tmpl_if>
+							</tmpl_if>
+						</table>
+					</form>
+					<form name="theForm" action="admin.php?op=updateFluAzuSettings" method="post" onsubmit="return validateSettings('fluazu')">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td align="center" colspan="2">
+									<table width="100%" border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0">
+										<tr>
+											<td colspan="6" bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+												<div align="center">
+													<tmpl_var name="SuperAdminLink1">
+													|<tmpl_var name="SuperAdminLink3">
+													|<tmpl_var name="SuperAdminLink9">
+												</div>
+											</td>
+										</tr>
+									</table>
+									<br>
+								</td>
+							</tr>
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="fluazu_host"><strong>Host:</strong></label><br/>
+										Host of Azureus-server (currently only localhost is supported).
+									</td>
+									<td valign="top">
+										<input name="fluazu_host" id="fluazu_host" type="Text" maxlength="254" value="<tmpl_var name="fluazu_host">" size="55">
+									</td>
+								</tr>
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="fluazu_port"><strong>Port:</strong></label><br/>
+										Port of Azureus-server (XML/HTTP, default: 6884).
+									</td>
+									<td valign="top">
+										<input name="fluazu_port" id="fluazu_port" type="Text" maxlength="5" value="<tmpl_var name="fluazu_port">" size="5">
+									</td>
+								</tr>
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="fluazu_secure"><strong>Secure:</strong></label><br/>
+										Use secure connection to azureus.
+									</td>
+									<td valign="bottom">
+										<select name="fluazu_secure" id="fluazu_secure">
+											<option value="1">true</option>
+											<option value="0"
+											<tmpl_if name="fluazu_secure" value="0">
+												 selected
+											</tmpl_if>
+											>false</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="fluazu_user"><strong>Username:</strong></label><br/>
+										Username to use when connecting to Azureus-server.
+									</td>
+									<td>
+										<input name="fluazu_user" id="fluazu_user" type="Text" maxlength="254" value="<tmpl_var name="fluazu_user">" size="55">
+									</td>
+								</tr>
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="fluazu_pw"><strong>Password:</strong></label><br/>
+										Password to use when connecting to Azureus-server.
+									</td>
+									<td>
+										<input name="fluazu_pw" id="fluazu_pw" type="password" maxlength="254" value="<tmpl_var name="fluazu_pw">" size="55">
+									</td>
+								</tr>
+								<tr><td colspan="2"><hr noshade></td></tr>
+								<tr>
+									<td align="center" colspan="2">
+									<input type="Submit" value="Update Settings">
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<tmpl_include name="inc.subfoot.tmpl">

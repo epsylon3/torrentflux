@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8ff9d2cb-e98c-4140-8ee4-bf05788badc6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>fluazu</RootNamespace>
+    <AssemblyName>fluazu</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{229B3E77-97E9-4f6d-9151-E6D103EA4D4A};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{57B76CF8-F148-40c5-BE9B-5C5EFB1ACA14}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <PublishUrl>Publish\</PublishUrl>
+    <Name>fluazu</Name>
+    <MainFile>Program.py</MainFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="IronPython" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="fluazu" />
+    <Folder Include="dopal" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="dopal\aztypes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\classes.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\class_defs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\convert.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\core.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\debug.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\errors.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\interact.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\logutils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\objects.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\obj_impl.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\persistency.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\scripting.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\utils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\xmlutils.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="dopal\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu\FluAzuD.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu\output.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu\StatFile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu\Transfer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu\TransferFile.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="fluazu\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\IronPython Studio\1.0\IronPython.targets" />
+</Project>

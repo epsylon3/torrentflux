@@ -1,0 +1,54 @@
+#attention {
+	padding-top: 20px;
+	text-align: center;
+	font-size: 20px;
+	color: #ff0000;
+	font-weight: 700;
+}
+#current_stream {
+	padding-top: 5px;
+	text-align: center;
+}
+#stream_control {
+	padding-top: 10px;
+	text-align: center;
+}
+a.watch_link {
+	font-size: 10px;
+	text-decoration: none;
+}
+#file_title {
+	padding-top: 15px;
+	text-align: center;
+}
+#video_settings {
+	padding-top: 10px;
+	text-align: center;
+}
+#audio_settings {
+	padding-top: 5px;
+	text-align: center;
+}
+#please_stop {
+	padding-top: 10px;
+	text-align: center;
+	color: #ff0000;
+	font-weight: 700;
+}
+#stream_started {
+	padding-top: 15px;
+	text-align: center;
+	font-weight: 700;
+}
+#info {
+	padding-top: 5px;
+	margin-left: auto;
+	margin-right: auto
+}
+td.infos {
+	text-align: right;
+}
+#links {
+	padding-top: 5px;
+	text-align: center;
+}

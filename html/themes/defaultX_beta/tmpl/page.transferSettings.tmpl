@@ -1,0 +1,113 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.transferHead.tmpl">
+<tmpl_include name="inc.transferNavi.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/transfer.js" type="text/javascript"></script>
+<table bgcolor="#A2BED4" width="100%" cellpadding="1">
+	<tr>
+		<td>
+			<div align="center">
+			<tmpl_if name="isSave" value="1">
+				<tmpl_if name="message">
+					<tmpl_var name="message"><br>
+				</tmpl_if>
+				<tmpl_if name="error">
+					<tmpl_var name="error"><br>
+				</tmpl_if>
+				<tmpl_if name="list_changes">
+					<br><strong>Changes :</strong>
+					<table border="1" bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4" width="100%">
+						<tmpl_loop name="list_changes">
+							<tr>
+								<td align="left" width="75%"><tmpl_var name="lbl">:</td>
+								<td nowrap><tmpl_var name="val"></td>
+							</tr>
+						</tmpl_loop>
+					</table>
+				</tmpl_if>
+				<tmpl_if name="list_send">
+					<br><strong>Changes sent to Client :</strong>
+					<table border="1" bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4" width="100%">
+						<tmpl_loop name="list_send">
+							<tr>
+								<td align="left" width="75%"><tmpl_var name="lbl">:</td>
+								<td nowrap><tmpl_var name="val"></td>
+							</tr>
+						</tmpl_loop>
+					</table>
+				</tmpl_if>
+				<tmpl_if name="list_restart">
+					<br><strong>Changes that require a Client-Restart :</strong>
+					<table border="1" bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4" width="100%">
+						<tmpl_loop name="list_restart">
+							<tr>
+								<td align="left" width="75%"><tmpl_var name="lbl">:</td>
+								<td nowrap><tmpl_var name="val"></td>
+							</tr>
+						</tmpl_loop>
+					</table>
+				</tmpl_if>
+			<tmpl_else>
+				<tmpl_if name="enableClientChooser" value="1">
+					<tmpl_if name="enableBtclientChooser" value="1">
+						<form name="clientForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post">
+							<tmpl_if name="profile">
+								<input type="hidden" name="profile" value="<tmpl_var name="profile">" />
+							</tmpl_if>
+							<table border="1" bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4" width="100%">
+								<tr>
+									<td align="center" colspan="2">
+										<label for="client">BitTorrent-Client:</label> <tmpl_include name="inc.clientSelectForm.tmpl">
+									</td>
+								</tr>
+							</table>
+						</form>
+					</tmpl_if>
+				</tmpl_if>
+				<tmpl_if name="with_profiles" value="1">
+					<form name="profileForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post">
+						<tmpl_if name="client">
+							<input type="hidden" name="client" value="<tmpl_var name="client">" />
+						</tmpl_if>
+						<tmpl_include name="inc.transferProfile.tmpl">
+					</form>
+				</tmpl_if>
+				<form name="theForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post" onsubmit="return validateSettings('<tmpl_var name="type">')">
+					<input type="hidden" name="save" value="1" />
+					<table border="1" bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4" width="100%">
+						<tmpl_include name="inc.transferSettings.tmpl">
+						<tmpl_if name="showdirtree">
+							<tr>
+								<td colspan="2" align="right">
+									<table border="0" cellpadding="0" cellspacing="0" width="100%">
+										<tr>
+											<td align="left" valign="top" rowspan="2"><label for="savepath">Save Path:</label></td>
+											<td align="right" valign="top">
+												<input type="text" name="savepath" id="savepath" style="width:300px" value="<tmpl_var name="savepath">">
+											</td>
+										</tr>
+										<tr>
+											<td align="right" valign="top">
+												<select style="width:300px" size="5" onchange="savepath.value= this.options[this.selectedIndex].value;"><tmpl_include name="inc.dirTree.tmpl"></select>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</tmpl_if>
+						<tr>
+							<td colspan="2" align="right">
+								<tmpl_if name="sendboxShow" value="1">
+									<input type="checkbox" name="sendbox" id="sendbox" <tmpl_var name="sendboxAttr">><label for="sendbox">Send Changes to Client</label>&nbsp;
+								</tmpl_if>
+								<input type="Submit" value="Save">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</tmpl_if>
+			</div>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.transferFoot.tmpl">

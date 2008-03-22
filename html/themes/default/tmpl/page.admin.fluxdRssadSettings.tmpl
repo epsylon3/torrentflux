@@ -1,0 +1,435 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<tmpl_if name="new_msg">
+	<table cellpadding="5" cellspacing="0" border="0" width="100%">
+		<tr>
+			<td align="center" bgcolor="#A2BED4">
+				<strong><tmpl_var name="message"></strong>
+			</td>
+		</tr>
+	</table>
+</tmpl_if>
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<script src="js/fluxdSettings.js" type="text/javascript"></script>
+<div align="center">
+	<a name="fluxd" id="fluxd"></a>
+	<tmpl_if name="pageop" value="default">
+		<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Filters</font>
+				</td>
+			</tr>
+			<tr bgcolor="#A2BED4">
+				<td>
+				<div align="left" style="width:600px">
+				<strong>Filters Overview:</strong><br/>
+				A filter is a perl compatible regular expression (pcre) that rssad searches for in the RSS torrent feeds that you specify in the rssad job(s).<br/><br/>
+				Filters can be as simple as a string of characters - 'foobar' - or can use the more advanced features of pcre to search for metacharacters - 'foo.*bar' (which would match 'foobar', 'foololbar', etc).<br/><br/>
+				Filters are case insensitive - 'foobar' will match both 'foobar' lowercase and 'FOOBAR' uppercase or even 'fOObAR' mixed case.<br/><br/>
+				<strong>Filter Examples:</strong><br/>
+				<ul>
+				<li>foobar.*s01e.* - will match 'foobar S01E01', 'Foobar Stories s01e21', etc</li>
+				<li>foobar.*s10e0[1-7] - will match 'Foobar S10E01', 'Foobar S10E02, etc - ie episodes 1 - 7 of season 10.
+				<li>foobar.*s0[1-2].* - will match 'Foobar S01 [other characters after]', 'Foobar S02 etc' - ie seasons 1 and 2.
+				</ul>
+				</div>
+				</td>
+			</tr>
+			<tmpl_if name="rssad_filters">
+				<tmpl_loop name="rssad_filters">
+					<tr bgcolor="#A2BED4">
+						<td>
+							<a href="admin.php?op=fluxdRssadSettings&pageop=deleteFilter&filtername=<tmpl_var name="filtername">"  onclick="return confirm('Delete Filter <tmpl_var name="filtername"> ?')"><img src="themes/default/images/delete_on.gif" width=16 height=16 border=0 title="Delete <tmpl_var name="filtername">" align="absmiddle"></a>&nbsp;
+							<a href="admin.php?op=fluxdRssadSettings&pageop=editFilter&filtername=<tmpl_var name="filtername">"><img src="themes/default/images/edit.gif" width=16 height=16 border=0 title="Edit <tmpl_var name="filtername">" align="absmiddle"></a>&nbsp;
+							<tmpl_var name="filtername">
+						</td>
+					</tr>
+				</tmpl_loop>
+			<tmpl_else>
+				<tr bgcolor="#A2BED4">
+					<td>
+						<strong>No Filters defined.</strong>
+					</td>
+				</tr>
+			</tmpl_if>
+			<tr bgcolor="#A2BED4">
+				<td align="center">
+					<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_filter_new')">
+						<input type="hidden" name="pageop" value="addFilter">
+						<label for="filtername">Name:</label> <input type="Text" size="30" maxlength="255" name="filtername" id="filtername">
+						<input type="Submit" value="Add Filter">
+					</form>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td colspan="4" bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Jobs</font>
+				</td>
+			</tr>
+			<tmpl_if name="rssad_jobs">
+				<tr bgcolor="#A2BED4">
+					<td align="center">&nbsp;</td>
+					<td align="center">Savedir</td>
+					<td align="center">URL</td>
+					<td align="center">Filter</td>
+				</tr>
+				<tmpl_loop name="rssad_jobs">
+					<tr>
+						<td>
+							<a href="admin.php?op=fluxdRssadSettings&pageop=deleteJob&job=<tmpl_var name="__ROWNUM__">"  onclick="return confirm('Delete Job ?')"><img src="themes/default/images/delete_on.gif" width=16 height=16 border=0 title="Delete Job" align="absmiddle"></a>&nbsp;
+							<a href="admin.php?op=fluxdRssadSettings&pageop=editJob&job=<tmpl_var name="__ROWNUM__">"><img src="themes/default/images/edit.gif" width=16 height=16 border=0 title="Edit Job" align="absmiddle"></a>&nbsp;
+						</td>
+						<td>
+							<tmpl_var name="savedir">
+						</td>
+						<td>
+							<tmpl_if name="enable_dereferrer">
+								<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="url">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="url"></a>
+							<tmpl_else>
+								<a href="<tmpl_var escape="html" name="url">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="url"></a>
+							</tmpl_if>
+						</td>
+						<td>
+							<a href="admin.php?op=fluxdRssadSettings&pageop=editFilter&filtername=<tmpl_var name="filtername">"><tmpl_var name="filtername"></a>
+						</td>
+					</tr>
+				</tmpl_loop>
+			<tmpl_else>
+				<tr>
+					<td colspan="4">
+						<strong>No Jobs defined.</strong>
+					</td>
+				</tr>
+			</tmpl_if>
+			<tr>
+				<td colspan="4" align="center">
+					<tmpl_if name="rssad_filters">
+						<form action="admin.php?op=fluxdRssadSettings" method="post">
+							<input type="hidden" name="pageop" value="addJob">
+							<input type="Submit" value="Add Job">
+						</form>
+					<tmpl_else>
+						<form><input type="Submit" value="Add Job" disabled></form>
+					</tmpl_if>
+				</td>
+			</tr>
+		</table>
+	<tmpl_elseif name="pageop" value="addFilter">
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Add Filter</font>
+				</td>
+			</tr>
+			<tmpl_if name="filtername">
+				<tr>
+					<td align="center" valign="top">
+						<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_filter_add')">
+							<input type="hidden" name="pageop" value="saveFilter">
+							<input type="hidden" name="new" value="true">
+							<input type="hidden" name="rssad_filtercontent" value="<tmpl_var name="rssad_filtercontent">">
+							<label for="filtername">Name:</label> <input type="Text" size="30" maxlength="255" name="filtername" id="filtername" value="<tmpl_var name="filtername">">
+							<br><br>
+							<label for="rssad_filters">Filter-Entries:</label>
+							<br><br>
+							<select name="rssad_filters" id="rssad_filters" size="10">
+								<tmpl_if name="rssad_filter_list">
+									<tmpl_loop name="rssad_filter_list">
+										<option value="<tmpl_var name="filter">"><tmpl_var name="filter"></option>
+									</tmpl_loop>
+								</tmpl_if>
+							</select>
+							<input type="button" name="remButton" value="remove" onclick="removeRssadFilterEntry()">
+							<br><br>
+							<label for="rssad_filter_entry">Add Filter-Entry:</label> <input type="text" name="rssad_filter_entry" id="rssad_filter_entry" size="50">
+							<input type="button" name="addButton" value="add" onclick="addRssadFilterEntry()" size="30">
+							<br><br>
+							<input type="Submit" value="Add Filter">
+							<br><br>
+						</form>
+					</td>
+				</tr>
+			<tmpl_else>
+				<tr>
+					<td>
+						<strong>There was an error.</strong>
+					</td>
+				</tr>
+			</tmpl_if>
+		</table>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="editFilter">
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Edit Filter</font>
+				</td>
+			</tr>
+			<tmpl_if name="filtername">
+				<tr>
+					<td align="center" valign="top">
+						<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_filter_edit')">
+							<input type="hidden" name="pageop" value="saveFilter">
+							<input type="hidden" name="new" value="false">
+							<input type="hidden" name="rssad_filtercontent" value="<tmpl_var name="rssad_filtercontent">">
+							<input type="hidden" name="filtername" value="<tmpl_var name="filtername">">
+							<strong><tmpl_var name="filtername"></strong>
+							<br><br>
+							<label for="rssad_filters">Filter-Entries:</label>
+							<br><br>
+							<select name="rssad_filters" id="rssad_filters" size="10">
+								<tmpl_if name="rssad_filter_list">
+									<tmpl_loop name="rssad_filter_list">
+										<option value="<tmpl_var name="filter">"><tmpl_var name="filter"></option>
+									</tmpl_loop>
+								</tmpl_if>
+							</select>
+							<input type="button" name="remButton" value="remove" onclick="removeRssadFilterEntry()">
+							<br><br>
+							<label for="rssad_filter_entry">Add Filter-Entry:</label> <input type="text" name="rssad_filter_entry" id="rssad_filter_entry" size="50">
+							<input type="button" name="addButton" value="add" onclick="addRssadFilterEntry()" size="30">
+							<br><br>
+							<input type="Submit" value="Save Filter">
+							<br><br>
+						</form>
+					</td>
+				</tr>
+			<tmpl_else>
+				<tr>
+					<td>
+						<strong>There was an error.</strong>
+					</td>
+				</tr>
+			</tmpl_if>
+		</table>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="saveFilter">
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Save Filter</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<tmpl_if name="filter_saved" value="1">
+						<br>
+						<strong><tmpl_var name="rssad_filter_message"></strong>
+						<br>
+						<pre><tmpl_var name="filtercontent"></pre>
+					<tmpl_else>
+						<br>
+						<strong>Error saving Filter <tmpl_var name="filtername"> : </strong>
+						<br>
+						<tmpl_if name="messages">
+						    <ul>
+						        <tmpl_loop name="messages">
+						            <li><tmpl_var name="msg"></li>
+						        </tmpl_loop>
+						    </ul>
+						</tmpl_if>
+					</tmpl_if>
+				</td>
+			</tr>
+		</table>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="deleteFilter">
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Delete Filter</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<tmpl_if name="filter_deleted" value="1">
+						<br>
+						<strong>Filter <tmpl_var name="filtername"> deleted.</strong>
+					<tmpl_else>
+						<br>
+						<strong>Error deleting Filter <tmpl_var name="filtername"> : </strong>
+						<br>
+						<tmpl_if name="messages">
+						    <ul>
+						        <tmpl_loop name="messages">
+						            <li><tmpl_var name="msg"></li>
+						        </tmpl_loop>
+						    </ul>
+						</tmpl_if>
+					</tmpl_if>
+				</td>
+			</tr>
+		</table>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="addJob">
+		<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_job')">
+			<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+				<tr>
+					<td colspan="3" bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+						<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Add Job</font>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+					<div align="left" style="width:600px">
+					<strong>Jobs Overview:</strong><br/>
+					An Rssad job consists of a set of specifications to use when searching for torrents in RSS feeds. When rssad finds a torrent that contains a match for the pattern specified in the filter, the torrent will be uploaded to the directory you set.<br/><br/>
+					In the form below, specify the directory to save any found torrents to, the URL of the direct download RSS torrent feed and the name of the filter you want to use to search for within the RSS URL.<br/><br/>
+
+					<strong>Note:</strong><br/>
+					RSS seeds must contain 'direct download' links to torrent files otherwise torrentflux-b4rt will not be able to upload the files to the server.
+					</div>
+					</td>
+				</tr>
+				<tr bgcolor="#A2BED4">
+					<td align="center"><label for="savedir">Savedir</label></td>
+					<td align="center"><label for="url">URL</label></td>
+					<td align="center"><label for="filtername">Filter</label></td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" size="40" name="savedir" id="savedir">
+					</td>
+					<td>
+						<input type="text" size="50" name="url" id="url">
+					</td>
+					<td>
+						<select name="filtername" id="filtername">
+							<tmpl_loop name="rssad_filters">
+								<option value="<tmpl_var name="filtername">"><tmpl_var name="filtername"></option>
+							</tmpl_loop>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<label for="checkdir">Check/Create dir</label> <input type="checkbox" name="checkdir" id="checkdir" value="true" checked>
+						<br>
+						<input type="hidden" name="pageop" value="saveJob">
+						<input type="Submit" value="Add Job">
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="editJob">
+		<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_job')">
+			<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+				<tr>
+					<td colspan="3" bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+						<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Edit Job</font>
+					</td>
+				</tr>
+				<tmpl_if name="rssad_job_loaded" value="1">
+					<tr bgcolor="#A2BED4">
+						<td align="center"><label for="savedir">Savedir</label></td>
+						<td align="center"><label for="url">URL</label></td>
+						<td align="center"><label for="filtername">Filter</label></td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" size="40" name="savedir" id="savedir" value="<tmpl_var name="rssad_savedir">">
+						</td>
+						<td>
+							<input type="text" size="50" name="url" id="url" value="<tmpl_var escape="html" name="rssad_url">">
+						</td>
+						<td>
+							<select name="filtername" id="filtername">
+								<tmpl_loop name="rssad_filters">
+									<option value="<tmpl_var name="filtername">"<tmpl_var name="selected">><tmpl_var name="filtername"></option>
+								</tmpl_loop>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center">
+							<label for="checkdir">Check/Create dir</label> <input type="checkbox" name="checkdir" id="checkdir" value="true" checked>
+							<br>
+							<input type="hidden" name="pageop" value="saveJob">
+							<input type="hidden" name="job" value="<tmpl_var name="jobnumber">">
+							<input type="Submit" value="Save Job">
+						</td>
+					</tr>
+				<tmpl_else>
+					<tr>
+						<td colspan="3">
+							<strong>Error loading Job : </strong>
+							<br>
+							<tmpl_if name="messages">
+							    <ul>
+							        <tmpl_loop name="messages">
+							            <li><tmpl_var name="msg"></li>
+							        </tmpl_loop>
+							    </ul>
+							</tmpl_if>
+						</td>
+					</tr>
+				</tmpl_if>
+			</table>
+		</form>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="saveJob">
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Save Job</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<tmpl_if name="rssad_job_saved" value="1">
+						<br>
+						<strong><tmpl_var name="rssad_job_message"></strong>
+					<tmpl_else>
+						<br>
+						<strong>Error saving Job : </strong>
+						<br>
+						<tmpl_if name="messages">
+						    <ul>
+						        <tmpl_loop name="messages">
+						            <li><tmpl_var name="msg"></li>
+						        </tmpl_loop>
+						    </ul>
+						</tmpl_if>
+					</tmpl_if>
+				</td>
+			</tr>
+		</table>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	<tmpl_elseif name="pageop" value="deleteJob">
+		<table width="100%" border=1 bordercolor="#94ABC0" cellpadding="2" cellspacing="0" bgcolor="#A2BED4">
+			<tr>
+				<td bgcolor="#A2BED4" background="themes/default/images/bar.gif">
+					<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Delete Job</font>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<tmpl_if name="rssad_job_deleted" value="1">
+						<br>
+						<strong>Job deleted.</strong>
+					<tmpl_else>
+						<br>
+						<strong>Error deleting Job : </strong>
+						<br>
+						<tmpl_if name="messages">
+						    <ul>
+						        <tmpl_loop name="messages">
+						            <li><tmpl_var name="msg"></li>
+						        </tmpl_loop>
+						    </ul>
+						</tmpl_if>
+					</tmpl_if>
+				</td>
+			</tr>
+		</table>
+		<div align="center">[<a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a>]</div>
+	</tmpl_if>
+</div>
+<tmpl_include name="inc.subfoot.tmpl">

@@ -1,0 +1,44 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<tmpl_var name="content">
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+<div id="stats">
+	<div id="bandwidthTitle">
+		<a class="mainMenu" href="javascript:slider('statsBandwidth','toggle')">Type</a>
+	</div>
+		<form name="typeSelector" action="index.php?iid=images" method="post">
+		<div id="statsBandwidth">
+			<div class="serverStatsBottom">
+				<span class="serverStats">
+					<select name="type" onChange="javascript:submit();">
+						<tmpl_loop name="type_list">
+							<option value="<tmpl_var name="name">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="name"></option>
+						</tmpl_loop>
+					</select>
+				</span>
+			</div>
+		</div>
+		</form>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="javascript:slider('statsDrivespace','toggle')">Target</a>
+	</div>
+		<form name="targetSelector" action="index.php?iid=images" method="post">
+		<div id="statsDrivespace">
+			<div class="serverStatsBottom">
+				<span class="serverStats">
+					<select name="target" onChange="javascript:submit();">
+						<tmpl_if name="target_list">
+							<tmpl_loop name="target_list">
+								<option value="<tmpl_var name="name">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="name"></option>
+							</tmpl_loop>
+						</tmpl_if>
+					</select>
+				</span>
+			</div>
+		</div>
+	</form>
+</div>
+</body>
+</html>

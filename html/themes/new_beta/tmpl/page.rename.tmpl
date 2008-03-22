@@ -1,0 +1,33 @@
+<tmpl_include name="inc.head.tmpl">
+<body>
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="rename">
+	<tmpl_if name="is_start">
+		<form method="POST" action="index.php?iid=rename" name="move_form">
+			<p class="names">
+				<label for="fileFromDis"><tmpl_var name="_REN_FILE"></label>
+				<input disabled="true" type="text" name="fileFromDis" id="fileFromDis" value="<tmpl_var name="file">">
+			</p>
+			<p class="names">
+				<label for="fileTo"><tmpl_var name="_REN_STRING"></label>
+				<input type="text" name="fileTo" id="fileTo" value="<tmpl_var name="file">">
+			</p>
+			<p class="names"><input type="submit" value="OK" name="OK"></p>
+			<input type="hidden" name="dir" value="<tmpl_var name="dir">"/>
+			<input type="hidden" name="fileFrom" value="<tmpl_var name="file">"/>
+		</form>
+	<tmpl_else>
+		<tmpl_var name="messages">
+		<tmpl_if name="no_error">
+			<tmpl_var name="_REN_DONE"><br>
+			renamed <em><tmpl_var name="fileFrom"></em> to <em><tmpl_var name="fileTo"></em>
+		<tmpl_else>
+			<tmpl_var name="_REN_ERROR">
+		</tmpl_if>
+	</tmpl_if>
+</div>
+<div id="close">
+	[<a id="closeLink" href="#" onclick="window.opener.location.reload();window.close();">Close Window</a>]
+</div>
+</body>
+</html>

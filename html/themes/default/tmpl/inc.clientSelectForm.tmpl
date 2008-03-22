@@ -1,0 +1,5 @@
+<select name="client" id="client" onChange="javascript:submit();">
+	<tmpl_loop name="clientSelectForm_client_list">
+		<option value="<tmpl_var name="client">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="client"></option>
+	</tmpl_loop>
+</select>

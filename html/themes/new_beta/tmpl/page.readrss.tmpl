@@ -1,0 +1,62 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<a name="top"></a>
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<span class="upload">
+				RSS Feeds (jump list):
+			</span>
+		</div>
+	</div>
+	<div id="fileUpload" class="uploadClass">
+		<ul>
+			<tmpl_loop name="rss_list">
+				<tmpl_if name="stat" value="1">
+					<li><a id="closeLink" href="#<tmpl_var name="rid">" title="<tmpl_var name="title">"><tmpl_var name="title"></a></li>
+				<tmpl_elseif name="stat" value="2">
+					<li>* RSS feed URL active, but contains no active content * (<a id="closeLink" href="<tmpl_var name="url">" title="<tmpl_var name="title">"><tmpl_var name="url"></a>)</li>
+				<tmpl_elseif name="stat" value="3">
+					<li>* RSS timed out * (<a id="closeLink" href="<tmpl_var name="url">" title="<tmpl_var name="url">"><tmpl_var name="url"></a>)</li>
+				</tmpl_if>
+			</tmpl_loop>
+		</ul>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_loop name="rss_list">
+		<tmpl_if name="stat" value="1">
+			<div id="upload">
+				<div id="uploadLast"></div>
+				<div id="uploadFirst">
+					<span class="upload">
+						<a name="<tmpl_var name="rid">"></a>
+						<a id="closeLink" href="<tmpl_var name="url">" title="Open <tmpl_var name="title"> RSS feed in browser"><tmpl_var name="title"></a>
+						[<a id="closeLink" href="#" title="Top of page">top</a>]
+					</span>
+				</div>
+			</div>
+			<div id="fileUpload" class="uploadClass">
+				* Click on Torrent Links below to add them to the Torrent Download List
+				<table id="settings2">
+					<tmpl_loop name="feedItems">
+						<tr>
+							<td class="settingsTitle">
+								<a id="closeLink" href="dispatcher.php?action=urlUpload&url=<tmpl_var name="link">" title="<tmpl_var name="label">"><tmpl_var name="title"></a>
+							</td>
+							<td class="settingsSetting">
+								<tmpl_var name="pubDate">
+							</td>
+						</tr>
+					</tmpl_loop>
+				</table>
+			</div>
+			<div id="uploadBottom"></div>
+			<div id="uploadBottomEnd"></div>
+		</tmpl_if>
+	</tmpl_loop>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

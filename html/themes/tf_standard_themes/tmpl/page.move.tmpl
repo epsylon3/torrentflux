@@ -1,0 +1,50 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+						<tmpl_if name="is_start">
+							<form method="POST" action="index.php?iid=move" name="move_form">
+								<p>
+									<label for="T1"><tmpl_var name="_MOVE_FILE"></label>
+									<input disabled="true" type="text" name="T1" id="T1" size="91" value="<tmpl_var name="path">">
+								</p>
+								<p>
+									<label for="<tmpl_if name="move_start">selector<tmpl_else>dest</tmpl_if>"><tmpl_var name="_MOVE_STRING"></label><br>
+									<tmpl_if name="move_start">
+										<select size="1" name="selector" id="selector">
+											<tmpl_loop name="dir_list">
+												<option value="<tmpl_var name="target">"><tmpl_var name="target"></option>
+											</tmpl_loop>
+										</select>
+										<br><label for="dest">or:</label><br>
+									</tmpl_if>
+									<input name="dest" id="dest" type="Text" maxlength="254" value="" size="55">
+									<br><br>
+									<input type="submit" value="OK" name="OK">
+									<input type="hidden" name="file" value="<tmpl_var name="path">"/>
+								</p>
+							</form>
+						<tmpl_else>
+							<tmpl_if name="not_absolute">
+								Target-dirs must be specified with absolute and not relative paths. <br>
+							</tmpl_if>
+							<tmpl_if name="is_valid">
+								<tmpl_var name="messages">
+								<tmpl_if name="got_no_error">
+									Done<br>
+									moved <em><tmpl_var name="file"></em> to <em><tmpl_var name="targetDir"></em>
+								<tmpl_else>
+									An error occurred.
+								</tmpl_if>
+							<tmpl_else>
+								Invalid Target-dir : <tmpl_var name="targetDir">
+							</tmpl_if>
+						</tmpl_if>
+					</td>
+				</tr>
+			</table>
+			[<a href="#" onclick="window.opener.location.reload();window.close();">Close Window</a>]
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.fluxlink.tmpl">
+</body>
+</html>

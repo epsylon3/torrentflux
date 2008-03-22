@@ -1,0 +1,60 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<div align="center">
+	<table border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td colspan=6 bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+				<img src="themes/tf_standard_themes/images/user.gif" width=17 height=14 border=0>&nbsp;&nbsp;&nbsp;<font class="title"><tmpl_var name="_NEWUSER"></font>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<div align="center">
+					<form name="theForm" action="admin.php?op=addUser" method="post" onsubmit="return validateProfile(1, '<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+						<table cellpadding="5" cellspacing="0" border="0">
+							<tr>
+								<td align="right"><label for="newUser"><tmpl_var name="_USER">:</label></td>
+								<td>
+								<input name="newUser" id="newUser" type="Text" value="" size="15">
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label for="pass1"><tmpl_var name="_PASSWORD">:</label></td>
+								<td>
+								<input name="pass1" id="pass1" type="Password" value="" size="15">
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label for="pass2"><tmpl_var name="_CONFIRMPASSWORD">:</label></td>
+								<td>
+								<input name="pass2" id="pass2" type="Password" value="" size="15">
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label for="userType"><tmpl_var name="_USERTYPE">:</label></td>
+								<td>
+								<select name="userType" id="userType">
+									<option value="0"><tmpl_var name="_NORMALUSER"></option>
+									<option value="1"><tmpl_var name="_ADMINISTRATOR"></option>
+								</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="center" colspan="2">
+								<input type="Submit" value="<tmpl_var name="_CREATE">">
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<br>
+			</td>
+		</tr>
+	</table>
+</div>
+<tmpl_include name="inc.userSection.tmpl">
+<br><br>
+<tmpl_include name="inc.subfoot.tmpl">

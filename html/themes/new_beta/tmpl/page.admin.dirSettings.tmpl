@@ -1,0 +1,396 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<script src="js/moveSettings.js" type="text/javascript"></script>
+<script src="js/resdirSettings.js" type="text/javascript"></script>
+<div id="content">
+	<form name="theForm" action="admin.php?op=updateDirSettings" method="post" onsubmit="return validateSettings('dir')">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="dir_public_read">Public Read</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="dir_public_read" id="dir_public_read">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="dir_public_read" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable public read permission for all files/folders in torrentflux-b4rt - when enabled, all files and folders within torrentflux-b4rt will be readable by all torrentflux-b4rt users.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="dir_public_write">Public Write</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="dir_public_write" id="dir_public_write">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="dir_public_write" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable public write permission for all files/folders in torrentflux-b4rt - when enabled, all files and folders within torrentflux-b4rt will be writable by all torrentflux-b4rt users.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="dir_enable_chmod">Chmod</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="dir_enable_chmod" id="dir_enable_chmod">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="dir_enable_chmod" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the use of the chmod functionality for regular torrentflux-b4rt users - when enabled, users will be able to change the permissions on files and folders in torrentflux-b4rt to read/write/execute for everyone (777).
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_dirstats">Full Directory Listings</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+					<select name="enable_dirstats" id="enable_dirstats">
+						<option value="1">True</option>
+						<option value="0"
+						<tmpl_if name="enable_dirstats" value="0">
+							 selected
+						</tmpl_if>
+						>False</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable complete directory listings - when enabled, full directory listings will be used including size and last modified time similar to Unix 'ls -al' output.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_maketorrent">Make Torrent</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_maketorrent" id="enable_maketorrent">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_maketorrent" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable make torrent functionality for users - when enabled, users will be allowed to create torrent files from the contents in the directory manager.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="dir_maketorrent_default">Default Make Torrent Client</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+					<select name="dir_maketorrent_default" id="dir_maketorrent_default">
+						<option value="tornado">tornado</option>
+						<option value="mainline"
+						<tmpl_if name="dir_maketorrent_default" value="mainline">
+							 selected
+						</tmpl_if>
+						>mainline</option>
+					</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Choose the default client to use to create torrent files with.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_file_download">File Downloads</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_file_download" id="enable_file_download">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_file_download" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable file downloading from the directory manager - when enabled, users will be able to download files directly from the torrentflux-b4rt file manager.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="package_type">Download Archive Type</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="package_type" id="package_type">
+							<option value="tar" selected>Tar</option>
+							<option value="zip"
+							<tmpl_if name="package_type" value="zip">
+								 selected
+							</tmpl_if>
+							>Zip</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Choose the type of archive to use when performing file downloads - files downloaded will be archived using this archive type prior to sending.<br/><strong>Note:</strong><br/>Ensure your operating system supports the archive type you select here.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_view_nfo">Text/NFO Viewer</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_view_nfo" id="enable_view_nfo">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_view_nfo" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable access to the built in NFO viewer - when enabled, users will be able to view nfo/txt/log file types directly within torrentflux-b4rt.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_rar">Unrar</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_rar" id="enable_rar">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_rar" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable access to unrar functionality - when enabled, users will be able to use unrar to unpack rar archives directly within torrentflux-b4rt.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_sfvcheck">SFV File Checking</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_sfvcheck" id="enable_sfvcheck">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_sfvcheck" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable access to sfv file checking functionality - when enabled, if an sfv file is present users will be able to verify the integrity of the files covered by the sfv file directly within torrentflux-b4rt.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_vlc">VLC Streaming</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_vlc" id="enable_vlc">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_vlc" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable access to VLC file streaming functionality - when enabled, users will be able to stream media directly from the webserver using VLC.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="vlc_port">VLC Port</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="vlc_port" id="vlc_port" type="Text" maxlength="5" value="<tmpl_var name="vlc_port">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the port to use for VLC streaming.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_rename">File And Folder Renaming</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_rename" id="enable_rename">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_rename" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable access for users to rename files and folders.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="enable_move">File And Folder Moving</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="enable_move" id="enable_move">
+							<option value="1">True</option>
+							<option value="0"
+							<tmpl_if name="enable_move" value="0">
+								 selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable access for users to move files and folders out of the torrentflux-b4rt directory hierarchy - when enabled, users will be allowed to move files and folders out of the torrentflux-b4rt directory hierarchy into a choice of folders elsewhere on the server.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="categorylist">Valid File And Folder Moving Paths</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="categorylist" id="categorylist" size="4">
+							<tmpl_if name="moveSettings_move_list">
+								<tmpl_loop name="moveSettings_move_list">
+									<option value="<tmpl_var name="target">"><tmpl_var name="target"></option>
+								</tmpl_loop>
+							</tmpl_if>
+						</select>
+						<br /><br />
+						<input type="button" name="remCatButton" value="remove" onclick="removeMoveEntry()">
+						<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+                        Specify the paths to which users are allowed to move files and folders outside of the torrentflux-b4rt directory hierarchy.<br/><strong>Note:</strong><br/>Paths must be absolute - ie '/path/to/somefolder' instead of just 'somefolder'.<br/>Any newly created directories will not be deleted after removing a transfer from the transfer list.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="category">New Target-Dir</label>
+					</td>
+					<td class="settingsSetting">
+						<input type="text" name="category" id="category" size="30">
+						<br /><br />
+						<input type="button" name="addCatButton" value="add" onclick="addMoveEntry()" size="30">
+						<br /><br />
+						<input type="hidden" name="move_paths" value="<tmpl_var name="moveSettings_move_paths">">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="resdirlist">Restricted Files And Folders</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="resdirlist" id="resdirlist" size="4">
+							<tmpl_if name="dir_restricted_list">
+								<tmpl_loop name="dir_restricted_list">
+									<option value="<tmpl_var name="target">"><tmpl_var name="target"></option>
+								</tmpl_loop>
+							</tmpl_if>
+						</select>
+						<br /><br />
+						<input type="button" name="remButton" value="remove" onclick="removeDirEntry()">
+						<br /><br />
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+                        Specify a list of patterns which, when found in a file or folder name, will not be allowed access to by users.<br/><strong>Note:</strong><br/>Access to dot files/folders - files/folders starting with a dot - are always restricted.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="resdirentry">New Entry</label>
+					</td>
+					<td class="settingsSetting">
+						<input type="text" name="resdirentry" id="resdirentry" size="30">
+						<br /><br />
+						<input type="button" name="addButton" value="add" onclick="addDirEntry()" size="30">
+						<br /><br />
+						<input type="hidden" name="dir_restricted" value="<tmpl_var name="dir_restricted">">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+
+					</td>
+					<td class="settingsSetting">
+						<input type="Submit" value="Update Settings">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+	</form>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>

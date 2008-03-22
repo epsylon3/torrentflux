@@ -1,0 +1,46 @@
+<table width="100%">
+	<tr>
+		<td width="1%" style="padding:3px;" nowrap>
+			<div class="tiny" align="left">Upload :</div>
+		</td>
+		<td width="98%">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td id="barSpeedUp1" height="12" width="<tmpl_var name="bandwidthbars_upload_percent">%">
+						<div style="background:<tmpl_var name="bandwidthbars_upload_bgcolor">;"><img id="imgBandwidthUpBlank" src="themes/default/images/blank.gif" width="1" height="12" border="0"></div>
+					</td>
+					<td id="barSpeedUp2" height="12" width="<tmpl_var name="bandwidthbars_upload_percent2">%">
+						<div style="background:#000000;"><img src="themes/default/images/blank.gif" width="1" height="12" border="0"></div>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="1%" style="padding:3px;" nowrap>
+			<div class="tinypercent" align="left">
+				<nobr><label id="barSpeedUpPercent"><tmpl_var name="bandwidthbars_upload_percent"></label>% (<label id="barSpeedUp"><tmpl_var name="bandwidthbars_upload_text"></label> kB/s)</nobr>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td width="1%" style="padding:3px;" nowrap>
+			<div class="tiny" align="left">Download :</div>
+		</td>
+		<td width="98%">
+			<table width="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td id="barSpeedDown1" height="12" width="<tmpl_var name="bandwidthbars_download_percent">%">
+						<div style="background:<tmpl_var name="bandwidthbars_download_bgcolor">;"><img id="imgBandwidthDownBlank" src="themes/default/images/blank.gif" width="1" height="12" border="0"></div>
+					</td>
+					<td id="barSpeedDown2" height="12" width="<tmpl_var name="bandwidthbars_download_percent2">%">
+						<div style="background:#000000;"><img src="themes/default/images/blank.gif" width="1" height="12" border="0"></div>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td width="1%" style="padding:3px;" nowrap>
+			<div class="tinypercent" align="left">
+				<nobr><label id="barSpeedDownPercent"><tmpl_var name="bandwidthbars_download_percent"></label>% (<label id="barSpeedDown"><tmpl_var name="bandwidthbars_download_text"></label> kB/s)</nobr>
+			</div>
+		</td>
+	</tr>
+</table>

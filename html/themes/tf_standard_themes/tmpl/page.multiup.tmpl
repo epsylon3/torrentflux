@@ -1,0 +1,58 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<table border="0" cellpadding="0" cellspacing="0" width="760">
+	<tr>
+		<td>
+			<form name="form_file" action="dispatcher.php?action=fileUpload" method="post" enctype="multipart/form-data">
+				<table border="0" bordercolor="<tmpl_var name="table_border_dk">" cellpadding="4" cellspacing="0" width="100%">
+					<tr>
+						<td bgcolor="<tmpl_var name="table_header_bg">">
+							<table width="100%" cellpadding="3" cellspacing="0" border="0">
+								<tmpl_loop name="row_list">
+									<tr>
+										<td>
+											<label for="upload_files_1_<tmpl_var name="__ROWNUM__">"><tmpl_var name="_SELECTFILE">:</label><br>
+											<input type="file" name="upload_files[]" id="upload_files_1_<tmpl_var name="__ROWNUM__">" size="40">
+										</td>
+										<td>
+											<label for="upload_files_2_<tmpl_var name="__ROWNUM__">"><tmpl_var name="_SELECTFILE">:</label><br>
+											<input type="file" name="upload_files[]" id="upload_files_2_<tmpl_var name="__ROWNUM__">" size="40">
+										</td>
+									</tr>
+								</tmpl_loop>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">
+							<select name="aid" size="1">
+								<option value="1" selected><tmpl_var name="_UPLOAD"></option>
+								<tmpl_if name="queueActive" value="1">
+									<tmpl_if name="isAdmin">
+										<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+									</tmpl_if>
+									<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
+								<tmpl_else>
+									<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+								</tmpl_if>
+							</select>
+							<input type="Submit" value="Go">
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="<tmpl_var name="table_header_bg">">
+							<table width="100%" cellpadding="3" cellspacing="0" border="0">
+								<tr>
+									<td align="center">
+										<strong>valid Metafile-types : </strong><tmpl_var name="file_types_label">
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.subfoot.tmpl">

@@ -1,0 +1,9 @@
+DOPAL is a library to allow programs written in Python to easily communicate the Java BitTorrent client Azureus, via the XML/HTTP plugin (allowing communication over a network).
+
+This software is released under the GNU Public License - see COPYING for more details.
+
+Details and updates for this library can be found at http://dopal.sourceforge.net/
+
+To determine the current version of the library, type the following line into a Python command prompt:
+
+  print __import__('dopal').__version_str__

@@ -1,0 +1,19 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="transfer_content">
+	<tmpl_include name="inc.transferNavi.tmpl">
+	<div id="fileUpload" class="uploadClass">
+		<tmpl_var name="scrapeInfo">
+		<tmpl_if name="hasScrape" value="1">
+			<br />
+			<img src="image.php?i=pieTransferScrape&transfer=<tmpl_var name="transfer">" title="Scrape">
+		</tmpl_if>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_if name="subfoot_showReturn">
+		<tmpl_include name="inc.subfoot.tmpl">
+	</tmpl_if>
+</div>
+</body>
+</html>

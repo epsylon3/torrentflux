@@ -1,0 +1,617 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<tmpl_if name="message">
+		<tmpl_var name="message">
+	</tmpl_if>
+	<script src="js/functions.js" type="text/javascript"></script>
+	<script src="js/adminSettings.js" type="text/javascript"></script>
+	<script src="js/fluxdSettings.js" type="text/javascript"></script>
+	<a name="fluxd" id="fluxd"></a>
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<form name="controlForm" action="admin.php?op=controlFluxd" method="post">
+				<span class="upload">
+					<span id="fluazuStart">
+						<tmpl_if name="fluxdSupported" value="1">
+							<tmpl_if name="fluxdRunning">
+								<input type="Hidden" name="a" value="stop">
+								<input type="Submit" value="Stop fluxd">
+							<tmpl_else>
+								<input type="Hidden" name="a" value="start">
+								<input type="Submit" value="Start fluxd">
+							</tmpl_if>
+						<tmpl_else>
+							<span id="newUser">fluxd not supported<span>
+							<tmpl_if name="perlMissing">
+								<br>
+								Perl is missing or Path is incorrect, check <a href="admin.php?op=serverSettings">Server-Settings</a> Page
+							</tmpl_if>
+							<tmpl_if name="phpMissing">
+								<br>
+								PHP is missing or Path is incorrect, check <a href="admin.php?op=serverSettings">Server-Settings</a> Page
+							</tmpl_if>
+							<tmpl_if name="socketsMissing">
+								<br>
+								PHP does not have support for <em>sockets</em>
+							</tmpl_if>
+						</tmpl_if>
+					</span>
+				</span>
+			</form>
+		</div>
+	</div>
+	<div class="uploadClass">
+	<div align="left">
+		<strong>Overview:</strong><br/>
+		Fluxd is a service that runs in the background on the webserver to perform scheduled tasks related to torrentflux-b4rt.  The tasks performed depend on the modules that fluxd has enabled and the way that those modules are configured.<br/><br/>Details of each module and how they are configured can be found in the respective module's configuration section.
+	</div>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<form name="theForm" action="admin.php?op=updateFluxdSettings" method="post" onsubmit="return validateSettings('fluxd')">
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Core
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_dbmode">Database Mode</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_dbmode" id="fluxd_dbmode">
+							<option value="php"
+							<tmpl_if name="fluxd_dbmode" value="php">
+								selected
+							</tmpl_if>
+							>PHP + fluxcli.php</option>
+							<option value="dbi"
+							<tmpl_if name="fluxd_dbmode" value="dbi">
+								selected
+							</tmpl_if>
+							>Perl + DBI/DBD</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the mode used to get data from the database.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_loglevel">Loglevel</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_loglevel" id="fluxd_loglevel" type="Text" maxlength="2" value="<tmpl_var name="fluxd_loglevel">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the level of logging (default is 0).
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Qmgr
+					<tmpl_if name="fluxd_Qmgr_state" value="0">
+						<img height="10" src="themes/default/images/black.gif" title="Qmgr not loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Qmgr_state" value="1">
+						<img height="10" src="themes/default/images/green.gif" title="Qmgr loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Qmgr_state" value="-1">
+						<img height="10" src="themes/default/images/red.gif" title="Qmgr error.">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<div align="left">
+				<strong>Overview:</strong><br/>Qmgr handles a queue of transfers waiting to be started; starts transfers one after another to ease load on the server.
+			</div>
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Qmgr_enabled">Qmgr Enabled</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Qmgr_enabled" id="fluxd_Qmgr_enabled">
+							<option value="1"
+							<tmpl_if name="fluxd_Qmgr_enabled" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Qmgr_enabled" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the Qmgr module.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Qmgr_maxTotalTransfers">Global Max Concurrent Running Transfers Limit</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Qmgr_maxTotalTransfers" id="fluxd_Qmgr_maxTotalTransfers" type="Text" maxlength="5" value="<tmpl_var name="fluxd_Qmgr_maxTotalTransfers">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the maximum combined number of transfers (ie for all users combined) that are allowed to run at the same time - this setting can be overridden for admin users.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Qmgr_maxUserTransfers">Per User Max Concurrent Running Transfers Limit</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Qmgr_maxUserTransfers" id="fluxd_Qmgr_maxUserTransfers" type="Text" maxlength="5" value="<tmpl_var name="fluxd_Qmgr_maxUserTransfers">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Specify the maximum number of transfers a single user may run at one time.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Qmgr_interval">Qmgr Polling Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Qmgr_interval" id="fluxd_Qmgr_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Qmgr_interval">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Interval in seconds between Qmgr poll runs - Qmgr will check the transfer queue every 'interval' seconds.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Watch
+					<tmpl_if name="fluxd_Watch_state" value="0">
+						<img height="10" src="themes/default/images/black.gif" title="Watch not loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Watch_state" value="1">
+						<img height="10" src="themes/default/images/green.gif" title="Watch loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Watch_state" value="-1">
+						<img height="10" src="themes/default/images/red.gif" title="Watch error.">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<div align="left">
+				<strong>Overview:</strong><br/>Watch watches a specified directory for new transfer files (.torrent etc) and when found, starts the transfers automatically.  Watch 'jobs' are configured specifying which directory to watch, which user to start the transfer as when a new transfer file is found and what transfer profile to use to start the transfer.
+			</div>
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Watch_enabled">Watch Enabled</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Watch_enabled" id="fluxd_Watch_enabled">
+							<option value="1"
+							<tmpl_if name="fluxd_Watch_enabled" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Watch_enabled" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the Watch module.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Watch_interval">Watch Polling Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Watch_interval" id="fluxd_Watch_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Watch_interval">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Interval in seconds between watch module polling runs - watch module will run it's jobs every 'interval' seconds.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						Watch Jobs
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<a id="closeLink" href="admin.php?op=fluxdWatchSettings">Configure Watch Jobs</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Configure the watch jobs.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Rssad
+					<tmpl_if name="fluxd_Rssad_state" value="0">
+						<img height="10" src="themes/default/images/black.gif" title="Rssad not loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Rssad_state" value="1">
+						<img height="10" src="themes/default/images/green.gif" title="Rssad loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Rssad_state" value="-1">
+						<img height="10" src="themes/default/images/red.gif" title="Rssad error.">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<div align="left">
+				<strong>Overview:</strong><br/>Rssad runs scheduled checks for new torrents matching a specified pattern against a list of RSS direct download torrent feeds.  Filters are created containing patterns (regular expressions) to search for.  An Rssad 'job' is then configured to specify which filter to use, what RSS URL to use the filter on and what directory to save any found torrents to.
+			</div>
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Rssad_enabled">Rssad Enabled</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Rssad_enabled" id="fluxd_Rssad_enabled">
+							<option value="1"
+							<tmpl_if name="fluxd_Rssad_enabled" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Rssad_enabled" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the Rssad module.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Rssad_interval">Rssad Polling Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Rssad_interval" id="fluxd_Rssad_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Rssad_interval">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Interval in seconds between Rssad polling runs - Rssad will run it's jobs to check for new torrents matching configured filters every 'interval' seconds.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						Rssad Filters And Jobs
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<a id="closeLink" href="admin.php?op=fluxdRssadSettings">Configure Rssad Filters And Jobs</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Configure the rssad filters and jobs.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Fluxinet
+					<tmpl_if name="fluxd_Fluxinet_state" value="0">
+						<img height="10" src="themes/default/images/black.gif" title="Fluxinet not loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Fluxinet_state" value="1">
+						<img height="10" src="themes/default/images/green.gif" title="Fluxinet loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Fluxinet_state" value="-1">
+						<img height="10" src="themes/default/images/red.gif" title="Fluxinet error.">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<div align="left">
+				<strong>Overview:</strong><br/>Fluxinet allows network access directly to the fluxd daemon.
+			</div>
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Fluxinet_enabled">Fluxinet Enabled</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Fluxinet_enabled" id="fluxd_Fluxinet_enabled">
+							<option value="1"
+							<tmpl_if name="fluxd_Fluxinet_enabled" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Fluxinet_enabled" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the Fluxinet module.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Fluxinet_port">Fluxinet Port</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Fluxinet_port" id="fluxd_Fluxinet_port" type="Text" maxlength="5" value="<tmpl_var name="fluxd_Fluxinet_port">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						The port number to run the Fluxinet socket on.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Maintenance
+					<tmpl_if name="fluxd_Maintenance_state" value="0">
+						<img height="10" src="themes/default/images/black.gif" title="Maintenance not loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Maintenance_state" value="1">
+						<img height="10" src="themes/default/images/green.gif" title="Maintenance loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Maintenance_state" value="-1">
+						<img height="10" src="themes/default/images/red.gif" title="Maintenance error.">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<div align="left">
+				<strong>Overview:</strong><br/>The maintenance module performs regular maintenance checks on torrentflux-b4rt and can be configured to restart any transfers that have died unexpectedly.
+			</div>
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Maintenance_enabled">Maintenance Enabled</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Maintenance_enabled" id="fluxd_Maintenance_enabled">
+							<option value="1"
+							<tmpl_if name="fluxd_Maintenance_enabled" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Maintenance_enabled" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the Maintenance module.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Maintenance_interval">Maintenance Polling Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Maintenance_interval" id="fluxd_Maintenance_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Maintenance_interval">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Interval in seconds between Maintenance polling runs - Maintenance runs will be performed every 'interval' seconds.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Maintenance_trestart">Restart Dead Transfers</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Maintenance_trestart" id="fluxd_Maintenance_trestart">
+							<option value="1"
+							<tmpl_if name="fluxd_Maintenance_trestart" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Maintenance_trestart" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable automatic restarting of transfers that have died abnormally.
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+		<div id="upload">
+			<div id="uploadLast"></div>
+			<div id="uploadFirst">
+				<span class="upload">
+					Trigger
+					<tmpl_if name="fluxd_Trigger_state" value="0">
+						<img height="10" src="themes/default/images/black.gif" title="Trigger not loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Trigger_state" value="1">
+						<img height="10" src="themes/default/images/green.gif" title="Trigger loaded.">
+					</tmpl_if>
+					<tmpl_if name="fluxd_Trigger_state" value="-1">
+						<img height="10" src="themes/default/images/red.gif" title="Trigger error.">
+					</tmpl_if>
+				</span>
+			</div>
+		</div>
+		<div class="uploadClass">
+			<div align="left">
+				<strong>Overview:</strong><br/>Trigger performs an action on a transfer item when a specified event occurs.<br/><strong>Note:</strong><br/>The trigger module does not work at present.
+			</div>
+			<table id="settings">
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Trigger_enabled">Trigger Enabled</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<select name="fluxd_Trigger_enabled" id="fluxd_Trigger_enabled">
+							<option value="1"
+							<tmpl_if name="fluxd_Trigger_enabled" value="1">
+								selected
+							</tmpl_if>
+							>True</option>
+							<option value="0"
+							<tmpl_if name="fluxd_Trigger_enabled" value="0">
+								selected
+							</tmpl_if>
+							>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Enable/disable the Trigger module.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+						<label for="fluxd_Trigger_interval">Trigger Polling Interval</label>
+					</td>
+					<td class="settingsSetting" rowspan="2">
+						<input name="fluxd_Trigger_interval" id="fluxd_Trigger_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Trigger_interval">" size="5">
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsText">
+						Interval in seconds between Trigger polling runs - Trigger will check for actions to perform every 'interval' seconds.
+					</td>
+				</tr>
+				<tr>
+					<td class="settingsTitle">
+					</td>
+					<td class="settingsSetting">
+						<input type="Submit" value="Update Settings">
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="uploadBottom"></div>
+		<div id="uploadBottomEnd"></div>
+	</form>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+<div id="stats">
+	<script language="JavaScript">
+		function SuperAdmin(name_file) {
+			window.open (name_file,"_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600")
+		}
+	</script>
+	<div id="bandwidthTitle">
+		<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=1')">Log</a>
+	</div>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=2')">Error Log</a>
+	</div>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=3')">ps</a>
+	</div>
+	<tmpl_if name="fluxdRunning">
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=4')">Status</a>
+		</div>
+	<tmpl_else>
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=5')">Check</a>
+		</div>
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=6')">db-Debug</a>
+		</div>
+		<div id="drivespaceTitle">
+			<a class="mainMenu" href="javascript:SuperAdmin('superadmin.php?f=9')">Version</a>
+		</div>
+	</tmpl_if>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="">
+			<tmpl_if name="fluxdRunning">
+				fluxd Running
+			<tmpl_else>
+				fluxd Off
+			</tmpl_if>
+		</a>
+	</div>
+	<tmpl_if name="fluxdRunning">
+		<div id="statsDrivespace">
+			<div class="serverStatsBottom">
+				<span class="serverStats">(pid: <tmpl_var name="fluxdPid">)</span>
+			</div>
+		</div>
+	</tmpl_if>
+</div>
+</body>
+</html>

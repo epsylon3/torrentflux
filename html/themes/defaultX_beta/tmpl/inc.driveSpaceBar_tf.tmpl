@@ -1,0 +1,16 @@
+<tr>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;"><tmpl_var name="_STORAGE">:</div>
+	</td>
+	<td>
+		<div style="width:99%;height:12px;border-left:1px solid #000000;border-right:1px solid #000000;padding:0px;" class="clearfix">
+			<img id="barDriveSpace1" src="themes/<tmpl_var name="theme">/images/proglass.gif" style="height:12px;width:<tmpl_var name="drivespacebar_space">%;float:left;" alt="" />
+			<img id="barDriveSpace2" src="themes/<tmpl_var name="theme">/images/noglass.gif" style="height:12px;width:<tmpl_var name="drivespacebar_space2">%;float:left;" alt="" />
+		</div>
+	</td>
+	<td style="padding:2px 3px;width:1%;white-space:nowrap;">
+		<div class="small" style="text-align:left;">
+			<span id="barDriveSpacePercent"><tmpl_var name="drivespacebar_space2"></span>% (<span id="barFreeSpace"><tmpl_var name="drivespacebar_freeSpace"></span>) Free
+		</div>
+	</td>
+</tr>

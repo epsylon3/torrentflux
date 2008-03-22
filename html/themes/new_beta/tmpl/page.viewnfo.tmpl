@@ -1,0 +1,22 @@
+<tmpl_include name="inc.head.tmpl">
+<body>
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<pre id="nfo">
+<tmpl_var name="output">
+	</pre>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+<div id="stats">
+	<div id="bandwidthTitle">
+		<a class="mainMenu" href="index.php?iid=viewnfo&path=<tmpl_var name="file">&dos=1">DOS Format</a>
+	</div>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="index.php?iid=viewnfo&path=<tmpl_var name="file">&win=1">WIN Format</a>
+	</div>
+	<div id="drivespaceTitle">
+		<a class="mainMenu" href="index.php?iid=dir&dir=<tmpl_var name="folder">">Back</a>
+	</div>
+</div>
+</body>
+</html>

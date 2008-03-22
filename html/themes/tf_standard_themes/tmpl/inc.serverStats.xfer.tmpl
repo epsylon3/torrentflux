@@ -1,0 +1,99 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<tmpl_if name="xfer_day">
+			<tmpl_var name="xfer_day">
+		</tmpl_if>
+		<tmpl_if name="xfer_week">
+			<tmpl_var name="xfer_week">
+		</tmpl_if>
+		<tmpl_if name="xfer_month">
+			<tmpl_var name="xfer_month">
+		</tmpl_if>
+		<tmpl_if name="xfer_total">
+			<tmpl_var name="xfer_total">
+		</tmpl_if>
+	</tr>
+</table>
+<br>
+<tmpl_if name="show_xfer">
+	<table width='760' border=1 bordercolor='<tmpl_var name="table_admin_border">' cellpadding='2' cellspacing='0' bgcolor='<tmpl_var name="table_data_bg">'>
+		<tr>
+			<td bgcolor='<tmpl_var name="table_header_bg">' width='15%'><div align=center class='title'><tmpl_var name="_USER"></div></td>
+			<td bgcolor='<tmpl_var name="table_header_bg">' width='22%'><div align=center class='title'><tmpl_var name="_TOTALXFER"></div></td>
+			<td bgcolor='<tmpl_var name="table_header_bg">' width='22%'><div align=center class='title'><tmpl_var name="_MONTHXFER"></div></td>
+			<td bgcolor='<tmpl_var name="table_header_bg">' width='22%'><div align=center class='title'><tmpl_var name="_WEEKXFER"></div></td>
+			<td bgcolor='<tmpl_var name="table_header_bg">' width='22%'><div align=center class='title'><tmpl_var name="_DAYXFER"></div></td>
+		</tr>
+		<tmpl_loop name="user_list">
+			<tr>
+				<td><a href="index.php?iid=serverStats&type=xfer&user=<tmpl_var name="user_id">"><tmpl_var name="user_id"></a></td>
+				<td><div class="tiny" align="center"><tmpl_var name="total"></div></td>
+				<td><div class="tiny" align="center"><tmpl_var name="month"></div></td>
+				<td><div class="tiny" align="center"><tmpl_var name="week"></div></td>
+				<td><div class="tiny" align="center"><tmpl_var name="day"></div></td>
+			</tr>
+		</tmpl_loop>
+		<td><a href="index.php?iid=serverStats&type=xfer&user=%"><b><tmpl_var name="_TOTAL"></b></a></td>
+		<td><div class="tiny" align="center"><b><tmpl_var name="total_total"></b></div></td>
+		<td><div class="tiny" align="center"><b><tmpl_var name="total_month"></b></div></td>
+		<td><div class="tiny" align="center"><b><tmpl_var name="total_week"></b></div></td>
+		<td><div class="tiny" align="center"><b><tmpl_var name="total_day"></b></div></td>
+	</table>
+	<tmpl_if name="user">
+		<br><b>
+			<tmpl_if name="user" value="%">
+				<tmpl_var name="_SERVERXFERSTATS">
+			<tmpl_else>
+				<tmpl_var name="_USERDETAILS">: <tmpl_var name="user">
+			</tmpl_if>
+		</b><br>
+		<table width='760' border=1 bordercolor='<tmpl_var name="table_admin_border">' cellpadding='2' cellspacing='0' bgcolor='<tmpl_var name="table_data_bg">'>
+			<tr>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='20%'><div align=center class='title'>Month Starting</div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_TOTAL"></div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_DOWNLOAD"></div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_UPLOAD"></div></td>
+			</tr>
+			<tmpl_loop name="month_list">
+				<tr>
+					<td><a href='index.php?iid=serverStats&type=xfer&user=<tmpl_var name="user_id">&month=<tmpl_var name="month">'><tmpl_var name="start"></a></td>
+					<td><div class='tiny' align='center'><b><tmpl_var name="totalstr"></b></div></td>
+					<td><div class='tiny' align='center'><tmpl_var name="downloadstr"></div></td>
+					<td><div class='tiny' align='center'><tmpl_var name="uploadstr"></div></td>
+				</tr>
+			</tmpl_loop>
+		</table><br>
+		<table width='760' border=1 bordercolor='<tmpl_var name="table_admin_border">' cellpadding='2' cellspacing='0' bgcolor='<tmpl_var name="table_data_bg">'>
+			<tr>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='20%'><div align=center class='title'>Week Starting</div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_TOTAL"></div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_DOWNLOAD"></div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_UPLOAD"></div></td>
+			</tr>
+			<tmpl_loop name="week_list">
+				<tr>
+					<td><a href='index.php?iid=serverStats&type=xfer&user=<tmpl_var name="user_id">&month=<tmpl_var name="month">&week=<tmpl_var name="week">'><tmpl_var name="start"></a></td>
+					<td><div class='tiny' align='center'><b><tmpl_var name="totalstr"></b></div></td>
+					<td><div class='tiny' align='center'><tmpl_var name="downloadstr"></div></td>
+					<td><div class='tiny' align='center'><tmpl_var name="uploadstr"></div></td>
+				</tr>
+			</tmpl_loop>
+		</table><br>
+		<table width='760' border=1 bordercolor='<tmpl_var name="table_admin_border">' cellpadding='2' cellspacing='0' bgcolor='<tmpl_var name="table_data_bg">'>
+			<tr>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='20%'><div align=center class='title'>Day</div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_TOTAL"></div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_DOWNLOAD"></div></td>
+				<td bgcolor='<tmpl_var name="table_header_bg">' width='27%'><div align=center class='title'><tmpl_var name="_UPLOAD"></div></td>
+			</tr>
+			<tmpl_loop name="day_list">
+				<tr>
+					<td><tmpl_var name="start"></td>
+					<td><div class='tiny' align='center'><b><tmpl_var name="totalstr"></b></div></td>
+					<td><div class='tiny' align='center'><tmpl_var name="downloadstr"></div></td>
+					<td><div class='tiny' align='center'><tmpl_var name="uploadstr"></div></td>
+				</tr>
+			</tmpl_loop>
+		</table><br>
+	</tmpl_if>
+</tmpl_if>

@@ -1,0 +1,41 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<div align="center">
+	<table width="740" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td align="left">
+				<form name="typeSelector" action="index.php?iid=images" method="post">
+					<strong><label for="type">Type:</label></strong>
+					<select name="type" id="type" onChange="javascript:submit();">
+						<tmpl_loop name="type_list">
+							<option value="<tmpl_var name="name">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="name"></option>
+						</tmpl_loop>
+					</select>&nbsp;
+					<input type="submit" value="Change Type">
+				</form>
+			</td>
+			<td align="center" width="40">&nbsp;</td>
+			<td align="right">
+				<form name="targetSelector" action="index.php?iid=images" method="post">
+					<input type="hidden" name="type" value="<tmpl_var name="type">">
+					<strong><label for="target">Target:</label></strong>
+					<select name="target" id="target" onChange="javascript:submit();">
+						<tmpl_if name="target_list">
+							<tmpl_loop name="target_list">
+								<option value="<tmpl_var name="name">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="name"></option>
+							</tmpl_loop>
+						</tmpl_if>
+					</select>&nbsp;
+					<input type="submit" value="Change Target">
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>
+<tmpl_if name="content">
+	<p>
+	<div align="center" id="BodyLayer" name="BodyLayer" style="border: thin solid <tmpl_var name="main_bgcolor"> position:relative; width:740; height:500; padding-left: 5px; padding-right: 5px; z-index:1; overflow: scroll; visibility: visible">
+		<tmpl_var name="content">
+	</div>
+</tmpl_if>
+<tmpl_include name="inc.subfoot.tmpl">

@@ -1,0 +1,261 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<div align="center">
+	<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/default/images/bar.gif">
+				<img src="themes/default/images/properties.png" border=0>&nbsp;&nbsp;<font class="title">Server Settings</font>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<div align="center">
+					<form name="theForm" action="admin.php?op=updateServerSettings" method="post" onsubmit="return validateSettings('server')">
+						<table cellpadding="5" cellspacing="0" border="0" width="100%">
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Torrentflux-b4rt Paths</strong></td></tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="path"><strong>Transfer Parent Path:</strong></label><br/>
+									Define the main torrentflux-b4rt parent path.<br>
+									Directory must be writable by the webserver user.
+								</td>
+								<td valign="top">
+									<input name="path" id="path" type="Text" maxlength="254" value="<tmpl_var name="path">" size="55">
+									<tmpl_if name="is_path" value="1">
+										<tmpl_if name="is_writable" value="1">
+											<img src="themes/default/images/green.gif" align="absmiddle" title="Valid">
+										<tmpl_else>
+											<img src="themes/default/images/red.gif" align="absmiddle" title="Path is not Writable"><br><font color="#ff0000">Path is not writable - make sure you chmod +w this path</font>
+										</tmpl_if>
+									<tmpl_else>
+										<img src="themes/default/images/red.gif" align="absmiddle" title="Path is not valid"><br><font color="#ff0000">Path is not valid</font>
+									</tmpl_if>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="docroot"><strong>Document Root Path:</strong></label><br/>
+									Define the Document Root path of the installation.<br/>
+									Directory must be readable by the webserver user.
+								</td>
+								<td valign="top">
+									<input name="docroot" id="docroot" type="Text" maxlength="254" value="<tmpl_var name="docroot">" size="55">
+									<tmpl_if name="is_docroot" value="1">
+										<img src="themes/default/images/green.gif" align="absmiddle" title="Valid">
+									<tmpl_else>
+										<img src="themes/default/images/red.gif" align="absmiddle" title="Path is not valid"><br><font color="#ff0000">Path is not valid</font>
+									</tmpl_if>
+								</td>
+							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Home Directories</strong></td></tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="enable_home_dirs"><strong>Enable Home Directories:</strong></label><br/>
+									Enable/disable home directories.<br/>
+									If disabled all downloads are saved to the 'incoming' directory specified below.
+								</td>
+								<td valign="top">
+									<select name="enable_home_dirs" id="enable_home_dirs">
+										<option value="1">True</option>
+										<option value="0"
+										<tmpl_if name="enable_home_dirs" value="0">
+											 selected
+										</tmpl_if>
+										>False</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="path_incoming"><strong>Incoming Path:</strong></label><br/>
+									Define the incoming path where downloads are saved when per user home directories are disabled.
+								</td>
+								<td valign="top">
+									<input name="path_incoming" id="path_incoming" type="Text" maxlength="254" value="<tmpl_var name="path_incoming">" size="55">
+									<tmpl_if name="path_incoming_ok" value="1">
+										<img src="themes/default/images/green.gif" align="absmiddle" title="Valid">
+									<tmpl_else>
+										<img src="themes/default/images/red.gif" align="absmiddle" title="Path is not valid"><br><font color="#ff0000">Path is not valid</font>
+									</tmpl_if>
+								</td>
+							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Binary Paths</strong></td></tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="btclient_transmission_bin"><strong>transmissioncli</strong></label><br/>
+									Specify the path to the Transmission binary (/usr/local/bin/transmissioncli).
+								</td>
+								<td valign="top">
+									<input name="btclient_transmission_bin" id="btclient_transmission_bin" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_bin">" size="55">
+									<tmpl_var name="validate_transmission_bin">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_wget"><strong>wget</strong></label><br/>
+									Specify the path to the wget binary (/usr/bin/wget).
+								</td>
+								<td valign="top">
+									<input name="bin_wget" id="bin_wget" type="Text" maxlength="254" value="<tmpl_var name="bin_wget">" size="55">
+									<tmpl_var name="validate_wget">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_uudeview"><strong>uudeview</strong></label><br/>
+									Specify the path to the uudeview binary (needed for nzbperl) (/usr/local/bin/uudeview).
+								</td>
+								<td valign="top">
+									<input name="bin_uudeview" id="bin_uudeview" type="Text" maxlength="254" value="<tmpl_var name="bin_uudeview">" size="55">
+									<tmpl_var name="validate_uudeview">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_php"><strong>php</strong></label><br/>
+									Specify the path to the commandline (cli) php binary (/usr/bin/php).<br/>
+									<strong>Note: </strong>This must be the cli version of the PHP binary, NOT cgi or otherwise.
+								</td>
+								<td valign="top">
+									<input name="bin_php" id="bin_php" type="Text" maxlength="254" value="<tmpl_var name="bin_php">" size="55">
+									<tmpl_var name="validate_php">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="pythonCmd"><strong>python</strong></label><br/>
+									Specify the path to the python binary (/usr/bin/python).
+								</td>
+								<td valign="top">
+									<input name="pythonCmd" id="pythonCmd" type="Text" maxlength="254" value="<tmpl_var name="pythonCmd">" size="55">
+									<tmpl_var name="validate_python">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="perlCmd"><strong>perl</strong></label><br/>
+									Specify the path to perl (/usr/bin/perl).
+								</td>
+								<td valign="top">
+									<input name="perlCmd" id="perlCmd" type="Text" maxlength="254" value="<tmpl_var name="perlCmd">" size="55">
+									<tmpl_var name="validate_perl">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_grep"><strong>grep</strong></label><br/>
+									Specify the path to the grep binary (/bin/grep).
+								</td>
+								<td valign="top">
+									<input name="bin_grep" id="bin_grep" type="Text" maxlength="254" value="<tmpl_var name="bin_grep">" size="55">
+									<tmpl_var name="validate_grep">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_awk"><strong>awk</strong></label><br/>
+									Specify the path to the awk binary (/usr/bin/awk).
+								</td>
+								<td valign="top">
+									<input name="bin_awk" id="bin_awk" type="Text" maxlength="254" value="<tmpl_var name="bin_awk">" size="55">
+									<tmpl_var name="validate_awk">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_du"><strong>du</strong></label><br/>
+									Specify the path to the du binary (/usr/bin/du).
+								</td>
+								<td valign="top">
+									<input name="bin_du" id="bin_du" type="Text" maxlength="254" value="<tmpl_var name="bin_du">" size="55">
+									<tmpl_var name="validate_du">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_unzip"><strong>unzip</strong></label><br/>
+									Specify the path to the unzip binary (/usr/bin/unzip).
+								</td>
+								<td valign="top">
+									<input name="bin_unzip" id="bin_unzip" type="Text" maxlength="254" value="<tmpl_var name="bin_unzip">" size="55">
+									<tmpl_var name="validate_unzip">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_cksfv"><strong>cksfv</strong></label><br/>
+									Specify the path to the cksfv binary (/usr/bin/cksfv).
+								</td>
+								<td valign="top">
+									<input name="bin_cksfv" id="bin_cksfv" type="Text" maxlength="254" value="<tmpl_var name="bin_cksfv">" size="55">
+									<tmpl_var name="validate_cksfv">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_vlc"><strong>vlc</strong></label><br/>
+									Specify the path to the vlc binary (/usr/local/bin/vlc).
+								</td>
+								<td valign="top">
+									<input name="bin_vlc" id="bin_vlc" type="Text" maxlength="254" value="<tmpl_var name="bin_vlc">" size="55">
+									<tmpl_var name="validate_vlc">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_unrar"><strong>unrar</strong></label><br/>
+									Specify the path to the unrar binary (/usr/bin/unrar).
+								</td>
+								<td valign="top">
+									<input name="bin_unrar" id="bin_unrar" type="Text" maxlength="254" value="<tmpl_var name="bin_unrar">" size="55">
+									<tmpl_var name="validate_unrar">
+								</td>
+							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>OS Specific Binary Paths</strong> <em>(<tmpl_var name="php_uname1"> <tmpl_var name="php_uname2">)</em></td></tr>
+							<tmpl_if name="_OS" value="1">
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="loadavg_path"><strong>loadavg</strong></label><br/>
+										Path to the loadavg file (/proc/loadavg).
+									</td>
+									<td valign="top">
+										<input name="loadavg_path" id="loadavg_path" type="Text" maxlength="254" value="<tmpl_var name="loadavg_path">" size="55">
+										<tmpl_var name="validate_loadavg">
+									</td>
+								</tr>
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="bin_netstat"><strong>netstat</strong></label><br/>
+										Specify the path to the netstat binary (/bin/netstat).
+									</td>
+									<td valign="top">
+										<input name="bin_netstat" id="bin_netstat" type="Text" maxlength="254" value="<tmpl_var name="bin_netstat">" size="55">
+										<tmpl_var name="validate_netstat">
+									</td>
+								</tr>
+							<tmpl_elseif name="_OS" value="2">
+								<tr>
+									<td align="left" width="350" valign="top">
+										<label for="bin_sockstat"><strong>sockstat</strong></label><br/>
+										Specify the path to the sockstat binary (/usr/bin/sockstat).
+									</td>
+									<td valign="top">
+										<input name="bin_sockstat" id="bin_sockstat" type="Text" maxlength="254" value="<tmpl_var name="bin_sockstat">" size="55">
+										<tmpl_var name="validate_sockstat">
+									</td>
+								</tr>
+							</tmpl_if>
+						</table>
+						<br>
+						<input type="Submit" value="Update Settings">
+					</form>
+				</div>
+				<br>
+			</td>
+		</tr>
+	</table>
+</div>
+<tmpl_include name="inc.subfoot.tmpl">

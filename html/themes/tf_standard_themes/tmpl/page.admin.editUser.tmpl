@@ -1,0 +1,133 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<div align="center">
+	<table width="100%" border=1 bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0" bgcolor="<tmpl_var name="table_data_bg">">
+		<tr>
+			<td colspan=6 bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+				<img src="<tmpl_var name="editUserImage">" width=17 height=14 border=0>&nbsp;&nbsp;&nbsp;<font class="title"><tmpl_var name="_EDITUSER">: <tmpl_var name="user_id"></font>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<table width="100%" border="0" cellpadding="3" cellspacing="0">
+					<tr>
+						<td width="50%" bgcolor="<tmpl_var name="table_data_bg">" valign="top">
+						<div align="center">
+						<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td align="right"><tmpl_var name="user_id"> <tmpl_var name="_JOINED">:&nbsp;</td>
+							<td><strong><tmpl_var name="time_created"></strong></td>
+						</tr>
+						<tr>
+							<td align="right"><tmpl_var name="_LASTVISIT">:&nbsp;</td>
+							<td><strong><tmpl_var name="last_visit"></strong></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">&nbsp;</td>
+						</tr>
+						<tr>
+							<td align="right"><tmpl_var name="_UPLOADPARTICIPATION">:&nbsp;</td>
+								<td>
+									<table width="200" border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td background="themes/<tmpl_var name="theme">/images/proglass.gif" width="<tmpl_var name="percent1">"><img src="themes/tf_standard_themes/images/blank.gif" width="1" height="12" border="0"></td>
+											<td background="themes/<tmpl_var name="theme">/images/noglass.gif" width="<tmpl_var name="percent2">"><img src="themes/tf_standard_themes/images/blank.gif" width="1" height="12" border="0"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><tmpl_var name="_UPLOADS">:&nbsp;</td>
+								<td><strong><tmpl_var name="user_activity"></strong></td>
+							</tr>
+							<tr>
+								<td align="right"><tmpl_var name="_PERCENTPARTICIPATION">:&nbsp;</td>
+								<td><strong><tmpl_var name="user_percent">%</strong></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center"><div align="center" class="tiny">(<tmpl_var name="_PARTICIPATIONSTATEMENT"> <tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS">)</div><br></td>
+							</tr>
+							<tr>
+								<td align="right"><tmpl_var name="_TOTALPAGEVIEWS">:&nbsp;</td>
+								<td><strong><tmpl_var name="hits"></strong></td>
+							</tr>
+							<tr>
+								<td align="right" valign="top"><tmpl_var name="_THEME">:&nbsp;</td>
+								<td valign="top"><strong><tmpl_var name="theme"></strong><br></td>
+							</tr>
+							<tr>
+								<td align="right" valign="top"><tmpl_var name="_LANGUAGE">:&nbsp;</td>
+								<td valign="top"><strong><tmpl_var name="language_file"></strong><br><br></td>
+							</tr>
+							<tr>
+								<td align="right" valign="top"><tmpl_var name="_USERTYPE">:&nbsp;</td>
+								<td valign="top"><strong><tmpl_var name="user_type"></strong><br></td>
+							</tr>
+							<tr>
+								<td colspan="2" align="center"><div align="center">[<a href="admin.php?op=showUserActivity&user_id=<tmpl_var name="user_id">"><tmpl_var name="_USERSACTIVITY"></a>]</div></td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td valign="top" bgcolor="<tmpl_var name="body_data_bg">">
+					<div align="center">
+						<form name="theForm" action="admin.php?op=updateUser" method="post" onsubmit="return validateUser('<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+							<table cellpadding="5" cellspacing="0" border="0">
+								<tr>
+									<td align="right"><label for="user_id"><tmpl_var name="_USER">:</label></td>
+									<td>
+										<input name="user_id" id="user_id" type="Text" value="<tmpl_var name="user_id">" size="15">
+										<input name="org_user_id" type="Hidden" value="<tmpl_var name="user_id">">
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><label for="pass1"><tmpl_var name="_NEWPASSWORD">:</label></td>
+									<td>
+									<input name="pass1" id="pass1" type="Password" value="" size="15">
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><label for="pass2"><tmpl_var name="_CONFIRMPASSWORD">:</label></td>
+									<td>
+									<input name="pass2" id="pass2" type="Password" value="" size="15">
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><label for="userType"><tmpl_var name="_USERTYPE">:</label></td>
+									<td>
+										<tmpl_if name="user_level" op="<=" value="1">
+											<select name="userType" id="userType">
+												<option value="0" <tmpl_var name="selected_n">><tmpl_var name="_NORMALUSER"></option>
+												<option value="1" <tmpl_var name="selected_a">><tmpl_var name="_ADMINISTRATOR"></option>
+											</select>
+										<tmpl_else>
+											<strong><tmpl_var name="_SUPERADMIN"></strong>
+											<input type="Hidden" name="userType" value="2">
+										</tmpl_if>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<input name="hideOffline" id="hideOffline" type="Checkbox" value="1" <tmpl_var name="hide_checked">> <label for="hideOffline"><tmpl_var name="_HIDEOFFLINEUSERS"></label><br>
+									</td>
+								</tr>
+								<tr>
+									<td align="center" colspan="2">
+										<input type="Submit" value="<tmpl_var name="_UPDATE">">
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+<br><br>
+<tmpl_include name="inc.userSection.tmpl">
+<br><br>
+<tmpl_include name="inc.subfoot.tmpl">

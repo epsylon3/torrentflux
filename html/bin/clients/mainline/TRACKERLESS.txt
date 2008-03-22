@@ -1,0 +1,47 @@
+As of version 4.1.0, BitTorrent now includes "trackerless" operation.
+While it is called trackerless, in practice it makes every client a
+lightweight tracker.  A clever protocol allows clients to efficiently
+store and retrieve ip-address/port information for torrents.
+
+When generating a torrent, you can choose to utilize the trackerless
+system or a traditional dedicated tracker.  A dedicated tracker allows
+you to collect statistics about downloads and gives you a measure of
+control over the reliability of downloads.  The trackerless system
+makes no guarantees to reliability but requires no resources of the
+publisher.  The trackerless system is not consulted when downloading a
+traditionally tracked torrent.
+
+The trackerless protocol runs over UDP.  If you are forwarding a TCP
+port on your firewall to enhance BitTorrent operation you should also
+forward the same UDP port.  Many NAT devices, including wireless
+access points and DSL routers, automatically forward UDP ports.  Even
+if your particular arrangement doesn't allow for reliable service to
+others in the trackerless protocol, your client should still be able
+use the system to find peers.
+
+Each client in the trackerless system maintains a routing table of
+some of the other clients in the system.  No client has a complete
+directory of every other client in the system, it is distributed among
+all clients.  To find another client, an iterative protocol is used to
+find closer and closer clients, until the desired one is found.
+Before this process can be started, the routing table must contain at
+least one valid entry.  Clients acquire the contact information of
+other clients during the course of normal use, but a newly installed
+client has no contacts and no way of entering the network.
+
+There are two ways a newly installed client obtains contacts for the
+trackerless system.  The first is through tracked torrents.  When
+connected to another BitTorrent client that supports the trackerless
+system, the peers will exchange contact information for the
+trackerless system.  The other way to get bootstrapped into the
+trackerless system is by using contact information stored in
+trackerless torrent files.  When you create a trackerless torrent,
+contact information from your routing table is automatically included
+to help newly installed clients with no contacts.  An alternative is
+to include the contact information of known stable clients or special
+"routing" clients.  A routing client doesn't provide torrent tracking
+service, it only provides contact information.  When specifying the
+contact information for a trackerless torrent, separate the IP address
+and port with a colon and separate contacts with a comma
+i.e. "router.bittorrent.com:6881, 127.0.0.1:8080"
+

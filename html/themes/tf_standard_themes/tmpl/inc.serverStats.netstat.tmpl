@@ -1,0 +1,26 @@
+<table width="740" border=0 cellpadding=0 cellspacing=0>
+	<tr>
+		<td>
+			<tmpl_if name="drivespacebar_type" value="xfer">
+			    <tmpl_include name="inc.driveSpaceBar_xfer.tmpl">
+			<tmpl_else>
+			    <tmpl_include name="inc.driveSpaceBar_tf.tmpl">
+			</tmpl_if>
+		</td>
+	</tr>
+</table>
+<br>
+<div align="left" id="BodyLayer" name="BodyLayer" style="border: thin solid <tmpl_var name="main_bgcolor">; position:relative; width:740; height:500; padding-left: 5px; padding-right: 5px; z-index:1; overflow: scroll; visibility: visible">
+<tmpl_if name="isAdmin">
+<br>
+<pre>
+<strong><tmpl_var name="_ID_CONNECTIONS">: </strong><tmpl_var name="netstatConnectionsSum">
+<br>
+<strong><tmpl_var name="_ID_PORTS">: </strong>
+<tmpl_var name="netstatPortList">
+<br>
+<strong><tmpl_var name="_ID_HOSTS">: </strong>
+<tmpl_var name="netstatHostList">
+</pre>
+</tmpl_if>
+</div>

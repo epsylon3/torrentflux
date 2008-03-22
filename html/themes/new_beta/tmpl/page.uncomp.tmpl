@@ -1,0 +1,23 @@
+<tmpl_include name="inc.head.tmpl">
+<body>
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="uncomp">
+	<tmpl_if name="is_file">
+		<form method="POST" name="pass_form">
+			<p><label for="passwd">Please enter password for the file (leave blank if no password required):</label> <input type="text" name="passwd" id="passwd" size="60"></p>
+			<p><input type="submit" value=" OK " name="OK"></p>
+			<input type="hidden" name="file" value="<tmpl_var name="url_file">">
+			<input type="hidden" name="dir" value="<tmpl_var name="url_dir">">
+			<input type="hidden" name="type" value="<tmpl_var name="type">">
+			<input type="hidden" name="exec" value="true">
+		</form>
+	</tmpl_if>
+	<tmpl_if name="buff">
+		<tmpl_var name="buff">
+	</tmpl_if>
+</div>
+<div id="close">
+	[<a id="closeLink" href="#" onclick="window.opener.location.reload();window.close();">Close Window</a>]
+</div>
+</body>
+</html>

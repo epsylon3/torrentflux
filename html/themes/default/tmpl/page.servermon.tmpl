@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<title><tmpl_var name="pagetitle"> - Server Monitor</title>
+	<link rel="icon" href="themes/default/images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="themes/default/images/favicon.ico" type="image/x-icon" />
+	<link rel="StyleSheet" href="themes/<tmpl_var name="theme">/css/default.css" type="text/css" />
+	<script src="js/ajax.js" type="text/javascript"></script>
+	<script src="js/ajax_servermon.js" type="text/javascript"></script>
+</head>
+<body topmargin="8" leftmargin="5" bgcolor="#829FB5" style="font-family:Tahoma, 'Times New Roman'; font-size:12px;" onLoad="<tmpl_var name="onLoad">">
+<div align="center">
+	<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td>
+				<table border="1" bordercolor="#A2BED4" cellpadding="4" cellspacing="0">
+					<tr>
+						<td bgcolor="#829FB5" background="themes/default/images/bar.gif">
+							<tmpl_include name="inc.titleBar.tmpl">
+						</td>
+					</tr>
+					<tr>
+						<td bgcolor="#A2BED4">
+							<div align="left">
+								<table width="100%" bgcolor="#A2BED4">
+									<tr>
+										<td>
+											<table width="100%">
+												<tr>
+													<td align="right" nowrap><strong><tmpl_var name="_DOWNLOADSPEED"> :</strong></td>
+													<td>
+														<table width="200" cellpadding="0" cellspacing="0" border="0">
+															<tr>
+																<td background="themes/default/images/proglass.gif"><img id="barImageSpeedDown1" name="barImageSpeedDown1" src="themes/default/images/blank.gif" width="0" height="12" border="0"></td>
+																<td background="themes/default/images/noglass.gif" bgcolor="#000000"><img id="barImageSpeedDown2" name="barImageSpeedDown2" src="themes/default/images/blank.gif" width="200" height="12" border="0"></td>
+															</tr>
+														</table>
+													</td>
+													<td align="right" nowrap><label id="speedDown">0.00</label> kB/s</td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong><tmpl_var name="_UPLOADSPEED"> :</strong></td>
+													<td>
+														<table width="200" cellpadding="0" cellspacing="0" border="0">
+															<tr>
+																<td background="themes/default/images/proglass.gif"><img id="barImageSpeedUp1" name="barImageSpeedUp1" src="themes/default/images/blank.gif" width="0" height="12" border="0"></td>
+																<td background="themes/default/images/noglass.gif" bgcolor="#000000"><img id="barImageSpeedUp2" name="barImageSpeedUp2" src="themes/default/images/blank.gif" width="200" height="12" border="0"></td>
+															</tr>
+														</table>
+													</td>
+													<td align="right" nowrap><label id="speedUp">0.00</label> kB/s</td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong><tmpl_var name="_TOTALSPEED"> :</strong></td>
+													<td align="right" colspan="2" nowrap><label id="speedTotal">0.00</label> kB/s</td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong><tmpl_var name="_ID_CONNECTIONS"> :</strong></td>
+													<td align="right" colspan="2" nowrap><label id="cons">0</label></td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong><tmpl_var name="_DRIVESPACE"> :</strong></td>
+													<td>
+														<table width="200" cellpadding="0" cellspacing="0" border="0">
+															<tr>
+																<td background="themes/default/images/proglass.gif"><img id="barImageDriveSpace1" name="barImageDriveSpace1" src="themes/default/images/blank.gif" width="0" height="12" border="0"></td>
+																<td background="themes/default/images/noglass.gif" bgcolor="#000000"><img id="barImageDriveSpace2" name="barImageDriveSpace2" src="themes/default/images/blank.gif" width="200" height="12" border="0"></td>
+															</tr>
+														</table>
+													</td>
+													<td align="right" nowrap><label id="freeSpace">0.00</label></td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong><tmpl_var name="_SERVERLOAD"> :</strong></td>
+													<td align="right" colspan="2" nowrap><label id="loadavg">0.00</label></td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong>Transfers running :</strong></td>
+													<td align="right" colspan="2" nowrap><label id="running">0</label></td>
+												</tr>
+												<tr>
+													<td align="right" nowrap><strong>Transfers queued :</strong></td>
+													<td align="right" colspan="2" nowrap><label id="queued">0</label></td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<tmpl_include name="inc.fluxlink.tmpl">
+			</td>
+		</tr>
+	</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,156 @@
+=======================================================================
+$Id$
+=======================================================================
+
+/**********************************************************************
+Torrentflux-b4rt FEATURES file
+**********************************************************************/
+
+	Some of the most popular features of torrentflux-b4rt are listed
+	below.
+
+	NOTE! This list is definitely NOT exhaustive, there are
+	a massive number of features that can be configured via the
+	torrentflux-b4rt admin panel!
+
+	o Supports multiple internet transfer protocols:
+
+		- BitTorrent - supported client(s) include:
+
+			* Original BitTorrent/Mainline - supports trackerless
+			  torrents and encryption
+
+			* BitTornado - uses slightly less resources than the original
+			  BT, allows file priority for downloading files selectively
+
+			* Transmission - much smaller memory footprint without much
+			  loss in functionality
+
+			* Azureus - control a number of transfers from a single
+			  control process, tighter control on total max bandwidth
+			  for all torrents
+
+		- HTTP/FTP - supported client(s) include:
+
+			* wget - standard lightweight file transfer utility on
+			  Linux, supported on many other platforms also
+
+		- Usenet - supported client(s) include:
+
+			* nzbperl - perl based application allowing multi-connection
+			  news server downloads from nzb files with functionality
+			  for bandwidth throttling.
+
+	o Unified transfer control:
+
+		- Perform stop/start/resume/kill/delete operations on individual
+		  transfers, all transfers or a selection of transfers
+
+        - Changes Settings of running transfers on the fly - down/up
+		  rates, what ratio to stop seeding at, how many connections to
+		  use at same time, ...
+
+	o Individual Transfers 'remember' their own settings, allowing you
+	  to use different settings for different Transfers.
+
+	o View torrent Transfer information:
+
+		- cumulative transfer statistics are available for every
+		  transfer in the transfer list. tfb keeps track of how much
+		  data has been transfered up and down even when you stop and
+		  restart the transfer.  This allows you to keep track of what
+		  your actual ratio is rather than what the current session
+		  ratio is.
+
+		- logfiles are maintained for each and every torrent, allowing
+		  you to easily see when problems occur with your transfers.
+
+		- current upload/download bandwidth rate as well as the number
+		  of seeds/peers and estimated time left is viewable in the
+		  transfer list
+
+	o Transfer statistics and logging:
+
+		- View detailed Transfer statistics and information, including:
+
+			* per transfer error logging for easy troubleshooting
+			* upload/download totals for each user, by day/month/year
+			* number of seeders/leechers for a torrent in a graphical
+			  display
+
+	o Uploading and injection of metafiles (.torrent, .wget, .nzb files):
+
+		- Upload single or multiple metafiles from your local machine
+		  to the web server
+
+		- Upload metafiles directly to your web server from another
+		  web server
+
+        - Multiple operations in "fluxcli.php" allow inject and more
+          from command-line (cron, etc.)
+          eg.: "inject", "watch", "rss"
+
+	o fluxcli.php - a complete command-line version of torrentflux-b4rt:
+
+		- As mentioned, can perform all the tasks available in the
+		  torrentflux-b4rt frontend but from the commandline.  Makes it
+		  ideal for running from a cron job.
+
+		- Schedule cron jobs to check RSS feeds on a regular basis and
+		  download them to a directory.
+
+		- Schedule cron jobs to watch folders for new torrent files and
+		  then autostart/inject them
+
+		- Check up on the status of transfers directly from a Unix shell
+
+	o Fluxd - background perl daemon to perform scheduled tasks:
+
+		- Qmgr module handles queueing of transfers with per-user and
+		  global limits.  Add transfers to the queue and Qmgr will
+		  automatically start one transfer after another finishes.
+
+		- automate fetching of torrent files from RSS feeds
+
+		- watch a list of directories for new upload of torrent files
+		  and automatically start those torrents running
+
+	o Integrated Filemanager:
+
+		- Support for a large number of additional third party
+		  utilities/functionality, including:
+
+			* archive file extraction from the browser (zip/rar)
+
+			* vlc streaming controllable from browser
+
+			* download of completed transfers directly from browser
+
+			* reading of .nfo files directly in the browser
+
+			* creation of torrent files directly in the browser
+
+	o AJAX updates for maximum info with minimal bandwidth:
+
+		- Display of transfer lists can be easily configured to use AJAX
+		  to update transfer stats in real time.  This saves on
+		  bandwidth since only the transfer list needs to be sent across
+		  the network, not the whole web page.
+
+		- Individual transfer windows can also use AJAX to update stats
+		  in real time.
+
+	o Templating engine:
+
+		- The torrentflux-b4rt GUI is template driven using the vLib
+		  template engine:
+
+			http://vlib.clausvb.de/vlibtemplate.php
+
+		  This allows developers to completely redesign the look and
+		  feel of torrentflux-b4rt without having to worry about the
+		  underlying PHP codebase.
+
+		- Torrentflux-b4rt also incorporates template caching to speed
+		  up the load time of pages.  This feature can be enabled via
+		  the Administration control panel.

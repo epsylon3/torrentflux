@@ -1,0 +1,283 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.titleBar.tmpl">
+<div id="content">
+	<div id="upload">
+		<div id="uploadLast"></div>
+		<div id="uploadFirst">
+			<table id="statusTitle">
+				<tr>
+					<td class="status">
+						Other Stats
+					</td>
+					<td class="status">
+						Database Details
+					</td>
+					<td class="status">
+						tf-b4rt Stats
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div id="status">
+		<table id="statusInfos">
+			<tr>
+				<td class="statusInfos">
+					<table class="settings2">
+						<tr>
+							<td class="settingsTitle3">
+								OS:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_os">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								PHP-Version:
+							</td>
+							<td class="<tmpl_if name="server_php_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_php">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Sessions:
+							</td>
+							<td class="<tmpl_if name="server_extension_session_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_extension_session">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								PCRE:
+							</td>
+							<td class="<tmpl_if name="server_extension_pcre_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_extension_pcre">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Sockets:
+							</td>
+							<td class="<tmpl_if name="server_extension_sockets_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_extension_sockets">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Safe-Mode:
+							</td>
+							<td class="<tmpl_if name="server_ini_safe_mode_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_ini_safe_mode">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Allow URL fOpen:
+							</td>
+							<td class="<tmpl_if name="server_ini_allow_url_fopen_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_ini_allow_url_fopen">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Register Globals:
+							</td>
+							<td class="<tmpl_if name="server_ini_register_globals_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_ini_register_globals">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Image-Types:
+							</td>
+							<td class="<tmpl_if name="server_image_state" value="1">settingsSetting3<tmpl_else>settingsSetting32</tmpl_if>">
+								<tmpl_var name="server_image">
+							</td>
+						</tr>
+						<tmpl_if name="superadminlinks_check">
+							<tmpl_loop name="superadminlinks_check">
+								<tr>
+									<td align="left" colspan="2"> <tmpl_var name="sa_link"></td>
+								</tr>
+							</tmpl_loop>
+						</tmpl_if>
+					</table>
+				</td>
+				<td class="statusInfos">
+					<table class="settings2">
+						<tr>
+							<td class="settingsTitle3">
+								Type:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="db_type">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Host:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="db_host">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Name:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="db_name">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Username:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="db_user">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Pers. Connection:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="db_pcon">
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td class="statusInfos">
+					<table class="settings2">
+						<tr>
+							<td class="settingsTitle3">
+								Transfers:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_transfers_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Users:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_users_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Hits:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_hits_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Logs:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_logs_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Links:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_links_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								RSS:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_rss_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Messages:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_messages_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Cookies:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_cookies_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Transfer Profiles:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_profiles_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Search-Engines:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_searchengines_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Themes:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_themes_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Languages:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_lang_total">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Version:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_version">
+							</td>
+						</tr>
+						<tr>
+							<td class="settingsTitle3">
+								Docroot Disk Usage:
+							</td>
+							<td class="settingsSetting3">
+								<tmpl_var name="server_du_total">
+							</td>
+						</tr>
+						<tmpl_if name="superadminlinks_main">
+							<tmpl_loop name="superadminlinks_main">
+								<tr>
+									<td align="left" colspan="2"> <tmpl_var name="sa_link"></td>
+								</tr>
+							</tmpl_loop>
+						</tmpl_if>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="uploadBottom"></div>
+	<div id="uploadBottomEnd"></div>
+	<tmpl_include name="inc.subfoot.tmpl">
+</div>
+</body>
+</html>
