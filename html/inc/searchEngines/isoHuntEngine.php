@@ -263,7 +263,7 @@ class isoHunt
             // Chunck up the row into columns.
             $tmpListArr = split("</td>",$htmlLine);
 
-            array_pop($tmpListArr);
+            array_pop($tmpListArr);//echo '<br><br>|a|0='.$tmpListArr[0].'<br>| '.'|1='.$tmpListArr[1].'<br>| '.'|2='.$tmpListArr[2].'<br>| '.'|3='.$tmpListArr[3].'<br>| '.'|4='.$tmpListArr[4].'<br>| '.'|5='.$tmpListArr[5].'<br>| ';
 
             //Age   Type    Torrent Names   MB  F   S   L   D
             if(count($tmpListArr) > 5)
@@ -288,7 +288,7 @@ class isoHunt
                         $this->torrentName = str_replace("'",'',$tmpStr);
 
                         $this->torrentSize = $this->cleanLine($tmpListArr["4"]); // MB
-                        $this->fileCount = $this->cleanLine($tmpListArr["5"]); // Files
+                        //$this->fileCount = $this->cleanLine($tmpListArr["5"]); // Files
                         $this->Seeds = $this->cleanLine($tmpListArr["6"]); // Seeds
                         $this->Peers = $this->cleanLine($tmpListArr["7"]); // Peers / Leechers
                         $this->dwnldCount = $this->cleanLine($tmpListArr["8"]); // Download Count
@@ -297,11 +297,11 @@ class isoHunt
                     {
                         $this->CatName = $this->cleanLine($tmpListArr["1"]); // Type
 
-                        $tmpStr = $tmpListArr["0"];  // TorrentName and Download Link
-                        $tmpStr = substr($tmpStr,strpos($tmpStr,"torrent_details/"));
+                        $tmpStr = $tmpListArr["2"];  // TorrentName and Download Link
+                        $tmpStr = substr($tmpStr,strpos($tmpStr,"_details/")+9);
                         $this->torrentFile = "http://isohunt.com/download/".substr($tmpStr,0,strpos($tmpStr,"'"));
 
-                        $this->torrentName = $this->cleanLine($tmpListArr["2"]);
+                        $this->torrentName = substr($this->cleanLine($tmpListArr["2"]),1,strlen($tmpListArr["2"]));
 
                         $this->torrentSize = $this->cleanLine($tmpListArr["3"]); // MB
                         $this->fileCount = $this->cleanLine($tmpListArr["4"]); // Files
@@ -328,21 +328,22 @@ class isoHunt
                         $tmpStr = substr($tmpStr,strpos($tmpStr,"title=\"")+strlen("title=\""));
                         $tmpStr = substr($tmpStr,0,strpos($tmpStr,"\""));
                         $tmpStr = substr($tmpStr,strpos($tmpStr,'\''));
-                        $this->torrentName = str_replace(array("'","Download .torrent here: "),'',$tmpStr);
+                        $this->torrentName = str_replace(array("'","Download .torrent here: ","Download torrent: "),'',$tmpStr);
 
                     }
                     else
                     {
 
-                        $tmpStr = $tmpListArr["0"];  // Download ID and Type
-                        $this->CatName = $this->cleanLine($tmpStr); // Download ID and Type
+                        $tmpStr = $tmpListArr["2"];  // Download ID and Type
+                        $this->CatName = $this->cleanLine($tmpListArr["0"]); // Download ID and Type
                         $tmpStr = substr($tmpStr,strpos($tmpStr,"torrent_details/")+strlen("torrent_details/"));
 
-                        $this->torrentFile = "http://isohunt.com/download/".substr($tmpStr,0,strpos($tmpStr,",")-1);
+                        $this->torrentFile = "http://isohunt.com/download/".substr($tmpStr,0,strpos($tmpStr,"?tab"));
 
                         //$tmpListArr["1"] = $this->cleanLine($tmpListArr["1"]);  // Age
-
-                        $this->torrentName = $this->cleanLine($tmpListArr["2"]);
+                        $tmpStr = $tmpListArr["2"];
+                        $tmpStr = substr($tmpStr,strpos($tmpStr,"a id=link")-1,strlen($tmpStr));
+                        $this->torrentName = substr($this->cleanLine($tmpStr),0,strlen($tmpStr));
 
                     }
 
