@@ -432,10 +432,20 @@ function UrlHTMLSlashesDecode($input){
 */
 function dirsize($path)
 {
+	global $cfg;
 	if(!is_dir($path)) return -1;
-	$size = shell_exec("du -sb ".tfb_shellencode($path));
-	$size = (float) preg_replace("/(.+)[\t\s]*.*/","$1", $size);
-	return $size;
+	switch ($cfg["_OS"]) {
+			case 1: // linux
+					$size = shell_exec("du -sb ".tfb_shellencode($path));
+					$size = (float) preg_replace("/(.+)[\t\s]*.*/","$1", $size);
+					return $size;
+			case 2: // bsd
+					$size = shell_exec("du -sk ".tfb_shellencode($path));
+					$size = (float) preg_replace("/(.+)[\t\s]*.*/","$1", $size);
+					$size = $size*1024;
+					return $size;
+	}
+	return -1;
 }
 
 ?>
