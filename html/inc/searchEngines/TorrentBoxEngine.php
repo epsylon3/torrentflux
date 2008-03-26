@@ -348,9 +348,9 @@ class tBox
 
                 $this->dateAdded = $this->cleanLine($tmpListArr["4"]);  // Date Added
                 $this->torrentSize = $this->cleanLine($tmpListArr["5"]);  // Size of File
-                $this->dwnldCount = $this->cleanLine($tmpListArr["6"]);  // Download Count
-                $this->Seeds = $this->cleanLine($tmpListArr["7"]);  // Seeds
-                $this->Peers = $this->cleanLine($tmpListArr["8"]);  // Peers
+                //$this->dwnldCount = $this->cleanLine($tmpListArr["6"]);  // Download Count
+                $this->Seeds = $this->cleanLine($tmpListArr["6"]);  // Seeds
+                $this->Peers = $this->cleanLine($tmpListArr["7"]);  // Peers
                 //$tmpListArr["9"] = $this->cleanLine($tmpListArr["9"]);  // Person who Uploaded it.
 
                 if ($this->Peers == '')

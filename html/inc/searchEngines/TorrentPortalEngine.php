@@ -386,11 +386,11 @@ class tPort
                 $tmpStr = substr($tmpListArr["2"],strpos($tmpListArr["2"],"cat=")+strlen("cat=")); // Main Id
                 $this->MainId = substr($tmpStr,0,strpos($tmpStr,"\""));
 
-                $this->torrentName = $this->cleanLine("<td ".$tmpListArr["4"]."</td>");  // TorrentName
+                $this->torrentName = str_replace('[+]','',$this->cleanLine("<td ".$tmpListArr["4"]."</td>"));  // TorrentName
                 $this->torrentRating = $this->cleanLine("<td ".$tmpListArr["5"]."</td>");  // Rating
 
                 $this->torrentSize = $this->cleanLine("<td ".$tmpListArr["6"]."</td>");  // Size of File
-                $this->Seeds = $this->cleanLine("<td ".$tmpListArr["7"]."</td>");  // Seeds
+                $this->Seeds = str_replace('[U]','',$this->cleanLine("<td ".$tmpListArr["7"]."</td>"));  // Seeds
                 $this->Peers = $this->cleanLine("<td ".$tmpListArr["8"]."</td>");  // Leech
 
                 $tmpStr = substr($tmpListArr["9"],strpos($tmpListArr["9"],"Health ")+strlen("Health "));  // Health
