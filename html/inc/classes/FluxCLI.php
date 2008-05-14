@@ -171,6 +171,22 @@ class FluxCLI
 			case "transfers":
 				return $this->_transfers();
 
+                        /* pm */
+                        case "pm":
+                                if ($this->_argc < 3) {
+                                        array_push($this->_argErrors, "Missing arguments: sender, recipient, message text");
+                                        break;
+                                } else {
+                                        $sender = array_shift($this->_args);
+                                        $user = array_shift($this->_args);
+                                        $message = implode(" ",$this->_args);
+                                        return $this->_pm(
+                                                $sender,
+                                                $user,
+                                                $message
+                                        );
+				}
+
 			/* start */
 			case "start":
 				if (empty($this->_args[0])) {
@@ -580,6 +596,20 @@ class FluxCLI
 			return false;
 		}
 	}
+
+        /**
+         * PM a user
+         *
+         * @param $user, $message
+         * @return $string
+         */
+        function _pm($sender, $recipient, $message) {
+                global $cfg;
+                // 
+                require_once("inc/functions/functions.common.message.php");
+                check_html($message, "nohtml");
+                SaveMessage($recipient, $sender, $message);
+        }
 
 	/**
 	 * Stop Transfer
@@ -1414,6 +1444,10 @@ class FluxCLI
 		. "                extra-arg 1 : dir (optional, default: docroot)\n"
 		. "  checksums   : print checksum-list.\n"
 		. "                extra-arg 1 : dir (optional, default: docroot)\n"
+                . "  pm          : Send a private message to another user.\n"
+                . "                extra-arg 1 : username of sender\n"
+                . "                extra-arg 2 : username of recipient\n"
+                . "                extra-arg 3 : text to send\n"
 		. "\n"
 		. "examples:\n"
 		. $this->_script." transfers\n"
@@ -1449,6 +1483,7 @@ class FluxCLI
 		. $this->_script." dump users\n"
 		. $this->_script." filelist /var/www\n"
 		. $this->_script." checksums /var/www\n"
+                . $this->_script." pm admin user here is a message for you\n"
 		. "\n";
 		if (count($this->_argErrors) > 0) {
 			echo "arg-error(s) :\n"
