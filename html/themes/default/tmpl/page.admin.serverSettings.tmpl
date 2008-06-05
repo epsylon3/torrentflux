@@ -82,37 +82,7 @@
 									</tmpl_if>
 								</td>
 							</tr>
-							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Binary Paths</strong></td></tr>
-							<tr>
-								<td align="left" width="350" valign="top">
-									<label for="btclient_transmission_bin"><strong>transmissioncli</strong></label><br/>
-									Specify the path to the Transmission binary (/usr/local/bin/transmissioncli).
-								</td>
-								<td valign="top">
-									<input name="btclient_transmission_bin" id="btclient_transmission_bin" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_bin">" size="55">
-									<tmpl_var name="validate_transmission_bin">
-								</td>
-							</tr>
-							<tr>
-								<td align="left" width="350" valign="top">
-									<label for="bin_wget"><strong>wget</strong></label><br/>
-									Specify the path to the wget binary (/usr/bin/wget).
-								</td>
-								<td valign="top">
-									<input name="bin_wget" id="bin_wget" type="Text" maxlength="254" value="<tmpl_var name="bin_wget">" size="55">
-									<tmpl_var name="validate_wget">
-								</td>
-							</tr>
-							<tr>
-								<td align="left" width="350" valign="top">
-									<label for="bin_uudeview"><strong>uudeview</strong></label><br/>
-									Specify the path to the uudeview binary (needed for nzbperl) (/usr/local/bin/uudeview).
-								</td>
-								<td valign="top">
-									<input name="bin_uudeview" id="bin_uudeview" type="Text" maxlength="254" value="<tmpl_var name="bin_uudeview">" size="55">
-									<tmpl_var name="validate_uudeview">
-								</td>
-							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Binary Paths - REQUIRED</strong></td></tr>
 							<tr>
 								<td align="left" width="350" valign="top">
 									<label for="bin_php"><strong>php</strong></label><br/>
@@ -132,16 +102,6 @@
 								<td valign="top">
 									<input name="pythonCmd" id="pythonCmd" type="Text" maxlength="254" value="<tmpl_var name="pythonCmd">" size="55">
 									<tmpl_var name="validate_python">
-								</td>
-							</tr>
-							<tr>
-								<td align="left" width="350" valign="top">
-									<label for="perlCmd"><strong>perl</strong></label><br/>
-									Specify the path to perl (/usr/bin/perl).
-								</td>
-								<td valign="top">
-									<input name="perlCmd" id="perlCmd" type="Text" maxlength="254" value="<tmpl_var name="perlCmd">" size="55">
-									<tmpl_var name="validate_perl">
 								</td>
 							</tr>
 							<tr>
@@ -172,6 +132,47 @@
 								<td valign="top">
 									<input name="bin_du" id="bin_du" type="Text" maxlength="254" value="<tmpl_var name="bin_du">" size="55">
 									<tmpl_var name="validate_du">
+								</td>
+							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Binary Paths - OPTIONAL</strong></td></tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="btclient_transmission_bin"><strong>transmissioncli</strong></label><br/>
+									Specify the path to the Transmission binary (/usr/local/bin/transmissioncli).
+								</td>
+								<td valign="top">
+									<input name="btclient_transmission_bin" id="btclient_transmission_bin" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_bin">" size="55">
+									<tmpl_var name="validate_transmission_bin">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_wget"><strong>wget</strong></label><br/>
+									Specify the path to the wget binary (/usr/bin/wget).
+								</td>
+								<td valign="top">
+									<input name="bin_wget" id="bin_wget" type="Text" maxlength="254" value="<tmpl_var name="bin_wget">" size="55">
+									<tmpl_var name="validate_wget">
+								</td>
+							</tr>	
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="bin_uudeview"><strong>uudeview</strong></label><br/>
+									Specify the path to the uudeview binary (needed for nzbperl) (/usr/local/bin/uudeview).
+								</td>
+								<td valign="top">
+									<input name="bin_uudeview" id="bin_uudeview" type="Text" maxlength="254" value="<tmpl_var name="bin_uudeview">" size="55">
+									<tmpl_var name="validate_uudeview">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="perlCmd"><strong>perl</strong></label><br/>
+									Specify the path to perl (/usr/bin/perl).
+								</td>
+								<td valign="top">
+									<input name="perlCmd" id="perlCmd" type="Text" maxlength="254" value="<tmpl_var name="perlCmd">" size="55">
+									<tmpl_var name="validate_perl">
 								</td>
 							</tr>
 							<tr>
