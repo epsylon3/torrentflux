@@ -25,6 +25,7 @@
 */
 
 /*
+    v 1.01b - Jul 05 2008 - fix for search results
     v 1.01 - Oct 06, 06 fix to search results.
     v 1.00 - Aug 23, 06
 */
@@ -40,7 +41,7 @@ class SearchEngine extends SearchEngineBase
         $this->engineName = "btJunkie";
 
         $this->author = "kboy";
-        $this->version = "1.01-tfb";
+        $this->version = "1.01b-tfb";
         $this->updateURL = "http://www.torrentflux.com/forum/index.php/topic,874.0.html";
         $this->Initialize($cfg);
     }
@@ -163,13 +164,13 @@ class SearchEngine extends SearchEngineBase
         {
             $thing = substr($thing,strpos($thing,">Health<"));
             $thing = substr($thing,strpos($thing,"<tr"));
-            if (is_integer(strpos($thing,"do=gear")))
+            if (is_integer(strpos($thing,"do=copyrights")))
             {
-                $tmpList = substr($thing,0,strpos($thing,"do=gear"));
+                $tmpList = substr($thing,0,strpos($thing,"do=copyrights"));
             }
             else
             {
-                $tmpList = substr($thing,0,strpos($thing,"JavaScript"));
+                $tmpList = $thing; //$tmpList = substr($thing,0,strpos($thing,"JavaScript"));
             }
             // ok so now we have the listing.
             $tmpListArr = split("</tr>",$tmpList);
@@ -181,7 +182,7 @@ class SearchEngine extends SearchEngineBase
             foreach($tmpListArr as $key =>$value)
             {
                 $buildLine = true;
-                if (strpos($value,"/torrent?do"))
+                if (strpos($value,"/download.torrent"))//if (strpos($value,"/torrent?do"))
                 {
                     $ts = new btJunk($value);
 
@@ -217,7 +218,7 @@ class SearchEngine extends SearchEngineBase
                 }
             }
             // set thing to end of this table.
-            $thing = substr($thing,strpos($thing,"do=gear"));
+            $thing = substr($thing,strpos($thing,"do=copyrights"));
         }
 
         $output .= "</table>";
@@ -280,9 +281,9 @@ class btJunk
 
                 $this->torrentDisplayName = $this->cleanLine($tmpListArr["0"]);  // TorrentName
 
-                $tmpStr = substr($tmpListArr["0"],strpos($tmpListArr["0"],"torrent?"),strpos($tmpListArr["0"],"><img")-6);
+                $tmpStr = substr($tmpListArr[0],strpos($tmpListArr[0],"/torrent/"),strpos($tmpListArr[0],"><img")-17);//$tmpStr = substr($tmpListArr["0"],strpos($tmpListArr["0"],"torrent?"),strpos($tmpListArr["0"],"><img")-6);
 
-                $this->torrentFile = "http://btjunkie.org/" . substr($tmpStr,0,strpos($tmpStr,"\""));
+                $this->torrentFile = "http://dl.btjunkie.org" . substr($tmpStr,0,strpos($tmpStr,"\""));
 
                 if (strpos($this->torrentFile,"do=stat"))
                 {
@@ -290,13 +291,13 @@ class btJunk
                 }
                 $this->torrentName = $this->torrentDisplayName;
 
-                $this->MainCategory = $this->cleanLine($tmpListArr["1"]);
+                $this->MainCategory = $this->cleanLine($tmpListArr["3"]);
                 $this->MainId = substr($tmpStr,0,strpos($tmpStr,"\""));
 
-                $this->torrentSize = $this->cleanLine($tmpListArr["2"]);  // Size of File
+                $this->torrentSize = $this->cleanLine($tmpListArr["4"]);  // Size of File
 
-                $this->Seeds = $this->cleanLine($tmpListArr["4"]);  // Seeds
-                $this->Peers = $this->cleanLine($tmpListArr["5"]);  // Peers
+                $this->Seeds = $this->cleanLine($tmpListArr["5"]);  // Seeds
+                $this->Peers = $this->cleanLine($tmpListArr["6"]);  // Peers
 
                 if ($this->Seeds == '') $this->Seeds = "N/A";
                 if ($this->Seeds == 'X') $this->Seeds = "N/A";
