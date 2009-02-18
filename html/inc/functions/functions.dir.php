@@ -48,7 +48,7 @@ function hasPermission($object, $user, $permission) {
 			return false;
 	}
 	// check if object in users home-dir
-	if (preg_match("/^".$user."/", $object))
+	if (preg_match("/^".$user."$/", $object))
 		return true;
 	// only admin has right
 	return $cfg['isAdmin'];
