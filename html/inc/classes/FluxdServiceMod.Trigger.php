@@ -34,7 +34,7 @@ class FluxdTrigger extends FluxdServiceMod
      * @return FluxdTrigger
      */
     function getInstance() {
-    global $instanceFluxdTrigger;
+		global $instanceFluxdTrigger;
 		// initialize if needed
 		if (!isset($instanceFluxdTrigger))
 			FluxdTrigger::initialize();
@@ -98,49 +98,6 @@ class FluxdTrigger extends FluxdServiceMod
 			? ($instanceFluxdTrigger->modstate == FLUXDMOD_STATE_RUNNING)
 			: false;
     }
-    
-    /**
-     * listJobs
-     *
-     * @return string
-     */
-     function listJobs() {
-     global $instanceFluxdTrigger;
-     return (isset($instanceFluxdTrigger))
-       ? ($instanceFluxdTrigger->instance_listJobs()
-       : "";
-     }
-     
-    /**
-     *
-     * addJob
-     *
-     * @params transfer
-     * @param event
-     * @param action
-     */
-     function addjob($transfer, $event, $action) {
-         global $instanceFluxdTrigger;
-         if (isset($instanceFluxdTrigger) {
-           $instanceFluxdTrigger->instance_addjob($transfer, $event, $action);
-         }
-     }
-     
-    /**
-     *
-     * removeJob
-     *
-     * @params transfer
-     * @params event
-     * @event action
-     */
-     function removeJob($transfer, $event, $action) {
-         global $instanceFluxdTrigger;
-         if (isset($instanceFluxdTrigger) {
-           $instanceFluxdTrigger->instance_removeJob($transfer, $event, $action);
-         }
-    }
-         
 
 	// =========================================================================
 	// ctor
@@ -155,66 +112,6 @@ class FluxdTrigger extends FluxdServiceMod
 		// initialize
         $this->instance_initialize();
     }
-
-  // ===========================================================================
-  // public methods
-  // ===========================================================================
-  
-    /**
-     *
-     * instance_listJobs
-     * 
-     * @return string
-     */
-     function instance_listJobs() {
-         return ($this->modstate == FLUXMOD_STATE_RUNNING)
-           ? Fluxd::sendServiceCommand($this->moduleName, 'listJobs', 1)
-           : "";
-     }
-     
-    /**
-     *
-     * instance_addJob
-     * 
-     * @param transfer
-     * @param event
-     * @param action
-     * @return string
-     */
-     function instance_addJob($transfer, $event, $action) {
-         global $cfg;
-         if ($this->modstate == FLUXMOD_STATE_RUNNING) {
-            // send command
-            $result = Fluxd::sendServiceCommand($this->moduleName, 'addJob;' . $transfer . ';' . $event . ';' . $action, 1)
-            
-            // log it
-            AuditAction($cfg["constants"]["fluxd"], $result);
-            // sleep
-            sleep(2);
-        }
-    }
-    
-     /**
-      *
-      * instance_removeJob
-      *
-      * @param transfer
-      * @param event
-      * @param action
-      * @return string
-      */
-      function instance_removeJob($transfer, $event, $action) {
-        global $cfg
-        if ($this->modstate == FLUXMOD_STATE_RUNNING) {
-            // send command
-            $result = Fluxd::sendServiceCommand($this->moduleName, 'removeJob;' . $transfer . ';' . $event . ';' . $action, 1)
-            
-            // log it
-            AuditAction($cfg["constants"]["fluxd"], $result);
-            // sleep
-            sleep(2)
-        }
-      }
 
 }
 
