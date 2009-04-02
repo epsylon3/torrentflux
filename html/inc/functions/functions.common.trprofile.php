@@ -105,7 +105,7 @@ function GetProfileSettings($profile) {
 	$sql = "SELECT minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder, savepath from tf_trprofiles where name=".$db->qstr($profile);
 	$settings = $db->GetRow($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
-		return $settings;
+	return $settings;
 }
 
 /**
@@ -158,9 +158,10 @@ function getProfile($pid) {
 function modProfileInfo($pid, $newProfile) {
 	global $cfg, $db;
 	
-	$default_savepath = " value=\"" . ($cfg["enable_home_dirs"] != 0)
-		? $cfg['path'].$cfg["user"].'/'
-		: $cfg['path'].$cfg["path_incoming"].'/' . "\"";
+	// b4rt: var not used, commented this out
+	//	$default_savepath = " value=\"" . ($cfg["enable_home_dirs"] != 0)
+	//		? $cfg['path'].$cfg["user"].'/'
+	//		: $cfg['path'].$cfg["path_incoming"].'/' . "\"";
 	
 	// in case of homedirs, ensure profile doesnt go out of savepath.
 	if ($cfg["enable_home_dirs"] != 0) {

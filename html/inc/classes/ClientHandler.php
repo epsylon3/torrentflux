@@ -613,9 +613,11 @@ class ClientHandler
 	    	if ($reqvar != "")
 	    		$this->rerequest = $reqvar;
 	    	// savepath
-	    	$reqvar = tfb_getRequestVar('savepath');
-	    	if ($reqvar != "")
-	    		$this->savepath = $reqvar;
+			if ($cfg["showdirtree"] == 1) {
+				$reqvar = tfb_getRequestVar('savepath');
+				if ($reqvar != "")
+					$this->savepath = $reqvar;
+			}
     	}
     	// savepath
     	if ($cfg["showdirtree"] == 1)

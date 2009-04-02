@@ -1,5 +1,5 @@
 <?php
-require_once('inc/functions/functions.common.transfer.php');
+
 /* $Id$ */
 
 /*******************************************************************************

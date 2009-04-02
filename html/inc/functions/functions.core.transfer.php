@@ -936,5 +936,72 @@ function resetOwner($transfer) {
 function IsOwner($user, $owner) {
 	return (($user) == ($owner));
 }
+	
+/**
+ * gets datapath of a transfer.
+ *
+ * @param $transfer name of the torrent
+ * @return var with transfer-datapath or empty string
+ */
+function getTransferDatapath($transfer) {
+	global $cfg, $db, $transfers;
+	if (isset($transfers['settings'][$transfer]['datapath'])) {
+		return $transfers['settings'][$transfer]['datapath'];
+	} else {
+		$datapath = $db->GetOne("SELECT datapath FROM tf_transfers WHERE transfer = ".$db->qstr($transfer));
+		if (empty($datapath)) {
+			if (substr($transfer, -8) == ".torrent") {
+				// this is a torrent-client
+				require_once('inc/classes/BDecode.php');
+				$ftorrent = $cfg["transfer_file_path"].$transfer;
+				$fd = fopen($ftorrent, "rd");
+				$alltorrent = fread($fd, filesize($ftorrent));
+				$btmeta = @BDecode($alltorrent);
+				$datapath = (empty($btmeta['info']['name']))
+					? ""
+					: trim($btmeta['info']['name']);
+			} else if (substr($transfer, -5) == ".wget") {
+				// this is wget.
+				$datapath = ".";
+			} else if (substr($transfer, -4) == ".nzb") {
+				// This is nzbperl.
+				$datapath = ".";
+			} else {
+				$datapath = "";
+			}
+		}
+		$transfers['settings'][$transfer]['datapath'] = $datapath;
+		return $datapath;
+	}
+}
+	
+/**
+ * gets savepath of a transfer for a given profile.
+ *
+ * @param $transfer name of the torrent
+ * @param $profile name of profile to be used. if not given, attempt
+ *	to grab it from request vars is made.
+ * @return var with transfer-savepath or empty string
+ */
+function getTransferSavepath($transfer, $profile = NULL) {
+	global $cfg, $db, $transfers;
+	if (isset($transfers['settings'][$transfer]['savepath'])) {
+		return $transfers['settings'][$transfer]['savepath'];
+	} else {
+		$savepath = $db->GetOne("SELECT savepath FROM tf_transfers WHERE transfer = ".$db->qstr($transfer));
+		if (empty($savepath)) {
+			if ($cfg['transfer_profiles'] <= 0) {
+				$savepath = ($cfg["enable_home_dirs"] != 0)
+					? $cfg["path"].getOwner($transfer).'/'
+					: $cfg["path"].$cfg["path_incoming"].'/';
+			} else {
+				require_once('inc/functions/functions.common.transfer.php');
+				$savepath = calcTransferSavepath($transfer, $profile);
+			}
+		}
+		$transfers['settings'][$transfer]['savepath'] = $savepath;
+		return $savepath;
+	}
+}
 
 ?>
