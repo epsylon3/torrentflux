@@ -286,6 +286,7 @@ CREATE TABLE tf_trprofiles (
   maxport SMALLINT(5) unsigned NOT NULL default '0',
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
+  savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM");
 // tf_xfer
@@ -415,6 +416,7 @@ CREATE TABLE tf_trprofiles (
   maxport INTEGER NOT NULL DEFAULT '0',
   maxcons INTEGER NOT NULL DEFAULT '0',
   rerequest INTEGER NOT NULL DEFAULT '0',
+  savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY (id),
   CHECK (public>=0),
   CHECK (maxuploads>=0),

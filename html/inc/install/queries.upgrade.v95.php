@@ -272,6 +272,7 @@ CREATE TABLE tf_trprofiles (
   maxport SMALLINT(5) unsigned NOT NULL default '0',
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
+  savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM");
 // tf_settings_dir
@@ -364,7 +365,8 @@ CREATE TABLE tf_trprofiles (
   minport INTEGER(5) NOT NULL default '0',
   maxport INTEGER(5) NOT NULL default '0',
   maxcons INTEGER(4) NOT NULL default '0',
-  rerequest INTEGER(8) NOT NULL default '0'
+  rerequest INTEGER(8) NOT NULL default '0',
+  savepath VARCHAR(255) NOT NULL default ''
 )");
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "

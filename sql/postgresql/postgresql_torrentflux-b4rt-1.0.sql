@@ -188,6 +188,7 @@ CREATE TABLE tf_trprofiles (
   maxport INTEGER NOT NULL DEFAULT '0',
   maxcons INTEGER NOT NULL DEFAULT '0',
   rerequest INTEGER NOT NULL DEFAULT '0',
+  savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY (id),
   CHECK (public>=0),
   CHECK (maxuploads>=0),

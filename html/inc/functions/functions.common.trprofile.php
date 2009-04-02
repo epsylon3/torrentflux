@@ -168,14 +168,12 @@ function modProfileInfo($pid, $newProfile) {
 		if (substr($newProfile["savepath"], 0, strlen($cfg['path'].$cfg["user"])) != $cfg['path'].$cfg["user"]) {
 			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER DIRECTORY.: ");
 			@error("Invalid directory. You can only set transfer paths within your own directory.", "", "", array());
-			die();
 		}
 	}
 	else {
 		if (substr($newProfile["savepath"], 0, strlen($cfg['path'])) != $cfg['path']) {
 			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER DIRECTORY.: ");
 			@error("Invalid directory. You can only set transfer paths within the root directory ".$cfg['path'].".", "", "", array());
-			die();
 		}	
 	}
 				
