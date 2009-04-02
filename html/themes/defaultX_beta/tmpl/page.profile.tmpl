@@ -10,8 +10,10 @@
 		&nbsp;|&nbsp;
 		<a href="index.php?iid=profile&amp;op=showCookies">Cookie Management</a>
 		&nbsp;|&nbsp;
-		<a href="index.php?iid=profile&amp;op=showProfiles">Transfer Profiles Management</a>
-		&nbsp;|&nbsp;
+		<tmpl_if name="with_profiles" value="1">
+			<a href="index.php?iid=profile&amp;op=showProfiles">Transfer Profiles Management</a>
+			&nbsp;|&nbsp;
+		</tmpl_if>
 		<a href="dispatcher.php?action=cookieFlush&amp;riid=profile" onclick="return confirm('Delete Auto-Login-Cookie ?');">Delete Login-Cookie</a>
 		&nbsp;|&nbsp;
 		<a href="index.php?iid=profile&amp;op=resetSettingsUser" onclick="return confirm('Reset Personal Settings ?')">Reset</a>
