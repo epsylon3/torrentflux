@@ -567,7 +567,7 @@ class FluxCLI
 		$ch = ClientHandler::getInstance(getTransferClient($transfer));
 		// load and apply profile, if specified (just ignore
 		// it if profiles are disabled, no error)
-		if ($cfg['transfer_profiles'] >= 1 && !empty($profile)) {
+		if ($cfg['transfer_profiles'] >= 1 && !empty($profile)) {		
 			$ch->settingsDefault($transfer);
 			$settings = GetProfileSettings($profile);
 			if (empty($settings) || $settings === false) {
@@ -584,6 +584,8 @@ class FluxCLI
 			$ch->maxport = $settings['maxport'];
 			$ch->maxcons = $settings['maxcons'];
 			$ch->rerequest = $settings['rerequest'];
+			$ch->savepath = calcTransferSavepath($transfer, $profile);
+			// TODO CONFIRM ALL GOES WELL AFTER THIS
 			$ch->settingsSave();
 		}
 		// force start, don't queue

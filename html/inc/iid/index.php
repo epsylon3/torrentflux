@@ -1,5 +1,5 @@
 <?php
-
+require_once('inc/functions/functions.common.transfer.php');
 /* $Id$ */
 
 /*******************************************************************************
@@ -118,10 +118,8 @@ foreach ($arList as $transfer) {
 			@error("Invalid Transfer", "", "", array($transfer));
 		}
 		$settingsAry['hash'] = "";
-		$settingsAry["savepath"] = ($cfg["enable_home_dirs"] != 0)
-			? $cfg["path"].$transferowner.'/'
-			: $cfg["path"].$cfg["path_incoming"].'/';
-		$settingsAry['datapath'] = "";
+		$settingsAry["savepath"] = getTransferSavepath($transfer);
+		$settingsAry['datapath'] = getTransferDatapath($transfer);
 	}
 	// cache running-flag in local var. we will access that often
 	$transferRunning = $sf->running;

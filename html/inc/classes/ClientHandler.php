@@ -227,7 +227,7 @@ class ClientHandler
         // common vars
         $this->hash        = getTransferHash($this->transfer);
         $this->datapath    = getTransferDatapath($this->transfer);
-    	$this->savepath    = getTransferSavepath($this->transfer);
+    	$this->savepath    = getTransferSavepath($this->transfer, ""); // default profile
     	$this->running     = 0;
 		$this->rate        = $cfg["max_upload_rate"];
 		$this->drate       = $cfg["max_download_rate"];
@@ -326,7 +326,7 @@ class ClientHandler
 	    	. $db->qstr($this->rerequest)
 	    	.")";
 		$db->Execute($sql);
-		if ($db->ErrorNo() != 0) dbError($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);		
 		// set transfers-cache
 		cacheTransfersSet();
 		return true;
@@ -612,6 +612,10 @@ class ClientHandler
 	    	$reqvar = tfb_getRequestVar('rerequest');
 	    	if ($reqvar != "")
 	    		$this->rerequest = $reqvar;
+	    	// savepath
+	    	$reqvar = tfb_getRequestVar('savepath');
+	    	if ($reqvar != "")
+	    		$this->savepath = $reqvar;
     	}
     	// savepath
     	if ($cfg["showdirtree"] == 1)

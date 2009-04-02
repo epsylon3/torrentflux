@@ -102,10 +102,10 @@ function GetPublicProfiles($profile) {
  */
 function GetProfileSettings($profile) {
 	global $cfg, $db;
-	$sql = "SELECT minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder from tf_trprofiles where name=".$db->qstr($profile);
+	$sql = "SELECT minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder, savepath from tf_trprofiles where name=".$db->qstr($profile);
 	$settings = $db->GetRow($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
-	return $settings;
+		return $settings;
 }
 
 /**
@@ -115,7 +115,7 @@ function GetProfileSettings($profile) {
  */
 function AddProfileInfo( $newProfile ) {
 	global $db, $cfg;
-	$sql = 'INSERT INTO tf_trprofiles ( name , owner , minport , maxport , maxcons , rerequest , rate , maxuploads , drate , runtime , sharekill , superseeder , public )'
+	$sql = 'INSERT INTO tf_trprofiles ( name , owner , minport , maxport , maxcons , rerequest , rate , maxuploads , drate , runtime , sharekill , superseeder , savepath, public )'
 		." VALUES ("
 		.     $db->qstr($newProfile["name"])
 		.", ".$db->qstr($cfg['uid'])
@@ -129,7 +129,8 @@ function AddProfileInfo( $newProfile ) {
 		.", ".$db->qstr($newProfile["runtime"])
 		.", ".$db->qstr($newProfile["sharekill"])
 		.", ".$db->qstr($newProfile["superseeder"])
-		.", ".$db->qstr($newProfile["public"]).")";
+		.", ".$db->qstr($newProfile["public"])
+		.", ".$db->qstr($newProfile["savepath"]).")";
 	$db->Execute( $sql );
 	if ($db->ErrorNo() != 0) dbError($sql);
 }
@@ -143,7 +144,7 @@ function AddProfileInfo( $newProfile ) {
 function getProfile($pid) {
 	global $cfg, $db;
 	$rtnValue = "";
-	$sql = "SELECT id , name , minport , maxport , maxcons , rerequest , rate , maxuploads , drate , runtime , sharekill , superseeder , public FROM tf_trprofiles WHERE id=".$db->qstr($pid);
+	$sql = "SELECT id , name , minport , maxport , maxcons , rerequest , rate , maxuploads , drate , runtime , sharekill , superseeder , public, savepath FROM tf_trprofiles WHERE id=".$db->qstr($pid);
 	$rtnValue = $db->GetAll($sql);
 	return $rtnValue[0];
 }
@@ -156,6 +157,27 @@ function getProfile($pid) {
  */
 function modProfileInfo($pid, $newProfile) {
 	global $cfg, $db;
+	
+	$default_savepath = " value=\"" . ($cfg["enable_home_dirs"] != 0)
+		? $cfg['path'].$cfg["user"].'/'
+		: $cfg['path'].$cfg["path_incoming"].'/' . "\"";
+	
+	// in case of homedirs, ensure profile doesnt go out of savepath.
+	if ($cfg["enable_home_dirs"] != 0) {
+		if (substr($newProfile["savepath"], 0, strlen($cfg['path'].$cfg["user"])) != $cfg['path'].$cfg["user"]) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER DIRECTORY.: ");
+			@error("Invalid directory. You can only set transfer paths within your own directory.", "", "", array());
+			die();
+		}
+	}
+	else {
+		if (substr($newProfile["savepath"], 0, strlen($cfg['path'])) != $cfg['path']) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER DIRECTORY.: ");
+			@error("Invalid directory. You can only set transfer paths within the root directory ".$cfg['path'].".", "", "", array());
+			die();
+		}	
+	}
+				
 	$sql = "UPDATE tf_trprofiles SET"
 	." owner = ".$db->qstr($cfg['uid'])
 	.", name = ".$db->qstr($newProfile["name"])
@@ -170,6 +192,7 @@ function modProfileInfo($pid, $newProfile) {
 	.", sharekill = ".$db->qstr($newProfile["sharekill"])
 	.", superseeder = ".$db->qstr($newProfile["superseeder"])
 	.", public = ".$db->qstr($newProfile["public"])
+	.", savepath = ".$db->qstr($newProfile["savepath"])
 	." WHERE id = ".$db->qstr($pid);
 	$db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);

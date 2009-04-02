@@ -1,5 +1,4 @@
 <?php
-
 /* $Id$ */
 
 /*******************************************************************************
@@ -54,6 +53,7 @@ switch ($op) {
 		$newProfile["runtime"] = tfb_getRequestVar('runtime');
 		$newProfile["sharekill"] = tfb_getRequestVar('sharekill');
 		$newProfile["superseeder"] = tfb_getRequestVar('superseeder');
+		$newProfile["savepath"] = tfb_getRequestVar('savepath');
 		$pub = tfb_getRequestVar('public');
 		$newProfile["public"] = ($pub == "") ? 0 : $pub;
 		if (!empty( $newProfile)) {
@@ -78,6 +78,7 @@ switch ($op) {
 		$newProfile["runtime"] = tfb_getRequestVar('runtime');
 		$newProfile["sharekill"] = tfb_getRequestVar('sharekill');
 		$newProfile["superseeder"] = tfb_getRequestVar('superseeder');
+		$newProfile["savepath"] = tfb_getRequestVar('savepath');
 		$pub = tfb_getRequestVar('public');
 		$newProfile["public"] = ($pub == "") ? 0 : $pub;
 		$pid = tfb_getRequestVar('pid');
@@ -240,7 +241,7 @@ switch ($op) {
 		$tmpl->setvar('add1', $add1);
 		(!empty( $pid )) ? $op2 = "modProfile" : $op2 = "addProfile";
 		$tmpl->setvar('op', $op2);
-		$name = $minport = $maxport = $maxcons = $rerequest = $rate = $maxuploads = $drate = $runtime = $sharekill = $public = "";
+		$name = $minport = $maxport = $maxcons = $rerequest = $rate = $maxuploads = $drate = $runtime = $sharekill = $public = $savepath = "";
 		$runtime = $cfg['die_when_done'];
 		$superseeder = 0;
 		if (!empty($pid)) {
@@ -256,6 +257,7 @@ switch ($op) {
 			$runtime = $profile['runtime'];
 			$sharekill = " value=\"" . $profile['sharekill'] . "\"";
 			$superseeder = $profile['superseeder'];
+			$savepath = " value=\"" . $profile['savepath'] . "\"";			
 			if ($profile['public'] == 1)
 				$public = "checked";
 		}
@@ -271,6 +273,7 @@ switch ($op) {
 		$tmpl->setvar('sharekill', $sharekill);
 		$tmpl->setvar('superseeder', $superseeder);
 		$tmpl->setvar('public', $public);
+		$tmpl->setvar('savepath', $savepath);
 		$tmpl->setvar('default_name', "TransferProfile");
 		$tmpl->setvar('default_minport', $cfg['minport']);
 		$tmpl->setvar('default_maxport', $cfg['maxport']);
@@ -283,6 +286,15 @@ switch ($op) {
 		$tmpl->setvar('default_sharekill', $cfg['sharekill']);
 		$tmpl->setvar('default_superseeder', $cfg['superseeder']);
 		$tmpl->setvar('default_btclient', $cfg['btclient']);
+		
+		if ($cfg["enable_home_dirs"] != 0) {
+			$default_savepath .= $cfg['path'].$cfg["user"];			
+		}
+		else {
+			$default_savepath .= $cfg['path']/*.$cfg["path_incoming"]*/; // TODO: maybe incoming should be appended here already
+		}		
+		$tmpl->setvar('default_savepath', $default_savepath);
+		
 		$tmpl->setvar('pid', $pid);
 		if (!empty($pid)) {
 			$tmpl->setvar('empty_pid', 1);

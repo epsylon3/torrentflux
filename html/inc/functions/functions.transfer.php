@@ -142,6 +142,7 @@ function transfer_setVarsFromProfileSettings($profile) {
 	$tmpl->setvar('maxport', $settings["maxport"]);
 	$tmpl->setvar('maxcons', $settings["maxcons"]);
 	$tmpl->setvar('rerequest', $settings["rerequest"]);
+	$tmpl->setvar('savepath', getTransferSavepath($transfer, $profile));
 }
 
 /**

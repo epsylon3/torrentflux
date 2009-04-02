@@ -1,5 +1,5 @@
 <?php
-
+include('functions.common.trprofile.php');
 /* $Id$ */
 
 /*******************************************************************************
@@ -232,24 +232,53 @@ function getTransferDatapath($transfer) {
 }
 
 /**
- * gets savepath of a transfer.
+/**
+ * gets savepath of a transfer for a given profile.
  *
  * @param $transfer name of the torrent
+ * @param $profile name of profile to be used. if not given, attempt
+ *	to grab it from request vars is made.
  * @return var with transfer-savepath or empty string
  */
-function getTransferSavepath($transfer) {
+function getTransferSavepath($transfer, $profile = NULL) {
 	global $cfg, $db, $transfers;
 	if (isset($transfers['settings'][$transfer]['savepath'])) {
-		return $transfers['settings'][$transfer]['savepath'];
+		$savepath = $transfers['settings'][$transfer]['savepath'];
 	} else {
 		$savepath = $db->GetOne("SELECT savepath FROM tf_transfers WHERE transfer = ".$db->qstr($transfer));
-		if (empty($savepath))
-			$savepath = ($cfg["enable_home_dirs"] != 0)
-				? $cfg["path"].getOwner($transfer).'/'
-				: $cfg["path"].$cfg["path_incoming"].'/';
-		$transfers['settings'][$transfer]['savepath'] = $savepath;
-		return $savepath;
+		if ($savepath == "") {
+			$savepath = calcTransferSavepath($transfer, $profile);
+		}
 	}
+	$transfers['settings'][$transfer]['savepath'] = $savepath;
+	return $savepath;
+}
+
+function calcTransferSavepath($transfer, $profile = NULL) {
+	global $cfg, $transfers;
+	// meh, my hack
+	if ($profile == NULL) {
+		$profile = tfb_getRequestVar("profile");
+	}
+	$settings = GetProfileSettings($profile);
+	$savepath = "";
+	if (isset($settings["savepath"]))
+		$savepath = $settings["savepath"];
+	// no savepath set in profile or profile not set.
+	// so: take default save path.
+	if ($savepath == "") {		
+		$savepath = ($cfg["enable_home_dirs"] != 0)
+			? $cfg["path"].getOwner($transfer).'/'
+			: $cfg["path"].$cfg["path_incoming"].'/';
+	}
+	// Save path is set. if using homedirs, we're fine as savepaths must lie
+	// below the users homedir. This is enforced when saving the savepath.
+	// If not using homedirs, incoming path should be appended.
+	else if ($cfg["enable_home_dirs"] == 0) { 
+		$savepath .= $cfg["path_incoming"].'/';
+	}
+	
+	return $savepath;
 }
 
 /**
