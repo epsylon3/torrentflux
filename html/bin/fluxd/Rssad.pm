@@ -52,7 +52,8 @@ my $time_last_run = 0;
 my @jobs;
 
 # data-dir
-my $dataDir = "rssad/";
+my $dataDir = "";
+my $rssDataDir = "rssad/";
 
 ################################################################################
 # constructor + destructor                                                     #
@@ -118,7 +119,7 @@ sub initialize {
 		# return
 		return 0;
 	}
-	$dataDir = $ddir . $dataDir;
+	$dataDir = $ddir . $rssDataDir;
 	# check if our main-dir exists. try to create if it doesnt
 	if (! -d $dataDir) {
 		Fluxd::printMessage("Rssad", "creating data-dir : ".$dataDir."\n");
