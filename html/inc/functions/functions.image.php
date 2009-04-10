@@ -29,7 +29,10 @@ function image_login() {
 		? 'themes/'.$cfg["default_theme"].'/images/code_bg'
 		: 'themes/tf_standard_themes/images/code_bg';
 	$rndCode = loginImageCode($cfg["db_user"], tfb_getRequestVar('rnd'));
-	Image::paintLabelFromImage($bgImage, $rndCode, 5, 12, 2, 80, 80, 80);
+	$tc = image_getTextcolor(80, 80, 80);
+	Image::paintLabelFromImage($bgImage, $rndCode, 
+							   5, 12, 2, 
+							   $tc['r'], $tc['g'], $tc['b']);
 }
 
 /**
@@ -40,7 +43,10 @@ function image_test() {
 	$bgImage = ((strpos($cfg["theme"], '/')) === false)
 		? 'themes/'.$cfg["theme"].'/images/code_bg'
 		: 'themes/tf_standard_themes/images/code_bg';
-	Image::paintLabelFromImage($bgImage, 'tf-b4rt', 5, 8, 2, 0, 0, 0);
+	$tc = image_getTextcolor(0, 0, 0);
+	Image::paintLabelFromImage($bgImage, 'tf-b4rt', 
+							   5, 8, 2, 
+							   $tc['r'], $tc['g'], $tc['b']);
 }
 
 /**
@@ -344,6 +350,23 @@ function image_noop() {
 	Image::paintNoOp();
 }
 
+/**
+ * get array with text-color. try to read values from the request-vars. 
+ * use default-color created from function-args if no colors provided in 
+ * request-vars.
+ *
+ * @param $r
+ * @param $g
+ * @param $b
+ *
+ * @return color[]
+ */
+function image_getTextcolor($r = 0, $g = 0, $b = 0) {
+	$rtc = tfb_getRequestVar('tc');
+	return (empty($rtc)) 
+		? array('r' => $r, 'g' => $g, 'b' => $b) 
+		: Image::stringToRGBColor($rtc);
+}
 	
 /**
  * get array with colors. try to read values from the request-vars. 
