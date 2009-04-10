@@ -162,9 +162,15 @@ class Image
 	function stringToRGBColor($color) {
 		$retVal = array();
 		$color = str_replace('#', '', $color);
-		$retVal['r'] = hexdec(substr($color, 0, 2));
-		$retVal['g'] = hexdec(substr($color, 2, 2));
-		$retVal['b'] = hexdec(substr($color, 4, 2));
+		if (preg_match('/[0-9a-fA-F]{6}/', $color)) {
+			$retVal['r'] = hexdec(substr($color, 0, 2));
+			$retVal['g'] = hexdec(substr($color, 2, 2));
+			$retVal['b'] = hexdec(substr($color, 4, 2));
+		} else {
+			$retVal['r'] = 0;
+			$retVal['g'] = 0;
+			$retVal['b'] = 0;
+		}
 		return $retVal;
 	}
 
