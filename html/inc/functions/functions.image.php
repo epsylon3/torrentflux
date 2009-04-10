@@ -71,7 +71,7 @@ function image_pieTransferTotals() {
 		20,
 		Image::stringToRGBColor($cfg["body_data_bg"]),
 		array($totals["uptotal"] + 1, $totals["downtotal"] + 1),
-		array(array('r' => 0x00, 'g' => 0xEB, 'b' => 0x0C), array('r' => 0x10, 'g' => 0x00, 'b' => 0xFF)),
+		image_getColors(),
 		array('Up : '.@formatFreeSpace($totals["uptotal"] / 1048576), 'Down : '.@formatFreeSpace($totals["downtotal"] / 1048576)),
 		48,
 		130,
@@ -169,7 +169,7 @@ function image_pieTransferPeers() {
 		20,
 		Image::stringToRGBColor($cfg["body_data_bg"]),
 		array($peerData['seeds'] + 0.00001, $peerData['peers'] + 0.00001),
-		array(array('r' => 0x00, 'g' => 0xEB, 'b' => 0x0C), array('r' => 0x10, 'g' => 0x00, 'b' => 0xFF)),
+		image_getColors(),
 		array('Seeds : '.$peerData['seedsLabel'], 'Peers : '.$peerData['peersLabel']),
 		58,
 		130,
@@ -209,7 +209,7 @@ function image_pieTransferScrape() {
 			20,
 			Image::stringToRGBColor($cfg["body_data_bg"]),
 			array($seeder + 0.00001, $leecher + 0.00001),
-			array(array('r' => 0x00, 'g' => 0xEB, 'b' => 0x0C), array('r' => 0x10, 'g' => 0x00, 'b' => 0xFF)),
+			image_getColors(),
 			array('Seeder : '.$seeder, 'Leecher : '.$leecher),
 			58,
 			130,
@@ -247,7 +247,7 @@ function image_pieServerBandwidth() {
 		20,
 		Image::stringToRGBColor($cfg["body_data_bg"]),
 		array($bwU + 0.00001, $bwD + 0.00001),
-		array(array('r' => 0x00, 'g' => 0xEB, 'b' => 0x0C), array('r' => 0x10, 'g' => 0x00, 'b' => 0xFF)),
+		image_getColors(),
 		array('Up : '.@number_format($bwU, 2)." kB/s", 'Down : '.@number_format($bwD, 2)." kB/s"),
 		48,
 		130,
@@ -285,7 +285,7 @@ function image_pieServerDrivespace() {
 		20,
 		Image::stringToRGBColor($cfg["body_data_bg"]),
 		array($df_b + 0.00001, $du_b + 0.00001),
-		array(array('r' => 0x00, 'g' => 0xEB, 'b' => 0x0C), array('r' => 0x10, 'g' => 0x00, 'b' => 0xFF)),
+		image_getColors(),
 		array('Free : '.formatFreeSpace($df_b / 1048576), 'Used : '.formatFreeSpace($du_b / 1048576)),
 		58,
 		130,
@@ -342,6 +342,25 @@ function image_notsup() {
 function image_noop() {
 	// output image
 	Image::paintNoOp();
+}
+
+	
+/**
+ * get array with colors. try to read values from the request-vars. 
+ * use default-colors if no colors provided in request-vars.
+ *
+ * @return colors[][]
+ */
+function image_getColors() {
+	$rc1 = tfb_getRequestVar('c1');
+	$rc2 = tfb_getRequestVar('c2');
+	$color1 = (empty($rc1)) 
+		? array('r' => 0x00, 'g' => 0xEB, 'b' => 0x0C) 
+		: Image::stringToRGBColor($rc1);
+	$color2 = (empty($rc2)) 
+		? array('r' => 0x10, 'g' => 0x00, 'b' => 0xFF) 
+		: Image::stringToRGBColor($rc2);
+	return (array($color1, $color2));
 }
 
 ?>
