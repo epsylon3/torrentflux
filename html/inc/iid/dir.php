@@ -206,9 +206,17 @@ if (!(@is_dir($dirName))) {
 		header("Location: index.php?iid=dir");
 	exit();
 }
+
+// check if valid entry
 if (($dir != "") && (isValidEntry($dir) !== true)) {
 	AuditAction($cfg["constants"]["error"], "ILLEGAL DIR: ".$cfg["user"]." tried to access ".$dir);
 	@error("Invalid Dir", "index.php?iid=dir", "", array($dir));
+}
+
+// check for permission to read
+if (($dir != "") && (hasPermission($dir, $cfg["user"], 'r') !== true)) {
+	AuditAction($cfg["constants"]["error"], "ILLEGAL DIR: ".$cfg["user"]." tried to access ".$dir);
+	@error("No Permission for Dir", "index.php?iid=dir", "", array($dir));
 }
 
 // init template-instance
