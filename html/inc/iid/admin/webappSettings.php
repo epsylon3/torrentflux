@@ -62,6 +62,13 @@ if (Image::isSupported()) {
 		)
 	);
 }
+// 2009-04-17 pmunn@munn.com: Form-Auth + ReCaptcha.
+array_push($authlist, array(
+	    'avalue' => 5,
+	    'atype'=>'Form-Auth + reCAPTCHA',
+	    'aselected' => ($cfg["auth_type"] == 5) ? 1: 0
+	    )
+);
 // Basic-Auth
 array_push($authlist, array(
 	'avalue' => 2,
@@ -79,6 +86,10 @@ array_push($authlist, array(
 $tmpl->setloop('auth_type_list', $authlist);
 $tmpl->setvar('auth_type', $cfg["auth_type"]);
 $tmpl->setvar('auth_basic_realm', $cfg["auth_basic_realm"]);
+
+// 2009-04-17 pmunn@munn.com: reCAPTCHA keys.
+$tmpl->setvar('recaptcha_private_key', $cfg["recaptcha_private_key"]);
+$tmpl->setvar('recaptcha_public_key', $cfg["recaptcha_public_key"]);
 
 // more vars
 $tmpl->setvar('enable_tmpl_cache', $cfg["enable_tmpl_cache"]);

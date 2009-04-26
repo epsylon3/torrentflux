@@ -130,6 +130,49 @@ switch ($cfg['auth_type']) {
 			$tmpl->setvar('imageSupported', 0);
 		}
 		break;
+	case 5: /* Form-Based + ReCaptcha */
+		// 2009-04-19 pmunn@munn.com
+		require_once('inc/functions/recaptchalib.php');
+		$user = strtolower(tfb_getRequestVar('username'));
+		$iamhim = addslashes(tfb_getRequestVar('iamhim'));
+		$md5password = "";
+		$bSetReCaptcha = false;
+		if (!empty($user)) {
+			$isLoginRequest = true;
+			// test the captcha.
+			if (tfb_getRequestVar('recaptcha_response_field')) {
+				$recaptcha_resp = recaptcha_check_answer (
+				$cfg["recaptcha_private_key"], 
+				$_SERVER["REMOTE_ADDR"], 
+				tfb_getRequestVar('recaptcha_challenge_field'), 
+				tfb_getRequestVar('recaptcha_response_field'));
+
+				if(!$recaptcha_resp->is_valid) {
+					// log this
+					AuditAction($cfg["constants"]["access_denied"], 
+					  "FAILED RECAPTCHA: User: ".
+					  $user.
+					  " Error: ".
+					  $recaptcha_resp->error);
+					// flush credentials
+					$user = "";
+					$iamhim = "";
+					// ensure recaptcha value is reset.
+					$bSetReCaptcha = true;
+				}
+			} else {
+				// no recaptcha value, flush credentials.
+				$user = "";
+				$iamhim = "";
+                // ensures another recaptcha is shown.
+                $bSetReCaptcha = true;
+			}
+		}
+		if($bSetReCaptcha || (!$isLoginRequest)) {
+			// write recaptcha code
+			$tmpl->setvar('recaptcha_html', recaptcha_get_html($cfg["recaptcha_public_key"], $error));
+		}
+		break;
 	case 0: /* Form-Based Auth Standard */
 	default:
 		$user = strtolower(tfb_getRequestVar('username'));
@@ -165,7 +208,6 @@ tmplSetTitleBar($cfg["pagetitle"], false);
 tmplSetFoot(false);
 tmplSetIidVars();
 $tmpl->setvar('iid', 'login');
-
 
 // parse template
 $tmpl->pparse();
