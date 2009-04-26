@@ -1,2 +1,3 @@
-adodb : ADOdb V4.98
-vlib  : vLIB 4.1.0
+adodb     : ADOdb V4.98
+recaptcha : reCAPTCHA 1.10
+vlib      : vLIB 4.1.0
