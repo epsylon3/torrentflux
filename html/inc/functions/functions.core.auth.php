@@ -38,8 +38,8 @@ function getCredentials() {
 			return $retVal;
 		}
 	}
-	// check for http-post/get-supplied credentials (only if auth-type not 4)
-	if ($cfg['auth_type'] != 4) {
+	// check for http-post/get-supplied credentials (only if auth-type not 4 or 5)
+	if (($cfg['auth_type'] != 4) && ($cfg['auth_type'] != 5)) {
 		if (isset($_REQUEST['username'])) {
 			if (isset($_REQUEST['md5pass'])) {
 				$retVal = array();
