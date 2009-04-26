@@ -132,7 +132,7 @@ switch ($cfg['auth_type']) {
 		break;
 	case 5: /* Form-Based + ReCaptcha */
 		// 2009-04-19 pmunn@munn.com
-		require_once('inc/functions/recaptchalib.php');
+		require_once('inc/lib/recaptcha/recaptchalib.php');
 		$user = strtolower(tfb_getRequestVar('username'));
 		$iamhim = addslashes(tfb_getRequestVar('iamhim'));
 		$md5password = "";

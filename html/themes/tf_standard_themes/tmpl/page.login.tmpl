@@ -152,6 +152,9 @@
 																			<td align="right"><label for="iamhim">Password:</label></td>
 																			<td><input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /></td>
 																		</tr>
+																		<tmpl_if name="auth_type" value="5">
+																			<tr><td colspan="2"><tmpl_var name="recaptcha_html"></td></tr>
+																		</tmpl_if>
 																		<tr>
 																			<td colspan="2" align="center"><input class="button" type="submit" value="Login" /></td>
 																		</tr>
