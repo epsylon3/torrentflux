@@ -3,10 +3,15 @@
 <tmpl_include name="inc.adminmenu.tmpl">
 <br>
 <div align="center">
-	<tmpl_var name="_TRYDIFFERENTUSERID">
-	<br>
-	<strong><tmpl_var name="newUser"></strong>
-	<tmpl_var name="_HASBEENUSED">
+	<tmpl_if name="errUsername" value="1">
+		<tmpl_var name="_TRYDIFFERENTUSERID">
+		<br>
+		<tmpl_var name="errMsgUsername">
+	</tmpl_if>
+	<tmpl_if name="errPassword" value="1">
+		<br>
+		<tmpl_var name="errMsgPassword">
+	</tmpl_if>
 </div>
 <br><br><br>
 <tmpl_include name="inc.subfoot.tmpl">

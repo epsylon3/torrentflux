@@ -83,5 +83,44 @@ function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language) {
 		cacheFlush($cfg["user"]);
 	}
 }
+	
+/**
+ * check the username
+ *
+ * @param $username string
+ * @return boolean true or string with error-message
+ */
+function checkUsername($username) {
+	global $cfg;
+	if ((isset($username)) && ($username != "")) {
+		return (IsUser($username))
+			? $username . " " . $cfg['_HASBEENUSED']
+			: true;
+	} else {
+		return $cfg['_USERIDREQUIRED'];
+	}
+}
+	
+/**
+ * check the password
+ *
+ * @param $pass1 string
+ * @param $pass2 string
+ * @return boolean true or string with error-message
+ */
+function checkPassword($pass1, $pass2) {
+	global $cfg;
+	if ((isset($pass1)) && (isset($pass2))) {
+		if ($pass1 != $pass2) {
+			return $cfg['_PASSWORDNOTMATCH'];
+		} else {
+			return (strlen($pass1) > 5) 
+				? true
+				: $cfg['_PASSWORDLENGTH'];
+		}
+	} else {
+		return $cfg['_PASSWORDLENGTH'];
+	}
+}
 
 ?>

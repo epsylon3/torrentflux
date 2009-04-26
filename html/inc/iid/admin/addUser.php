@@ -31,11 +31,18 @@ if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 
 $newUser = tfb_getRequestVar('newUser');
 $pass1 = tfb_getRequestVar('pass1');
+$pass2 = tfb_getRequestVar('pass2');
 $userType = tfb_getRequestVar('userType');
 
+// check username
+$usernameCheck = checkUsername($newUser);
+	
+// check password
+$passwordCheck = checkPassword($pass1, $pass2);
+	
 // new user ?
 $newUser = strtolower($newUser);
-if (!(IsUser($newUser))) {
+if (($usernameCheck === true) && ($passwordCheck === true)) {
 	addNewUser($newUser, $pass1, $userType);
 	AuditAction($cfg["constants"]["admin"], $cfg['_NEWUSER'].": ".$newUser);
 	@header("location: admin.php?op=showUsers");
@@ -47,9 +54,19 @@ tmplInitializeInstance($cfg["theme"], "page.admin.addUser.tmpl");
 
 // set vars
 $tmpl->setvar('newUser', $newUser);
-//
+
+// error
+	
+// backward-compat-vars
 $tmpl->setvar('_TRYDIFFERENTUSERID', $cfg['_TRYDIFFERENTUSERID']);
 $tmpl->setvar('_HASBEENUSED', $cfg['_HASBEENUSED']);
+
+// error-vars
+$tmpl->setvar('errUsername', ($usernameCheck !== true) ? 1 : 0);
+$tmpl->setvar('errMsgUsername', ($usernameCheck !== true) ? $usernameCheck : '');
+$tmpl->setvar('errPassword', ($passwordCheck !== true) ? 1 : 0);
+$tmpl->setvar('errMsgPassword', ($passwordCheck !== true) ? $passwordCheck : '');
+	
 //
 tmplSetTitleBar("Administration - Add User");
 tmplSetAdminMenu();

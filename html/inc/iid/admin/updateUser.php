@@ -32,11 +32,18 @@ if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 $user_id = tfb_getRequestVar('user_id');
 $org_user_id = tfb_getRequestVar('org_user_id');
 $pass1 = tfb_getRequestVar('pass1');
+$pass2 = tfb_getRequestVar('pass2');
 $userType = tfb_getRequestVar('userType');
 $hideOffline = tfb_getRequestVar('hideOffline');
 $user_id = strtolower($user_id);
 
-if (!(IsUser($user_id) && ($user_id != $org_user_id))) {
+// check password
+$passwordCheck = (($pass1 != '') && ($pass2 != ''))
+	? checkPassword($pass1, $pass2)
+	: true;
+	
+// update user
+if ((IsUser($org_user_id)) && (!IsUser($user_id)) && ($user_id != '') && ($user_id != $org_user_id) && ($passwordCheck === true)) {
 	// Admin is changing id or password through edit screen
 	if (($user_id == $cfg["user"] || $cfg["user"] == $org_user_id) && $pass1 != "") {
 		// this will expire the user
@@ -54,9 +61,19 @@ tmplInitializeInstance($cfg["theme"], "page.admin.updateUser.tmpl");
 // set vars
 $tmpl->setvar('user_id', $user_id);
 $tmpl->setvar('org_user_id', $org_user_id);
-//
+	
+// error
+	
+// backward-compat-vars
 $tmpl->setvar('_TRYDIFFERENTUSERID', $cfg['_TRYDIFFERENTUSERID']);
 $tmpl->setvar('_HASBEENUSED', $cfg['_HASBEENUSED']);
+
+// error-vars
+$tmpl->setvar('errUsername', ($user_id == '') ? 1 : 0);
+$tmpl->setvar('errMsgUsername', ($user_id == '') ? $cfg['_USERIDREQUIRED'] : '');	
+$tmpl->setvar('errPassword', ($passwordCheck !== true) ? 1 : 0);
+$tmpl->setvar('errMsgPassword', ($passwordCheck !== true) ? $passwordCheck : '');
+	
 $tmpl->setvar('_RETURNTOEDIT', $cfg['_RETURNTOEDIT']);
 //
 tmplSetTitleBar("Administration - Update User");

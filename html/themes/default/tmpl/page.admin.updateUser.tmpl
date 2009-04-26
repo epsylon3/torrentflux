@@ -3,10 +3,15 @@
 <tmpl_include name="inc.adminmenu.tmpl">
 <br>
 <div align="center">
-	<tmpl_var name="_TRYDIFFERENTUSERID">
-	<br>
-	<strong><tmpl_var name="user_id"></strong>
-	<tmpl_var name="_HASBEENUSED">
+	<tmpl_if name="errUsername" value="1">
+		<tmpl_var name="_TRYDIFFERENTUSERID">
+		<br>
+		<tmpl_var name="errMsgUsername">
+	</tmpl_if>
+	<tmpl_if name="errPassword" value="1">
+		<br>
+		<tmpl_var name="errMsgPassword">
+	</tmpl_if>
 	<br><br><br>
 	[<a href="admin.php?op=editUser&user_id=<tmpl_var name="org_user_id">"><tmpl_var name="_RETURNTOEDIT"> <tmpl_var name="org_user_id"></a>]
 </div>
