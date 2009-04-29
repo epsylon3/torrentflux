@@ -46,6 +46,7 @@ if (isset($_SESSION['user'])) {
 
 // authentication
 $isLoginRequest = false;
+$bSetReCaptcha = false;
 switch ($cfg['auth_type']) {
 	case 3: /* Basic-Passthru */
 	case 2: /* Basic-Auth */
@@ -136,7 +137,6 @@ switch ($cfg['auth_type']) {
 		$user = strtolower(tfb_getRequestVar('username'));
 		$iamhim = addslashes(tfb_getRequestVar('iamhim'));
 		$md5password = "";
-		$bSetReCaptcha = false;
 		if (!empty($user)) {
 			$isLoginRequest = true;
 			// test the captcha.
@@ -164,13 +164,12 @@ switch ($cfg['auth_type']) {
 				// no recaptcha value, flush credentials.
 				$user = "";
 				$iamhim = "";
-                // ensures another recaptcha is shown.
-                $bSetReCaptcha = true;
+				// ensures another recaptcha is shown.
+				$bSetReCaptcha = true;
 			}
-		}
-		if($bSetReCaptcha || (!$isLoginRequest)) {
-			// write recaptcha code
-			$tmpl->setvar('recaptcha_html', recaptcha_get_html($cfg["recaptcha_public_key"], $error));
+		} else {
+		  // this is not a login request
+		  $bSetReCaptcha = true;
 		}
 		break;
 	case 0: /* Form-Based Auth Standard */
@@ -199,8 +198,18 @@ if ($isLoginRequest) {
 		exit();
 	} else {
 		$tmpl->setvar('login_failed', 1);
+
+		// reset the captcha if this was an auth type of 5.
+		$bSetReCaptcha = ($cfg["auth_type"] == 5);
 	}
 }
+
+// Do we need to reset the captcha for this page?
+if($bSetReCaptcha) {
+  // write recaptcha code
+  $tmpl->setvar('recaptcha_html', recaptcha_get_html($cfg["recaptcha_public_key"], $error));
+}
+
 
 // defines
 $tmpl->setvar('auth_type', $cfg["auth_type"]);
