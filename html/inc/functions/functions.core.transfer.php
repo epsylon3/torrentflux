@@ -886,7 +886,7 @@ function getOwner($transfer) {
 		return $transfers['owner'][$transfer];
 	} else {
 		// Check log to see what user has a history with this file
-		$transfers['owner'][$transfer] = $db->GetOne("SELECT user_id FROM tf_log WHERE file=".$db->qstr($transfer)." AND (action=".$db->qstr($cfg["constants"]["file_upload"])." OR action=".$db->qstr($cfg["constants"]["url_upload"])." OR action=".$db->qstr($cfg["constants"]["reset_owner"]).") ORDER BY time DESC");
+		$transfers['owner'][$transfer] = $db->GetOne("SELECT user_id FROM tf_log WHERE BINARY file=".$db->qstr($transfer)." AND (action=".$db->qstr($cfg["constants"]["file_upload"])." OR action=".$db->qstr($cfg["constants"]["url_upload"])." OR action=".$db->qstr($cfg["constants"]["reset_owner"]).") ORDER BY time DESC");
 		return ($transfers['owner'][$transfer] != "")
 			? $transfers['owner'][$transfer]
 			: resetOwner($transfer); // try and get the owner from the stat file;
