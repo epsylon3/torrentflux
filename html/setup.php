@@ -383,6 +383,12 @@ if (isset($_REQUEST["1"])) {                                                    
 	$pass = $_REQUEST["db_pass"];
 	$pcon = $_REQUEST["db_pcon"];
 
+	if ($type == 'SQLite') {
+		if ( strpos($host,'\\') && ! strpos($host,'\\\\') ) {
+			$host = str_replace('\\','/',$host);
+		}
+	}
+
 	// write file
 	$databaseConfWriteOk = false;
 	$databaseConfWriteError = "";
@@ -419,6 +425,7 @@ if (isset($_REQUEST["1"])) {                                                    
 		if (!$dbCon) {
 			$databaseTableCreation = false;
 			$databaseError = "Cannot connect to database.";
+			var_dump($cfg);
 		} else {
 			send('<ul>');
 			foreach ($queries['create'][$cfg["db_type"]] as $databaseTypeName => $databaseQuery) {
