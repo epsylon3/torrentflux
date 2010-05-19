@@ -60,7 +60,7 @@ class Transfer(object):
         AZ_READY: TF_STOPPED, \
         AZ_SEEDING: TF_RUNNING, \
         AZ_STOPPED: TF_STOPPED, \
-        AZ_STOPPING: TF_RUNNING, \
+        AZ_STOPPING: TF_STOPPED, \
         AZ_WAITING: TF_STOPPED \
     }
 
@@ -96,19 +96,16 @@ class Transfer(object):
     """ -------------------------------------------------------------------- """
     def initialize(self):
 
-        # out
-        printMessage("initializing transfer %s ..." % self.name)
-
         # meta-file
-        printMessage("loading transfer-file %s ..." % self.fileMeta)
+        printMessage("loading transfer %s and stat..." % self.name)
+
         self.tf = TransferFile(self.fileMeta)
 
         # stat-file
-        printMessage("loading statfile %s ..." % self.fileStat)
         self.sf = StatFile(self.fileStat)
 
         # verbose
-        printMessage("transfer loaded.")
+        # printMessage("transfer loaded.")
 
         # return
         return True
@@ -120,6 +117,15 @@ class Transfer(object):
 
         # azu-state
         self.state_azu = download.getState()
+        
+        # and auto stopped (sharekill)
+        if self.state_azu == Transfer.AZ_STOPPED and self.sf.running == '1':
+
+            printMessage("Torrent autostopped by Azureus %s " % self.sf.sharing)
+            self.log("Torrent autostopped by Azureus %s " % self.sf.sharing)
+            
+            # stat
+            self.statShutdown(download)
 
         # set state
         self.state = Transfer.STATE_MAP[self.state_azu]
@@ -129,11 +135,18 @@ class Transfer(object):
 
             # stat
             self.statRunning(download)
+            
+        else:
+          if self.state_azu != 7:
+            printMessage(self.name + ": update() state_azu=%d" % self.state_azu)
 
     """ -------------------------------------------------------------------- """
     """ start                                                                """
     """ -------------------------------------------------------------------- """
     def start(self, download):
+        
+        bRes = True
+        
         self.log("starting transfer %s (%s) ..." % (str(self.name), str(self.tf.transferowner)))
 
         # stat
@@ -144,10 +157,12 @@ class Transfer(object):
 
         # start transfer
         try:
-            download.restart()
-        except:
-            self.log("exception when starting transfer :")
+            download.startDownload(True)
+            # download.restart()
+        except:            
+            self.log("exception when (re)starting transfer :")
             printException()
+            bRes = False
 
         # refresh
         download.refresh_object()
@@ -160,10 +175,13 @@ class Transfer(object):
         self.setRateD(download, int(self.tf.max_download_rate))
 
         # log
-        self.log("transfer started.")
+        if self.state != Transfer.TF_STOPPED:
+            self.log("transfer started.")
 
+        # self.log("start() state= %d" % download.getState())
+        
         # return
-        return True
+        return bRes
 
     """ -------------------------------------------------------------------- """
     """ stop                                                                 """
@@ -177,7 +195,8 @@ class Transfer(object):
         # stop transfer
         retVal = True
         try:
-            download.stop()
+            #download.stop()
+            download.stopDownload()
             retVal = True
         except:
             self.log("exception when stopping transfer :")
@@ -399,7 +418,8 @@ class Transfer(object):
                 # stats
                 if download == None:
                     return
-                stats = download.getStats()
+
+                stats = download.getStats()                    
                 if stats == None:
                     return
 
@@ -502,14 +522,21 @@ class Transfer(object):
 
         # set some values
         self.sf.running = Transfer.TF_STOPPED
-        self.sf.down_speed = "0.00 kB/s"
-        self.sf.up_speed = "0.00 kB/s"
+#        self.sf.down_speed = "0.00 kB/s"
+#        self.sf.up_speed = "0.00 kB/s"
+        self.sf.down_speed = ""
+        self.sf.up_speed = ""
         self.sf.transferowner = self.tf.transferowner
         self.sf.seeds = ""
         self.sf.peers = ""
-        self.sf.sharing = ""
-        self.sf.seedlimit = ""
+#        self.sf.sharing = ""
+#        self.sf.seedlimit = ""
         try:
+
+            # stats
+            if not hasattr(download, 'getStats'):
+               printMessage("statShutdown() Bad download .")
+               return
 
             # stats
             try:
@@ -585,7 +612,8 @@ class Transfer(object):
     def deletePid(self):
         self.log("deleting pid-file %s " % self.filePid)
         try:
-            os.remove(self.filePid)
+            if os.path.isfile(self.filePid):
+                os.remove(self.filePid)
             return True
         except Exception, e:
             self.log("Failed to delete pid-file %s" % self.filePid)
@@ -603,3 +631,29 @@ class Transfer(object):
             f.close()
         except Exception, e:
             printError("Failed to write log-file %s" % self.fileLog)
+
+    """ -------------------------------------------------------------------- """
+    """ needFastUpdate                                                       """
+    """ -------------------------------------------------------------------- """
+    def needFastUpdate(self):
+        
+        if self.state == Transfer.TF_STOPPED:
+            return False
+            
+        if self.state_azu == Transfer.AZ_WAITING:
+            return True
+
+        if self.state_azu == Transfer.AZ_DOWNLOADING:
+            return True
+
+        if self.state_azu == Transfer.AZ_PREPARING:
+            return True
+            
+        if self.state_azu == Transfer.AZ_STOPPING:
+            return True
+
+        if self.state_azu == Transfer.AZ_QUEUED:
+            return True
+        
+        
+        return False

@@ -24,6 +24,10 @@
 import sys
 import os
 import time
+
+# shell execute
+import shlex, subprocess
+
 # fluazu
 from fluazu.output import printMessage, printError, printException
 from fluazu.Transfer import Transfer
@@ -75,6 +79,10 @@ class FluAzuD(object):
         self.connection = None
         self.interface = None
         self.dm = None
+        
+        self.needUpdate = 0
+        self.needUpdateAll = 0
+        self.needUpdateStat = 0
 
     """ -------------------------------------------------------------------- """
     """ run                                                                  """
@@ -100,6 +108,10 @@ class FluAzuD(object):
             self.azu_secure = False
         self.azu_user = username
         self.azu_pass = password
+        
+        self.needUpdate = 1
+        self.needUpdateAll = 1
+        self.needUpdateStat = 1
 
         # more vars
         printMessage("flu-path: %s" % str(self.flu_path))
@@ -214,53 +226,110 @@ class FluAzuD(object):
                 os.remove(self.flu_filePid)
             except:
                 printError("Failed to delete pid-file %s " % self.flu_filePid)
-
+    
+    def getActiveUsers(self):
+        
+        actifs = 1
+        
+        #if os.path.isfile("/usr/local/bin/flubartchkactive.php"):
+            
+        #    args = shlex.split("/usr/bin/php /usr/local/bin/flubartchkactive.php")
+        #    data = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()[0]
+            #printMessage("os exec = %s ..." % data)
+            
+            #f = open("/tmp/flubartactif", 'r')
+            #data = f.read()
+            #f.close()
+        #    try:
+        #        actifs = int(data)
+        #    except:
+        #        printMessage("bad data in /tmp/flubartactif %s ..." % data)
+        #        actifs = 1
+            
+        return actifs
+        
+    
     """ -------------------------------------------------------------------- """
     """ main                                                                 """
     """ -------------------------------------------------------------------- """
     def main(self):
-
+        
+        nloop = 0
+        self.getActiveUsers()
         # main-loop
         while self.running > 0:
-
+            
+            actifs = self.getActiveUsers()
+            if actifs == 0:
+                printMessage("flubart inactive, sleeping (no tf_log HIT) ...")
+                while (actifs == 0):
+                    time.sleep(2)
+                    actifs = self.getActiveUsers()
+                printMessage("flubart wake up (tf_log HIT=%d) ..." % actifs)
+            
+            nloop = (nloop + 1) % 200
+            if (nloop == 0):
+                self.needUpdateAll = 1
+                
+            if (nloop % 50) == 0:
+                self.needUpdate = 1
+                
+            if (nloop % 10) == 0:
+                self.needUpdateStat = 1
+                
             # check if connection still valid, shutdown if it is not
             if not self.checkAzuConnection():
                 # shutdown
                 self.shutdown()
                 # return
                 return 1
-
-            # update downloads
-            self.updateDownloads()
-
-            # update transfers
-            for transfer in self.transfers:
-                if transfer.name in self.downloads:
-                    # update
-                    transfer.update(self.downloads[transfer.name])
-
-            # inner loop
-            for i in range(4):
-
-                # process daemon command stack
+            
+            # update downloads (slow)
+            if (self.needUpdate == 1):
+                printMessage("update downloads")
+                self.updateDownloads()
+            
+            # update downloading torrents (slow)
+            if (self.needUpdateStat == 1):
+                # update transfers
+                # printMessage("update downloading torrents")
+                for transfer in self.transfers:
+                    if transfer.name in self.downloads:
+                        if self.needUpdateAll == 1 or transfer.needFastUpdate():
+                            # update
+                            transfer.update(self.downloads[transfer.name])
+                            #printMessage(transfer.name + " %d " % transfer.state_azu)
+                
+                self.needUpdateStat = 0
+                self.needUpdateAll = 0
+            
+            #printMessage("processCommandStack")
+            
+            # inner loop which check if there is a command file to run
+            for i in range(100):
+                
+                # process daemon command stack (fast) CTRL+C ?
                 if self.processCommandStack():
                     # shutdown
                     self.running = 0
                     break;
-
+                
                 # process transfers command stacks
                 for transfer in self.transfers:
                     if transfer.isRunning():
                         if transfer.processCommandStack(self.downloads[transfer.name]):
-                            # update downloads
-                            self.updateDownloads()
-
+                            self.needUpdateStat = 1;
+                            # update downloads (too slow)
+                            # self.needUpdate = 1;
+                
                 # sleep
-                time.sleep(1)
-
+                time.sleep(0.5)
+        
+        printMessage("shutdown")
+        
         # shutdown
         self.shutdown()
-
+        
         # return
         return 0
 
@@ -269,13 +338,13 @@ class FluAzuD(object):
     """ -------------------------------------------------------------------- """
     def reload(self):
         printMessage("reloading...")
-
+        
         # delete-requests
         self.processDeleteRequests()
-
+        
         # run-requests
         self.processRunRequests()
-
+        
         # transfers
         self.loadTransfers()
 
@@ -284,7 +353,7 @@ class FluAzuD(object):
     """ -------------------------------------------------------------------- """
     def processDeleteRequests(self):
         printMessage("processing delete-requests...")
-
+        
         # read requests
         requests = []
         try:
@@ -299,25 +368,30 @@ class FluAzuD(object):
                     printError("Failed to delete file : %s" % delFile)
         except:
             return False
-
+        
         # process requests
         if len(requests) > 0:
             for fileName in requests:
                 printMessage("deleting %s ..." % fileName)
                 # update downloads
-                self.downloads = {}
-                self.updateDownloads()
+                # self.downloads = {}
+                # self.updateDownloads()
+                self.needUpdate = 1
                 # remove if needed
                 if fileName in self.downloads:
                     # remove transfer
-                    self.removeTransfer(fileName)
+                    try:
+                        self.removeTransfer(fileName)
+                    except:
+                        printMessage("Failed to removeTransfer %s" % fileName)
+                        
                 # del file
                 delFile = self.flu_pathTransfers + fileName
                 try:
                     os.remove(delFile)
                 except:
                     printError("Failed to delete file : %s" % delFile)
-
+        
         # return
         return True
 
@@ -357,26 +431,33 @@ class FluAzuD(object):
         if len(requests) > 0:
             try:
                 # update downloads
-                self.downloads = {}
-                self.updateDownloads()
+                #self.downloads = {}
+                #self.updateDownloads()
                 for fileName in requests:
                     # add if needed
                     if fileName not in self.downloads:
                         try:
                             # add
-                            self.addTransfer(fileName)
+                            torrent = self.addTransfer(fileName)
                         except:
                             printError("exception when adding new transfer %s" % fileName)
                             raise
+                    
                     # downloads
                     tries = 0
-                    while tries < 5 and fileName not in self.downloads:
-                        #if fileName not in self.downloads:
-                        printMessage("download %s missing, update downloads..." % fileName)
-                        self.updateDownloads()
+                    while torrent and (tries < 10) and fileName not in self.downloads:                       
+                        download = self.dm.getDownload(torrent)
+                        if (torrent and download):
+                            self.downloads[fileName] = download
+                            self.needUpdate=1
+                            break
+                        else:
+                            printMessage("download %s missing, update downloads..." % torrent)
+                        
                         # sleep + increment
-                        time.sleep(1)
+                        time.sleep(0.5)
                         tries += 1
+                    
                     # start transfer
                     if fileName in self.downloads:
                         try:
@@ -414,7 +495,7 @@ class FluAzuD(object):
             self.dm.addDownload(torrent, fileSource, fileTarget)
 
             # return
-            return True
+            return torrent
         except:
             printMessage("exception when adding transfer:")
             printException()
@@ -450,10 +531,14 @@ class FluAzuD(object):
     """ updateDownloads                                                      """
     """ -------------------------------------------------------------------- """
     def updateDownloads(self):
+        printMessage("updateDownloads() getDownloads...") # slow
         azu_dls = self.dm.getDownloads()
+        # then fast
         for download in azu_dls:
             tfile = (os.path.split(str(download.getTorrentFileName())))[1]
             self.downloads[tfile] = download
+        self.needUpdate = 0
+        printMessage("updateDownloads() done")
 
     """ -------------------------------------------------------------------- """
     """ processCommandStack                                                  """
@@ -661,7 +746,11 @@ class FluAzuD(object):
         try:
 
             # get plugin-config
-            config_object = self.interface.getPluginconfig()
+            try:
+                config_object = self.interface.getPluginconfig()
+            except:
+                printException()
+                return True
 
             # get vars
             coreVars = [ \

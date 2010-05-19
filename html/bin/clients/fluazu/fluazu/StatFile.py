@@ -104,6 +104,10 @@ class StatFile(object):
     """ -------------------------------------------------------------------- """
     def write(self):
 
+        if str(self.running) == '0':
+            self.down_speed = ''
+            self.up_speed = ''
+
         # write stat-file
         try:
             f = open(self.file, 'w')

@@ -71,7 +71,8 @@ if __name__ == '__main__':
         daemon.shutdown()
         exitVal = 0
     except Exception, e:
-        print e
+    	print "Exception:"
+    	printException()
 
     # exit
     sys.exit(exitVal)
