@@ -47,6 +47,7 @@ if (isset($_SESSION['user'])) {
 // authentication
 $isLoginRequest = false;
 $bSetReCaptcha = false;
+$nAuthTypeCookie = 0; // Is this a cookie-supporting auth type?
 switch ($cfg['auth_type']) {
 	case 3: /* Basic-Passthru */
 	case 2: /* Basic-Auth */
@@ -63,39 +64,59 @@ switch ($cfg['auth_type']) {
 			exit();
 		}
 		break;
+	case 6:
+		// bring in the recaptcha library
+		require_once('inc/lib/recaptcha/recaptchalib.php');
 	case 1: /* Form-Auth + Cookie */
 		$cookieDelim = '|';
+		$nAuthTypeCookie = 1;
 		// check if login-request
 		$isCookieLoginRequest = tfb_getRequestVar('docookielogin');
 		if ($isCookieLoginRequest == "true") {
+			// state: A cookie exists, user is logged out, and user pushes "Login as X" button to use the cookie and come in.
 			$isLoginRequest = true;
 			$user = strtolower(tfb_getRequestVar('username'));
 			$iamhim = "";
 			$md5password = tfb_getRequestVar('md5pass');
+			
 			// set new cookie
-			setcookie("autologin", $user.$cookieDelim.$md5password, time() + 60 * 60 * 24 * 30);
+			setcookie("autologin", $user.$cookieDelim.$md5password, time() + 60 * 60 * 24`* 30);
 		} else {
 			// is a form-login-request ?
 			$docookieloginnew = tfb_getRequestVar('docookieloginnew');
 			if ($docookieloginnew == "true") {
+				// state: User is logging in with form, may or may not have checked the setcookie option.
 				$isLoginRequest = true;
 				$user = strtolower(tfb_getRequestVar('username'));
 				$requestPW = tfb_getRequestVar('iamhim');
 				$iamhim = addslashes($requestPW);
 				$md5password = "";
 				$setcookie = tfb_getRequestVar('setcookie');
+
+				// test the captcha if this is login type 6.  If it fails then don't set the cookie.
+				if($cfg["auth_type"] == 6)
+					if(!auth_validateRecaptcha($user, $iamhim, $bSetRecaptcha))
+						if($setcookie == "true")
+							$setcookie = "false";
+							
 				// set cookie if wanted
 				if ($setcookie == "true")
 					setcookie("autologin", $user.$cookieDelim.md5($requestPW), time() + 60 * 60 * 24 * 30);
 			} else {
 				// check if cookie-set
 				if (isset($_COOKIE["autologin"])) {
+					// state: user is logged out, but login page senses cookie credentials.  We need a new recaptcha for user change.
+				
 					// cookie is set
 					$tmpl->setvar('cookie_set', 1);
 					$creds = explode($cookieDelim, $_COOKIE["autologin"]);
 					$tmpl->setvar('cookieuser', $creds[0]);
 					$tmpl->setvar('cookiepass', $creds[1]);
 				}
+				// Either user is logged out and form is sensing login credentials, so a user change form needs the recaptcha -OR-
+				// cookie is not set for this login.  The auth form with cookie checkbox is shown
+				if($cfg["auth_type"] == 6) 
+					$bSetReCaptcha = true;
 			}
 		}
 		break;
@@ -139,34 +160,9 @@ switch ($cfg['auth_type']) {
 		$md5password = "";
 		if (!empty($user)) {
 			$isLoginRequest = true;
+			
 			// test the captcha.
-			if (tfb_getRequestVar('recaptcha_response_field')) {
-				$recaptcha_resp = recaptcha_check_answer (
-				$cfg["recaptcha_private_key"], 
-				$_SERVER["REMOTE_ADDR"], 
-				tfb_getRequestVar('recaptcha_challenge_field'), 
-				tfb_getRequestVar('recaptcha_response_field'));
-
-				if(!$recaptcha_resp->is_valid) {
-					// log this
-					AuditAction($cfg["constants"]["access_denied"], 
-					  "FAILED RECAPTCHA: User: ".
-					  $user.
-					  " Error: ".
-					  $recaptcha_resp->error);
-					// flush credentials
-					$user = "";
-					$iamhim = "";
-					// ensure recaptcha value is reset.
-					$bSetReCaptcha = true;
-				}
-			} else {
-				// no recaptcha value, flush credentials.
-				$user = "";
-				$iamhim = "";
-				// ensures another recaptcha is shown.
-				$bSetReCaptcha = true;
-			}
+			auth_validateRecaptcha($user, $iamhim, $bSetRecaptcha);
 		} else {
 		  // this is not a login request
 		  $bSetReCaptcha = true;
@@ -199,8 +195,8 @@ if ($isLoginRequest) {
 	} else {
 		$tmpl->setvar('login_failed', 1);
 
-		// reset the captcha if this was an auth type of 5.
-		$bSetReCaptcha = ($cfg["auth_type"] == 5);
+		// reset the captcha if this was an auth types of 5 or 6.
+		$bSetReCaptcha = ($cfg["auth_type"] == 5 || $cfg["auth_type"] == 6);
 	}
 }
 
@@ -213,6 +209,7 @@ if($bSetReCaptcha) {
 
 // defines
 $tmpl->setvar('auth_type', $cfg["auth_type"]);
+$tmpl->setvar('auth_type_cookie', $nAuthTypeCookie); // 2009-05-12 tells template we are type 1 or 6.
 tmplSetTitleBar($cfg["pagetitle"], false);
 tmplSetFoot(false);
 tmplSetIidVars();

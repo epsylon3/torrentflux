@@ -11,7 +11,7 @@
 			<form name="cookieLogin" action="login.php" method="post">
 				<span class="upload_first">
 					Login
-					<tmpl_if name="auth_type" value="1">
+					<tmpl_if name="auth_type_cookie" value="1">
 						<tmpl_if name="cookie_set" value="1">
 							<input name="docookielogin" type="Hidden" value="true">
 							<input name="username" type="Hidden" value="<tmpl_var name="cookieuser">">
@@ -35,6 +35,11 @@
 					<input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
 					<label for="setcookie">Set "Auto-Login" Cookie</label>
 					<input type="checkbox" name="setcookie" id="setcookie" value="true" checked size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+
+<tmpl_if name="auth_type" value="6">
+<tmpl_var name="recaptcha_html"><br />
+</tmpl_if>
+
 					<input class="button" type="submit" value="Login" />
 				</form>
 			<tmpl_else>
@@ -46,6 +51,11 @@
 					<input type="password" name="iamhim" id="iamhim" size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
 					<label for="setcookie">Set "Auto-Login" Cookie</label>
 					<input type="checkbox" name="setcookie" id="setcookie" value="true" checked size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /><br />
+
+<tmpl_if name="auth_type" value="6">
+<tmpl_var name="recaptcha_html"><br />
+</tmpl_if> 
+
 					<input class="button" type="submit" value="Login" />
 				</form>
 			</tmpl_if>

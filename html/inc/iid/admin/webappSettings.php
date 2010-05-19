@@ -69,6 +69,13 @@ array_push($authlist, array(
 	    'aselected' => ($cfg["auth_type"] == 5) ? 1: 0
 	    )
 );
+// 2009-05-12 pmunn@munn.com: Form-Auth + ReCaptcha + Cookie.
+array_push($authlist, array(
+	    'avalue' => 6,
+	    'atype'=>'Form-Auth + reCAPTCHA + Cookie',
+	    'aselected' => ($cfg["auth_type"] == 6) ? 1: 0
+	    )
+);
 // Basic-Auth
 array_push($authlist, array(
 	'avalue' => 2,

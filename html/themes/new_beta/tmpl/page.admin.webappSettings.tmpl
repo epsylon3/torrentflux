@@ -36,6 +36,10 @@
 							<li><strong>Form Auth</strong><br/>Standard form based authentication.</li>
 							<li><strong>Form Auth + Cookie</strong><br/>Standard form based authentication using an 'autologin' cookie (expires after 30 days).</li>
 							<li><strong>Form Auth + Image</strong><br/>Standard form based authentication using image based captcha validation (user must enter the characters displayed in a dynamically created image to validate).</li>
+
+<li><strong>Form Auth + reCAPTCHA</strong><br/>Standard form based authentication using image based captcha validation from reCAPTCHA.net.  (Must supply keys below.)</li>
+
+<li><strong>Form Auth + reCAPTCHA + Cookie</strong><br/>Augments Form Auth + Cookie above with image-based validation from reCAPTCHA.net.  (Must supply keys below.)</li>
 							<li><strong>Basic Auth</strong><br/>Use HTTP Basic Authentication scheme (browser will handle user/password input).</li>
 							<li><strong>Basic Auth + Passthrough</strong><br/>Pass the credentials of a user authenticated externally via basic auth to the webapp.</li>
 						</ul>
@@ -54,6 +58,27 @@
 						Specify the realm name to use if Basic Authentication method is used.
 					</td>
 				</tr>
+
+<tr>
+  <td class="settingsTitle">
+    <label for="recaptcha_public_key"><strong>reCAPTCHA Public Key:</strong></label><br/>
+    Supply the Public Key if Form + reCAPTCHA Authentication method is used.
+  </td>
+  <td class="settingsSetting">
+    <input name="recaptcha_public_key" id="recaptcha_public_key" type="Text" maxlength="64" value="<tmpl_var name="recaptcha_public_key">" size="45">
+  </td>
+</tr>
+
+<tr>
+  <td class="settingsTitle">
+    <label for="recaptcha_private_key"><strong>reCAPTCHA Private Key:</strong></label><br/>
+    Supply the Private Key if Form + reCAPTCHA Authentication method is used.
+  </td>
+  <td class="settingsSetting">
+    <input name="recaptcha_private_key" id="recaptcha_private_key" type="Text" maxlength="64" value="<tmpl_var name="recaptcha_private_key">" size="45">
+  </td>
+</tr>
+
 				<tr>
 					<td class="settingsTitle">
 						<label for="pagetitle">Default Page Title</label>

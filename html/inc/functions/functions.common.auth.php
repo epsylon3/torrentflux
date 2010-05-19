@@ -206,4 +206,46 @@ function firstLogin($username = '', $password = '') {
 	AuditAction($cfg["constants"]["update"], "Initial Settings Updated for first login.");
 }
 
+/**
+ * validate the recaptcha from login.php
+ * 
+ * 2009-05-12 pmunn@munn.com - created function
+ */
+function auth_validateRecaptcha(&$user, &$iamhim, &$bSetRecaptcha) {
+	$bResult = false;
+
+	global $cfg;
+	
+	if (tfb_getRequestVar('recaptcha_response_field')) {
+		$recaptcha_resp = recaptcha_check_answer (
+		$cfg["recaptcha_private_key"], 
+		$_SERVER["REMOTE_ADDR"], 
+		tfb_getRequestVar('recaptcha_challenge_field'), 
+		tfb_getRequestVar('recaptcha_response_field'));
+
+		if(!$recaptcha_resp->is_valid) {
+			// log this
+			AuditAction($cfg["constants"]["access_denied"], 
+			  "FAILED RECAPTCHA: User: ".
+			  $user.
+			  " Error: ".
+			  $recaptcha_resp->error);
+			// flush credentials
+			$user = "";
+			$iamhim = "";
+			// ensure recaptcha value is reset.
+			$bSetReCaptcha = true;
+		} else {
+			$bResult = true;
+		}
+	} else {
+		// no recaptcha value, flush credentials.
+		$user = "";
+		$iamhim = "";
+		// ensures another recaptcha is shown.
+		$bSetReCaptcha = true;
+	}
+	return $bResult;
+}
+
 ?>

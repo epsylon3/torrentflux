@@ -45,7 +45,7 @@
 															<tmpl_if name="login_failed">
 																<div align="center">Login failed.<br />Please try again.</div>
 															</tmpl_if>
-															<tmpl_if name="auth_type" value="1">
+															<tmpl_if name="auth_type_cookie" value="1">
 																<tmpl_if name="cookie_set" value="1">
 																	<form name="cookieLogin" action="login.php" method="post">
 																		<table width="100%" cellpadding="5" cellspacing="0" border="0">
@@ -80,6 +80,9 @@
 																				<td align="right"><label for="setcookie">Set "Auto-Login" Cookie</label></td>
 																				<td align="left"><input type="checkbox" name="setcookie" id="setcookie" value="true" checked size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /></td>
 																			</tr>
+																		<tmpl_if name="auth_type" value="6">
+																			<tr><td colspan="2"><tmpl_var name="recaptcha_html"></td></tr>
+																		</tmpl_if>
 																			<tr>
 																				<td colspan="2" align="center">
 																					<input name="docookieloginnew" type="Hidden" value="true">
@@ -103,6 +106,9 @@
 																				<td align="right"><label for="setcookie">Set "Auto-Login" Cookie</label></td>
 																				<td align="left"><input type="checkbox" name="setcookie" id="setcookie" value="true" checked size="15" style="font-family:verdana,helvetica,sans-serif; font-size:9px; color:#000" /></td>
 																			</tr>
+																		<tmpl_if name="auth_type" value="6">
+																			<tr><td colspan="2"><tmpl_var name="recaptcha_html"></td></tr>
+																		</tmpl_if>																			
 																			<tr>
 																				<td colspan="2" align="center">
 																					<input name="docookieloginnew" type="Hidden" value="true">

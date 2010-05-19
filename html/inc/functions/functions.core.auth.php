@@ -57,7 +57,7 @@ function getCredentials() {
 		}
 	}
 	// check for cookie-supplied credentials (only if activated)
-	if ($cfg['auth_type'] == 1) {
+	if ($cfg['auth_type'] == 1 || $cfg['auth_type'] == 6) {
 		if (isset($_COOKIE["autologin"])) {
 			$creds = explode('|', $_COOKIE["autologin"]);
 			$retVal = array();
