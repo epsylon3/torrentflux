@@ -837,7 +837,7 @@ if (isset($_REQUEST["1"])) {                                                    
 	send("<h2>Setup Completed</h2>");
 	send("<p>Congratulations!  "._NAME." has successfully been installed.</p>");
 
-	if ((substr(_VERSION, 0, 3)) != "svn") {
+	if ((substr(_VERSION, 0, 3)) != "svn" && (substr(_VERSION, 0, 3)) != "git") {
 		$result = @unlink(__FILE__);
 		if ($result !== true) {
 			$err = 'Could not delete '.__FILE__.'. Please delete the file manually.';
@@ -855,7 +855,7 @@ if (isset($_REQUEST["1"])) {                                                    
 			send('</form>');
 		}
 	} else {
-		$msg = '<font color="blue">This is an svn-version. '.__FILE__.' is untouched. Please remove the file manually to login to your '._NAME.' installation.</font>';
+		$msg = '<font color="blue">This is an '.substr(_VERSION, 0, 3).'-version. '.__FILE__.' is untouched. Please remove the file manually to login to your '._NAME.' installation.</font>';
 		displaySetupMessage($msg, true);
 	}
 		send("<p><strong>Important:</strong><br/>When logging in for the first time <strong>the login username and password you supply there will create the default superadmin user for your "._NAME." installation.</strong>  For this reason it is important you do this immediately and remember the username and password!!!</p>");

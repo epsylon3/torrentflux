@@ -208,9 +208,9 @@ if (isset($dir)) {
 }
 
 foreach($tDirPs as $key => $value) {
-	$value=ereg_replace('(.*\.torrent)\.pid','\1',$value);	
+	$value=preg_replace('#(.*\.torrent)\.pid#','\1',$value);	
 	$stats=explode("\n",file_get_contents($value.".stat"));	
-	$value=ereg_replace('.*\.transfers/([^ ]+\.torrent)','\1',$value);
+	$value=preg_replace('#.*\.transfers/([^ ]+\.torrent)#','\1',$value);
 	$path=getTransferDatapath($value);
 	if ((0+$stats[1]) < 100) {
 		$tRunning[$path]=$value;

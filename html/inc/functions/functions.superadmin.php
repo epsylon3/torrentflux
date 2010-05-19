@@ -180,19 +180,19 @@ function sa_processes($action = "") {
 			$running = getRunningClientProcesses();
 			foreach ($running as $rng) {
 				$rt = RunningTransfer::getInstance($rng['pinfo'], $rng['client']);
-			    $htmlMain .= '<tr bgcolor="'.$cfg["table_header_bg"].'">';
-			    $htmlMain .= '<td nowrap><div class="tiny">';
-			    $htmlMain .= tfb_htmlencodekeepspaces($rt->transferowner);
-			    $htmlMain .= '</div></td>';
-			    $htmlMain .= '<td nowrap><div align=center><div class="tiny" align="left">';
-			    $htmlMain .= $rt->transferFile;
-			    $htmlMain .= '</div></td>';
-			    $htmlMain .= '<td nowrap>';
-			    $htmlMain .= '<a href="dispatcher.php?action=forceStop&riid=_referer_';
-			    $htmlMain .= "&transfer=".urlencode($rt->transferFile);
-			    $htmlMain .= "&pid=".$rt->processId;
-			    $htmlMain .= '"><img src="themes/'.$cfg["theme"].'/images/kill.gif" width="16" height="16" title="'.$cfg['_FORCESTOP'].'" border="0"></a></td>';
-			    $htmlMain .= '</tr>';
+				$htmlMain .= '<tr bgcolor="'.$cfg["table_header_bg"].'">';
+				$htmlMain .= '<td nowrap><div class="tiny">';
+				$htmlMain .= tfb_htmlencodekeepspaces($rt->transferowner);
+				$htmlMain .= '</div></td>';
+				$htmlMain .= '<td nowrap><div align=center><div class="tiny" align="left">';
+				$htmlMain .= $rt->transferFile;
+				$htmlMain .= '</div></td>';
+				$htmlMain .= '<td nowrap>';
+				$htmlMain .= '<a href="dispatcher.php?action=forceStop&riid=_referer_';
+				$htmlMain .= "&transfer=".urlencode($rt->transferFile);
+				$htmlMain .= "&pid=".$rt->processId;
+				$htmlMain .= '"><img src="themes/'.$cfg["theme"].'/images/kill.gif" width="16" height="16" title="'.$cfg['_FORCESTOP'].'" border="0"></a></td>';
+				$htmlMain .= '</tr>';
 			}
 			$htmlMain .= '</table>';
 			$htmlMain .= '</div>';
@@ -1069,49 +1069,56 @@ function sa_tfb($action = "") {
 			$versionAvailable = trim(getDataFromUrl(_SUPERADMIN_URLBASE._SUPERADMIN_PROXY));
 			if ((isset($versionAvailable)) && ($versionAvailable != "")) {
 				// set image
-				if ($versionAvailable == _VERSION || (substr(_VERSION, 0, 3)) == "svn")
+				if ($versionAvailable == _VERSION || (substr(_VERSION, 0, 3)) == "svn" || (substr(_VERSION, 0, 3)) == "git")
 					$statusImage = "green.gif";
 				else
 					$statusImage = "red.gif";
 				// version-text
 				$htmlMain .= '<br>';
-				if (strpos(_VERSION, "svn") !== false) {
-				        $htmlMain .= '<strong>This Version: </strong>'._VERSION;
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<strong>Latest Release: </strong>';
-    					$htmlMain .= $versionAvailable;
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<font color="blue">This Version is a svn-Version.</font>';
+				if (strpos(_VERSION, "git") !== false) {
+						$htmlMain .= '<strong>This Version: </strong>'._VERSION;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<strong>Latest Release: </strong>';
+						$htmlMain .= $versionAvailable;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<font color="blue">This Version is a git-Version.</font>';
+				elseif (strpos(_VERSION, "svn") !== false) {
+						$htmlMain .= '<strong>This Version: </strong>'._VERSION;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<strong>Latest Release: </strong>';
+						$htmlMain .= $versionAvailable;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<font color="blue">This Version is a svn-Version.</font>';
 				} else {
-    				if ($versionAvailable != _VERSION) {
-    					$htmlMain .= '<strong>This Version: </strong>';
-    					$htmlMain .= '<font color="red">'._VERSION.'</font>';
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<strong>Available Version: </strong>';
-    					$htmlMain .= $versionAvailable;
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<strong><font color="red">There is a new Version available !</font></strong>';
-    					$htmlMain .= '<br><br>';
+					if ($versionAvailable != _VERSION) {
+						$htmlMain .= '<strong>This Version: </strong>';
+						$htmlMain .= '<font color="red">'._VERSION.'</font>';
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<strong>Available Version: </strong>';
+						$htmlMain .= $versionAvailable;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<strong><font color="red">There is a new Version available !</font></strong>';
+						$htmlMain .= '<br><br>';
 						$htmlMain .= '<form name="update" action="' . _FILE_THIS . '" method="post">';
 						$htmlMain .= '<input type="Hidden" name="u" value="0">';
 						$htmlMain .= '<input type="submit" value="Update to Version '.$versionAvailable.'">';
 						$htmlMain .= '</form>';
-    					$htmlMain .= '<strong>Current Release: </strong>';
-    					$htmlMain .= '<br>';
-    					$htmlMain .= '<a href="'._URL_RELEASE.'" target="_blank"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Current Release" border="0"> '._URL_RELEASE.'</a>';
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<strong>Homepage: </strong>';
-    					$htmlMain .= '<br>';
-    					$htmlMain .= '<a href="'._URL_HOME.'" target="_blank"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Homepage on BerliOS" border="0"> '._URL_HOME.'</a>';
-    					$htmlMain .= '<br>';
-    				} else {
-    					$htmlMain .= '<strong>This Version: </strong>'._VERSION;
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<strong>Available Version: </strong>';
-    					$htmlMain .= $versionAvailable;
-    					$htmlMain .= '<br><br>';
-    					$htmlMain .= '<font color="green">This Version looks good.</font>';
-    				}
+						$htmlMain .= '<strong>Current Release: </strong>';
+						$htmlMain .= '<br>';
+						$htmlMain .= '<a href="'._URL_RELEASE.'" target="_blank"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Current Release" border="0"> '._URL_RELEASE.'</a>';
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<strong>Homepage: </strong>';
+						$htmlMain .= '<br>';
+						$htmlMain .= '<a href="'._URL_HOME.'" target="_blank"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Homepage on BerliOS" border="0"> '._URL_HOME.'</a>';
+						$htmlMain .= '<br>';
+					} else {
+						$htmlMain .= '<strong>This Version: </strong>'._VERSION;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<strong>Available Version: </strong>';
+						$htmlMain .= $versionAvailable;
+						$htmlMain .= '<br><br>';
+						$htmlMain .= '<font color="green">This Version looks good.</font>';
+					}
 				}
 				$htmlMain .= '<br><br>';
 			} else { // could not get the version
@@ -1120,9 +1127,9 @@ function sa_tfb($action = "") {
 				$htmlMain = '<br>';
 				$htmlMain .= '<font color="red">Error getting available version.</font>';
 				$htmlMain .= '<br><br>';
-    			$htmlMain .= '<strong>Current Release: </strong>';
-    			$htmlMain .= '<br>';
-    			$htmlMain .= '<a href="'._URL_RELEASE.'" target="_blank"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Current Release" border="0"> '._URL_RELEASE.'</a>';
+				$htmlMain .= '<strong>Current Release: </strong>';
+				$htmlMain .= '<br>';
+				$htmlMain .= '<a href="'._URL_RELEASE.'" target="_blank"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Current Release" border="0"> '._URL_RELEASE.'</a>';
 				$htmlMain .= '<br><br>';
 				$htmlMain .= '<strong>Homepage: </strong>';
 				$htmlMain .= '<br>';
@@ -1866,13 +1873,13 @@ function updateError($message = "") {
 function getAdoConnection() {
 	global $cfg;
 	// create ado-object
-    $db = &ADONewConnection($cfg["db_type"]);
-    // connect
-    $result = @ $db->Connect($cfg["db_host"], $cfg["db_user"], $cfg["db_pass"], $cfg["db_name"]);
-    // check for error
-    if ($db->ErrorNo() != 0 || !$result)
-    	return false;
-    // return db-connection
+	$db = &ADONewConnection($cfg["db_type"]);
+	// connect
+	$result = @ $db->Connect($cfg["db_host"], $cfg["db_user"], $cfg["db_pass"], $cfg["db_name"]);
+	// check for error
+	if ($db->ErrorNo() != 0 || !$result)
+		return false;
+	// return db-connection
 	return $db;
 }
 
@@ -2518,12 +2525,12 @@ function phpCheckWeb() {
 	// get os
 	$osString = php_uname('s');
 	if (isset($osString)) {
-	    if (!(stristr($osString, 'linux') === false)) /* linux */
-	    	define('_OS', 1);
-	    else if (!(stristr($osString, 'bsd') === false)) /* bsd */
-	    	define('_OS', 2);
-	    else
-	    	define('_OS', 0);
+		if (!(stristr($osString, 'linux') === false)) /* linux */
+			define('_OS', 1);
+		else if (!(stristr($osString, 'bsd') === false)) /* bsd */
+			define('_OS', 2);
+		else
+			define('_OS', 0);
 	} else {
 		define('_OS', 0);
 	}
