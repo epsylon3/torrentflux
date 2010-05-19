@@ -210,8 +210,8 @@ class Vlc
     function Vlc() {
     	global $cfg;
     	$this->addr = $_SERVER['SERVER_ADDR'];
-    	$this->port_default = $cfg['vlc_port'];
-    	$this->port = (int) $this->port_default;// + (int)$cfg['uid'];
+    	$this->port_default = (int) $cfg['vlc_port'];
+    	$this->port = $this->port_default;// + (int)$cfg['uid'];
     }
 
 	// =========================================================================
@@ -255,7 +255,7 @@ class Vlc
 	 */
     function instance_stop($port = 0) {
     	global $cfg;
-		if ($port == $cfg['vlc_port']) { /* all */
+		if ($port == 0) { /* all */
 			@shell_exec("killall -9 vlc > /dev/null");
 
 		$errno=0; $errstr="";
