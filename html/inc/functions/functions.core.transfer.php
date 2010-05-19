@@ -263,7 +263,7 @@ function getTransferDetails($transfer, $full) {
 		$settingsAry = $transfers['settings'][$transfer];
 	} else {
 		$settingsAry = array();
-		if (substr($transfer, -8) == ".torrent") {
+		if (substr(str_replace('.imported','',$transfer), -8) == ".torrent") {
 			// this is a t-client
 			$settingsAry['type'] = "torrent";
 			$settingsAry['client'] = $cfg["btclient"];
@@ -421,10 +421,11 @@ function getTransferArray($sortOrder = '') {
 				case 'prio':
 					break;
 				default:
-					if (tfb_isValidTransfer($transfer))
+					$transferName=str_replace('.imported','',$transfer);
+					if (tfb_isValidTransfer($transferName))
 						$retVal[filemtime($cfg["transfer_file_path"].$transfer).md5($transfer)] = $transfer;
 					else
-						AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+						AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transferName);
 					break;
 			}
 		}
@@ -535,7 +536,7 @@ function getTransferListArray() {
 			$settingsAry = $transfers['settings'][$transfer];
 		} else {
 			$settingsAry = array();
-			if (substr($transfer, -8) == ".torrent") {
+			if (substr(str_replace('.imported','',$transfer), -8) == ".torrent") {
 				// this is a t-client
 				$settingsAry['type'] = "torrent";
 				$settingsAry['client'] = $cfg["btclient"];
@@ -954,8 +955,9 @@ function getTransferDatapath($transfer) {
 				// this is a torrent-client
 				require_once('inc/classes/BDecode.php');
 				$ftorrent = $cfg["transfer_file_path"].$transfer;
-				$fd = fopen($ftorrent, "rd");
-				$alltorrent = fread($fd, filesize($ftorrent));
+				$alltorrent = @file_get_contents($ftorrent);
+				if ($alltorrent == "") return "";
+				
 				$btmeta = @BDecode($alltorrent);
 				$datapath = (empty($btmeta['info']['name']))
 					? ""

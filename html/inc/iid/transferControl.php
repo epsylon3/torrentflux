@@ -96,6 +96,15 @@ if (empty($pageop)) {
 }
 $tmpl->setvar('pageop', $pageop);
 
+
+// get details vars to extract Annouce URL (Epsylon3)
+transfer_setDetailsVars();
+
+$announceUrl = strstr($tmpl->_vars['transferMetaInfo'],'announce url..: ');
+$announceUrl = str_replace('announce url..: ','',$announceUrl);
+if (strstr($announceUrl,"\n")) $announceUrl = substr($announceUrl,0,strpos($announceUrl,"\n"));
+$tmpl->setvar('announceUrl', $announceUrl);
+
 // op-switch
 switch ($pageop) {
 
@@ -186,6 +195,14 @@ switch ($pageop) {
 		$tmpl->setvar('is_queue', (FluxdQmgr::isRunning()) ? 1 : 0);
 
 		// break
+		break;
+
+	case "rewrite":                                                /* btreannounce*/
+
+		$newUrl = tfb_getRequestVar('announceUrl');
+		if ($newUrl != $announceUrl) {
+			echo shell_exec("cd ".tfb_shellencode($cfg["transfer_file_path"])."; ".$cfg["pythonCmd"]." -OO ".tfb_shellencode($cfg["docroot"]."bin/clients/tornado/btreannounce.py")." ".tfb_shellencode($newUrl).' '.tfb_shellencode($transfer));
+		}
 		break;
 
 	default:                                                       /* default */

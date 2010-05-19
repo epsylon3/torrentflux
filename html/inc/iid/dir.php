@@ -44,6 +44,9 @@ require_once('inc/functions/functions.common.php');
 // dir functions
 require_once('inc/functions/functions.dir.php');
 
+// transfer functions (to know running)
+require_once('inc/functions/functions.transfer.php');
+
 // config
 initRestrictedDirEntries();
 
@@ -68,6 +71,7 @@ if (tfb_isValidPath($dir) !== true) {
  * chmod
  ******************************************************************************/
 if ($chmod != "") {
+	if (substr($dir,strlen($dir)-1)=='/') $dir=substr($dir,0,strlen($dir)-1);
 	// is enabled ?
 	if ($cfg["dir_enable_chmod"] != 1) {
 		AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use chmod (".$dir.")");
@@ -86,6 +90,7 @@ if ($chmod != "") {
  * delete
  ******************************************************************************/
 if ($del != "") {
+	if (substr($dir,strlen($dir)-1)=='/') $dir=substr($dir,0,strlen($dir)-1);
 	// only valid entry with permission
 	if ((isValidEntry(basename($del))) && (hasPermission($del, $cfg["user"], 'w'))) {
 		$current = delDirEntry($del);
@@ -185,14 +190,36 @@ if ($tar != "") {
 /*******************************************************************************
  * dir-page
  ******************************************************************************/
+$tDirPs=array();
+$tRunning=array();
+$tSeeding=array();
 
 // check dir-var
 if (isset($dir)) {
-	if ($dir != "")
-		$dir = $dir."/";
+	if ($dir != "" && substr($dir,strlen($dir)-1,1)!="/") {
+		$dir = $dir."/";	
+	}
+	if ($dir != "") {
+		//get list of processes of known running transfers
+		$tDirPs=explode("\n", shell_exec( "ls ".$cfg['transfer_file_path']."/*.pid"));
+	}
 } else {
 	$dir = "";
 }
+
+foreach($tDirPs as $key => $value) {
+	$value=ereg_replace('(.*\.torrent)\.pid','\1',$value);	
+	$stats=explode("\n",file_get_contents($value.".stat"));	
+	$value=ereg_replace('.*\.transfers/([^ ]+\.torrent)','\1',$value);
+	$path=getTransferDatapath($value);
+	if ((0+$stats[1]) < 100) {
+		$tRunning[$path]=$value;
+	} else {
+		$tSeeding[$path]=$value;
+	}
+}
+unset($tDirPs);
+
 
 // dir-name
 $dirName = $cfg["path"].$dir;
@@ -273,11 +300,26 @@ foreach ($entrys as $entry) {
 		$islink = 1;
 	}
 	// dirstats
+	$size = 0;
+	$date = "";
+
 	if ($cfg['enable_dirstats'] == 1) 
 	{
 		if($islink == 0) // it's not a symbolic link
-		{
-			$size = (is_dir($dirName.$entry))? formatBytesTokBMBGBTB(dirsize($dirName.$entry)):formatBytesTokBMBGBTB(filesize($dirName.$entry));
+		{	
+			$path = $dirName.$entry;
+			$ssz = is_dir($dirName.$entry)? dirsize($path) : @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
+			if ($ssz < 0)
+				$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
+
+			//if shell_exec fails (or windows)
+			if (!$ssz)
+				$ssz = is_dir($dirName.$entry)? dirsize($path) : filesize($path);
+
+			$size = formatBytesTokBMBGBTB( $ssz );
+			
+			if (strstr($size,"G")) $size="<b>$size</b>";
+
 			$timeStamp = filemtime($dirName.$entry);
 			$date = date("m-d-Y h:i a", $timeStamp);
 		}
@@ -342,8 +384,15 @@ foreach ($entrys as $entry) {
 		}
 		$permission .= " (0".$permission_oct.")";
 	}
+	$realentry=$entry;
 	if(function_exists('mb_detect_encoding') && function_exists('utf8_decode') && mb_detect_encoding(" ".$entry." ",'UTF-8,ISO-8859-1') == 'UTF-8')
 		$entry = utf8_decode($entry);
+	
+	if (array_key_exists($realentry,$tRunning)) {
+		$size='<span style="color:red;">'.$size.'</span>';
+	} elseif (array_key_exists($realentry,$tSeeding)) {
+		$size='<span style="color:blue;">'.$size.'</span>';
+	}
 	
 	// add entry to dir-array
 	array_push($list, array(

@@ -29,7 +29,10 @@ function netstatConnectionsSum() {
 	global $cfg;
 	switch ($cfg["_OS"]) {
 		case 1: // linux
-			return intval(trim(shell_exec($cfg['bin_netstat']." -e -p --tcp -n 2> /dev/null | ".$cfg['bin_grep']." -v root | ".$cfg['bin_grep']." -v 127.0.0.1 | ".$cfg['bin_grep']." -cE '.*(python|transmissionc|wget|nzbperl|java).*'")));
+			$res = shell_exec(
+				$cfg['bin_netstat']." -e -p --tcp -n 2> /dev/null | ".$cfg['bin_grep']." -v root | ".$cfg['bin_grep']." -v 127.0.0.1 | ".$cfg['bin_grep']." -cE '.*(python|transmissionc|wget|nzbperl|java).*'"
+			);
+			return intval(trim($res));
 		case 2: // bsd
 			$processUser = posix_getpwuid(posix_geteuid());
 			$webserverUser = $processUser['name'];
@@ -58,7 +61,10 @@ function netstatConnectionsByPid($transferPid) {
 	global $cfg;
 	switch ($cfg["_OS"]) {
 		case 1: // linux
-			return trim(shell_exec($cfg['bin_netstat']." -e -p --tcp --numeric-hosts --numeric-ports 2> /dev/null | ".$cfg['bin_grep']." -v root | ".$cfg['bin_grep']." -v 127.0.0.1 | ".$cfg['bin_grep']." -c \"".$transferPid ."/\""));
+			$res = shell_exec(
+				$cfg['bin_netstat']." -e -p --tcp --numeric-hosts --numeric-ports 2> /dev/null | ".$cfg['bin_grep']." -v root | ".$cfg['bin_grep']." -v 127.0.0.1 | ".$cfg['bin_grep']." -c \"".$transferPid ."/\""
+			);
+			return intval(trim($res));
 		case 2: // bsd
 			$processUser = posix_getpwuid(posix_geteuid());
 			$webserverUser = $processUser['name'];

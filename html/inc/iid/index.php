@@ -121,6 +121,17 @@ foreach ($arList as $transfer) {
 		$settingsAry["savepath"] = getTransferSavepath($transfer);
 		$settingsAry['datapath'] = getTransferDatapath($transfer);
 	}
+	// Fix FluAzu progression 100% (client to check, not set to "azureus")
+	if ($settingsAry["client"] == "") {
+	
+		if (!$sf->seedlimit)
+			$sf->seedlimit=$settingsAry["sharekill"];
+	
+		if ((0+$sf->size) > 0) {
+			if (!$sf->sharing) 
+				$sf->sharing=(0+$sf->uptotal)/(0+$sf->size)*100;
+		}
+	}
 	// cache running-flag in local var. we will access that often
 	$transferRunning = $sf->running;
 	// cache percent-done in local var. ...

@@ -120,7 +120,13 @@ class ClientHandlerTornado extends ClientHandler
         // build the command-string
 		// note : order of args must not change for ps-parsing-code in
 		// RunningTransferTornado
-		$this->command  = "cd ".tfb_shellencode($this->savepath).";";
+
+		$this->command  = "";
+
+//	       Proxy Hack
+//	       $this->command .= 'export http_proxy=127.0.0.1:8118; HTTP_PROXY=$http_proxy;';
+
+		$this->command .= "cd ".tfb_shellencode($this->savepath).";";
 		$this->command .= " HOME=".tfb_shellencode($cfg["path"]);
 		$this->command .= "; export HOME;";
 		$this->command .= $this->umask;
