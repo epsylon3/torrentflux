@@ -30,6 +30,7 @@ class Vlc
 	// lists
 	var $lists = array(
 		'vidc' => array(
+			'direct',
 			'DIV3',
 			'DIV4',
 			'WMV1',
@@ -71,7 +72,7 @@ class Vlc
 	var $addr = "";
 
 	// ports
-	var $port_default = 0;
+	var $port_default = 554;
     var $port = 0;
 
     // private fields
@@ -210,7 +211,7 @@ class Vlc
     	global $cfg;
     	$this->addr = $_SERVER['SERVER_ADDR'];
     	$this->port_default = $cfg['vlc_port'];
-    	$this->port = $this->port_default;
+    	$this->port = (int) $this->port_default;// + (int)$cfg['uid'];
     }
 
 	// =========================================================================
@@ -232,9 +233,16 @@ class Vlc
 		$this->_command = "nohup";
 		$this->_command .= " ".$cfg['bin_vlc'];
 		$this->_command .= " --rc-fake-tty";
-		$this->_command .= " --sout ".tfb_shellencode("#transcode{vcodec=".$vidc.",vb=".$vbit.",scale=1,acodec=".$audc.",ab=".$abit.",channels=2}:std{access=mmsh,mux=asfh,dst=".$this->addr.":".$this->port."}");
-		$this->_command .= " ".tfb_shellencode($file);
-		$this->_command .= " > /dev/null &";
+		if ($vidc=='direct') {
+			$this->_command .= " --play-and-stop --intf telnet -vvv \"".str_replace("'","\'",($file))."\"";
+			$this->_command .= " --sout '#standard{access=http,mux=ogg,dst=".$this->addr.":".$this->port."}'";
+		} else {
+			$this->_command .= " --sout ".tfb_shellencode("#transcode{vcodec=".$vidc.",vb=".$vbit.",scale=1,acodec=".$audc.",ab=".$abit.",channels=2}:std{access=mmsh,mux=asfh,dst=".$this->addr.":".$this->port."}");
+			$this->_command .= " ".tfb_shellencode($file);
+		}
+		$this->_command = str_replace('//','/',$this->_command);
+		
+		$this->_command .= " > /dev/null &"; //2>>/var/log/vlc_tfberr &";
 		// DEBUG : log the command
 		if ($cfg['debuglevel'] > 1)
 			AuditAction($cfg["constants"]["debug"], "vlcStart : ".$this->_command);
@@ -246,8 +254,28 @@ class Vlc
 	 * stop a (/all) stream(s)
 	 */
     function instance_stop($port = 0) {
-    	if ($port == 0) { /* all */
-    		@shell_exec("killall -9 vlc > /dev/null");
+    	global $cfg;
+		if ($port == $cfg['vlc_port']) { /* all */
+			@shell_exec("killall -9 vlc > /dev/null");
+
+		$errno=0; $errstr="";
+		$usenet = fsockopen('127.0.0.1',44412, $errno, $errstr);
+		
+		if (!$usenet) {
+			echo "VLC stopped\n";
+		} else {
+			echo "Connected\n";
+			usleep(100);
+			
+			//VLC Telnet Password (set in vlcrc)
+			fputs ($usenet, "admintfb\r\n");
+			usleep(100);
+			//Command (set in vlcrc)
+			fputs ($usenet, "shutdown\r\n");
+			
+			// this skip non essential text
+			stream_set_timeout($usenet, 2); // set the timeout for the fgets
+			fgets($usenet, 16);
     	}
     }
 
