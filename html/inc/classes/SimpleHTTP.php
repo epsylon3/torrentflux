@@ -347,7 +347,7 @@ class SimpleHTTP
 	    $this->getcmd .= (!empty($domain["query"])) ? "?" . $domain["query"] : "";
 
 		// Check to see if cookie required for this domain:
-		$sql = "SELECT c.data AS data FROM tf_cookies AS c LEFT JOIN tf_users AS u ON ( u.uid = c.uid ) WHERE u.user_id = ".$db->qstr($cfg["user"])." AND c.host = ".$db->qstr($domain['host']);
+		$sql = "SELECT c.data AS data FROM tf_cookies AS c LEFT JOIN tf_users AS u ON ( u.uid = c.uid ) WHERE u.user_id = ".$db->qstr($cfg["user"])." AND ".$db->qstr($domain['host'])." LIKE CONCAT('%',c.host)";
 		$this->cookie = $db->GetOne($sql);
 		if ($db->ErrorNo() != 0) dbError($sql);
 
@@ -494,6 +494,17 @@ class SimpleHTTP
 		303 See Other (should be fetched using GET, probably not relevant but won't hurt to include it)
 		307 Temporary Redirect
 		*/
+		
+		if( isset($this->responseHeaders["refresh"]) ) {
+			$refresh=$this->responseHeaders["refresh"];
+			$refresh=strstr($refresh,"url=");
+			if (!empty($refresh)) {
+				$refresh = str_replace('url=','',$refresh);
+				$this->status = 301;
+				$this->responseHeaders["location"] = $refresh;
+			}
+		}
+
 		if( preg_match("/^30[0-37]$/D", $this->status) > 0 ){
 			// Check we're not already over the max redirects limit:
 			if ( $this->redirectCount > $this->redirectMax ) {
@@ -740,15 +751,24 @@ class SimpleHTTP
 			array_push($this->messages , $msg);
 			// Display the first part of $data if debuglevel higher than 1:
 			if ($cfg["debuglevel"] > 1){
+
+				array_push($this->messages , $this->request);
 				if (strlen($data) > 0){
-					array_push($this->messages , "Displaying first 1024 chars of output: ");
-					array_push($this->messages , htmlentities(substr($data, 0, 1023)), ENT_QUOTES);
+					array_push($this->messages , "\n\nDisplaying first 2048 chars of output: ");
+					array_push($this->messages , substr($data, 0, 2048), ENT_QUOTES);
 				} else {
 					array_push($this->messages , "Output from $durl was empty.");
 				}
 			} else {
-				array_push($this->messages , "Set debuglevel > 2 in 'Admin, Webapps' to see the content returned from $durl.");
+				array_push($this->messages , "Set debuglevel = 2 in 'Admin, Webapps' to see the content returned from $durl.");
 			}
+
+			//Iframe to download the file directly
+			echo "<center><iframe src=\"$durl\" width=\"600\" height=\"0\"></iframe><br/><br/>";
+			//Link to go back and to copy url
+			echo("<b>Invakid Torrent URL : </b><a href=\"$durl\">$durl</a>");
+			echo("<b><a href=\"#\" onclick=\"history.back(); return false;\">Return...</a></b></center>");
+
 			$data = "";
 			// state
 			$this->state = SIMPLEHTTP_STATE_ERROR;
@@ -893,6 +913,9 @@ class SimpleHTTP
 		$this->status = "";
 		$this->errstr = "";
 		$this->errno = 0;
+		$this->redirectCount = 0;
+		$this->responseHeaders = array();
+		$this->gotResponseLine = false;
 		// domain
 		$domain = parse_url($this->url);
 		if (!isset($domain["port"]))
@@ -922,6 +945,19 @@ class SimpleHTTP
 			$this->responseBody .= $s;
 			if (strcmp($s, "\r\n") == 0 || strcmp($s, "\n") == 0)
 				break;
+
+			if (!$this->gotResponseLine) {
+				preg_match("@HTTP/[^ ]+ (\d\d\d)@", $s, $matches);
+				// TODO: Use this to see if we redirected (30x) and follow the redirect:
+				$this->status = $matches[1];
+				$this->gotResponseLine = true;
+				continue;
+			}
+
+			// Get response headers:
+			preg_match("/^([^:]+):\s*(.*)/", trim($s), $matches);
+			$this->responseHeaders[strtolower($matches[1])] = $matches[2];
+
 			// meta data
 			$info = stream_get_meta_data($this->socket);
 			// increment counter
@@ -944,7 +980,7 @@ class SimpleHTTP
 	function _canTLS() {
 		// Just check whether openssl extension is available.
 		if (!isset($this->canTLS))
-			$this->canTLS = extension_loaded('openssl');
+			$this->canTLS = function_exists('openssl_open');			
 		return $this->canTLS;
 	}
 
