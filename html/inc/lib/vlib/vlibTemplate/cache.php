@@ -82,7 +82,7 @@ class vlibTemplateCache extends vlibTemplate {
      * @return boolean
      */
     function setCacheExtension($str = null) {
-        if ($str == null || !ereg('^[a-z0-9]+$', strtolower($str))) return false;
+        if ($str == null || !preg_match('#^[a-z0-9]+$#', strtolower($str))) return false;
         $this->OPTIONS['CACHE_EXTENSION'] = strtolower($str);
         return true;
     }

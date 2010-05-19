@@ -56,13 +56,13 @@ if (!function_exists('html_entity_decode')) {
 function ScrubDescription($desc, $title) {
 	$rtnValue = "";
 	$parts = explode("</a>", $desc);
-	$replace = ereg_replace('">.*$', '">'.$title."</a>", $parts[0]);
+	$replace = preg_replace('#">.*$', '">'.$title."</a>#", $parts[0]);
 	if (strpos($parts[1], "Search:") !== false)
 		$parts[1] = $parts[1]."</a>\n";
 	for ($inx = 2; $inx < count($parts); $inx++) {
 		if (strpos($parts[$inx], "Info: <a ") !== false) {
 			// We have an Info: and URL to clean
-			$parts[$inx] = ereg_replace('">.*$', '" target="_blank">Read More...</a>', $parts[$inx]);
+			$parts[$inx] = preg_replace('#">.*$', '" target="_blank">Read More...</a>#', $parts[$inx]);
 		}
 	}
 	$rtnValue = $replace;

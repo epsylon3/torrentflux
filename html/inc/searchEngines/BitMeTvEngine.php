@@ -602,7 +602,7 @@ class BitMeTv
 
 
             // Cleanup any bugs in the HTML
-            $htmlLine = eregi_replace("</td>\n</td>",'</td>',$htmlLine);
+            $htmlLine = preg_replace("#</td>\n</td>#i",'</td>',$htmlLine);
 
             // Chunck up the row into columns.
             $tmpListArr = split("<td ",$htmlLine);

@@ -1210,7 +1210,7 @@ if (!defined('vlibTemplateClassLoaded')) {
 
             switch (strtolower($this->OPTIONS['UNKNOWNS'])) {
                 case 'comment':
-                    $comment = addcslashes('<!-- unknown variable '.ereg_replace('<!--|-->', '', $wholetag).'//-->', '"');
+                    $comment = addcslashes('<!-- unknown variable '.preg_replace('#<!--|-->#', '', $wholetag).'//-->', '"');
                     $retstr .= ' else { print("'.$comment.'"); $this->_setUnknown("'.$varname.'"); }';
                     return $retstr;
                 break;

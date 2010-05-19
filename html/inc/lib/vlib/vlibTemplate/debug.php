@@ -397,11 +397,11 @@ class vlibTemplateDebug extends vlibTemplate {
                 }
             }
 
-            if (eregi("^([a-z0-9_]+\.)*([a-z0-9_]+[_a-z0-9]*)$", $var, $matches) && !ereg('include|comment', $tag)) $var = $matches[2];
+            if (preg_match("#^([a-z0-9_]+\.)*([a-z0-9_]+[_a-z0-9]*)$#i", $var, $matches) && !preg_match('#include|comment#', $tag)) $var = $matches[2];
 
             // out of sequences
             if ($tag == 'else') {
-                if (ereg('if|elseif|unless', $lasttag[0])) {
+                if (preg_match('#if|elseif|unless#', $lasttag[0])) {
                     continue;
                 } else {
                     array_push($this->_debugwarningmsgs, array(
@@ -413,7 +413,7 @@ class vlibTemplateDebug extends vlibTemplate {
             }
 
             if ($tag == 'elseif') {
-                if (ereg('if|elseif', $lasttag[0])) {
+                if (preg_match('#if|elseif#', $lasttag[0])) {
                     array_pop($this->_debugtags);
                 } else {
                     array_push($this->_debugwarningmsgs, array(
@@ -426,7 +426,7 @@ class vlibTemplateDebug extends vlibTemplate {
 
 
             // bad syntax
-            if (!eregi("^([a-z_]+[_a-z0-9\.]*)$", $var) && !ereg('include|comment', $tag) && !empty($var)) {
+            if (!preg_match("#^([a-z_]+[_a-z0-9\.]*)$#i", $var) && !preg_match('#include|comment#', $tag) && !empty($var)) {
                 array_push($this->_debugwarningmsgs, array(
                                     'problem' => 'Warning: Invalid variable name',
                                     'detail'  => "The variable name in the following tag does not comply with the correct php syntax:\n".$entire_tag,
@@ -435,7 +435,7 @@ class vlibTemplateDebug extends vlibTemplate {
             }
 
             // if it's a closing tag return
-            if (preg_match("/^<\/|{\/|<!--\/$/s", $openclose) || ereg("endloop|endif|endunless|endcomment", $tag)) {
+            if (preg_match("/^<\/|{\/|<!--\/$/s", $openclose) || preg_match("#endloop|endif|endunless|endcomment#", $tag)) {
                 $closetag = 1;
                 if ($tag == 'loop' || $tag == 'endloop') $tag = 'loop';
                 if ($tag == 'if' || $tag == 'endif') $tag = 'if';
@@ -529,7 +529,7 @@ class vlibTemplateDebug extends vlibTemplate {
 
             }
 
-            if (ereg('if|unless|loop|elseif|comment', $tag) && !$closetag) {
+            if (preg_match('#if|unless|loop|elseif|comment#', $tag) && !$closetag) {
                 array_push($this->_debugtags, array(
                                         $tag,
                                         $file,

@@ -123,16 +123,16 @@ function check_html ($str, $strip="") {
 	if ($strip == "nohtml")
 		$AllowableHTML = array('');
 	$str = stripslashes($str);
-	$str = eregi_replace("<[[:space:]]*([^>]*)[[:space:]]*>",'<\\1>', $str);
+	$str = preg_replace("#<[[:space:]]*([^>]*)[[:space:]]*>#i",'<\\1>', $str);
 	// Delete all spaces from html tags .
-	$str = eregi_replace("<a[^>]*href[[:space:]]*=[[:space:]]*\"?[[:space:]]*([^\" >]*)[[:space:]]*\"?[^>]*>",'<a href="\\1">', $str);
+	$str = preg_replace("#<a[^>]*href[[:space:]]*=[[:space:]]*\"?[[:space:]]*([^\" >]*)[[:space:]]*\"?[^>]*>#i",'<a href="\\1">', $str);
 	// Delete all attribs from Anchor, except an href, double quoted.
-	$str = eregi_replace("<[[:space:]]* img[[:space:]]*([^>]*)[[:space:]]*>", '', $str);
+	$str = preg_replace("#<[[:space:]]* img[[:space:]]*([^>]*)[[:space:]]*>#i", '', $str);
 	// Delete all img tags
-	$str = eregi_replace("<a[^>]*href[[:space:]]*=[[:space:]]*\"?javascript[[:punct:]]*\"?[^>]*>", '', $str);
+	$str = preg_replace("#<a[^>]*href[[:space:]]*=[[:space:]]*\"?javascript[[:punct:]]*\"?[^>]*>#i", '', $str);
 	// Delete javascript code from a href tags -- Zhen-Xjell @ http://nukecops.com
 	$tmp = "";
-	while (ereg("<(/?[[:alpha:]]*)[[:space:]]*([^>]*)>",$str,$reg)) {
+	while (preg_match("#<(/?[[:alpha:]]*)[[:space:]]*([^>]*)>#",$str,$reg)) {
 		$i = strpos($str,$reg[0]);
 		$l = strlen($reg[0]);
 		$tag = ($reg[1][0] == "/") ? strtolower(substr($reg[1],1)) : strtolower($reg[1]);
@@ -145,7 +145,7 @@ function check_html ($str, $strip="") {
 			  # Place here the double quote fix function.
 			  $attrb_list=delQuotes($reg[2]);
 			  // A VER
-			  $attrb_list = ereg_replace("&","&amp;",$attrb_list);
+			  $attrb_list = str_replace("&","&amp;",$attrb_list);
 			  $tag = "<$tag" . $attrb_list . ">";
 			} # Attribs in tag allowed
 		} else {

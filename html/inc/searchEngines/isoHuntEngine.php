@@ -258,7 +258,7 @@ class isoHunt
             $this->Data = $htmlLine;
 
             // Fix messed up end td's once in a while.
-            $htmlLine = eregi_replace("<(.)*1ff8(.)*/td>",'</td>',$htmlLine);
+            $htmlLine = preg_replace("#<(.)*1ff8(.)*/td>#i",'</td>',$htmlLine);
 
             // Chunck up the row into columns.
             $tmpListArr = split("</td>",$htmlLine);
