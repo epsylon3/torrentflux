@@ -16,6 +16,11 @@ MAX_REDIRECTS = 10
 
 class btHTTPcon(HTTPConnection): # attempt to add automatic connection timeout
     def connect(self):
+
+        # proxy hack
+        #self.host='127.0.0.1'
+        #self.port=8888 #privoxy (def 8118)
+
         HTTPConnection.connect(self)
         try:
             self.sock.settimeout(30)
@@ -56,13 +61,15 @@ class urlopen:
             else:
                 self.connection = btHTTPScon(netloc)
             self.connection.request('GET', url, None,
+            # proxy hack
+            #self.connection.request('GET', scheme + '://' + netloc + url, None,
                                 { 'User-Agent': VERSION,
                                   'Accept-Encoding': 'gzip' } )
             self.response = self.connection.getresponse()
         except HTTPException, e:
             raise IOError, ('http error', str(e))
         status = self.response.status
-        if status in (301,302):
+        if status in (300,301,302,303,307):
             try:
                 self.connection.close()
             except:
@@ -78,7 +85,7 @@ class urlopen:
                     return
             except:
                 pass
-            raise IOError, ('http error', status, self.response.reason)
+            raise IOError, ('http error', status, self.response.reason + ' ' + netloc)
 
     def read(self):
         if self.error_return:

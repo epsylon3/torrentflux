@@ -40,7 +40,7 @@ except:
     bool = lambda x: not not x
 
 defaults = [
-    ('port', 80, "Port to listen on."),
+    ('port', 9980, "Port to listen on."),
     ('dfile', None, 'file to store recent downloader info in'),
     ('bind', '', 'comma-separated list of ips/hostnames to bind to locally'),
 #    ('ipv6_enabled', autodetect_ipv6(),
