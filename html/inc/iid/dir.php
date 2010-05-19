@@ -197,11 +197,11 @@ $tSeeding=array();
 // check dir-var
 if (isset($dir)) {
 	if ($dir != "" && substr($dir,strlen($dir)-1,1)!="/") {
-		$dir = $dir."/";	
+		$dir = $dir."/";
 	}
 	if ($dir != "") {
 		//get list of processes of known running transfers
-		$tDirPs=explode("\n", shell_exec( "ls ".$cfg['transfer_file_path']."/*.pid"));
+		$tDirPs=explode("\n", shell_exec('ls "'.rtrim($cfg['transfer_file_path'],'/').'/*.pid"'));
 	}
 } else {
 	$dir = "";
