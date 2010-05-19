@@ -80,7 +80,7 @@ switch ($cfg['auth_type']) {
 			$md5password = tfb_getRequestVar('md5pass');
 			
 			// set new cookie
-			setcookie("autologin", $user.$cookieDelim.$md5password, time() + 60 * 60 * 24`* 30);
+			setcookie("autologin", $user.$cookieDelim.$md5password, time() + 60 * 60 * 24 * 30);
 		} else {
 			// is a form-login-request ?
 			$docookieloginnew = tfb_getRequestVar('docookieloginnew');
