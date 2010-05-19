@@ -2,6 +2,15 @@
 $Id: INSTALL 3404 2008-05-15 19:58:53Z b4rt $
 =================================================================
 
+Recent Versions
+---------------
+
+1. Get Transmission Source Archive from
+   http://download.m0k.org/transmission/files/
+   
+2. Replace cli.c in folder cli and transmission.h in folder libtransmission.
+
+3. Configure and Compile Transmission
 
 Transmission 0.96 and later
 ---------------------------
