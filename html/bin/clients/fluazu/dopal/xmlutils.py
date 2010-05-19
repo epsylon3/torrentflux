@@ -62,7 +62,7 @@ def get_text_content(node):
     #    return node.firstChild.nodeValue
 
     # Sometimes happens for attributes with no real value.
-    elif len(node.childNodes) == 0:
+    elif node.childNodes is None:
         return ''
 
     text_node = None
@@ -82,7 +82,11 @@ def get_text_content(node):
                 err_text = "did not contain a character string as its value"
         else:
             return text_node.nodeValue
-
+    
+    if ("%s" % node.nodeName) == "eta":
+    	return ""
+    
+    return ("%s" % node.nodeName)
     raise ValueError, ("the node %s " % node.nodeName) + err_text
 
 from xml.sax.saxutils import quoteattr, escape

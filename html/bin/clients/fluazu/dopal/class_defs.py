@@ -126,35 +126,119 @@ class PluginConfigDataType:
     #   Map getPluginMapParameter(String, Map)
     #   void setPluginListParameter(String, List)
     #   void setPluginMapParameter(String, Map)
-    #   
+    #   PluginConfigSource getPluginConfigSource(void)
+    
+    #   Added Methods For Azureus 3.1 +
+    #
+    #            Name / [ Arguments ] / Result Type
     __az_methods__ = AzureusMethods([
         _method('addListener', ['PluginConfigListener']),
-        _method('getBooleanParameter', ['String', 'boolean'], 'boolean'),
-        _method('getBooleanParameter', ['String'], 'boolean'),
-        _method('getByteParameter', ['String', 'byte[]'], 'byte[]'),
-        _method('getFloatParameter', ['String'], 'float'),
-        _method('getIntParameter', ['String'], 'int'),
-        _method('getIntParameter', ['String', 'int'], 'int'),
         _method('getParameter', ['String'], 'ConfigParameter'),
+        
+        _method('getBooleanParameter', ['String', 'boolean'], 'boolean'),  # Deprecated, use getCoreXxx ou getUnsafeXxx
+        _method('getBooleanParameter', ['String'], 'boolean'),             # Deprecated
+        _method('getByteParameter', ['String', 'byte[]'], 'byte[]'),       # Deprecated
+        _method('getFloatParameter', ['String'], 'float'),                 # Deprecated
+        _method('getIntParameter', ['String'], 'int'),                     # Deprecated
+        _method('getIntParameter', ['String', 'int'], 'int'),              # Deprecated
+        _method('getLongParameter', ['String', 'long'], 'long'),           # Deprecated
+        _method('getStringParameter', ['String'], 'String'),               # Deprecated
+        _method('getStringParameter', ['String', 'String'], 'String'),     # Deprecated
+        
+        _method('getCoreBooleanParameter', ['String', 'boolean'], 'boolean'),
+        _method('getCoreBooleanParameter', ['String'], 'boolean'),
+        _method('getCoreByteParameter', ['String', 'byte[]'], 'byte[]'),
+        _method('getCoreByteParameter', ['String'], 'byte[]'),
+        _method('getCoreColorParameter', ['String', 'int[]'], 'int[]'),
+        _method('getCoreColorParameter', ['String'], 'int[]'),
+        _method('getCoreFloatParameter', ['String', 'float'], 'float'),
+        _method('getCoreFloatParameter', ['String'], 'float'),
+        _method('getCoreIntParameter', ['String', 'int'], 'int'),
+        _method('getCoreIntParameter', ['String'], 'int'),
+        _method('getCoreLongParameter', ['String', 'long'], 'long'),
+        _method('getCoreLongParameter', ['String'], 'long'),
+        _method('getCoreStringParameter', ['String', 'String'], 'String'),
+        _method('getCoreStringParameter', ['String'], 'String'),
+        
         _method('getPluginBooleanParameter', ['String', 'boolean'], 'boolean'),
         _method('getPluginBooleanParameter', ['String'], 'boolean'),
         _method('getPluginByteParameter', ['String', 'byte[]'], 'byte[]'),
-        _method('getPluginConfigKeyPrefix', [], 'String'),
+        _method('getPluginFloatParameter', ['String', 'float'], 'float'),
+        _method('getPluginFloatParameter', ['String'], 'float'),
         _method('getPluginIntParameter', ['String'], 'int'),
         _method('getPluginIntParameter', ['String', 'int'], 'int'),
+        _method('getPluginLongParameter', ['String', 'long'], 'long'),
+        _method('getPluginLongParameter', ['String'], 'long'),
         _method('getPluginParameter', ['String'], 'ConfigParameter'),
+        _method('getPluginStringListParameter', ['String'], 'String[]'),
         _method('getPluginStringParameter', ['String'], 'String'),
         _method('getPluginStringParameter', ['String', 'String'], 'String'),
+        
+        _method('getPluginConfigKeyPrefix', [], 'String'),
         _method('getPluginUserFile', ['String'], 'File'),
-        _method('getStringParameter', ['String'], 'String'),
-        _method('getStringParameter', ['String', 'String'], 'String'),
+        
+        _method('getUnsafeBooleanParameter', ['String', 'boolean'], 'boolean'),
+        _method('getUnsafeBooleanParameter', ['String'], 'boolean'),
+        _method('getUnsafeByteParameter', ['String', 'byte[]'], 'byte[]'),
+        _method('getUnsafeByteParameter', ['String'], 'byte[]'),
+        _method('getUnsafeColorParameter', ['String', 'int[]'], 'int[]'),
+        _method('getUnsafeColorParameter', ['String'], 'int[]'),
+        _method('getUnsafeFloatParameter', ['String', 'float'], 'float'),
+        _method('getUnsafeFloatParameter', ['String'], 'float'),
+        _method('getUnsafeIntParameter', ['String', 'int'], 'int'),
+        _method('getUnsafeIntParameter', ['String'], 'int'),
+        _method('getUnsafeLongParameter', ['String', 'long'], 'long'),
+        _method('getUnsafeLongParameter', ['String'], 'long'),
+        _method('getUnsafeStringParameter', ['String', 'String'], 'String'),
+        _method('getUnsafeStringParameter', ['String'], 'String'),
+        
+        _method('hasParameter', ['String'], 'boolean'),
+        _method('hasPluginParameter', ['String'], 'boolean'),
+        _method('removePluginColorParameter', ['String'], 'boolean'),
+        _method('removePluginParameter', ['String'], 'boolean'),
         _method('save'),
-        _method('setBooleanParameter', ['String', 'boolean']),
-        _method('setIntParameter', ['String', 'int']),
+        
+        _method('setBooleanParameter', ['String', 'boolean']),  # Deprecated
+        _method('setByteParameter', ['String', 'byte']),        # Deprecated
+        _method('setFloatParameter', ['String', 'float']),      # Deprecated
+        _method('setIntParameter', ['String', 'int']),          # Deprecated
+        _method('setLongParameter', ['String', 'long']),        # Deprecated
+        _method('setStringParameter', ['String', 'String']),    # Deprecated
+        
+        _method('setPluginColorParameter', ['String', 'int[]']),
+        _method('setPluginColorParameter', ['String', 'int[]', 'boolean']),
+        _method('setPluginConfigKeyPrefix', ['String']),
+        
         _method('setPluginParameter', ['String', 'byte[]']),
         _method('setPluginParameter', ['String', 'int']),
         _method('setPluginParameter', ['String', 'String']),
         _method('setPluginParameter', ['String', 'boolean']),
+        _method('setPluginParameter', ['String', 'float']),
+        _method('setPluginParameter', ['String', 'int', 'boolean']),
+        _method('setPluginParameter', ['String', 'long']),
+        _method('setPluginStringListParameter', ['String', 'String']),
+        
+        _method('setCoreBooleanParameter', ['String', 'boolean']),
+        _method('setCoreByteParameter', ['String', 'byte[]']),
+        _method('setCoreColorParameter', ['String', 'int[]']),
+        _method('setCoreFloatParameter', ['String', 'float']),
+        _method('setCoreIntParameter', ['String', 'int']),
+        _method('setCoreLongParameter', ['String', 'long']),
+        _method('setCoreStringParameter', ['String', 'String']),
+        
+        _method('setUnsafeBooleanParameter', ['String', 'boolean']),
+        _method('setUnsafeByteParameter', ['String', 'byte[]']),
+        _method('setUnsafeColorParameter', ['String', 'int[]']),
+        _method('setUnsafeColorParameter', ['String', 'int[]', 'boolean']),
+        _method('setUnsafeFloatParameter', ['String', 'float']),
+        _method('setUnsafeIntParameter', ['String', 'int']),
+        _method('setUnsafeLongParameter', ['String', 'long']),
+        _method('setUnsafeStringParameter', ['String', 'String']),
+        
+        _method('enableExternalConfigSource', [], 'PluginConfigSource'),
+        _method('getPluginConfigSource', [], 'PluginConfigSource'),
+        _method('setPluginConfigSource', ['PluginConfigSource']),
+        
     ])
     
     # 
@@ -167,6 +251,20 @@ class PluginConfigDataType:
         'cached_property_names': 'String[]',
     }
 
+class PluginConfigSourceDataType:
+    
+    def get_xml_type():
+        return "PluginConfigSource"
+    get_xml_type = staticmethod(get_xml_type)
+    
+    __az_methods__ = AzureusMethods([
+        _method('initialize'),
+        _method('setConfigFilename'),
+        _method('getConfigFile'),
+        _method('save'),
+        _method('forceSettingsMigration'),
+    ])
+    
 class PluginConfigListenerDataType:
     
     def get_xml_type():
@@ -898,7 +996,9 @@ class DownloadDataType:
         _method('setSessionAuthenticator', ['SessionAuthenticator']),
         _method('setUploadRateLimitBytesPerSecond', ['int']),
         _method('start'),
+        _method('startDownload', ['boolean']),
         _method('stop'),
+        _method('stopDownload'),
         _method('stopAndQueue'),
     ])
     

@@ -227,7 +227,10 @@ class DopalPluginConfig(DopalObjectMixin, AzureusPluginConfig):
 class DopalDownload(DopalObjectMixin, AzureusDownload):
 
     def _short_description(self):
-        return self.torrent.short_description()
+        if self.torrent is None:
+            return ''
+        else:
+            return self.torrent.short_description()
 
     def _full_description(self):
         result = self.short_description()

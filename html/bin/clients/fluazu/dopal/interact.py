@@ -24,7 +24,10 @@ def main():
     '''Function to invoke this application.'''
     # Get host and port.
     connection_details = {}
-    connection_details['host'] = raw_input('Enter host: ')
+    connection_details['host'] = raw_input('Enter host (default is 127.0.0.1): ')
+    if connection_details['host']=="":
+        connection_details['host'] = '127.0.0.1'
+
     port_text = raw_input('Enter port (default is 6884): ')
     if port_text:
         connection_details['port'] = int(port_text)
@@ -52,13 +55,14 @@ def main():
         connection_error = None
 
     from dopal import __version_str__
-    banner = "DOPAL %s - interact module\n\n" % __version_str__
+    banner = "DOPAL %s+ (updated by Epsylon3) - interact module\n\n" % __version_str__
     banner += "Connection object stored in 'connection' variable.\n"
 
     if connection_error is None:
         banner += "Plugin interface stored in 'interface' variable.\n"
     else:
         banner += "\nError getting plugin interface object - could not connect to Azureus, error:\n  %s" % connection_error.to_error_string()
+        banner += "\nSee examples at http://dopal.sourceforge.net/examples.html\n "
 
     import dopal
     if dopal.__dopal_mode__ == 1:

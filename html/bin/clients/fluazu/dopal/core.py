@@ -98,7 +98,9 @@ class AzureusLink(object):
             del auth_string, base64_string
 
         try:
-            data = self._send_data(request).read()
+            req = self._send_data(request)
+            data = req.read()
+            req.close()
         except (urllib2.URLError, socket.error, LinkError), error:
 
             # Log the error, if enabled.
