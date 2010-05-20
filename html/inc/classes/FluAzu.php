@@ -343,7 +343,8 @@ class FluAzu
 		[lib='shell32.dll'] int ShellExecuteA(int handle, char *operation, char *file, char *param, char *directory, int show);
 		";
 		$ffi = new ffi($win32_idl);
-		$result = $ffi->ShellExecuteA(0, "open", tfb_shellencode($app), $params, tfb_shellencode($startDir), 1);
+		$show = 7; //0: hided, 1: normal, 2: mini, 3:maxi, 4:inactive, 7:mini inactive
+		$result = $ffi->ShellExecuteA(0, "open", tfb_shellencode($app), $params, tfb_shellencode($startDir), $show);
 		return $result;
 	}
 
@@ -397,8 +398,8 @@ class FluAzu
 				$pythonParams .= " >".tfb_shellencode($this->_pathLogFile);
 				$pythonParams .= " 2>&1";
 				
-				$startDir = tfb_shellencode($cfg["docroot"]."bin/clients/fluazu/");
-				//$startDir = tfb_shellencode($cfg["path"]);
+				//$startDir = tfb_shellencode($cfg["docroot"]."bin/clients/fluazu/");
+				$startDir = tfb_shellencode($cfg["path"]);
 				//$startCommand = 'start /SEPARATE /MIN /D'.$startDir.' "fluazu" '.$startCommand;
 
 			} else {
@@ -423,7 +424,8 @@ class FluAzu
 			} else {
 				if (class_exists('ffi')) {
 					$result = $this->win32_fork($cfg["pythonCmd"], $pythonParams, $startDir);
-					var_dump($result);
+					if ($result == -1) $result=0;
+					$loop = ($result != 0);
 				}
 				else
 					$this->instance_logMessage("Fluazu cant be started from PHP on Windows\n", true);
@@ -435,7 +437,7 @@ class FluAzu
 			$started = false;
 			while ($loop) {
 				@clearstatcache();
-				if (file_exists($this->_pathStatFile)) {
+				if (file_exists($this->_pathStatFile) || file_exists($cfg["path"].".fluazu/fluazu.pid")) {
 					$started = true;
 					$loop = false;
 				} else {

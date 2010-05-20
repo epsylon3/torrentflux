@@ -771,8 +771,8 @@ class SimpleHTTP
 			//Iframe to download the file directly
 			echo "<center><iframe src=\"$durl\" width=\"600\" height=\"0\"></iframe><br/><br/>";
 			//Link to go back and to copy url
-			echo("<b>Invakid Torrent URL : </b><a href=\"$durl\">$durl</a>");
-			echo("<b><a href=\"#\" onclick=\"history.back(); return false;\">Return...</a></b></center>");
+			echo("<b>Invalid Torrent URL : </b><a href=\"$durl\">$durl</a><br/><br/>");
+			echo("<b><a href=\"#\" onclick=\"history.back(); return false;\">Return to the main page...</a></b></center>");
 
 			$data = "";
 			// state

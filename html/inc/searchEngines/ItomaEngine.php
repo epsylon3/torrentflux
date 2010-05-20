@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /*************************************************************
 *  TorrentFlux PHP Torrent Manager
@@ -173,7 +173,11 @@ class SearchEngine extends SearchEngineBase
 			$tmpStr = substr($tmpStr,0,strpos($tmpStr,"Privacy"));
 		$stats = str_replace('<br>',' | ',$tmpStr);
 		$stats = preg_replace('#[\s\n]+#m',' ',$stats);
-		$output .= "<b>Current Stats : ".strip_tags($stats)."</b>";
+		
+		if (strstr($stats,"Enregistrement"))
+			$output .= "<b>Connexion Impossible : Veuillez enregistrer le cookie d'identification Itoma dans votre profil.</b>";
+		else
+			$output .= "<b>Current Stats : ".strip_tags($stats)."</b>";
 
 		$output .= "<tr bgcolor=\"".$this->cfg["table_header_bg"]."\">";
 		$output .= "  <td>&nbsp;</td>";
