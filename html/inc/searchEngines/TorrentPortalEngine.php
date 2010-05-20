@@ -240,7 +240,7 @@ class SearchEngine extends SearchEngineBase
             $tmpList = substr($thing,0,strpos($thing,"</table>"));
 
             // ok so now we have the listing.
-            $tmpListArr = split("<tr>",$tmpList);
+            $tmpListArr = explode("<tr>",$tmpList);
 
             $bg = $this->cfg["bgLight"];
 
@@ -374,7 +374,7 @@ class tPort
             $htmlLine = preg_replace("#</td>\n</td>#i",'</td>',$htmlLine);
 
             // Chunck up the row into columns.
-            $tmpListArr = split("<td ",$htmlLine);
+            $tmpListArr = explode("<td ",$htmlLine);
 
             if(count($tmpListArr) > 8)
             {
@@ -395,7 +395,7 @@ class tPort
 
                 $tmpStr = substr($tmpListArr["9"],strpos($tmpListArr["9"],"Health ")+strlen("Health "));  // Health
                 $tmpStr = substr($tmpStr,0,strpos($tmpStr,"\""));
-                $tmpArr = split("/",$tmpStr);
+                $tmpArr = explode("/",$tmpStr);
                 if (count($tmpArr) > 1 && $tmpArr["1"] > 0 )
                 {
                     $this->torrentStatus = ($tmpArr["0"] / $tmpArr["1"]) * 100 . "%";

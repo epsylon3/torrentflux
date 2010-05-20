@@ -63,7 +63,7 @@ if((isset($_REQUEST['start'])) && ($_REQUEST['start'] == true)) {
 	$tmpl->setvar('_MOVE_FILE', $cfg['_MOVE_FILE']);
 	if ((isset($cfg["move_paths"])) && (strlen($cfg["move_paths"]) > 0)) {
 		$tmpl->setvar('move_start', 1);
-		$dirs = split(":", trim($cfg["move_paths"]));
+		$dirs = explode(":", trim($cfg["move_paths"]));
 		$dir_list = array();
 		foreach ($dirs as $dir) {
 			$target = trim($dir);

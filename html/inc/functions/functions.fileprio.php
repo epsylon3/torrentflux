@@ -49,7 +49,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 	$torrent_size = $btmeta["info"]["piece length"] * (strlen($btmeta["info"]["pieces"]) / 20);
 	$dirnum = (array_key_exists('files',$btmeta['info'])) ? count($btmeta['info']['files']) : 0;
 	if (@is_readable($prioFileName)) {
-		$prio = split(',', @file_get_contents($prioFileName));
+		$prio = explode(',', @file_get_contents($prioFileName));
 		$prio = array_splice($prio,1);
 	} else {
 		$prio = array();

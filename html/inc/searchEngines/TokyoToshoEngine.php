@@ -120,7 +120,7 @@ class SearchEngine extends SearchEngineBase
             return "<table width=\"100%\" cellpadding=3 cellspacing=0 border=0><tr><td align=\"center\"><strong><br/>Nothing to display.<br/></strong></td></tr></table>";
         }
         $s = substr($s, strpos($s, "<tr"), strpos($s, "</table>") - strpos($s, "<tr"));
-        $tmpListArr = split("<td rowspan=\"2\">", $s);
+        $tmpListArr = explode("<td rowspan=\"2\">", $s);
 
         foreach($tmpListArr as $line)
         {

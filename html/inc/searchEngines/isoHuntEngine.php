@@ -140,7 +140,7 @@ class SearchEngine extends SearchEngineBase
         if (strpos($tmpList,"/download/") || strpos($tmpList,"torrent_details"))
             {
                 // ok so now we have the listing.
-                $tmpListArr = split("</tr>",$tmpList);
+                $tmpListArr = explode("</tr>",$tmpList);
 
                 array_pop($tmpListArr);
                 $bg = $this->cfg["bgLight"];
@@ -205,7 +205,7 @@ class SearchEngine extends SearchEngineBase
 
             $pages = str_replace("&nbsp; ",'',strip_tags($pages,"<a><b>"));
 
-            $tmpPageArr = split("</a>",$pages);
+            $tmpPageArr = explode("</a>",$pages);
             array_pop($tmpPageArr);
 
             $pagesout = '';
@@ -261,7 +261,7 @@ class isoHunt
             $htmlLine = preg_replace("#<(.)*1ff8(.)*/td>#i",'</td>',$htmlLine);
 
             // Chunck up the row into columns.
-            $tmpListArr = split("</td>",$htmlLine);
+            $tmpListArr = explode("</td>",$htmlLine);
 
             array_pop($tmpListArr);//echo '<br><br>|a|0='.$tmpListArr[0].'<br>| '.'|1='.$tmpListArr[1].'<br>| '.'|2='.$tmpListArr[2].'<br>| '.'|3='.$tmpListArr[3].'<br>| '.'|4='.$tmpListArr[4].'<br>| '.'|5='.$tmpListArr[5].'<br>| ';
 

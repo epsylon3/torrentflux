@@ -523,7 +523,7 @@ function formatFreeSpace($freeSpace) {
  * @return number
  */
 function GetSpeedValue($inValue) {
-	$arTemp = split(" ", trim($inValue));
+	$arTemp = explode(" ", trim($inValue));
 	return (is_numeric($arTemp[0])) ? $arTemp[0] : 0;
 }
 
@@ -534,7 +534,7 @@ function GetSpeedValue($inValue) {
  * @return string
  */
 function GetSpeedInBytes($inValue) {
-	$arTemp = split(" ", trim($inValue));
+	$arTemp = explode(" ", trim($inValue));
 	return ($arTemp[1] == "kB/s") ? $arTemp[0] * 1024 : $arTemp[0];
 }
 

@@ -63,7 +63,7 @@ function hasPermission($object, $user, $permission) {
 function initRestrictedDirEntries() {
 	global $cfg, $restrictedFileEntries;
 	$restrictedFileEntries = ((isset($cfg["dir_restricted"])) && (strlen($cfg["dir_restricted"]) > 0))
-		? split(":", trim($cfg["dir_restricted"]))
+		? explode(":", trim($cfg["dir_restricted"]))
 		: array();
 }
 
