@@ -1082,7 +1082,7 @@ function sa_tfb($action = "") {
 						$htmlMain .= $versionAvailable;
 						$htmlMain .= '<br><br>';
 						$htmlMain .= '<font color="blue">This Version is a git-Version.</font>';
-				elseif (strpos(_VERSION, "svn") !== false) {
+				} elseif (strpos(_VERSION, "svn") !== false) {
 						$htmlMain .= '<strong>This Version: </strong>'._VERSION;
 						$htmlMain .= '<br><br>';
 						$htmlMain .= '<strong>Latest Release: </strong>';
