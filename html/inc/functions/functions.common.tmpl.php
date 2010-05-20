@@ -211,7 +211,7 @@ function tmplSetDirTree($dir, $maxdepth) {
 function tmplSetMoveSettings() {
 	global $cfg, $tmpl;
 	if ((isset($cfg["move_paths"])) && (strlen($cfg["move_paths"]) > 0)) {
-		$dirs = split(":", trim($cfg["move_paths"]));
+		$dirs = explode(":", trim($cfg["move_paths"]));
 		$dir_list = array();
 		foreach ($dirs as $dir) {
 			$target = trim($dir);

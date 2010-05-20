@@ -173,7 +173,7 @@ class SearchEngine extends SearchEngineBase
                 $tmpList = $thing; //$tmpList = substr($thing,0,strpos($thing,"JavaScript"));
             }
             // ok so now we have the listing.
-            $tmpListArr = split("</tr>",$tmpList);
+            $tmpListArr = explode("</tr>",$tmpList);
 
             $langFile = $this->cfg["_FILE"];
 
@@ -262,7 +262,7 @@ class btJunk
             $this->Data = $htmlLine;
 
             // Chunck up the row into columns.
-            $tmpListArr = split("</th>",$htmlLine);
+            $tmpListArr = explode("</th>",$htmlLine);
 
 /*
 (

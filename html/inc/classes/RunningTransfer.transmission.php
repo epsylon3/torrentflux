@@ -38,7 +38,7 @@ class RunningTransferTransmission extends RunningTransfer
         if (strlen($psLine) > 0) {
             while (strpos($psLine,"  ") > 0)
                 $psLine = str_replace("  ",' ',trim($psLine));
-            $arr = split(' ',$psLine);
+            $arr = explode(' ',$psLine);
             $this->processId = $arr[0];
             $this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[(count($arr) - 1)]);
             $this->filePath = substr($this->transferFile,0,strrpos($this->transferFile,"/")+1);

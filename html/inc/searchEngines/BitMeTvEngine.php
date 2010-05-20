@@ -479,7 +479,7 @@ class SearchEngine extends SearchEngineBase
 
             //$tmpList = substr($thing,0,strpos($thing,"</table>"));
             // ok so now we have the listing.
-            $tmpListArr = split("</tr>",$thing);
+            $tmpListArr = explode("</tr>",$thing);
 
             $bg = $this->cfg["bgLight"];
             //var_export($tmpListArr);
@@ -525,7 +525,7 @@ class SearchEngine extends SearchEngineBase
 
                 $pages = str_replace("&nbsp; ",'',$pages);
 
-                $tmpPageArr = split("</a>",$pages);
+                $tmpPageArr = explode("</a>",$pages);
                 array_pop($tmpPageArr);
 
                 $pagesout = '';
@@ -605,7 +605,7 @@ class BitMeTv
             $htmlLine = preg_replace("#</td>\n</td>#i",'</td>',$htmlLine);
 
             // Chunck up the row into columns.
-            $tmpListArr = split("<td ",$htmlLine);
+            $tmpListArr = explode("<td ",$htmlLine);
 
             $tmpStr = substr($tmpListArr["1"],strpos($tmpListArr["1"],"alt=\"")+strlen("alt=\"")); // MainCategory
             $this->MainCategory = substr($tmpStr,0,strpos($tmpStr,"\""));

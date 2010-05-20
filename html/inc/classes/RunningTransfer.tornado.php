@@ -40,7 +40,7 @@ class RunningTransferTornado extends RunningTransfer
         if (strlen($psLine) > 0) {
             while (strpos($psLine,"  ") > 0)
                 $psLine = str_replace("  ",' ',trim($psLine));
-            $arr = split(' ',$psLine);
+            $arr = explode(' ',$psLine);
             $this->processId = $arr[0];
             foreach($arr as $key =>$value) {
                 if ($key == 0)

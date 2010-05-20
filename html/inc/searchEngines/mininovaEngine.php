@@ -130,7 +130,7 @@ class SearchEngine extends SearchEngineBase
 		$tmpList = substr($thing,0,strpos($thing,"</table>"));
 
 		// ok so now we have the listing.
-		$tmpListArr = split("</tr>",$tmpList);
+		$tmpListArr = explode("</tr>",$tmpList);
 
 		$bg = $this->cfg["bgLight"];
 
@@ -217,7 +217,7 @@ class mininova
             $this->Data = $htmlLine;
 
             // Chunck up the row into columns.
-            $tmpListArr = split("</td>",$htmlLine);
+            $tmpListArr = explode("</td>",$htmlLine);
             array_pop($tmpListArr);
 //print_r($tmpListArr);
             //Age   Type    Torrent Names   MB  S   L

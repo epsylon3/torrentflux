@@ -106,12 +106,12 @@ class SearchEngine extends SearchEngineBase
             }
 
             // ok so now we have the listing.
-            //$tmpListArr = split("</p>",$tmpList);
+            //$tmpListArr = explode("</p>",$tmpList);
 
             $allowedTags = '<a><b><i><br>';
 
             // ok so now we have the listing.
-            $tmpListArr = split("</a>",strip_tags($tmpList,$allowedTags));
+            $tmpListArr = explode("</a>",strip_tags($tmpList,$allowedTags));
 
             $langFile = $this->cfg['_FILE'];
 
