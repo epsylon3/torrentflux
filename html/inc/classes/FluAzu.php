@@ -345,6 +345,9 @@ class FluAzu
 	 */
 	function instance_start() {
 		global $cfg;
+		
+		@unlink($this->_pathLogFile);
+		
 		if ($this->state == FLUAZU_STATE_RUNNING) {
 			AuditAction($cfg["constants"]["error"], "fluazu already started");
 			return false;
@@ -375,12 +378,20 @@ class FluAzu
 			
 			if ($this->isWinOS) {
 				$startCommand  = "cd ".tfb_shellencode($cfg["docroot"]."bin/clients/fluazu/")."; SET HOME=".tfb_shellencode($cfg["path"]).";";
-				exec($startCommand);
-				$startCommand  = " ".tfb_shellencode($cfg["pythonCmd"])." -OO";
+				
+				$startCommand  = tfb_shellencode($cfg["pythonCmd"])." -OO";
 				$startCommand .= " ".tfb_shellencode($cfg["docroot"]."bin/clients/fluazu/fluazu.py");
 				$startCommand .= $startParams;
-				$startCommand .= " >> ".tfb_shellencode($this->_pathLogFile);
+				$startCommand .= " >".tfb_shellencode($this->_pathLogFile);
 				$startCommand .= " 2>&1";
+				
+				$startDir = tfb_shellencode($cfg["docroot"]."bin/clients/fluazu/");
+				//$startDir = tfb_shellencode($cfg["path"]);
+				$startCommand = 'start /SEPARATE /MIN /D'.$startDir.' "fluazu" '.$startCommand;
+				//$startCommand = $startCommand;
+				if (function_exists('pcntl_fork')) {
+					pcntl_fork();
+				}
 			} else {
 				$startCommand  = "cd ".tfb_shellencode($cfg["docroot"]."bin/clients/fluazu/")."; HOME=".tfb_shellencode($cfg["path"]).";";
 				$startCommand .= " export HOME;";
@@ -395,10 +406,16 @@ class FluAzu
 			
 			// log the command
 			$this->instance_logMessage("executing command : \n".$startCommand."\n", true);
+			
 			// exec
-			$result = exec($startCommand);
+			if (function_exists('pcntl_fork') || !$this->isWinOS) {
+				$result = exec($startCommand);
+				$loop = true;
+			} else {
+				$this->instance_logMessage("Fluazu cant be started from PHP on Windows\n", true);
+			}
+			
 			// check if fluazu could be started
-			$loop = true;
 			$maxLoops = 125;
 			$loopCtr = 0;
 			$started = false;
