@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /*************************************************************
 *  TorrentFlux PHP Torrent Manager
@@ -71,8 +71,7 @@ class SearchEngine extends SearchEngineBase
 	// Function to get Latest..
 	function getLatest()
 	{
-		if (!empty($_REQUEST['mainGenre']))
-			$cat = $_REQUEST['mainGenre'];
+		$cat = tfb_getRequestVar('mainGenre');
 		
 		if (empty($cat) && !empty($_REQUEST['cat']))
 			$cat = $_REQUEST['cat'];
@@ -164,15 +163,17 @@ class SearchEngine extends SearchEngineBase
 	{
 		$tmpStr = $this->htmlPage;
 
-		$output = "<table width=\"100%\" cellpadding=3 cellspacing=0 border=0>";
-		$output .= "<br>\n";
+		$output = "<table width=\"100%\" cellpadding=3 cellspacing=0 border=0>\n";
 		$output .= "<tr bgcolor=\"".$this->cfg["bgLight"]."\">";
 		$output .= "  <td colspan=7 align=center>";
 
 		$tmpStr = substr($tmpStr,strpos($tmpStr,"userdetails"));
-		$tmpStr = substr($tmpStr,strpos($tmpStr,"<font"));
-		$output .= "<font size=5px> Current Stats : ".strip_tags(substr("<td>".$tmpStr,0,strpos($tmpStr,"</td>")))."</font>";
-		$output .= "</td>";
+		$tmpStr = substr($tmpStr,strpos($tmpStr,"Downloaded"));
+		if (strpos($tmpStr,"Privacy"))
+			$tmpStr = substr($tmpStr,0,strpos($tmpStr,"Privacy"));
+		$stats = str_replace('<br>',' | ',$tmpStr);
+		$stats = preg_replace('#[\s\n]+#m',' ',$stats);
+		$output .= "<b>Current Stats : ".strip_tags($stats)."</b>";
 
 		$output .= "<tr bgcolor=\"".$this->cfg["table_header_bg"]."\">";
 		$output .= "  <td>&nbsp;</td>";
@@ -318,8 +319,7 @@ class SearchEngine extends SearchEngineBase
 
 			$pagesout = str_replace("se.php?page=","",$pagesout);
 
-			if (!empty($_REQUEST['mainGenre']))
-				$cat = $_REQUEST['mainGenre'];
+			$cat = tfb_getRequestVar('mainGenre');
 			
 			if (empty($cat) && !empty($_REQUEST['cat']))
 				$cat = $_REQUEST['cat'];
