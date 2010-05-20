@@ -782,8 +782,12 @@ function safePhpCli($php, $args) {
 	#   variables -- so if this code is run by a cgi php (with those env. vars set),
 	#   child will inherit those and thus believe it is invoked in cgi mode
 	#    => 'unset ...'
-	$cmd = 'unset SERVER_SOFTWARE SERVER_NAME GATEWAY_INTERFACE REQUEST_METHOD ; ';
-	$cmd .= $php . ' ' . $args . ' < /dev/null';
+	if (strncmp(PHP_OS,'WIN',3) === 0) {
+		$cmd = $php . ' ' . $args;
+	} else {
+		$cmd = 'unset SERVER_SOFTWARE SERVER_NAME GATEWAY_INTERFACE REQUEST_METHOD ; ';
+		$cmd .= $php . ' ' . $args . ' < /dev/null';
+	}
 	return shell_exec($cmd);
 }
 
