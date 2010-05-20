@@ -748,39 +748,46 @@ class FluAzuD(object):
             # get plugin-config
             try:
                 config_object = self.interface.getPluginconfig()
+                config_ok = 1
             except:
+                printMessage("getPluginconfig: Ignoring Incompatible Plugin Config :")
                 printException()
-                return True
-
-            # get vars
-            coreVars = [ \
-                config_object.CORE_PARAM_INT_MAX_ACTIVE, \
-                config_object.CORE_PARAM_INT_MAX_ACTIVE_SEEDING, \
-                config_object.CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL, \
-                config_object.CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT, \
-                config_object.CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC, \
-                config_object.CORE_PARAM_INT_MAX_DOWNLOADS, \
-                config_object.CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC, \
-                config_object.CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC, \
-                config_object.CORE_PARAM_INT_MAX_UPLOADS, \
-                config_object.CORE_PARAM_INT_MAX_UPLOADS_SEEDING \
-            ]
-            coreParams = {}
-            for coreVar in coreVars:
-                try:
-                    coreParams[coreVar] = config_object.getIntParameter(coreVar, 0)
-                except:
-                    coreParams[coreVar] = 0
-                    printException()
-
+                config_ok = 0
+                #return True
+            
+            if config_ok == 1:
+                # get vars
+                coreVars = [ \
+                    config_object.CORE_PARAM_INT_MAX_ACTIVE, \
+                    config_object.CORE_PARAM_INT_MAX_ACTIVE_SEEDING, \
+                    config_object.CORE_PARAM_INT_MAX_CONNECTIONS_GLOBAL, \
+                    config_object.CORE_PARAM_INT_MAX_CONNECTIONS_PER_TORRENT, \
+                    config_object.CORE_PARAM_INT_MAX_DOWNLOAD_SPEED_KBYTES_PER_SEC, \
+                    config_object.CORE_PARAM_INT_MAX_DOWNLOADS, \
+                    config_object.CORE_PARAM_INT_MAX_UPLOAD_SPEED_KBYTES_PER_SEC, \
+                    config_object.CORE_PARAM_INT_MAX_UPLOAD_SPEED_SEEDING_KBYTES_PER_SEC, \
+                    config_object.CORE_PARAM_INT_MAX_UPLOADS, \
+                    config_object.CORE_PARAM_INT_MAX_UPLOADS_SEEDING \
+                ]
+                coreParams = {}
+                for coreVar in coreVars:
+                    try:
+                        coreParams[coreVar] = config_object.getIntParameter(coreVar, 0)
+                        printError("writeStatFile2: %s %s" % (coreVar, coreParams[coreVar]))
+                    except:
+                        printException()
+                        coreParams[coreVar] = 0
+                        continue
+                
             # write file
             try:
                 f = open(self.flu_fileStat, 'w')
                 f.write("%s\n" % self.azu_host)
                 f.write("%d\n" % self.azu_port)
                 f.write("%s\n" % self.azu_version_str)
-                for coreVar in coreVars:
-                    f.write("%d\n" % coreParams[coreVar])
+                if config_ok == 1:                
+                    for coreVar in coreVars:
+                        f.write("%d\n" % coreParams[coreVar])
                 f.flush()
                 f.close()
                 return True
