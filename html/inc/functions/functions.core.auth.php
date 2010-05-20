@@ -94,6 +94,10 @@ function isAuthenticated() {
 	}
 	// user exists ?
 	$recordset = $db->Execute("SELECT uid, hits FROM tf_users WHERE user_id=".$db->qstr($cfg["user"]));
+	if (!$recordset) {
+		print "<b>Error in query isAuthenticated()</b><p>";
+		return 0;
+	}
 	if ($recordset->RecordCount() != 1) {
 		AuditAction($cfg["constants"]["access_denied"], "FAILED AUTH: ".$cfg["user"]);
 		@session_destroy();
