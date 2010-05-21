@@ -207,6 +207,13 @@ class ClientHandler
 	// public methods
 	// =========================================================================
 
+	/**
+	 * isWinOS - Check if OS is Windows or Not
+	 */
+	function isWinOS() {
+		return (strncmp(PHP_OS,'WIN',3) === 0);
+	}
+	
     /**
      * sets settings-fields
      */

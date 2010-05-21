@@ -107,10 +107,16 @@ class ClientHandlerAzureus extends ClientHandler
         $content .= $this->maxport."\n";
         $content .= $this->maxcons."\n";
         $content .= $this->rerequest;
-		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.fluazu/run/'.$transfer);
-		$this->command .= " && ";
-		$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
+        
+        $this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.fluazu/run/'.$transfer);
+        $this->command .= " && ";
+        $this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
 
+        if ($this->isWinOS) {
+		file_put_contents($cfg["path"].'.fluazu/run/'.$transfer, $content);
+		$this->command = "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
+        }
+        
         // start the client
         $this->_start();
     }

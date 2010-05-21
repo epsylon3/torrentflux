@@ -175,4 +175,11 @@ function sendLine($line = "") {
 	@flush();
 }
 
+/**
+ * isWinOS - Check if OS is Windows or Not
+ */
+function isWinOS() {
+	return (strncmp(PHP_OS,'WIN',3) === 0);
+}
+
 ?>
