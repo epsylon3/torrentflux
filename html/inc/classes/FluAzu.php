@@ -437,7 +437,7 @@ class FluAzu
 			$started = false;
 			while ($loop) {
 				@clearstatcache();
-				if (file_exists($this->_pathStatFile) || file_exists($cfg["path"].".fluazu/fluazu.pid")) {
+				if (file_exists($this->_pathStatFile)) { 
 					$started = true;
 					$loop = false;
 				} else {
