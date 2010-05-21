@@ -1,4 +1,4 @@
-# File: core.py
+﻿# File: core.py
 # Library: DOPAL - DO Python Azureus Library
 #
 # This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,9 @@ from dopal.errors import AzureusResponseXMLError, MissingObjectIDError, \
     NoSuchMethodError, InvalidWrapTypeError, InvalidRemoteObjectError, \
     NoObjectIDGivenError, NoEstablishedConnectionError, \
     InvalidConnectionIDError, raise_as, DopalPendingDeprecationWarning
+
+# debug
+#from fluazu.output import printMessage
 
 #
 # Low-level class, representing a link to a remote Azureus instance.
@@ -859,6 +862,11 @@ class AzureusConnection(AzureusLink):
 
         # Second step, send this to Azureus and get a response back.
         xml_response_string = self.send_method_exchange(xml_data_as_string)
+
+        if method_name == 'getPluginconfig':
+            xml_response_string = xml_response_string.replace("false","0")
+            xml_response_string = xml_response_string.replace("true","1")
+            # printMessage(" %s xml_response_string %s" % (method_name, xml_response_string) )
 
         # Third step, convert the string into a xml.dom.Node structure.
         xml_structure = parseString(xml_response_string)
