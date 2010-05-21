@@ -535,8 +535,11 @@ class FluAzuD(object):
         azu_dls = self.dm.getDownloads()
         # then fast
         for download in azu_dls:
-            tfile = (os.path.split(str(download.getTorrentFileName())))[1]
-            self.downloads[tfile] = download
+            try:
+                tfile = (os.path.split(str(download.getTorrentFileName())))[1]
+                self.downloads[tfile] = download
+            except:
+                continue
         self.needUpdate = 0
         printMessage("updateDownloads() done")
 
