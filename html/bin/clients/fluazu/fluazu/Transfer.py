@@ -408,21 +408,20 @@ class Transfer(object):
         if self.state_azu == Transfer.AZ_SEEDING and self.tf.die_when_done.lower() == 'true':
             self.log("die-when-done set, setting shutdown-flag...")
             self.stop(download)
-            return
-
+            return True
+        
+        # stats
+        if download == None:
+            return False
+        
         # set some values
         self.sf.running = Transfer.TF_RUNNING
         try:
             try:
-
-                # stats
-                if download == None:
-                    return
-
-                stats = download.getStats()                    
+                stats = download.getStats()
                 if stats == None:
-                    return
-
+                    raise
+                
                 # die-on-seed-limit
                 if self.state_azu == Transfer.AZ_SEEDING:
                     sk = float(self.tf.sharekill)
@@ -432,85 +431,98 @@ class Transfer(object):
                             if shareRatio >= sk:
                                 self.log("seed-limit %s reached (%s), setting shutdown-flag..." % (self.tf.sharekill, str(shareRatio)))
                                 self.stop(download)
-                                return
+                                return True
                         except:
                             printException()
-
+                
                 # completed
                 try:
                     pctf = (float(stats.getCompleted())) / 10
                     self.sf.percent_done = str(pctf)
                 except:
                     printException()
-
+                
                 # time_left
                 try:
                     self.sf.time_left = str(stats.getETA())
                 except:
                     self.sf.time_left = '-'
-
+                
                 # down_speed
                 try:
                     self.sf.down_speed = "%.1f kB/s" % ((float(stats.getDownloadAverage())) / 1024)
                 except:
                     printException()
-
+                
                 # up_speed
                 try:
                     self.sf.up_speed = "%.1f kB/s" % ((float(stats.getUploadAverage())) / 1024)
                 except:
                     printException()
-
+                
                 # uptotal
                 try:
                     self.sf.uptotal = str(stats.getUploaded())
                 except:
                     printException()
-
+                
                 # downtotal
                 try:
                     self.sf.downtotal = str(stats.getDownloaded())
                 except:
                     printException()
-
+                
             except:
                 printException()
-
+            
             # hosts
             try:
-                ps = download.getPeerManager().getStats()
                 scrape = download.getLastScrapeResult()
-
+                
+                pm = download.getPeerManager()
+                # stats
+                if not hasattr(pm, 'getStats'):
+                    hasStats=0
+                else:
+                    ps = pm.getStats()
+                    hasStats=1
+                
                 # seeds
                 try:
                     countS = int(scrape.getSeedCount())
                     if (countS < 0):
                         countS = 0
-                    countSC = int(ps.getConnectedSeeds())
-                    if (countSC < 0):
-                        countSC = 0
-                    self.sf.seeds = "%d (%d)" % (countSC, countS)
+                    if hasStats == 1:
+                        countSC = int(ps.getConnectedSeeds())
+                        if (countSC < 0):
+                            countSC = 0
+                        self.sf.seeds = "%d (%d)" % (countSC, countS)
+                    else:
+                        self.sf.seeds = "(%d)" % (countS)
                 except:
                     printException()
-
+                
                 # peers
                 try:
                     countP = int(scrape.getNonSeedCount())
                     if (countP < 0):
                         countP = 0
-                    countPC = int(ps.getConnectedLeechers())
-                    if (countPC < 0):
-                        countPC = 0
-                    self.sf.peers = "%d (%d)" % (countPC, countP)
+                    if hasStats == 1:
+                        countPC = int(ps.getConnectedLeechers())
+                        if (countPC < 0):
+                            countPC = 0
+                        self.sf.peers = "%d (%d)" % (countPC, countP)
+                    else:
+                        self.sf.peers = "(%d)" % (countP)
                 except:
                     printException()
-
+                
             except:
                 printException()
-
+            
             # write
             return self.sf.write()
-
+            
         except:
             printException()
             return False
@@ -522,8 +534,6 @@ class Transfer(object):
 
         # set some values
         self.sf.running = Transfer.TF_STOPPED
-#        self.sf.down_speed = "0.00 kB/s"
-#        self.sf.up_speed = "0.00 kB/s"
         self.sf.down_speed = ""
         self.sf.up_speed = ""
         self.sf.transferowner = self.tf.transferowner
@@ -535,8 +545,8 @@ class Transfer(object):
 
             # stats
             if not hasattr(download, 'getStats'):
-               printMessage("statShutdown() Bad download .")
-               return
+               printMessage("statShutdown() download has not available stats.")
+               return False
 
             # stats
             try:
