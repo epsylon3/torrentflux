@@ -258,6 +258,14 @@ class SimpleHTTP
 		return $instanceSimpleHTTP->instance_getRemoteSize($durl);
 	}
 
+	function getRealUrl($durl) {
+		global $instanceSimpleHTTP;
+		$url=$durl;
+		if ($instanceSimpleHTTP->redirectUrl!="")
+			$url=$instanceSimpleHTTP->redirectUrl;
+		return $url;
+	}
+
 	// =========================================================================
 	// ctor
 	// =========================================================================
@@ -373,7 +381,7 @@ class SimpleHTTP
 			// GET /url/path/example.php HTTP/1.1
 			// Host: example.com
 			// Accept: */*
-			// Accept-Language: en-us
+			// Accept-Language: en-US
 			// User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1) Gecko/20061010 Firefox/2.0
 			// Connection: Close
 			// Cookie: uid=12345;pass=asdfasdf;
@@ -382,7 +390,7 @@ class SimpleHTTP
 			$this->request  = "GET ".$this->_fullURLEncode($this->getcmd)." HTTP/".$this->httpVersion."\r\n";
 			$this->request .= (!empty($this->referer)) ? "Referer: " . $this->referer . "\r\n" : "";
 			$this->request .= "Accept: */*\r\n";
-			$this->request .= "Accept-Language: en-us\r\n";
+//			$this->request .= "Accept-Language: en-US\r\n";
 			$this->request .= "User-Agent: ".$this->userAgent."\r\n";
 			$this->request .= "Host: " . $domain["host"] . "\r\n";
 			if($this->httpVersion=="1.1"){
@@ -757,7 +765,6 @@ class SimpleHTTP
 			// Display the first part of $data if debuglevel higher than 1:
 			if ($cfg["debuglevel"] > 1){
 
-				array_push($this->messages , $this->request);
 				if (strlen($data) > 0){
 					array_push($this->messages , "\n\nDisplaying first 2048 chars of output: ");
 					array_push($this->messages , substr($data, 0, 2048), ENT_QUOTES);
@@ -918,7 +925,7 @@ class SimpleHTTP
 		$this->status = "";
 		$this->errstr = "";
 		$this->errno = 0;
-		$this->redirectCount = 0;
+    	$this->redirectCount = 0;
 		$this->responseHeaders = array();
 		$this->gotResponseLine = false;
 		// domain
