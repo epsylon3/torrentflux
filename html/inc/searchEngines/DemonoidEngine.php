@@ -24,6 +24,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 /*
+	v 1.07 - May 22. 10 - some tabs/space cleanup
 	v 1.06 - Dec 12. 06 - Change path on main pages.
 	v 1.05 - May 20. 06 - Change to paging URL, addtion of user stats as per Qromes Request (should now appear above column headers)
 	v 1.04 - Apr 26. 06 - Fixed filtering lists - Possible bug in admin.php (line 1997 - option value [NO FILTER] needs setting to -1 instead of "")
@@ -43,7 +44,7 @@ class SearchEngine extends SearchEngineBase
         $this->engineName = "Demonoid";
 
         $this->author = "moldavite";
-        $this->version = "1.06-tfb";
+        $this->version = "1.07-tfb";
         $this->updateURL = "http://www.torrentflux.com/forum/index.php/topic,1210.0.html";
 
         $this->Initialize($cfg);
@@ -51,19 +52,21 @@ class SearchEngine extends SearchEngineBase
 
     function populateMainCategories()
     {
+	//Ok Checked May 2010
+
         $this->mainCatalog["0"] = "(all types)";
         $this->mainCatalog["9"] = "Anime";
         $this->mainCatalog["5"] = "Applications";
         $this->mainCatalog["17"] = "Audio Books";
         $this->mainCatalog["11"] = "Books";
         $this->mainCatalog["10"] = "Comics";
-		$this->mainCatalog["4"] = "Games";
+        $this->mainCatalog["4"] = "Games";
         $this->mainCatalog["6"] = "Misc";
         $this->mainCatalog["1"] = "Movies";
-		$this->mainCatalog["2"] = "Music";
+        $this->mainCatalog["2"] = "Music";
         $this->mainCatalog["13"] = "Music Videos";
         $this->mainCatalog["8"] = "Pictures";
-		$this->mainCatalog["3"] = "TV";
+        $this->mainCatalog["3"] = "TV";
     }
 
     //----------------------------------------------------------------
@@ -72,10 +75,12 @@ class SearchEngine extends SearchEngineBase
     {
         $output = array();
 
+	//To Check
+
         switch ($mainGenre)
         {
             case "1" :
-			    $output["1:ALL"] = "All";
+                $output["1:ALL"] = "All";
                 $output["1:6"] = "Action";
                 $output["1:7"] = "Adventure";
                 $output["1:8"] = "Animation";
@@ -102,7 +107,7 @@ class SearchEngine extends SearchEngineBase
                 $output["1:26"] = "Western";
                 break;
             case "2" :
-				$output["2:All"] = "All";
+                $output["2:All"] = "All";
                 $output["2:183"] = "Alternative";
                 $output["2:34"] = "Blues";
                 $output["2:185"] = "Christian";
@@ -130,8 +135,8 @@ class SearchEngine extends SearchEngineBase
                 $output["2:190"] = "Soundtrack";
                 $output["2:191"] = "Trance";
                 break;
-			case "3" :
-				$output["3:All"] = "All";
+            case "3" :
+                $output["3:All"] = "All";
                 $output["3:192"] = "Action";
                 $output["3:193"] = "Adventure";
                 $output["3:194"] = "Animation";
@@ -159,7 +164,7 @@ class SearchEngine extends SearchEngineBase
                 $output["3:211"] = "Western";
                 break;
             case "4" :
-				$output["4:All"] = "All";
+                $output["4:All"] = "All";
                 $output["4:177"] = "DOS";
                 $output["4:176"] = "Dreamcast";
                 $output["4:178"] = "Emulators";
@@ -180,19 +185,19 @@ class SearchEngine extends SearchEngineBase
                 $output["4:174"] = "XBox 360";
                 break;
             case "5" :
-				$output["5:All"] = "All";
+                $output["5:All"] = "All";
                 $output["5:2"] = "Linux";
-				$output["5:3"] = "Macintosh";
-				$output["5:118"] = "Mobile phone";
-				$output["5:5"] = "Palm";
-				$output["5:4"] = "PocketPC";
-				$output["5:1"] = "Windows";
+		$output["5:3"] = "Macintosh";
+                $output["5:118"] = "Mobile phone";
+                $output["5:5"] = "Palm";
+                $output["5:4"] = "PocketPC";
+                $output["5:1"] = "Windows";
                 break;
             case "6" :
                 $output["6:All"] = "All";
                 break;
             case "8" :
-				$output["8:All"] = "All";
+                $output["8:All"] = "All";
                 $output["8:66"] = "Art";
                 $output["8:67"] = "Commercial";
                 $output["8:69"] = "Glamour";
@@ -202,21 +207,20 @@ class SearchEngine extends SearchEngineBase
                 $output["8:71"] = "Sports";
                 $output["8:72"] = "Wildlife";
                 break;
-			case "9" :
-				$output["9:All"] = "All";
+            case "9" :
+                $output["9:All"] = "All";
                 $output["9:111"] = "Action";
-				$output["9:220"] = "Adventure";
-				$output["9:112"] = "Comedy";
-				$output["9:113"] = "Drama";
-				$output["9:114"] = "Fantasy";
-				$output["9:115"] = "Horror";
-				$output["9:221"] = "Other";
-				$output["9:117"] = "Romance";
-				$output["9:116"] = "Sci-Fi";
-
+                $output["9:220"] = "Adventure";
+                $output["9:112"] = "Comedy";
+                $output["9:113"] = "Drama";
+                $output["9:114"] = "Fantasy";
+                $output["9:115"] = "Horror";
+                $output["9:221"] = "Other";
+                $output["9:117"] = "Romance";
+                $output["9:116"] = "Sci-Fi";
                 break;
-			case "10" :
-				$output["10:All"] = "All";
+            case "10" :
+                $output["10:All"] = "All";
                 $output["10:159"] = "Action / Adventure";
                 $output["10:227"] = "Crime";
                 $output["10:160"] = "Drama";
@@ -227,10 +231,10 @@ class SearchEngine extends SearchEngineBase
                 $output["10:229"] = "Other";
                 $output["10:226"] = "Real-Life";
                 $output["10:225"] = "Sci-Fi";
-				$output["10:222"] = "Super Hero";
+                $output["10:222"] = "Super Hero";
                 break;
-			case "11" :
-				$output["11:All"] = "All";
+            case "11" :
+                $output["11:All"] = "All";
                 $output["11:119"] = "Action";
                 $output["11:120"] = "Adventure";
                 $output["11:122"] = "Childrens";
@@ -254,8 +258,8 @@ class SearchEngine extends SearchEngineBase
                 $output["11:135"] = "Thriller";
                 $output["11:136"] = "Western";
                 break;
-			case "13" :
-				$output["13:All"] = "All";
+            case "13" :
+                $output["13:All"] = "All";
                 $output["13:251"] = "Alternative";
                 $output["13:239"] = "Blues";
                 $output["13:253"] = "Christian";
@@ -284,8 +288,8 @@ class SearchEngine extends SearchEngineBase
                 $output["13:257"] = "Soundtrack";
                 $output["13:258"] = "Trance";
                 break;
-			case "17" :
-				$output["17:All"] = "All";
+            case "17" :
+                $output["17:All"] = "All";
                 $output["17:140"] = "Action";
                 $output["17:139"] = "Adventure";
                 $output["17:142"] = "Childrens";
@@ -327,14 +331,14 @@ class SearchEngine extends SearchEngineBase
     {
         $request = '/files/';
 
-		if (array_key_exists("mainGenre",$_REQUEST) && array_key_exists("subGenre",$_REQUEST))
+        if (array_key_exists("mainGenre",$_REQUEST) && array_key_exists("subGenre",$_REQUEST))
         {
             $request = "/files/?category=".$_REQUEST["mainGenre"]."&subcategory=".$_REQUEST["subGenre"]."&language=0&seeded=0&external=2&query=&uid=0";
 
         }
-		elseif (array_key_exists("subGenre",$_REQUEST))
+        elseif (array_key_exists("subGenre",$_REQUEST))
         {
-			$splitted = explode(":", $_REQUEST['subGenre']);
+            $splitted = explode(":", $_REQUEST['subGenre']);
             $request = "/files/?category=".$splitted[0]."&subcategory=".$splitted[1]."&language=0&seeded=0&external=2&query=&uid=0";
 
         }
@@ -344,7 +348,7 @@ class SearchEngine extends SearchEngineBase
 
         }
 
-		if (!empty($this->pg))
+        if (!empty($this->pg))
         {
             if(strpos($request,"?"))
             {
