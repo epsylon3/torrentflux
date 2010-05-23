@@ -305,29 +305,27 @@ foreach ($entrys as $entry) {
 
 	if ($cfg['enable_dirstats'] == 1) 
 	{
+		$path = $dirName.$entry;
+		
 		if($islink == 0) // it's not a symbolic link
 		{	
-			$path = $dirName.$entry;
-			$ssz = is_dir($dirName.$entry)? dirsize($path) : @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
-			if ($ssz < 0)
+			$ssz = is_dir($dirName.$entry)? dirsize($path) : filesize($path);
+			if ( $ssz < 0 && !isWinOS() )
 				$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
 
-			//if shell_exec fails (or windows)
-			if (!$ssz)
-				$ssz = is_dir($dirName.$entry)? dirsize($path) : filesize($path);
-
-			$size = formatBytesTokBMBGBTB( $ssz );
-			
-			if (strstr($size,"G")) $size="<b>$size</b>";
-
-			$timeStamp = filemtime($dirName.$entry);
-			$date = date("m-d-Y h:i a", $timeStamp);
 		}
 		else // it's a symbolic link
 		{
-			$size = 0;
+			$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
 			$date = "";
 		}
+		
+		$size = formatBytesTokBMBGBTB( $ssz );
+		
+		if (strstr($size,"G")) $size="<b>$size</b>";
+
+		$timeStamp = filemtime($dirName.$entry);
+		$date = date("m-d-Y h:i a", $timeStamp);
 	} 
 	else 
 	{
