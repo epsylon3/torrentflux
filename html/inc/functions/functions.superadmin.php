@@ -554,6 +554,8 @@ function sa_maintenance($action = "") {
 			$htmlTitle = "Maintenance - Clean - Template Cache";
 			$htmlMain .= '<br><strong>Cleaning Torrentflux-b4rt Template Cache:</strong><br>';
 			$result = cleanDir($cfg["path"].'.templateCache');
+			if (is_dir("/tmp/.templateCache")
+				$result = cleanDir("/tmp/.templateCache");
 			if (strlen($result) > 0)
 				$htmlMain .= '<br>Deleted compiled templates: <br><pre>'.$result.'</pre><br>';
 			else

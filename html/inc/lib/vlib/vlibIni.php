@@ -44,7 +44,12 @@ if (!defined('vlibIniClassLoaded')) {
 
         /** config vars for vlibTemplate */
         function vlibTemplate () {
-			global $cfg;
+            global $cfg;
+
+            $cache_dir = $cfg["path"].'.templateCache';
+            if ( !is_writable($cfg["path"]) )
+		$cache_dir = '/tmp/.templateCache';
+
             return array(
                 'TEMPLATE_DIR' => '/var/www/themes/default/tmpl',   // Default directory for your template files (full path) leave the '/' or '\' off the end of the directory.
                 'MAX_INCLUDES' => 10, // Drill depth for tmpl_include's
@@ -62,15 +67,16 @@ if (!defined('vlibIniClassLoaded')) {
                 'ENABLE_PHPINCLUDE' => '0', // Will allow template to include a php file using <TMPL_PHPINCLUDE>
                 'ENABLE_SHORTTAGS'  => '0', // Will allow you to use short tags in your script i.e.: <VAR name="my_var">, <LOOP name="my_loop">...</LOOP>
 
-				/* the following are only used by the vlibTemplateCache class. */
-                'CACHE_DIRECTORY' => $cfg["path"].'.templateCache',
+		/* the following are only used by the vlibTemplateCache class. */
+		'CACHE_DIRECTORY' => $cache_dir,
                     // Directory where the cached filesystem
                     // will be set up (full path, and must be writable)
                     // '/' or '\' off the end of the directory.
                 'CACHE_LIFETIME' => 604800, // Duration until file is re-cached in seconds (604800 = 1 week)
                 'CACHE_EXTENSION' => 'vtc', // extention to be used by the cached file i.e. index.php will become index.vtc (vlibTemplate Compiled)
                 'DEBUG_WITHOUT_JAVASCRIPT' => 0 // if set to 1, the external debug window won't be displayed and the debug output is placed below every template output.
-            );
+            );	
+
         } // << end function vlibTemplate
 
 

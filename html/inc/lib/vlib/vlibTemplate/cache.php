@@ -139,7 +139,10 @@ class vlibTemplateCache extends vlibTemplate {
      */
     function _createCache($data) {
         $cache_file = $this->_cachefile;
+	if (empty($cache_file) return false;
+
         if(!$this->_prepareDirs($cache_file)) return false; // prepare all of the directories
+
 
         $f = fopen ($cache_file, "w");
         flock($f, 2); // set an EXclusive lock
@@ -158,15 +161,16 @@ class vlibTemplateCache extends vlibTemplate {
      */
     function _prepareDirs($file) {
         if (empty($file)) die('no filename'); //do error in future
-        $filepath = dirname($file);
+        $filepath = dirname($file); 
+
         if (is_dir($filepath)) return true;
 
-        $dirs = preg_split('#[\\/]#', $filepath);
+        $dirs = preg_split("#[\\/\\\\]#", $filepath); // "/" ou "\"
         $currpath = "";
-        foreach ($dirs as $dir) {
+        foreach ($dirs as $dir)
+        if (!empty($dir)) {
             $currpath .= $dir .'/';
             $type = @filetype($currpath);
-
             ($type=='link') and $type = 'dir';
             if ($type != 'dir' && $type != false && !empty($type)) {
                 vlibTemplateError::raiseError('VT_ERROR_WRONG_CACHE_TYPE',KILL,'directory: '.$currpath.', type: '.$type);
@@ -175,7 +179,7 @@ class vlibTemplateCache extends vlibTemplate {
                 continue;
             }
             else {
-                $s = @mkdir($currpath, 0775);
+                $s = (@mkdir($currpath, 0775) || @mkdir($currpath) );
                 if (!$s) vlibTemplateError::raiseError('VT_ERROR_CACHE_MKDIR_FAILURE',KILL,'directory: '.$currpath);
             }
         }
