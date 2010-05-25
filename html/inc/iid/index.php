@@ -90,7 +90,17 @@ $bar_width = "4";
 foreach ($arList as $transfer) {
 	// ---------------------------------------------------------------------
 	// displayname
-	$displayname = (strlen($transfer) >= 47) ? substr($transfer, 0, 44)."..." : $transfer;
+	$displayname = $transfer;
+
+	// may need a special config panel to clean names...
+	$displayname = preg_replace('#(_www\.[^_]+_)#',"",$displayname);
+	$displayname = preg_replace('#(_[^\.]+\.com_)#',"",$displayname);
+
+	$arToClean = array ("http","download.php","_isoHunt_","__");	
+
+	$displayname = str_replace($arToClean,"",$displayname);
+
+	$displayname = (strlen($displayname) >= 47) ? substr($displayname, 0, 44)."..." : $displayname;
 	// owner
 	$transferowner = getOwner($transfer);
 	$owner = IsOwner($cfg["user"], $transferowner);
