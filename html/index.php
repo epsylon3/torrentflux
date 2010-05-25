@@ -20,6 +20,8 @@
 
 *******************************************************************************/
 
+@ini_set("display_errors", "On");
+
 // main.internal
 require_once("inc/main.internal.php");
 
