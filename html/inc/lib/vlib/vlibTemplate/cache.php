@@ -139,7 +139,7 @@ class vlibTemplateCache extends vlibTemplate {
      */
     function _createCache($data) {
         $cache_file = $this->_cachefile;
-	if (empty($cache_file) return false;
+	if (empty($cache_file)) return false;
 
         if(!$this->_prepareDirs($cache_file)) return false; // prepare all of the directories
 

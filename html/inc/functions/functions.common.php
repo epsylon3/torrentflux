@@ -103,10 +103,10 @@ function getFile($var) {
 function checkMainDirectories() {
 	global $cfg;
 	// main-path
-	if (!checkDirectory($cfg["path"]))
+	if (!checkDirectory($cfg["path"], 0775))
 		@error("Main-Path does not exist and cannot be created or is not writable", "admin.php?op=serverSettings", "Server-Settings", array("path : ".$cfg["path"]));
 	// transfer-path
-	if (!checkDirectory($cfg["transfer_file_path"]))
+	if (!checkDirectory($cfg["transfer_file_path"], 0775))
 		@error("Transfer-File-Path does not exist and cannot be created or is not writable", "admin.php?op=serverSettings", "Server-Settings", array("transfer_file_path : ".$cfg["transfer_file_path"]));
 }
 
