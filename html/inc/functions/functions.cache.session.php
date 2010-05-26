@@ -86,6 +86,8 @@ function cacheTransfersInit() {
 	global $transfers;
 	if (isset($_SESSION['cache_transfers']) )
 		$transfers = $_SESSION['cache_transfers'];
+	else
+		$transfers = null;
 }
 
 /**

@@ -348,7 +348,7 @@ class ClientHandler
      */
     function stop($transfer, $kill = false, $transferPid = 0) {
     	// set vars
-		$this->_setVarsForTransfer($transfer);
+        $this->_setVarsForTransfer($transfer);
         // stop the client
         $this->_stop($kill, $transferPid);
     }
@@ -795,15 +795,15 @@ class ClientHandler
         AuditAction($cfg["constants"]["stop_transfer"], $this->transfer);
         // send quit-command to client
         CommandHandler::add($this->transfer, "q");
-		CommandHandler::send($this->transfer);
+	CommandHandler::send($this->transfer);
         // wait until transfer is down
-        waitForTransfer($this->transfer, false, 25);
+        waitForTransfer($this->transfer, false, 20);
         // one more second
-        sleep(1);
+        usleep(500000);
         // flag the transfer as stopped (in db)
         stopTransferSettings($this->transfer);
-		// set transfers-cache
-		cacheTransfersSet();
+        // set transfers-cache
+        cacheTransfersSet();
         // see if the transfer process is hung.
         $running = $this->runningProcesses();
         $isHung = false;
@@ -812,11 +812,12 @@ class ClientHandler
             if ($rt->transferFile == $this->transfer) {
             	$isHung = true;
                 AuditAction($cfg["constants"]["error"], "Possible Hung Process for ".$rt->transferFile." (".$rt->processId.")");
+//$kill = true;
             }
         }
         // kill-request
         if ($kill && $isHung) {
-        	AuditAction($cfg["constants"]["kill_transfer"], $this->transfer);
+            AuditAction($cfg["constants"]["kill_transfer"], $this->transfer);
             // set pid
             if (!empty($transferPid)) {
             	// test for valid pid-var
@@ -824,9 +825,9 @@ class ClientHandler
                 	$this->pid = $transferPid;
             	} else {
             		$this->state = CLIENTHANDLER_STATE_ERROR;
-		    		AuditAction($cfg["constants"]["error"], "INVALID PID: ".$transferPid);
-		    		array_push($this->messages, "INVALID PID: ".$transferPid);
-		    		return false;
+                        AuditAction($cfg["constants"]["error"], "INVALID PID: ".$transferPid);
+                        array_push($this->messages, "INVALID PID: ".$transferPid);
+                        return false;
             	}
             } else {
                 $this->pid = getTransferPid($this->transfer);;

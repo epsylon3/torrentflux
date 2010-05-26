@@ -102,6 +102,8 @@ class FluAzuD(object):
         self.flu_pathTransfersDel = self.flu_path + 'del/'
         self.azu_host = host
         self.azu_port = int(port)
+        self.azu_pathTransfers = '/www/.azureus/torrents/'
+        
         if secure == '1':
             self.azu_secure = True
         else:
@@ -255,7 +257,8 @@ class FluAzuD(object):
     def main(self):
         
         nloop = 0
-        self.getActiveUsers()
+        self.getActiveUsers()        
+        
         # main-loop
         while self.running > 0:
             
@@ -266,47 +269,55 @@ class FluAzuD(object):
                     time.sleep(2)
                     actifs = self.getActiveUsers()
                 printMessage("flubart wake up (tf_log HIT=%d) ..." % actifs)
-            
-            nloop = (nloop + 1) % 200
-            if (nloop == 0):
+
+            printMessage("loop")
+
+            nloop = (nloop + 1) % 400
+            if (nloop == 50):
                 self.needUpdateAll = 1
-                
-            if (nloop % 50) == 0:
+
+            if (nloop % 100) == 0:
                 self.needUpdate = 1
-                
+
             if (nloop % 10) == 0:
                 self.needUpdateStat = 1
-                
+
             # check if connection still valid, shutdown if it is not
             if not self.checkAzuConnection():
                 # shutdown
                 self.shutdown()
                 # return
                 return 1
-            
+
             # update downloads (slow)
             if (self.needUpdate == 1):
                 printMessage("update downloads")
                 self.updateDownloads()
-            
+                if (nloop == 1):
+                    self.loadCurrentNotInVuze()
+
             # update downloading torrents (slow)
             if (self.needUpdateStat == 1):
                 # update transfers
-                # printMessage("update downloading torrents")
+                printMessage("update stat")
                 for transfer in self.transfers:
                     if transfer.name in self.downloads:
                         if self.needUpdateAll == 1 or transfer.needFastUpdate():
                             # update
                             transfer.update(self.downloads[transfer.name])
                             #printMessage(transfer.name + " %d " % transfer.state_azu)
+                    else:
+                        if (transfer.state_azu != 7):
+                            printMessage(" not in transfers: " + transfer.name + " %d " % transfer.state_azu)
+                            #self.downloads[tfile]
                 
                 self.needUpdateStat = 0
                 self.needUpdateAll = 0
-            
+
             #printMessage("processCommandStack")
             
             # inner loop which check if there is a command file to run
-            for i in range(100):
+            for i in range(20):
                 
                 # process daemon command stack (fast) CTRL+C ?
                 if self.processCommandStack():
@@ -320,11 +331,11 @@ class FluAzuD(object):
                         if transfer.processCommandStack(self.downloads[transfer.name]):
                             self.needUpdateStat = 1;
                             # update downloads (too slow)
-                            # self.needUpdate = 1;
+                            self.needUpdate = 1;
                 
                 # sleep
-                time.sleep(0.5)
-        
+                time.sleep(0.1)
+
         printMessage("shutdown")
         
         # shutdown
@@ -348,6 +359,88 @@ class FluAzuD(object):
         # transfers
         self.loadTransfers()
 
+    """ -------------------------------------------------------------------- """
+    def loadCurrentNotInVuze(self):
+
+        printMessage("loading missing transfers... %s" % self.flu_pathTransfers)
+
+        needReload = 0
+        requests = []
+        try:
+            vuzePathExists = os.path.isdir(self.azu_pathTransfers);
+            for fileName in os.listdir(self.flu_pathTransfers):
+                if os.path.isfile(self.tf_pathTransfers + fileName):                	
+                    if vuzePathExists and not os.path.isfile(self.azu_pathTransfers + fileName):
+                        # add to vuze (but dont start)
+                        printMessage("adding missing transfer... %s" % fileName)
+                        requests.append(fileName)
+                        try:
+                          os.remove(self.flu_pathTransfers + fileName + ".cmd")
+                        except:
+                          printMessage("ignoring existing cmd file... %s" % fileName)
+                        needReload = 1
+                else:
+                    if os.path.isfile(self.tf_pathTransfers + fileName + ".pid"):
+                        try:
+                            printMessage("cleaning transfer pid... %s" % fileName)
+                            os.remove(self.tf_pathTransfers + fileName + ".pid")
+                        except:
+                            printError("exception when cleaning old transfer %s" % fileName+ ".pid")
+                            continue
+        except:
+            return False
+
+        # process requests
+        if len(requests) > 0:
+            try:
+                # update downloads
+                #self.downloads = {}
+                #self.updateDownloads()
+                for fileName in requests:
+                    # add if needed
+                    if fileName not in self.downloads:
+                        try:
+                            # add
+                            torrent = self.addTransfer(fileName)
+                        except:
+                            printError("exception when adding new transfer %s" % fileName)
+                            raise
+                    
+                        # downloads
+                        tries = 0
+                        while torrent and (tries < 10) and fileName not in self.downloads:                       
+                            download = self.dm.getDownload(torrent)
+                            if (torrent and download):
+                                self.downloads[fileName] = download
+                                self.needUpdate=1
+                                break
+                            else:
+                                printMessage("download %s missing, update downloads..." % torrent)
+                            
+                            # sleep + increment
+                            time.sleep(0.5)
+                            tries += 1
+                        
+                        # start transfer
+                        if fileName in self.downloads:
+                            try:
+                                transfer = Transfer(self.tf_pathTransfers, self.flu_pathTransfers, fileName)
+                                #transfer.start(self.downloads[fileName])
+                            except:
+                                printError("exception when starting new transfer %s" % fileName)
+                                raise
+                        else:
+                            printError("download %s not in azureus-downloads, cannot start it." % fileName)
+            except:
+                printMessage("exception when processing run-requests:")
+                printException()
+
+        if needReload == 1:
+            self.reload()
+
+        # return
+        return True
+        
     """ -------------------------------------------------------------------- """
     """ processDeleteRequests                                                """
     """ -------------------------------------------------------------------- """
@@ -399,7 +492,7 @@ class FluAzuD(object):
     """ processRunRequests                                                   """
     """ -------------------------------------------------------------------- """
     def processRunRequests(self):
-        printMessage("processing run-requests...")
+        printMessage("processing run-requests... %s" % self.flu_pathTransfersRun)
 
         # read requests
         requests = []
@@ -443,31 +536,31 @@ class FluAzuD(object):
                             printError("exception when adding new transfer %s" % fileName)
                             raise
                     
-                    # downloads
-                    tries = 0
-                    while torrent and (tries < 10) and fileName not in self.downloads:                       
-                        download = self.dm.getDownload(torrent)
-                        if (torrent and download):
-                            self.downloads[fileName] = download
-                            self.needUpdate=1
-                            break
-                        else:
-                            printMessage("download %s missing, update downloads..." % torrent)
+                        # downloads
+                        tries = 0
+                        while torrent and (tries < 10) and fileName not in self.downloads:                       
+                            download = self.dm.getDownload(torrent)
+                            if (torrent and download):
+                                self.downloads[fileName] = download
+                                self.needUpdate=1
+                                break
+                            else:
+                                printMessage("download %s missing, update downloads..." % torrent)
+                            
+                            # sleep + increment
+                            time.sleep(0.5)
+                            tries += 1
                         
-                        # sleep + increment
-                        time.sleep(0.5)
-                        tries += 1
-                    
-                    # start transfer
-                    if fileName in self.downloads:
-                        try:
-                            transfer = Transfer(self.tf_pathTransfers, self.flu_pathTransfers, fileName)
-                            transfer.start(self.downloads[fileName])
-                        except:
-                            printError("exception when starting new transfer %s" % fileName)
-                            raise
-                    else:
-                        printError("download %s not in azureus-downloads, cannot start it." % fileName)
+                        # start transfer
+                        if fileName in self.downloads:
+                            try:
+                                transfer = Transfer(self.tf_pathTransfers, self.flu_pathTransfers, fileName)
+                                transfer.start(self.downloads[fileName])
+                            except:
+                                printError("exception when starting new transfer %s" % fileName)
+                                raise
+                        else:
+                            printError("download %s not in azureus-downloads, cannot start it." % fileName)
             except:
                 printMessage("exception when processing run-requests:")
                 printException()

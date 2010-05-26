@@ -30,58 +30,58 @@ class ClientHandlerAzureus extends ClientHandler
 	// ctor
 	// =========================================================================
 
-    /**
+	/**
      * ctor
      */
-    function ClientHandlerAzureus() {
-    	$this->type = "torrent";
-        $this->client = "azureus";
-        $this->binSystem = "java";
-        $this->binSocket = "java";
-        $this->binClient = "java";
-    }
+	function ClientHandlerAzureus() {
+		$this->type = "torrent";
+		$this->client = "azureus";
+		$this->binSystem = "java";
+		$this->binSocket = "java";
+		$this->binClient = "java";
+	}
 
 	// =========================================================================
 	// public methods
 	// =========================================================================
 
-    /**
+	/**
      * starts a client
      *
      * @param $transfer name of the transfer
      * @param $interactive (boolean) : is this a interactive startup with dialog ?
      * @param $enqueue (boolean) : enqueue ?
      */
-    function start($transfer, $interactive = false, $enqueue = false) {
-    	global $cfg;
+	function start($transfer, $interactive = false, $enqueue = false) {
+	global $cfg;
 
-    	// set vars
+	// set vars
 		$this->_setVarsForTransfer($transfer);
 
-    	// log
-    	$this->logMessage($this->client."-start : ".$transfer."\n", true);
+	// log
+	$this->logMessage($this->client."-start : ".$transfer."\n", true);
 
-		// FluAzu
-		require_once("inc/classes/FluAzu.php");
+	// FluAzu
+	require_once("inc/classes/FluAzu.php");
 
-        // do azureus special-pre-start-checks
-        // check to see if fluazu is running
-        if (!FluAzu::isRunning()) {
-        	$this->state = CLIENTHANDLER_STATE_ERROR;
-        	$msg = "fluazu not running, cannot start transfer ".$transfer;
-        	AuditAction($cfg["constants"]["error"], $msg);
-        	$this->logMessage($msg."\n", true);
-        	array_push($this->messages, $msg);
-            // write error to stat
+		// do azureus special-pre-start-checks
+		// check to see if fluazu is running
+		if (!FluAzu::isRunning()) {
+			$this->state = CLIENTHANDLER_STATE_ERROR;
+			$msg = "fluazu not running, cannot start transfer ".$transfer;
+			AuditAction($cfg["constants"]["error"], $msg);
+			$this->logMessage($msg."\n", true);
+			array_push($this->messages, $msg);
+			// write error to stat
 			$sf = new StatFile($this->transfer, $this->owner);
 			$sf->time_left = 'Error: fluazu down';
 			$sf->write();
 			// return
-            return false;
-        }
+			return false;
+		}
 
-        // init starting of client
-        $this->_init($interactive, $enqueue, true, false);
+		// init starting of client
+		$this->_init($interactive, $enqueue, true, false);
 
 		// only continue if init succeeded (skip start / error)
 		if ($this->state != CLIENTHANDLER_STATE_READY) {
@@ -94,57 +94,60 @@ class ClientHandlerAzureus extends ClientHandler
 			return false;
 		}
 
-        // build the command-string
-        $content  = $cfg['user']."\n";
-        $content .= $this->savepath."\n";
-        $content .= $this->rate."\n";
-        $content .= $this->drate."\n";
-        $content .= $this->maxuploads."\n";
-        $content .= $this->superseeder."\n";
-        $content .= $this->runtime."\n";
-        $content .= $this->sharekill_param."\n";
-        $content .= $this->minport."\n";
-        $content .= $this->maxport."\n";
-        $content .= $this->maxcons."\n";
-        $content .= $this->rerequest;
-        
-        $this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.fluazu/run/'.$transfer);
-        $this->command .= " && ";
-        $this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
+		// build the command-string
+		$content  = $cfg['user']."\n";
+		$content .= $this->savepath."\n";
+		$content .= $this->rate."\n";
+		$content .= $this->drate."\n";
+		$content .= $this->maxuploads."\n";
+		$content .= $this->superseeder."\n";
+		$content .= $this->runtime."\n";
+		$content .= $this->sharekill_param."\n";
+		$content .= $this->minport."\n";
+		$content .= $this->maxport."\n";
+		$content .= $this->maxcons."\n";
+		$content .= $this->rerequest;
+		
+		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.fluazu/run/'.$transfer);
+		$this->command .= " && ";
+		$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
 
-        if ($this->isWinOS) {
+		if ($this->isWinOS) {
 		file_put_contents($cfg["path"].'.fluazu/run/'.$transfer, $content);
 		$this->command = "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
-        }
-        
-        // start the client
-        $this->_start();
-    }
+		}
+		
+		// start the client
+		$this->_start();
+	}
 
-    /**
+	/**
      * stops a client
      *
      * @param $transfer name of the transfer
      * @param $kill kill-param (optional)
      * @param $transferPid transfer Pid (optional)
      */
-    function stop($transfer, $kill = false, $transferPid = 0) {
-    	// set vars
+	function stop($transfer, $kill = false, $transferPid = 0) {
+		// set vars
 		$this->_setVarsForTransfer($transfer);
 		// FluAzu
 		require_once("inc/classes/FluAzu.php");
 		// only if fluazu running and transfer exists in fluazu
 		if (!FluAzu::isRunning()) {
-        	array_push($this->messages , "fluazu not running, cannot stop transfer ".$transfer);
+			array_push($this->messages , "fluazu not running, cannot stop transfer ".$transfer);
 			return false;
 		}
 		if (!FluAzu::transferExists($transfer)) {
-        	array_push($this->messages , "transfer ".$transfer." does not exist in fluazu, cannot stop it");
-			return false;
+			$msg = "transfer ".$transfer." does not exist in fluazu, deleting pid file (stop).";
+			$this->logMessage($msg."\n", true);
+			$this->cleanStoppedStatFile();
+			//array_push($this->messages , "transfer ".$transfer." does not exist in fluazu, cannot stop it");
+			//return false;
 		}
 		// stop the client
-        $this->_stop($kill, $transferPid);
-    }
+		$this->_stop($kill, $transferPid);
+	}
 
 	/**
 	 * deletes a transfer
@@ -153,7 +156,7 @@ class ClientHandlerAzureus extends ClientHandler
 	 * @return boolean of success
 	 */
 	function delete($transfer) {
-    	// set vars
+		// set vars
 		$this->_setVarsForTransfer($transfer);
 		// FluAzu
 		require_once("inc/classes/FluAzu.php");
@@ -161,46 +164,51 @@ class ClientHandlerAzureus extends ClientHandler
 		if (FluAzu::transferExists($transfer)) {
 			// only if fluazu running
 			if (!FluAzu::isRunning()) {
-	        	array_push($this->messages , "fluazu not running, cannot delete transfer ".$transfer);
+				array_push($this->messages , "fluazu not running, cannot delete transfer ".$transfer);
 				return false;
 			}
+			else
 			// remove from azu
 			if (!FluAzu::delTransfer($transfer)) {
-	        	array_push($this->messages , $this->client.": error when deleting transfer ".$transfer." :");
-	        	$this->messages = array_merge($this->messages, FluAzu::getMessages());
+				array_push($this->messages , $this->client.": error when deleting transfer ".$transfer." :");
+				$this->messages = array_merge($this->messages, FluAzu::getMessages());
 				return false;
 			}
+		} else {
+			$msg = "transfer ".$transfer." does not exist in fluazu, deleting pid file (delete).";
+			$this->logMessage($msg."\n", true);
+			unlink($this->transferFilePath.".pid");
 		}
 		// delete
 		return $this->_delete();
 	}
 
-    /**
+	/**
      * gets current transfer-vals of a transfer
      *
      * @param $transfer
      * @return array with downtotal and uptotal
      */
-    function getTransferCurrent($transfer) {
-    	global $db, $transfers;
-        $retVal = array();
-        // transfer from stat-file
+	function getTransferCurrent($transfer) {
+		global $db, $transfers;
+		$retVal = array();
+		// transfer from stat-file
 		$sf = new StatFile($transfer);
-        $retVal["uptotal"] = $sf->uptotal;
-        $retVal["downtotal"] = $sf->downtotal;
-        // transfer from db
-        $torrentId = getTransferHash($transfer);
-        $sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId);
-        $result = $db->Execute($sql);
-        $row = $result->FetchRow();
-        if (!empty($row)) {
-            $retVal["uptotal"] -= $row["uptotal"];
-            $retVal["downtotal"] -= $row["downtotal"];
-        }
-        return $retVal;
-    }
+		$retVal["uptotal"] = $sf->uptotal;
+		$retVal["downtotal"] = $sf->downtotal;
+		// transfer from db
+		$torrentId = getTransferHash($transfer);
+		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId);
+		$result = $db->Execute($sql);
+		$row = $result->FetchRow();
+		if (!empty($row)) {
+			$retVal["uptotal"] -= $row["uptotal"];
+			$retVal["downtotal"] -= $row["downtotal"];
+		}
+		return $retVal;
+	}
 
-    /**
+	/**
      * gets current transfer-vals of a transfer. optimized version
      *
      * @param $transfer
@@ -209,32 +217,32 @@ class ClientHandlerAzureus extends ClientHandler
      * @param $sfd stat-file-downtotal of the transfer
      * @return array with downtotal and uptotal
      */
-    function getTransferCurrentOP($transfer, $tid, $sfu, $sfd) {
-        global $transfers;
-        $retVal = array();
-        $retVal["uptotal"] = (isset($transfers['totals'][$tid]['uptotal']))
-        	? $sfu - $transfers['totals'][$tid]['uptotal']
-        	: $sfu;
-        $retVal["downtotal"] = (isset($transfers['totals'][$tid]['downtotal']))
-        	? $sfd - $transfers['totals'][$tid]['downtotal']
-        	: $sfd;
-        return $retVal;
-    }
+	function getTransferCurrentOP($transfer, $tid, $sfu, $sfd) {
+		global $transfers;
+		$retVal = array();
+		$retVal["uptotal"] = (isset($transfers['totals'][$tid]['uptotal']))
+			? $sfu - $transfers['totals'][$tid]['uptotal']
+			: $sfu;
+		$retVal["downtotal"] = (isset($transfers['totals'][$tid]['downtotal']))
+			? $sfd - $transfers['totals'][$tid]['downtotal']
+			: $sfd;
+		return $retVal;
+	}
 
-    /**
+	/**
      * gets total transfer-vals of a transfer
      *
      * @param $transfer
      * @return array with downtotal and uptotal
      */
-    function getTransferTotal($transfer) {
-    	global $transfers;
-        // transfer from stat-file
-        $sf = new StatFile($transfer);
-        return array("uptotal" => $sf->uptotal, "downtotal" => $sf->downtotal);
-    }
+	function getTransferTotal($transfer) {
+		global $transfers;
+		// transfer from stat-file
+		$sf = new StatFile($transfer);
+		return array("uptotal" => $sf->uptotal, "downtotal" => $sf->downtotal);
+	}
 
-    /**
+	/**
      * gets total transfer-vals of a transfer. optimized version
      *
      * @param $transfer
@@ -243,45 +251,45 @@ class ClientHandlerAzureus extends ClientHandler
      * @param $sfd stat-file-downtotal of the transfer
      * @return array with downtotal and uptotal
      */
-    function getTransferTotalOP($transfer, $tid, $sfu, $sfd) {
-        return array("uptotal" => $sfu, "downtotal" => $sfd);
-    }
+	function getTransferTotalOP($transfer, $tid, $sfu, $sfd) {
+		return array("uptotal" => $sfu, "downtotal" => $sfd);
+	}
 
-    /**
+	/**
      * set upload rate of a transfer
      *
      * @param $transfer
      * @param $uprate
      * @param $autosend
      */
-    function setRateUpload($transfer, $uprate, $autosend = false) {
-    	// set rate-field
-    	$this->rate = $uprate;
-    	// add command
+	function setRateUpload($transfer, $uprate, $autosend = false) {
+		// set rate-field
+		$this->rate = $uprate;
+		// add command
 		CommandHandler::add($transfer, "u".$uprate);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
+	/**
      * set download rate of a transfer
      *
      * @param $transfer
      * @param $downrate
      * @param $autosend
      */
-    function setRateDownload($transfer, $downrate, $autosend = false) {
-    	// set rate-field
-    	$this->drate = $downrate;
-    	// add command
+	function setRateDownload($transfer, $downrate, $autosend = false) {
+		// set rate-field
+		$this->drate = $downrate;
+		// add command
 		CommandHandler::add($transfer, "d".$downrate);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
+	/**
      * set runtime of a transfer
      *
      * @param $transfer
@@ -289,17 +297,17 @@ class ClientHandlerAzureus extends ClientHandler
      * @param $autosend
      * @return boolean
      */
-    function setRuntime($transfer, $runtime, $autosend = false) {
-    	// set runtime-field
-    	$this->runtime = $runtime;
-    	// add command
+	function setRuntime($transfer, $runtime, $autosend = false) {
+		// set runtime-field
+		$this->runtime = $runtime;
+		// add command
 		CommandHandler::add($transfer, "r".(($this->runtime == "True") ? "1" : "0"));
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
+	/**
      * set sharekill of a transfer
      *
      * @param $transfer
@@ -307,17 +315,37 @@ class ClientHandlerAzureus extends ClientHandler
      * @param $autosend
      * @return boolean
      */
-    function setSharekill($transfer, $sharekill, $autosend = false) {
+	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
-        $this->sharekill = $sharekill;
-    	// add command
+		$this->sharekill = $sharekill;
+		// add command
 		CommandHandler::add($transfer, "s".$this->sharekill);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    	// return
-    	return true;
-    }
+			// return
+			return true;
+	}
+
+	/**
+     * clean stat file
+     *
+     * @param $transfer
+     * @return boolean
+     */
+	function cleanStoppedStatFile($transfer) {
+		unlink($this->transferFilePath.".pid");
+		$sf = new StatFile($this->transfer, $this->owner);
+		$sf->running = "0";
+		$sf->percent_done=100;
+		$sf->peers = "";
+		$sf->time_left = "Stopped";
+		$sf->down_speed = "";
+		$sf->up_speed = "";
+		//var_dump($sf);die();
+		return $sf->write();
+	}
+
 
 }
 
