@@ -34,6 +34,7 @@
 import sys
 # fluazu
 from fluazu.FluAzuD import FluAzuD
+from fluazu.output import printException
 ################################################################################
 
 """ ------------------------------------------------------------------------ """
