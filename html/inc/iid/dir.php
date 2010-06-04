@@ -300,7 +300,8 @@ foreach ($entrys as $entry) {
 		$islink = 1;
 	}
 	// dirstats
-	$size = 0;
+	$size = 0.0;
+	$ssz  = 0.0;
 	$date = "";
 
 	if ($cfg['enable_dirstats'] == 1) 
@@ -309,18 +310,17 @@ foreach ($entrys as $entry) {
 		
 		if($islink == 0) // it's not a symbolic link
 		{	
-			$ssz = is_dir($dirName.$entry)? dirsize($path) : filesize($path);
-			if ( $ssz < 0 && !isWinOS() )
-				$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
-
+			$ssz += is_dir($dirName.$entry)? dirsize($path) : sprintf("%u", filesize($path));
+			//if ( $ssz < 0 && !isWinOS() )
+			//	$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
 		}
-		else // it's a symbolic link
+		elseif (!isWinOS()) // it's a symbolic link
 		{
 			$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
 			$date = "";
 		}
 		
-		$size = formatBytesTokBMBGBTB( $ssz );
+		$size = formatBytesTokBMBGBTB( sprintf("%u", $ssz) );
 		
 		if (strstr($size,"G")) $size="<b>$size</b>";
 

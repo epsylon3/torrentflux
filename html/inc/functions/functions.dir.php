@@ -437,8 +437,8 @@ function UrlHTMLSlashesDecode($input){
  */
 function dirsize($path)
 {
-    // Init
-    $size = 0;
+    // Init a float for big sizes
+    $size = 0.0;
 
     // Trailing slash
     if (substr($path, -1, 1) !== DIRECTORY_SEPARATOR) {
@@ -472,7 +472,7 @@ function dirsize($path)
                     $path .= DIRECTORY_SEPARATOR;
                     $subdirs[] = $path;
                 } elseif (is_file($path)) {
-                    $size += filesize($path);
+                    $size += sprintf("%u", filesize($path));
                 }
             }
 
