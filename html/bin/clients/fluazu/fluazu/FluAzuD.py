@@ -372,8 +372,8 @@ class FluAzuD(object):
                 if os.path.isfile(self.tf_pathTransfers + fileName):                	
                     if vuzePathExists and not os.path.isfile(self.azu_pathTransfers + fileName):
                         # add to vuze (but dont start)
-                        printMessage("adding missing transfer... %s" % fileName)
-                        requests.append(fileName)
+                        #printMessage("adding missing transfer... %s" % fileName)
+                        #requests.append(fileName)
                         try:
                           os.remove(self.flu_pathTransfers + fileName + ".cmd")
                         except:
