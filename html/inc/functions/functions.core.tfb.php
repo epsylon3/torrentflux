@@ -24,10 +24,10 @@
  * get Request Var
  *
  * @param $varName
+ * @param $return
  * @return string
  */
-function tfb_getRequestVar($varName) {
-	$return = "";
+function tfb_getRequestVar($varName, $return = '') {
 	if(array_key_exists($varName, $_REQUEST)){
 		// If magic quoting on, strip magic quotes:
 		/**
@@ -54,13 +54,13 @@ function tfb_getRequestVar($varName) {
  * tfb_shellencode, in a DB without going thru addslashes or similar, ...
  *
  * @param $varName
+ * @param $return
  * @return string
  */
-function tfb_getRequestVarRaw($varName) {
+function tfb_getRequestVarRaw($varName,$return = '') {
 	// Note: CANNOT use tfb_strip_quotes directly on $_REQUEST
 	// here, because it works in-place, i.e. would break other
 	// future uses of tfb_getRequestVarRaw on the same variables.
-	$return = '';
 	if (array_key_exists($varName, $_REQUEST)){
 		$return = $_REQUEST[$varName];
 		// Seems get_magic_quotes_gpc is deprecated
