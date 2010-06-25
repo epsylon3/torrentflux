@@ -1,6 +1,6 @@
 <?php
 
-/* $Id$ */
+/* $Id: dispatcher.php 3193 2007-08-21 20:23:13Z warion $ */
 
 /*******************************************************************************
 
@@ -102,8 +102,9 @@ switch ($action) {
  ******************************************************************************/
     case "maintenance":
 		require_once("inc/classes/MaintenanceAndRepair.php");
-		MaintenanceAndRepair::maintenance((tfb_getRequestVar('trestart') == "true") ?
+		$type = tfb_getRequestVar('type',(tfb_getRequestVar('trestart') == "true") ?
 			MAINTENANCEANDREPAIR_TYPE_EXT : MAINTENANCEANDREPAIR_TYPE_STD);
+		MaintenanceAndRepair::maintenance($type);
 		// set transfers-cache
 		cacheTransfersSet();
     	break;

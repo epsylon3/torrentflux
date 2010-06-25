@@ -180,6 +180,7 @@ class MaintenanceAndRepair
 			$this->_maintenanceFluxd();
 			// fluazu
 			$this->_maintenanceFluazu();
+			$this->_maintenanceFluazuTransfers();
 			// transfers
 			$this->_maintenanceTransfers($type == MAINTENANCEANDREPAIR_TYPE_EXT);
 			// database
@@ -204,6 +205,7 @@ class MaintenanceAndRepair
 		$this->_maintenanceFluxd();
 		// fluazu
 		$this->_maintenanceFluazu();
+		$this->_maintenanceFluazuTransfers();
 		// repair app
 		$this->_repairApp();
 		// database
@@ -315,6 +317,43 @@ class MaintenanceAndRepair
 		}
 		/* done */
 		$this->_outputMessage("fluazu-maintenance done.\n");
+	}
+	
+	/**
+	 * _maintenanceFluazuTransfers
+	 * delete leftovers of fluazu (only do this if daemon is not running)
+	 */
+	function _maintenanceFluazuTransfers() {
+
+		global $cfg;
+		// output
+		$this->_outputMessage("fluazu-Transfers maintenance...\n");
+	
+		// cmd-files of transfer-clients
+		$cmdFiles = array();
+		if ($dirHandle = @opendir($cfg["transfer_file_path"])) {
+			while (false !== ($file = @readdir($dirHandle))) {
+				if ((strlen($file) > 3) && ((substr($file, -4, 4)) == ".cmd"))
+					array_push($cmdFiles, $file);
+			}
+			@closedir($dirHandle);
+		}
+		
+		foreach ($cmdFiles as $cmdFile) {
+			$transfer = (substr($cmdFile, 0, -4));
+			if (getTransferClient($transfer) == "azureus" && file_get_contents($cfg["transfer_file_path"].$cmdFile) == "q\n") {
+				$sf = new StatFile($transfer, getOwner($transfer)); 
+				if ($sf->running == "0") {
+					array_push($this->_bogusTransfers, $transfer);
+					// set stopped flag in db
+					stopTransferSettings($transfer);
+					unlink($cfg["transfer_file_path"].$cmdFile);
+				}
+			}
+		}
+		
+		/* done */
+		$this->_outputMessage("fluazu-Transfers maintenance done.\n");
 	}
 	
 	/**
