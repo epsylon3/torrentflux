@@ -307,9 +307,17 @@ class FluAzuD(object):
                             transfer.update(self.downloads[transfer.name])
                             #printMessage(transfer.name + " %d " % transfer.state_azu)
                     else:
+                      if "_"+transfer.name in self.downloads:
+                          printMessage(" found lost transfer: " + transfer.name + " = _" + transfer.name)
+                          transfer.name = "_"+transfer.name
+                          transfer.update(self.downloads[transfer.name])
+                      else:
                         if (transfer.state_azu != 7):
                             printMessage(" not in transfers: " + transfer.name + " %d " % transfer.state_azu)
                             #self.downloads[tfile]
+                            
+                            #for download in self.downloads:
+                            #  printMessage(download)
                 
                 self.needUpdateStat = 0
                 self.needUpdateAll = 0
