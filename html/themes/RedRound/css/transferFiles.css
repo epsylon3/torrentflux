@@ -1,0 +1,31 @@
+#transferFiles {
+	border-width: 2px 2px 2px 2px;
+	border-spacing: 2px;
+	border-collapse: collapse;
+	background-color: white;
+	margin: 0 auto;
+	width: 500px;
+}
+
+#transferFiles th {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: left;
+	font-size: 12px;
+	background-color: black;
+	color: white;
+	padding-left: 10px;
+}
+
+#transferFilesName {
+	border-width: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	font-size: 12px;
+	width: 90%;
+	padding-left: 10px;
+}
+
+#transferFilesSize {
+	-moz-border-radius: 0px 0px 0px 0px;
+	font-size: 10px;
+}

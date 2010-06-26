@@ -1,0 +1,220 @@
+.:
+audio types
+backup types
+compressed types
+data types
+dev types
+disk types
+encoded types
+executable types
+font types
+game types
+image types
+ls.txt
+misc types
+plugin types
+settings types
+system types
+text types
+video types
+web types
+
+./audio types:
+ac3.png
+acc.png
+aif.png
+iff.png
+m3u.png
+m4a.png
+midi.png
+mid.png
+mp3.png
+mpa.png
+ogg.png
+ram.png
+ra.png
+wav.png
+wma.png
+
+./backup types:
+bak.png
+bup.png
+drive.png
+gho.png
+old.png
+ori.png
+tmp.png
+
+./compressed types:
+7z.png
+cab.png
+deb.png
+gz.png
+jar.png
+pkg.png
+rar.png
+rpm.png
+sea.png
+sit.png
+sitx.png
+tar.png
+zip.png
+
+./data types:
+123.png
+accdb.png
+csv.png
+dat.png
+db.png
+mdb.png
+sql.png
+wks.png
+xls.png
+xml.png
+
+./dev types:
+c.png
+C.png
+cpp.png
+h.png
+java.png
+pl.png
+py.png
+sh.png
+vb.png
+
+./disk types:
+bin.png
+cue.png
+daa.png
+dao.png
+dmg.png
+image.png
+img.png
+iso.png
+toast.png
+
+./encoded types:
+hqx.png
+mim.png
+uue.png
+
+./executable types:
+app.png
+bat.png
+cgi.png
+com.png
+dll.png
+exe.png
+msi.png
+pif.png
+pyc.png
+
+./font types:
+fnt.png
+fon.png
+otf.png
+ttf.png
+
+./game types:
+gam.png
+nes.png
+rom.png
+sav.png
+
+./image types:
+3dmf.png
+3dm.png
+ai.png
+bmp.png
+drw.png
+dxf.png
+eps.png
+gif.png
+indd.png
+jpeg.png
+jpg.png
+mng.png
+pct.png
+picture.png
+png.png
+psd.png
+ps.png
+psp.png
+qxd.png
+qxp.png
+svg.png
+thm.png
+tif.png
+
+./misc types:
+ass.png
+srt.png
+ssa.png
+sub.png
+subtitle.png
+torrent.png
+
+./plugin types:
+8bi.png
+plugin.png
+xll.png
+
+./settings types:
+cfg.png
+ini.png
+reg.png
+
+./system types:
+cpl.png
+cur.png
+dmp.png
+drv.png
+key.png
+lnk.png
+sys.png
+theme.png
+
+./text types:
+doc.png
+docx.png
+log.png
+man.png
+msg.png
+nfo.png
+pages.png
+pdf.png
+pps.png
+ppt.png
+rtf.png
+txt.png
+wps.png
+
+./video types:
+3g2.png
+3gp.png
+asf.png
+avi.png
+flv.png
+mkv.png
+mov.png
+mp4.png
+mpeg.png
+mpg.png
+ogm.png
+qt.png
+rm.png
+swf.png
+vcd.png
+vob.png
+wmv.png
+
+./web types:
+asp.png
+css.png
+html.png
+htm.png
+js.png
+jsp.png
+php.png
+xhtml.png

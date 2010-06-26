@@ -1,0 +1,35 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<h1><tmpl_var name="_NEWUSER"></h1>
+<form name="theForm" action="admin.php?op=addUser" method="post" onsubmit="return validateProfile(1, '<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+<table id="adminShowUsersForm">
+	<tr>
+		<th colspan="2" class="head">add new user</th>
+	</tr>
+	<tr>
+		<th><tmpl_var name="_USER"></th>
+		<td><input name="newUser" id="newUser" type="Text" size="15" value="test user" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test user'; }"></td>
+	</tr>
+	<tr>
+		<th class="alt"><tmpl_var name="_PASSWORD"></th>
+		<td class="alt"><input name="pass1" id="pass1" type="Password" size="15" value="test" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test'; }"></td>
+	</tr>
+		<tr>
+			<th><tmpl_var name="_CONFIRMPASSWORD"></th>
+			<td><input name="pass2" id="pass2" type="Password" size="15" value="test" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test'; }"></td>
+		</tr>
+		<tr>
+			<th class="alt"><tmpl_var name="_USERTYPE"></th>
+			<td class="alt">
+				<select name="userType" id="userType">
+					<option value="0"><tmpl_var name="_NORMALUSER"></option>
+					<option value="1"><tmpl_var name="_ADMINISTRATOR"></option>
+				</select>
+			</td>
+		</tr>
+	<tr>
+		<th colspan="2" class="button"><input type="Submit" value="<tmpl_var name="_CREATE">"></th>
+	</tr>
+</table>
+</form>
+<tmpl_include name="inc.userSection.tmpl">
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

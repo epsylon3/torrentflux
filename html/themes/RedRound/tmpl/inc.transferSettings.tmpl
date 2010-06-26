@@ -1,0 +1,104 @@
+<input type="hidden" name="client" value="<tmpl_var name="client">">
+<input type="hidden" name="type" value="<tmpl_var name="type">" />
+<tmpl_if name="upload_support_enabled" value="1">
+<table id="transferSettings">
+	<tr>
+		<th>Max Upload Rate:</th>
+		<td>
+			<input name="max_upload_rate" id="max_upload_rate" type="Text" maxlength="5" value="<tmpl_var name="max_upload_rate">" size="5"> kB/second
+		</td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="max_upload_rate" value="<tmpl_var name="max_upload_rate">" />
+</tmpl_if>
+<tmpl_if name="download_support_enabled" value="1">
+	<tr class="alt">
+		<th>Max Download Rate:</th>
+		<td><input name="max_download_rate" id="max_download_rate" type="Text" maxlength="5" value="<tmpl_var name="max_download_rate">" size="5"> kB/second</td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="max_download_rate" value="<tmpl_var name="max_download_rate">" />
+</tmpl_if>
+<tmpl_if name="max_uploads_enabled" value="1">
+	<tr>
+		<th>Max Upload Connections:</label></th>
+		<td><input name="max_uploads" id="max_uploads" type="Text" maxlength="5" value="<tmpl_var name="max_uploads">" size="5"></td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="max_uploads" value="<tmpl_var name="max_uploads">" />
+</tmpl_if>
+<tmpl_if name="maxcons_enabled" value="1">
+	<tr class="alt">
+		<th>Max Cons:</th>
+		<td><input name="maxcons" id="maxcons" type="Text" maxlength="5" value="<tmpl_var name="maxcons">" size="5"></td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="maxcons" value="<tmpl_var name="maxcons">" />
+</tmpl_if>
+<tmpl_if name="die_when_done_enabled" value="1">
+	<tr>
+		<th><label for="die_when_done">Completion Activity:</th>
+		<td>
+			<select name="die_when_done" id="die_when_done">
+				<option value="True">Die When Done</option>
+				<option value="False"
+					<tmpl_if name="die_when_done" value="False">
+						 selected
+					</tmpl_if>
+				>Keep Seeding</option>
+			</select>
+		</td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="die_when_done" value="<tmpl_var name="die_when_done">" />
+</tmpl_if>
+<tmpl_if name="sharekill_enabled" value="1">
+	<tr class="alt">
+		<th>Percentage When Seeding should Stop:</th>
+		<td><input name="sharekill" id="sharekill" type="Text" maxlength="4" value="<tmpl_var name="sharekill">" size="4">%</td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="sharekill" value="<tmpl_var name="sharekill">" />
+</tmpl_if>
+<tmpl_if name="rerequest_enabled" value="1">
+	<tr>
+		<th>Rerequest Interval:</th>
+		<td><input name="rerequest" id="rerequest" type="Text" maxlength="5" value="<tmpl_var name="rerequest">" size="5"></td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="rerequest" value="<tmpl_var name="rerequest">" />
+</tmpl_if>
+<tmpl_if name="superseeder_enabled" value="1">
+	<tr class="alt">
+		<th>Superseeder:</td>
+		<td>
+			<select name="superseeder" id="superseeder">
+				<option value="1">true</option>
+				<option value="0"
+				<tmpl_if name="superseeder" value="0">
+					 selected
+				</tmpl_if>
+				>false</option>
+			</select>
+		</td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="superseeder" value="<tmpl_var name="superseeder">" />
+</tmpl_if>
+<tmpl_if name="minport_enabled" value="1">
+	<tr>
+		<th>Min Port:</th>
+		<td><input name="minport" id="minport" type="Text" maxlength="5" value="<tmpl_var name="minport">" size="5"></td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="minport" value="<tmpl_var name="minport">" />
+</tmpl_if>
+<tmpl_if name="maxport_enabled" value="1">
+	<tr class="alt">
+		<th>Max Port:</th>
+		<td><input name="maxport" id="maxport" type="Text" maxlength="5" value="<tmpl_var name="maxport">" size="5"></td>
+	</tr>
+<tmpl_else>
+	<input type="hidden" name="maxport" value="<tmpl_var name="maxport">" />
+</tmpl_if>
+</table>

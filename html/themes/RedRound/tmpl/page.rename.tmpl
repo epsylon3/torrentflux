@@ -1,0 +1,26 @@
+<tmpl_include name="inc.dirActionsLayoutHeader.tmpl">
+<tmpl_if name="is_start">
+	<form method="POST" action="index.php?iid=rename" name="move_form">
+	<h1>Rename Files/Folders</h1>
+	<p><label for="fileFromDis"><span><!-- <tmpl_var name="_REN_FILE"> -->Current Name:</span>
+	<input disabled="true" type="text" name="fileFromDis" id="fileFromDis" size="50" value="<tmpl_var name="file">"></label>
+	
+	<label for="fileTo"><span><!-- <tmpl_var name="_REN_STRING">--> New Name:</span></label>
+	<input type="text" name="fileTo" id="fileTo" size="50" value="<tmpl_var name="file">">
+	
+	<div class="spacer"><input type="submit" value="Rename" name="OK"></div>
+	<input type="hidden" name="dir" value="<tmpl_var name="dir">"/>
+	<input type="hidden" name="fileFrom" value="<tmpl_var name="file">"/>
+	</form>
+	</div>
+		<tmpl_else>
+			<tmpl_var name="messages">
+				<tmpl_if name="no_error">
+					<tmpl_var name="_REN_DONE"><br>
+						renamed <em><tmpl_var name="fileFrom"></em> to <em><tmpl_var name="fileTo"></em>
+					<tmpl_else>
+				<tmpl_var name="_REN_ERROR">
+					</tmpl_if>
+		</tmpl_if>
+</p>
+<tmpl_include name="inc.dirActionsLayoutFooter.tmpl">

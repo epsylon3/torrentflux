@@ -1,0 +1,50 @@
+/********************************
+SUPERADMIN PAGES
+*********************************
+Superadmin pages use normal html syntax, some have inline styling, but to some extend can be themed.
+The trick is to have all element in parts that can be themed have an ID, so element in superadmin which have no ID
+can be manipulated through normal html/css element names
+*********************************/
+
+body {
+margin:0;
+padding: 0;
+font-size: .74em;
+background: #000;
+color: #aaa;
+font-family: Verdana, Geneva, Lucida, Helvetica, Arial, sans-serif;
+}
+
+table {
+	background-color: #000;
+	border: none;
+}
+
+td {
+	background: #000;
+	border: none;
+}
+
+hr {
+	color: #E7AD32;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+pre {
+	background-color: #eee;
+	color: #000;
+	border: 1px dashed black;
+	min-height: 10px;
+	padding: 2px;
+}
+
+a,a:link,a:active,a:visited { color: #E7AD32; outline: none; text-decoration: none;}
+
+a:hover { color: #666; text-decoration: none; }
+
+img {border: none;}
+
+ul {  list-style-type: square; margin: 0; padding: 0px; color: #999;}	
+
+li {}

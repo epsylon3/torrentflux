@@ -1,0 +1,46 @@
+table#torrentSearch {
+	border-collapse: collapse;
+	background-color: transparent;
+	margin: 0 auto;
+	width: 800px;
+}
+
+table#torrentSearch th {
+	padding: 1px;
+	text-align: left;
+}	
+table#torrentSearch td {
+	padding: 1px;
+	text-align: center;
+	font-size: 12px;
+	background-color: transparent;
+}
+
+body#RedRoundBody table {
+/*	border-collapse: collapse; */
+	background: transparent;
+	margin: 0 auto;
+	width: 800px;
+}
+
+body#RedRoundBody th {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: left;
+	background-color: transparent;
+}
+
+body#RedRoundBody td {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	font-size: 12px;
+	background-color: white;
+}
+
+body#RedRoundBody tbody {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: left;
+	font-size: 12px;
+	background-color: transparent;
+}

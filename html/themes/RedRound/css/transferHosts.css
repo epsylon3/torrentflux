@@ -1,0 +1,25 @@
+#transferHosts {
+	margin: 0 auto;
+	width: 500px;
+	border-collapse: collapse;
+}
+
+#transferHosts th {
+	text-align: left;
+	background: black;
+	color: white;
+}
+
+#transferHostsHost {
+	border-width: 1px 1px 1px 1px; 
+	padding-left: 5px;
+	text-align: left;
+	-moz-border-radius: 0px 0px 0px 0px;
+	font-size: 12px;
+	width: 100%;
+}
+
+#transferHostsPort {
+	text-align: left;
+	-moz-border-radius: 0px 0px 0px 0px;
+}

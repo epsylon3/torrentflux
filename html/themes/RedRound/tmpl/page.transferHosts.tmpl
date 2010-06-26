@@ -1,0 +1,28 @@
+<tmpl_include name="inc.transferLayoutHeader.tmpl">
+<h1>Hosts</h1>
+<table id="transferHosts">
+	<tmpl_if name="transfer_hosts_aval">
+		<tr>
+			<th><tmpl_var name="_ID_HOST"></th>
+			<th><tmpl_var name="_ID_PORT"></th>
+		</tr>
+		<tmpl_if name="hosts">
+		<tmpl_loop name="list_host">
+			<tr onmouseover="this.className='hover';" 
+			<tmpl_if name="__EVEN__">
+				onmouseout="this.className='alt';" class="alt"  
+			<tmpl_else>
+				onmouseout="this.className='';" class=""  
+			</tmpl_if>
+			>
+				<td id="transferHostsHost">
+					<a href="index.php?iid=dereferrer&u=http://whois.domaintools.com/<tmpl_var name="host">" target="_blank">
+					<img src="themes/<tmpl_var name="theme">/images/transferSettings/transferHosts/whois.png" title="WHOIS LookUp <tmpl_var name="host">"></a>
+					<tmpl_var name="host"></td>
+				<td id="transferHostsPort"><tmpl_var name="port"></td>
+			</tr>
+		</tmpl_loop>
+		</tmpl_if>
+	</tmpl_if>
+</table>
+<tmpl_include name="inc.transferLayoutFooter.tmpl">

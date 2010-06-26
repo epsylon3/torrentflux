@@ -1,0 +1,47 @@
+<table id="adminMainStatsDatabase">
+	<tr>
+		<th>Type:</th>
+		<td><tmpl_var name="db_type"></td>
+	</tr>
+	<tr>
+		<th>Host:</th>
+		<td><tmpl_var name="db_host"></td>
+	</tr>
+	<tr>
+		<th>Name:</th>
+		<td><tmpl_var name="db_name"></td>
+	</tr>
+	<tr>
+		<th>Username:</th>
+		<td><tmpl_var name="db_user"></th>
+	</tr>
+	<tr>
+		<th>Persistent Connection:</th>
+		<td><tmpl_var name="db_pcon"></td>
+	</tr>
+</table>
+<tmpl_if name="is_superadmin">
+<table id="adminMainSuperAdmin">
+	<tr><th class="head" colspan="2">Super Admin</th></tr>
+	<tr>
+		<td>
+			<table> <!-- MAINTAINCE LINKS -->
+				<tmpl_if name="superadminlinks_main">
+				<tmpl_loop name="superadminlinks_main">
+					<tr><td><tmpl_var name="sa_link"></td></tr>
+				</tmpl_loop>
+				</tmpl_if>
+			</table>
+		</td>
+		<td valign="top">
+			<table> <!-- SYSTEM CHECK LINKS -->
+				<tmpl_if name="superadminlinks_check">
+				<tmpl_loop name="superadminlinks_check">
+				<tr><td><tmpl_var name="sa_link"></td></tr>
+				</tmpl_loop>
+				</tmpl_if>
+			</table>
+		</td> 
+	</tr>
+</table>
+</tmpl_if>

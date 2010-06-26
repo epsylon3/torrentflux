@@ -1,0 +1,41 @@
+<div id="indexStats">
+<table>
+	<tr>
+		<tmpl_if name="xfer_realtime">
+			<td valign="top">
+				<h3><tmpl_var name="_SERVERXFERSTATS"></h3>
+				<tmpl_var name="_TOTALXFER">: <span id="xferGlobalTotal" style="font-weight:bold;"><tmpl_var name="totalxfer1"></span><br />
+				<tmpl_var name="_MONTHXFER">: <span id="xferGlobalMonth" style="font-weight:bold;"><tmpl_var name="monthxfer1"></span><br />
+				<tmpl_var name="_WEEKXFER">: <span id="xferGlobalWeek" style="font-weight:bold;"><tmpl_var name="weekxfer1"></span><br />
+				<tmpl_var name="_DAYXFER">: <span id="xferGlobalDay" style="font-weight:bold;"><tmpl_var name="dayxfer1"></span><br />
+			</td>
+		</tmpl_if>
+		<tmpl_if name="queueActive" value="1">
+			<td valign="top">
+				<h3><tmpl_var name="_QUEUEMANAGER"></h3>
+				<span id="running" style="font-weight:bold;"><tmpl_var name="runningTransferCount"></span> transfer(s) running and <span id="queued" style="font-weight:bold;"><tmpl_var name="countQueuedTransfers"></span> queued.<br />
+				Total transfers server will run: <span style="font-weight:bold;"><tmpl_var name="limitGlobal"></span><br />
+				Total transfers a user may run: <span style="font-weight:bold;"><tmpl_var name="limitUser"></span><br />
+			</td>
+		</tmpl_if>
+		<td valign="top">
+			<h3><tmpl_var name="_OTHERSERVERSTATS"></h3>
+			<tmpl_var name="_DOWNLOADSPEED">: <span style="font-weight:bold;"><span id="b_speedDown"><tmpl_var name="downloadspeed1"></span> (<tmpl_var name="downloadspeed11">)</span> kB/s<br />
+			<tmpl_var name="_UPLOADSPEED">: <span style="font-weight:bold;"><span id="b_speedUp"><tmpl_var name="uploadspeed1"></span> (<tmpl_var name="uploadspeed11">)</span> kB/s<br />
+			<tmpl_var name="_TOTALSPEED">: <span style="font-weight:bold;"><span id="b_speedTotal"><tmpl_var name="totalspeed1"></span> (<tmpl_var name="totalspeed11">)</span> kB/s<br />
+			<tmpl_var name="_ID_CONNECTIONS">: <span style="font-weight:bold;"><span id="b_cons"><tmpl_var name="id_connections1"></span> <tmpl_var name="id_connections11"></span><br />
+			<tmpl_var name="_DRIVESPACE">: <span id="b_freeSpace" style="font-weight:bold;"><tmpl_var name="drivespace1"></span><br />
+			<tmpl_var name="_SERVERLOAD">: <span id="b_loadavg" style="font-weight:bold;"><tmpl_var name="serverload1"></span>
+		</td>
+		<tmpl_if name="xfer_realtime">
+		<td valign="top">
+			<h3><tmpl_var name="_YOURXFERSTATS"></h3>
+			<tmpl_var name="_TOTALXFER">: <span id="xferUserTotal" style="font-weight:bold;"><tmpl_var name="total2"></span><br />
+			<tmpl_var name="_MONTHXFER">: <span id="xferUserMonth" style="font-weight:bold;"><tmpl_var name="month2"></span><br />
+			<tmpl_var name="_WEEKXFER">: <span id="xferUserWeek" style="font-weight:bold;"><tmpl_var name="week2"></span><br />
+			<tmpl_var name="_DAYXFER">: <span id="xferUserDay" style="font-weight:bold;"><tmpl_var name="day2"></span><br />
+		</td>
+		</tmpl_if>
+	</tr>
+</table>
+</div>

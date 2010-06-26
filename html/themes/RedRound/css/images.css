@@ -1,0 +1,20 @@
+table#images {
+	width: 800px;
+	background: transparent;
+	margin: 0 auto;
+}
+
+table#images td {
+	background: transparent;
+}
+
+table#imagesServer {
+	width: 800px;
+	background: transparent;
+	margin: 25px auto;
+}
+
+table#imagesServer td {
+	background: transparent;
+	text-align: center;
+}

@@ -1,0 +1,15 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<tmpl_include name="inc.adminmenu.tmpl">
+<table width="760" border="1" bordercolor="<tmpl_var name="table_admin_border">" cellpadding="2" cellspacing="0">
+	<tr>
+		<td bgcolor="<tmpl_var name="table_header_bg">" background="themes/<tmpl_var name="theme">/images/bar.gif">
+			<div align="center">
+				<a href="admin.php?op=CreateUser"><font class="adminlink">create user</font></a>
+			</div>
+		</td>
+	</tr>
+</table>
+<br>
+<tmpl_include name="inc.userSection.tmpl">
+<tmpl_include name="inc.subfoot.tmpl">

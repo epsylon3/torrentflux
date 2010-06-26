@@ -1,0 +1,57 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<h1>RSS Torrents</h1>
+<p>
+	Click on <img src="themes/<tmpl_var name="theme">/images/readrss/add.png" title="add button" alt="green add button" /> below to add them to Transfer List
+</p>
+<h2>RSS Feeds (jump list)</h2>
+	<ul id="rssJumpList">
+		<tmpl_loop name="rss_list">
+			<tmpl_if name="stat" value="1">
+				<li><a href="#<tmpl_var name="rid">" title="<tmpl_var name="title">"><tmpl_var name="title"></a></li>
+			<tmpl_elseif name="stat" value="2">
+				<li>* RSS feed URL active, but contains no active content * (<a href="<tmpl_var name="url">" title="<tmpl_var name="title">"><tmpl_var name="url"></a>)</li>
+			<tmpl_elseif name="stat" value="3">
+				<li>* RSS timed out * (<a href="<tmpl_var name="url">" title="<tmpl_var name="url">"><tmpl_var name="url"></a>)</li>
+			</tmpl_if>
+		</tmpl_loop>
+	</ul>
+<div style="height: 15px;"></div>
+<tmpl_loop name="rss_list">
+<tmpl_if name="stat" value="1">
+<!-- WHAT'S THIS ? <a name="<tmpl_var name="rid">"></a> INVALID XHTML 1.1, so commented -->
+<table id="readrss">
+	<tr>
+		<th colspan="2" class="rssTitle">
+			<a href="<tmpl_var name="url">" target="_blank" title="Open <tmpl_var name="title"> RSS feed in browser">
+			<img src="themes/<tmpl_var name="theme">/images/readrss/visit.png" alt="visit rss feed" title="Open <tmpl_var name="title"> RSS feed in browser" /></a>
+			&nbsp;
+			
+			<a href="<tmpl_var name="url">" target="_blank" title="Open <tmpl_var name="title"> RSS feed in browser"><tmpl_var name="title"></a>
+			
+			[<a href="#" title="Top of page">top</a>]
+		</th>
+	</tr>
+	<tr>
+		<th><tmpl_var name="_TRANSFERFILE"></th>
+		<th id="readrssDateHead"><tmpl_var name="_TIMESTAMP"></th>
+	</tr>
+
+<!-- Loop through each feed item for this feed -->
+<tmpl_loop name="feedItems">
+	<tmpl_if name="__ODD__">
+		<tr class="alt" onmouseover="this.className='hover';" onmouseout="this.className='alt';">
+	<tmpl_else>
+		<tr onmouseover="this.className='hover';" onmouseout="this.className='';">
+	</tmpl_if>
+		<td class="readrssFile">			
+			<a href="dispatcher.php?action=urlUpload&amp;url=<tmpl_var name="link">" title="download this">
+			<img src="themes/<tmpl_var name="theme">/images/readrss/add.png" title="add to transfers" alt="add" /></a>
+			<tmpl_var name="title">
+		</td>
+		<td class="readrssDate"><tmpl_var name="pubDate"></td>
+	</tr>
+</tmpl_loop>
+</table>
+</tmpl_if>
+</tmpl_loop>
+<tmpl_include name="inc.LayoutFooter.tmpl">

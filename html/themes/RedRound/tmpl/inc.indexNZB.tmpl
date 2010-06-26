@@ -1,0 +1,21 @@
+<div id="indexNZBPerl">
+<form id="form_url_nzb" action="dispatcher.php?action=urlUpload" method="post" onsubmit="return actionSubmit('<tmpl_var name="_GETFILE">')">
+<fieldset>
+	<label for="url_nzb">URL for the nzb-File:</label><br />
+	<input type="hidden" name="type" value="nzb" />
+	<input type="text" name="url" id="url_nzb" size="40" />
+	<select name="aid" style="width:100px">
+	<option value="1" selected="selected"><tmpl_var name="_GETFILE"></option>
+	<tmpl_if name="queueActive" value="1">
+	<tmpl_if name="isAdmin">
+	<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+	</tmpl_if>
+	<option value="3"><tmpl_var name="_GETFILE">+Queue</option>
+	<tmpl_else>
+	<option value="2"><tmpl_var name="_GETFILE">+Start</option>
+	</tmpl_if>
+	</select>
+	<input type="submit" value="Go" />
+</fieldset>
+</form>
+</div>

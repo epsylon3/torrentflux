@@ -1,0 +1,42 @@
+<tmpl_include name="inc.transferLayoutHeader.tmpl">
+<h1>Details</h1>
+
+<tmpl_if name="clientType" value="torrent">
+
+<table id="transferDetails">
+	<tr>
+		<td>
+			<pre><tmpl_var name="transferMetaInfo"></pre>
+		</td>
+	</tr>
+</table>
+
+<tmpl_elseif name="clientType" value="wget">
+
+	<table id="transferDetails">
+		<tr>
+			<td>Metainfo File:</td>
+			<td><tmpl_var name="transfer"></td>
+		</tr>
+		<tr>
+			<td>URL:</td>
+			<td><tmpl_var name="transferUrl"></td>
+		</tr>
+	</table>
+
+<tmpl_elseif name="clientType" value="nzb">
+
+	<table id="transferDetails">
+		<tr>
+			<td>Metainfo File:</td>
+			<td><tmpl_var name="transfer"></td>
+		</tr>
+		<tr>
+			<td>Content:</td>
+		</tr>
+		<tr>
+			<td><pre><tmpl_var name="transferMetaInfo"></pre></td>
+		</tr>
+	</table>
+</tmpl_if>
+<tmpl_include name="inc.transferLayoutFooter.tmpl">

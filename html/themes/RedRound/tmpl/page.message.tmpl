@@ -1,0 +1,32 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<h1>Write Message</h1>
+<a href="index.php?iid=readmsg">Return to Messages</a>
+<form id="theForm" method="post" action="index.php?iid=message">
+<table id="ComposeMessage">
+	<tr><th colspan="2"><input type="submit" name="submit" value="<tmpl_var name="_SEND">" /></th></tr>
+	<tr>
+		<th><tmpl_var name="_TO"></th>
+		<td><tmpl_var name="to_user"><input type="hidden" name="to_user" id="to_user" value="<tmpl_var name="to_user">" size="20" readonly="readonly" /></td>
+	</tr>
+	<tr>
+		<th><tmpl_var name="_FROM"></th>
+		<td><tmpl_var name="user"><input type="hidden" name="from_user" id="from_user" value="<tmpl_var name="user">" size="20" readonly="readonly" /></td>
+	</tr>
+	<tr>
+		<th>Options</th>
+		<td>
+			<input type="checkbox" name="to_all" id="to_all" value="1" />&nbsp;<tmpl_var name="_SENDTOALLUSERS">&nbsp;
+		<tmpl_if name="isAdmin">
+			<input type="checkbox" name="force_read" id="force_read" value="1" />&nbsp;<tmpl_var name="_FORCEUSERSTOREAD">
+		</td>
+	</tmpl_if>
+	</tr>
+	<tr>
+		<th><tmpl_var name="_YOURMESSAGE"></th>
+		<td><textarea cols="72" rows="10" name="message" id="message" tabindex="1"><tmpl_var name="message"></textarea></td>
+	</tr>
+	<tr><th colspan="2"><input type="submit" name="submit" value="<tmpl_var name="_SEND">" tabindex="2" /></th></tr>
+</table>
+</form>
+<script type="text/javascript">document.theForm.message.focus();</script>
+<tmpl_include name="inc.LayoutFooter.tmpl">

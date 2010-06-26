@@ -1,0 +1,45 @@
+<h1>edit job</h1>
+<p class="NormalText"><a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a></p>
+<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_job')">
+<p>
+	<input type="hidden" name="pageop" value="saveJob">
+	<input type="hidden" name="job" value="<tmpl_var name="jobnumber">">
+	<input type="Submit" value="Save Job">
+</p>
+<table id="adminfluxdSettingsRSSadJobEdit">
+	<tmpl_if name="rssad_job_loaded" value="1">
+	<tr>
+		<th>Savedir</th>
+		<td><input type="text" size="40" name="savedir" id="savedir" value="<tmpl_var name="rssad_savedir">"></td>
+	</tr><tr>
+		<th class="alt">URL</th>
+		<td class="alt"><input type="text" size="50" name="url" id="url" value="<tmpl_var escape="html" name="rssad_url">"></td>
+	</tr><tr>
+		<th>Filter</th>
+		<td>
+			<select name="filtername" id="filtername">
+			<tmpl_loop name="rssad_filters">
+				<option value="<tmpl_var name="filtername">"<tmpl_var name="selected">><tmpl_var name="filtername"></option>
+			</tmpl_loop>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Check/Create dir</th>
+		<td class="alt"><input type="checkbox" name="checkdir" id="checkdir" value="true" checked></td>
+	</tr>
+</table>
+</form>
+
+<tmpl_else> <!-- ERROR MESSAGE -->
+	<p class="NormalText">
+		Error loading Job:
+	<tmpl_if name="messages">
+		<ul>
+			<tmpl_loop name="messages">
+				<li><tmpl_var name="msg"></li>
+			</tmpl_loop>
+		</ul>
+	</tmpl_if>
+	</p>
+</tmpl_if>

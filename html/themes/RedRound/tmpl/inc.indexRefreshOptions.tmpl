@@ -1,0 +1,33 @@
+	<tr>
+		<td>
+		<tmpl_if name="page_refresh">
+			<a href="dispatcher.php?action=set&amp;key=index_meta_refresh&amp;val=0" onclick="return actionClick(true)">
+				<tmpl_var name="_PAGEWILLREFRESH"> <span id='span_refresh'><tmpl_var name="page_refresh"></span> <tmpl_var name="_SECONDS">
+			</a>
+		<tmpl_else>
+			<a href="dispatcher.php?action=set&amp;key=index_meta_refresh&amp;val=1" onclick="return actionClick(true)">
+				<tmpl_var name="_TURNONREFRESH">
+			</a>
+		</tmpl_if>
+		</td>
+	
+		<td>
+			<tmpl_if name="index_ajax_update">
+				<a href="dispatcher.php?action=set&amp;key=index_ajax_update&amp;val=0" onclick="return actionClick(true)">
+					<span id='span_update'>Next AJAX-Update in <tmpl_var name="index_ajax_update"> seconds</span>
+				</a>
+			<tmpl_else>
+				<a href="dispatcher.php?action=set&amp;key=index_ajax_update&amp;val=1" onclick="return actionClick(true)">
+					Turn ON AJAX-Update
+				</a>
+			</tmpl_if>
+		</td>
+			<tmpl_if name="onLoad">
+		<td>
+				<a href="dispatcher.php?action=set&amp;key=_refresh_&amp;val=0" onclick="return actionClick(true,'Turning off')">
+					<tmpl_var name="_TURNOFFREFRESH"> and AJAX-Update
+				</a>
+		</td>
+			</tmpl_if>
+	</tr>
+

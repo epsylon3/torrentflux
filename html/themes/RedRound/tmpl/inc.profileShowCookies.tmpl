@@ -1,0 +1,69 @@
+	<script type="text/javascript">
+	<!-- Begin
+	function popUp(name_file)
+	{
+		window.open (name_file,'help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=800,height=600')
+	}
+	// End -->
+	</script>
+<form action="index.php?iid=profile&amp;op=<tmpl_var name="op">" method="post">
+<fieldset>
+<input type="hidden" name="cid" value="<tmpl_var name="cid">" />
+<h1>Cookie Management</h1>
+<a href="index.php?iid=profile">Return to Profile</a>
+<table id="profileCookieForm">
+	<tr>
+		<th colspan="2">
+			<a style="cursor:pointer;" onclick="window.open('index.php?iid=cookiehelp','help','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=800,height=600');">How to get cookie information?</a>
+		</th>
+	</tr>
+	<tr>
+		<th>Host</th>
+		<td><input type="text" size="15" maxlength="255" name="host" id="host"<tmpl_var name="hostvalue"> /></td>
+	</tr>
+	<tr>
+		<th>Data</th>
+		<td><input type="text" size="15" maxlength="255" name="data" id="data"<tmpl_var name="datavalue"> /></td>
+	</tr>
+	<tr>
+		<th></th>
+		<td><input type="submit" value="<tmpl_var name="add1">" /></td>
+	</tr>
+	<tmpl_if name="empty_cid">
+	<tr>
+		<th colspan="2">
+			<img src="themes/<tmpl_var name="theme">/images/profile/back.png" title="Back to Profiles"> <a href="index.php?iid=profile&amp;op=editCookies">back</a>
+		</th>
+	</tr>
+	<tmpl_else>
+</table>
+</fieldset>
+
+<table id="profileCookieList">
+	<tr>
+		<td colspan="2"><h2>Cookie List</h2></td>
+	</tr>
+	<tr>
+		<th>Host</th>
+		<th>Data</th>
+	</tr>
+	<tmpl_if name="empty_dat">
+		<tr><td colspan="3">No cookie entries exist.</td></tr>
+	<tmpl_else>
+		<tmpl_loop name="cookie_data">
+		<tmpl_if name="__ODD__">
+			<tr class="alt" onmouseover="this.className='hover';" onmouseout="this.className='alt';">
+		<tmpl_else>
+			<tr onmouseover="this.className='hover';" onmouseout="this.className='';">
+		</tmpl_if>
+				<td>
+					<a href="index.php?iid=profile&op=deleteCookie&cid=<tmpl_var name="cid">"><img src="themes/<tmpl_var name="theme">/images/profile/delete.png" alt="<tmpl_var name="_DELETE"> <tmpl_var name="host">" title="<tmpl_var name="_DELETE"> <tmpl_var name="host">" /></a>
+					<a href="index.php?iid=profile&op=editCookies&cid=<tmpl_var name="cid">"><img src="themes/<tmpl_var name="theme">/images/profile/edit.png" alt="<tmpl_var name="_EDIT"> <tmpl_var name="host">" title="<tmpl_var name="_EDIT"> <tmpl_var name="host">" /></a> 
+					<tmpl_var name="host"></td>
+				<td><tmpl_var name="data"></td>
+			</tr>
+		</tmpl_loop>
+	</tmpl_if>
+</table>
+</tmpl_if>
+</form>

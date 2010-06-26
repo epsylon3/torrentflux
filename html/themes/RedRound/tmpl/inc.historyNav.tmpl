@@ -1,0 +1,22 @@
+<tmpl_if name="empty" value="1">
+<tr>
+	<td></td>
+	<td>
+		<a href="index.php?iid=history&min=<tmpl_var name="prev">"><img src="themes/<tmpl_var name="theme">/images/history/previous.png" title="<tmpl_var name="_SHOWPREVIOUS">"></a> &nbsp;
+		<a href="index.php?iid=history&min=<tmpl_var name="max">"><img src="themes/<tmpl_var name="theme">/images/history/next.png" title="<tmpl_var name="_SHOWMORE">"></a>
+	</td>
+</tr>
+
+<tmpl_elseif name="empty" value="2">			
+<tr>
+	<td><a href="index.php?iid=history&min=<tmpl_var name="prev">"><img src="themes/<tmpl_var name="theme">/images/history/previous.png" title="<tmpl_var name="_SHOWPREVIOUS">"></a></td>
+</tr>
+					
+<tmpl_elseif name="empty" value="3">
+<tr>
+	<td><a href="index.php?iid=history&min=<tmpl_var name="max">"><img src="themes/<tmpl_var name="theme">/images/history/next.png" title="<tmpl_var name="_SHOWMORE">"></a></td>
+</tr>
+
+<tmpl_else>
+<tr><td></td></tr>
+</tmpl_if>

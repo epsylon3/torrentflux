@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title><tmpl_var name="pagetitle"></title>
+<meta http-equiv="content-type" content="text/html;charset=<tmpl_var name="_CHARSET">" />
+<!-- prevent caching and search engine indexing -->
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="Mon, 14 Dec 1981 11:12:01 GMT" />
+<meta name="robots" content="noindex,nofollow,noarchive" />
+
+<link rel="icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
+<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/mainLayout.css" type="text/css" />
+<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+<link rel="alternate" title="Transfer-Stats" href="stats.php?f=rss" type="application/rss+xml" />
+<!-- refresh options if enabled -->
+<tmpl_if name="meta_refresh">
+	<meta http-equiv="refresh" content="<tmpl_var name="meta_refresh">" />
+</tmpl_if>
+<!-- jQuery files -->
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui-1.7.1.custom.min.js"></script>
+<link type="text/css" href="themes/<tmpl_var name="theme">/css/gray/jquery-ui-1.7.1.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/linkControl.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/common.js"></script>
+
+<!-- jQuery file depending on pages -->
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/<tmpl_var name="iid">.js"></script>
+
+<!-- JS files -->
+<script type="text/javascript" src="js/common.js"></script>
+
+<!-- JS files included depending on page -->
+<tmpl_if name="iid" value="index">
+<!-- INDEX -->
+	<script type="text/javascript" src="js/ajax.js"></script>
+	<script type="text/javascript" src="js/multiup.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$('#drivespacebar').progressbar({
+			value : <tmpl_var name="drivespacebar_space2">
+			});
+			
+			$('#uploadbar').progressbar({
+			value : <tmpl_var name="bandwidthbars_upload_percent">
+			});
+				
+			$('#downloadbar').progressbar({
+			value : <tmpl_var name="bandwidthbars_download_percent">
+			});
+		});
+	</script>
+</tmpl_if>
+<tmpl_if name="enable_sorttable">
+	<script type="text/javascript" src="js/sorttable.js"></script>
+</tmpl_if>
+<tmpl_if name="index_ajax_update">
+	<script type="text/javascript" src="js/ajax_index.js"></script>
+</tmpl_if>
+
+<tmpl_if name="iid" value="dir">
+<!-- DIR -->
+	<script type="text/javascript" src="js/dir.js"></script>
+</tmpl_if>
+
+<tmpl_if name="iid" value="index">
+<!-- this style is going to be removed -->
+	<style type="text/css">
+		/* .container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;} */
+	</style>
+</tmpl_if>
+</head>
+<body <tmpl_if name="onLoad">onload="<tmpl_var name="onLoad">"</tmpl_if>>
+	<div id="header">
+		<div id="UserBar"><tmpl_include name="inc.LayoutUserBar.tmpl"></div>
+		<h1><tmpl_var name="pagetitle"></h1>
+	</div>
+<div class="container">
+	<div class="angle" id="AngleTopLeft">
+		<div class="angle" id="AngleTopRight"></div>
+		<div id="AngleTopBorder"></div>
+	</div>
+	<div id="ContentBorderLeft">
+		<div id="ContentBorderRight">

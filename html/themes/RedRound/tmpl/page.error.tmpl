@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title><tmpl_var name="pagetitle"></title>
+	<link rel="icon" href="themes/<tmpl_var name="theme">/images/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="themes/<tmpl_var name="theme">/images/favicon.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/default.css" type="text/css" />
+	<meta http-equiv="content-type" content="text/html;charset=<tmpl_var name="_CHARSET">" />
+	<meta http-equiv="Pragma" content="no-cache;" />
+</head>
+<body style="text-align:center;">
+	<table class="table" style="text-align:left;width:70%;margin:75px auto auto auto;" cellspacing="0">
+	<thead>
+		<tr>
+			<td style="font-weight:bold;color:#FF0000;" class="tableheading">Error - <tmpl_var name="message"></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tmpl_if name="messages">
+		<tr>
+			<td style="text-align:left;padding:6px;" class="tablecontent">
+				<tmpl_var name="messages">
+			</td>
+		</tr>
+		</tmpl_if>
+		<tmpl_if name="link">
+		<tr>
+			<td style="text-align:center;padding:0px 6px 6px 6px" class="tablecontent">
+				[<a href="<tmpl_var name="link">"><tmpl_var name="linklabel"></a>]
+			</td>
+		</tr>
+		</tmpl_if>
+	</tbody>
+	</table>
+</body>
+</html>
