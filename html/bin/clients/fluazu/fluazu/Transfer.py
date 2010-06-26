@@ -136,7 +136,7 @@ class Transfer(object):
             self.statRunning(download)
             
         else:
-          if self.state_azu != 7:
+          if self.state_azu != Transfer.AZ_STOPPED:
             printMessage(self.name + ": update() state_azu=%d" % self.state_azu)
 
     """ -------------------------------------------------------------------- """
