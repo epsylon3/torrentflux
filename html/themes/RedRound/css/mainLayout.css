@@ -284,16 +284,16 @@ table#UsersOffline {
 
 #indexTorrentUpload {
 	margin: 0 auto;
-	min-height: 128px; height: 128px; /* IE6 */
-	padding-top: 25px;
+	min-height: 96px; height: 96px; /* IE6 */
+	padding-top: 5px;
 	padding-left: 132px;
 	background: #fff url('../images/index/TorrentUpload/bg.png') no-repeat top left;
 }
 
 #indexTorrentGet {
 	margin: 0 auto;
-	min-height: 128px; height: 128px; /* IE6 */
-	padding-top: 25px;
+	min-height: 96px; height: 96px; /* IE6 */
+	padding-top: 5px;
 	padding-left: 132px;
 	background: #fff url('../images/index/TorrentGet/bg.png') no-repeat top left;
 }

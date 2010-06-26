@@ -4,7 +4,7 @@
 	<label for="url_torrent"><tmpl_var name="_URLFILE">:</label><br />
 	<input type="hidden" name="type" value="torrent" />
 	<input type="text" name="url" id="url_torrent" size="40" />
-	<select name="aid" style="width:100px">
+	<select name="aid">
 	<option value="1" selected="selected"><tmpl_var name="_GETFILE"></option>
 	<tmpl_if name="queueActive" value="1">
 	<tmpl_if name="isAdmin"><option value="2"><tmpl_var name="_GETFILE">+Start</option>
