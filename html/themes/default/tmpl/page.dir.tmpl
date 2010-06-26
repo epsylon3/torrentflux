@@ -128,6 +128,11 @@
 				</td>
 		</tr>
 	</tmpl_if>
+	<form method="post">
+	<tr bgcolor="#829FB5">
+		<td align="center" colspan="4"><input type="text" size=105 value="<tmpl_var name="_WGET">" name="wget_url" /> <input type="submit" value="wget file" name="wget_submit" /></td>
+	</tr>
+	</form>
 <tmpl_if name="enable_dirstats" value="1">
 	<tr bgcolor="#829FB5">
 		<td align="center" colspan="4"><tmpl_var name="_TDDU"> <tmpl_var name="duTotal"></td>
