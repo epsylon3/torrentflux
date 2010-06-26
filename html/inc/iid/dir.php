@@ -60,6 +60,8 @@ $down = UrlHTMLSlashesDecode(tfb_getRequestVar('down'));
 $tar = UrlHTMLSlashesDecode(tfb_getRequestVar('tar'));
 $multidel = UrlHTMLSlashesDecode(tfb_getRequestVar('multidel'));
 $dir = UrlHTMLSlashesDecode(tfb_getRequestVar('dir'));
+$wget_url = UrlHTMLSlashesDecode(tfb_getRequestVar('wget_url'));
+
 
 // check dir-var
 if (tfb_isValidPath($dir) !== true) {
@@ -79,7 +81,7 @@ if ($chmod != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($dir))) && (hasPermission($dir, $cfg["user"], 'w')))
-		chmodRecursive($cfg["path"].$dir);
+		chmodRecursive($cfg["path"].$dir,775);
 	else
 		AuditAction($cfg["constants"]["error"], "ILLEGAL CHMOD: ".$cfg["user"]." tried to chmod ".$dir);
 	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
@@ -107,22 +109,6 @@ if ($del != "") {
 		}
 	}
 	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($current));
-	exit();
-}
-
-/*******************************************************************************
- * multi-delete
- ******************************************************************************/
-if ($multidel != "") {
-	foreach($_POST['file'] as $key => $element) {
-		$element = urldecode($element);
-		// only valid entry with permission
-		if ((isValidEntry(basename($element))) && (hasPermission($element, $cfg["user"], 'w')))
-			delDirEntry($element);
-		else
-			AuditAction($cfg["constants"]["error"], "ILLEGAL DELETE: ".$cfg["user"]." tried to delete ".$element);
-	}
-	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
 	exit();
 }
 
@@ -186,6 +172,132 @@ if ($tar != "") {
 	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($current));
 	exit();
 }
+
+/*******************************************************************************
+ * wget
+ ******************************************************************************/
+function _dir_cleanFileName($inName) {
+	global $cfg;
+	$arURL = explode("/", $inName);
+	$inName = urldecode($arURL[count($arURL)-1]); // get the file name
+	$outName = preg_replace("/[^0-9a-zA-Z.-]+/",'_', $inName);
+	return $outName;
+}
+
+function _dir_WgetFile($url,$target_dir) {
+	require_once('inc/functions/functions.core.tfb.php');
+	global $cfg;
+	$filename = "";
+	$downloadMessages = array();
+	if (!empty($url)) {
+		$arURL = explode("/", $url);
+		$filename = urldecode($arURL[count($arURL)-1]); // get the file name
+		$filename = str_replace(array("'",","), "", $filename);
+		$filename = stripslashes($filename);
+		
+		// Check to see if url has something like ?passkey=12345
+		// If so remove it.
+		if (($point = strrpos($filename, "?")) !== false )
+			$filename = substr($filename, 0, $point);
+		$ret = strrpos($filename, ".");
+
+		$url = str_replace(" ", "%20", $url);
+		// This is to support Sites that pass an id along with the url for downloads.
+		$tmpId = tfb_getRequestVar("id");
+		if(!empty($tmpId))
+			$url .= "&id=".$tmpId;
+
+		// retrieve the file
+		require_once("inc/classes/SimpleHTTP.php");
+
+		$content = SimpleHTTP::getData($url);
+		if ((SimpleHTTP::getState() == SIMPLEHTTP_STATE_OK) && (strlen($content) > 0)) {
+			$fileNameBackup = $filename;
+			$filename = SimpleHTTP::getFilename();
+			if ($filename != "") {
+				$filename = _dir_cleanFileName($filename);
+			}
+			if (($filename == "") || ($filename === false)) {
+				$filename = _dir_cleanFileName($fileNameBackup);
+				if ($filename === false || $filename=="") {
+					$filename = _dir_cleanFileName(SimpleHTTP::getRealUrl($url));
+					if ($filename === false || $filename=="") {
+						$filename = _dir_cleanFileName(md5($url.strval(@microtime())));
+						if ($filename === false || $filename=="") {
+							// Error
+							array_push($downloadMessages , "failed to get a valid filename for ".$url);
+						}
+					}
+				}
+			}
+			if (empty($downloadMessages)) { // no messages
+				// check if content contains html
+				if ($cfg['debuglevel'] > 0) {
+					if (strpos($content, "<br />") !== false)
+						AuditAction($cfg["constants"]["debug"], "download-content contained html : ".htmlentities(addslashes($url), ENT_QUOTES));
+				}
+				if (is_file($target_dir.$filename)) {
+					// Error
+					array_push($downloadMessages, "the file ".$filename." already exists on the server.");
+				} else {
+					// write to file
+					$handle = false;
+					$handle = @fopen($target_dir.$filename, "w");
+					if (!$handle) {
+						array_push($downloadMessages, "cannot open ".$target_dir.$filename." for writing.");
+					} else {
+						$result = @fwrite($handle, $content);
+						@fclose($handle);
+						if ($result === false)
+							array_push($downloadMessages, "cannot write content to ".$filename.".");
+					}
+				}
+			}
+		} else {
+			$msgs = SimpleHTTP::getMessages();
+			if (count($msgs) > 0)
+				$downloadMessages = array_merge($downloadMessages, $msgs);
+		}
+		if (empty($downloadMessages)) { // no messages
+			AuditAction($cfg["constants"]["url_upload"], $filename);
+		}
+	} else {
+		array_push($downloadMessages, "Invalid Url : ".$url);
+	}
+	if (count($downloadMessages) > 0) {
+		AuditAction($cfg["constants"]["error"], $cfg["constants"]["url_upload"]." :: ".$filename);
+		@error("There were Problems", "", "", $downloadMessages);
+	}
+}
+
+
+if ($wget_url != "") {
+	if ($dir != "" && substr($dir,strlen($dir)-1,1)!="/") {
+		$dir = $dir."/";	
+	}
+	if ($dir != "") {
+		_dir_WgetFile($wget_url,$cfg["path"].$dir);
+	}
+	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
+	exit();
+}
+
+/*******************************************************************************
+ * multi-delete
+ ******************************************************************************/
+if ($multidel != "") {
+	foreach($_POST['file'] as $key => $element) {
+		$element = urldecode($element);
+		// only valid entry with permission
+		if ((isValidEntry(basename($element))) && (hasPermission($element, $cfg["user"], 'w')))
+			delDirEntry($element);
+		else
+			AuditAction($cfg["constants"]["error"], "ILLEGAL DELETE: ".$cfg["user"]." tried to delete ".$element);
+	}
+	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
+	exit();
+}
+
 
 /*******************************************************************************
  * dir-page
@@ -462,6 +574,8 @@ $tmpl->setvar('_DIR_MOVE_LINK', $cfg['_DIR_MOVE_LINK']);
 $tmpl->setvar('_ABOUTTODELETE', $cfg['_ABOUTTODELETE']);
 $tmpl->setvar('_BACKTOPARRENT', $cfg['_BACKTOPARRENT']);
 $tmpl->setvar('_ID_IMAGES', $cfg['_ID_IMAGES']);
+//
+$tmpl->setvar('_WGET', $wget_url);
 //
 tmplSetTitleBar($cfg["pagetitle"].' - '.$cfg['_DIRECTORYLIST']);
 tmplSetDriveSpaceBar();
