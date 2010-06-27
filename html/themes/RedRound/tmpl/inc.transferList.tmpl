@@ -33,7 +33,12 @@
 				<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
 			</a>
 		</td>
-		<td><tmpl_var name="displayname"></td><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+		<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+		  <a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
+		  <img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
+		  <tmpl_var name="displayname">
+		  </a>
+		</td>
 		<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
 		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
 		<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
@@ -121,9 +126,6 @@
 									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_stop.png" title="<tmpl_var name="_STOPTRANSFER">" alt="" />
 								</a>
 								<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" alt="" />
-								<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name="datapath">" />
-					</a>
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
 							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
@@ -181,10 +183,7 @@
 									</a>
 								<tmpl_else>
 									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" title="<tmpl_var name="_STOPPING">" alt="" />
-								</tmpl_if>
-								<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name="datapath">" />
-					</a>
+								</tmpl_if>								
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
 							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
@@ -234,7 +233,12 @@
 						<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
 					</a>
 				</td>
-				<td><tmpl_var name="displayname"></td><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+				<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+				  <a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
+				  <img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
+				  <tmpl_var name="displayname">
+				  </a>
+				</td>
 				<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
 				<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
 				<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
@@ -320,9 +324,6 @@
 									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_stop.png" title="<tmpl_var name="_STOPTRANSFER">" alt="" />
 								</a>
 								<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" alt="" />
-								<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name="datapath">" />
-					</a>
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
 							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
@@ -381,9 +382,6 @@
 								<tmpl_else>
 									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" title="<tmpl_var name="_STOPPING">" alt="" />
 								</tmpl_if>
-								<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name="datapath">" />
-					</a>
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
 							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
