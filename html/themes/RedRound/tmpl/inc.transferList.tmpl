@@ -7,15 +7,15 @@
 	<tr>
 		<th></th>
 		<th><tmpl_var name="_TRANSFERFILE"></th>
-		<tmpl_if name="settings_0"><th><tmpl_var name="_USER"></th></tmpl_if>
+		<!--<tmpl_if name="settings_0"><th>User</th></tmpl_if>-->
 		<tmpl_if name="settings_1"><th>Size</th></tmpl_if>
 		<tmpl_if name="settings_2"><th>T. Down</th></tmpl_if>
 		<tmpl_if name="settings_3"><th>T. Up</th></tmpl_if>
 		<tmpl_if name="settings_4"><th><tmpl_var name="_STATUS"></th></tmpl_if>
 		<tmpl_if name="settings_5"><th>Progress</th></tmpl_if>
-		<tmpl_if name="settings_6"><th>Down</th></tmpl_if>
-		<tmpl_if name="settings_7"><th>Up</th></tmpl_if>
-		<tmpl_if name="settings_8"><th>Seeds</th></tmpl_if>
+		<tmpl_if name="settings_6"><th width="60">Down</th></tmpl_if>
+		<tmpl_if name="settings_7"><th width="60">Up</th></tmpl_if>
+		<tmpl_if name="settings_8"><th width="45">Seeds</th></tmpl_if>
 		<tmpl_if name="settings_9"><th>Peers</th></tmpl_if>
 		<tmpl_if name="settings_10"><th><tmpl_var name="_ESTIMATEDTIME"></th></tmpl_if>
 		<tmpl_if name="settings_11"><th>C</th></tmpl_if>
@@ -39,7 +39,7 @@
 		  <tmpl_var name="displayname">
 		  </a>
 		</td>
-		<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
+		<!--<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if>--><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
 		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
 		<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
 		<tmpl_if name="settings_3"><td><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
@@ -208,15 +208,15 @@
 		<tr>
 			<th></th>
 			<th><tmpl_var name="_TRANSFERFILE"></th>
-			<tmpl_if name="settings_0"><th><tmpl_var name="_USER"></th></tmpl_if>
+			<tmpl_if name="settings_0"><th>User</th></tmpl_if>
 			<tmpl_if name="settings_1"><th>Size</th></tmpl_if>
 			<tmpl_if name="settings_2"><th>T. Down</th></tmpl_if>
 			<tmpl_if name="settings_3"><th>T. Up</th></tmpl_if>
 			<tmpl_if name="settings_4"><th><tmpl_var name="_STATUS"></th></tmpl_if>
 			<tmpl_if name="settings_5"><th>Progress</th></tmpl_if>
-			<tmpl_if name="settings_6"><th>Down</th></tmpl_if>
-			<tmpl_if name="settings_7"><th>Up</th></tmpl_if>
-			<tmpl_if name="settings_8"><th>Seeds</th></tmpl_if>
+			<tmpl_if name="settings_6"><th width="60">Down</th></tmpl_if>
+			<tmpl_if name="settings_7"><th width="60">Up</th></tmpl_if>
+			<tmpl_if name="settings_8"><th width="45">Seeds</th></tmpl_if>
 			<tmpl_if name="settings_9"><th>Peers</th></tmpl_if>
 			<tmpl_if name="settings_10"><th><tmpl_var name="_ESTIMATEDTIME"></th></tmpl_if>
 			<tmpl_if name="settings_11"><th>C</th></tmpl_if>

@@ -238,7 +238,8 @@ foreach ($arList as $transfer) {
 	if($settings[1] != 0)
 	{
 		$format_af_size = formatBytesTokBMBGBTB($sf->size);
-		if($format_af_size == "") $format_af_size = "&nbsp;";
+		if(strstr($format_af_size,"G")) $format_af_size = "<b>".$format_af_size."</b>";
+		if($format_af_size == "") $format_af_size = "&nbsp;";		
 	}
 	// =============================================================== downtotal
 	$format_downtotal = "";
