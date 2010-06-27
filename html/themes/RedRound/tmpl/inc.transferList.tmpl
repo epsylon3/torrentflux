@@ -46,7 +46,7 @@
 		<tmpl_if name="settings_4"><td><tmpl_var name="statusStr"></td></tmpl_if>
 		<tmpl_if name="settings_5"> <!-- PROGRESS BAR -->
 		<td style="white-space:nowrap;overflow:hidden;text-align:center;padding:1px;vertical-align:30%">
-			<tmpl_if name="graph_width" value="-1"> <!-- PROGRESS BAR WHEN FINISHED OR SEEDING -->
+			<tmpl_if name="graph_width" value="100"> <!-- PROGRESS BAR WHEN FINISHED -->
 				<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
 					<div  style="position:absolute;top:0px;left:0px;height:10px;text-align:center;width:100px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_finished.png);">
 					<div style="padding:0px;margin:0px;"><tmpl_var name="percentage"></div>
@@ -54,30 +54,41 @@
 				<div class="clear"></div>
 				</div>
 			<tmpl_else>
-				<tmpl_if name="transferRunning" op="<" value="2"> <!-- PROGRESS BAR WHEN DOWNLOADING -->
+			  <tmpl_if name="statusStr" value="Seeding"> <!-- PROGRESS BAR WHEN SEEDING -->
+					<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
+						<div  style="position:absolute;top:0px;left:0px;height:10px;text-align:center;width:100px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_seed.png);">
+						<div style="padding:0px;margin:0px;"><tmpl_var name="percentage"></div>
+					</div>
+					<div class="clear"></div>
+					</div>
+				<tmpl_else>
+				 <tmpl_if name="transferRunning" value="1"> 
+				  <!-- PROGRESS BAR WHEN DOWNLOADING -->
 					<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
 					<div style="position:absolute;top:0px;left:0px;height:10px;text-align:right;width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png);">
 						<tmpl_if name="graph_width" op=">=" value="50">
 							<div style="padding:0px;margin:0px 2px 0px 0px;"><tmpl_var name="percentage"></div>
-						</tmpl_if>
-					</div>
-			<!-- PROGRESS BAR WHEN STOPPED -->
-					<div style="position:absolute;top:0px;left:<tmpl_var name="graph_width">px;height:10px;text-align:left;width:<tmpl_var name="100_graph_width">px;background-color:<tmpl_var name="background">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_stop.png);">
-						<tmpl_if name="graph_width" op="<" value="50">
+						<tmpl_else>
 							<div style="padding:0px;margin:0px 0px 0px 2px;color:black;"><tmpl_var name="percentage"></div>
 						</tmpl_if>
 					</div>
 					<div class="clear"></div>
 					</div>
-					<tmpl_else>
-						&nbsp;
-					</tmpl_if>
+				 <tmpl_else>
+			    <!-- PROGRESS BAR WHEN STOPPED -->
+					<div style="position:absolute;top:0px;left:<tmpl_var name="graph_width">px;height:10px;text-align:left;width:<tmpl_var name="100_graph_width">px;background-color:<tmpl_var name="background">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_stop.png);">
+						<div style="padding:0px;margin:0px 0px 0px 2px;color:black;"><tmpl_var name="percentage"></div>
+					</div>
+					<div class="clear"></div>
+					</div>
+				 </tmpl_if>
 				</tmpl_if>
+			</tmpl_if>
 			
 			</td>
-			</tmpl_if>
-			<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
-			<tmpl_if name="settings_7"><!-- UPLOAD SPEED -->
+		</tmpl_if>
+		<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
+		<tmpl_if name="settings_7"><!-- UPLOAD SPEED -->
 				<td>
 					<tmpl_if name="transferRunning" value="1">
 						<tmpl_var name="up_speed">
@@ -85,8 +96,8 @@
 						&nbsp;
 					</tmpl_if>
 				</td>
-			</tmpl_if>
-			<tmpl_if name="settings_8"><!-- SEEDS -->
+		</tmpl_if>
+		<tmpl_if name="settings_8"><!-- SEEDS -->
 				<td>
 					<tmpl_if name="transferRunning" value="1">
 						<tmpl_if name="seeds" op="!=" value="">
@@ -98,8 +109,8 @@
 						&nbsp;
 					</tmpl_if>
 				</td>
-				</tmpl_if>
-				<tmpl_if name="settings_9"><!-- PEERS -->
+		</tmpl_if>
+		<tmpl_if name="settings_9"><!-- PEERS -->
 					<td>
 						<tmpl_if name="transferRunning" value="1">
 							<tmpl_if name="peers" op="!=" value="">
@@ -111,9 +122,9 @@
 							&nbsp;
 						</tmpl_if>
 					</td>
-				</tmpl_if>
-				<tmpl_if name="settings_10"><td><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td></tmpl_if><!-- ESTIMATED TIME -->
-				<tmpl_if name="settings_11"><td><tmpl_var name="client"></a></td></tmpl_if><!-- USED CLIENT -->
+		</tmpl_if>
+		<tmpl_if name="settings_10"><td><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td></tmpl_if><!-- ESTIMATED TIME -->
+		<tmpl_if name="settings_11"><td><tmpl_var name="client"></a></td></tmpl_if><!-- USED CLIENT -->
 <!-- ACTIONS CELL E.G STOP/START/SEED/EDIT -->
 				<td style="text-align:right;">
 						<tmpl_if name="is_owner">
@@ -239,44 +250,56 @@
 				  <tmpl_var name="displayname">
 				  </a>
 				</td>
-				<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
-				<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
-				<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
-				<tmpl_if name="settings_3"><td><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
-				<tmpl_if name="settings_4"><td><tmpl_var name="statusStr"></td></tmpl_if>
-				<tmpl_if name="settings_5"> <!-- PROGRESS BAR -->
-					<td style="white-space:nowrap;overflow:hidden;text-align:center;padding:1px;vertical-align:30%">
-						<tmpl_if name="graph_width" value="-1"> <!-- PROGRESS BAR WHEN FINISHED OR SEEDING -->
-							<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
-									<div  style="position:absolute;top:0px;left:0px;height:10px;text-align:center;width:100px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_finished.png);">
-										<div style="padding:0px;margin:0px;"><tmpl_var name="percentage"></div>
-									</div>
-									<div class="clear"></div>
-								</div>
+		<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
+		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
+		<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
+		<tmpl_if name="settings_3"><td><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
+		<tmpl_if name="settings_4"><td><tmpl_var name="statusStr"></td></tmpl_if>
+		<tmpl_if name="settings_5"> <!-- PROGRESS BAR -->
+		<td style="white-space:nowrap;overflow:hidden;text-align:center;padding:1px;vertical-align:30%">
+			<tmpl_if name="graph_width" value="100"> <!-- PROGRESS BAR WHEN FINISHED -->
+				<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
+					<div  style="position:absolute;top:0px;left:0px;height:10px;text-align:center;width:100px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_finished.png);">
+					<div style="padding:0px;margin:0px;"><tmpl_var name="percentage"></div>
+				</div>
+				<div class="clear"></div>
+				</div>
+			<tmpl_else>
+			  <tmpl_if name="statusStr" value="Seeding"> <!-- PROGRESS BAR WHEN SEEDING -->
+					<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
+						<div  style="position:absolute;top:0px;left:0px;height:10px;text-align:center;width:100px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_seed.png);">
+						<div style="padding:0px;margin:0px;"><tmpl_var name="percentage"></div>
+					</div>
+					<div class="clear"></div>
+					</div>
+				<tmpl_else>
+				 <tmpl_if name="transferRunning" value="1"> 
+				  <!-- PROGRESS BAR WHEN DOWNLOADING -->
+					<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
+					<div style="position:absolute;top:0px;left:0px;height:10px;text-align:right;width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png);">
+						<tmpl_if name="graph_width" op=">=" value="50">
+							<div style="padding:0px;margin:0px 2px 0px 0px;"><tmpl_var name="percentage"></div>
 						<tmpl_else>
-							<tmpl_if name="transferRunning" op="<" value="2"> <!-- PROGRESS BAR WHEN DOWNLOADING -->
-								<div class="progress" style="position:relative;top:3px;width:100px;font-size:90%;">
-									<div style="position:absolute;top:0px;left:0px;height:10px;text-align:right;width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png);">
-									<tmpl_if name="graph_width" op=">=" value="50">
-										<div style="padding:0px;margin:0px 2px 0px 0px;"><tmpl_var name="percentage"></div>
-									</tmpl_if>
-									</div>
-									<!-- PROGRESS BAR WHEN STOPPED -->
-									<div style="position:absolute;top:0px;left:<tmpl_var name="graph_width">px;height:10px;text-align:left;width:<tmpl_var name="100_graph_width">px;background-color:<tmpl_var name="background">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_stop.png);">
-									<tmpl_if name="graph_width" op="<" value="50">
-										<div style="padding:0px;margin:0px 0px 0px 2px;color:black;"><tmpl_var name="percentage"></div>
-									</tmpl_if>
-									</div>
-									<div class="clear"></div>
-								</div>
-							<tmpl_else>
-								&nbsp;
-							</tmpl_if>
+							<div style="padding:0px;margin:0px 0px 0px 2px;color:black;"><tmpl_var name="percentage"></div>
 						</tmpl_if>
-					</td>
+					</div>
+					<div class="clear"></div>
+					</div>
+				 <tmpl_else>
+			    <!-- PROGRESS BAR WHEN STOPPED -->
+					<div style="position:absolute;top:0px;left:<tmpl_var name="graph_width">px;height:10px;text-align:left;width:<tmpl_var name="100_graph_width">px;background-color:<tmpl_var name="background">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_stop.png);">
+						<div style="padding:0px;margin:0px 0px 0px 2px;color:black;"><tmpl_var name="percentage"></div>
+					</div>
+					<div class="clear"></div>
+					</div>
+				 </tmpl_if>
 				</tmpl_if>
-				<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
-				<tmpl_if name="settings_7"><!-- UPLOAD SPEED -->
+			</tmpl_if>
+			
+			</td>
+		</tmpl_if>
+		<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
+		<tmpl_if name="settings_7"><!-- UPLOAD SPEED -->
 					<td>
 						<tmpl_if name="transferRunning" value="1">
 							<tmpl_var name="up_speed">
@@ -284,8 +307,8 @@
 							&nbsp;
 						</tmpl_if>
 					</td>
-				</tmpl_if>
-				<tmpl_if name="settings_8"><!-- SEEDS -->
+		</tmpl_if>
+		<tmpl_if name="settings_8"><!-- SEEDS -->
 					<td>
 						<tmpl_if name="transferRunning" value="1">
 							<tmpl_if name="seeds" op="!=" value="">
@@ -297,8 +320,8 @@
 							&nbsp;
 						</tmpl_if>
 					</td>
-				</tmpl_if>
-				<tmpl_if name="settings_9"><!-- PEERS -->
+		</tmpl_if>
+		<tmpl_if name="settings_9"><!-- PEERS -->
 					<td>
 						<tmpl_if name="transferRunning" value="1">
 							<tmpl_if name="peers" op="!=" value="">
@@ -310,9 +333,9 @@
 							&nbsp;
 						</tmpl_if>
 					</td>
-				</tmpl_if>
-				<tmpl_if name="settings_10"><td><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td></tmpl_if><!-- ESTIMATED TIME -->
-				<tmpl_if name="settings_11"><td><tmpl_var name="client"></a></td></tmpl_if><!-- USED CLIENT -->
+		</tmpl_if>
+		<tmpl_if name="settings_10"><td><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td></tmpl_if><!-- ESTIMATED TIME -->
+		<tmpl_if name="settings_11"><td><tmpl_var name="client"></a></td></tmpl_if><!-- USED CLIENT -->
 				<td style="text-align:right;">
 						<tmpl_if name="is_owner">
 							<a onclick="showTransfer('index.php?iid=transferSettings&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
