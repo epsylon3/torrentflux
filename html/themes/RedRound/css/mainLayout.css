@@ -199,6 +199,14 @@ table#transfer_table tr.white {
  	color: white;
 }
 
+table#transfer_table a{
+	color: #222;
+}
+
+table#transfer_table tr.hover a{
+	color: white;
+}
+
 table.sortable a.sortheader { color: white; text-decoration: none; }
 table.sortable span.sortarrow { color: white; text-decoration: none; }
 
