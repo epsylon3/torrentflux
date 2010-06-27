@@ -8,22 +8,22 @@
 
 
 // open admin link in a new page
-	$(function(){
-		$('.overlay').linkControl({overlay:true, padding:5, bgColor:'#eee', borderColor:'#333'});
+	jQuery(function(){
+		jQuery('.overlay').linkControl({overlay:true, padding:5, bgColor:'#eee', borderColor:'#333'});
 	});
 	
 // credits window open when link is clicked
-	$(function(){
-		$('#credits').hide();
-		$('#credit_link').click(function(){
-			$('#credits').dialog({
+	jQuery(function(){
+		jQuery('#credits').hide();
+		jQuery('#credit_link').click(function(){
+			jQuery('#credits').dialog({
 				resizable: false,
 				bgiframe: true,
 				width: 500,
 				height: 300
 				});
 			});
-		$('#credit_tabs').tabs({
+		jQuery('#credit_tabs').tabs({
 			event: 'mouseover'
 		});
 	});
