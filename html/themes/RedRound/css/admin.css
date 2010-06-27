@@ -283,7 +283,6 @@ SERVER SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -291,7 +290,9 @@ SERVER SETTINGS
 
 #adminServerSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminServerSettings td {
@@ -337,7 +338,8 @@ TRANSFER SETTINGS
 
 #adminTransferSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
 }
 
 #adminTransferSettings th.alt {
@@ -345,7 +347,6 @@ TRANSFER SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -390,7 +391,9 @@ FLUAZU SETTINGS
 
 #adminfluazuSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminfluazuSettings th.alt {
@@ -398,7 +401,6 @@ FLUAZU SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -446,7 +448,6 @@ CONTROL SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -454,7 +455,9 @@ CONTROL SETTINGS
 
 #adminControlSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminControlSettings td {
@@ -496,7 +499,9 @@ WebAPP SETTINGS
 
 #adminWebAppSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminWebAppSettings th.alt {
@@ -504,7 +509,6 @@ WebAPP SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -549,15 +553,17 @@ INDEX SETTINGS
 
 #adminIndexSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
+
 
 #adminIndexSettings th.alt {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -625,7 +631,9 @@ DIR SETTINGS
 
 #adminDirSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminDirSettings th.alt {
@@ -633,7 +641,6 @@ DIR SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -689,7 +696,6 @@ DIR SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -722,15 +728,17 @@ STATS SETTINGS
 
 #adminStatsSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
+
 
 #adminStatsSettings th.alt {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -775,15 +783,17 @@ FLUXD SETTINGS
 
 #adminfluxdSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
+
 
 #adminfluxdSettings th.alt {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -906,7 +916,9 @@ FLUXD WATCH ADD JOBS
 
 #adminfluxdAddJob th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminfluxdAddJob th.alt {
@@ -914,7 +926,6 @@ FLUXD WATCH ADD JOBS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1032,15 +1043,17 @@ FLUXD RSSAD FILTER ADD
 
 #adminfluxdSettingsRSSadFilterAdd th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
+
 
 #adminfluxdSettingsRSSadFilterAdd th.alt {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1085,7 +1098,9 @@ FLUXD RSSAD FILTER EDIT
 
 #adminfluxdSettingsRSSadFilterEdit th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminfluxdSettingsRSSadFilterEdit th.alt {
@@ -1093,7 +1108,6 @@ FLUXD RSSAD FILTER EDIT
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1301,15 +1315,17 @@ FLUXD RSSAD JOB ADD
 
 #adminfluxdSettingsRSSadJobAdd th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
+
 
 #adminfluxdSettingsRSSadJobAdd th.alt {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1354,7 +1370,9 @@ FLUXD RSSAD JOB EDIT
 
 #adminfluxdSettingsRSSadJobEdit th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminfluxdSettingsRSSadJobEdit th.alt {
@@ -1362,7 +1380,6 @@ FLUXD RSSAD JOB EDIT
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1406,7 +1423,9 @@ XFER SETTINGS
 
 #adminXferSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #adminXferSettings th.alt {
@@ -1414,7 +1433,6 @@ XFER SETTINGS
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1458,15 +1476,17 @@ SEARCH SETTINGS
 
 #adminSearchSettings th span {
 	font-size: 80%;
-	font-weight: bold;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
+
 
 #adminSearchSettings th.alt {
 	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1775,7 +1795,6 @@ ShowUsers List (inc.userSection.tmpl)
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
@@ -1832,6 +1851,9 @@ EDIT USER
 
 #admineditUserInfo th span {
 	font-size: 65%;
+	text-transform: none;
+	letter-spacing: auto;
+	font-weight: normal;
 }
 
 #admineditUserInfo td {
@@ -1866,7 +1888,6 @@ EDIT USER
 	color: #4f6b72;
 	border: 1px solid #C1DAD7;
 	letter-spacing: 2px;
-	text-transform: uppercase;
 	text-align: right;
 	padding: 6px 6px 6px 12px;
 	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;

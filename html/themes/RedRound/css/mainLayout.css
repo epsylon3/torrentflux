@@ -168,6 +168,11 @@ h3 { /* YOUR/FOREIGN TRANSFERS */
 }
 
 /* Transfer List Header */
+
+.container div#tabs {
+  min-width: 900px;
+}
+
 table#transfer_table th, table#transfer_table th a {
 	background-color: black;
 	color: white;
