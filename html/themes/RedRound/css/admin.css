@@ -291,7 +291,7 @@ SERVER SETTINGS
 #adminServerSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -392,7 +392,7 @@ FLUAZU SETTINGS
 #adminfluazuSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -456,7 +456,7 @@ CONTROL SETTINGS
 #adminControlSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -500,7 +500,7 @@ WebAPP SETTINGS
 #adminWebAppSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -554,7 +554,7 @@ INDEX SETTINGS
 #adminIndexSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -632,7 +632,7 @@ DIR SETTINGS
 #adminDirSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -729,7 +729,7 @@ STATS SETTINGS
 #adminStatsSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -784,7 +784,7 @@ FLUXD SETTINGS
 #adminfluxdSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -917,7 +917,7 @@ FLUXD WATCH ADD JOBS
 #adminfluxdAddJob th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1044,7 +1044,7 @@ FLUXD RSSAD FILTER ADD
 #adminfluxdSettingsRSSadFilterAdd th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1099,7 +1099,7 @@ FLUXD RSSAD FILTER EDIT
 #adminfluxdSettingsRSSadFilterEdit th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1316,7 +1316,7 @@ FLUXD RSSAD JOB ADD
 #adminfluxdSettingsRSSadJobAdd th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1371,7 +1371,7 @@ FLUXD RSSAD JOB EDIT
 #adminfluxdSettingsRSSadJobEdit th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1424,7 +1424,7 @@ XFER SETTINGS
 #adminXferSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1477,7 +1477,7 @@ SEARCH SETTINGS
 #adminSearchSettings th span {
 	font-size: 80%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 
@@ -1852,7 +1852,7 @@ EDIT USER
 #admineditUserInfo th span {
 	font-size: 65%;
 	text-transform: none;
-	letter-spacing: auto;
+	letter-spacing: 0;
 	font-weight: normal;
 }
 

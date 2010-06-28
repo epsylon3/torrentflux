@@ -242,7 +242,7 @@ table#UsersOnline {
 	vertical-align: top;
 	width: 400px;
 	height: 128px;
-	padding-left: 132px;
+	padding-left: 100px;
 }
 
 table#UsersOnline td, table#UsersOffline td { background-color: transparent; }
@@ -253,14 +253,14 @@ table#UsersOffline {
 	width: 400px;
 	min-height: 128px;
 	height: 128px; /* IE6 */
-	padding-left: 132px;
+	padding-left: 100px;
 }
 
 #indexTorrentSearch {
 	margin: 0 auto;
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 25px;
-	padding-left: 132px;
+	padding-left: 100px;
 	background: #fff url('../images/index/TorrentSearch/bg.png') no-repeat top left;
 }
 
@@ -268,7 +268,7 @@ table#UsersOffline {
 	margin: 0 auto;
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 25px;
-	padding-left: 132px;
+	padding-left: 100px;
 	background: #fff url('../images/index/Wget/bg.png') no-repeat top left;
 }
 
@@ -276,7 +276,7 @@ table#UsersOffline {
 	margin: 0 auto;
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 25px;
-	padding-left: 132px;
+	padding-left: 100px;
 	background: #fff url('../images/index/NZBPerl/bg.png') no-repeat top left;
 }
 
@@ -285,7 +285,7 @@ table#UsersOffline {
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 10px;
 	padding-bottom: 15px;
-	padding-left: 132px;
+	padding-left: 100px;
 	background: #fff url('../images/index/Links/bg.png') no-repeat top left;
 }
 
@@ -299,7 +299,7 @@ table#UsersOffline {
 	margin: 0 auto;
 	min-height: 96px; height: 96px; /* IE6 */
 	padding-top: 5px;
-	padding-left: 132px;
+	padding-left: 100px;
 	margin-left: 10px;
 	background: #fff url('../images/index/TorrentUpload/bg.png') no-repeat top left;
 }
@@ -308,7 +308,7 @@ table#UsersOffline {
 	margin: 0 auto;
 	min-height: 96px; height: 96px; /* IE6 */
 	padding-top: 5px;
-	padding-left: 132px;
+	padding-left: 100px;
 	margin-left: 10px;
 	background: #fff url('../images/index/TorrentGet/bg.png') no-repeat top left;
 }
