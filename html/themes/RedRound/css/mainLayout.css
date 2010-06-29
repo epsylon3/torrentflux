@@ -39,7 +39,7 @@ img { border: none;}
 
 #header {
    	margin: 0 auto;
-   	width: 800px;
+   	width: 1024px;
 	height: 100px;
 	background: #B22037 url('../images/mainLayout/Box/header.jpg');
 	background-repeat: no-repeat;
@@ -63,8 +63,9 @@ img { border: none;}
 }
 
 #UserBar ul li {
-display: inline;
-list-style-type: none;
+	display: inline;
+	list-style-type: none;
+	padding: 0 10px;
 }
 
 #UserBar a:link, #UserBar a:visited {
@@ -110,7 +111,7 @@ tr.white {
 }
 
 table#indexStatsBarWarning {
-	width: 800px;
+	width: 1024px;
 	background-color: white;
 	margin: 0 auto;
 }
@@ -230,7 +231,6 @@ table#TransferListBulkActions td a:hover {
 }
 
 table#indexUsers {
-	width: 800px;
 	height: 128px;
 	background-color: transparent;
 }
