@@ -17,9 +17,9 @@ body {
 	display: table;
 }
 
-#AngleTopLeft { background:url('../images/mainLayout/Box/round.png') no-repeat top left; height:40px; }
-#AngleTopRight { background: url('../images/mainLayout/Box/round.png') no-repeat top right; height:40px; }
-#AngleTopBorder { background:url('../images/mainLayout/Box/top.png') repeat-x top; height:40px; margin:-40px 40px; }
+#AngleTopLeft { background:url('../images/mainLayout/Box/round.png') no-repeat top left; height:30px; }
+#AngleTopRight { background: url('../images/mainLayout/Box/round.png') no-repeat top right; height:30px; }
+#AngleTopBorder { background:url('../images/mainLayout/Box/top.png') repeat-x top; height:30px; margin:-30px 30px; }
 #ContentBorderLeft { background:#fff url('../images/mainLayout/Box/left.png') repeat-y left; }
 #ContentBorderRight { background:url('../images/mainLayout/Box/right.png') repeat-y right; padding: 0 30px;}
 #AngleBottomLeft { background:url('../images/mainLayout/Box/round.png') no-repeat bottom left; height:40px; }

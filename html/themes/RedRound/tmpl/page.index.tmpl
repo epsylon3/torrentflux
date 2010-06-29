@@ -13,9 +13,13 @@
 <!-- Meta Page Refresh -->
 <!-- This table CANNOT be moved to the content it's showing inc.indexRefreshOptions.tmpl because Opera 9 breaks layout -->
 
+<tmpl_include name="inc.indexStatsBar.tmpl">
+<div style="height:5px;"></div>
+
 <div id="tabs">
 	<div id="tabs-2"><tmpl_include name="inc.indexTorrentUpload.tmpl"></div>
 	<div id="tabs-3"><tmpl_include name="inc.indexTorrentGet.tmpl"></div>
+
 	<ul style="margin-left:15px;">
 		<li><a href="#tabs-1">Torrents</a></li>
 <!--		<li><a href="#tabs-2">Uploader Torrent</a></li> -->
@@ -39,8 +43,6 @@
 	<tmpl_include name="inc.indexRefreshOptions.tmpl">
 </table>
 
-<tmpl_include name="inc.indexStatsBar.tmpl">
-<div style="height:5px;"></div>
 <table id="indexStatsGoodLooking">
 	<tmpl_if name="enable_goodlookstats">
 	<tr>

@@ -12,17 +12,17 @@
 	</a>		
 	<br />
 	<select name="aid">
-		<option value="1" selected="selected"><tmpl_var name="_UPLOAD"></option>
+		<option value="1"><tmpl_var name="_UPLOAD"></option>
 			<tmpl_if name="queueActive" value="1">
 				<tmpl_if name="isAdmin">
-						<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+						<option value="2" selected="selected"><tmpl_var name="_UPLOAD">+Start</option>
 				</tmpl_if>
 			<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
 				<tmpl_else>
-			<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+			<option value="2" selected="selected"><tmpl_var name="_UPLOAD">+Start</option>
 				</tmpl_if>
 		</select>
-		<input type="submit" value="Go" />
+		<input type="submit" value=" Go " />
 	</tmpl_if>
 </fieldset>
 </form>
