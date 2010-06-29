@@ -7,7 +7,7 @@
 				<a href="dispatcher.php?action=bulkResume" onclick="return actionConfirm('Resume All Transfers ?','Resuming all Transfers')">Resume</a> | 
 				<a href="dispatcher.php?action=bulkStop" onclick="return actionConfirm('Stop All Transfers ?','Stopping all Transfers')">Stop</a> | 	
 		</tmpl_if>
-		<td>		
+		<td>
 		<tmpl_if name="index_show_seeding">
 		<!--	<a href="dispatcher.php?action=set&amp;key=index_show_seeding&amp;val=0" onclick="return actionClick(true,'Hiding Seeds')">Hide Seeding Torrents</a>-->
 		<tmpl_else>
@@ -32,7 +32,7 @@
 					<option value="transferResetTotals" style="background-color:#DDAAAA;">Reset Totals</option>
 					<option value="transferWipe" style="background-color:#DDAAAA;">Wipe</option>
 				</select>
-				<input type="submit" value=" Go " id="BulkActionButton"/>
+				<input style="width:35px" type="submit" value="Go" id="BulkActionButton"/>
 				<input type="checkbox" name="bulkBox" onclick="bulkCheck(this);" />
 			</tmpl_if>
 			</div>
