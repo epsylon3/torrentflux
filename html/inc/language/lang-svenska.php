@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /* $Id$ */
 
@@ -196,5 +196,7 @@ define('_ID_CONNECTIONS','Connections');
 define('_ID_HOST','Host');
 define('_ID_HOSTS','Hosts');
 define('_ID_IMAGES','Images');
+
+include('lang-common.php');
 
 ?>

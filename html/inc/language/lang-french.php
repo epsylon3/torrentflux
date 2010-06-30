@@ -1,6 +1,6 @@
-<?php
+ï»¿<?php
 
-/* $Id: lang-french.php 3111 2007-06-16 23:49:48Z b4rt $ */
+/* $Id$ */
 
 /**************************************************************************/
 /* TorrentFlux - PHP Torrent Client
@@ -19,145 +19,144 @@
 /* And, if you use HTML code, please double check it.
 /**************************************************************************/
 
-define("_CHARSET", "iso-8859-15");  // if you don't know... then leave this as is.
-define("_SELECTFILE", htmlentities("Uploader un torrent depuis votre poste"));
-define("_URLFILE",htmlentities("URL de fichier.torrent depuis un site web externe (https géré !)"));
-define("_UPLOAD", htmlentities("Envoyer"));
-define("_GETFILE", htmlentities("Ajouter le torrent"));
-define("_LINKS", htmlentities("Liens"));
-define("_ONLINE", htmlentities("En ligne"));
-define("_OFFLINE", htmlentities("Hors ligne"));
-define("_STORAGE", htmlentities("Disque dur"));
-define("_DRIVESPACE", htmlentities("Espace Disque"));
-define("_SERVERSTATS", htmlentities("Stats du serveur / Qui"));
-define("_DIRECTORYLIST", htmlentities("Listing répertoire"));
-define("_ALL", htmlentities("Tous"));
-define("_PAGEWILLREFRESH", htmlentities("La Page se recharge toutes les"));
-define("_SECONDS", htmlentities("secondes"));
-define("_TURNONREFRESH", htmlentities("Activer le Rechargement Auto"));
-define("_TURNOFFREFRESH", htmlentities("Arrêter le Rechargement Auto"));
-define("_WARNING", htmlentities("AVERTISSEMENT"));
-define("_DRIVESPACEUSED", htmlentities("L'espace disque est saturé!"));
-define("_ADMINMESSAGE", htmlentities("Vous avez un message d'un administrateur dans votre boîte de messages."));
-define("_TORRENTS", htmlentities("Torrents"));
-define("_UPLOADHISTORY", htmlentities("Historique"));
-define("_MYPROFILE", htmlentities("Éditer Mon Profil"));
-define("_ADMINISTRATION", htmlentities("Administration"));
-define("_SENDMESSAGETO", htmlentities("Envoyez un message à"));
-define("_TRANSFERFILE", htmlentities("Fichier Torrent"));
-define("_FILESIZE", htmlentities("Taille Du Fichier"));
-define("_STATUS", htmlentities("Statut"));
-define("_ADMIN", htmlentities("Admin"));
-define("_BADFILE", htmlentities("Mauvais Fichier"));
-define("_DATETIMEFORMAT", htmlentities("Y/m/d - H:i:s"));
-define("_DATEFORMAT", htmlentities("Y/m/d"));
-define("_ESTIMATEDTIME", htmlentities("Temps Estimé"));
-define("_DOWNLOADSPEED", htmlentities("Vitesse Download"));
-define("_UPLOADSPEED", htmlentities("Vitesse Upload"));
-define("_SHARING", htmlentities("Partage"));
-define("_USER", htmlentities("Utilisateur"));
-define("_DONE", htmlentities("FAIT"));
-define("_INCOMPLETE", htmlentities("INACHEVÉ"));
-define("_NEW", htmlentities("NOUVEAU"));
-define("_TRANSFERDETAILS", htmlentities("Details du Transfert"));
-define("_STOPTRANSFER", htmlentities("Stopper le Transfert"));
-define("_RUNTRANSFER", htmlentities("Lancer le Transfert"));
-define("_SEEDTRANSFER", htmlentities("Partager le Transfert"));
-define("_DELETE", htmlentities("Effacer"));
-define("_ABOUTTODELETE", htmlentities("Vous êtes sur le point de supprimer"));
-define("_NOTOWNER", htmlentities("Pas proprietaire du Transfert"));
-define("_MESSAGETOALL", htmlentities("Ce message a ete envoye à TOUS LES UTILISATEURS"));
-define("_TRYDIFFERENTUSERID", htmlentities("Erreur: Essayez un utilisateur different."));
-define("_HASBEENUSED", htmlentities("a été utilisé."));
-define("_RETURNTOEDIT", htmlentities("Retour à l'édition"));
-define("_ADMINUSERACTIVITY", htmlentities("Administration - Activité D'Utilisateurs"));
-define("_ADMIN_MENU", htmlentities("admin"));
-define("_ACTIVITY_MENU", htmlentities("activité"));
-define("_LINKS_MENU", htmlentities("liens"));
-define("_NEWUSER_MENU", htmlentities("nouvel utilisateur"));
-define("_BACKUP_MENU", htmlentities("sauvegarde"));
-define("_ALLUSERS", htmlentities("Tous les Utilisateurs"));
-define("_NORECORDSFOUND", htmlentities("PAS D'ENREGISTREMENT TROUVÉ"));
-define("_SHOWPREVIOUS", htmlentities("Précédent"));
-define("_SHOWMORE", htmlentities("Voir Plus"));
-define("_ACTIVITYSEARCH", htmlentities("Activité des Recherches"));
-define("_FILE", htmlentities("Fichier"));
-define("_ACTION", htmlentities("Action"));
-define("_SEARCH", htmlentities("Search"));
-define("_ACTIVITYLOG", htmlentities("Fichier de journalisation - Dernier"));
-define("_DAYS", htmlentities("Jours"));
-define("_IP", htmlentities("IP"));
-define("_TIMESTAMP", htmlentities("Temps"));
-define("_USERDETAILS", htmlentities("Détails de l'Utilisateur"));
-define("_HITS", htmlentities("Hits"));
-define("_UPLOADACTIVITY", htmlentities("Activité D'Upload"));
-define("_JOINED", htmlentities("à rejoint")); // header for the date when the user joined (became a member)
-define("_LASTVISIT", htmlentities("Dernière Visite")); // header for when the user last visited the site
-define("_USERSACTIVITY", htmlentities("Activité")); // used for popup to display Activity next to users name
-define("_NORMALUSER", htmlentities("Utilisateur Normal")); // used to describe a normal user's account type
-define("_ADMINISTRATOR", htmlentities("Administrateur")); // used to describe an administrator's account type
-define("_SUPERADMIN", htmlentities("Super Admin")); // used to describe Super Admin's account type
-define("_EDIT", htmlentities("Éditer"));
-define("_USERADMIN", htmlentities("Administration - Utilisateurs")); // title of page for user administration
-define("_EDITUSER", htmlentities("Éditer L'Utilisateur"));
-define("_UPLOADPARTICIPATION", htmlentities("Participation au Téléchargement"));
-define("_UPLOADS", htmlentities("Uploads")); // Number of uploads a user has contributed
-define("_PERCENTPARTICIPATION", htmlentities("Pourcentage de Participation"));
-define("_PARTICIPATIONSTATEMENT", htmlentities("La participation et les téléchargements basés sur les derniers")); // ends with 15 Days
-define("_TOTALPAGEVIEWS", htmlentities("Pages Vues au Total"));
-define("_THEME", htmlentities("Thème"));
-define("_USERTYPE", htmlentities("Type d'utilisateur"));
-define("_NEWPASSWORD", htmlentities("Nouveau Mot de passe"));
-define("_CONFIRMPASSWORD", htmlentities("Confirmez le Mot de passe"));
-define("_HIDEOFFLINEUSERS", htmlentities("Masquer les utilisateurs Hors-ligne de la page d'acceuil"));
-define("_UPDATE", htmlentities("Mise à jour"));
-define("_USERIDREQUIRED", htmlentities("L'identification de l'utilisateur est exigée."));
-define("_PASSWORDLENGTH", htmlentities("Le mot de passe doit avoir 6 caractères ou plus."));
-define("_PASSWORDNOTMATCH", htmlentities("Les mots de passe sont différents."));
-define("_PLEASECHECKFOLLOWING", htmlentities("Veuillez vérifier ces informations")); // Displays errors after this statement
-define("_NEWUSER", htmlentities("Nouvel Utilisateur"));
-define("_PASSWORD", htmlentities("Mot de passe"));
-define("_CREATE", htmlentities("Créer")); // button text to create a new user
-define("_ADMINEDITLINKS", htmlentities("Administration - Modifier Les Liens"));
-define("_FULLURLLINK", htmlentities("URL Complete"));
-define("_BACKTOPARRENT", htmlentities("Répertoire Parent"));  // indicates going back to parent directory
-define("_DOWNLOADDETAILS", htmlentities("Détails Du Téléchargement"));
-define("_PERCENTDONE", htmlentities("Pourcentage Terminé"));
-define("_RETURNTOTRANSFERS", htmlentities("Revenir aux Transfers")); // Link at the bottom of each page
-define("_DATE", htmlentities("Date"));
-define("_WROTE", htmlentities("a écrit"));  // Used in a reply to tag what the user had writen
-define("_SENDMESSAGETITLE", htmlentities("Envoyer un message"));  // Title of page
-define("_TO", htmlentities("À"));
-define("_FROM", htmlentities("De"));
-define("_YOURMESSAGE", htmlentities("Votre Message"));
-define("_SENDTOALLUSERS", htmlentities("Envoyez à tous les utilisateurs"));
-define("_FORCEUSERSTOREAD", htmlentities("Force Utilisateur(s) à lire")); // Admin option in messaging
-define("_SEND", htmlentities("Envoyer"));  // Button to send private message
-define("_PROFILE", htmlentities("Profil"));
-define("_PROFILEUPDATEDFOR", htmlentities("Profil mis à jour pour"));  // Profile updated for 'username'
-define("_REPLY", htmlentities("Répondre"));  // popup text for reply button
-define("_MESSAGE", htmlentities("Message"));
-define("_MESSAGES", htmlentities("Messages"));  // plural (more than one)
-define("_RETURNTOMESSAGES", htmlentities("Retourner aux messages"));
-define("_COMPOSE", htmlentities("Ecrire"));  // As in 'Compose a message' for button
-define("_LANGUAGE", htmlentities("Langue")); // label
-define("_CURRENTDOWNLOAD", htmlentities("Current Download"));
-define("_CURRENTUPLOAD", htmlentities("Current Upload"));
-define("_SERVERLOAD", htmlentities("Server Load"));
-define("_FREESPACE", htmlentities("Free Space"));
+define("_CHARSET", "utf-8");  // utf-8 (check this file remains utf-8 encoded)
+define("_SELECTFILE", "Uploader un torrent depuis votre poste");
+define("_URLFILE","URL de fichier.torrent depuis un site web externe (https gÃ©rÃ© !)");
+define("_UPLOAD", "Envoyer");
+define("_GETFILE", "Ajouter le torrent");
+define("_LINKS", "Liens");
+define("_ONLINE", "En ligne");
+define("_OFFLINE", "Hors ligne");
+define("_STORAGE", "Disque dur");
+define("_DRIVESPACE", "Espace Disque");
+define("_SERVERSTATS", "Stats du serveur / Qui");
+define("_DIRECTORYLIST", "Listing rÃ©pertoire");
+define("_ALL", "Tous");
+define("_PAGEWILLREFRESH", "La Page se recharge toutes les");
+define("_SECONDS", "secondes");
+define("_TURNONREFRESH", "Activer le Rechargement Auto");
+define("_TURNOFFREFRESH", "ArrÃªter le Rechargement Auto");
+define("_WARNING", "AVERTISSEMENT");
+define("_DRIVESPACEUSED", "L'espace disque est saturÃ©!");
+define("_ADMINMESSAGE", "Vous avez un message d'un administrateur dans votre boÃ®te de messages.");
+define("_TORRENTS", "Torrents");
+define("_UPLOADHISTORY", "Historique");
+define("_MYPROFILE", "Ã‰diter Mon Profil");
+define("_ADMINISTRATION", "Administration");
+define("_SENDMESSAGETO", "Envoyez un message Ã ");
+define("_TRANSFERFILE", "Fichier Torrent");
+define("_FILESIZE", "Taille Du Fichier");
+define("_STATUS", "Statut");
+define("_ADMIN", "Admin");
+define("_BADFILE", "Mauvais Fichier");
+define("_DATETIMEFORMAT", "Y/m/d - H:i:s");
+define("_DATEFORMAT", "Y/m/d");
+define("_ESTIMATEDTIME", "Temps EstimÃ©");
+define("_DOWNLOADSPEED", "Vitesse Download");
+define("_UPLOADSPEED", "Vitesse Upload");
+define("_SHARING", "Partage");
+define("_DONE", "FAIT");
+define("_INCOMPLETE", "INACHEVÃ‰");
+define("_NEW", "NOUVEAU");
+define("_TRANSFERDETAILS", "Details du Transfert");
+define("_STOPTRANSFER", "Stopper le Transfert");
+define("_RUNTRANSFER", "Lancer le Transfert");
+define("_SEEDTRANSFER", "Partager le Transfert");
+define("_DELETE", "Effacer");
+define("_ABOUTTODELETE", "Vous Ãªtes sur le point de supprimer");
+define("_NOTOWNER", "Pas proprietaire du Transfert");
+define("_MESSAGETOALL", "Ce message a ete envoye Ã  TOUS LES UTILISATEURS");
+define("_TRYDIFFERENTUSERID", "Erreur: Essayez un utilisateur different.");
+define("_HASBEENUSED", "a Ã©tÃ© utilisÃ©.");
+define("_RETURNTOEDIT", "Retour Ã  l'Ã©dition");
+define("_ADMINUSERACTIVITY", "Administration - ActivitÃ© D'Utilisateurs");
+define("_ADMIN_MENU", "admin");
+define("_ACTIVITY_MENU", "activitÃ©");
+define("_LINKS_MENU", "liens");
+define("_NEWUSER_MENU", "nouvel utilisateur");
+define("_BACKUP_MENU", "sauvegarde");
+define("_ALLUSERS", "Tous les Utilisateurs");
+define("_NORECORDSFOUND", "PAS D'ENREGISTREMENT TROUVÃ‰");
+define("_SHOWPREVIOUS", "PrÃ©cÃ©dent");
+define("_SHOWMORE", "Voir Plus");
+define("_ACTIVITYSEARCH", "ActivitÃ© des Recherches");
+define("_FILE", "Fichier");
+define("_ACTION", "Action");
+define("_SEARCH", "Rechercher");
+define("_ACTIVITYLOG", "Fichier de journalisation - Dernier");
+define("_DAYS", "Jours");
+define("_IP", "IP");
+define("_TIMESTAMP", "Temps");
+define("_USERDETAILS", "DÃ©tails de l'Utilisateur");
+define("_HITS", "Hits");
+define("_UPLOADACTIVITY", "ActivitÃ© D'Upload");
+define("_JOINED", "Ã  rejoint"); // header for the date when the user joined (became a member)
+define("_LASTVISIT", "DerniÃ¨re Visite"); // header for when the user last visited the site
+define("_USERSACTIVITY", "ActivitÃ©"); // used for popup to display Activity next to users name
+define("_NORMALUSER", "Utilisateur Normal"); // used to describe a normal user's account type
+define("_ADMINISTRATOR", "Administrateur"); // used to describe an administrator's account type
+define("_SUPERADMIN", "Super Admin"); // used to describe Super Admin's account type
+define("_EDIT", "Ã‰diter");
+define("_USERADMIN", "Administration - Utilisateurs"); // title of page for user administration
+define("_EDITUSER", "Ã‰diter L'Utilisateur");
+define("_UPLOADPARTICIPATION", "Participation au TÃ©lÃ©chargement");
+define("_UPLOADS", "Uploads"); // Number of uploads a user has contributed
+define("_PERCENTPARTICIPATION", "Pourcentage de Participation");
+define("_PARTICIPATIONSTATEMENT", "La participation et les tÃ©lÃ©chargements basÃ©s sur les derniers"); // ends with 15 Days
+define("_TOTALPAGEVIEWS", "Pages Vues au Total");
+define("_THEME", "ThÃ¨me");
+define("_USERTYPE", "Type d'utilisateur");
+define("_NEWPASSWORD", "Nouveau Mot de passe");
+define("_CONFIRMPASSWORD", "Confirmez le Mot de passe");
+define("_HIDEOFFLINEUSERS", "Masquer les utilisateurs Hors-ligne de la page d'acceuil");
+define("_UPDATE", "Mise Ã  jour");
+define("_USERIDREQUIRED", "L'identification de l'utilisateur est exigÃ©e.");
+define("_PASSWORDLENGTH", "Le mot de passe doit avoir 6 caractÃ¨res ou plus.");
+define("_PASSWORDNOTMATCH", "Les mots de passe sont diffÃ©rents.");
+define("_PLEASECHECKFOLLOWING", "Veuillez vÃ©rifier ces informations"); // Displays errors after this statement
+define("_NEWUSER", "Nouvel Utilisateur");
+define("_PASSWORD", "Mot de passe");
+define("_CREATE", "CrÃ©er"); // button text to create a new user
+define("_ADMINEDITLINKS", "Administration - Modifier Les Liens");
+define("_FULLURLLINK", "URL Complete");
+define("_BACKTOPARRENT", "RÃ©pertoire Parent");  // indicates going back to parent directory
+define("_DOWNLOADDETAILS", "DÃ©tails Du TÃ©lÃ©chargement");
+define("_PERCENTDONE", "Pourcentage TerminÃ©");
+define("_RETURNTOTRANSFERS", "Revenir aux Transfers"); // Link at the bottom of each page
+define("_DATE", "Date");
+define("_WROTE", "a Ã©crit");  // Used in a reply to tag what the user had writen
+define("_SENDMESSAGETITLE", "Envoyer un message");  // Title of page
+define("_TO", "Ã€");
+define("_FROM", "De");
+define("_YOURMESSAGE", "Votre Message");
+define("_SENDTOALLUSERS", "Envoyez Ã  tous les utilisateurs");
+define("_FORCEUSERSTOREAD", "Force Utilisateur(s) Ã  lire"); // Admin option in messaging
+define("_SEND", "Envoyer");  // Button to send private message
+define("_PROFILE", "Profil");
+define("_PROFILEUPDATEDFOR", "Profil mis Ã  jour pour");  // Profile updated for 'username'
+define("_REPLY", "RÃ©pondre");  // popup text for reply button
+define("_MESSAGE", "Message");
+define("_MESSAGES", "Messages");  // plural (more than one)
+define("_RETURNTOMESSAGES", "Retourner aux messages");
+define("_COMPOSE", "Ecrire");  // As in 'Compose a message' for button
+define("_LANGUAGE", "Langue"); // label
+define("_CURRENTDOWNLOAD", "Current Download");
+define("_CURRENTUPLOAD", "Current Upload");
+define("_SERVERLOAD", "Server Load");
+define("_FREESPACE", "Free Space");
 define("_UPLOADED", "Uploaded");
-define("_QMANAGER_MENU", htmlentities("queue"));
-define("_FLUXD_MENU", htmlentities("fluxd"));
-define("_SETTINGS_MENU", htmlentities("settings"));
-define("_SEARCHSETTINGS_MENU", htmlentities("search"));
-define("_ERRORSREPORTED", htmlentities("Errors"));
+define("_QMANAGER_MENU", "queue");
+define("_FLUXD_MENU", "fluxd");
+define("_SETTINGS_MENU", "settings");
+define("_SEARCHSETTINGS_MENU", "search");
+define("_ERRORSREPORTED", "Errors");
 define("_STARTED", "Started");
 define("_ENDED", "Ended");
-define("_QUEUED", htmlentities("Queued"));
-define("_DELQUEUE", htmlentities("Remove from Queue"));
-define("_FORCESTOP", htmlentities("Kill Transfer"));
-define("_STOPPING", htmlentities("Stopping"));
-define("_COOKIE_MENU", htmlentities("cookies"));
+define("_QUEUED", "Queued");
+define("_DELQUEUE", "Remove from Queue");
+define("_FORCESTOP", "Kill Transfer");
+define("_STOPPING", "Stopping");
+define("_COOKIE_MENU", "cookies");
 define('_TOTALXFER','Total Transfer');
 define('_MONTHXFER','Month\'s Transfer');
 define('_WEEKXFER','Week\'s Transfer');
@@ -196,5 +195,10 @@ define('_ID_CONNECTIONS','Connexions');
 define('_ID_HOST','Host');
 define('_ID_HOSTS','Hosts');
 define('_ID_IMAGES','Images');
+
+define("_USER", "Utilisateur");
+define("_USERS", "Utilisateurs");
+
+include('lang-common.php');
 
 ?>

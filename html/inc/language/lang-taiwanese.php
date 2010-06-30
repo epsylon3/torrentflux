@@ -205,4 +205,6 @@ define('_ID_HOST','Host');
 define('_ID_HOSTS','Hosts');
 define('_ID_IMAGES','Images');
 
+include('lang-common.php');
+
 ?>
