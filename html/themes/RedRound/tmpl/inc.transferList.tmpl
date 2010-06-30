@@ -189,7 +189,7 @@
 									</tmpl_if>
 								</tmpl_if>
 								<tmpl_if name="is_no_file">
-									<a href="dispatcher.php?action=delete&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> ?','Deleting Transfer')">
+									<a href="dispatcher.php?action=deleteWithData&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> (and data) ?','Deleting Transfer')">
 										<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_on.png" title="<tmpl_var name="_DELETE">" alt="" />
 									</a>
 								<tmpl_else>
@@ -399,7 +399,7 @@
 									</tmpl_if>
 								</tmpl_if>
 								<tmpl_if name="is_no_file">
-									<a href="dispatcher.php?action=delete&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> ?','Deleting Transfer')">
+									<a href="dispatcher.php?action=deleteWithData&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> (and data) ?','Deleting Transfer')">
 										<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_on.png" title="<tmpl_var name="_DELETE">" alt="" />
 									</a>
 								<tmpl_else>

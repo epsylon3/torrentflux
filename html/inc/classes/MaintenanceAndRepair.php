@@ -330,28 +330,26 @@ class MaintenanceAndRepair
 		$this->_outputMessage("fluazu-Transfers maintenance...\n");
 	
 		// cmd-files of transfer-clients
-		$cmdFiles = array();
+		$pidFiles = array();
 		if ($dirHandle = @opendir($cfg["transfer_file_path"])) {
 			while (false !== ($file = @readdir($dirHandle))) {
-				if ((strlen($file) > 3) && ((substr($file, -4, 4)) == ".cmd"))
-					array_push($cmdFiles, $file);
+				if ((strlen($file) > 3) && ((substr($file, -4, 4)) == ".pid"))
+					array_push($pidFiles, $file);
 			}
 			@closedir($dirHandle);
 		}
 		
-		foreach ($cmdFiles as $cmdFile) {
-			$transfer = (substr($cmdFile, 0, -4));
-			if (getTransferClient($transfer) == "azureus" && file_get_contents($cfg["transfer_file_path"].$cmdFile) == "q\n") {
+		foreach ($pidFiles as $pidFile) {
+			$transfer = (substr($pidFile, 0, -4));
+			if (getTransferClient($transfer) == "azureus") {
 				$sf = new StatFile($transfer, getOwner($transfer)); 
 				if ($sf->running == "0") {
-					array_push($this->_bogusTransfers, $transfer);
 					// set stopped flag in db
 					stopTransferSettings($transfer);
-					unlink($cfg["transfer_file_path"].$cmdFile);
+					unlink($cfg["transfer_file_path"].$pidFile);
 				}
 			}
 		}
-		
 		/* done */
 		$this->_outputMessage("fluazu-Transfers maintenance done.\n");
 	}
