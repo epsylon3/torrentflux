@@ -22,10 +22,10 @@
 
 	<ul style="margin-left:15px;">
 		<li><a href="#tabs-1">Torrents</a></li>
-		<tmpl_if name="enable_search"><li><a href="#tabs-4">Rechercher</a></li></tmpl_if>
+		<tmpl_if name="enable_search"><li><a href="#tabs-4"><tmpl_var name="_SEARCH"></a></li></tmpl_if>
 		<tmpl_if name="enable_wget"><li><a href="#tabs-5">wget</a></li></tmpl_if>
 		<tmpl_if name="enable_nzbperl"><li><a href="#tabs-6">NZB Perl</a></li></tmpl_if>
-		<tmpl_if name="ui_displayusers"><li><a href="#tabs-7">Utilisateurs</a></li></tmpl_if>
+		<tmpl_if name="ui_displayusers"><li><a href="#tabs-7"><tmpl_var name="_USERS"></a></li></tmpl_if>
 		<tmpl_if name="ui_displaylinks" value="1"><li><a href="#tabs-8"><tmpl_var name="_LINKS"></a></li></tmpl_if>
 		<tmpl_if name="index_page_stats"><li><a href="#tabs-9">Stats</a></li></tmpl_if>
 	</ul>

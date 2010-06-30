@@ -58,6 +58,7 @@ $tmpl->setvar('_STOPPING', $cfg['_STOPPING']);
 $tmpl->setvar('_TRANSFERFILE', $cfg['_TRANSFERFILE']);
 $tmpl->setvar('_ADMIN', $cfg['_ADMIN']);
 $tmpl->setvar('_USER', $cfg['_USER']);
+$tmpl->setvar('_USERS', $cfg['_USERS']);
 
 // username
 $tmpl->setvar('user', $cfg["user"]);
