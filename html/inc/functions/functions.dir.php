@@ -451,6 +451,13 @@ function dirsize($path)
     } elseif (!is_dir($path)) {
         return false;
     }
+    
+    if (!isWinOS())
+	{
+		$size += @trim(shell_exec('du -ksL '.tfb_shellencode($path)));
+		$size *= 1024;
+		if ($size > 0.0) return sprintf("%.0f", $size);
+	}
 
     // Iterate queue
     $queue = array($path);

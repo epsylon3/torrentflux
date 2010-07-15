@@ -422,17 +422,15 @@ foreach ($entrys as $entry) {
 		
 		if($islink == 0) // it's not a symbolic link
 		{	
-			$ssz += is_dir($dirName.$entry)? dirsize($path) : sprintf("%u", filesize($path));
-			//if ( $ssz < 0 && !isWinOS() )
-			//	$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
+			$ssz += is_dir($dirName.$entry)? dirsize($path) : sprintf("%.0f", 0.0+filesize($path));
 		}
 		elseif (!isWinOS()) // it's a symbolic link
 		{
-			$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
+			$ssz += @trim(shell_exec('du -ksL '.tfb_shellencode($path)));
 			$date = "";
 		}
 		
-		$size = formatBytesTokBMBGBTB( sprintf("%u", $ssz) );
+		$size = formatBytesTokBMBGBTB( sprintf("%.0f", $ssz) );
 		
 		if (strstr($size,"G")) $size="<b>$size</b>";
 
