@@ -27,40 +27,59 @@
  */
 function dispatcher_startTransfer($transfer) {
 	global $cfg;
-	// valid
-	if (tfb_isValidTransfer($transfer) !== true) {
-		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-		@error("Invalid Transfer", "", "", array($transfer));
+	// First check if it is a torrent added in transmission, if so the next if should not be executed
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get(array(), array("id","hashString"));
+	$torrentlist = $response[arguments][torrents];
+	foreach ($torrentlist as $aTorrent) {
+		if ( $aTorrent[hashString] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$torrentId = $aTorrent[id];
+			break;
+		}
 	}
-	// interactive
-	$interactive = (tfb_getRequestVar('interactive') == 1) ? 1 : 0;
-	// ch
-	$ch = ($interactive == 1)
-		? ClientHandler::getInstance(tfb_getRequestVar('client'))
-		: ClientHandler::getInstance(getTransferClient($transfer));
-	// permission
-	dispatcher_checkTypePermission($transfer, $ch->type, "start");
-	// start
-	if ($interactive == 1)
-		$ch->start($transfer, true, (tfb_getRequestVar('queue') == '1') ? FluxdQmgr::isRunning() : false);
-	else
-		$ch->start($transfer, false, FluxdQmgr::isRunning());
-	// check
-	if ($ch->state == CLIENTHANDLER_STATE_ERROR) { // start failed
-		$msgs = array();
-		array_push($msgs, "transfer : ".$transfer);
-		array_push($msgs, "\nmessages :");
-		$msgs = array_merge($msgs, $ch->messages);
-		AuditAction($cfg["constants"]["error"], "Start failed: ".$transfer."\n".implode("\n", $ch->messages));
-		@error("Start failed", "", "", $msgs);
+
+	if ( $isTransmissionTorrent ) {
+		$reponse = $trans->start($torrentId);
+		if ( $response['result'] != "success" ) @error("Start failed", "", "", $response['result']);
 	} else {
-		if (($interactive == 1) && (isset($_REQUEST["close"]))) {
-			echo '<script  language="JavaScript">';
-			echo ' window.opener.location.reload(true);';
-			echo ' window.close();';
-			echo '</script>';
-			// Prevent dispatcher_exit from running and redirecting client, otherwise script won't be executed.
-			exit();
+	// valid
+		if (tfb_isValidTransfer($transfer) !== true) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+			@error("Invalid Transfer", "", "", array($transfer));
+		}
+		// interactive
+		$interactive = (tfb_getRequestVar('interactive') == 1) ? 1 : 0;
+		// ch
+		$ch = ($interactive == 1)
+			? ClientHandler::getInstance(tfb_getRequestVar('client'))
+			: ClientHandler::getInstance(getTransferClient($transfer));
+		// permission
+		dispatcher_checkTypePermission($transfer, $ch->type, "start");
+		// start
+		if ($interactive == 1)
+			$ch->start($transfer, true, (tfb_getRequestVar('queue') == '1') ? FluxdQmgr::isRunning() : false);
+		else
+			$ch->start($transfer, false, FluxdQmgr::isRunning());
+		// check
+		if ($ch->state == CLIENTHANDLER_STATE_ERROR) { // start failed
+			$msgs = array();
+			array_push($msgs, "transfer : ".$transfer);
+			array_push($msgs, "\nmessages :");
+			$msgs = array_merge($msgs, $ch->messages);
+			AuditAction($cfg["constants"]["error"], "Start failed: ".$transfer."\n".implode("\n", $ch->messages));
+			@error("Start failed", "", "", $msgs);
+		} else {
+			if (($interactive == 1) && (isset($_REQUEST["close"]))) {
+				echo '<script  language="JavaScript">';
+				echo ' window.opener.location.reload(true);';
+				echo ' window.close();';
+				echo '</script>';
+				// Prevent dispatcher_exit from running and redirecting client, otherwise script won't be executed.
+				exit();
+			}
 		}
 	}
 }
@@ -72,20 +91,40 @@ function dispatcher_startTransfer($transfer) {
  */
 function dispatcher_stopTransfer($transfer) {
 	global $cfg;
-	// valid
-	if (tfb_isValidTransfer($transfer) !== true) {
-		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-		@error("Invalid Transfer", "", "", array($transfer));
+
+	// First check if it is a torrent added in transmission, if so the next if should not be executed
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get(array(), array("id","hashString"));
+	$torrentlist = $response[arguments][torrents];
+	foreach ($torrentlist as $aTorrent) {
+		if ( $aTorrent[hashString] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$torrentId = $aTorrent[id];
+			break;
+		}
 	}
-	// ch
-	$ch = ClientHandler::getInstance(getTransferClient($transfer));
-	// permission
-	dispatcher_checkTypePermission($transfer, $ch->type, "stop");
-	// stop
-	$ch->stop($transfer);
-	// check
-	if (count($ch->messages) > 0)
-    	@error("There were Problems", "", "", $ch->messages);
+
+	if ( $isTransmissionTorrent ) {
+		$response = $trans->stop($torrentId);
+		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
+	} else {
+		// valid
+		if (tfb_isValidTransfer($transfer) !== true) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+			@error("Invalid Transfer", "", "", array($transfer));
+		}
+		// ch
+		$ch = ClientHandler::getInstance(getTransferClient($transfer));
+		// permission
+		dispatcher_checkTypePermission($transfer, $ch->type, "stop");
+		// stop
+		$ch->stop($transfer);
+		// check
+		if (count($ch->messages) > 0)
+		@error("There were Problems", "", "", $ch->messages);
+	}
 }
 
 /**
@@ -136,37 +175,57 @@ function dispatcher_forceStopTransfer($transfer, $pid) {
  */
 function dispatcher_deleteTransfer($transfer) {
 	global $cfg;
-	// valid
-	if (tfb_isValidTransfer($transfer) !== true) {
-		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-		@error("Invalid Transfer", "", "", array($transfer));
+
+	// First check if it is a torrent added in transmission, if so the next if should not be executed
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get(array(), array("id","hashString"));
+	$torrentlist = $response[arguments][torrents];
+	foreach ($torrentlist as $aTorrent) {
+		if ( $aTorrent[hashString] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$torrentId = $aTorrent[id];
+			break;
+		}
 	}
-	// client
-	$client = getTransferClient($transfer);
-	// ch
-	$ch = ClientHandler::getInstance($client);
-	// permission
-	dispatcher_checkTypePermission($transfer, $ch->type, "delete");
-	// is transfer running ?
-	$tRunningFlag = isTransferRunning($transfer);
-	if ($tRunningFlag) {
-		// stop first
-		$ch->stop($transfer);
-		if (count($ch->messages) > 0)
-    		@error("There were Problems", "", "", $ch->messages);
+
+	if ( $isTransmissionTorrent ) {
+		$response = $trans->remove($torrentId);
+		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
+	} else {
+		// valid
+		if (tfb_isValidTransfer($transfer) !== true) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+			@error("Invalid Transfer", "", "", array($transfer));
+		}
+		// client
+		$client = getTransferClient($transfer);
+		// ch
+		$ch = ClientHandler::getInstance($client);
+		// permission
+		dispatcher_checkTypePermission($transfer, $ch->type, "delete");
 		// is transfer running ?
 		$tRunningFlag = isTransferRunning($transfer);
-	}
-	// if it was running... hope the thing is down...
-	// only continue if it is
-	if ($tRunningFlag) {
-		@error("Delete failed, Transfer is running and stop failed", "", "", $ch->messages);
-	} else {
-		// delete
-		$ch->delete($transfer);
-		// check
-		if (count($ch->messages) > 0)
-	    	@error("There were Problems", "", "", $ch->messages);
+		if ($tRunningFlag) {
+			// stop first
+			$ch->stop($transfer);
+			if (count($ch->messages) > 0)
+			@error("There were Problems", "", "", $ch->messages);
+			// is transfer running ?
+			$tRunningFlag = isTransferRunning($transfer);
+		}
+		// if it was running... hope the thing is down...
+		// only continue if it is
+		if ($tRunningFlag) {
+			@error("Delete failed, Transfer is running and stop failed", "", "", $ch->messages);
+		} else {
+			// delete
+			$ch->delete($transfer);
+			// check
+			if (count($ch->messages) > 0)
+			@error("There were Problems", "", "", $ch->messages);
+		}
 	}
 }
 
@@ -177,40 +236,61 @@ function dispatcher_deleteTransfer($transfer) {
  */
 function dispatcher_deleteDataTransfer($transfer) {
 	global $cfg;
-	// valid
-	if (tfb_isValidTransfer($transfer) !== true) {
-		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-		@error("Invalid Transfer", "", "", array($transfer));
-	}
-	// client
-	$client = getTransferClient($transfer);
-	// ch
-	$ch = ClientHandler::getInstance($client);
-	// permission
-	dispatcher_checkTypePermission($transfer, $ch->type, "deleteWithData");
-	// is transfer running ?
-	$tRunningFlag = isTransferRunning($transfer);
-	if ($tRunningFlag) {
-		// stop first
-		$ch->stop($transfer);
-		if (count($ch->messages) > 0)
-    		@error("There were Problems", "", "", $ch->messages);
+
+print($transfer);
+exit;
+        require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+        $isTransmissionTorrent = false;
+        $trans = new Transmission();
+        $response = $trans->get( array(), array('hashString', 'id', 'name') );
+        foreach ( $response[arguments][torrents] as $aTorrent ) { 
+                if ( $aTorrent['hashString'] == $transfer ) { 
+                        $isTransmissionTorrent = true;
+                        $theTorrent = $aTorrent;
+                        break;
+                }   
+        }
+
+
+	if ( $isTransmissionTorrent ) {
+		$response = $trans->remove($theTorrent['id'], true);
+		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
+	} else {
+		// valid
+		if (tfb_isValidTransfer($transfer) !== true) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+			@error("Invalid Transfer", "", "", array($transfer));
+		}
+		// client
+		$client = getTransferClient($transfer);
+		// ch
+		$ch = ClientHandler::getInstance($client);
+		// permission
+		dispatcher_checkTypePermission($transfer, $ch->type, "deleteWithData");
 		// is transfer running ?
 		$tRunningFlag = isTransferRunning($transfer);
-	}
-	// if it was running... hope the thing is down...
-	// only continue if it is
-	if ($tRunningFlag) {
-		@error("Delete with Data failed, Transfer is running and stop failed", "", "", $ch->messages);
-	} else {
-		// transferData
-		$msgsDelete = deleteTransferData($transfer);
-		if (count($msgsDelete) > 0)
-			@error("There were Problems deleting Transfer-Data", "", "", $msgsDelete);
-		// transfer
-		$ch->delete($transfer);
-		if (count($ch->messages) > 0)
+		if ($tRunningFlag) {
+			// stop first
+			$ch->stop($transfer);
+			if (count($ch->messages) > 0)
 			@error("There were Problems", "", "", $ch->messages);
+			// is transfer running ?
+			$tRunningFlag = isTransferRunning($transfer);
+		}
+		// if it was running... hope the thing is down...
+		// only continue if it is
+		if ($tRunningFlag) {
+			@error("Delete with Data failed, Transfer is running and stop failed", "", "", $ch->messages);
+		} else {
+			// transferData
+			$msgsDelete = deleteTransferData($transfer);
+			if (count($msgsDelete) > 0)
+				@error("There were Problems deleting Transfer-Data", "", "", $msgsDelete);
+			// transfer
+			$ch->delete($transfer);
+			if (count($ch->messages) > 0)
+				@error("There were Problems", "", "", $ch->messages);
+		}
 	}
 }
 
@@ -433,51 +513,67 @@ function dispatcher_multi($action) {
 		// url-decode
 		$transfer = urldecode($element);
 
-		// is valid transfer ? + check permissions
-		$invalid = true;
-		if (tfb_isValidTransfer($transfer) === true) {
-			if (substr($transfer, -8) == ".torrent") {
-				// this is a torrent-client
-				$invalid = false;
-			} else if (substr($transfer, -5) == ".wget") {
-				// this is wget.
-				$invalid = false;
-				// is enabled ?
-				if ($cfg["enable_wget"] == 0) {
-					$invalid = true;
-					AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use wget");
-					array_push($dispatcherMessages, "wget is disabled : ".$transfer);
-				} else if ($cfg["enable_wget"] == 1) {
-					if (!$cfg['isAdmin']) {
+		require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+		$isTransmissionTorrent = false;
+		$trans = new Transmission();
+		$response = $trans->get(array(), array("id","hashString"));
+		$torrentlist = $response[arguments][torrents];
+		foreach ($torrentlist as $aTorrent) {
+			if ( $aTorrent[hashString] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$torrentId = $aTorrent[id];
+				break;
+			}    
+		}    
+
+		if ( !$isTransmissionTorrent ) {
+			// is valid transfer ? + check permissions
+			$invalid = true;
+			if (tfb_isValidTransfer($transfer) === true) {
+				if (substr($transfer, -8) == ".torrent") {
+					// this is a torrent-client
+					$invalid = false;
+				} else if (substr($transfer, -5) == ".wget") {
+					// this is wget.
+					$invalid = false;
+					// is enabled ?
+					if ($cfg["enable_wget"] == 0) {
 						$invalid = true;
 						AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use wget");
-						array_push($dispatcherMessages, "wget is disabled for users : ".$transfer);
+						array_push($dispatcherMessages, "wget is disabled : ".$transfer);
+					} else if ($cfg["enable_wget"] == 1) {
+						if (!$cfg['isAdmin']) {
+							$invalid = true;
+							AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use wget");
+							array_push($dispatcherMessages, "wget is disabled for users : ".$transfer);
+						}
 					}
-				}
-			} else if (substr($transfer, -4) == ".nzb") {
-				// This is nzbperl.
-				$invalid = false;
-				if ($cfg["enable_nzbperl"] == 0) {
-					$invalid = true;
-					AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use nzbperl");
-					array_push($dispatcherMessages, "nzbperl is disabled : ".$transfer);
-				} else if ($cfg["enable_nzbperl"] == 1) {
-					if (!$cfg['isAdmin']) {
+				} else if (substr($transfer, -4) == ".nzb") {
+					// This is nzbperl.
+					$invalid = false;
+					if ($cfg["enable_nzbperl"] == 0) {
 						$invalid = true;
 						AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use nzbperl");
-						array_push($dispatcherMessages, "nzbperl is disabled for users : ".$transfer);
+						array_push($dispatcherMessages, "nzbperl is disabled : ".$transfer);
+					} else if ($cfg["enable_nzbperl"] == 1) {
+						if (!$cfg['isAdmin']) {
+							$invalid = true;
+							AuditAction($cfg["constants"]["error"], "ILLEGAL ACCESS: ".$cfg["user"]." tried to use nzbperl");
+							array_push($dispatcherMessages, "nzbperl is disabled for users : ".$transfer);
+						}
 					}
 				}
 			}
-		}
-		if ($invalid) {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$cfg["user"]." tried to ".$action." ".$transfer);
-			array_push($dispatcherMessages, "Invalid Transfer : ".$transfer);
-			continue;
-		}
+			if ($invalid) {
+				AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$cfg["user"]." tried to ".$action." ".$transfer);
+				array_push($dispatcherMessages, "Invalid Transfer : ".$transfer);
+				continue;
+			}
 
-		// client
-		$client = getTransferClient($transfer);
+			// client
+			$client = getTransferClient($transfer);
+
+		}
 
 		// is transfer running ?
 		$tRunningFlag = isTransferRunning($transfer);
@@ -609,106 +705,127 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 	global $cfg;
 	$filename = "";
 	$downloadMessages = array();
+	$origurl = $url; // Added by deadeyes; copied as later $url gets changed
 	if (!empty($url)) {
-		$arURL = explode("/", $url);
-		$filename = urldecode($arURL[count($arURL)-1]); // get the file name
-		$filename = str_replace(array("'",","), "", $filename);
-		$filename = stripslashes($filename);
-		// Check to see if url has something like ?passkey=12345
-		// If so remove it.
-		if (($point = strrpos($filename, "?")) !== false )
-			$filename = substr($filename, 0, $point);
-		$ret = strrpos($filename, ".");
-		if ($ret === false) {
-			$filename .= $ext;
+		// Added by deadeyes to detect a magnet link
+		if ( $type === 'torrent' && strlen( stristr( $url, 'magnet:' ) ) > 0 ) {
+			// We have a magnet link :D
+			require_once('inc/classes/Transmission.class.php');
+			$rpc = new Transmission();
+
+			$result = $rpc->add( $url, '', array ('paused'=>true)  );
+
+			//require_once('inc/classes/TransmissionRpc.php');
+			//$myclass = new TransmissionRpc("127.0.0.1", "9091", "me", "mypassword");
+			//$myclass->login();
+
+			//$arguments = array ( "filename" => $url, "paused" => true );
+			//$rpccall = array("arguments" => $arguments,"method" => "torrent-add") ;
+			//$myclass->doRpcCall($rpccall, $result, $status);
+
+			// closing connection
+			//$myclass->logout();
 		} else {
-			if (!strcmp(strtolower(substr($filename, -(strlen($ext)))), $ext) == 0)
+			$arURL = explode("/", $url);
+			$filename = urldecode($arURL[count($arURL)-1]); // get the file name
+			$filename = str_replace(array("'",","), "", $filename);
+			$filename = stripslashes($filename);
+			// Check to see if url has something like ?passkey=12345
+			// If so remove it.
+			if (($point = strrpos($filename, "?")) !== false )
+				$filename = substr($filename, 0, $point);
+			$ret = strrpos($filename, ".");
+			if ($ret === false) {
 				$filename .= $ext;
-		}
-		$url = str_replace(" ", "%20", $url);
-		// This is to support Sites that pass an id along with the url for downloads.
-		$tmpId = tfb_getRequestVar("id");
-		if(!empty($tmpId))
-			$url .= "&id=".$tmpId;
-		// retrieve the file
-		require_once("inc/classes/SimpleHTTP.php");
-		$content = "";
-		switch ($type) {
-			default:
-			case 'torrent':
-				$content = SimpleHTTP::getTorrent($url);
-				break;
-			case 'nzb':
-				$content = SimpleHTTP::getNzb($url);
-				break;
-		}
-		if ((SimpleHTTP::getState() == SIMPLEHTTP_STATE_OK) && (strlen($content) > 0)) {
-			$fileNameBackup = $filename;
-			$filename = SimpleHTTP::getFilename();
-			if ($filename != "") {
-				$filename = ((strpos($filename, $ext) !== false))
-					? tfb_cleanFileName($filename)
-					: tfb_cleanFileName($filename.$ext);
+			} else {
+				if (!strcmp(strtolower(substr($filename, -(strlen($ext)))), $ext) == 0)
+					$filename .= $ext;
 			}
-			if (($filename == "") || ($filename === false) || (transferExists($filename))) {
-				$filename = tfb_cleanFileName($fileNameBackup);
-				if (($filename === false) || (transferExists($filename))) {
-					$filename = tfb_cleanFileName($url.$ext);
+			$url = str_replace(" ", "%20", $url);
+			// This is to support Sites that pass an id along with the url for downloads.
+			$tmpId = tfb_getRequestVar("id");
+			if(!empty($tmpId))
+				$url .= "&id=".$tmpId;
+			// retrieve the file
+			require_once("inc/classes/SimpleHTTP.php");
+			$content = "";
+			switch ($type) {
+				default:
+				case 'torrent':
+					$content = SimpleHTTP::getTorrent($url);
+					break;
+				case 'nzb':
+					$content = SimpleHTTP::getNzb($url);
+					break;
+			}
+			if ((SimpleHTTP::getState() == SIMPLEHTTP_STATE_OK) && (strlen($content) > 0)) {
+				$fileNameBackup = $filename;
+				$filename = SimpleHTTP::getFilename();
+				if ($filename != "") {
+					$filename = ((strpos($filename, $ext) !== false))
+						? tfb_cleanFileName($filename)
+						: tfb_cleanFileName($filename.$ext);
+				}
+				if (($filename == "") || ($filename === false) || (transferExists($filename))) {
+					$filename = tfb_cleanFileName($fileNameBackup);
 					if (($filename === false) || (transferExists($filename))) {
-						$filename = tfb_cleanFileName(md5($url.strval(@microtime())).$ext);
+						$filename = tfb_cleanFileName($url.$ext);
 						if (($filename === false) || (transferExists($filename))) {
-							// Error
-							array_push($downloadMessages , "failed to get a valid transfer-filename for ".$url);
+							$filename = tfb_cleanFileName(md5($url.strval(@microtime())).$ext);
+							if (($filename === false) || (transferExists($filename))) {
+								// Error
+								array_push($downloadMessages , "failed to get a valid transfer-filename for ".$url);
+							}
 						}
 					}
 				}
-			}
-			if (empty($downloadMessages)) { // no messages
-				// check if content contains html
-				if ($cfg['debuglevel'] > 0) {
-					if (strpos($content, "<br />") !== false)
-						AuditAction($cfg["constants"]["debug"], "download-content contained html : ".htmlentities(addslashes($url), ENT_QUOTES));
-				}
-				if (is_file($cfg["transfer_file_path"].$filename)) {
-					// Error
-					array_push($downloadMessages, "the file ".$filename." already exists on the server.");
-				} else {
-					// write to file
-					$handle = false;
-					$handle = @fopen($cfg["transfer_file_path"].$filename, "w");
-					if (!$handle) {
-						array_push($downloadMessages, "cannot open ".$filename." for writing.");
+				if (empty($downloadMessages)) { // no messages
+					// check if content contains html
+					if ($cfg['debuglevel'] > 0) {
+						if (strpos($content, "<br />") !== false)
+							AuditAction($cfg["constants"]["debug"], "download-content contained html : ".htmlentities(addslashes($url), ENT_QUOTES));
+					}
+					if (is_file($cfg["transfer_file_path"].$filename)) {
+						// Error
+						array_push($downloadMessages, "the file ".$filename." already exists on the server.");
 					} else {
-						$result = @fwrite($handle, $content);
-						@fclose($handle);
-						if ($result === false)
-							array_push($downloadMessages, "cannot write content to ".$filename.".");
+						// write to file
+						$handle = false;
+						$handle = @fopen($cfg["transfer_file_path"].$filename, "w");
+						if (!$handle) {
+							array_push($downloadMessages, "cannot open ".$filename." for writing.");
+						} else {
+							$result = @fwrite($handle, $content);
+							@fclose($handle);
+							if ($result === false)
+								array_push($downloadMessages, "cannot write content to ".$filename.".");
+						}
 					}
 				}
+			} else {
+				$msgs = SimpleHTTP::getMessages();
+				if (count($msgs) > 0)
+					$downloadMessages = array_merge($downloadMessages, $msgs);
 			}
-		} else {
-			$msgs = SimpleHTTP::getMessages();
-			if (count($msgs) > 0)
-				$downloadMessages = array_merge($downloadMessages, $msgs);
-		}
-		if (empty($downloadMessages)) { // no messages
-			AuditAction($cfg["constants"]["url_upload"], $filename);
-			// inject
-			injectTransfer($filename);
-			// instant action ?
-			$actionId = tfb_getRequestVar('aid');
-			if ($actionId > 1) {
-				$ch = ClientHandler::getInstance(getTransferClient($filename));
-				switch ($actionId) {
-					case 3:
-						$ch->start($filename, false, true);
-						break;
-					case 2:
-						$ch->start($filename, false, false);
-						break;
+			if (empty($downloadMessages)) { // no messages
+				AuditAction($cfg["constants"]["url_upload"], $filename);
+				// inject
+				injectTransfer($filename);
+				// instant action ?
+				$actionId = tfb_getRequestVar('aid');
+				if ($actionId > 1) {
+					$ch = ClientHandler::getInstance(getTransferClient($filename));
+					switch ($actionId) {
+						case 3:
+							$ch->start($filename, false, true);
+							break;
+						case 2:
+							$ch->start($filename, false, false);
+							break;
+					}
+					if (count($ch->messages) > 0)
+				$downloadMessages = array_merge($downloadMessages, $ch->messages);
 				}
-				if (count($ch->messages) > 0)
-               		$downloadMessages = array_merge($downloadMessages, $ch->messages);
 			}
 		}
 	} else {

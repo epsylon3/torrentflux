@@ -29,23 +29,43 @@ function transfer_init() {
 	$transfer = tfb_getRequestVar('transfer');
 	if (empty($transfer))
 		@error("missing params", "", "", array('transfer'));
-	// validate transfer
-	if (tfb_isValidTransfer($transfer) !== true) {
-		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-		@error("Invalid Transfer", "", "", array($transfer));
+	
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get( array(), array('hashString', 'id', 'name') );
+	foreach ( $response[arguments][torrents] as $aTorrent ) {
+		if ( $aTorrent[hashString] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$theTorrent = $aTorrent;
+			break;
+		}
 	}
-	// permission
-	if ((!$cfg['isAdmin']) && (!IsOwner($cfg["user"], getOwner($transfer)))) {
-		AuditAction($cfg["constants"]["error"], "ACCESS DENIED: ".$transfer);
-		@error("Access Denied", "", "", array($transfer));
+	
+	if ( $isTransmissionTorrent ) {
+		$transferLabel = (strlen($theTorrent[name]) >= 39) ? substr($theTorrent[name], 0, 35)."..." : $theTorrent[name];
+		$tmpl->setvar('transfer', $theTorrent[hashString]);
+		$tmpl->setvar('transferLabel', $transferLabel);
+		$tmpl->setvar('transfer_exists', 0);
+	} else {
+		// validate transfer
+		if (tfb_isValidTransfer($transfer) !== true) {
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+			@error("Invalid Transfer", "", "", array($transfer));
+		}
+		// permission
+		if ((!$cfg['isAdmin']) && (!IsOwner($cfg["user"], getOwner($transfer)))) {
+			AuditAction($cfg["constants"]["error"], "ACCESS DENIED: ".$transfer);
+			@error("Access Denied", "", "", array($transfer));
+		}
+		// get label
+	        $transferLabel = preg_replace("#\.torrent$#","",$transfer);
+	        $transferLabel = (strlen($transferLabel) >= 39) ? substr($transferLabel, 0, 35)."..." : $transferLabel;
+		// set transfer vars
+		$tmpl->setvar('transfer', $transfer);
+		$tmpl->setvar('transferLabel', $transferLabel);
+		$tmpl->setvar('transfer_exists', (transferExists($transfer)) ? 1 : 0);
 	}
-	// get label
-	$transferLabel = preg_replace("#\.torrent$#","",$transfer);
-	$transferLabel = (strlen($transferLabel) >= 39) ? substr($transferLabel, 0, 35)."..." : $transferLabel;
-	// set transfer vars
-	$tmpl->setvar('transfer', $transfer);
-	$tmpl->setvar('transferLabel', $transferLabel);
-	$tmpl->setvar('transfer_exists', (transferExists($transfer)) ? 1 : 0);
 }
 
 /**
@@ -163,26 +183,52 @@ function transfer_setFileVars() {
 				@fclose($fd);
 			}
 			$transferSizeSum = 0;
-			if ((isset($btmeta)) && (is_array($btmeta)) && (isset($btmeta['info']))) {
-				if (array_key_exists('files', $btmeta['info'])) {
-					foreach ($btmeta['info']['files'] as $filenum => $file) {
-						$name = (is_array($file['path'])) ? (implode("/", ($file['path']))) : $file['path'];
-						$size = ((isset($file['length'])) && (is_numeric($file['length']))) ? $file['length'] : 0;
+			require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+			$isTransmissionTorrent = false;
+			$trans = new Transmission();
+			$response = $trans->get( array(), array('hashString', 'id', 'name') );
+			foreach ( $response[arguments][torrents] as $aTorrent ) {
+				if ( $aTorrent[hashString] == $transfer ) {
+					$isTransmissionTorrent = true;
+					$theTorrent = $aTorrent;
+					break;
+				}
+			}
+			if ( $isTransmissionTorrent ) {
+				$response = $trans->get( $theTorrent[id], array('files') );
+				foreach ( $response[arguments][torrents][0][files] as $aFile ) {
+					$transferSizeSum += $aFile[length];
+					$fileNameParts = explode ( "/", $aFile[name] );
+					$name = $fileNameParts[ count($fileNameParts) - 1 ];
+					$size = $aFile[length];
+					array_push($transferFilesList, array(
+						'name' => $name,
+						'size' => ($size != 0) ? formatBytesTokBMBGBTB($size) : 0
+						)
+					);
+				}
+			} else {
+				if ((isset($btmeta)) && (is_array($btmeta)) && (isset($btmeta['info']))) {
+					if (array_key_exists('files', $btmeta['info'])) {
+						foreach ($btmeta['info']['files'] as $filenum => $file) {
+							$name = (is_array($file['path'])) ? (implode("/", ($file['path']))) : $file['path'];
+							$size = ((isset($file['length'])) && (is_numeric($file['length']))) ? $file['length'] : 0;
+							$transferSizeSum += $size;
+							array_push($transferFilesList, array(
+								'name' => $name,
+								'size' => ($size != 0) ? formatBytesTokBMBGBTB($size) : 0
+								)
+							);
+						}
+					} else {
+						$size = $btmeta["info"]["piece length"] * (strlen($btmeta["info"]["pieces"]) / 20);
 						$transferSizeSum += $size;
 						array_push($transferFilesList, array(
-							'name' => $name,
-							'size' => ($size != 0) ? formatBytesTokBMBGBTB($size) : 0
+							'name' => $btmeta["info"]["name"],
+							'size' => formatBytesTokBMBGBTB($size)
 							)
 						);
 					}
-				} else {
-					$size = $btmeta["info"]["piece length"] * (strlen($btmeta["info"]["pieces"]) / 20);
-					$transferSizeSum += $size;
-					array_push($transferFilesList, array(
-						'name' => $btmeta["info"]["name"],
-						'size' => formatBytesTokBMBGBTB($size)
-						)
-					);
 				}
 			}
 			if (empty($transferFilesList)) {
