@@ -39,6 +39,22 @@ function getTransferPid($transfer) {
  */
 function isTransferRunning($transfer) {
 	global $cfg;
+
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get(array(), array("id","hashString","status"));
+	$torrentlist = $response[arguments][torrents];
+	foreach ($torrentlist as $aTorrent) {
+		if ( $aTorrent[hashString] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$torrentId = $aTorrent[id];
+			if ( $aTorrent['status'] == 16 ) return false;
+			else return true;
+			break;
+		}
+	}
+	
 	return file_exists($cfg["transfer_file_path"].$transfer.'.pid');
 }
 

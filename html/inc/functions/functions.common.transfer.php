@@ -150,29 +150,48 @@ function resetTransferTotals($transfer, $delete = false) {
 function deleteTransferData($transfer) {
 	global $cfg, $transfers;
 	$msgs = array();
-	if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
-		// only torrent
-		if (substr($transfer, -8) != ".torrent")
-			return $msgs;
-		// delete data
-		$datapath = getTransferDatapath($transfer);
-		if (($datapath != "") && ($datapath != ".")) {
-			$targetPath = getTransferSavepath($transfer).$datapath;
-			if (tfb_isValidPath($targetPath)) {
-				if ((@is_dir($targetPath)) || (@is_file($targetPath))) {
-					avddelete($targetPath);
-					AuditAction($cfg["constants"]["fm_delete"], $targetPath);
-				}
-			} else {
-				$msg = "ILLEGAL DELETE: ".$cfg["user"]." attempted to delete data of ".$transfer;
-				AuditAction($cfg["constants"]["error"], $msg);
-				array_push($msgs, $msg);
-			}
+
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get( array(), array('hashString', 'id', 'name') );
+	foreach ( $response[arguments][torrents] as $aTorrent ) {
+		if ( $aTorrent['hashString'] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$theTorrent = $aTorrent;
+			break;
 		}
+	}
+
+
+	if ( $isTransmissionTorrent ) {
+		$response = $trans->remove($theTorrent['id'], true);
+		if ( $response[result] != "success" ) @error("Delete of torrent failed", "", "", $response[result]);
 	} else {
-		$msg = "ILLEGAL DELETE: ".$cfg["user"]." attempted to delete data of ".$transfer;
-		AuditAction($cfg["constants"]["error"], $msg);
-		array_push($msgs, $msg);
+		if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
+			// only torrent
+			if (substr($transfer, -8) != ".torrent")
+				return $msgs;
+			// delete data
+			$datapath = getTransferDatapath($transfer);
+			if (($datapath != "") && ($datapath != ".")) {
+				$targetPath = getTransferSavepath($transfer).$datapath;
+				if (tfb_isValidPath($targetPath)) {
+					if ((@is_dir($targetPath)) || (@is_file($targetPath))) {
+						avddelete($targetPath);
+						AuditAction($cfg["constants"]["fm_delete"], $targetPath);
+					}
+				} else {
+					$msg = "ILLEGAL DELETE: ".$cfg["user"]." attempted to delete data of ".$transfer;
+					AuditAction($cfg["constants"]["error"], $msg);
+					array_push($msgs, $msg);
+				}
+			}
+		} else {
+			$msg = "ILLEGAL DELETE: ".$cfg["user"]." attempted to delete data of ".$transfer;
+			AuditAction($cfg["constants"]["error"], $msg);
+			array_push($msgs, $msg);
+		}
 	}
 	return $msgs;
 }
@@ -236,48 +255,95 @@ function calcTransferSavepath($transfer, $profile = NULL) {
  */
 function setFilePriority($transfer) {
     global $cfg;
-    // we will use this to determine if we should create a prio file.
-    // if the user passes all 1's then they want the whole thing.
-    // so we don't need to create a prio file.
-    // if there is a -1 in the array then they are requesting
-    // to skip a file. so we will need to create the prio file.
-    $okToCreate = false;
-    if (!empty($transfer)) {
-        $fileName = $cfg["transfer_file_path"].$transfer.".prio";
-        $result = array();
-        $files = array();
-        if (isset($_REQUEST['files'])) {
-        	$filesTemp = (is_array($_REQUEST['files']))
-        		? $_REQUEST['files']
-        		: array($_REQUEST['files']);
-        	$files = array_filter($filesTemp, "getFile");
-        }
-        // if there are files to get then process and create a prio file.
-        if (count($files) > 0) {
-            for ($i=0; $i <= tfb_getRequestVar('count'); $i++) {
-                if (in_array($i,$files)) {
-                    array_push($result, 1);
-                } else {
-                    $okToCreate = true;
-                    array_push($result, -1);
-                }
-            }
-            if ($okToCreate) {
-                $fp = fopen($fileName, "w");
-                fwrite($fp,tfb_getRequestVar('filecount').",");
-                fwrite($fp,implode($result,','));
-                fclose($fp);
-            } else {
-                // No files to skip so must be wanting them all.
-                // So we will remove the prio file.
-                @unlink($fileName);
-            }
-        } else {
-            // No files selected so must be wanting them all.
-            // So we will remove the prio file.
-            @unlink($fileName);
-        }
-    }
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get( array(), array('hashString', 'id', 'name') );
+	foreach ( $response[arguments][torrents] as $aTorrent ) {
+		if ( $aTorrent['hashString'] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$theTorrent = $aTorrent;
+			break;
+		}
+	}
+
+	if ( $isTransmissionTorrent ) {
+		foreach ($_REQUEST[files] as $fileid ) {
+			$selectedFiles[] = (int)$fileid;
+		}
+		# Get files that are wanted or not for download, then we can compare.
+		$responseWantedFiles = $trans->get( $theTorrent[id], array('wanted') );
+		$wantedFiles = $responseWantedFiles[arguments][torrents][0][wanted];
+		
+		$thearray = array_fill(0, count($wantedFiles), 0);
+		foreach ( $selectedFiles as $fileid ) {
+			$thearray[$fileid] = 1;
+		}
+		
+$counter = 0;
+		foreach ( $wantedFiles as $fileid => $wanted ) {
+			if ( $thearray[$counter] == 1 && $wantedFiles[$counter] == 0 ) { // the file is not marked as selected in the gui but it has been saved as "wanted"
+					$includeFiles[]=(int)$counter; // deselect this files
+			}
+			if ( $thearray[$counter] == 0 && $wantedFiles[$counter] == 1 ) { // the file is not marked as selected in the gui but it has been saved as "wanted"
+				$excludeFiles[]=(int)$counter; // deselect this files
+			}
+$counter++;
+		}
+		
+		if (count($includeFiles)>0) {
+			$includeFiles = array_values($includeFiles);
+			$response = $trans->set( $theTorrent[id], array("files-wanted" => $includeFiles) );
+		}
+		if (count($excludeFiles)>0) {
+			$excludeFiles = array_values($excludeFiles);
+			$response = $trans->set( $theTorrent[id], array("files-unwanted" => $excludeFiles) );
+		}
+#print_r($response);
+	} else {
+	    // we will use this to determine if we should create a prio file.
+	    // if the user passes all 1's then they want the whole thing.
+	    // so we don't need to create a prio file.
+	    // if there is a -1 in the array then they are requesting
+	    // to skip a file. so we will need to create the prio file.
+	    $okToCreate = false;
+	    if (!empty($transfer)) {
+		$fileName = $cfg["transfer_file_path"].$transfer.".prio";
+		$result = array();
+		$files = array();
+		if (isset($_REQUEST['files'])) {
+			$filesTemp = (is_array($_REQUEST['files']))
+				? $_REQUEST['files']
+				: array($_REQUEST['files']);
+			$files = array_filter($filesTemp, "getFile");
+		}
+		// if there are files to get then process and create a prio file.
+		if (count($files) > 0) {
+		    for ($i=0; $i <= tfb_getRequestVar('count'); $i++) {
+			if (in_array($i,$files)) {
+			    array_push($result, 1);
+			} else {
+			    $okToCreate = true;
+			    array_push($result, -1);
+			}
+		    }
+		    if ($okToCreate) {
+			$fp = fopen($fileName, "w");
+			fwrite($fp,tfb_getRequestVar('filecount').",");
+			fwrite($fp,implode($result,','));
+			fclose($fp);
+		    } else {
+			// No files to skip so must be wanting them all.
+			// So we will remove the prio file.
+			@unlink($fileName);
+		    }
+		} else {
+		    // No files selected so must be wanting them all.
+		    // So we will remove the prio file.
+		    @unlink($fileName);
+		}
+	    }
+	}
 }
 
 /**

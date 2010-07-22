@@ -85,8 +85,123 @@ $sortOrder = tfb_getRequestVar("so");
 $tmpl->setvar('sortOrder', (empty($sortOrder)) ? $cfg["index_page_sortorder"] : $sortOrder);
 // t-list
 $arList = getTransferArray($sortOrder);
+//print_r($arList);
 $progress_color = "#00ff00";
 $bar_width = "4";
+
+require ('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php') ;
+$rpc = new Transmission ();
+$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
+$result = $rpc->get ( array(), $fields );
+//print_r($result[arguments][torrents]);
+
+// eta
+//  -1 : Done
+//  -2 : Unknown
+
+foreach ($result[arguments][torrents] as $aTorrent)
+{
+#	print_r($aTorrent);
+	// fill in eta
+	if ( $aTorrent[eta] == '-1' ) {
+		$eta = 'n/a';
+	} elseif ( $aTorrent[eta] == '-2' ) {
+		$eta = 'Unknown';
+	} else {
+		$eta = convertTime( $aTorrent[eta] );
+	}
+
+	$status = $aTorrent[status];
+	switch ($aTorrent[status]) {
+	    case 16:
+		$status = "Stopped";
+		$transferRunning = 0;
+		break;
+	    case 4:
+		if ( $aTorrent[rateDownload] == 0 ) {
+			$status = "Idle";
+		} else {
+			$status = "Downloading";
+		}
+		$transferRunning = 1;
+		break;
+	    case 8:
+		$status = "Seeding";
+		$transferRunning = 1;
+		break;
+	}
+
+	$tArray = array(
+		'is_owner' => true,
+		'transferRunning' => $transferRunning,
+		'url_entry' => $aTorrent[hashString],
+		'hd_image' => 'black.gif',
+		'hd_title' => $nothing,
+		'displayname' => $aTorrent[name],
+		'transferowner' => 'administrator',
+		'format_af_size' => formatBytesTokBMBGBTB( $aTorrent[totalSize] ),
+		'format_downtotal' => $nothing,
+		'format_uptotal' => $nothing,
+		'statusStr' => $status,
+		'graph_width' => floor($aTorrent[percentDone]*100),
+		'percentage' => floor($aTorrent[percentDone]*100) . '%',
+		'progress_color' => '#00ff00',
+		'bar_width' => 4,
+		'background' => '#000000',
+		'100_graph_width' => 100 - floor($aTorrent[percentDone]*100),
+		'down_speed' => formatBytesTokBMBGBTB( $aTorrent[rateDownload] ) . '/s',
+		'up_speed' => formatBytesTokBMBGBTB( $aTorrent[rateUpload] ) . '/s',
+		'seeds' => $nothing,
+		'peers' => $nothing,
+		'estTime' => $eta,
+		'clientType' => 'torrent',
+		'upload_support_enabled' => 1,
+		'client' => $nothing,
+		'url_path' => 'fakepath',
+		'datapath' => $aTorrent[name],
+		'is_no_file' => 1,
+		'show_run' => 1,
+		'entry' => $aTorrent[name]
+
+	);
+	array_push($arUserTorrent, $tArray);
+}
+	// -------------------------------------------------------------------------
+	// create temp-array
+/*	$tArray = array(
+		'is_owner' => ($cfg['isAdmin']) ? true : $owner,
+		'transferRunning' => $transferRunning,
+		'url_entry' => urlencode($transfer),
+		'hd_image' => $hd->image,
+		'hd_title' => $hd->title,
+		'displayname' => $displayname,
+		'transferowner' => $transferowner,
+		'format_af_size' => $format_af_size,
+		'format_downtotal' => $format_downtotal,
+		'format_uptotal' => $format_uptotal,
+		'statusStr' => $statusStr,
+		'graph_width' => $graph_width,
+		'percentage' => $percentage,
+		'progress_color' => $progress_color,
+		'bar_width' => $bar_width,
+		'background' => $background,
+		'100_graph_width' => (100 - $graph_width),
+		'down_speed' => $down_speed,
+		'up_speed' => $up_speed,
+		'seeds' => $seeds,
+		'peers' => $peers,
+		'estTime' => $estTime,
+		'clientType' => $settingsAry['type'],
+		'upload_support_enabled' => $cfg["supportMap"][$settingsAry['client']]['max_upload_rate'],
+		'client' => $client,
+		'url_path' => urlencode(str_replace($cfg["path"],'', $settingsAry['savepath']).$settingsAry['datapath']),
+		'datapath' => $settingsAry['datapath'],
+		'is_no_file' => $is_no_file,
+		'show_run' => $show_run,
+		'entry' => $transfer
+	);
+*/
+
 foreach ($arList as $transfer) {
 	// ---------------------------------------------------------------------
 	// displayname
@@ -146,7 +261,7 @@ foreach ($arList as $transfer) {
 	$transferRunning = $sf->running;
 	// cache percent-done in local var. ...
 	$percentDone = $sf->percent_done;
-
+//print_r($sf);
 	// hide seeding - we do it asap to keep things as fast as possible
 	if (($_SESSION['settings']['index_show_seeding'] == 0) && ($percentDone >= 100) && ($transferRunning == 1)) {
 		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($sf->up_speed);
@@ -382,6 +497,7 @@ foreach ($arList as $transfer) {
 		'show_run' => $show_run,
 		'entry' => $transfer
 	);
+//print_r($tArray);
 	// Is this transfer for the user list or the general list?
 	if ($owner)
 		array_push($arUserTorrent, $tArray);

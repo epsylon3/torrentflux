@@ -28,6 +28,7 @@
  * @return string
  */
 function getFilePrioForm($transfer, $withForm = false) {
+/*
 	global $cfg;
 	$prioFileName = $cfg["transfer_file_path"].$transfer.".prio";
 	require_once('inc/classes/BDecode.php');
@@ -56,37 +57,128 @@ function getFilePrioForm($transfer, $withForm = false) {
 		for ($i=0; $i<$dirnum; $i++)
 			$prio[$i] = -1;
 	}
-	$tree = new dir("/",$dirnum, isset($prio[$dirnum]) ? $prio[$dirnum] : -1);
-	if (array_key_exists('files',$btmeta['info'])) {
-		foreach( $btmeta['info']['files'] as $filenum => $file) {
-			$depth = count($file['path']);
-			$branch =& $tree;
-			for ($i=0; $i < $depth; $i++) {
-				if ($i != $depth - 1) {
-					$d =& $branch->findDir($file['path'][$i]);
-					if ($d) {
-						$branch =& $d;
+*/
+	global $cfg;
+	require_once('inc/classes/BDecode.php');
+	$retVal = "";
+	// theme-switch
+	if ((strpos($cfg["theme"], '/')) === false) {
+		$retVal .= '<link rel="StyleSheet" href="themes/'.$cfg["theme"].'/css/dtree.css" type="text/css" />';
+		$retVal .= '<script type="text/javascript">var dtree_path_images = "themes/'.$cfg["theme"].'/images/dtree/";</script>';
+	} else {
+		$retVal .= '<link rel="StyleSheet" href="themes/tf_standard_themes/css/dtree.css" type="text/css" />';
+		$retVal .= '<script type="text/javascript">var dtree_path_images = "themes/tf_standard_themes/images/dtree/";</script>';
+	}
+	$retVal .= '<script type="text/javascript" src="js/dtree.js"></script>';
+
+	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	$isTransmissionTorrent = false;
+	$trans = new Transmission();
+	$response = $trans->get( array(), array('hashString', 'id', 'name') );
+	foreach ( $response[arguments][torrents] as $aTorrent ) {
+		if ( $aTorrent[hashString] == $transfer ) {
+			$isTransmissionTorrent = true;
+			$theTorrent = $aTorrent;
+			break;
+		}
+	}
+	
+	$files = array();
+	if ( $isTransmissionTorrent ) {
+		$response = $trans->get($theTorrent[id], array("files"));
+		$responseWantedFiles = $trans->get( $theTorrent[id], array('wanted') );
+		$wantedFiles = $responseWantedFiles[arguments][torrents][0][wanted];
+		$dirnum = count($response[arguments][torrents][0][files]); // make sure this is in here otherwhise you will loose alot of time debugging your code on what is missing (the filetree selection is not displayed)
+		$tree = new dir("/",$dirnum, -1);
+		foreach($response[arguments][torrents][0][files] as $file) {
+			$fileparts = explode("/", $file[name]);
+			$filesize = $file[length];
+			$fileprops = array( 'length' => $filesize, 'path' => $fileparts );
+			array_push($files, $fileprops);
+		}
+		$filescount = count($files);
+		#print_r($files);
+			foreach( $files as $filenum => $file) {
+				$depth = count($file['path']);
+				$branch =& $tree;
+				for ($i=0; $i < $depth; $i++) {
+					if ($i != $depth - 1) {
+						$d =& $branch->findDir($file['path'][$i]);
+						if ($d) {
+							$branch =& $d;
+						} else {
+							$dirnum++;
+							$d =& $branch->addDir(new dir($file['path'][$i], $dirnum, -1));
+							$branch =& $d;
+						}
 					} else {
-						$dirnum++;
-						$d =& $branch->addDir(new dir($file['path'][$i], $dirnum, (isset($prio[$dirnum]) ? $prio[$dirnum] : -1)));
-						$branch =& $d;
+						$branch->addFile(new file($file['path'][$i]." (".$file['length'].")", $filenum,$file['length'], ($wantedFiles[$filenum] == 1? 1 : -1) ));
 					}
-				} else {
-					$branch->addFile(new file($file['path'][$i]." (".$file['length'].")", $filenum,$file['length'], $prio[$filenum]));
+				}
+			}
+		$response = $trans->get($theTorrent[id], array("pieceCount", "pieceSize", "totalSize", "dateCreated", "downloadDir", "comment"));
+
+		#$torrent_size = $response[arguments][torrents][0][pieceSize] * $response[arguments][torrents][0][pieceCount];
+		$torrent_size = $response[arguments][torrents][0][totalSize];
+		$torrent_chunksize = $response[arguments][torrents][0][pieceSize];
+		$torrent_directoryname = $response[arguments][torrents][0][downloadDir];
+		$torrent_announceurl = $response[arguments][torrents][0][comment];
+		$torrent_creationdate = $response[arguments][torrents][0][dateCreated];
+		$torrent_filescount = $filescount;
+	} else {
+		$prioFileName = $cfg["transfer_file_path"].$transfer.".prio";
+		$ftorrent = $cfg["transfer_file_path"].$transfer;
+		$fp = @fopen($ftorrent, "rd");
+		$alltorrent = @fread($fp, @filesize($ftorrent));
+		@fclose($fp);
+		$btmeta = @BDecode($alltorrent);
+		$torrent_size = $btmeta["info"]["piece length"] * (strlen($btmeta["info"]["pieces"]) / 20);
+		$dirnum = (array_key_exists('files',$btmeta['info'])) ? count($btmeta['info']['files']) : 0;
+		if (@is_readable($prioFileName)) {
+			$prio = explode(',', @file_get_contents($prioFileName));
+			$prio = array_splice($prio,1);
+		} else {
+			$prio = array();
+			for ($i=0; $i<$dirnum; $i++)
+				$prio[$i] = -1;
+		}
+		$tree = new dir("/",$dirnum, isset($prio[$dirnum]) ? $prio[$dirnum] : -1);
+		if (array_key_exists('files',$btmeta['info'])) {
+			foreach( $btmeta['info']['files'] as $filenum => $file) {
+				$depth = count($file['path']);
+				$branch =& $tree;
+				for ($i=0; $i < $depth; $i++) {
+					if ($i != $depth - 1) {
+						$d =& $branch->findDir($file['path'][$i]);
+						if ($d) {
+							$branch =& $d;
+						} else {
+							$dirnum++;
+							$d =& $branch->addDir(new dir($file['path'][$i], $dirnum, (isset($prio[$dirnum]) ? $prio[$dirnum] : -1)));
+							$branch =& $d;
+						}
+					} else {
+						$branch->addFile(new file($file['path'][$i]." (".$file['length'].")", $filenum,$file['length'], $prio[$filenum]));
+					}
 				}
 			}
 		}
+		$torrent_chunksize = $btmeta[info]['piece length'];
+		$torrent_directoryname = $btmeta[info][name];
+		$torrent_announceurl = $btmeta[announce];
+		$torrent_creationdate = $btmeta['creation date'];
+		$torrent_filescount = count($btmeta['info']['files']);
 	}
 	$retVal .= "<table><tr>";
 	$retVal .= "<tr><td width=\"110\">Metainfo File:</td><td>".$transfer."</td></tr>";
-	$retVal .= "<tr><td>Directory Name:</td><td>".$btmeta['info']['name']."</td></tr>";
-	$retVal .= "<tr><td>Announce URL:</td><td>".$btmeta['announce']."</td></tr>";
+	$retVal .= "<tr><td>Directory Name:</td><td>".$torrent_directoryname."</td></tr>";
+	$retVal .= "<tr><td>Announce URL:</td><td>".$torrent_announceurl."</td></tr>";
 	if (array_key_exists('comment',$btmeta))
 		$retVal .= "<tr><td valign=\"top\">Comment:</td><td>".tfb_htmlencode($btmeta['comment'])."</td></tr>";
-	$retVal .= "<tr><td>Created:</td><td>".date("F j, Y, g:i a",$btmeta['creation date'])."</td></tr>";
+	$retVal .= "<tr><td>Created:</td><td>".date("F j, Y, g:i a",$torrent_creationdate)."</td></tr>";
 	$retVal .= "<tr><td>Torrent Size:</td><td>".$torrent_size." (".@formatBytesTokBMBGBTB($torrent_size).")</td></tr>";
-	$retVal .= "<tr><td>Chunk size:</td><td>".$btmeta['info']['piece length']." (".@formatBytesTokBMBGBTB($btmeta['info']['piece length']).")</td></tr>";
-	if (array_key_exists('files',$btmeta['info'])) {
+	$retVal .= "<tr><td>Chunk size:</td><td>".$torrent_chunksize." (".@formatBytesTokBMBGBTB($torrent_chunksize).")</td></tr>";
+	if ( array_key_exists('files',$btmeta['info']) || count($files)>0 ) {
 		$retVal .= "<tr><td>Selected size:</td><td id=\"sel\">0</td></tr>";
 		$retVal .= "</table><br>\n";
 		if ($withForm) {
@@ -101,7 +193,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 		$retVal .= "sel = getSizes();\n";
 		$retVal .= "drawSel();\n";
 		$retVal .= "</script>\n";
-		$retVal .= "<input type=\"hidden\" name=\"filecount\" value=\"".count($btmeta['info']['files'])."\">";
+		$retVal .= "<input type=\"hidden\" name=\"filecount\" value=\"".$torrent_filescount."\">";
 		$retVal .= "<input type=\"hidden\" name=\"count\" value=\"".$dirnum."\">";
 		$retVal .= "<br>";
 		if ($withForm) {
