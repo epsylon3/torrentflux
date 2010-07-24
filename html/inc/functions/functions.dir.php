@@ -181,14 +181,20 @@ function downloadFile($down) {
 				}
 			} else {
 				// standard download
-				@header("Content-type: application/octet-stream\n");
 				@header("Content-transfer-encoding: binary\n");
 				@header("Content-length: " . $filesize . "\n");
-				@header("Content-disposition: attachment; filename=\"".$headerName."\"\n");
+				$fileExt = getExtension($headerName);
+				$is_image = preg_match("#(jpg|gif|png)#",$fileExt);
+				if (!$is_image) {
+					@header("Content-type: application/octet-stream\n");
+					@header("Content-disposition: attachment; filename=\"".$headerName."\"\n");
+				} else {
+					@header("Content-type: image/$fileExt\n");
+				}
 				// write the session to close so you can continue to browse on the site.
 				@session_write_close();
 				
-				if ($cfg["enable_xsendfile"] == 1)
+				if (!$is_image && $cfg["enable_xsendfile"] == 1)
 					@header('X-Sendfile: '.$path);
 				else {
 					$fp = popen("cat ".tfb_shellencode($path), "r");
