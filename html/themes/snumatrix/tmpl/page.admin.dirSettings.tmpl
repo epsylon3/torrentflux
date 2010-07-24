@@ -131,6 +131,22 @@
 							</tr>
 							<tr>
 								<td align="left" width="350" valign="top">
+									<label for="enable_xsendfile"><strong>X-SendFile:</strong></label><br/>
+									Enable/disable optimized Webserver File Transfert, you need to enable X-SendFile header support in your webserver configuration to use that.
+								</td>
+								<td valign="top">
+									<select name="enable_xsendfile" id="enable_xsendfile">
+										<option value="1">True</option>
+										<option value="0"
+										<tmpl_if name="enable_xsendfile" value="0">
+											 selected
+										</tmpl_if>
+										>False</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
 									<label for="package_type"><strong>Download Archive Type:</strong></label><br/>
 									Choose the type of archive to use when performing file downloads - files downloaded will be archived using this archive type prior to sending.<br/><strong>Note:</strong><br/>Ensure your operating system supports the archive type you select here.
 								</td>

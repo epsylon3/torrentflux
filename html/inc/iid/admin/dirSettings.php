@@ -62,6 +62,7 @@ $tmpl->setvar('enable_vlc', $cfg["enable_vlc"]);
 $tmpl->setvar('vlc_port', $cfg["vlc_port"]);
 $tmpl->setvar('enable_rename', $cfg["enable_rename"]);
 $tmpl->setvar('enable_move', $cfg["enable_move"]);
+$tmpl->setvar('enable_xsendfile', $cfg["enable_xsendfile"]);
 tmplSetMoveSettings();
 //
 tmplSetTitleBar("Administration - Dir Settings");

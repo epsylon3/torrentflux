@@ -67,7 +67,7 @@
 			</select>
 		</td>
 	</tr>
-		<tr>
+	<tr>
 		<th>
 			File Downloads<br /><span>Enable/disable file downloading from the directory manager - when enabled, 
 			users will be able to download files directly from the torrentflux-b4rt file manager.<span>
@@ -77,6 +77,22 @@
 				<option value="1">True</option>
 				<option value="0"
 			<tmpl_if name="enable_file_download" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			X-SendFile<br /><span>Enable/disable optimized Webserver File Transfert, 
+			You need to enable X-SendFile header support in your webserver configuration to use that.<span>
+		</th>
+		<td>
+			<select name="enable_xsendfile" id="enable_xsendfile">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_xsendfile" value="0">
 				selected
 			</tmpl_if>
 				>False</option>
