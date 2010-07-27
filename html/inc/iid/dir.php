@@ -421,8 +421,9 @@ foreach ($entrys as $entry) {
 		$path = $dirName.$entry;
 		
 		if($islink == 0) // it's not a symbolic link
-		{	
-			$ssz += is_dir($dirName.$entry)? dirsize($path) : sprintf("%.0f", 0.0+filesize($path));
+		{
+			$ssz += is_dir($path)? dirsize($path) : sprintf("%.0f", filesize($path));
+			if ($ssz < 0 && !isWinOS()) $ssz = @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($path)));
 		}
 		elseif (!isWinOS()) // it's a symbolic link
 		{

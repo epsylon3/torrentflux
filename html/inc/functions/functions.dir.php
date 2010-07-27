@@ -140,7 +140,7 @@ function downloadFile($down) {
 		}
 		if (file_exists($path)) {
 			// size
-			$filesize = file_size($path);
+			$filesize = sprintf("%.0f",filesize($path));
 			// filenames in IE containing dots will screw up the filename
 			$headerName = (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE"))
 				? preg_replace('/\./', '%2e', $file, substr_count($file, '.') - 1)
@@ -458,7 +458,7 @@ function dirsize($path)
 
     // Sanity check
     if (is_file($path)) {
-        return filesize($path);
+        return sprintf("%.0f",filesize($path));
     } elseif (!is_dir($path)) {
         return false;
     }
