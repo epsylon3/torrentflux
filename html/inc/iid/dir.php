@@ -81,7 +81,7 @@ if ($chmod != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($dir))) && (hasPermission($dir, $cfg["user"], 'w')))
-		chmodRecursive($cfg["path"].$dir,775);
+		chmodRecursive($cfg["path"].$dir,0775);
 	else
 		AuditAction($cfg["constants"]["error"], "ILLEGAL CHMOD: ".$cfg["user"]." tried to chmod ".$dir);
 	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));

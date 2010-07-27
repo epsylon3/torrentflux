@@ -398,7 +398,7 @@ function chmodRecursive($path, $mode = 0777) {
 		if (isValidEntry(basename($file))) {
 			$fullpath = $path.'/'.$file;
 			if (!@is_dir($fullpath)) {
-				if (!@chmod($fullpath, $mode))
+				if (!@chmod($fullpath, $mode & 0666))
 					return false;
 			} else {
 				if (!chmodRecursive($fullpath, $mode))
