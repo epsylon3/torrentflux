@@ -97,7 +97,22 @@ function tfb_isValidPath($path, $ext = "") {
  */
 function tfb_isValidTransfer($transfer) {
 	global $cfg;
-	return (preg_match('/^[0-9a-zA-Z._-]+('.$cfg["file_types_regexp"].')$/D', $transfer) == 1);
+	return (preg_match('/^[0-9a-zA-Z_\.\-]+('.$cfg["file_types_regexp"].')$/D', $transfer) == 1);
+}
+
+
+/**
+ * clean accents
+ *
+ * @param $inName
+ * @return string
+ */
+function tfb_clean_accents($inName) {
+	$outName = strtr($inName, 'àáâãäåòóôõöøèéêëçìíîïùúûüÿñ', 'aaaaaaooooooeeeeciiiiuuuuyn');
+	$outName = strtr($outName,'ÀÁÂÃÄÅÒÓÔÕÖØÈÉÊËÇÌÍÎÏÙÚÛÜŸÑ', 'AAAAAAOOOOOOEEEECIIIIUUUUYN');
+	$outName = str_replace("æ","ae",$outName);
+	$outName = str_replace("œ","oe",$outName);	
+	return $outName;
 }
 
 /**
@@ -108,7 +123,9 @@ function tfb_isValidTransfer($transfer) {
  */
 function tfb_cleanFileName($inName) {
 	global $cfg;
-	$outName = preg_replace("/[^0-9a-zA-Z.-]+/",'_', $inName);
+	$outName = tfb_clean_accents($inName);
+	$outName = preg_replace("/[^0-9a-zA-Z\.\-]+/",'_', $outName);
+	$outName = str_replace("_-_", "-", $outName);
 	$stringLength = strlen($outName);
 	foreach ($cfg['file_types_array'] as $ftype) {
 		$extLength = strlen($ftype);
@@ -127,7 +144,9 @@ function tfb_cleanFileName($inName) {
  */
 function tfb_cleanTransferName($transfer) {
 	global $cfg;
-	return str_replace($cfg["file_types_array"], "", preg_replace("/[^0-9a-zA-Z.-]+/",'_', $transfer));
+	$outName = trim(preg_replace("/\[www\.[^\]]+\]/i",'', $transfer));
+	$outName = preg_replace("/[^0-9a-zA-Z\.\-]+/",'_', $outName);
+	return str_replace($cfg["file_types_array"], "", $outName);
 }
 
 /**

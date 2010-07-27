@@ -263,7 +263,7 @@ function BDecode($wholefile)
 {
     $decoder = new BDecode;
     $return = $decoder->decodeEntry($wholefile);
-
+    
     return $return[0];
 }
 

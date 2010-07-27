@@ -53,16 +53,16 @@ class ClientHandlerAzureus extends ClientHandler
      * @param $enqueue (boolean) : enqueue ?
      */
 	function start($transfer, $interactive = false, $enqueue = false) {
-	global $cfg;
+		global $cfg;
 
-	// set vars
+		// set vars
 		$this->_setVarsForTransfer($transfer);
 
-	// log
-	$this->logMessage($this->client."-start : ".$transfer."\n", true);
+		// log
+		$this->logMessage($this->client."-start : ".$transfer."\n", true);
 
-	// FluAzu
-	require_once("inc/classes/FluAzu.php");
+		// FluAzu
+		require_once("inc/classes/FluAzu.php");
 
 		// do azureus special-pre-start-checks
 		// check to see if fluazu is running

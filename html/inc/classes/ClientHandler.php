@@ -667,6 +667,7 @@ class ClientHandler
         		: $cfg['path'].$cfg["path_incoming"]."/";
         else
 			$this->savepath = checkDirPathString($this->savepath);
+			
         // check target-directory, create if not present
 		if (!(checkDirectory($this->savepath, 0777))) {
 			$this->state = CLIENTHANDLER_STATE_ERROR;

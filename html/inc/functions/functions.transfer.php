@@ -40,7 +40,8 @@ function transfer_init() {
 		@error("Access Denied", "", "", array($transfer));
 	}
 	// get label
-	$transferLabel = (strlen($transfer) >= 39) ? substr($transfer, 0, 35)."..." : $transfer;
+	$transferLabel = preg_replace("#\.torrent$#","",$transfer);
+	$transferLabel = (strlen($transferLabel) >= 39) ? substr($transferLabel, 0, 35)."..." : $transferLabel;
 	// set transfer vars
 	$tmpl->setvar('transfer', $transfer);
 	$tmpl->setvar('transferLabel', $transferLabel);
