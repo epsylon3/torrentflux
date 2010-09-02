@@ -405,6 +405,11 @@ INSERT INTO tf_settings_dir VALUES ('dir_restricted','lost+found:CVS:Temporary I
 INSERT INTO tf_settings_dir VALUES ('enable_vlc','1');
 INSERT INTO tf_settings_dir VALUES ('vlc_port','8080');
 
+-- GIT UPDATES
+INSERT INTO tf_settings VALUES ('enable_torrent','1');
+INSERT INTO tf_settings VALUES ('nzbperl_ssl','0');
+INSERT INTO tf_settings VALUES ('nzbperl_port','119');
+
 --
 -- tf_settings_stats
 --

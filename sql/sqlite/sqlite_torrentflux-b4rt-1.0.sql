@@ -324,6 +324,11 @@ INSERT INTO tf_settings VALUES ('fluxd_Maintenance_interval','600');
 INSERT INTO tf_settings VALUES ('fluxd_Maintenance_trestart','0');
 INSERT INTO tf_settings VALUES ('fluxd_Trigger_interval','600');
 
+-- GIT UPDATES
+INSERT INTO tf_settings VALUES ('enable_torrent','1');
+INSERT INTO tf_settings VALUES ('nzbperl_ssl','0');
+INSERT INTO tf_settings VALUES ('nzbperl_port','119');
+
 --
 -- tf_settings_dir
 --
