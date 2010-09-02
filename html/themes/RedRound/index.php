@@ -8,14 +8,14 @@
 # now styles should use css files
 
 $cfg["main_bgcolor"] = "#000000"; //used in Superadmin pages, RedRound doesn't use it.
-$cfg["table_data_bg"] = "#000000";
+$cfg["table_data_bg"] = "#f0f0f0";
 $cfg["table_border_dk"] = "#000000";
-$cfg["table_header_bg"] = "#000000";
+$cfg["table_header_bg"] = "#808080";
 $cfg["table_admin_border"] = "#000000"; // not used in RedRound (other themes use this for tables in admin pages)
 $cfg["body_data_bg"] = "#ffffff"; // used as background of server charts in images
 
 // Directory alternating colors for dir.php
-$cfg["bgLight"] = "#000000";
-$cfg["bgDark"] = "#000000";
+$cfg["bgLight"] = "#F0F0F0";
+$cfg["bgDark"] = "#D0D0D0";
 
 ?>
