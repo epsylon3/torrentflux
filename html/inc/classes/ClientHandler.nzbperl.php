@@ -125,6 +125,12 @@ class ClientHandlerNzbperl extends ClientHandler
 		$this->command .= " --dthreadct ".tfb_shellencode($cfg['nzbperl_threads']);
 		$this->command .= " --speed ".tfb_shellencode($this->drate);
 		$this->command .= " --server ".tfb_shellencode($cfg['nzbperl_server']);
+	  	$this->command .= " --port ".tfb_shellencode($cfg['nzbperl_port']);
+	
+	    if ($cfg["nzbperl_ssl"] == 1)
+	  	    $this->command .= " --ssl";
+
+		  
 		if ($cfg['nzbperl_user'] != "") {
 			$this->command .= " --user ".tfb_shellencode($cfg['nzbperl_user']);
 			$this->command .= " --pw ".tfb_shellencode($cfg['nzbperl_pw']);

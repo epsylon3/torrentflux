@@ -33,6 +33,7 @@ if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 tmplInitializeInstance($cfg["theme"], "page.admin.transferSettings.tmpl");
 
 // torrent
+$tmpl->setvar('enable_torrent', $cfg["enable_torrent"]);
 $tmpl->setvar('btclient', $cfg["btclient"]);
 $tmpl->setvar('metainfoclient', $cfg["metainfoclient"]);
 $tmpl->setvar('btclient_tornado_options', $cfg["btclient_tornado_options"]);
@@ -69,6 +70,8 @@ $tmpl->setvar('nzbperl_badAction', $cfg['nzbperl_badAction']);
 $tmpl->setvar('nzbperl_server', $cfg['nzbperl_server']);
 $tmpl->setvar('nzbperl_user', $cfg['nzbperl_user']);
 $tmpl->setvar('nzbperl_pw', $cfg['nzbperl_pw']);
+$tmpl->setvar('nzbperl_ssl', $cfg['nzbperl_ssl']);
+$tmpl->setvar('nzbperl_port', $cfg['nzbperl_port']);
 $tmpl->setvar('nzbperl_threads', $cfg['nzbperl_threads']);
 $nzbThreadList = array();
 array_push($nzbThreadList, array(

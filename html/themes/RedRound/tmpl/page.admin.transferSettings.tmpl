@@ -7,6 +7,16 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 <h2>BitTorrent</h2>
 <table id="adminTransferSettings">
 	<tr>
+		<th class="alt">Enable Torrent<br/><span>Set who can use torrents.</span></th>
+		<td class="alt">
+			<select name="enable_torrent" id="enable_torrent">
+				<option value="0" <tmpl_if name="enable_torrent" value="0"> selected</tmpl_if>>Torrent Disabled</option>
+				<option value="1" <tmpl_if name="enable_torrent" value="1"> selected</tmpl_if>>Only Admins</option>
+				<option value="2" <tmpl_if name="enable_torrent" value="2"> selected</tmpl_if>>All Users</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
 		<th>Default BitTorrent Client<br /><span>Set the client to use by default to start torrent transfers</span></th>
 		<td>
 			<select name="btclient" id="btclient">
@@ -290,6 +300,22 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 		<th>Password<br /><span>Set the password to use when connecting to your NNTP server</span></th>
 		<td>
 			<input name="nzbperl_pw" id="nzbperl_pw" type="password" maxlength="254" value="<tmpl_var name="nzbperl_pw">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>Use SSL<br /><span>Use SSL.</span></th>
+		</td>
+		<td class="alt">
+			<select name="nzbperl_ssl" id="nzbperl_ssl">
+				<option value="0" <tmpl_if name="nzbperl_ssl" value="0"> selected</tmpl_if>>No</option>
+				<option value="1" <tmpl_if name="nzbperl_ssl" value="1"> selected</tmpl_if>>Yes</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Port<br /><span>The port number used by nzbperl.</span></th>
+		<td>
+			<input name="nzbperl_port" id="nzbperl_port" type="text" maxlength="5" value="<tmpl_var name="nzbperl_port">" size="5">
 		</td>
 	</tr>
 	<tr>
