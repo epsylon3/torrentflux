@@ -10,13 +10,15 @@
 // turn unordened list into tabs
 jQuery(document).ready(function(){
 	
-
+	//tabs first, because droplisti use ul/li too
 	jQuery("#tabs").tabs({ panelTemplate: '<li></li>' });
 
+	//skin buttons
 	jQuery("input:submit").button();
+	
+	//comboboxes
 	jQuery('select#searchEngine').droplist({width:100})
 		.css('display','inline-block')
-		.css('width','130px')
 		.css('vertical-align','bottom');
 	jQuery('select').droplist({autoresize:true,slide:false,height:150});
  

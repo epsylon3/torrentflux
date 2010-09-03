@@ -70,9 +70,13 @@
 </tmpl_if>
 
 <tmpl_if name="iid" value="index">
-<!-- this style is going to be removed -->
 	<style type="text/css">
 		/* .container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;} */
+		/* Fix droplists autoresize in tabs */
+		.ui-tabs .ui-tabs-hide {
+		 position: absolute;
+		 left: -10000px;
+		}
 	</style>
 </tmpl_if>
 </head>
