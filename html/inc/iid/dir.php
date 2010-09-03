@@ -385,24 +385,22 @@ while (false !== ($entry = readdir($handle))) {
 			array_push($entrys, $entry);
 	} else { // sub-dir
 		if (hasPermission($dir, $cfg["user"], 'r')) {
-			if (isValidEntry($entry)) { //array_push($entrys, $entry);
+			if (isValidEntry($entry)) {
 				if (is_dir($dirName.$entry)) {
 					array_push($entrysDirs, $entry);
-				   } else {
+				} else {
 					array_push($entrysFiles, $entry);
-				   }
+				}
 			}
 
 		}
 	}
 }
 closedir($handle);
-#natsort($entrys);
-#natcasesort($entrys);
  
 natcasesort($entrysDirs);
 natcasesort($entrysFiles); 
-$entrys = array_merge ($entrysDirs, $entrysFiles);
+$entrys = array_merge ($entrysDirs, $entrysFiles, $entrys);
 
 // process entries and fill dir- + file-array
 $list = array();
