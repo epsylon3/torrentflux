@@ -28,16 +28,18 @@
 function dispatcher_startTransfer($transfer) {
 	global $cfg;
 	// First check if it is a torrent added in transmission, if so the next if should not be executed
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString"));
-	$torrentlist = $response[arguments][torrents];
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$torrentId = $aTorrent[id];
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get(array(), array("id","hashString"));
+		$torrentlist = $response[arguments][torrents];
+		foreach ($torrentlist as $aTorrent) {
+			if ( $aTorrent[hashString] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$torrentId = $aTorrent[id];
+				break;
+			}
 		}
 	}
 
@@ -93,19 +95,21 @@ function dispatcher_stopTransfer($transfer) {
 	global $cfg;
 
 	// First check if it is a torrent added in transmission, if so the next if should not be executed
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString"));
-	$torrentlist = $response[arguments][torrents];
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$torrentId = $aTorrent[id];
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get(array(), array("id","hashString"));
+		$torrentlist = $response[arguments][torrents];
+		foreach ($torrentlist as $aTorrent) {
+			if ( $aTorrent[hashString] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$torrentId = $aTorrent[id];
+				break;
+			}
 		}
 	}
-
+	
 	if ( $isTransmissionTorrent ) {
 		$response = $trans->stop($torrentId);
 		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
@@ -177,19 +181,21 @@ function dispatcher_deleteTransfer($transfer) {
 	global $cfg;
 
 	// First check if it is a torrent added in transmission, if so the next if should not be executed
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString"));
-	$torrentlist = $response[arguments][torrents];
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$torrentId = $aTorrent[id];
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get(array(), array("id","hashString"));
+		$torrentlist = $response[arguments][torrents];
+		foreach ($torrentlist as $aTorrent) {
+			if ( $aTorrent[hashString] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$torrentId = $aTorrent[id];
+				break;
+			}
 		}
 	}
-
+	
 	if ( $isTransmissionTorrent ) {
 		$response = $trans->remove($torrentId);
 		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
@@ -237,20 +243,21 @@ function dispatcher_deleteTransfer($transfer) {
 function dispatcher_deleteDataTransfer($transfer) {
 	global $cfg;
 
-print($transfer);
-exit;
-        require_once('inc/classes/Transmission.class.php');
-        $isTransmissionTorrent = false;
-        $trans = new Transmission();
-        $response = $trans->get( array(), array('hashString', 'id', 'name') );
-        foreach ( $response[arguments][torrents] as $aTorrent ) { 
-                if ( $aTorrent['hashString'] == $transfer ) { 
-                        $isTransmissionTorrent = true;
-                        $theTorrent = $aTorrent;
-                        break;
-                }   
-        }
-
+//print($transfer);
+//exit;
+	$isTransmissionTorrent = false;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get( array(), array('hashString', 'id', 'name') );
+		foreach ( $response[arguments][torrents] as $aTorrent ) { 
+			if ( $aTorrent['hashString'] == $transfer ) { 
+				$isTransmissionTorrent = true;
+				$theTorrent = $aTorrent;
+				break;
+			}
+		}
+	}
 
 	if ( $isTransmissionTorrent ) {
 		$response = $trans->remove($theTorrent['id'], true);
@@ -513,19 +520,21 @@ function dispatcher_multi($action) {
 		// url-decode
 		$transfer = urldecode($element);
 
-		require_once('inc/classes/Transmission.class.php');
 		$isTransmissionTorrent = false;
-		$trans = new Transmission();
-		$response = $trans->get(array(), array("id","hashString"));
-		$torrentlist = $response[arguments][torrents];
-		foreach ($torrentlist as $aTorrent) {
-			if ( $aTorrent[hashString] == $transfer ) {
-				$isTransmissionTorrent = true;
-				$torrentId = $aTorrent[id];
-				break;
-			}    
-		}    
-
+		if ($cfg["btclient_transmission_enable"]) {
+			require_once('inc/classes/Transmission.class.php');
+			$trans = new Transmission();
+			$response = $trans->get(array(), array("id","hashString"));
+			$torrentlist = $response[arguments][torrents];
+			foreach ($torrentlist as $aTorrent) {
+				if ( $aTorrent[hashString] == $transfer ) {
+					$isTransmissionTorrent = true;
+					$torrentId = $aTorrent[id];
+					break;
+				}
+			}
+		}
+		
 		if ( !$isTransmissionTorrent ) {
 			// is valid transfer ? + check permissions
 			$invalid = true;
@@ -710,21 +719,24 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 		// Added by deadeyes to detect a magnet link
 		if ( $type === 'torrent' && strlen( stristr( $url, 'magnet:' ) ) > 0 ) {
 			// We have a magnet link :D
-			require_once('inc/classes/Transmission.class.php');
-			$rpc = new Transmission();
+			
+			if ($cfg["btclient_transmission_enable"]) {
+				require_once('inc/classes/Transmission.class.php');
+				$rpc = new Transmission();
 
-			$result = $rpc->add( $url, '', array ('paused'=>true)  );
-
-			//require_once('inc/classes/TransmissionRpc.php');
-			//$myclass = new TransmissionRpc("127.0.0.1", "9091", "me", "mypassword");
-			//$myclass->login();
-
-			//$arguments = array ( "filename" => $url, "paused" => true );
-			//$rpccall = array("arguments" => $arguments,"method" => "torrent-add") ;
-			//$myclass->doRpcCall($rpccall, $result, $status);
-
-			// closing connection
-			//$myclass->logout();
+				$result = $rpc->add( $url, '', array ('paused'=>true)  );
+				//require_once('inc/classes/TransmissionRpc.php');
+				//$myclass = new TransmissionRpc("127.0.0.1", "9091", "me", "mypassword");
+				//$myclass->login();
+	
+				//$arguments = array ( "filename" => $url, "paused" => true );
+				//$rpccall = array("arguments" => $arguments,"method" => "torrent-add") ;
+				//$myclass->doRpcCall($rpccall, $result, $status);
+	
+				// closing connection
+				//$myclass->logout();
+			}
+			
 		} else {
 			$arURL = explode("/", $url);
 			$filename = urldecode($arURL[count($arURL)-1]); // get the file name

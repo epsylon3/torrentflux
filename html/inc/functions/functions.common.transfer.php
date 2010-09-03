@@ -151,18 +151,19 @@ function deleteTransferData($transfer) {
 	global $cfg, $transfers;
 	$msgs = array();
 
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent['hashString'] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get( array(), array('hashString', 'id', 'name') );
+		foreach ( $response[arguments][torrents] as $aTorrent ) {
+			if ( $aTorrent['hashString'] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$theTorrent = $aTorrent;
+				break;
+			}
 		}
 	}
-
 
 	if ( $isTransmissionTorrent ) {
 		$response = $trans->remove($theTorrent['id'], true);
@@ -254,19 +255,21 @@ function calcTransferSavepath($transfer, $profile = NULL) {
  * @param $transfer
  */
 function setFilePriority($transfer) {
-    global $cfg;
-	require_once('inc/classes/Transmission.class.php');
+	global $cfg;
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent['hashString'] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get( array(), array('hashString', 'id', 'name') );
+		foreach ( $response[arguments][torrents] as $aTorrent ) {
+			if ( $aTorrent['hashString'] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$theTorrent = $aTorrent;
+				break;
+			}
 		}
 	}
-
+	
 	if ( $isTransmissionTorrent ) {
 		foreach ($_REQUEST[files] as $fileid ) {
 			$selectedFiles[] = (int)$fileid;
@@ -356,7 +359,7 @@ function getTorrentScrapeInfo($transfer) {
 	global $cfg;
 	$hasClient = false;
 	// transmissioncli
-	if (is_executable($cfg["btclient_transmission_bin"])) {
+	if ($cfg["btclient_transmission_enable"]) {
 		$hasClient = true;
 		$retVal = "";
 		$retVal = @shell_exec("HOME=".tfb_shellencode($cfg["path"])."; export HOME; ".$cfg["btclient_transmission_bin"] . " -s ".tfb_shellencode($cfg["transfer_file_path"].$transfer));

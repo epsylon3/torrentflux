@@ -71,18 +71,20 @@ function getFilePrioForm($transfer, $withForm = false) {
 	}
 	$retVal .= '<script type="text/javascript" src="js/dtree.js"></script>';
 
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');	
+		$trans = new Transmission();
+		$response = $trans->get( array(), array('hashString', 'id', 'name') );
+		foreach ( $response[arguments][torrents] as $aTorrent ) {
+			if ( $aTorrent[hashString] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$theTorrent = $aTorrent;
+				break;
+			}
 		}
 	}
-	
+		
 	$files = array();
 	if ( $isTransmissionTorrent ) {
 		$response = $trans->get($theTorrent[id], array("files"));

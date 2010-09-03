@@ -77,6 +77,15 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 		</td>
 	</tr>
 	<tr>
+		<th class="alt">Transmission Enabled<br /><span>Enable/Disable Transmission client</span></th>
+		<td class="alt">
+			<select name="enable_torrent" id="btclient_transmission_enable">
+				<option value="0" <tmpl_if name="btclient_transmission_enable" value="0"> selected</tmpl_if>>Disabled</option>
+				<option value="1" <tmpl_if name="btclient_transmission_enable" value="1"> selected</tmpl_if>>Enabled</option>
+			</select>
+		</td>
+	</tr>	
+	<tr>
 		<th class="alt">Transmission <br /><span>Extra Commandline Options</span></th>
 		<td class="alt">
 			<input name="btclient_transmission_options" id="btclient_transmission_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_options">" size="35">

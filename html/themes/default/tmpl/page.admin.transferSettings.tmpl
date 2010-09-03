@@ -100,6 +100,21 @@
 							</tr>
 							<tr>
 								<td align="left" width="350" valign="top">
+									<label for="btclient_transmission_enable"><strong>Enable Transmission Client</strong></label><br/>
+								</td>
+								<td valign="top">
+									<select name="btclient_transmission_enable" id="btclient_transmission_enable">
+										<option value="1">Enabled</option>
+										<option value="0"
+											<tmpl_if name="btclient_transmission_enable" value="False">
+												 selected="selected"
+											</tmpl_if>
+										>Disabled</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
 									<label for="btclient_transmission_options"><strong>Transmission - Extra Commandline Options:</strong></label>
 								</td>
 								<td valign="top">

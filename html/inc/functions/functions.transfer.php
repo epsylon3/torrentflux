@@ -30,15 +30,17 @@ function transfer_init() {
 	if (empty($transfer))
 		@error("missing params", "", "", array('transfer'));
 	
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
+		$response = $trans->get( array(), array('hashString', 'id', 'name') );
+		foreach ( $response[arguments][torrents] as $aTorrent ) {
+			if ( $aTorrent[hashString] == $transfer ) {
+				$isTransmissionTorrent = true;
+				$theTorrent = $aTorrent;
+				break;
+			}
 		}
 	}
 	
@@ -183,15 +185,18 @@ function transfer_setFileVars() {
 				@fclose($fd);
 			}
 			$transferSizeSum = 0;
-			require_once('inc/classes/Transmission.class.php');
+			
 			$isTransmissionTorrent = false;
-			$trans = new Transmission();
-			$response = $trans->get( array(), array('hashString', 'id', 'name') );
-			foreach ( $response[arguments][torrents] as $aTorrent ) {
-				if ( $aTorrent[hashString] == $transfer ) {
-					$isTransmissionTorrent = true;
-					$theTorrent = $aTorrent;
-					break;
+			if ($cfg["btclient_transmission_enable"]) {
+				require_once('inc/classes/Transmission.class.php');
+				$trans = new Transmission();
+				$response = $trans->get( array(), array('hashString', 'id', 'name') );
+				foreach ( $response[arguments][torrents] as $aTorrent ) {
+					if ( $aTorrent[hashString] == $transfer ) {
+						$isTransmissionTorrent = true;
+						$theTorrent = $aTorrent;
+						break;
+					}
 				}
 			}
 			if ( $isTransmissionTorrent ) {
