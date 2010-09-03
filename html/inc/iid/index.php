@@ -90,7 +90,7 @@ $arList = getTransferArray($sortOrder);
 $progress_color = "#00ff00";
 $bar_width = "4";
 
-require ('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php') ;
+require ('inc/classes/Transmission.class.php') ;
 $rpc = new Transmission ();
 $fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
 $result = $rpc->get ( array(), $fields );

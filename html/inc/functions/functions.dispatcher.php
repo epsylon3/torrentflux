@@ -28,7 +28,7 @@
 function dispatcher_startTransfer($transfer) {
 	global $cfg;
 	// First check if it is a torrent added in transmission, if so the next if should not be executed
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get(array(), array("id","hashString"));
@@ -93,7 +93,7 @@ function dispatcher_stopTransfer($transfer) {
 	global $cfg;
 
 	// First check if it is a torrent added in transmission, if so the next if should not be executed
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get(array(), array("id","hashString"));
@@ -177,7 +177,7 @@ function dispatcher_deleteTransfer($transfer) {
 	global $cfg;
 
 	// First check if it is a torrent added in transmission, if so the next if should not be executed
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get(array(), array("id","hashString"));
@@ -239,7 +239,7 @@ function dispatcher_deleteDataTransfer($transfer) {
 
 print($transfer);
 exit;
-        require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+        require_once('inc/classes/Transmission.class.php');
         $isTransmissionTorrent = false;
         $trans = new Transmission();
         $response = $trans->get( array(), array('hashString', 'id', 'name') );
@@ -513,7 +513,7 @@ function dispatcher_multi($action) {
 		// url-decode
 		$transfer = urldecode($element);
 
-		require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+		require_once('inc/classes/Transmission.class.php');
 		$isTransmissionTorrent = false;
 		$trans = new Transmission();
 		$response = $trans->get(array(), array("id","hashString"));
