@@ -15,7 +15,7 @@ $cfg["table_admin_border"] = "#000000"; // not used in RedRound (other themes us
 $cfg["body_data_bg"] = "#ffffff"; // used as background of server charts in images
 
 // Directory alternating colors for dir.php
-$cfg["bgLight"] = "#F0F0F0";
-$cfg["bgDark"] = "#D0D0D0";
+$cfg["bgLight"] = "#f0f0f0";
+$cfg["bgDark"] = "#c0c0c0";
 
 ?>

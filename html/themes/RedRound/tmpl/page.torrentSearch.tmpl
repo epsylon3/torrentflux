@@ -16,7 +16,7 @@
 				<form id="searchForm" name="searchForm" action="index.php" method="get">
 					<input type="hidden" name="iid" value="torrentSearch">
 					<input type="text" name="searchterm" id="searchterm" value="<tmpl_var name="searchterm">" size=30 maxlength=50>
-					<select name="searchEngine" <tmpl_if name="autoSubmit">onchange="this.form.submit();"</tmpl_if> STYLE="width: 125px">
+					<select id="searchEngine" name="searchEngine" <tmpl_if name="autoSubmit">onchange="this.form.submit();"</tmpl_if> width="125px">
 					<tmpl_loop name="Engine_List">
 						<option <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="Engine"></option>
 					</tmpl_loop>
