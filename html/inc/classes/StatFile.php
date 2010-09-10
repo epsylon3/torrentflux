@@ -25,100 +25,100 @@
  */
 class StatFile
 {
-    // public fields
+	// public fields
 
-    // file
-    var $theFile;
+	// file
+	var $theFile;
 
-    // af-props
-    var $running = "1";
-    var $percent_done = "0.0";
-    var $time_left = "";
-    var $down_speed = "";
-    var $up_speed = "";
-    var $sharing = "";
-    var $transferowner = "";
-    var $seeds = "";
-    var $peers = "";
-    var $seedlimit = "";
-    var $uptotal = "";
-    var $downtotal = "";
-    var $size = "";
+	// af-props
+	var $running = "1";
+	var $percent_done = "0.0";
+	var $time_left = "";
+	var $down_speed = "";
+	var $up_speed = "";
+	var $sharing = "";
+	var $transferowner = "";
+	var $seeds = "";
+	var $peers = "";
+	var $seedlimit = "";
+	var $uptotal = "";
+	var $downtotal = "";
+	var $size = "";
 
 	// =========================================================================
 	// public static methods
 	// =========================================================================
 
-    /**
-     * factory
-     *
-     * @param $transfer
-     * @param $user
-     * @return StatFile
-     */
-    function getInstance($transfer, $user = '') {
-        return new StatFile($transfer, $user);
-    }
+	/**
+	 * factory
+	 *
+	 * @param $transfer
+	 * @param $user
+	 * @return StatFile
+	 */
+	function getInstance($transfer, $user = '') {
+		return new StatFile($transfer, $user);
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     *
-     * @param $transfer
-     * @param $user
-     * @return StatFile
-     */
-    function StatFile($transfer, $user = "") {
+	/**
+	 * ctor
+	 *
+	 * @param $transfer
+	 * @param $user
+	 * @return StatFile
+	 */
+	function StatFile($transfer, $user = "") {
 		// init
-    	$this->init($transfer, $user);
-    }
+		$this->init($transfer, $user);
+	}
 
 	// =========================================================================
 	// public methods
 	// =========================================================================
 
-    /**
-     * init stat-file
-     *
-     * @param $transfer
-     * @param $user
-     */
-    function init($transfer, $user = '') {
-    	global $cfg;
-    	// file
-    	$this->theFile = $cfg["transfer_file_path"].$transfer.".stat";
-        // set user
-        if ($user != '')
-            $this->transferowner = $user;
-        // load file
-        if (@file_exists($this->theFile)) {
-            // read the stat file
-            $data = @file_get_contents($this->theFile);
+	/**
+	 * init stat-file
+	 *
+	 * @param $transfer
+	 * @param $user
+	 */
+	function init($transfer, $user = '') {
+		global $cfg;
+		// file
+		$this->theFile = $cfg["transfer_file_path"].$transfer.".stat";
+		// set user
+		if ($user != '')
+			$this->transferowner = $user;
+		// load file
+		if (@file_exists($this->theFile)) {
+			// read the stat file
+			$data = @file_get_contents($this->theFile);
 			// assign vars from content
-	        $content = @explode("\n", $data);
-	        $this->running = @ $content[0];
-	        $this->percent_done = @ $content[1];
-	        $this->time_left = @ $content[2];
-	        $this->down_speed = @ $content[3];
-	        $this->up_speed = @ $content[4];
-	        $this->transferowner = @ $content[5];
-	        $this->seeds = @ $content[6];
-	        $this->peers = @ $content[7];
-	        $this->sharing = @ $content[8];
-	        $this->seedlimit = @ $content[9];
-	        $this->uptotal = @ $content[10];
-	        $this->downtotal = @ $content[11];
-	        $this->size = @ $content[12];
-	        //complete stat file
-	        if((int)$this->size == 0) {
-	        	$this->size = $this->getTransferSize($transfer);
-	        	if((int)$this->size > 0) $this->write();
-	        }
-        }
-    }
+			$content = @explode("\n", $data);
+			$this->running = @ $content[0];
+			$this->percent_done = @ $content[1];
+			$this->time_left = @ $content[2];
+			$this->down_speed = @ $content[3];
+			$this->up_speed = @ $content[4];
+			$this->transferowner = @ $content[5];
+			$this->seeds = @ $content[6];
+			$this->peers = @ $content[7];
+			$this->sharing = @ $content[8];
+			$this->seedlimit = @ $content[9];
+			$this->uptotal = @ $content[10];
+			$this->downtotal = @ $content[11];
+			$this->size = @ $content[12];
+			//complete stat file
+			if((int)$this->size == 0) {
+				$this->size = $this->getTransferSize($transfer);
+				if((int)$this->size > 0) $this->write();
+			}
+		}
+	}
 
 	/**
 	 * @return full size
@@ -128,75 +128,75 @@ class StatFile
 		return getTransferSize($transfer);
 	}
 
-    /**
-     * call this on start
-     *
-     * @return boolean
-     */
-    function start() {
-        // Reset all the var to new state (all but transferowner)
-        $this->running = "1";
-        $this->percent_done = "0.0";
-        $this->time_left = "Starting...";
-        $this->down_speed = "";
-        $this->up_speed = "";
-        $this->sharing = "";
-        $this->seeds = "";
-        $this->peers = "";
-        $this->seedlimit = "";
-        $this->uptotal = "";
-        $this->downtotal = "";
-        // write to file
-        return $this->write();
-    }
+	/**
+	 * call this on start
+	 *
+	 * @return boolean
+	 */
+	function start() {
+		// Reset all the var to new state (all but transferowner)
+		$this->running = "1";
+		$this->percent_done = "0.0";
+		$this->time_left = "Starting...";
+		$this->down_speed = "";
+		$this->up_speed = "";
+		$this->sharing = "";
+		$this->seeds = "";
+		$this->peers = "";
+		$this->seedlimit = "";
+		$this->uptotal = "";
+		$this->downtotal = "";
+		// write to file
+		return $this->write();
+	}
 
-    /**
-     * call this on enqueue
-     *
-     * @return boolean
-     */
-    function queue() {
-        // Reset all the var to new state (all but transferowner)
-        $this->running = "3";
-        $this->time_left = "Waiting...";
-        $this->down_speed = "";
-        $this->up_speed = "";
-        $this->seeds = "";
-        $this->peers = "";
-        $this->uptotal = "";
-        $this->downtotal = "";
-        // write to file
-        return $this->write();
-    }
+	/**
+	 * call this on enqueue
+	 *
+	 * @return boolean
+	 */
+	function queue() {
+		// Reset all the var to new state (all but transferowner)
+		$this->running = "3";
+		$this->time_left = "Waiting...";
+		$this->down_speed = "";
+		$this->up_speed = "";
+		$this->seeds = "";
+		$this->peers = "";
+		$this->uptotal = "";
+		$this->downtotal = "";
+		// write to file
+		return $this->write();
+	}
 
-    /**
-     * Common write Method
-     *
-     * @return boolean
-     */
-    function write() {
+	/**
+	 * Common write Method
+	 *
+	 * @return boolean
+	 */
+	function write() {
 		// content
-        $content  = $this->running."\n";
-        $content .= $this->percent_done."\n";
-        $content .= $this->time_left."\n";
-        $content .= $this->down_speed."\n";
-        $content .= $this->up_speed."\n";
-        $content .= $this->transferowner."\n";
-        $content .= $this->seeds."\n";
-        $content .= $this->peers."\n";
-        $content .= $this->sharing."\n";
-        $content .= $this->seedlimit."\n";
-        $content .= $this->uptotal."\n";
-        $content .= $this->downtotal."\n";
-        $content .= $this->size;
+		$content  = $this->running."\n";
+		$content .= $this->percent_done."\n";
+		$content .= $this->time_left."\n";
+		$content .= $this->down_speed."\n";
+		$content .= $this->up_speed."\n";
+		$content .= $this->transferowner."\n";
+		$content .= $this->seeds."\n";
+		$content .= $this->peers."\n";
+		$content .= $this->sharing."\n";
+		$content .= $this->seedlimit."\n";
+		$content .= $this->uptotal."\n";
+		$content .= $this->downtotal."\n";
+		$content .= $this->size;
 		// write file
 		if ($handle = @fopen($this->theFile, "w")) {
-	        $resultSuccess = (@fwrite($handle, $content) !== false);
+			$resultSuccess = (@fwrite($handle, $content) !== false);
 			@fclose($handle);
 			return $resultSuccess;
 		}
 		return false;
-    }
+	}
 
 }
 
