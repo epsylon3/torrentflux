@@ -255,7 +255,7 @@ foreach ($arList as $transfer) {
 		if (!$sf->seedlimit)
 			$sf->seedlimit=$settingsAry["sharekill"];
 	
-		if ((0+$sf->size) > 0) {
+		if ((int)$sf->size > 0) {
 			if (!$sf->sharing) 
 				$sf->sharing=(0+$sf->uptotal)/(0+$sf->size)*100;
 		}
@@ -356,7 +356,7 @@ foreach ($arList as $transfer) {
 	{
 		$format_af_size = formatBytesTokBMBGBTB($sf->size);
 		if(strstr($format_af_size,"G")) $format_af_size = "<b>".$format_af_size."</b>";
-		if($format_af_size == "") $format_af_size = "&nbsp;";		
+		if($format_af_size == "") $format_af_size = "&nbsp;";
 	}
 	// =============================================================== downtotal
 	$format_downtotal = "";

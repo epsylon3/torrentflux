@@ -112,8 +112,21 @@ class StatFile
 	        $this->uptotal = @ $content[10];
 	        $this->downtotal = @ $content[11];
 	        $this->size = @ $content[12];
+	        //complete stat file
+	        if((int)$this->size == 0) {
+	        	$this->size = $this->getTransferSize($transfer);
+	        	if((int)$this->size > 0) $this->write();
+	        }
         }
     }
+
+	/**
+	 * @return full size
+	 */
+	function getTransferSize($transfer) {
+		require_once('inc/functions/functions.core.transfer.php');
+		return getTransferSize($transfer);
+	}
 
     /**
      * call this on start
