@@ -211,12 +211,17 @@ foreach ($arList as $transfer) {
 	$displayname = $transfer;
 
 	// may need a special config panel to clean names...
-	$displayname = preg_replace('#(_www\.[^_]+_)#',"",$displayname);
-	$displayname = preg_replace('#(_[^\.]+\.com_)#',"",$displayname);
+	$displayname = str_replace('.',"_",$displayname);
+	
+	$displayname = preg_replace('#([^_]+_(com|org|net|info)_)#i',"",$displayname);
+	$displayname = preg_replace('#(_torrent)$#i',"",$displayname);
 
-	$arToClean = array ("http","download.php","_isoHunt_","__");	
-
-	$displayname = str_replace($arToClean,"",$displayname);
+	$arToClean = array ("http","download_php","_www_","isohunt");
+	$displayname = str_ireplace($arToClean,"",$displayname);
+	
+	$displayname = str_replace('_',".",$displayname);
+	$displayname = str_replace('..',".",$displayname);
+	$displayname = trim($displayname,'.');
 
 	$displayname = (strlen($displayname) >= 47) ? substr($displayname, 0, 44)."..." : $displayname;
 	// owner
