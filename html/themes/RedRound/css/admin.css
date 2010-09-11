@@ -1951,7 +1951,7 @@ SHOW ACTIVITY
 	text-transform: uppercase;
 	text-align: left;
 	padding: 6px 6px 6px 4px;
-	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') repeat-x;
 }
 
 #adminShowUserActivity th.nobg {
@@ -1995,4 +1995,12 @@ SHOW ACTIVITY
 #adminShowUserActivity td.alt {
 	background: #F5FAFA;
 	color: #B4AA9D;
+}
+
+div#overDiv {
+	background: #F5FAFA;
+	border: 1px solid silver;
+	padding: 2px;
+	font-size: 75%;
+	opacity: 0.8;
 }
