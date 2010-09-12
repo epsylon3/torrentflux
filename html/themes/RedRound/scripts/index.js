@@ -7,6 +7,27 @@
  *      This file is public domain;
  */
 
+function bindFileInput() {
+	jQuery('div.upload_file input[type="file"]').unbind('change').change(function() {
+		$(this).closest("div").children("div").remove();
+		if (jQuery.browser.mozilla)
+		$(this).closest("div").append('<div style="position:absolute;margin-left:2px;margin-top:-21px;">'+$(this).val()+'</div>');
+		else//if (jQuery.browser.webkit)
+		$(this).closest("div").append('<div style="position:absolute;margin-left:2px;margin-top:-16px;">'+$(this).val()+'</div>');
+	});
+}
+/**
+ * addUploadField (override js/multiup.js)
+ */
+function addUploadField(e) {
+	var fileContent = '</div><br /><div class="upload_file"><input type="file" name="upload_files[]" id="upload_files_first" width="250px" size="40" />';
+
+	jQuery("div.upload_file").last().after(fileContent);
+	jQuery("div#indexTorrentUpload").css('height','auto');
+	
+	bindFileInput();
+}
+
 // turn unordened list into tabs
 jQuery(document).ready(function(){
 	
@@ -14,12 +35,24 @@ jQuery(document).ready(function(){
 	jQuery("#tabs").tabs({ panelTemplate: '<li></li>' });
 
 	//skin buttons
-	jQuery("input:submit").button();
+	jQuery("input:submit").button()
+		.css('padding','2px 8px');
+//		.css('height','22px')
+//		.css('line-height','20px')
+//		.css('vertical-align','bottom');
+	
+	bindFileInput();
+	
+	//text zones height
+	jQuery("input:text")
+		.css('height','18px')
+		.css('padding','1px')
+		.css('vertical-align','bottom');
 	
 	//comboboxes
 	jQuery('select#searchEngine').droplist({width:100})
 		.css('display','inline-block')
 		.css('vertical-align','bottom');
-	jQuery('select').droplist({autoresize:true,slide:false,height:150});
+	jQuery('select[name!="action"]').droplist({autoresize:true,slide:false,height:150});
  
 });

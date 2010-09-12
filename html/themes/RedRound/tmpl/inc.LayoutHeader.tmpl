@@ -30,19 +30,15 @@
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.jScrollPane.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.droplist.js"></script>
 
-<!-- jQuery file depending on pages -->
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/<tmpl_var name="iid">.js"></script>
-
 <!-- JS files -->
 <script type="text/javascript" src="js/common.js"></script>
 
 <!-- JS files included depending on page -->
 <tmpl_if name="iid" value="index">
 <!-- INDEX -->
-	<script type="text/javascript" src="js/ajax.js"></script>
-	<script type="text/javascript" src="js/multiup.js"></script>
+	<!--<script type="text/javascript" src="js/multiup.js"></script>-->
 	<script type="text/javascript">
-		$(function(){
+		jQuery(function(){
 			$('#drivespacebar').progressbar({
 			value : <tmpl_var name="drivespacebar_space2">
 			});
@@ -56,7 +52,12 @@
 			});
 		});
 	</script>
+
+	<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/<tmpl_var name="iid">.js"></script>
+
+	<script type="text/javascript" src="js/ajax.js"></script>
 </tmpl_if>
+
 <tmpl_if name="enable_sorttable">
 	<script type="text/javascript" src="js/sorttable.js"></script>
 </tmpl_if>
