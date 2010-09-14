@@ -788,7 +788,14 @@ function safePhpCli($php, $args) {
 		$cmd = 'unset SERVER_SOFTWARE SERVER_NAME GATEWAY_INTERFACE REQUEST_METHOD ; ';
 		$cmd .= $php . ' ' . $args . ' < /dev/null';
 	}
-	return shell_exec($cmd);
+	$return = shell_exec($cmd);
+	if (empty($return)) {
+		$cmd.=' > /tmp/phpver';
+		shell_exec($cmd);
+		$return = file_get_contents('/tmp/phpver');
+		@unlink('/tmp/phpver');
+	}
+	return $return; 
 }
 
 /**
@@ -843,7 +850,7 @@ function validatePhpCli($the_file) {
 		return validationMsg(false, 'Path is not valid');
 	if (!is_executable($the_file))
 		return validationMsg(false, 'File exists but is not executable');
-	$phpVersion = safePhpCli($the_file, '-v');
+	$phpVersion = safePhpCli($the_file, '-v -n');
 	if ((strpos($phpVersion, 'PHP')) === false || (strpos($phpVersion, '(cli)')) === false)
 		return validationMsg(false, 'Executable is not PHP-CLI');
 	return validationMsg(true);
