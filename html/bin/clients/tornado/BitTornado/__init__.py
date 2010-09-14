@@ -5,7 +5,7 @@ version = version_short+' ('+product_name+')'
 report_email = version_short+'@degreez.net'
 
 from types import StringType
-from sha import sha
+from hashlib import sha1
 from time import time, clock
 try:
     from os import getpid
@@ -51,7 +51,7 @@ def resetPeerIDs():
            + str(getpid()) )
 
     s = ''
-    for i in sha(x).digest()[-11:]:
+    for i in sha1(x).digest()[-11:]:
         s += mapbase64[ord(i) & 0x3F]
     _idrandom[0] = s
         

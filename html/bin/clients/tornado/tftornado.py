@@ -33,7 +33,7 @@ from os.path import abspath, isfile
 from os import getpid, remove
 from sys import argv, stdout
 import sys
-from sha import sha
+from hashlib import sha1
 from time import strftime
 from BitTornado.clock import clock
 from BitTornado import createPeerID, version
@@ -588,7 +588,7 @@ def run(autoDie, shareKill, userName, params):
             if not response:
                 break
 
-            infohash = sha(bencode(response['info'])).digest()
+            infohash = sha1(bencode(response['info'])).digest()
 
             h.dow = BT1Download(h.display, h.finished, h.error, disp_exception, doneflag,
                         config, response, infohash, myid, rawserver, listen_port)

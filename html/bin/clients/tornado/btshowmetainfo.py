@@ -8,7 +8,7 @@
 
 from sys import *
 from os.path import *
-from sha import *
+from hashlib import sha1
 from BitTornado.bencode import *
 
 NAME, EXT = splitext(basename(argv[0]))
@@ -27,7 +27,7 @@ for metainfo_name in argv[1:]:
     metainfo = bdecode(metainfo_file.read())
 #    print metainfo
     info = metainfo['info']
-    info_hash = sha(bencode(info))
+    info_hash = sha1(bencode(info))
 
     print 'metainfo file.: %s' % basename(metainfo_name)
     print 'info hash.....: %s' % info_hash.hexdigest()

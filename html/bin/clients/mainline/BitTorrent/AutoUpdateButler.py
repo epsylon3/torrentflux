@@ -24,7 +24,7 @@ from BTL.platform import encode_for_filesystem
 from BTL.defer import ThreadedDeferred, wrap_task
 from BTL.yielddefer import launch_coroutine
 from BTL.obsoletepythonsupport import set
-from BTL.hash import sha
+from hashlib import sha1
 
 from BitTorrent import version, BTFailure
 from BitTorrent import zurllib
@@ -303,7 +303,7 @@ class AutoUpdateButler(TorrentButler):
         public_key_file = open(os.path.join(doc_root, 'public.key'), 'rb')
         public_key = pickle.load(public_key_file)
         public_key_file.close()
-        h = sha(torrentfile).digest()
+        h = sha1(torrentfile).digest()
         return public_key.verify(h, signature)
 
 

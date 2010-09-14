@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
 from BitTorrent.CurrentRateMeasure import Measure
 import BitTorrent.Connector
-from BTL.hash import sha
+from hashlib import sha1
 import struct
 import logging
 logger = logging.getLogger("BitTorrent.Upload")
@@ -40,7 +40,7 @@ def _compute_allowed_fast_list(infohash, ip, num_fast, num_pieces):
     if num_pieces <= num_fast:
         return range(num_pieces) # <---- this would be bizarre
     while True:
-        h = sha(h).digest() # rehash hash to generate new random string.
+        h = sha1(h).digest() # rehash hash to generate new random string.
         for i in xrange(5):
             j = i*4
             #y = [ord(x) for x in h[j:j+4]]
@@ -114,7 +114,7 @@ class Upload(object):
         if num_pieces <= num_fast:
             return range(num_pieces) # <---- this would be bizarre
         while True:
-            h = sha(h).digest() # rehash hash to generate new random string.
+            h = sha1(h).digest() # rehash hash to generate new random string.
             #log("infohash=%s" % h.encode('hex'))
             for i in xrange(5):
                 j = i*4

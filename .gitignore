@@ -1,7 +1,6 @@
 /html/inc/config/config.db.php
 /html/setup.php
-/html/inc/classes/TransmissionController.php
-/html/inc/classes/TransmissionRpc.php
-/html/inc/functions/.functions.common.transfer.php.swp
-/html/inc/functions/functions.dispatcher.php.orig
 /torrentadd
+*.swp
+*.pyc
+*.pyo

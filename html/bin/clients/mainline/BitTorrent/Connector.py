@@ -23,7 +23,7 @@ log_data = False
 
 # for crypto
 from random import randrange
-from BTL.hash import sha
+from hashlib import sha1
 from Crypto.Cipher import ARC4
 # urandom comes from obsoletepythonsupport
 
@@ -447,19 +447,19 @@ class Connector(Handler):
                 S = numtobyte(pow(pub, self._privkey, dh_prime))
                 pub = self._privkey = dhstr = None
                 SKEY = self.parent.infohash
-                x = sha('req3' + S).digest()
-                streamid = sha('req2'+SKEY).digest()
+                x = sha1('req3' + S).digest()
+                streamid = sha1('req2'+SKEY).digest()
                 streamid = ''.join([chr(ord(streamid[i]) ^ ord(x[i]))
                                     for i in range(20)])
-                encrypt = ARC4.new(sha('keyA' + S + SKEY).digest()).encrypt
+                encrypt = ARC4.new(sha1('keyA' + S + SKEY).digest()).encrypt
                 encrypt('x'*1024)
                 padlen = randrange(PAD_MAX)
-                x = sha('req1' + S).digest() + streamid + encrypt(
+                x = sha1('req1' + S).digest() + streamid + encrypt(
                     '\x00'*8 + '\x00'*3+'\x02'+'\x00'+chr(padlen)+
                     urandom(padlen)+'\x00\x00')
                 self.connection.write(x)
                 self.connection.encrypt = encrypt
-                decrypt = ARC4.new(sha('keyB' + S + SKEY).digest()).decrypt
+                decrypt = ARC4.new(sha1('keyB' + S + SKEY).digest()).decrypt
                 decrypt('x'*1024)
                 VC = decrypt('\x00'*8) # actually encrypt
                 x = ''
@@ -498,7 +498,7 @@ class Connector(Handler):
                 pub = bytetonum(dhstr)
                 S = numtobyte(pow(pub, privkey, dh_prime))
                 dhstr = pub = privkey = None
-                streamid = sha('req1' + S).digest()
+                streamid = sha1('req1' + S).digest()
                 x = ''
                 while 1:
                     yield 1
@@ -514,7 +514,7 @@ class Connector(Handler):
                 yield i + 20 + 20 + 8 + 4 + 2 - len(x)
                 self._message = (x + self._message)[-34:]
                 streamid = self._message[0:20]
-                x = sha('req3' + S).digest()
+                x = sha1('req3' + S).digest()
                 streamid = ''.join([chr(ord(streamid[i]) ^ ord(x[i]))
                                     for i in range(20)])
                 self.parent.select_torrent_obfuscated(self, streamid)
@@ -525,7 +525,7 @@ class Connector(Handler):
                     self.log_prefix + '.' + repr(self.parent.infohash) +
                     '.peer_id_not_yet')
                 SKEY = self.parent.infohash
-                decrypt = ARC4.new(sha('keyA' + S + SKEY).digest()).decrypt
+                decrypt = ARC4.new(sha1('keyA' + S + SKEY).digest()).decrypt
                 decrypt('x'*1024)
                 s = decrypt(self._message[20:34])
                 if s[0:8] != '\x00' * 8:
@@ -539,7 +539,7 @@ class Connector(Handler):
                 self._decrypt = decrypt
                 yield padlen + 2
                 s = self._message
-                encrypt = ARC4.new(sha('keyB' + S + SKEY).digest()).encrypt
+                encrypt = ARC4.new(sha1('keyB' + S + SKEY).digest()).encrypt
                 encrypt('x'*1024)
                 self.connection.encrypt = encrypt
                 if not crypto_provide & 2:

@@ -2,11 +2,9 @@
 # they are slow on linux and windows.
 # stupid.
 
-import sha as shalib
-sha = shalib.sha
-##try:
-##    import hashlib
-##    sha = hashlib.sha1
-##except ImportError:
-##    import sha as shalib
-##    sha = shalib.sha
+try:
+    from hashlib import sha1
+    sha = hashlib.sha1
+except ImportError:
+    from shalib import sha
+    sha = shalib.sha

@@ -10,7 +10,7 @@ import time
 import traceback
 from BTL.platform import bttime
 from BTL.DictWithLists import OrderedDictWithLists
-
+from hashlib import sha1
 
 # these are for logging and such
 class GlobalRate(object):

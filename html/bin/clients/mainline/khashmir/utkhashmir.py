@@ -13,7 +13,7 @@ from actions import *
 from khash import newID
 from krpc import KRPCProtocolError, KRPCFailSilently
 from BTL.cache import Cache
-from sha import sha
+from hashlib import sha1
 from util import *
 from BTL.stackthreading import Thread
 from socket import gethostbyname
@@ -76,7 +76,7 @@ class UTKhashmir(khashmir.KhashmirBase):
 
     def setup(self, host, port, data_dir, rlcount, checkpoint=True):
         khashmir.KhashmirBase.setup(self, host, port,data_dir, rlcount, checkpoint)
-        self.cur_token = self.last_token = sha('')
+        self.cur_token = self.last_token = sha1('')
         self.tcache = Cache()
         self.gen_token(loop=True)
         self.expire_cached_tokens(loop=True)
@@ -89,7 +89,7 @@ class UTKhashmir(khashmir.KhashmirBase):
                                 
     def gen_token(self, loop=False):
         self.last_token = self.cur_token
-        self.cur_token = sha(newID())
+        self.cur_token = sha1(newID())
         if loop:
             self.rawserver.external_add_task(TOKEN_UPDATE_INTERVAL,
                                              self.gen_token, True)

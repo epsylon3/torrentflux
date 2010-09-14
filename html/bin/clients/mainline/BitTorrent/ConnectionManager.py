@@ -17,7 +17,7 @@ from BTL.platform import app_name
 from BTL.translation import _
 from BitTorrent import BTFailure
 from BTL.obsoletepythonsupport import *
-from BTL.hash import sha
+from hashlib import sha1
 from BitTorrent.RawServer_twisted import Handler
 from BitTorrent.Connector import Connector
 from BitTorrent.HTTPConnector import HTTPConnector
@@ -706,7 +706,7 @@ class SingleportListener(Handler):
             raise BTFailure(_("Can't start two separate instances of the same "
                               "torrent"))
         self.torrents[infohash] = connection_manager
-        key = sha('req2' + infohash).digest()
+        key = sha1('req2' + infohash).digest()
         self.obfuscated_torrents[key] = connection_manager
         if self.local_discovery:
             service = self.local_discovery.announce(infohash.encode('hex'),
@@ -715,7 +715,7 @@ class SingleportListener(Handler):
 
     def remove_torrent(self, infohash):
         del self.torrents[infohash]
-        del self.obfuscated_torrents[sha('req2' + infohash).digest()]
+        del self.obfuscated_torrents[sha1('req2' + infohash).digest()]
         if infohash in self.ld_services:
             service = self.ld_services.pop(infohash)
             if self.local_discovery:

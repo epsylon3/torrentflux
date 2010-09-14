@@ -12,7 +12,7 @@ from cStringIO import StringIO
 from traceback import print_exc
 from socket import error, gethostbyname
 from random import shuffle
-from sha import sha
+from hashlib import sha1
 from time import time
 try:
     from os import getpid
@@ -32,7 +32,7 @@ basekeydata = str(getpid()) + repr(time()) + 'tracker'
 
 def add_key(tracker):
     key = ''
-    for i in sha(basekeydata+tracker).digest()[-6:]:
+    for i in sha1(basekeydata+tracker).digest()[-6:]:
         key += mapbase64[ord(i) & 0x3F]
     keys[tracker] = key
 

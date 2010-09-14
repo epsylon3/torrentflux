@@ -18,7 +18,7 @@ from BTL.translation import _
 import time
 from sys import *
 from os.path import *
-from sha import *
+from hashlib import sha1
 from BTL.bencode import *
 from BitTorrent import version
 
@@ -62,7 +62,7 @@ for metainfo_name in argv[1:]:
     metainfo = bdecode(metainfo_file.read())
     metainfo_file.close()
     info = metainfo['info']
-    info_hash = sha(bencode(info))
+    info_hash = sha1(bencode(info))
 
     if metainfo.has_key('title'):
         print labels['title'] % metainfo['title']
