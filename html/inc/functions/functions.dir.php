@@ -220,14 +220,14 @@ function downloadFile($down) {
  * @param $down
  * @return string with current
  */
-function downloadArchive($down) {
+function downloadArchive($download) {
 	global $cfg;
 	$current = "";
 
-	if (tfb_isValidPath($down)) {
+	if (tfb_isValidPath($download)) {
 		// This prevents the script from getting killed off when running lengthy tar jobs.
 		@ini_set("max_execution_time", 3600);
-		$down = $cfg["path"].$down;
+		$down = $cfg["path"].$download;
 		$arTemp = explode("/", $down);
 		if (count($arTemp) > 1) {
 			array_pop($arTemp);
@@ -265,13 +265,13 @@ function downloadArchive($down) {
 			// Make it a bit easier for tar/zip.
 			chdir(dirname($down));
 			passthru($command);
-			AuditAction($cfg["constants"]["fm_download"], $sendname.".".$cfg["package_type"]);
+			AuditAction($cfg["constants"]["fm_download"], $download.".".$cfg["package_type"]);
 			exit();
 		} else {
-			AuditAction($cfg["constants"]["error"], "Illegal download: ".$cfg["user"]." tried to download ".$down);
+			AuditAction($cfg["constants"]["error"], "Illegal download: ".$cfg["user"]." tried to download ".$download);
 		}
 	} else {
-		AuditAction($cfg["constants"]["error"], "ILLEGAL TAR DOWNLOAD: ".$cfg["user"]." tried to download ".$down);
+		AuditAction($cfg["constants"]["error"], "ILLEGAL TAR DOWNLOAD: ".$cfg["user"]." tried to download ".$download);
 	}
 	return $current;
 }
