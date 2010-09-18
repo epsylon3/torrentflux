@@ -17,8 +17,11 @@
 	</tr>
 	<tr>
 		<td style="width:18px;"><img src="themes/<tmpl_var name="theme">/images/dtree/folder.png" title="<tmpl_var name="entry">" alt="" /></td>
-		<td colspan="5">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)
-		</td>
+		<tmpl_if name="enable_dirstats" value="1">
+			<td colspan="6">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
+		<tmpl_else>
+			<td colspan="2">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
+		</tmpl_if>
 		<td id="dirChmod">
 			<tmpl_if name="show_chmod" value="1">
 				<a href="index.php?iid=dir&amp;chmod=1&amp;dir=<tmpl_var name="dir">"><img src="themes/<tmpl_var name="theme">/images/dir/chmod.png" title="chmod directory" alt="" /></a>
@@ -84,6 +87,7 @@
 				<tmpl_if name="enable_dirstats" value="1">
 					<td class="dirPermission"><tmpl_var name="permission"></td>
 					<td class="dirSize"><tmpl_var name="size"></td>
+					<td class="dirDown"><tmpl_var name="dlinfo"></td>
 					<td class="dirDate"><tmpl_var name="date"></td>
 				</tmpl_if>
 			<tmpl_else>
@@ -95,7 +99,7 @@
 					</tmpl_if>
 				</td>	
 				<tmpl_if name="enable_dirstats" value="1">
-					<td colspan="4">
+					<td colspan="5">
 				<tmpl_else>
 					<td>
 				</tmpl_if>

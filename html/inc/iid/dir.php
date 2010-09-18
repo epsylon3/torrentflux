@@ -70,6 +70,125 @@ if (tfb_isValidPath($dir) !== true) {
 }
 
 /*******************************************************************************
+ * log history
+ ******************************************************************************/
+function getDownloadLogs($path) {
+	global $cfg, $db;
+	$srchAction = "File Download";
+	
+	$sqlWhere  = "file LIKE ".$db->qstr($path."%")." AND ";
+	$sqlWhere .= "action LIKE ".$db->qstr($srchAction."%")." AND ";
+
+	$sql = "SELECT user_id, file, max(time) as time FROM tf_log WHERE ".$sqlWhere."action!=".$db->qstr($cfg["constants"]["hit"])." GROUP BY user_id, file ORDER BY time desc";
+	$result = $db->SelectLimit($sql, 999, 0);
+	if ($db->ErrorNo() != 0) dbError($sql);
+	$array = array();
+	while ($row = $result->FetchNextObject(false))
+		$array[] = $row;
+	
+	return $array;
+}
+
+function getDownloadFtpLogUsers($srchFile, $logNumber="") {
+	global $cfg, $db, $dlLog;
+	$userlist=array();
+	$userRenamer=array(); 
+
+	//xferlog or xferlog.0 (last month)
+	//$ftplog = '/var/log/proftpd/xferlog'.$logNumber;
+	$ftplog = "/var/log/pure-ftpd/stats_transfer$logNumber.log";
+
+	if (!is_file($ftplog))
+		return array();
+
+	//Search in Log (for old or external log insert, todo)
+	$srchFile   = str_replace($cfg["path"],'',$srchFile);
+
+	//Search in cached db log array
+	foreach ($dlLog as $row) {
+		if ($row->file == $srchFile) {
+			$userlist[$row->user_id] = htmlentities(substr($row->user_id, 0, 3), ENT_QUOTES);
+		}
+	}
+	
+	if (count($userlist) > 0) return $userlist;
+
+	$userRenamer["root"]="epsylon3";
+
+	$cmdLog = "cat $ftplog|".$cfg["bin_grep"].' '.tfb_shellencode(str_replace(' ','_',$srchFile)); //.'|'.$cfg["bin_grep"]." -o -E ' r (.*) ftp'"
+
+	$dlInfos=trim( @ shell_exec($cmdLog) );
+	if ($dlInfos) {
+		$ftpusers = explode("\n", $dlInfos);
+		foreach ($ftpusers as $key=>$value) {
+/* PROFTPD
+			$value=substr($value,4);
+			$time=strtotime(substr($value,0,20));
+			$value=substr($value,21);
+			$lineWords=explode(' ',$value);
+			$hostname=$lineWords[1];
+			$size=0+($lineWords[2]);
+			$username=$lineWords[count($lineWords)-5];
+			$complete=$lineWords[count($lineWords)-1]; */
+
+/* pure-ftpd (stats:/var/log/pure-ftpd/stats_transfer.log) */
+			$lineWords=explode(' ',$value);
+			$time=0+($lineWords[0]);
+			$username=$lineWords[2];
+			$hostname=$lineWords[3];
+			$complete=str_replace("D","c",$lineWords[4]);
+			$size=0+($lineWords[5]);
+
+//die( "<pre>$size-$complete-$hostname-$username-$time\n$value\n</pre>");
+
+			if ($complete=="c") {
+
+				//rename user ?
+				if (array_key_exists($username,$userRenamer)) $username=$userRenamer[$username];	
+			
+				if (!array_key_exists($username,$userlist)) {
+					
+					$srchAction = "File Download (FTP)";
+					
+					$db->Execute("INSERT INTO tf_log (user_id,file,action,ip,ip_resolved,user_agent,time)"
+ 					   	." VALUES ("
+  					  	. $db->qstr($username).","
+  					  	. $db->qstr($srchFile).","
+  					  	. $db->qstr($srchAction).","
+ 					   	. $db->qstr('FTP')."," //IP
+ 					   	. $db->qstr($hostname).","
+ 					   	. $db->qstr('FTP')."," //user-agent
+   					 	. $time
+   					 	.")"
+					);
+					if ($db->ErrorNo() != 0) dbError($sql);
+				}
+
+				$userlist[$username]=substr($username,0,3);
+			}
+
+		}
+	}
+	return $userlist;
+}
+
+function getDownloadWebLogUsers($srchFile,$is_dir) {
+	global $cfg, $db, $dlLog;
+	$userlist=array();
+
+	//$srchFile=str_replace('/var/cache/torrentflux/','',$srchFile);
+	$srchFile=str_replace($cfg["path"],'',$srchFile);
+
+	foreach ($dlLog as $row) {
+		if ($row->file == $srchFile || ($is_dir && $srchFile && strpos($row->file,$srchFile) !== false)) {
+			$userlist[$row->user_id] = htmlentities(substr($row->user_id, 0, 3), ENT_QUOTES);
+		}
+	}
+	
+	return $userlist;
+}
+
+/*******************************************************************************
  * chmod
  ******************************************************************************/
 if ($chmod != "") {
@@ -320,11 +439,11 @@ if (isset($dir)) {
 }
 
 foreach($tDirPs as $key => $value) {
-	$value=preg_replace('#(.*\.torrent)\.pid#','\1',$value);	
-	$stats=explode("\n",file_get_contents($value.".stat"));	
+	$value=preg_replace('#(.*\.torrent)\.pid#','\1',$value);
+	$stats=explode("\n",@file_get_contents($value.".stat"));
 	$value=preg_replace('#.*\.transfers/([^ ]+\.torrent)#','\1',$value);
 	$path=getTransferDatapath($value);
-	if ((0+$stats[1]) < 100) {
+	if ((int) @$stats[1] < 100) {
 		$tRunning[$path]=$value;
 	} else {
 		$tSeeding[$path]=$value;
@@ -405,17 +524,24 @@ $entrys = array_merge ($entrysDirs, $entrysFiles, $entrys);
 // process entries and fill dir- + file-array
 $list = array();
 
+// files downloaded (from log)
+$dlLog = getDownloadLogs($dir);
+
 foreach ($entrys as $entry) {
+	$slink="";
+	$dlInfos="";
+	
 	// acl-write-check
 	if (empty($dir)) /* parent dir */
 		$aclWrite = (hasPermission($entry, $cfg["user"], 'w')) ? 1 : 0;
 	else /* sub-dir */
 		$aclWrite = (hasPermission($dir, $cfg["user"], 'w')) ? 1 : 0;
-		
+
 	// symbolic links
 	if(!is_link($dirName.$entry))
 	{
 		$islink = 0;
+		$slink = $entry;
 	}
 	else
 	{
@@ -423,14 +549,18 @@ foreach ($entrys as $entry) {
 			$slink = "";
 		$islink = 1;
 	}
+	
 	// dirstats
-	$size = 0.0;
-	$ssz  = 0.0;
 	$date = "";
-
+	$size = 0.0;
+	$show_sfv = 0;
+	$sfvdir = "";
+	$sfvsfv = "";
+	$userlist = array();
 	if ($cfg['enable_dirstats'] == 1) 
 	{
 		$path = $dirName.$entry;
+		$ssz = 0.0;
 		
 		if($islink == 0) // it's not a symbolic link
 		{
@@ -439,7 +569,7 @@ foreach ($entrys as $entry) {
 		}
 		elseif (!isWinOS()) // it's a symbolic link
 		{
-			$ssz += @trim(shell_exec('du -ksL '.tfb_shellencode($path)));
+			$ssz += @trim(shell_exec('du -ksL '.tfb_shellencode($slink)));
 			$date = "";
 		}
 		
@@ -448,13 +578,8 @@ foreach ($entrys as $entry) {
 		if (strstr($size,"G")) $size="<b>$size</b>";
 
 		$timeStamp = filemtime($dirName.$entry);
-		$date = date("m-d-Y h:i a", $timeStamp);
-	} 
-	else 
-	{
-		$size = 0;
-		$date = "";
-	}	
+		$date = date($cfg['_DATETIMEFORMAT'],$timeStamp);
+	}
 	if (is_dir($dirName.$entry)) // dir
 	{ 
 		// sfv
@@ -463,34 +588,47 @@ foreach ($entrys as $entry) {
 			$show_sfv = 1;
 			$sfvdir = $sfv['dir'];
 			$sfvsfv = $sfv['sfv'];
-		} 
-		else 
-		{
-			$show_sfv = 0;
-			$sfvdir = "";
-			$sfvsfv = "";
 		}
 		$isdir = 1;
 		$show_nfo = 0;
 		$show_rar = 0;
-	} 
+		
+		$image = "";
+		
+		if ($dir != '') {
+			$userlist = getDownloadWebLogUsers($dirName.$entry,1);
+		}
+	}
 	else if (!@is_dir($dirName.$entry)) // file
-	{ 
-		// image
-		$image = "themes/".$cfg['theme']."/images/time.gif";
-		$imageOption = "themes/".$cfg['theme']."/images/files/".getExtension($entry).".png";
-		if (file_exists("./".$imageOption))
-			$image = $imageOption;
+	{
+
+		if ((0+$size) > 0 && $cfg['enable_dirstats'] == 1) {
+
+			//WEB DL Users (Who Downloaded it ?)
+			$userlist = getDownloadWebLogUsers($dirName.$entry,0);
+			//FTP DL Users (Who Downloaded it ?)
+			$userlist = array_merge($userlist, getDownloadFtpLogUsers($dirName.$entry) );
+			//FTP DL Users (Who Downloaded it last month?)
+			$userlist = array_merge($userlist, getDownloadFtpLogUsers($dirName.$entry, ".0") );
+		}
+		
 		// nfo
 		$show_nfo = ($cfg["enable_view_nfo"] == 1) ? isNfo($entry) : 0;
 		// rar
 		$show_rar = (($cfg["enable_rar"] == 1) && ($aclWrite == 1)) ? isRar($entry) : 0;
 		// add entry to file-array
 		$isdir = 0;
-		$show_sfv = 0;
-		$sfvdir = "";
-		$sfvsfv = "";
+
+		// image
+		$image = "themes/".$cfg['theme']."/images/time.gif";
+		$imageOption = "themes/".$cfg['theme']."/images/files/".getExtension($entry);
+		
+		if (file_exists("./".$imageOption.".png"))
+			$image = $imageOption.".png";
+		else if (file_exists("./".$imageOption.".gif"))
+			$image = $imageOption.".gif";
 	}
+	
 	// get Permission and format it userfriendly
 	if(($fperm = fileperms($dirName.$entry)) !== FALSE)
 	{
@@ -515,6 +653,14 @@ foreach ($entrys as $entry) {
 		$size='<span style="color:blue;">'.$size.'</span>';
 	}
 	
+	$dlFullInfo = implode(', ',array_keys($userlist));
+	if ($dlFullInfo) {
+		if (file_exists('./themes/'.$cfg['theme'].'/images/dir/dlinfo.png'))
+			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/dir/dlinfo.png" title="Downloaded by '.$dlFullInfo.'">';
+		else
+			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/download_owner.gif" title="Downloaded by '.$dlFullInfo.'">';
+	}
+	
 	// add entry to dir-array
 	array_push($list, array(
 		'is_dir'      => $isdir,
@@ -522,13 +668,14 @@ foreach ($entrys as $entry) {
 		'aclWrite'    => $aclWrite,
 		'permission'  => $permission,
 		'entry'       => $entry,
-		'real_entry'  => $slink,
+		'real_entry'  => $realentry,
 		'urlencode1'  => UrlHTMLSlashesEncode($dir.$entry),
 		'urlencode2'  => UrlHTMLSlashesEncode($dir),
 		'urlencode3'  => UrlHTMLSlashesEncode($entry),
 		'addslashes1' => addslashes($entry),
 		'size'        => $size,
-		'date'        => $date,
+		'date'        => "<nobr>$date</nobr>",
+		'dlinfo'      => $dlFullInfo,
 		'image'       => $image,
 		'show_sfv'    => $show_sfv,
 		'sfvdir'      => UrlHTMLSlashesEncode($sfvdir),
