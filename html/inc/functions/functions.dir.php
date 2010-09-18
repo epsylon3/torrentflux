@@ -188,6 +188,7 @@ function downloadFile($down) {
 				if (!$is_image) {
 					@header("Content-type: application/octet-stream\n");
 					@header("Content-disposition: attachment; filename=\"".$headerName."\"\n");
+					@header("Accept-Ranges: bytes\n");
 				} else {
 					@header("Content-type: image/$fileExt\n");
 				}
@@ -257,6 +258,7 @@ function downloadArchive($download) {
 				: $sendname;
 			@header("Cache-Control: no-cache");
 			@header("Pragma: no-cache");
+			// XSendfile not possible here (passthru)
 			@header("Content-Description: File Transfer");
 			@header("Content-Type: application/force-download");
 			@header('Content-Disposition: attachment; filename="'.$headerName.'.'.$cfg["package_type"].'"');
