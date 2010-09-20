@@ -1,6 +1,6 @@
-/*	jquery.droplist v1.0 by Tanguy Pruvot Rev: $Rev$ $Id$
+/*	jquery.droplist v1.1 by Tanguy Pruvot Rev: $Rev$ $Id$
 
-	02 September 2010 - http://github.com/tpruvot/jquery.droplist
+	19 September 2010 - http://github.com/tpruvot/jquery.droplist
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@
 		var self = this;
 		var isInsideForm = false;
 		var callTriggers = false;
+		var wx_opt, wx_drp, wx_lst;
 		var onchange;
 
 		// DEFAULT SETTINGS
@@ -45,6 +46,7 @@
 			'autoresize' : false,
 			'slide': true,
 			'width': null,
+			'height': 200,
 			'selected': null
 		};
 		
@@ -61,22 +63,26 @@
 		}
 
 		function customScroll() {
-			var h1 = settings.height || 220,
-				h2 = self.listWrapper.height();
+			var h1 = settings.height,
+				h2 = self.listWrapper.innerHeight();
 			if (h2 > h1) {
 				self.list.css('height', h1 + 'px').jScrollPane({showArrows:false});
 			}
 		}
 
 		function layout() {
-			self.listWrapper.css('width', (settings.width - (self.listWrapper.outerWidth(true) - self.listWrapper.width())) + 'px');
+			//listWrapper visible at this state, we can get padding widths;
+			wx_lst = self.listWrapper.outerWidth() - self.listWrapper.width();
+			wx_opt = self.option.outerWidth() - self.option.width();
+			wx_drp = self.drop.outerWidth() - self.drop.width();
+			self.listWrapper.width(settings.width - wx_lst);
 			if (!settings.autoresize) {
 				self.wrapper.css('clear','both');
 				self.option.css('display','block');
 				self.option.css('float','left');
 				self.drop.css('display','block');
 				self.drop.css('float','left');
-				self.option.css('width', (settings.width - self.drop.width() - (self.option.outerWidth(true) - self.option.width())) + 'px');
+				self.option.width(settings.width - self.drop.outerWidth() - wx_opt - wx_drp);
 			}
 		}
 
@@ -141,9 +147,9 @@
 
 			// auto direction
 			if (settings.direction === 'auto') {
-				var distanceFromBottom = (self.select.height() + self.wrapper.offset().top - $(document).scrollTop() - $(window).height()) * -1,
-					objHeight = self.select.height() + self.listWrapper.height();
-				if (distanceFromBottom < objHeight) {
+				var distanceFromBottom = (self.wrapper.offset().top - $(document).scrollTop() - $(window).height()) * -1,
+					objHeight = self.listWrapper.height();
+				if (distanceFromBottom < objHeight || distanceFromBottom < 100) {
 					self.wrapper.addClass('droplist-up');
 				} else {
 					self.wrapper.removeClass('droplist-up');
@@ -318,18 +324,17 @@
 			if (settings.autoresize) {
 				self.option.css('width','');
 				self.select.css('display','inline-block');
-				self.select.css('width',settings.width);
-				if (self.option.outerWidth(true) + self.drop.outerWidth(true) >= settings.width) {
-					var wx = self.option.outerWidth(true) - self.option.width();
-					self.option.css('width',settings.width - self.drop.outerWidth(true) - wx);
+				//self.select.width(settings.width);
+				if (self.option.outerWidth() > settings.width - self.drop.outerWidth()) {
+					//max width to settings
+					self.option.width(settings.width - self.drop.outerWidth() - wx_opt - wx_drp);
 				}
-				self.select.css('width',self.option.outerWidth(true) + self.drop.outerWidth(true));
+				self.select.width(self.option.outerWidth() + self.drop.outerWidth() + 1);
 
 				self.wrapper.css('display','inline-block');
-				self.wrapper.css('width',self.option.outerWidth(true) + self.drop.outerWidth(true));
+				self.wrapper.width(self.option.outerWidth() + self.drop.outerWidth());
 			} else {
-				var wx = self.option.outerWidth(true) - self.option.width();
-				self.option.css('width',settings.width - self.drop.outerWidth(true) - wx);
+				self.option.width(settings.width - self.drop.outerWidth() - wx_opt - wx_drp);
 			}
 			
 			if (self.callTriggers) {
@@ -370,7 +375,7 @@
 		self.obj.name = self.obj.attr('name');
 		self.obj.id = self.obj.attr('id');
 		self.obj.title = self.obj.attr('title') || '';
-		self.obj.width = self.obj.width();
+		self.obj.width = self.obj.outerWidth();
 		settings.width = settings.width || self.obj.width;
 		self.onchange = self.obj[0].getAttribute('onchange');
 
@@ -424,6 +429,7 @@
 			self.inputHidden.attr('name',self.obj.name);
 			if (self.obj.id) self.inputHidden.attr('id',self.obj.id+'_hidden');
 			//we need to find a way to detect external change of select value via javascript
+			if (self.inputHidden[0].addEventListener)
 			self.inputHidden[0].addEventListener('DOMAttrModified', function (e) {
 				if (callTriggers && e.attrName == 'value') {
 					//working only in Mozilla
