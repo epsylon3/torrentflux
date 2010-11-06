@@ -112,6 +112,7 @@ function getDownloadFtpLogUsers($srchFile, $logNumber="") {
 	}
 	
 	if (count($userlist) > 0) return $userlist;
+	if (!file_exists($ftplog)) return $userlist;
 
 	$userRenamer["root"]="epsylon3";
 
@@ -180,7 +181,11 @@ function getDownloadWebLogUsers($srchFile,$is_dir) {
 	$srchFile=str_replace($cfg["path"],'',$srchFile);
 
 	foreach ($dlLog as $row) {
-		if ($row->file == $srchFile || ($is_dir && $srchFile && strpos($row->file,$srchFile) !== false)) {
+		$downloaded = ($row->file == $srchFile);
+		if (!$downloaded && $is_dir && $srchFile) {
+			$downloaded = (strpos($row->file,$srchFile) !== false);
+		}
+		if ($downloaded) {
 			$userlist[$row->user_id] = htmlentities(substr($row->user_id, 0, 3), ENT_QUOTES);
 		}
 	}
