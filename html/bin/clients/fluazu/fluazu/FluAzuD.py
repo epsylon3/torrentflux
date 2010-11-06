@@ -234,20 +234,20 @@ class FluAzuD(object):
         actifs = 1
         
         #if os.path.isfile("/usr/local/bin/flubartchkactive.php"):
-            
+        #    
         #    args = shlex.split("/usr/bin/php /usr/local/bin/flubartchkactive.php")
         #    data = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()[0]
-            #printMessage("os exec = %s ..." % data)
-            
-            #f = open("/tmp/flubartactif", 'r')
-            #data = f.read()
-            #f.close()
+        #    printMessage("os exec = %s ..." % data)
+        #    
+        #    f = open("/tmp/flubartactif", 'r')
+        #    data = f.read()
+        #    f.close()
         #    try:
         #        actifs = int(data)
         #    except:
         #        printMessage("bad data in /tmp/flubartactif %s ..." % data)
         #        actifs = 1
-            
+        
         return actifs
         
     
@@ -276,7 +276,7 @@ class FluAzuD(object):
             if (nloop == 50):
                 self.needUpdateAll = 1
 
-            if (nloop % 100) == 0:
+            if (nloop % 50) == 0:
                 self.needUpdate = 1
 
             if (nloop % 10) == 0:
@@ -325,7 +325,7 @@ class FluAzuD(object):
             #printMessage("processCommandStack")
             
             # inner loop which check if there is a command file to run
-            for i in range(20):
+            for i in range(15):
                 
                 # process daemon command stack (fast) CTRL+C ?
                 if self.processCommandStack():
