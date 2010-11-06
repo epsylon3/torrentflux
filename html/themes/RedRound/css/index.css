@@ -1,7 +1,7 @@
 div.upload_file {
 	border-width:1px;
 	border-style:solid;
-	border-color:#666;
+	border-color:#ccc;
 	background-color:#fcfcfc;
 	width:250px;
 	height:20px;
@@ -31,6 +31,6 @@ input[type="text"] {
 	height:22px;
 	border-width:1px;
 	border-style:solid;
-	border-color:#666;
+	border-color:#ccc;
 	background-color:#fcfcfc;
 }
