@@ -1,6 +1,6 @@
-/*	jquery.droplist v1.1 by Tanguy Pruvot Rev: $Rev$ $Id$
+/*	jquery.droplist v1.2 by Tanguy Pruvot Rev: $Rev$ $Id$
 
-	19 September 2010 - http://github.com/tpruvot/jquery.droplist
+	29 October 2010 - http://github.com/tpruvot/jquery.droplist
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -31,155 +31,188 @@
 */
 (function ($) {
 
-	var DropList = function (el, options, callback) {
+	var DropList = function (element, _settings, callback) {
 
-		var self = this;
-		var isInsideForm = false;
-		var callTriggers = false;
-		var wx_opt, wx_drp, wx_lst;
-		var onchange;
+		var me = this,
+			isInsideForm = false,
+			callTriggers = false,
+			wx_opt, wx_drp, wx_lst,
+			onchange,
 
-		// DEFAULT SETTINGS
-		var defaults = { 
-			'direction': 'auto', 
-			'customScroll': true, 
-			'autoresize' : false,
-			'slide': true,
-			'width': null,
-			'height': 200,
-			'selected': null
-		};
-		
-		var settings = $.extend({}, defaults, options);
-		
+			// SETTINGS
+			// ==============================================================================
+
+			defaults = {
+				'direction': 'auto',
+				'customScroll': true,
+				'autoresize' : false,
+				'slide': true,
+				'width': null,
+				'height': 200,
+				'selected': null,
+				'namespaces': {
+					droplist: 'droplist',
+					clickout: 'droplistClickout'
+				}
+			},
+
+			settings = jQuery.extend({}, defaults, _settings || {});
+
 		if (settings.width !== null) {
 			settings.autoresize = false;
 		}
 
+
 		// PRIVATE METHODS
+		// ==============================================================================
 
-		function setText(str) {
-			self.option.html(text2html(str));
-		}
+		var setText = function (str) {
+			me.option.html(text2html(str));
+		};
 
-		function customScroll() {
+		var customScroll = function () {
 			var h1 = settings.height,
-				h2 = self.listWrapper.innerHeight();
+				h2 = me.dropdown.height();
 			if (h2 > h1) {
-				self.list.css('height', h1 + 'px').jScrollPane({showArrows:false});
+				me.list.css('height', h1 + 'px').jScrollPane({
+					showArrows:false
+				});
 			}
-		}
+		};
 
-		function layout() {
-			//listWrapper visible at this state, we can get padding widths;
-			wx_lst = self.listWrapper.outerWidth() - self.listWrapper.width();
-			wx_opt = self.option.outerWidth() - self.option.width();
-			wx_drp = self.drop.outerWidth() - self.drop.width();
-			self.listWrapper.width(settings.width - wx_lst);
+		var layoutController = function () {
+			//dropdown visible at this state, we can get padding widths;
+			wx_lst = me.dropdown.outerWidth() - me.dropdown.width();
+			wx_opt = me.option.outerWidth() - me.option.width();
+			wx_drp = me.drop.outerWidth() - me.drop.width();
+			me.dropdown.width(settings.width - wx_lst);
 			if (!settings.autoresize) {
-				self.wrapper.css('clear','both');
-				self.option.css('display','block');
-				self.option.css('float','left');
-				self.drop.css('display','block');
-				self.drop.css('float','left');
-				self.option.width(settings.width - self.drop.outerWidth() - wx_opt - wx_drp);
+				me.wrapper.css('clear','both');
+				me.option.css({
+					'display':'block',
+					'float':'left'
+				});
+				me.option.width(settings.width - me.drop.outerWidth() - wx_opt - wx_drp);
+				me.wrapper.width(settings.width);
 			}
-		}
+
+			me.drop.css({
+				'position':'absolute',
+				'right':'0px'
+			});
+
+		};
 
 		var text2html = function (data) {
 			//fix incorrect chars in possible values
 			return data.replace("<","&lt;").replace(">","&gt;");
-		}
-		
+		};
+
 		var text2js = function (data) {
 			//fix incorrect quote in possible values
 			data = (data !== null) ? data : '';
 			return data.replace("'","\'");
-		}
-		
+		};
+
 		var text2attr = function (data) {
 			//fix incorrect dbquote in attr value
 			data = (data !== null) ? data : '';
 			return data.replace('"','\"');
-		}
-		
+		};
+
 		var options2list = function (data) {
 			var output = '<ul>';
 			data.each(function () {
-				var selected = $(this).attr('selected') ? 'selected' : '';
-				selected += ($(this).attr('class') || '');
-				if (!!$(this).attr('disabled'))
-					output += '<li class="'+selected+' "><span class="disabled">' + text2html($(this).text()) + '<span></li>\t';
+				var selected = jQuery(this).attr('selected') ? 'selected' : '';
+				selected += ' ' + (jQuery(this).attr('class') || '');
+				if (!!jQuery(this).attr('disabled'))
+					output += '<li class="'+selected+'"><span class="disabled">' + text2html(jQuery(this).text()) + '<span></li>\t';
 				else
-					output += '<li class="'+selected+' "><a href="' + $(this).val() +'">' + text2html($(this).text()) + '</a></li>\t';
+					output += '<li class="'+selected+'"><a href="' + jQuery(this).val() +'">' + text2html(jQuery(this).text()) + '</a></li>\t';
 			});
 			output += '</ul>';
 			return output;
 		};
 
+		var setInitialTitle = function () {
+			if (me.obj.title !== '') {
+				setText(me.obj.title);
+			}
+		};
+
+		var setInitialSelected = function () {
+			var selectedItem = me.list.find('.selected');
+			if (selectedItem.length === 1)
+				me.set(selectedItem);
+			else
+				me.set(me.list.find('li a').closest('li').first());
+		};
+
 
 		// PUBLIC METHODS
+		// ==============================================================================
 
-		self.setValue = function (val, trigger) {
-			var item = self.listItems.find(">a[href='"+text2js(val)+"']").closest('li');
+		me.setValue = function (val, trigger) {
+			var item = me.listItems.find(">a[href='"+text2js(val)+"']").closest('li');
 			if (item.length <= 1) {
-				self.callTriggers = (trigger && self.get() != val);
-				self.set(item);
-				self.callTriggers = true;
+				me.callTriggers = (trigger && me.get() != val);
+				me.set(item);
+				me.callTriggers = true;
 			}
 		}
 
-		self.open = function () {
+		me.open = function () {
 
 			// just show
 			if (settings.slide)
-				self.listWrapper.slideDown(60);
+				me.dropdown.slideDown(60);
 			else
-				self.listWrapper.show();
+				me.dropdown.show();
 
 			// close other opened lists
-			var opened = $('html').find('.droplist-active');
+			var opened = jQuery(document).find('.droplist-active');
 			if (opened !== null && opened.length > 0) {
 				opened.data('droplist').close();
 			}
 
-			self.wrapper.addClass('droplist-active');
+			me.wrapper.addClass('droplist-active');
 
 			// auto direction
 			if (settings.direction === 'auto') {
-				var distanceFromBottom = (self.wrapper.offset().top - $(document).scrollTop() - $(window).height()) * -1,
-					objHeight = self.listWrapper.height();
+				var distanceFromBottom = (me.wrapper.offset().top - jQuery(document).scrollTop() - jQuery(window).height()) * -1,
+					objHeight = me.dropdown.height();
 				if (distanceFromBottom < objHeight || distanceFromBottom < 100) {
-					self.wrapper.addClass('droplist-up');
+					me.wrapper.addClass('droplist-up');
 				} else {
-					self.wrapper.removeClass('droplist-up');
+					me.wrapper.removeClass('droplist-up');
 				}
 			} else if (settings.direction === 'up') {
-				self.wrapper.addClass('droplist-up');
+				me.wrapper.addClass('droplist-up');
 			}
 
 			// focus selected item (auto scroll)
 			if (settings.customScroll)
-				self.listItems.filter('.selected').focus();
+				me.listItems.filter('.selected').focus();
 
-			// events (clickout / ESC key / type-ahead)
-			self.typedKeys = '';
+			// events (clickout / type-ahead)
+			me.typedKeys = '';
 
-			$('html').click( function (e) {
+			jQuery(document).bind('click.' + settings.namespaces.clickout, function (e) {
 
 				// clickout
-				if ($(e.target).closest('.droplist').length === 0 || $(e.target).hasClass('droplist-value')) {
-					self.close();
+				if (jQuery(e.target).closest('.droplist').length === 0 || jQuery(e.target).hasClass('droplist-value')) {
+					me.close();
 				}
 
-			}).keydown( function (e) {
+			}).bind('keydown.' + settings.namespaces.clickout, function (e) {
 
-				var curSel = self.listItems.filter('.focused').first();
-				if (!curSel.length) curSel = self.listItems.filter('.selected').first();
-				var curPos = self.listItems.index(curSel);
+				var curSel = me.listItems.filter('.focused').first();
+				if (!curSel.length) curSel = me.listItems.filter('.selected').first();
+				var curPos = me.listItems.index(curSel);
 				var nextSelection=null;
 
 				// get keycode
+				var keycode = null;
 				if (e === null) { // old ie
 					e = event;
 					keycode = e.keyCode;
@@ -188,51 +221,51 @@
 				}
 
 				// esc/tab
-				if (keycode == 27 || keycode == 9) {
-					self.close();
+				if (keycode === 27 || keycode === 9) {
+					me.close();
 					e.preventDefault();
 					return true;
 				}
 
 				//enter,space : selection
-				else if (keycode == 13 || keycode == 32) {
+				else if (keycode === 13 || keycode === 32) {
 					if (curPos >= 0) {
-						self.set(self.listItems.filter('.focused').first());
-						e.preventDefault();
+						me.set(me.listItems.filter('.focused').first());
 					} else {
-						//to check...
-						var focused = self.list.filter('a:focus'),
-						current = (focused.parent().is('li')) ? focused.parent() : self.listItems.first();
-						self.set(current);
+						var focused = me.list.filter('a:focus'),
+							current = (focused.parent().is('li')) ? focused.parent() : me.listItems.first();
+						me.set(current);
 					}
+					e.preventDefault();
 					return true;
 				}
 
 				// type-ahead support
-				else if ((keycode >= 0x30 && keycode <= 0x7a)) {
+				else if (keycode >= 0x30 && keycode <= 0x7a) {
 
-					var newKey = '' + String.fromCharCode(keycode);
+					var key = '' + String.fromCharCode(keycode);
 					var searchFrom = 0;
-					if (self.typedKeys != newKey) {
+					if (me.typedKeys != key) {
 						curPos = -1;
-						self.typedKeys += newKey;
+						me.typedKeys += key;
 					} else {
 						//same key repeated, next element
 						if (curPos >= 0) {
 							searchFrom = curPos+1;
 							curPos = -1;
-							self.typedKeys = newKey;
-							clearTimeout(self.typeDelay);
+							me.typedKeys = key;
+							clearTimeout(me.typeDelay);
 						}
 					}
 					if (curPos == -1) {
-						clearTimeout(self.typeDelay);
-						self.typeDelay = setTimeout(function () {
-							self.typedKeys = '';
-						}, 800);
-						self.listItems.slice(searchFrom).each(function () {
-							if ($(this).find('>a').text().toUpperCase().indexOf(self.typedKeys) === 0) {
-								nextSelection = $(this);
+						clearTimeout(me.typeDelay);
+						me.typeDelay = setTimeout(function () {
+							me.typedKeys = '';
+						}, 1200);
+						me.listItems.slice(searchFrom).each(function () {
+							var link = jQuery(this).find('>a');
+							if (link.text().toUpperCase().indexOf(me.typedKeys) === 0) {
+								nextSelection = jQuery(this);
 								return false; //exit each() only, not func.
 							}
 						});
@@ -240,49 +273,51 @@
 
 				} else {
 
-					self.typedKeys = '';
+					me.typedKeys = '';
 
 					//down arrow
 					if (keycode == 40) {
 						if (curPos >= 0)
-							nextSelection = self.listItems.eq(curPos+1);
+							nextSelection = me.listItems.eq(curPos+1);
 						if (nextSelection === null || nextSelection.length === 0)
-							nextSelection = self.listItems.last();
+							nextSelection = me.listItems.last();
 					}
 					//up arrow
 					else if (keycode == 38) {
 						if (curPos > 0)
-							nextSelection = self.listItems.eq(curPos-1);
+							nextSelection = me.listItems.eq(curPos-1);
 						if (nextSelection === null || nextSelection.length === 0)
-							nextSelection = self.listItems.first();
+							nextSelection = me.listItems.first();
 					}
 					//page down
 					else if (keycode == 34) {
 						if (curPos >= 0)
-							nextSelection = self.listItems.eq(curPos+10);
+							nextSelection = me.listItems.eq(curPos+10);
 						if (nextSelection === null || nextSelection.length === 0)
-							nextSelection = self.listItems.last();
+							nextSelection = me.listItems.last();
 					}
 					//page up
 					else if (keycode == 33) {
 						if (curPos >= 10)
-							nextSelection = self.listItems.eq(curPos-10);
+							nextSelection = me.listItems.eq(curPos-10);
 						else
-							nextSelection = self.listItems.first();
+							nextSelection = me.listItems.first();
 					}
 					//home key
 					else if (keycode == 36) {
-						nextSelection = self.listItems.first();
+						nextSelection = me.listItems.first();
 					}
 					//end key
 					else if (keycode == 35) {
-						nextSelection = self.listItems.last();
+						nextSelection = me.listItems.last();
 					}
 
 				}
 
+				me.displayKeys(me.typedKeys);
+
 				if (nextSelection !== null) {
-					self.listItems.removeClass('focused');
+					me.listItems.removeClass('focused');
 					nextSelection.addClass('focused').focus();
 					e.preventDefault();
 					return false;
@@ -290,157 +325,193 @@
 
 			});
 
+			me.obj.trigger('open.' + settings.namespaces.droplist, me);
+
 		};
 
-		self.close = function (fast) {
-			self.wrapper.removeClass('droplist-active');
-			$('html').unbind('click').unbind('keydown');
+		me.close = function (fast) {
+			me.wrapper.removeClass('droplist-active');
+			jQuery(document).unbind('.' + settings.namespaces.clickout);
 			if (settings.slide && !fast)
-				self.listWrapper.slideUp(40);
+				me.dropdown.slideUp(40);
 			else
-				self.listWrapper.hide();
+				me.dropdown.hide();
+
+			me.obj.trigger('close.' + settings.namespaces.droplist, me);
 		};
 
-		self.set = function (el) {
+		me.set = function (el) {
 			var str,val;
-			self.listItems.removeClass('selected');
-			if ($(el).length == 0) {
-				str = self.obj.title;
+			me.listItems.removeClass('selected');
+			if (jQuery(el).length == 0) {
+				str = me.obj.title;
 				val = "";
 			} else {
-				str = $(el).find('>a').text();
-				val = $(el).find('>a').attr('href');
-				$(el).addClass('selected');
+				str = jQuery(el).find('>a').text();
+				val = jQuery(el).find('>a').attr('href');
+				jQuery(el).addClass('selected');
 			}
 
 			setText(str);
-			if (self.inputHidden.length) {
-				self.inputHidden.attr('value', val);
+			if (me.originalSelect.length > 0) {
+				me.originalSelect.find("option[value$='" + val + "']").attr('selected', 'selected');
 			}
 
-			self.close(1);
+			me.close(1);
 
 			//set container width to div + dropdown bt width to prevent dropdown br
 			if (settings.autoresize) {
-				self.option.css('width','');
-				self.select.css('display','inline-block');
-				//self.select.width(settings.width);
-				if (self.option.outerWidth() > settings.width - self.drop.outerWidth()) {
+				me.option.css('width','');
+				me.select.css('display','inline-block');
+				//me.select.width(settings.width);
+				if (me.option.outerWidth() > settings.width - me.drop.outerWidth()) {
 					//max width to settings
-					self.option.width(settings.width - self.drop.outerWidth() - wx_opt - wx_drp);
+					me.option.width(settings.width - me.drop.outerWidth() - wx_opt - wx_drp);
 				}
-				self.select.width(self.option.outerWidth() + self.drop.outerWidth() + 1);
+				me.select.width(me.option.outerWidth() + me.drop.outerWidth() + 1);
 
-				self.wrapper.css('display','inline-block');
-				self.wrapper.width(self.option.outerWidth() + self.drop.outerWidth());
+				me.wrapper.css('display','inline-block');
+				me.wrapper.width(me.option.outerWidth() + me.drop.outerWidth());
 			} else {
-				self.option.width(settings.width - self.drop.outerWidth() - wx_opt - wx_drp);
+				me.option.width(settings.width - me.drop.outerWidth() - wx_opt - wx_drp);
 			}
-			
-			if (self.callTriggers) {
-				if (self.onchange) {
+
+			if (me.callTriggers) {
+				if (me.onchange) {
 					//set "this.value"
-					self.obj.val(val); //firefox, chrome
-					self.obj.html( //IE8 doesnt want a value without selected <option>
-						$('<option selected="selected"></option>').val(val).html('')
-					);
-					self.obj.trigger('onchange');
+					me.obj.val(val); //firefox, chrome
+					//me.obj.html( //IE8 doesnt want a value without selected <option>
+					//	jQuery('<option selected="selected"></option>').val(val).html('')
+					//);
+					me.obj.trigger('onchange');
 				} else {
-					self.obj.trigger('droplistchange', self);
+					me.obj.trigger('change.' + settings.namespaces.droplist, me);
 				}
 			}
 		};
 
-		self.get = function () {
-			return self.list.find('.selected:first a').attr('href');
+		me.get = function () {
+			return me.list.find('.selected:first a').attr('href');
 		};
 
-		self.tabs = function () {
+		// HELPERS
+		// ==============================================================================
+
+		me.tabs = function () {
 			var that = this;
 			that.list.find('li').click( function (e) {
 				that.set(this);
-				var id = $(this).find('a').attr('href');
+				that.close();
+				var id = jQuery(this).find('a').attr('href');
 				jQuery(id).removeClass('hide').show().siblings().hide();
 				e.preventDefault();
 				return false;
 			});
 		};
 
+		me.displayKeys = function (keys) {
+			me.span.text(keys.toLowerCase()+'..');
+			me.span.css({
+				'background-color':'white',
+				'color':'red',
+				'position':'absolute',
+				'top':'3px',
+				'left':'3px',
+				'line-height':'16px',
+				'height':'16px'
+			});
+			me.span.show();
+			clearTimeout(me.showDelay);
+			me.showDelay = setTimeout(function () {
+				me.span.hide();
+			}, 1200);
+		};
 
 		// CONTROLLER
-		self.obj = $(el);
-		self.obj.css('border','none');
+		// ==============================================================================
 
-		self.obj.className = self.obj.attr('class');
-		self.obj.name = self.obj.attr('name');
-		self.obj.id = self.obj.attr('id');
-		self.obj.title = self.obj.attr('title') || '';
-		self.obj.width = self.obj.outerWidth();
-		settings.width = settings.width || self.obj.width;
-		self.onchange = self.obj[0].getAttribute('onchange');
+		me.obj = jQuery(element);
+		me.obj.css('border','none');
+		me.obj.id = me.obj.attr('id');
+		me.obj.classname = me.obj.attr('class');
+		me.obj.name = me.obj.attr('name');
+		me.obj.title = me.obj.attr('title') || '';
+		me.obj.width = me.obj.outerWidth();
+		settings.width = settings.width || me.obj.width;
+		me.onchange = me.obj[0].getAttribute('onchange');
+
+		var isDisabled = (me.obj.attr('disabled') == true);
+		if (isDisabled) {
+			me.obj.classname += ' droplist-disabled';
+		}
 
 		// insert wrapper
-		var wrapperHtml = '<div class="' + self.obj.className + ' droplist"><div class="droplist-list"></div></div>';
+		var wrapperHtml = '<div class="' + me.obj.classname + ' droplist"><div class="droplist-list"></div></div>';
 
 		// get elements
-		self.wrapper = self.obj.removeAttr('class').wrap(wrapperHtml).parent().parent();
-		if (self.obj.id) self.wrapper.attr('id',self.obj.id+'_div');
-		self.listWrapper = self.wrapper.find('.droplist-list:first');
-		self.list = self.listWrapper.find('ul:first');
+		me.wrapper = me.obj.removeAttr('class').wrap(wrapperHtml).parent().parent();
+		if (me.obj.id) me.wrapper.attr('id',me.obj.id+'_div');
+		me.dropdown = me.wrapper.find('.droplist-list:first');
+		me.list = me.dropdown.find('ul:first');
 
 		// case it's a SELECT tag, not a UL
-		if (self.list.length === 0) {
+		if (me.list.length === 0) {
 			isInsideForm = true;
 			var html = '',
-				optgroups = self.listWrapper.find('select:first optgroup'),
+				select = me.dropdown.find('select:first'),
+				optgroups = select.find('optgroup'),
 				options;
+
 			if (optgroups.length > 0) {
 				html += '<ul>';
 				optgroups.each(function () {
-					options = $(this).find('option');
-					html += '<li><strong>' + $(this).attr('label') + '</strong>' + options2list(options) + '</li>';
+					options = jQuery(this).find('option');
+					html += '<li><strong>' + jQuery(this).attr('label') + '</strong>' + options2list(options) + '</li>';
 				});
 				html += '</ul>';
 			} else {
-				options = self.listWrapper.find('select:first option');
+				options = me.dropdown.find('select:first option');
 				html += options2list(options);
 			}
-			self.listWrapper.html(html);
-			self.list = self.listWrapper.find('ul:first');
+
+			me.dropdown.append(html);
+
+			// override list
+			me.list = me.dropdown.find('ul:first');
+
 		}
 
 		// insert HTML into the wrapper
-		self.wrapper.prepend('<div class="droplist-value"><div></div><a class="nogo" href="#nogo"></a></div>');
-
-		// input hidden
-		if (isInsideForm) {
-			self.wrapper.append('<input type="hidden" name="" value="" />');//onchange="'+text2attr(self.onchange)+'" />');
-		}
+		me.wrapper.prepend('<div class="droplist-value"><span style="display:none;"></span><a class="nogo" href="javascript:void(0);"></a><div></div></div>');
 
 		// GET ELEMENTS
-		self.listItems = self.list.find('li a').closest('li');
-		self.select = self.wrapper.find('.droplist-value:first');
-		self.zone   = self.select.find('div,a');
-		self.option = self.select.find('div:first');
-		self.drop = self.select.find('a:first');
-		self.inputHidden = self.wrapper.find('input[type=hidden]:first');
+		me.listItems = me.list.find('li a').closest('li');
+		me.select = me.wrapper.find('.droplist-value:first');
+		me.zone   = me.select.find('div,a');
+		me.option = me.select.find('div:first');
+		me.drop = me.select.find('a:first');
+		me.span = me.select.find('span:last');
+		
+		me.originalSelect = me.wrapper.find('select:first');
+		me.originalSelect.hide(); //in css but..
 
 		if (isInsideForm) {
-			self.inputHidden.attr('name',self.obj.name);
-			if (self.obj.id) self.inputHidden.attr('id',self.obj.id+'_hidden');
 			//we need to find a way to detect external change of select value via javascript
-			if (self.inputHidden[0].addEventListener)
-			self.inputHidden[0].addEventListener('DOMAttrModified', function (e) {
+			/*if (me.originalSelect[0].addEventListener)
+			me.originalSelect[0].addEventListener('DOMAttrModified', function (e) {
 				if (callTriggers && e.attrName == 'value') {
 					//working only in Mozilla
 					window.alert(e.attrName);
 				}
 			}, false);
+			*/
 		}
 
 		// EVENTS
-		jQuery.event.copy(self.obj,self.wrapper);
-		
+		// ==============================================================================
+
+		jQuery.event.copy(me.obj,me.wrapper);
+
 		// null function to prevent browser default events
 		function preventDefault (e) {
 			e.preventDefault();
@@ -448,59 +519,63 @@
 		}
 
 		// clicking on selected value or dropdown button
-		if (self.wrapper.hasClass("disabled"))
-			self.drop.removeAttr('href');
-		else
-		self.zone.mousedown( function (e) {
-			if (self.listWrapper.is(':hidden')) {
-				self.open();
-			} else {
-				self.close();
-			}
+		if (!me.wrapper.hasClass("droplist-disabled")) {
+			me.zone.mousedown( function (e) {
+				if (me.dropdown.is(':hidden')) {
+					me.open();
+				} else {
+					me.close();
+				}
+				return preventDefault(e);
+			});
+		}
+		// cancel href #nogo jump
+		//me.drop.click(preventDefault);
+
+		// clicking on an option inside a form
+		me.list.find('li a').closest('li').click( function (e) {
+			me.set(jQuery(this));
 			return preventDefault(e);
 		});
-		//cancel href #nogo jump
-		self.drop.click(preventDefault);
+		// cancel href links
+		me.list.find('li a').click(preventDefault);
 
-		//clicking on an option inside a form
-		self.list.find('li a').closest('li').click( function (e) {
-			self.set($(this));
-			return preventDefault(e);
-		});
-		//cancel href links
-		self.list.find('li a').click(preventDefault);
 
-		//title
-		if (self.obj.title !== "") { setText(self.obj.title); }
+		// label correlation
+		if (me.obj.id) {
+			me.wrapper.parents('form').find('label[for="' + me.obj.id + '"]').click( function () {
+				me.drop.focus();
+			});
+		}
 
-		// ADJUST LAYOUT (WIDTHS)
-		layout();
+		// adjust layout (WIDTHS)
+		layoutController();
 
-		// CUSTOM SCROLL
+		// custom scroll
 		if (settings.customScroll) {
 			customScroll();
 		}
 
-		// INITIAL STATE
-		self.close(1);
+		// initial state
+		setInitialTitle();
+		me.close(1);
 
 		// set selected item
 		if (settings.selected !== null) {
-			self.setValue(settings.selected);
+			me.setValue(settings.selected);
 		}
-		else if (! self.obj.title) {
-			var selectedItem = self.list.find('.selected');
-			if (selectedItem.length === 1)
-				self.set(selectedItem);
-			else
-				self.set(self.list.find('li a').closest('li').first());
+		else if (! me.obj.title) {
+			setInitialSelected();
 		}
 
-		// CALLBACK
-		if (typeof callback == 'function') { callback.apply(self); }
+		// callback
+		if (typeof callback == 'function') { callback.apply(me); }
 
 		//enable triggers
-		self.callTriggers = true;
+		me.callTriggers = true;
+
+		me.wrapper.data('instanced', true);
+		return me;
 
 	};
 
@@ -517,9 +592,9 @@
 	jQuery.event.copy = function(from, to) {
 		from = (from.jquery) ? from : jQuery(from);
 		to   = (to.jquery)   ? to   : jQuery(to);
-		
+
 		if (!from.size() || !from[0].events || !to.size()) return;
-			
+
 		var events = from[0].events;
 		to.each(function() {
 			for (var type in events)
@@ -528,32 +603,36 @@
 		});
 	};
 
-	// extend jQuery
+	// INSTANCES MANAGER
+	// ==============================================================================
+
 	jQuery.fn.droplist = function (settings, callback) {
-		var newDiv=jQuery();
+		var res=jQuery();
 		this.each(function (){
-			var sel = $(this);
-			var obj = sel.data('droplist');
-			if (obj) {
+			var obj = jQuery(this),
+				instance = null,
+				made = obj.data('droplist');
+
+			if (made) {
 				// return early if this obj already has a plugin instance
-				if (obj !== 1) {
+				if (made !== true) {
 					// return plugin instance $('.droplist').droplist().setValue(xxx)
-					newDiv = obj;
+					res = made;
 					return false;
 				}
 				//continue to next object to find/create
 				return true;
 			}
-			var instance = new DropList(this, settings, callback);
-			sel.data('droplist', 1);
+			instance = new DropList(this, settings, callback);
+			obj.data('droplist', true);
 
 			//external data access, ex: $('.droplist').data('droplist').setValue(xxx);
 			instance.wrapper.data('droplist', instance);
-			//$.extend(instance.wrapper,instance);
-			$.merge(newDiv,instance.wrapper);
+
+			jQuery.merge(res,instance.wrapper);
 		});
 		//substitute select/ul by new div(s)
-		return newDiv;
+		return res;
 	};
 
 })(jQuery);

@@ -9,26 +9,26 @@
 }
 
 /* Skin */
-.droplist, .droplist .droplist-value div, .droplist .droplist-value a.nogo { background:url(droplist.png) no-repeat; }
+.droplist, .droplist .droplist-value div, .droplist .droplist-value a.nogo { background:url('droplist.png') no-repeat; }
 
 .droplist .droplist-value div    {background-position:   0px -22px; background-repeat: repeat-x; }
 .droplist .droplist-value a.nogo {background-position: -22px -66px; }
-.droplist { background-position: -66px -66px; }
-.droplist .droplist-list { border:1px solid #9DA7B8; background:#FFF; }
+.droplist { background-position: -66px -66px; border: 1px solid #ccc; }
+.droplist .droplist-list { border:1px solid #ccc; background:#FFF; margin-left: -1px; margin-top: -1px;}
 
 .droplist { position:relative; margin:0; font-size:12px; }
-.droplist .droplist-value { left: 0px; height:22px; line-height:20px; min-width:32px; z-index:3003; }
+.droplist .droplist-value { left: 0px; height:20px; line-height:20px; min-width:32px; z-index:3003; }
 .droplist .droplist-value div {
-	height:20px; line-height:18px; color:#000; min-width:16px;
-	padding:2px; padding-bottom:0px; padding-left:3px; 
+	height:18px; line-height:18px; color:#000; min-width:16px;
+	padding:2px; padding-bottom:0px;
 }
 .droplist .droplist-value a.nogo {
-	height:22px; width:18px;
+	height:20px; width:18px;
 	outline:none; text-indent:-9999px;
 }
 
-.disabled .droplist-value div    {background-position: 0px   0px; cursor: ''; color: silver; }
-.disabled .droplist-value a.nogo {background-position: 0px -66px; cursor: ''; }
+.droplist-disabled .droplist-value div    {background-position: 0px   0px; cursor: ''; color: silver; }
+.droplist-disabled .droplist-value a.nogo {background-position: 0px -66px; cursor: ''; }
 
 .droplist-active { z-index:999; }
 .droplist-active div { background-position:0 -44px !important; outline:none; }
@@ -37,6 +37,7 @@
 .droplist .droplist-list { position:absolute; top:21px; padding:1px; z-index:3002; }
 .droplist:focus .droplist-list { display:block; }
 .droplist-up .droplist-list { top:auto; bottom:21px; }
+.droplist .droplist-list select { display:none; }
 .droplist .droplist-list ul li { list-style-type: none; _height:0; }
 .droplist .droplist-list ul li strong { display:block; padding:1px; color:#47423A; }
 .droplist .droplist-list ul li span { display:block; padding:1px; }

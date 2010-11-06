@@ -52,7 +52,8 @@ jQuery(document).ready(function(){
 	//comboboxes
 	jQuery('select#searchEngine').droplist({width:100})
 		.css('display','inline-block')
-		.css('vertical-align','bottom');
+		.css('vertical-align','bottom')
+		.css(' overflow','hidden');
 	jQuery('select[name!="action"]').droplist({autoresize:true,slide:false,height:150});
  
 });
