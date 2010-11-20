@@ -138,7 +138,7 @@ function getDownloadFtpLogUsers($srchFile, $logNumber="") {
 			$username=$lineWords[2];
 			$hostname=$lineWords[3];
 			$complete=str_replace("D","c",$lineWords[4]);
-			$size=0+($lineWords[5]);
+			$size=0.0+($lineWords[5]);
 
 //die( "<pre>$size-$complete-$hostname-$username-$time\n$value\n</pre>");
 
@@ -437,14 +437,19 @@ if (isset($dir)) {
 	}
 	if ($dir != "") {
 		//get list of processes of known running transfers
-		$tDirPs=explode("\n", shell_exec('ls "'.rtrim($cfg['transfer_file_path'],'/').'/*.pid"'));
+		$handle = opendir($cfg['transfer_file_path']);
+		$tDirPs = array();
+		while (false !== ($entry = readdir($handle))) {
+			if (substr($entry,-3) == 'pid')
+				$tDirPs[] = $entry;
+		}
 	}
 } else {
 	$dir = "";
 }
 
-foreach($tDirPs as $key => $value) {
-	$value=preg_replace('#(.*\.torrent)\.pid#','\1',$value);
+foreach($tDirPs as $value) {
+	$value=$cfg['transfer_file_path'].'/'.preg_replace('#(.*\.torrent)\.pid#','\1',$value);
 	$stats=explode("\n",@file_get_contents($value.".stat"));
 	$value=preg_replace('#.*\.transfers/([^ ]+\.torrent)#','\1',$value);
 	$path=getTransferDatapath($value);
@@ -565,24 +570,24 @@ foreach ($entrys as $entry) {
 	if ($cfg['enable_dirstats'] == 1) 
 	{
 		$path = $dirName.$entry;
+		$stat = stat($path);
 		$ssz = 0.0;
 		
 		if($islink == 0) // it's not a symbolic link
 		{
-			$ssz += is_dir($path)? dirsize($path) : sprintf("%.0f", filesize($path));
-			if ($ssz < 0 && !isWinOS()) $ssz = @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($path)));
+			$ssz += is_dir($path)? dirsize($path) : sprintf("%.0f", $stat['size']);
+			if (($ssz < 0 || $stat['blocks'] > 2000000) && !isWinOS()) $ssz = @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($path)));
 		}
 		elseif (!isWinOS()) // it's a symbolic link
 		{
-			$ssz += @trim(shell_exec('du -ksL '.tfb_shellencode($slink)));
+			$ssz += @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($slink)));
 			$date = "";
 		}
-		
 		$size = formatBytesTokBMBGBTB( sprintf("%.0f", $ssz) );
 		
 		if (strstr($size,"G")) $size="<b>$size</b>";
 
-		$timeStamp = filemtime($dirName.$entry);
+		$timeStamp = $stat['mtime'];
 		$date = date($cfg['_DATETIMEFORMAT'],$timeStamp);
 	}
 	if (is_dir($dirName.$entry)) // dir
@@ -655,7 +660,7 @@ foreach ($entrys as $entry) {
 	if (array_key_exists($realentry,$tRunning)) {
 		$size='<span style="color:red;">'.$size.'</span>';
 	} elseif (array_key_exists($realentry,$tSeeding)) {
-		$size='<span style="color:blue;">'.$size.'</span>';
+		$size='<span style="color:navy;">'.$size.'</span>';
 	}
 	
 	$dlFullInfo = implode(', ',array_keys($userlist));
