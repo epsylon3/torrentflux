@@ -87,7 +87,7 @@ $tmpl->setvar('sortOrder', (empty($sortOrder)) ? $cfg["index_page_sortorder"] : 
 // t-list
 $arList = getTransferArray($sortOrder);
 
-$progress_color = "#00ff00";
+$progress_color = "#22BB22";
 $bar_width = "4";
 
 if ($cfg["btclient_transmission_enable"]) {
@@ -146,7 +146,7 @@ if ($cfg["btclient_transmission_enable"]) {
 			'statusStr' => $status,
 			'graph_width' => floor($aTorrent[percentDone]*100),
 			'percentage' => floor($aTorrent[percentDone]*100) . '%',
-			'progress_color' => '#00ff00',
+			'progress_color' => '#22BB22',
 			'bar_width' => 4,
 			'background' => '#000000',
 			'100_graph_width' => 100 - floor($aTorrent[percentDone]*100),
