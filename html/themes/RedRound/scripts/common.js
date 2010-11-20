@@ -16,14 +16,12 @@
 	jQuery(function(){
 		jQuery('#credits').hide();
 		jQuery('#credit_link').click(function(){
+			$(document).scrollTop(0);
 			jQuery('#credits').dialog({
 				resizable: false,
 				bgiframe: true,
 				width: 500,
 				height: 300
-				});
 			});
-		jQuery('#credit_tabs').tabs({
-			event: 'mouseover'
 		});
 	});
