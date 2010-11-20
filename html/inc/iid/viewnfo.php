@@ -69,9 +69,14 @@ if ($fileHandle = @fopen($path,'r')) {
 	$output = "Error opening NFO File: ".$file;
 }
 if ((empty($_REQUEST["dos"]) && empty($_REQUEST["win"])) || !empty($_REQUEST["dos"]))
-	$tmpl->setvar('output', htmlentities($output, ENT_COMPAT, "cp866"));
+	$output = htmlentities($output, ENT_COMPAT, "cp866");
 else
-	$tmpl->setvar('output', htmlentities($output));
+	$output = htmlentities($output);
+
+if (stripos($cfg['_CHARSET'],'utf') !== false)
+	$output = utf8_encode($output);
+
+$tmpl->setvar('output', $output);
 //
 tmplSetTitleBar($cfg["pagetitle"].' - View NFO');
 tmplSetFoot();
