@@ -12,6 +12,11 @@ div.upload_file {
 	margin-bottom:0px; 
 	cursor:text;
 }
+div.upload_file div {
+	overflow:hidden;
+	width:246px;
+}
+
 div.upload_file input[type="file"] {
 	opacity: 0; filter:alpha(opacity: 0);
 	margin:0; padding:0;
@@ -28,9 +33,14 @@ input[type="submit"] {
 }
 input[type="text"] {
 	padding:1px;
-	height:22px;
+	height:18px;
 	border-width:1px;
 	border-style:solid;
 	border-color:#ccc;
 	background-color:#fcfcfc;
+}
+
+ul.maintabs li {
+	list-style: none;
+	display: inline-block;
 }

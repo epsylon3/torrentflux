@@ -8,20 +8,12 @@
 <meta http-equiv="cache-control" content="no-cache" />
 <meta http-equiv="expires" content="Mon, 14 Dec 1981 11:12:01 GMT" />
 <meta name="robots" content="noindex,nofollow,noarchive" />
-
-<link rel="icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
-<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/mainLayout.css" type="text/css" />
-<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
 <link rel="alternate" title="Transfer-Stats" href="stats.php?f=rss" type="application/rss+xml" />
-<!-- refresh options if enabled -->
-<tmpl_if name="meta_refresh">
-	<meta http-equiv="refresh" content="<tmpl_var name="meta_refresh">" />
-</tmpl_if>
+
 <!-- jQuery files -->
+<link type="text/css" href="themes/<tmpl_var name="theme">/css/red/jquery-ui-1.8.5.custom.css" rel="stylesheet" />
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-1.4.3.min.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui-1.8.6.custom.min.js"></script>
-<link type="text/css" href="themes/<tmpl_var name="theme">/css/red/jquery-ui-1.8.5.custom.css" rel="stylesheet" />
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/linkControl.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/common.js"></script>
 
@@ -29,6 +21,17 @@
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.jScrollPane.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.droplist.js"></script>
+
+<!-- Theme -->
+<link rel="icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
+<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/mainLayout.css" type="text/css" />
+<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+
+<!-- refresh options if enabled -->
+<tmpl_if name="meta_refresh">
+<meta http-equiv="refresh" content="<tmpl_var name="meta_refresh">" />
+</tmpl_if>
 
 <!-- JS files -->
 <script type="text/javascript" src="js/common.js"></script>
