@@ -19,15 +19,18 @@
 /* And, if you use HTML code, please double check it.
 /**************************************************************************/
 
-define("_CHARSET","iso-8859-1");
-define("_SELECTFILE","Wähle ein Metafile für Upload aus");
+// to be able to exec shell commands with utf8 accents
+define("_LC_CTYPE", "de_DE.UTF-8");
+define("_CHARSET","utf-8");  // utf-8 (check this file remains utf-8 encoded)
+
+define("_SELECTFILE","WÃ¤hle ein Metafile fÃ¼r Upload aus");
 define("_URLFILE","URL der Torrent Datei");
 define("_UPLOAD","Upload");
 define("_GETFILE","Hole Datei");
 define("_LINKS","Links");
 define("_ONLINE","Online");
 define("_OFFLINE","Offline");
-define("_STORAGE","Speicherkapazität");
+define("_STORAGE","SpeicherkapazitÃ¤t");
 define("_DRIVESPACE","Platten Platz");
 define("_SERVERSTATS","Server Stats / Who");
 define("_DIRECTORYLIST","Verzeichnis Liste");
@@ -45,7 +48,7 @@ define("_MYPROFILE","Bearbeite Mein Profil");
 define("_ADMINISTRATION","Administration");
 define("_SENDMESSAGETO","Sende eine Nachricht an");
 define("_TRANSFERFILE","Transfer Datei");
-define("_FILESIZE","Datei Größe");
+define("_FILESIZE","Datei GrÃ¶ÃŸe");
 define("_STATUS","Status");
 define("_ADMIN","Admin");
 define("_BADFILE","fehlerhafte Datei");
@@ -57,44 +60,44 @@ define("_UPLOADSPEED","Upload Speed");
 define("_SHARING","Geteilt");
 define("_USER","Benutzer");
 define("_DONE","FERTIG");
-define("_INCOMPLETE","UNVOLLSTÄNDIG");
+define("_INCOMPLETE","UNVOLLSTÃ„NDIG");
 define("_NEW","NEU");
 define("_TRANSFERDETAILS","Transfer Details");
 define("_STOPTRANSFER","Halte Transfer Download an");
 define("_RUNTRANSFER","Starte Transfer");
 define("_SEEDTRANSFER","Seed Transfer");
-define("_DELETE","Löschen");
-define("_ABOUTTODELETE","Möchten Sie löschen");
+define("_DELETE","LÃ¶schen");
+define("_ABOUTTODELETE","MÃ¶chten Sie lÃ¶schen");
 define("_NOTOWNER","Sie sind nicht der Besitzer des Transfers");
 define("_AUTHORIZATIONFAILED","Authorization FAILED.   Action has been logged.");
 define("_MESSAGETOALL","Diese Nachricht wurde an ALLE Benutzer geschickt");
 define("_TRYDIFFERENTUSERID","Fehler: Versuchen Sie eine andere Benutzer ID.");
 define("_HASBEENUSED","wurde benutzt.");
-define("_RETURNTOEDIT","Zurück zum Bearbeiten");
-define("_ADMINUSERACTIVITY","Administration - Benutzer Aktivität");
+define("_RETURNTOEDIT","ZurÃ¼ck zum Bearbeiten");
+define("_ADMINUSERACTIVITY","Administration - Benutzer AktivitÃ¤t");
 define("_ADMIN_MENU","admin");
-define("_ACTIVITY_MENU","aktivität");
+define("_ACTIVITY_MENU","aktivitÃ¤t");
 define("_LINKS_MENU","links");
 define("_NEWUSER_MENU","Neuer Benutzer");
 define("_BACKUP_MENU","Sicherung");
 define("_ALLUSERS","Alle Benutzer");
-define("_NORECORDSFOUND","KEINE EINTRÄGE GEFUNDEN");
+define("_NORECORDSFOUND","KEINE EINTRÃ„GE GEFUNDEN");
 define("_SHOWPREVIOUS","Vorhergehende");
 define("_SHOWMORE","Zeige mehr");
-define("_ACTIVITYSEARCH","Suche Aktivität");
+define("_ACTIVITYSEARCH","Suche AktivitÃ¤t");
 define("_FILE","Datei");
 define("_ACTION","Aktion");
 define("_SEARCH","Suche");
-define("_ACTIVITYLOG","Aktivitäts Log - Letzter Eintrag");
+define("_ACTIVITYLOG","AktivitÃ¤ts Log - Letzter Eintrag");
 define("_DAYS","Tage");
 define("_IP","IP");
 define("_TIMESTAMP","Zeit Stempel");
 define("_USERDETAILS","Benutzer Details");
 define("_HITS","Treffer");
-define("_UPLOADACTIVITY","Upload Aktivität");
+define("_UPLOADACTIVITY","Upload AktivitÃ¤t");
 define("_JOINED","Beigetreten"); // header for the date when the user joined (became a member)
 define("_LASTVISIT","Letzter Besuch"); // header for when the user last visited the site
-define("_USERSACTIVITY","Aktivität"); // used for popup to display Activity next to users name
+define("_USERSACTIVITY","AktivitÃ¤t"); // used for popup to display Activity next to users name
 define("_NORMALUSER","Normaler Benutzer"); // used to describe a normal user's account type
 define("_ADMINISTRATOR","Administrator"); // used to describe an administrator's account type
 define("_SUPERADMIN","Super Admin"); // used to describe Super Admin's account type
@@ -109,22 +112,22 @@ define("_TOTALPAGEVIEWS","Seitenaufrufe gesamt");
 define("_THEME","Thema");
 define("_USERTYPE","Benutzer Typ");
 define("_NEWPASSWORD","Neues Passwort");
-define("_CONFIRMPASSWORD","Bestätige Passwort");
+define("_CONFIRMPASSWORD","BestÃ¤tige Passwort");
 define("_HIDEOFFLINEUSERS","Verstecke Offline Benutzer auf der Home Page");
 define("_UPDATE","Aktualisierung");
-define("_USERIDREQUIRED","Benutzer ID benötigt.");
+define("_USERIDREQUIRED","Benutzer ID benÃ¶tigt.");
 define("_PASSWORDLENGTH","Ihr Passwort muss sechs oder mehr Zeichen haben.");
-define("_PASSWORDNOTMATCH","Passwörter stimmen nicht.");
-define("_PLEASECHECKFOLLOWING","Bitte überprüfen Sie folgendes"); // Displays errors after this statement
+define("_PASSWORDNOTMATCH","PasswÃ¶rter stimmen nicht.");
+define("_PLEASECHECKFOLLOWING","Bitte Ã¼berprÃ¼fen Sie folgendes"); // Displays errors after this statement
 define("_NEWUSER","Neuer Benutzer");
 define("_PASSWORD","Passwort");
 define("_CREATE","Erstellen"); // button text to create a new user
 define("_ADMINEDITLINKS","Administration - Editiere Links");
 define("_FULLURLLINK","Kompletter URL Link");
-define("_BACKTOPARRENT","Zurück zum übergeordneten Verzeichnis");  // indicates going back to parrent directory
+define("_BACKTOPARRENT","ZurÃ¼ck zum Ã¼bergeordneten Verzeichnis");  // indicates going back to parrent directory
 define("_DOWNLOADDETAILS","Stats");
 define("_PERCENTDONE","Prozent fertig");
-define("_RETURNTOTRANSFERS","Zurück zu den Transfers"); // Link at the bottom of each page
+define("_RETURNTOTRANSFERS","ZurÃ¼ck zu den Transfers"); // Link at the bottom of each page
 define("_DATE","Datum");
 define("_WROTE","schrieb");  // Used in a reply to tag what the user had writen
 define("_SENDMESSAGETITLE","Sende eine Nachricht");  // Title of page
@@ -135,11 +138,11 @@ define("_SENDTOALLUSERS","Sende an Alle Benutzer");
 define("_FORCEUSERSTOREAD","Zwinge Benutzer zum Lesen"); // Admin option in messaging
 define("_SEND","Senden");  // Button to send private message
 define("_PROFILE","Profil");
-define("_PROFILEUPDATEDFOR","Profil aktualisiert für");  // Profile updated for 'username'
+define("_PROFILEUPDATEDFOR","Profil aktualisiert fÃ¼r");  // Profile updated for 'username'
 define("_REPLY","Antworte");  // popup text for reply button
 define("_MESSAGE","Nachricht");
 define("_MESSAGES","Nachrichten");  // plural (more than one)
-define("_RETURNTOMESSAGES","Zuroück zu den Nachrichten");
+define("_RETURNTOMESSAGES","ZuroÃ¼ck zu den Nachrichten");
 define("_COMPOSE","Erstellen");  // As in 'Compose a message' for button
 define("_LANGUAGE","Sprache"); // label
 define("_CURRENTDOWNLOAD","Current Download");

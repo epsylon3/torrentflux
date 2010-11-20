@@ -28,7 +28,6 @@ the item:
 
 vlc
 */
-
 // prevent direct invocation
 if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 	@ob_end_clean();
@@ -52,6 +51,12 @@ initRestrictedDirEntries();
 
 // check incoming path
 checkIncomingPath();
+
+
+// to be able to execute shell commands with utf8 accents
+if (isset($cfg['_LC_CTYPE'])) {
+	setlocale(LC_CTYPE, $cfg['_LC_CTYPE']); //"fr_FR.UTF-8" or "de_DE.UTF-8"
+}
 
 // get request-vars
 $chmod = UrlHTMLSlashesDecode(tfb_getRequestVar('chmod'));
@@ -489,7 +494,7 @@ if (($dir != "") && (hasPermission($dir, $cfg["user"], 'r') !== true)) {
 
 // init template-instance
 tmplInitializeInstance($cfg["theme"], "page.dir.tmpl");
-
+	
 // dirstats
 if ($cfg['enable_dirstats'] == 1) {
 	$tmpl->setvar('enable_dirstats', 1);
@@ -567,7 +572,12 @@ foreach ($entrys as $entry) {
 	$sfvdir = "";
 	$sfvsfv = "";
 	$userlist = array();
-	if ($cfg['enable_dirstats'] == 1) 
+
+	$realentry=$entry_iso=$entry;
+	if(function_exists('mb_detect_encoding') && function_exists('utf8_decode') && mb_detect_encoding(" ".$entry." ",'UTF-8,ISO-8859-1') == 'UTF-8')
+		$entry_iso = utf8_decode($entry);
+
+	if ($cfg['enable_dirstats'] == 1)
 	{
 		$path = $dirName.$entry;
 		$stat = stat($path);
@@ -576,7 +586,7 @@ foreach ($entrys as $entry) {
 		if($islink == 0) // it's not a symbolic link
 		{
 			$ssz += is_dir($path)? dirsize($path) : sprintf("%.0f", $stat['size']);
-			if (($ssz < 0 || $stat['blocks'] > 2000000) && !isWinOS()) $ssz = @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($path)));
+			if (($ssz < 0 || $stat['blocks'] > 2000000) && !isWinOS()) $ssz = @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($dirName.$entry)));
 		}
 		elseif (!isWinOS()) // it's a symbolic link
 		{
@@ -653,10 +663,7 @@ foreach ($entrys as $entry) {
 		}
 		$permission .= " (0".$permission_oct.")";
 	}
-	$realentry=$entry;
-	if(function_exists('mb_detect_encoding') && function_exists('utf8_decode') && mb_detect_encoding(" ".$entry." ",'UTF-8,ISO-8859-1') == 'UTF-8')
-		$entry = utf8_decode($entry);
-	
+
 	if (array_key_exists($realentry,$tRunning)) {
 		$size='<span style="color:red;">'.$size.'</span>';
 	} elseif (array_key_exists($realentry,$tSeeding)) {
@@ -670,6 +677,8 @@ foreach ($entrys as $entry) {
 		else
 			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/download_owner.gif" title="Downloaded by '.$dlFullInfo.'">';
 	}
+	if ($cfg['_CHARSET']!='utf-8')
+		$entry = $entry_iso;
 	
 	// add entry to dir-array
 	array_push($list, array(

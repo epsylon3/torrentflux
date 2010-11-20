@@ -19,7 +19,10 @@
 /* And, if you use HTML code, please double check it.
 /**************************************************************************/
 
+// to be able to exec shell commands with utf8 accents
+define("_LC_CTYPE", "fr_FR.UTF-8");
 define("_CHARSET", "utf-8");  // utf-8 (check this file remains utf-8 encoded)
+
 define("_SELECTFILE", "Uploader un torrent depuis votre poste");
 define("_URLFILE","URL de fichier.torrent depuis un site web externe (https géré !)");
 define("_UPLOAD", "Envoyer");

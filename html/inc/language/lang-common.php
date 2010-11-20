@@ -20,6 +20,7 @@
 /**************************************************************************/
 
 $defines = array(
+'_LC_CTYPE' => "C",
 '_ABOUTTODELETE' => "You are about to delete",
 '_ACTION' => "Action",
 '_ACTIVITY_MENU' => "activity",

@@ -61,7 +61,9 @@ function loadLanguageFile($language) {
 	// load language
 	require_once("inc/language/".$language);
 	// set vars
-	$cfg['_CHARSET'] = _CHARSET;
+	$cfg['_CHARSET'] = _CHARSET;   //output
+	$cfg['_LC_CTYPE'] = _LC_CTYPE; //shell
+
 	$cfg['_SELECTFILE'] = _SELECTFILE;
 	$cfg['_URLFILE'] = _URLFILE;
 	$cfg['_UPLOAD'] = _UPLOAD;
