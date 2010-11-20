@@ -42,5 +42,13 @@ input[type="text"] {
 
 ul.maintabs li {
 	list-style: none;
-	display: inline-block;
+	display: inline;
+	height: 24px;
+	font-weight: bold;
+	padding : 8px;
+}
+
+ul.maintabs {
+	padding-top: 16px;
+	padding-bottom: 16px;
 }
