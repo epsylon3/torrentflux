@@ -4,7 +4,7 @@
 <form action="index.php?iid=dir&amp;dir=<tmpl_var name="dir">&amp;multidel=1" method="post" id="multidir">
 <table id="dir">
 	<tr>
-		<td colspan="8">
+		<td colspan="9">
 			<tmpl_if name="showparentURL">
 				<a href="<tmpl_var name="parentURL">">
 					<img src="themes/<tmpl_var name="theme">/images/dir/up.png" title="<tmpl_var name="_BACKTOPARRENT">" alt="" />
@@ -18,17 +18,24 @@
 	<tr>
 		<td style="width:18px;"><img src="themes/<tmpl_var name="theme">/images/dtree/folder.png" title="<tmpl_var name="entry">" alt="" /></td>
 		<tmpl_if name="enable_dirstats" value="1">
-			<td colspan="6">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
+		<td colspan="6">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
 		<tmpl_else>
-			<td colspan="2">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
+		<td colspan="2">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
 		</tmpl_if>
 		<td id="dirChmod">
+			<tmpl_if name="enable_file_download" value="1">
+				<a href="index.php?iid=dir&amp;tar=<tmpl_var name="dir">"><img src="themes/<tmpl_var name="theme">/images/dir/tar.png" title="Download as <tmpl_var name="package_type">" alt="download as <tmpl_var name="package_type">" /></a>
+			</tmpl_if>
 			<tmpl_if name="show_chmod" value="1">
 				<a href="index.php?iid=dir&amp;chmod=1&amp;dir=<tmpl_var name="dir">"><img src="themes/<tmpl_var name="theme">/images/dir/chmod.png" title="chmod directory" alt="" /></a>
 			<tmpl_else>
 				&nbsp;
 			</tmpl_if>
 		</td>
+		<td>
+			<input type="checkbox" onclick="checkCheck(this);" />
+		</td>
+
 	</tr>
 
 <tmpl_if name="list">
@@ -144,13 +151,17 @@
 						<a href="index.php?iid=dir&amp;down=<tmpl_var name="urlencode1">"><img src="themes/<tmpl_var name="theme">/images/dir/download_file.png" title="Download" alt="download file" /></a>
 					</tmpl_if>
 				</tmpl_if>
-				<tmpl_if name="aclWrite" value="1">
-					<a href="index.php?iid=dir&amp;del=<tmpl_Var name="urlencode1">" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : <tmpl_var name="addslashes1">')"><img src="themes/<tmpl_var name="theme">/images/dir/delete_on.png" alt="delete on" title="<tmpl_var name="_DELETE">" /></a>
-					<input type="checkbox" name="file[]" value="<tmpl_var name="urlencode1">" />
-				<tmpl_else>
-					<img src="themes/<tmpl_var name="theme">/images/dir/delete_off.png" alt="delete off" title="<tmpl_var name="_DELETE">" />
-					<input type="checkbox" name="file[]" disabled />
-				</tmpl_if>
+			<tmpl_if name="aclWrite" value="1">
+				<a href="index.php?iid=dir&amp;del=<tmpl_Var name="urlencode1">" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : <tmpl_var name="addslashes1">')"><img src="themes/<tmpl_var name="theme">/images/dir/delete_on.png" alt="delete on" title="<tmpl_var name="_DELETE">" /></a>
+			</td>
+			<td>
+				<input type="checkbox" name="file[]" value="<tmpl_var name="urlencode1">" />
+			<tmpl_else>
+				<img src="themes/<tmpl_var name="theme">/images/dir/delete_off.png" alt="delete off" title="<tmpl_var name="_DELETE">" />
+			</td>
+			<td>
+				<input type="checkbox" name="file[]" disabled />
+			</tmpl_if>
 			</td>
 		</tr>
 		</tmpl_loop>
@@ -161,6 +172,8 @@
 				<td colspan="7">
 			</tmpl_if>
 				<a href="javascript:document.multidir.submit()" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : Multiple Files')"><img src="themes/<tmpl_var name="theme">/images/dir/delete_on.png" title="Delete" alt="delete" /></a>
+			</td>
+			<td>
 				<input type="checkbox" onclick="checkCheck(this);" />
 				<input type="hidden" name="action" value="fileDelete" />
 			</td>
