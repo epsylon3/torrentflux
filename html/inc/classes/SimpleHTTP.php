@@ -32,8 +32,8 @@ class SimpleHTTP
 {
 	// public fields
 
-    // timeout
-    var $timeout = 20;
+	// timeout
+	var $timeout = 20;
 
 	/**
 	 * Temporarily use HTTP/1.0 until chunked encoding is sorted out
@@ -106,20 +106,20 @@ class SimpleHTTP
 	// user-agent
 	var $userAgent = "";
 
-    // filename
-    var $filename = "";
+	// filename
+	var $filename = "";
 
-    // url
-    var $url = "";
+	// url
+	var $url = "";
 
-    // referer
-    var $referer = "";
+	// referer
+	var $referer = "";
 
-    // messages
-    var $messages = array();
+	// messages
+	var $messages = array();
 
-    // state
-    var $state = SIMPLEHTTP_STATE_NULL;
+	// state
+	var $state = SIMPLEHTTP_STATE_NULL;
 
 	// Number of redirects we've followed so far:
 	var $redirectCount = 0;
@@ -138,64 +138,64 @@ class SimpleHTTP
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return SimpleHTTP
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return SimpleHTTP
+	 */
+	function getInstance() {
 		global $instanceSimpleHTTP;
 		// initialize if needed
 		if (!isset($instanceSimpleHTTP))
 			SimpleHTTP::initialize();
 		return $instanceSimpleHTTP;
-    }
+	}
 
-    /**
-     * initialize SimpleHTTP.
-     */
-    function initialize() {
-    	global $instanceSimpleHTTP;
-    	// create instance
-    	if (!isset($instanceSimpleHTTP))
-    		$instanceSimpleHTTP = new SimpleHTTP();
-    }
+	/**
+	 * initialize SimpleHTTP.
+	 */
+	function initialize() {
+		global $instanceSimpleHTTP;
+		// create instance
+		if (!isset($instanceSimpleHTTP))
+			$instanceSimpleHTTP = new SimpleHTTP();
+	}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-    function getState() {
+	function getState() {
 		global $instanceSimpleHTTP;
 		return (isset($instanceSimpleHTTP))
 			? $instanceSimpleHTTP->state
 			: SIMPLEHTTP_STATE_NULL;
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	function getMessages() {
 		global $instanceSimpleHTTP;
 		return (isset($instanceSimpleHTTP))
 			? $instanceSimpleHTTP->messages
 			: array();
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return string
-     */
-    function getFilename() {
+	/**
+	 * getMessages
+	 *
+	 * @return string
+	 */
+	function getFilename() {
 		global $instanceSimpleHTTP;
 		return (isset($instanceSimpleHTTP))
 			? $instanceSimpleHTTP->filename
 			: "";
-    }
+	}
 
 	/**
 	 * method to get data from URL -- uses timeout and user agent
@@ -270,19 +270,19 @@ class SimpleHTTP
 	// ctor
 	// =========================================================================
 
-    /**
-     * do not use direct, use the factory-method !
-     *
-     * @return SimpleHTTP
-     */
-    function SimpleHTTP() {
-    	global $cfg;
+	/**
+	 * do not use direct, use the factory-method !
+	 *
+	 * @return SimpleHTTP
+	 */
+	function SimpleHTTP() {
+		global $cfg;
 		// user-agent
 		$this->userAgent = $cfg['user_agent'];
 		// ini-settings
 		@ini_set("allow_url_fopen", "1");
 		@ini_set("user_agent", $this->userAgent);
-    }
+	}
 
 	// =========================================================================
 	// public methods
@@ -302,8 +302,8 @@ class SimpleHTTP
 		$this->url = $get_url;
 		$this->referer = $get_referer;
 
-    	// (re)set state
-    	$this->state = SIMPLEHTTP_STATE_NULL;
+		// (re)set state
+		$this->state = SIMPLEHTTP_STATE_NULL;
 
 		// (re-)set some vars
 		$this->cookie = "";
@@ -348,11 +348,11 @@ class SimpleHTTP
 			$domain["path"] = "/";
 		$this->getcmd = $domain["path"];
 
-	    if (!array_key_exists("query", $domain))
-	        $domain["query"] = "";
+		if (!array_key_exists("query", $domain))
+			$domain["query"] = "";
 
 		// append the query string if included:
-	    $this->getcmd .= (!empty($domain["query"])) ? "?" . $domain["query"] : "";
+		$this->getcmd .= (!empty($domain["query"])) ? "?" . $domain["query"] : "";
 
 		// Check to see if cookie required for this domain:
 		$sql = "SELECT c.data AS data FROM tf_cookies AS c LEFT JOIN tf_users AS u ON ( u.uid = c.uid ) WHERE u.user_id = ".$db->qstr($cfg["user"]);
@@ -360,7 +360,7 @@ class SimpleHTTP
 			$sql .= " AND ".$db->qstr($domain['host'])." LIKE CONCAT('%',c.host)";
 		else
 			$sql .= " AND ".$db->qstr($domain['host'])." LIKE PHP('sprintf','%%%s',c.host)";
-			
+
 		$this->cookie = $db->GetOne($sql);
 		if ($db->ErrorNo() != 0) dbError($sql);
 
@@ -507,7 +507,7 @@ class SimpleHTTP
 		303 See Other (should be fetched using GET, probably not relevant but won't hurt to include it)
 		307 Temporary Redirect
 		*/
-		
+
 		if( isset($this->responseHeaders["refresh"]) ) {
 			$refresh=$this->responseHeaders["refresh"];
 			$refresh=strstr($refresh,"url=");
@@ -597,8 +597,8 @@ class SimpleHTTP
 			}
 		}
 
-        // state
-        $this->state = SIMPLEHTTP_STATE_OK;
+		// state
+		$this->state = SIMPLEHTTP_STATE_OK;
 
 		// return content
 		return $this->responseBody;
@@ -613,11 +613,11 @@ class SimpleHTTP
 	function instance_getTorrent($durl) {
 		global $cfg;
 
-    	// (re)set state
-    	$this->state = SIMPLEHTTP_STATE_NULL;
+		// (re)set state
+		$this->state = SIMPLEHTTP_STATE_NULL;
 
-    	// (re)set redir-count
-    	$this->redirectCount = 0;
+		// (re)set redir-count
+		$this->redirectCount = 0;
 
 		// Initialize file name:
 		$this->filename = "";
@@ -631,7 +631,7 @@ class SimpleHTTP
 			AuditAction($cfg["constants"]["error"], $msg);
 			array_push($this->messages , $msg);
 			// state
-        	$this->state = SIMPLEHTTP_STATE_ERROR;
+			$this->state = SIMPLEHTTP_STATE_ERROR;
 			// return empty data:
 			return ($data="");
 		}
@@ -719,7 +719,7 @@ class SimpleHTTP
 					AuditAction($cfg["constants"]["error"], $msg);
 					array_push($this->messages , $msg);
 					// state
-			    	$this->state = SIMPLEHTTP_STATE_ERROR;
+					$this->state = SIMPLEHTTP_STATE_ERROR;
 					// return empty data:
 					return($data="");
 				}
@@ -794,14 +794,14 @@ class SimpleHTTP
 					$this->filename = substr($file_name, 0, $filelength).".torrent";
 				} else {
 					require_once('inc/classes/BDecode.php');
-				    $btmeta = @BDecode($data);
-				    $this->filename = ((is_array($btmeta)) && (!empty($btmeta['info'])) && (!empty($btmeta['info']['name'])))
-				    	? trim($btmeta['info']['name']).".torrent"
-				    	: "";
+					$btmeta = @BDecode($data);
+					$this->filename = ((is_array($btmeta)) && (!empty($btmeta['info'])) && (!empty($btmeta['info']['name'])))
+						? trim($btmeta['info']['name']).".torrent"
+						: "";
 					}
 			}
-	        // state
-	        $this->state = SIMPLEHTTP_STATE_OK;
+			// state
+			$this->state = SIMPLEHTTP_STATE_OK;
 		}
 		return $data;
 	}
@@ -815,11 +815,11 @@ class SimpleHTTP
 	function instance_getNzb($durl) {
 		global $cfg;
 
-    	// (re)set state
-    	$this->state = SIMPLEHTTP_STATE_NULL;
+		// (re)set state
+		$this->state = SIMPLEHTTP_STATE_NULL;
 
-    	// (re)set redir-count
-    	$this->redirectCount = 0;
+		// (re)set redir-count
+		$this->redirectCount = 0;
 
 		// Initialize file name:
 		$this->filename = "";
@@ -833,7 +833,7 @@ class SimpleHTTP
 			AuditAction($cfg["constants"]["error"], $msg);
 			array_push($this->messages , $msg);
 			// state
-        	$this->state = SIMPLEHTTP_STATE_ERROR;
+			$this->state = SIMPLEHTTP_STATE_ERROR;
 			// return empty data:
 			return ($data="");
 		}
@@ -867,7 +867,7 @@ class SimpleHTTP
 					AuditAction($cfg["constants"]["error"], $msg);
 					array_push($this->messages , $msg);
 					// state
-			    	$this->state = SIMPLEHTTP_STATE_ERROR;
+					$this->state = SIMPLEHTTP_STATE_ERROR;
 					// return empty data:
 					return($data="");
 				}
@@ -906,8 +906,8 @@ class SimpleHTTP
 			// state
 			$this->state = SIMPLEHTTP_STATE_ERROR;
 		} else {
-	        // state
-	        $this->state = SIMPLEHTTP_STATE_OK;
+			// state
+			$this->state = SIMPLEHTTP_STATE_OK;
 		}
 		return $data;
 	}
@@ -925,7 +925,7 @@ class SimpleHTTP
 		$this->status = "";
 		$this->errstr = "";
 		$this->errno = 0;
-    	$this->redirectCount = 0;
+		$this->redirectCount = 0;
 		$this->responseHeaders = array();
 		$this->gotResponseLine = false;
 		// domain
@@ -992,7 +992,7 @@ class SimpleHTTP
 	function _canTLS() {
 		// Just check whether openssl extension is available.
 		if (!isset($this->canTLS))
-			$this->canTLS = function_exists('openssl_open');			
+			$this->canTLS = function_exists('openssl_open');
 		return $this->canTLS;
 	}
 
