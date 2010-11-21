@@ -47,7 +47,7 @@ class SearchEngineBase
 
 	var $author = '';			// the author of this engine
 	var $version = '';
-	var $updateURL = 'http://www.torrentflux.com/forum/index.php/board,14.0.html';
+	var $updateURL = 'http://github.com/epsylon3/torrentflux/tree/master/html/inc/searchEngines/';
 
 	// ------------------------------------------------------------------------------
 	// You should only need to set the above variables in each of the custom classes.
@@ -182,12 +182,21 @@ class SearchEngineBase
 		$request = 	($useAlt)
 			? "http://".$this->altURL. $request
 			: "http://".$this->mainURL. $request;
-		// require SimpleHTTP
+			
+
 		require_once("inc/classes/SimpleHTTP.php");
+		
 		// get data
-		$this->htmlPage = SimpleHTTP::getData($request, $refererURI);
+		$http = new SimpleHTTP;
+
+		//utf-8 prefered
+		$http->charset = "utf-8";
+
+		$this->htmlPage = $http->instance_getData($request, $refererURI);
+		$this->htmlPage = setCharset($this->htmlPage, $http->charset);
+
 		// return
-		return (SimpleHTTP::getState() == SIMPLEHTTP_STATE_OK);
+		return ($http->state == SIMPLEHTTP_STATE_OK);
 	}
 
 	//----------------------------------------------------------------

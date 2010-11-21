@@ -133,6 +133,8 @@ class SimpleHTTP
 	// Can PHP do TLS?
 	var $canTLS = null;
 
+	// Charset prefered, then charset of content if set
+	var $charset = "";
 
 	// =========================================================================
 	// public static methods
@@ -390,7 +392,9 @@ class SimpleHTTP
 			$this->request  = "GET ".$this->_fullURLEncode($this->getcmd)." HTTP/".$this->httpVersion."\r\n";
 			$this->request .= (!empty($this->referer)) ? "Referer: " . $this->referer . "\r\n" : "";
 			$this->request .= "Accept: */*\r\n";
-//			$this->request .= "Accept-Language: en-US\r\n";
+			$this->request .= "Accept-Language: en, en-US, en-GB\r\n";
+			if (!empty($this->charset))
+				$this->request .= "Accept-Charset: ".$this->charset."\r\n";
 			$this->request .= "User-Agent: ".$this->userAgent."\r\n";
 			$this->request .= "Host: " . $domain["host"] . "\r\n";
 			if($this->httpVersion=="1.1"){
@@ -431,6 +435,12 @@ class SimpleHTTP
 
 				// meta-data
 				$info = stream_get_meta_data($this->socket);
+			}
+
+			if (isset($this->responseHeaders["content-type"])) {
+				$this->charset = $this->responseHeaders["content-type"];
+				$this->charset = substr($this->charset, strpos($this->charset, 'charset=')+8);
+				$this->charset = strtolower($this->charset);
 			}
 
 			if(

@@ -73,7 +73,7 @@ if ((empty($_REQUEST["dos"]) && empty($_REQUEST["win"])) || !empty($_REQUEST["do
 else
 	$output = htmlentities($output);
 
-if (stripos($cfg['_CHARSET'],'utf') !== false)
+if (utf8_needed())
 	$output = utf8_encode($output);
 
 $tmpl->setvar('output', $output);

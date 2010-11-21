@@ -100,7 +100,7 @@ function loadLanguageFile($language) {
 	$cfg['_UPLOADSPEED'] = _UPLOADSPEED;
 	$cfg['_SHARING'] = _SHARING;
 	$cfg['_USER'] = _USER;
-        $cfg['_USERS'] = _USERS;
+	$cfg['_USERS'] = _USERS;
 	$cfg['_DONE'] = _DONE;
 	$cfg['_INCOMPLETE'] = _INCOMPLETE;
 	$cfg['_NEW'] = _NEW;

@@ -178,11 +178,11 @@ class SearchEngine extends SearchEngineBase
 
 		if ($this->makeRequest($request))
 		{
-		  return $this->parseResponse();
+			return $this->parseResponse();
 		}
 		else
 		{
-		   return $this->msg;
+			return $this->msg;
 		}
 
 	}
@@ -518,12 +518,6 @@ class pBay
 					if (empty($this->Seeds)) $this->Seeds = "N/A";
 				}
 				if ($this->Seeds == '') $this->Seeds = "N/A";
-
-				if ($cfg['_CHARSET'] != 'utf-8') {
-					$this->MainCategory = utf8_decode($this->MainCategory);
-					$this->SubCategory = utf8_decode($this->SubCategory);
-					$this->torrentName = utf8_decode($this->torrentName);
-				}
 
 				$this->torrentDisplayName = $this->torrentName;
 				if(strlen($this->torrentDisplayName) > 50)
