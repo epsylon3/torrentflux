@@ -119,10 +119,10 @@ class Transfer(object):
         self.state_azu = download.getState()
         
         # and auto stopped (sharekill)
-        if self.state_azu == Transfer.AZ_STOPPED and self.sf.running == '1':
+        if self.state_azu == Transfer.AZ_STOPPED and self.sf.running == "1" and float(self.sf.percent_done) >= 100.0 :
 
-            printMessage("Torrent autostopped by Azureus %s " % self.sf.sharing)
-            self.log("Torrent autostopped by Azureus %s " % self.sf.sharing)
+            printMessage("Torrent autostopped by Azureus %s " % self.sf.percent_done)
+            self.log("Torrent autostopped by Azureus %s " % self.sf.percent_done)
             
             # stat
             self.statShutdown(download)
@@ -377,7 +377,7 @@ class Transfer(object):
     def statStartup(self, download):
         # set some values
         self.sf.running = Transfer.TF_RUNNING
-        self.sf.percent_done = 0
+        self.sf.percent_done = str(0)
         self.sf.time_left = "Starting..."
         self.sf.down_speed = "0.00 kB/s"
         self.sf.up_speed = "0.00 kB/s"
@@ -573,7 +573,7 @@ class Transfer(object):
 
                 # done
                 if download.isComplete():
-                    self.sf.percent_done = 100
+                    self.sf.percent_done = str(100)
                     self.sf.time_left = "Download Succeeded!"
 
                 # not done
