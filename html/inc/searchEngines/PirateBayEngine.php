@@ -192,8 +192,10 @@ class SearchEngine extends SearchEngineBase
 	function performSearch($searchTerm)
 	{
 		$order = 99;
-		$page = (int) @ $this->page;
+		$page = (int) @ $this->pg;
 		$searchTerm = urlencode($searchTerm);
+		$this->lastSearch = $searchTerm;
+		
 		if (array_key_exists("subGenre",$_REQUEST))
 		{
 			$request = "/search/$searchTerm/$page/$order/".$_REQUEST["subGenre"];
@@ -228,8 +230,8 @@ class SearchEngine extends SearchEngineBase
 
 		$output .= "<br>\n";
 		$output .= "<tr bgcolor=\"".$this->cfg["table_header_bg"]."\">";
-		$output .= "  <td>&nbsp;</td>";
-		$output .= "  <td><strong>Torrent Name</strong> &nbsp;(";
+		$output .= "	<td>&nbsp;</td>";
+		$output .= "	<td><strong>Torrent Name</strong> &nbsp;(";
 
 		$tmpURI = str_replace(array("?hideSeedless=yes","&hideSeedless=yes","?hideSeedless=no","&hideSeedless=no"),"",$_SERVER["REQUEST_URI"]);
 
@@ -283,15 +285,17 @@ class SearchEngine extends SearchEngineBase
 			if (strpos($thing,"searchResult") !== false)
 			{
 				$thing = substr($thing,strpos($thing,"searchResult"));
-				//$thing = substr($thing,strpos($thing,"<table>"));
 				$thing = substr($thing,strpos($thing,"<tr>"));
-				$thing = substr($thing,0,strpos($thing,"</table>"));
-
+				$tmpList = substr($thing,0,strpos($thing,"</table>"));
+				
+				// keep for paging
+				$thing = substr($thing,strlen($tmpList));
+				
 				// clean tabs
-				$thing = str_replace("\t","",$thing);
+				$tmpList = str_replace("\t","",$tmpList);
 
 				// ok so now we have the listing.
-				$tmpListArr = explode("</tr>",$thing);
+				$tmpListArr = explode("</tr>",$tmpList);
 
 				$bg = $this->cfg["bgLight"];
 
@@ -366,17 +370,22 @@ class SearchEngine extends SearchEngineBase
 					}
 
 				}
+				
 			}
 
 			$output .= "</table>";
 
 			// is there paging at the bottom?
-			if (strpos($thing, "&page=") != false)
+			if (strpos($thing, ">2<") !== false || strpos($thing, ">1<") !== false)
 			{
 				// Yes, then lets grab it and display it!  ;)
-				$thing = substr($thing,strpos($thing,"<tr><td colspan")+strlen("<tr><td colspan"));
+				$thing = substr($thing,strpos($thing,"<div")+1);
 				$thing = substr($thing,strpos($thing,">")+1);
-				$pages = substr($thing,0,strpos($thing,"</td>"));
+				$pages = substr($thing,0,strpos($thing,"</div>"));
+				$thing = "";
+				
+				$lastSearch = $this->lastSearch;
+				
 				if (strpos($pages,"prev") > 0)
 				{
 					$tmpStr = substr($pages,0,strpos($pages,"<img"));
@@ -394,27 +403,16 @@ class SearchEngine extends SearchEngineBase
 				{
 					$pages = substr($pages,0,strpos($pages,"<img"))."Next</a>";
 				}
-
 				if(strpos($this->curRequest,"LATEST"))
 				{
-					$pages = str_replace("?",$this->searchURL()."&LATEST=1&",$pages);
-					$pages = str_replace("/recent.php","",$pages);
+					$pages = str_replace('/recent/'.$lastSearch.'/',$this->searchURL().'&searchterm='.$lastSearch.'&pg=',$pages);
 				}
 				else
 				{
-					$pages = str_replace("?",$this->searchURL()."&",$pages);
-					$pages = str_replace("/search.php",'',$pages);
+					$pages = str_replace('/search/'.$lastSearch.'/',$this->searchURL().'&searchterm='.$lastSearch.'&pg=',$pages);
 				}
-
-				$pages = str_replace("page=","pg=",$pages);
-				$pages = str_replace("d=","cat=",$pages);
-				$pages = str_replace("c=","subGenre=",$pages);
-				$pages = str_replace("q=","searchterm=", $pages);
-				$pages = str_replace("orderby=","",$pages);
-
-				$pages = str_replace("&&","&",$pages);
-
-				$pages = str_replace("/brwsearch.php","",$pages);
+				$pages = preg_replace("#/(\\d+)/#",'&orderby=\1&cat=',$pages);
+				$pages = str_replace("/",'',$pages);
 
 				$output .= "<div align=center>".$pages."</div>";
 			}
