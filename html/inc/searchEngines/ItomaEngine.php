@@ -5,8 +5,8 @@
 *  www.torrentflux.com
 **************************************************************/
 /*
-    v 1.10 - Epsylon3 May 19, 2010
-    v 1.00 - PTiRouZ Feb 05, 2007
+	v 1.10 - Epsylon3 May 19, 2010
+	v 1.00 - PTiRouZ Feb 05, 2007
 */
 
 class SearchEngine extends SearchEngineBase
