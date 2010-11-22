@@ -1,3 +1,11 @@
+v1.0git 11/2010
+* updated jQuery
+* fixed admin fonts
+* enhanced index header width
+* some icons changed
+* search results background fixed
+* and more...
+
 v0.9.9 16/5/2009
 * fixed various tables grow in height when using small screen or 79+ characters name
 * fixed sfv icon not showing up correctly

@@ -2,11 +2,11 @@
 <form name="theForm" action="admin.php?op=updateServerSettings" method="post" onsubmit="return validateSettings('server')">
 <h1>server settings</h1>
 <p><input type="Submit" value="Update Settings"></p>
-<h2>Torrentflux-b4rt Paths</h2>
+<h2>TorrentFlux-NG Paths</h2>
 <table id="adminServerSettings">
 	<tr>
 		<th>
-			Transfer Parent Path<br /><span>Define the main torrentflux-b4rt parent path. Directory must be writable by the webserver user</span></th>
+			Transfer Parent Path<br /><span>Define the main TorrentFlux-NG parent path. Directory must be writable by the webserver user</span></th>
 		<td>
 			<input name="path" id="path" type="Text" maxlength="254" value="<tmpl_var name="path">">
 				<tmpl_if name="is_path" value="1">

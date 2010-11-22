@@ -1,4 +1,4 @@
-RedRound for Torrentflux-b4rt consist of 4 parts.
+RedRound for TorrentFlux-NG consist of 4 parts.
 	- Users UI which users see e.g main/history/message/dir/rss torrents
 	- Sub Users UI which control each download & dir. You access this by clicking on pencil icon in index or various icons in dir
 	- Admin pages
