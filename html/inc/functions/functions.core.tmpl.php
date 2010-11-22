@@ -280,8 +280,8 @@ function tmplGetXferBar($total, $used, $title, $type='xfer') {
  */
 function getTorrentFluxLink() {
 	global $cfg;
-	$torrentFluxLink['address'] = "http://tf-b4rt.berlios.de/";
-	$torrentFluxLink['name'] = "torrentflux-b4rt ".$cfg["version"];
+	$torrentFluxLink['address'] = "http://www.torrentflux-ng.org/";
+	$torrentFluxLink['name'] = "TorrentFlux-NG ".$cfg["version"];
 	return $torrentFluxLink;
 }
 

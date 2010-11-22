@@ -24,7 +24,7 @@ var ajax_idCountXfer = ajax_fieldIdsXfer.length;
 //
 var silentEnabled = 0;
 var titleChangeEnabled = 0;
-var pageTitle = "torrentflux-b4rt";
+var pageTitle = "TorrentFlux-NG";
 var goodLookingStatsEnabled = 0;
 var goodLookingStatsSettings = null;
 var bottomStatsEnabled = 0;

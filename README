@@ -422,8 +422,8 @@ TorrentFlux-NG README file
 **********************************************************************/
 
     TorrentFlux-NG can be installed quickly from a web browser using
-    the included setup script. For full details of how to install
-    torrentflux-b4rt, please see the INSTALL file.
+    the included setup script. For full details of how to install,
+    please see the INSTALL file.
 
     It is also possible to Upgrade an existing installation of 2.1-b4rt
     or official TF (2.1 - 2.3) to TorrentFlux-NG. Details about

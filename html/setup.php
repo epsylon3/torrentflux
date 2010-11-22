@@ -33,7 +33,7 @@ else
 	die("Fatal Error. inc/install/functions.install.php is missing.");
 
 // defines
-define('_NAME', 'torrentflux-b4rt');
+define('_NAME', 'TorrentFlux-NG');
 define('_TITLE', _NAME.' '._VERSION.' - Setup');
 define('_DIR', dirname($_SERVER["SCRIPT_FILENAME"])."/");
 define('_FILE_DBCONF', 'inc/config/config.db.php');
