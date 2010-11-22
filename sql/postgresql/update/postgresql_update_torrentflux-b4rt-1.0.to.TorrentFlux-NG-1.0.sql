@@ -20,12 +20,13 @@
 --
 -- inserts
 --
+INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0');
 
 --
 -- updates
 --
 
-UPDATE tf_settings SET tf_value = 'TorrentFlux-NG' WHERE tf_key = 'auth_basic_realm'
-UPDATE tf_settings SET tf_value = 'TorrentFlux-NG' WHERE tf_key = 'pagetitle'
-UPDATE tf_settings SET tf_value = 'RedRound' WHERE tf_key = 'default_theme'
-UPDATE tf_users SET theme = 'RedRound'
+UPDATE tf_settings SET tf_value = 'TorrentFlux-NG' WHERE tf_key = 'auth_basic_realm';
+UPDATE tf_settings SET tf_value = 'TorrentFlux-NG' WHERE tf_key = 'pagetitle';
+UPDATE tf_settings SET tf_value = 'RedRound' WHERE tf_key = 'default_theme';
+UPDATE tf_users SET theme = 'RedRound';

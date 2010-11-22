@@ -30,6 +30,7 @@ $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 
 // insert
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // updates + deletes
