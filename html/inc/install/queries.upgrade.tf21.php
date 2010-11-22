@@ -29,7 +29,7 @@ $cdb = 'common';
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 // updates + deletes
-array_push($queries[$cqt][$cdb], "UPDATE tf_users SET theme = 'default'");
+array_push($queries[$cqt][$cdb], "UPDATE tf_users SET theme = 'RedRound'");
 // tf_settings
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('max_upload_rate','10')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('max_download_rate','0')");
@@ -45,7 +45,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('days_to_keep'
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('minutes_to_keep','3')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('rss_cache_min','20')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('page_refresh','60')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_theme','default')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_theme','RedRound')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_language','lang-english.php')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('debug_sql','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('die_when_done','False')");
@@ -331,7 +331,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://tf-b4rt.berlios.de/','tf-b4rt','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // -----------------------------------------------------------------------------
 // SQL : postgres
@@ -463,7 +463,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES ('0','http://tf-b4rt.berlios.de/','tf-b4rt','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES ('0','http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 // sequences
 array_push($queries[$cqt][$cdb], "SELECT SETVAL('tf_links_lid_seq',(select case when max(lid)>0 then max(lid)+1 else 1 end from tf_links))");
 array_push($queries[$cqt][$cdb], "SELECT SETVAL('tf_trprofiles_id_seq',(select case when max(id)>0 then max(id)+1 else 1 end from tf_trprofiles))");

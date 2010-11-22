@@ -2,7 +2,7 @@
 -- $Id$
 -- -----------------------------------------------------------------------------
 --
--- MySQL-File for 'torrentflux-b4rt-1.0'.
+-- MySQL-File for 'TorrentFlux-NG-1.0'.
 --
 -- This Stuff is provided 'as-is'. In no way will the authors be held
 -- liable for any damages to your soft- or hardware from this.
@@ -30,7 +30,7 @@ CREATE TABLE tf_links (
   PRIMARY KEY  (lid)
 ) TYPE=MyISAM;
 
-INSERT INTO tf_links VALUES (NULL,'http://tf-b4rt.berlios.de/','tf-b4rt','0');
+INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0');
 
 --
 -- tf_log
@@ -189,7 +189,7 @@ INSERT INTO tf_settings VALUES ('days_to_keep','30');
 INSERT INTO tf_settings VALUES ('minutes_to_keep','3');
 INSERT INTO tf_settings VALUES ('rss_cache_min','20');
 INSERT INTO tf_settings VALUES ('page_refresh','60');
-INSERT INTO tf_settings VALUES ('default_theme','default');
+INSERT INTO tf_settings VALUES ('default_theme','RedRound');
 INSERT INTO tf_settings VALUES ('default_language','lang-english.php');
 INSERT INTO tf_settings VALUES ('debug_sql','1');
 INSERT INTO tf_settings VALUES ('die_when_done','False');
@@ -271,7 +271,7 @@ INSERT INTO tf_settings VALUES ('enable_index_ajax_update','0');
 INSERT INTO tf_settings VALUES ('index_ajax_update','10');
 INSERT INTO tf_settings VALUES ('transferStatsType','ajax');
 INSERT INTO tf_settings VALUES ('transferStatsUpdate','5');
-INSERT INTO tf_settings VALUES ('auth_basic_realm','torrentflux-b4rt');
+INSERT INTO tf_settings VALUES ('auth_basic_realm','TorrentFlux-NG');
 INSERT INTO tf_settings VALUES ('servermon_update','5');
 INSERT INTO tf_settings VALUES ('enable_home_dirs','1');
 INSERT INTO tf_settings VALUES ('path_incoming','incoming');
@@ -287,7 +287,7 @@ INSERT INTO tf_settings VALUES ('enable_btclient_chooser','1');
 INSERT INTO tf_settings VALUES ('transfer_profiles','3');
 INSERT INTO tf_settings VALUES ('transfer_customize_settings','2');
 INSERT INTO tf_settings VALUES ('transferHosts','0');
-INSERT INTO tf_settings VALUES ('pagetitle','torrentflux-b4rt');
+INSERT INTO tf_settings VALUES ('pagetitle','TorrentFlux-NG');
 INSERT INTO tf_settings VALUES ('enable_sharekill','1');
 INSERT INTO tf_settings VALUES ('transfer_window_default','transferStats');
 INSERT INTO tf_settings VALUES ('index_show_seeding','1');
