@@ -11,13 +11,20 @@ require("../../../inc/classes/VuzeRPC.php");
 //Test config
 
 //commented to keep default
-//$rpc_cfg['vuze_rpc_host']='mytesthost.com';
+//$rpc_cfg['vuze_rpc_host']='127.0.0.1';
 $rpc_cfg['vuze_rpc_port']='19091';
 //$rpc_cfg['vuze_rpc_user']='vuze';
-//$rpc_cfg['vuze_rpc_pass']='blabla';
+//$rpc_cfg['vuze_rpc_pass']='mypassword';
 
 $v = new VuzeRPC($rpc_cfg);
 
-$v->torrent_get_tf_json();
+$v->torrent_get_tf();
+
+$filter = array(
+	'running' => 9
+);
+$torrents = $v->torrent_filter_tf($filter);
+
+echo print_r($torrents,true);
 
 ?>

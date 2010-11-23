@@ -1,7 +1,12 @@
 <?php
 /*
 VUZE xmwebui (0.2.8) RPC interface for PHP
-        by Epsylon3 on gmail.com, Nov 2010
+		by Epsylon3 on gmail.com, Nov 2010
+
+	Require PHP 5 for public/protected members
+
+	Require PHP 5 >= 5.2.0 for json_encode()
+	
 */
 
 class VuzeRPC {
@@ -18,9 +23,15 @@ class VuzeRPC {
 
 	//vuze general config
 	public $session;
-	
+
+	//full torrents array
+	public $torrents = array();
+
 	//last request info
 	public $curl_info;
+
+	//filters
+	public $filter=array();
 
 	/*
 	 * Constructor 
@@ -227,24 +238,69 @@ class VuzeRPC {
 	*/
 	public function torrent_get_tf_array() {
 
-		$torrents = array();
+		$this->torrents = array();
 
 		$req = $this->torrent_get();
 		if ($req && $req->result == 'success') {
 			$vuze = (array) $req->arguments->torrents;
 			
 			foreach($vuze as $t) {
-				$torrents[$t->name] = $this->vuze_to_tf($t);
+				$this->torrents[$t->name] = $this->vuze_to_tf($t);
 			}
 		}
 
+		return $this->torrents;
+
+	}
+
+	/*
+	 * Filter torrents (torrentflux compatible format)
+	 * @return array
+	*/
+	public function torrent_filter_tf($filter = NULL) {
+		if (is_null($filter))
+			$filter = $this->filter;
+		if (empty($filter))
+			return;
+		
+		$torrents = array();
+		foreach ($this->torrents as $name => $tfstat) {
+
+			$bDrop = false;
+			if (isset($filter['running'])) {
+				$bDrop = ($tfstat['running'] != $filter['running']);
+			}
+
+			if (!$bDrop) {
+				$torrents[$name] = $tfstat;
+			}
+		}
+
+		return $torrents;
+	}
+
+	/*
+	 * Get all torrents in torrentflux compatible format (shell)
+	 * @return array
+	*/
+	public function torrent_get_tf() {
+
+		$torrents = array();
+		
+		$session = $this->session_get();
+		if ($session && $session->result == 'success') {
+			
+			$torrents = $this->torrent_get_tf_array();
+			
+		}
+		
 		return $torrents;
 
 	}
 
 	/*
 	 * Get all torrents in torrentflux compatible format (json)
-	 * @return object
+	 * @return none
 	*/
 	public function torrent_get_tf_json() {
 
