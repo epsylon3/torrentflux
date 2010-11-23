@@ -208,7 +208,7 @@ class VuzeRPC {
 	*/
 	public function vuze_to_tf($stat) {
 		$tfStat = array(
-			'running' => $stat->status,
+			'running' => $this->vuze_status_to_tf($stat->status),
 			'speedDown' => $stat->rateDownload,
 			'speedUp' => $stat->rateUpload,
 			'downCurrent' => $stat->rateDownload,
@@ -221,6 +221,7 @@ class VuzeRPC {
 			'seeds' => $stat->seeders,
 			'peers' => $stat->leechers,
 			'cons' => $stat->peersConnected,
+			'status' => $stat->status,
 			'hashString' => $stat->hashString
 		);
 		//'cons' => $stat->peersGettingFromUs + $stat->peersSendingToUs
@@ -230,6 +231,34 @@ class VuzeRPC {
 		}
 		
 		return $tfStat;
+	}
+	
+	public function vuze_status_to_tf($status) {
+		// 1 - waiting to verify
+		// 2 - verifying
+		// 4 - downloading
+		// 5 - queued (incomplete)
+		// 8 - seeding
+		// 9 - queued (complete)
+		// 16 - paused
+		switch ((int) $status) {
+			case 1:
+			case 2:
+			case 4:
+			case 5:
+				$tfstatus=1;
+				break;
+			case 8:
+			case 9:
+				$tfstatus=1;
+				break;
+			case 0:
+			case 16:
+			default:
+				$tfstatus=0;
+		};
+		
+		return $tfstatus;
 	}
 
 	/*

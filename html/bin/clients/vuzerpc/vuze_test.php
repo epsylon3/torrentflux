@@ -2,7 +2,9 @@
 <?php
 /*
 VUZE xmwebui (0.2.8) RPC interface for PHP
-        by Epsylon3 on gmail.com, Nov 2010
+		by Epsylon3 on gmail.com, Nov 2010
+
+Require PHP 5 for public/protected members
 */
 
 require("../../../inc/classes/VuzeRPC.php");
@@ -21,7 +23,7 @@ $v = new VuzeRPC($rpc_cfg);
 $v->torrent_get_tf();
 
 $filter = array(
-	'running' => 9
+	'running' => 1
 );
 $torrents = $v->torrent_filter_tf($filter);
 
