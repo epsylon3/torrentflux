@@ -31,8 +31,8 @@ class ClientHandlerAzureus extends ClientHandler
 	// =========================================================================
 
 	/**
-     * ctor
-     */
+	 * ctor
+	 */
 	function ClientHandlerAzureus() {
 		$this->type = "torrent";
 		$this->client = "azureus";
@@ -46,12 +46,12 @@ class ClientHandlerAzureus extends ClientHandler
 	// =========================================================================
 
 	/**
-     * starts a client
-     *
-     * @param $transfer name of the transfer
-     * @param $interactive (boolean) : is this a interactive startup with dialog ?
-     * @param $enqueue (boolean) : enqueue ?
-     */
+	 * starts a client
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $interactive (boolean) : is this a interactive startup with dialog ?
+	 * @param $enqueue (boolean) : enqueue ?
+	 */
 	function start($transfer, $interactive = false, $enqueue = false) {
 		global $cfg;
 
@@ -107,7 +107,7 @@ class ClientHandlerAzureus extends ClientHandler
 		$content .= $this->maxport."\n";
 		$content .= $this->maxcons."\n";
 		$content .= $this->rerequest;
-		
+
 		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.fluazu/run/'.$transfer);
 		$this->command .= " && ";
 		$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
@@ -116,18 +116,18 @@ class ClientHandlerAzureus extends ClientHandler
 		file_put_contents($cfg["path"].'.fluazu/run/'.$transfer, $content);
 		$this->command = "echo r > ".tfb_shellencode($cfg["path"].'.fluazu/fluazu.cmd');
 		}
-		
+
 		// start the client
 		$this->_start();
 	}
 
 	/**
-     * stops a client
-     *
-     * @param $transfer name of the transfer
-     * @param $kill kill-param (optional)
-     * @param $transferPid transfer Pid (optional)
-     */
+	 * stops a client
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $kill kill-param (optional)
+	 * @param $transferPid transfer Pid (optional)
+	 */
 	function stop($transfer, $kill = false, $transferPid = 0) {
 		// set vars
 		$this->_setVarsForTransfer($transfer);
@@ -184,11 +184,11 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * gets current transfer-vals of a transfer
-     *
-     * @param $transfer
-     * @return array with downtotal and uptotal
-     */
+	 * gets current transfer-vals of a transfer
+	 *
+	 * @param $transfer
+	 * @return array with downtotal and uptotal
+	 */
 	function getTransferCurrent($transfer) {
 		global $db, $transfers;
 		$retVal = array();
@@ -209,14 +209,14 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * gets current transfer-vals of a transfer. optimized version
-     *
-     * @param $transfer
-     * @param $tid of the transfer
-     * @param $sfu stat-file-uptotal of the transfer
-     * @param $sfd stat-file-downtotal of the transfer
-     * @return array with downtotal and uptotal
-     */
+	 * gets current transfer-vals of a transfer. optimized version
+	 *
+	 * @param $transfer
+	 * @param $tid of the transfer
+	 * @param $sfu stat-file-uptotal of the transfer
+	 * @param $sfd stat-file-downtotal of the transfer
+	 * @return array with downtotal and uptotal
+	 */
 	function getTransferCurrentOP($transfer, $tid, $sfu, $sfd) {
 		global $transfers;
 		$retVal = array();
@@ -230,11 +230,11 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * gets total transfer-vals of a transfer
-     *
-     * @param $transfer
-     * @return array with downtotal and uptotal
-     */
+	 * gets total transfer-vals of a transfer
+	 *
+	 * @param $transfer
+	 * @return array with downtotal and uptotal
+	 */
 	function getTransferTotal($transfer) {
 		global $transfers;
 		// transfer from stat-file
@@ -243,25 +243,25 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * gets total transfer-vals of a transfer. optimized version
-     *
-     * @param $transfer
-     * @param $tid of the transfer
-     * @param $sfu stat-file-uptotal of the transfer
-     * @param $sfd stat-file-downtotal of the transfer
-     * @return array with downtotal and uptotal
-     */
+	 * gets total transfer-vals of a transfer. optimized version
+	 *
+	 * @param $transfer
+	 * @param $tid of the transfer
+	 * @param $sfu stat-file-uptotal of the transfer
+	 * @param $sfd stat-file-downtotal of the transfer
+	 * @return array with downtotal and uptotal
+	 */
 	function getTransferTotalOP($transfer, $tid, $sfu, $sfd) {
 		return array("uptotal" => $sfu, "downtotal" => $sfd);
 	}
 
 	/**
-     * set upload rate of a transfer
-     *
-     * @param $transfer
-     * @param $uprate
-     * @param $autosend
-     */
+	 * set upload rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $uprate
+	 * @param $autosend
+	 */
 	function setRateUpload($transfer, $uprate, $autosend = false) {
 		// set rate-field
 		$this->rate = $uprate;
@@ -273,12 +273,12 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * set download rate of a transfer
-     *
-     * @param $transfer
-     * @param $downrate
-     * @param $autosend
-     */
+	 * set download rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $downrate
+	 * @param $autosend
+	 */
 	function setRateDownload($transfer, $downrate, $autosend = false) {
 		// set rate-field
 		$this->drate = $downrate;
@@ -290,13 +290,13 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * set runtime of a transfer
-     *
-     * @param $transfer
-     * @param $runtime
-     * @param $autosend
-     * @return boolean
-     */
+	 * set runtime of a transfer
+	 *
+	 * @param $transfer
+	 * @param $runtime
+	 * @param $autosend
+	 * @return boolean
+	 */
 	function setRuntime($transfer, $runtime, $autosend = false) {
 		// set runtime-field
 		$this->runtime = $runtime;
@@ -308,13 +308,13 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * set sharekill of a transfer
-     *
-     * @param $transfer
-     * @param $sharekill
-     * @param $autosend
-     * @return boolean
-     */
+	 * set sharekill of a transfer
+	 *
+	 * @param $transfer
+	 * @param $sharekill
+	 * @param $autosend
+	 * @return boolean
+	 */
 	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
 		$this->sharekill = $sharekill;
@@ -328,11 +328,11 @@ class ClientHandlerAzureus extends ClientHandler
 	}
 
 	/**
-     * clean stat file
-     *
-     * @param $transfer
-     * @return boolean
-     */
+	 * clean stat file
+	 *
+	 * @param $transfer
+	 * @return boolean
+	 */
 	function cleanStoppedStatFile($transfer) {
 		unlink($this->transferFilePath.".pid");
 		$sf = new StatFile($this->transfer, $this->owner);
