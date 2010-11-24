@@ -461,7 +461,8 @@ class VuzeRPC {
 			'seeds' => $stat->seeders,
 			'peers' => $stat->leechers,
 			'cons' => $stat->peersConnected,
-
+			
+			'size' => $stat->totalSize,
 			'status' => $stat->status,
 			'hashString' => strtolower($stat->hashString),
 
@@ -472,7 +473,7 @@ class VuzeRPC {
 		);
 
 		//'cons' => $stat->peersGettingFromUs + $stat->peersSendingToUs
-		if ($stat->totalSize > 0) {
+		if ((int)$stat->totalSize > 0) {
 			$tfStat['percentDone'] = round(100.0 * ($stat->downloadedEver / $stat->totalSize) ,1);
 			if ($tfStat['percentDone'] > 100)
 				$tfStat['percentDone'] = 100;

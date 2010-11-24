@@ -207,7 +207,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		//$this->_stop($kill, $transferPid);
 
 		// flag the transfer as stopped (in db)
-		stopTransferSettings($this->transfer);
+		stopTransferSettings($transfer);
 		// set transfers-cache
 		cacheTransfersSet();
 
@@ -408,8 +408,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @return boolean
 	 */
 	function cleanStoppedStatFile($transfer) {
-		$this->updateStatFiles();
-
 		@unlink($this->transferFilePath.".pid");
 		$sf = new StatFile($this->transfer, $this->owner);
 		$sf->running = "0";
@@ -447,11 +445,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		foreach ($tfs as $name => $t)
 			$hashes[$t['hashString']] = "'".$t['hashString']."'";
 
-		$sql = "SELECT hash, transfer FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
 		$recordset = $db->Execute($sql);
 		$hashes=array();
-		while (list($hash, $transfer) = $recordset->FetchRow()) {
+		$sharekills=array();
+		while (list($hash, $transfer, $sharekill) = $recordset->FetchRow()) {
 			$hashes[$hash] = $transfer;
+			$sharekills[$hash] = $sharekill;
 		}
 
 		//convertTime
@@ -505,15 +505,36 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					if ($sf->percent_done >= 100)
 						$sf->time_left = "Download Succeeded!";
 				}
-				if ($t['downTotal'] > 0 || $t['upTotal'] > 0) {
-					$sf->downtotal = formatBytesTokBMBGBTB($t['downTotal']);
-					$sf->uptotal = formatBytesTokBMBGBTB($t['upTotal']);
-				}
-
+				
+				$sf->downtotal = $t['downTotal'];
+				$sf->uptotal = $t['upTotal'];
+				
+				if (!$sf->size)
+					$sf->size = $t['size'];
+				
 				if ($sf->seeds = -1);
 					$sf->seeds = '';
-				if ($sf->size > 0) {
-					$sf->write();
+				$sf->write();
+			}
+		}
+		
+		//SHAREKILLS
+		foreach ($tfs as $name => $t) {
+			if (isset($sharekills[$t['hashString']])) {
+				if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$t['hashString']]) {
+					
+					$transfer = $hashes[$t['hashString']];
+					// log
+					AuditAction($cfg["constants"]["debug"], $this->client."-stat. : need to kill $transfer");
+					
+					if (!$vuze->torrent_stop_tf($t['hashString'])) {
+						$msg = "transfer ".$transfer." does not exist in vuze.";
+						$this->logMessage($msg."\n", true);
+						AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
+					} else {
+						// flag the transfer as stopped (in db)
+						stopTransferSettings($transfer);
+					}
 				}
 			}
 		}
