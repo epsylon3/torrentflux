@@ -188,6 +188,9 @@ function ajax_processText(content) {
  * @param transferListStr
  */
 function ajax_updateContent(statsServerStr, statsXferStr, usersStr, transferListStr) {
+	if (!statsServerStr) {
+		return;
+	}
 	var statsServer = statsServerStr.split(ajax_txtDelim);
 	// page-title
 	if (titleChangeEnabled == 1) {

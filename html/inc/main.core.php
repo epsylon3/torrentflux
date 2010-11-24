@@ -87,7 +87,7 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
 // user-agent
 $cfg['user_agent'] = (isset($_SERVER['HTTP_USER_AGENT']))
 	? htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES)
-	: "torrentflux-b4rt/".$cfg["version"];
+	: "TorrentFlux-NG/".$cfg["version"];
 
 // get os
 $osString = @php_uname('s');
@@ -98,6 +98,8 @@ if (isset($osString)) {
     	$cfg["_OS"] = 2;
     elseif (!(stristr($osString, 'darwin') === false)) /* darwin */
         $cfg["_OS"] = 2;
+    elseif (!(stristr($osString, 'win') === false)) /* windows */
+        $cfg["_OS"] = 3;
     else /* well... linux ;) */
     	$cfg["_OS"] = 1;
 } else { /* well... linux ;) */
