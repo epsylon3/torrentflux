@@ -9,6 +9,31 @@ VUZE xmwebui (0.2.8) RPC interface for PHP
 	
 */
 
+// xmwebui seems to accept only urls and magnet to add torrents
+// so i've added that to download local torrent file.
+if (isset($_REQUEST['getUrl'])) {
+	
+	header("Content-type: application/octet-stream\n");
+	
+	// main.core to get $cfg
+	chdir('../../');
+	$_SESSION['check']['dbconf'] = 1;
+	require_once('inc/main.core.php');
+
+	// security replace
+	$transfer = str_replace('/','',$_REQUEST['getUrl']);
+
+	$path = $cfg["path"].'.transfers/';
+	//$data = file_get_contents($path.$transfer);
+	if (is_file($path.$transfer)) {
+		$fp = popen("cat ".tfb_shellencode($path.$transfer), "r");
+		fpassthru($fp);
+		pclose($fp);
+	}
+}
+
+$instance=NULL;
+
 class VuzeRPC {
 
 	public $DEBUG = false;
@@ -17,9 +42,6 @@ class VuzeRPC {
 	public $PORT = '19091';
 	public $USER = 'vuze';
 	public $PASS = 'mypassword';
-
-	//curl token
-	protected $ch = NULL;
 
 	//vuze general config
 	public $session;
@@ -33,14 +55,24 @@ class VuzeRPC {
 	//filters
 	public $filter=array();
 
+	//internal vars, dont touch them
+
+	//curl token
+	protected $ch = NULL;
+
+	protected $torrents_path;
+
 	/*
 	 * Constructor 
 	*/
-	public function __construct($cfg = array()) {
+	public function __construct($_cfg = array()) {
 
 		if ($this->DEBUG) {
 			error_reporting(E_ALL);
 		}
+
+		global $cfg;
+		$cfg = & $_cfg;
 
 		if (isset($cfg['vuze_rpc_host']))
 			$this->HOST = $cfg['vuze_rpc_host'];
@@ -50,6 +82,11 @@ class VuzeRPC {
 			$this->USER = $cfg['vuze_rpc_user'];
 		if (isset($cfg['vuze_rpc_pass']))
 			$this->PASS = $cfg['vuze_rpc_pass'];
+
+		$this->torrents_path = $cfg["path"].'.transfers/';
+
+		global $instance;
+		$instance = & $this;
 
 	}
 
@@ -142,8 +179,18 @@ class VuzeRPC {
 		return $this->session;
 	}
 
+	// Set Vuze data (general config)
+	public function session_set($key, $value) {
+		$args = new stdclass;
+		$args->$key = $value;
+		$req = $this->vuze_rpc('session-set',$args);
+		
+		$this->session = $this->vuze_rpc('session-get');
+		return $this->session;
+	}
+	
 	// Get Vuze data (all torrents)
-	public function torrent_get() {
+	public function torrent_get($ids=array()) {
 
 		//choose wanted torrents fields
 		$fields = array(
@@ -176,6 +223,15 @@ class VuzeRPC {
 			"swarmSpeed", 
 			"totalSize", 
 			"uploadedEver"
+			"swarmSpeed",
+			"pieceCount",
+			"pieceSize",
+			"metadataPercentComplete",
+			"recheckProgress"
+			"uploadRatio"
+			"seedRatioLimit"
+			"seedRatioMode"
+			"downloadDir"
 			*/
 			"id", 
 			"name", 
@@ -190,15 +246,183 @@ class VuzeRPC {
 			"eta", 
 			"leechers", 
 			"seeders", 
-			"peersConnected"
+			"peersConnected",
+			
+			"metadataPercentComplete",
+			"downloadDir",
+			"seedRatioLimit"
 		);
 
 		$args = new stdclass;
-		//$args->ids = array(1160,950);
+		if (!empty($ids))
+			$args->ids = $ids;
 		$args->fields = $fields;
 		$req = $this->vuze_rpc('torrent-get',$args);
-
 		return $req;
+	}
+	
+	public function torrent_get_namesids($ids=array()) {
+		$fields = array(
+			"id", 
+			"name"
+		);
+		$args = new stdclass;
+		if (!empty($ids))
+			$args->ids = $ids;
+		$args->fields = $fields;
+		$req = $this->vuze_rpc('torrent-get',$args);
+		return $req;
+	}
+
+	/*
+	 * Add Vuze Torrent (all torrents)
+	 * @return error string or object
+	*/
+	public function torrent_add($filename,$params=array()) {
+		$args = new stdclass;
+		$args->filename = $filename;
+		$args->paused = "false";
+		$req = $this->vuze_rpc('torrent-add',$args);
+
+		//O:8:"stdClass":3:{s:3:"tag";s:10:"1290615517";s:6:"result";s:7:"success";s:9:"arguments";O:8:"stdClass":1:{s:13:"torrent-added";O:8:"stdClass":3:{s:2:"id";i:1221;s:4:"name";s:13:"Winamp.v5.581";s:10:"hashString";s:40:"A9BD615FE09B401A770445A4D4FA4254A555577B";}}}
+		$member = "torrent-added";
+		if ($req->result == "success")
+			return $req->arguments->$member;
+		else
+			return $req->result;
+	}
+
+	public function torrent_set($ids,$key,$value) {
+		$args = new stdclass;
+		$args->ids = $ids;
+		$args->$key = $value;
+		$req = $this->vuze_rpc('torrent-set',$args);
+		return $req;
+	}
+
+	public function torrent_set_multi($ids,$values) {
+		$args = new stdclass;
+		$args->ids = $ids;
+		foreach ($values as $key => $value)
+			$args->$key = $value;
+		$req = $this->vuze_rpc('torrent-set',$args);
+		return $req;
+	}
+
+	public function torrent_stop($ids) {
+		$args = new stdclass;
+		$args->ids = $ids;
+		$req = $this->vuze_rpc('torrent-stop',$args);
+		return $req;
+	}
+
+	public function torrent_start($ids) {
+		$args = new stdclass;
+		$args->ids = $ids;
+		$req = $this->vuze_rpc('torrent-start',$args);
+		return $req;
+	}
+
+	public function torrent_remove($ids,$bDeleteData=false) {
+		$args = new stdclass;
+		$args->ids = $ids;
+		
+		$member = "delete-local-data";
+		$args->$member = ($bDeleteData ? 'true' : 'false');
+		
+		$req = $this->vuze_rpc('torrent-remove',$args);
+		return $req;
+	}
+
+	//##############################################################
+	public function http_server() {
+		$host = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
+		if (isset($_SERVER['HTTPS']))
+			$host = str_replace('http:','https:',$host);
+		else
+			$host = str_replace(':80','',$host);
+		return $host;
+	}
+	
+	public function torrent_add_tf($transfer,$content) {
+		$params = explode("\n",$content);
+		
+		$save_path  = $params[1];
+		$max_ul = (int)$params[2];
+		$max_dl = (int)$params[3];
+		$max_uc = (int)$params[4];
+		$max_dc = (int)$params[5];
+		//$ = $params[6];
+		$sharekill = (int)$params[7];
+		$min_port = (int)$params[8];
+		$max_port = (int)$params[9];
+		//$ = (int)$params[10];
+		//$ = (int)$params[11];
+	
+		//$url = $this->http_server()."/dispatcher.php?action=metafileDownload&transfer=$transfer";
+		//"file:///".$this->torrents_path.$transfer;
+		$url = $this->http_server()."/inc/classes/VuzeRPC.php?getUrl=$transfer";
+		
+		//set download directory
+		$this->session_set('download-dir',$save_path);
+		
+		$req = $this->torrent_add($url,$params);
+		if (is_object($req)) {
+			//return $req->id;
+			$id = $req->id;
+			$values = array(
+				'rateUpload' => $max_ul,
+				'rateDownload' => $max_dl,
+				'downloadDir' => $save_path,
+				'seedRatioLimit' => ((float)$sharekill / 100.0)
+			);
+			$req = $this->torrent_set_multi(array($id),$values);
+			//$req = $this->torrent_set(array($id),'downloadDir',$save_path);
+			//$req = $this->torrent_set(array($id),'seedRatioLimit',(float)$sharekill / 100.0);
+			//$req = $this->torrent_get(array($id));
+			return $id;
+		}
+		
+		return $req;
+	}
+
+	public function torrent_add_url($url,$content) {
+		$params = explode("\n",$content);
+		$req = $this->torrent_add($url,$params);
+		if (is_object($req))
+			return $req->id;
+		
+		return $req;
+	}
+	
+	public function torrent_stop_tf($transfer) {
+		$req = $this->torrent_get_namesids();
+		if ($req && $req->result == 'success') {
+			$torrents = (array) $req->arguments->torrents;
+			foreach ($torrents as $k => $t) {
+				if ($t->name == $transfer) {
+					$req = $this->torrent_stop(array($t->id));
+					return true;
+				}
+			}
+		}
+		//not found
+		return false;
+	}
+
+	public function torrent_start_tf($transfer) {
+		$req = $this->torrent_get_namesids();
+		if ($req && $req->result == 'success') {
+			$torrents = (array) $req->arguments->torrents;
+			foreach ($torrents as $k => $t) {
+				if ($t->name == $transfer) {
+					$req = $this->torrent_start(array($t->id));
+					return true;
+				}
+			}
+		}
+		//not found
+		return false;
 	}
 
 	/*
@@ -222,7 +446,10 @@ class VuzeRPC {
 			'peers' => $stat->leechers,
 			'cons' => $stat->peersConnected,
 			'status' => $stat->status,
-			'hashString' => $stat->hashString
+			'hashString' => $stat->hashString,
+			
+			'downloadDir' => $stat->downloadDir,
+			'seedRatioLimit' => $stat->seedRatioLimit
 		);
 		//'cons' => $stat->peersGettingFromUs + $stat->peersSendingToUs
 		if ($stat->totalSize > 0) {
@@ -265,11 +492,11 @@ class VuzeRPC {
 	 * Get all torrents in torrentflux compatible format
 	 * @return array
 	*/
-	public function torrent_get_tf_array() {
+	public function torrent_get_tf_array($ids=array()) {
 
 		$this->torrents = array();
 
-		$req = $this->torrent_get();
+		$req = $this->torrent_get($ids);
 		if ($req && $req->result == 'success') {
 			$vuze = (array) $req->arguments->torrents;
 			
@@ -312,14 +539,14 @@ class VuzeRPC {
 	 * Get all torrents in torrentflux compatible format (shell)
 	 * @return array
 	*/
-	public function torrent_get_tf() {
+	public function torrent_get_tf($ids=array()) {
 
 		$torrents = array();
 		
 		$session = $this->session_get();
 		if ($session && $session->result == 'success') {
 			
-			$torrents = $this->torrent_get_tf_array();
+			$torrents = $this->torrent_get_tf_array($ids);
 			
 		}
 		
@@ -353,6 +580,56 @@ class VuzeRPC {
 		
 		echo json_encode($request);
 
+	}
+
+	//STATIC HELPERS 
+	public function getInstance() {
+		global $instance;
+		if (!is_object($instance)) {
+			global $cfg;
+			$instance = new VuzeRPC($cfg);
+		}
+		return $instance;
+	}
+
+	//VuzeRPC::isRunning()
+	public function isRunning() {
+		$instance = VuzeRPC::getInstance();
+		$session = $instance->session_get();
+		return  ($session && $session->result == 'success');
+	}
+
+	//VuzeRPC::transferExists($transfer)
+	public function transferExists($transfer) {
+		$instance = VuzeRPC::getInstance();
+		
+		$req = $instance->torrent_get_namesids();
+		if ($req && $req->result == 'success') {
+			$torrents = (array) $req->arguments->torrents;
+			foreach ($torrents as $k => $t) {
+				if ($t->name == $transfer)
+					return true;
+			}
+		}
+		//not found
+		return false;
+	}
+
+	public function delTransfer($transfer) {
+		$instance = VuzeRPC::getInstance();
+		
+		$req = $instance->torrent_get_namesids();
+		if ($req && $req->result == 'success') {
+			$torrents = (array) $req->arguments->torrents;
+			foreach ($torrents as $k => $t) {
+				if ($t->name == $transfer) {
+					$instance->torrent_remove(array($t->id),true);
+					return true;
+				}
+			}
+		}
+		//not found
+		return false;
 	}
 
 } //end of VuzeRPC class
