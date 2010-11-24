@@ -50,6 +50,8 @@ class VuzeRPC {
 	public $USER = 'vuze';
 	public $PASS = 'mypassword';
 
+	public $lastError="";
+
 	//vuze general config
 	public $session;
 
@@ -169,6 +171,9 @@ class VuzeRPC {
 			//ok
 			$data=json_decode($res);
 			
+			if ($req->result != 'success')
+				$this->lastError = $req->result;
+			
 		}
 		elseif ($this->DEBUG) {
 			//not json ???
@@ -182,8 +187,8 @@ class VuzeRPC {
 
 	// Get Vuze data (general config)
 	public function session_get() {
-		$this->session = $this->vuze_rpc('session-get');
-		
+		$req = $this->vuze_rpc('session-get');
+		$this->session = $req;
 		return $this->session;
 	}
 
@@ -653,6 +658,12 @@ class VuzeRPC {
 		}
 		//not found
 		return false;
+	}
+
+	public function getMessages() {
+		$instance = VuzeRPC::getInstance();
+		
+		return array($instance->lastError);
 	}
 
 } //end of VuzeRPC class
