@@ -121,8 +121,17 @@ class ClientHandler
 				require_once('inc/classes/ClientHandler.mainline.php');
 				return new ClientHandlerMainline();
 			case "azureus":
-				require_once('inc/classes/ClientHandler.azureus.php');
-				return new ClientHandlerAzureus();
+				global $cfg;
+				if ($cfg['vuze_rpc_enable'] == 1) {
+					//xmwebui (json) (fast)
+					require_once('inc/classes/ClientHandler.vuzerpc.php');
+					return new ClientHandlerVuzeRPC();
+				} else {
+					//fluazu/dopal/xml_http (slow)
+					require_once('inc/classes/ClientHandler.azureus.php');
+					return new ClientHandlerAzureus();
+				}
+			case "azureus":
 			case "wget":
 				require_once('inc/classes/ClientHandler.wget.php');
 				return new ClientHandlerWget();

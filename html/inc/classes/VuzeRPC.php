@@ -7,6 +7,12 @@ VUZE xmwebui (0.2.8) RPC interface for PHP
 
 	Require PHP 5 >= 5.2.0 for json_encode()
 	
+	Settings needed in DB (need logout)
+		$cfg['vuze_rpc_enable'];
+		$cfg['vuze_rpc_host'];
+		$cfg['vuze_rpc_port'];
+		$cfg['vuze_rpc_user'];
+		$cfg['vuze_rpc_pass'];
 */
 
 // xmwebui seems to accept only urls and magnet to add torrents
