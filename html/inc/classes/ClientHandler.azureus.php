@@ -141,7 +141,7 @@ class ClientHandlerAzureus extends ClientHandler
 		if (!FluAzu::transferExists($transfer)) {
 			$msg = "transfer ".$transfer." does not exist in fluazu, deleting pid file (stop).";
 			$this->logMessage($msg."\n", true);
-			$this->cleanStoppedStatFile();
+			$this->cleanStoppedStatFile($transfer);
 			//array_push($this->messages , "transfer ".$transfer." does not exist in fluazu, cannot stop it");
 			//return false;
 		}
@@ -334,7 +334,7 @@ class ClientHandlerAzureus extends ClientHandler
 	 * @return boolean
 	 */
 	function cleanStoppedStatFile($transfer) {
-		unlink($this->transferFilePath.".pid");
+		@unlink($this->transferFilePath.".pid");
 		$sf = new StatFile($this->transfer, $this->owner);
 		$sf->running = "0";
 		$sf->percent_done=100;
