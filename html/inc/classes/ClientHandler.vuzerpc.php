@@ -35,14 +35,14 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 */
 	function ClientHandlerVuzeRPC() {
 		global $cfg;
-		
+
 		$this->type = "torrent";
 		$this->client = "azureus";
 		$this->binSystem = "php";
 		$this->binSocket = "php";
 		$this->binClient = "php";
 		$this->vuzerpcBin = $cfg["docroot"]."bin/clients/vuzerpc/vuzerpc.php";
-		
+
 	}
 
 	// =========================================================================
@@ -76,12 +76,12 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$msg = "VuzeRPC not reacheable, cannot start transfer ".$transfer;
 			AuditAction($cfg["constants"]["error"], $msg);
 			$this->logMessage($msg."\n", true);
-			
+
 			// write error to stat
 			$sf = new StatFile($this->transfer, $this->owner);
 			$sf->time_left = 'Error: VuzeRPC down';
 			$sf->write();
-			
+
 			// return
 			return false;
 		}
@@ -150,7 +150,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$sf->time_left = $tf['eta'];
 			$sf->down_speed = $tf['speedDown'];
 			$sf->up_speed = $tf['speedUp'];
-			
+
 			$sf->write();
 		}
 */
@@ -184,7 +184,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			array_push($this->messages , "VuzeRPC not running, cannot stop transfer ".$transfer);
 			return false;
 		}
-		
+
 		$hash = getTransferHash($transfer);
 		if (!VuzeRPC::transferExists($hash)) {
 			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (stop).";
@@ -195,7 +195,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		// log
 		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
-		
+
 		if (!$vuze->torrent_stop_tf($hash)) {
 			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (stop).";
 			$this->logMessage($msg."\n", true);
@@ -205,14 +205,14 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		// stop the client
 		//$this->_stop($kill, $transferPid);
-		
+
 		// flag the transfer as stopped (in db)
 		stopTransferSettings($this->transfer);
 		// set transfers-cache
 		cacheTransfersSet();
-		
+
 		@unlink($this->transferFilePath.".pid");
-		
+
 		$this->updateStatFiles();
 	}
 
@@ -227,9 +227,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$this->_setVarsForTransfer($transfer);
 		// FluAzu
 		require_once("inc/classes/VuzeRPC.php");
-		
+
 		$hash = getTransferHash($transfer);
-		
+
 		// only if transfer exists in vuze
 		if (VuzeRPC::transferExists($hash)) {
 			// only if vuze running
@@ -252,7 +252,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			unlink($this->transferFilePath.".pid");
 		}
 		$this->updateStatFiles();
-		
+
 		// delete
 		return $this->_delete();
 	}
@@ -425,7 +425,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 	function updateStatFiles() {
 		global $cfg, $db;
-		
+
 		$this->vuze = VuzeRPC::getInstance();
 		$vuze = & $this->vuze;
 
@@ -439,7 +439,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		$tfs = $vuze->torrent_get_tf();
 		//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles.log",serialize($tfs));
-		
+
 		if (empty($tfs))
 			return;
 
@@ -473,21 +473,21 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$t['eta'] = "";
 				}
 				$sf->time_left = $t['eta'];
-				
+
 				if ($sf->running) {
-				
+
 					$sf->percent_done = max($t['percentDone'],$t['sharing']);
-					
+
 					if ($t['status'] != 9 && $t['status'] != 5) {
 						$sf->peers = $t['peers'];
 						$sf->seeds = $t['seeds'];
 					}
-				
+
 					if ($t['speedDown'] > 0)
 						$sf->down_speed = formatBytesTokBMBGBTB($t['speedDown']);
 					if ($t['speedUp'] > 0)
 						$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp']);
-						
+
 					if ($t['status'] == 8) {
 						$sf->percent_done = 100;
 						$sf->down_speed = "";
@@ -497,7 +497,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						$sf->up_speed = "";
 						$sf->down_speed = "";
 					}
-					
+
 				} else {
 					$sf->down_speed = "";
 					$sf->up_speed = "";
@@ -509,7 +509,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$sf->downtotal = formatBytesTokBMBGBTB($t['downTotal']);
 					$sf->uptotal = formatBytesTokBMBGBTB($t['upTotal']);
 				}
-				
+
 				if ($sf->seeds = -1);
 					$sf->seeds = '';
 				if ($sf->size > 0) {

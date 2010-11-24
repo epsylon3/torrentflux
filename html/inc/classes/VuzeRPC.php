@@ -6,7 +6,7 @@ VUZE xmwebui (0.2.8) RPC interface for PHP
 	Require PHP 5 for public/protected members
 
 	Require PHP 5 >= 5.2.0 for json_encode()
-	
+
 	Settings needed in DB (need logout)
 		$cfg['vuze_rpc_enable'];
 		$cfg['vuze_rpc_host'];
@@ -18,9 +18,9 @@ VUZE xmwebui (0.2.8) RPC interface for PHP
 // xmwebui seems to accept only urls and magnet to add torrents
 // so i've added that to download local torrent file.
 if (isset($_REQUEST['getUrl'])) {
-	
+
 	header("Content-type: application/octet-stream\n");
-	
+
 	// main.core to get $cfg
 	chdir('../../');
 	$_SESSION['check']['dbconf'] = 1;
@@ -72,7 +72,7 @@ class VuzeRPC {
 	protected $torrents_path;
 
 	/*
-	 * Constructor 
+	 * Constructor
 	*/
 	public function __construct($_cfg = array()) {
 
@@ -101,7 +101,7 @@ class VuzeRPC {
 	}
 
 	/*
-	 * Destructor 
+	 * Destructor
 	*/
 	public function __destruct() {
 		if (!is_null($this->ch)) {
@@ -140,23 +140,23 @@ class VuzeRPC {
 	 * @return false or object
 	*/
 	public function vuze_rpc($method, $arguments=NULL) {
-	
+
 		if (is_null($this->ch)) {
 			$this->set_curl_options();
 		}
-		
+
 		$tag = date('U');
-		
+
 		$postData = '{"method":"'.$method.'", "tag":"'.$tag.'"}';
 		if (isset($arguments))
 			$postData = '{"method":"'.$method.'", "arguments": '.json_encode($arguments).', "tag":"'.$tag.'" }';
-		
+
 		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $postData);
-		
+
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($this->ch);
 		$this->curl_info = curl_getinfo($this->ch);
-		
+
 		$data = false;
 		if ($this->curl_info["http_code"] != 200) {
 			if ($this->DEBUG) {
@@ -167,13 +167,13 @@ class VuzeRPC {
 			}
 		}
 		elseif ($res{0} == "{") {
-			
+
 			//ok
 			$data=json_decode($res);
-			
+
 			if ($req->result != 'success')
 				$this->lastError = $req->result;
-			
+
 		}
 		elseif ($this->DEBUG) {
 			//not json ???
@@ -181,7 +181,7 @@ class VuzeRPC {
 			var_dump($res);
 			echo "</pre>";
 		}
-		
+
 		return $data;
 	}
 
@@ -197,44 +197,44 @@ class VuzeRPC {
 		$args = new stdclass;
 		$args->$key = $value;
 		$req = $this->vuze_rpc('session-set',$args);
-		
+
 		$this->session = $this->vuze_rpc('session-get');
 		return $this->session;
 	}
-	
+
 	// Get Vuze data (all torrents)
 	public function torrent_get($ids=array()) {
 
 		//choose wanted torrents fields
 		$fields = array(
 			/*
-			"addedDate", 
-			"announceURL", 
-			"comment", 
-			"creator", 
-			"dateCreated", 
-			"downloadedEver", 
-			"error", 
-			"errorString", 
-			"eta", 
-			"hashString", 
-			"haveUnchecked", 
-			"haveValid", 
-			"id", 
-			"isPrivate", 
-			"leechers", 
-			"leftUntilDone", 
-			"name", 
-			"peersConnected", 
-			"peersGettingFromUs", 
-			"peersSendingToUs", 
-			"rateDownload", 
-			"rateUpload", 
-			"seeders", 
-			"sizeWhenDone", 
-			"status", 
-			"swarmSpeed", 
-			"totalSize", 
+			"addedDate",
+			"announceURL",
+			"comment",
+			"creator",
+			"dateCreated",
+			"downloadedEver",
+			"error",
+			"errorString",
+			"eta",
+			"hashString",
+			"haveUnchecked",
+			"haveValid",
+			"id",
+			"isPrivate",
+			"leechers",
+			"leftUntilDone",
+			"name",
+			"peersConnected",
+			"peersGettingFromUs",
+			"peersSendingToUs",
+			"rateDownload",
+			"rateUpload",
+			"seeders",
+			"sizeWhenDone",
+			"status",
+			"swarmSpeed",
+			"totalSize",
 			"uploadedEver"
 			"pieceCount",
 			"pieceSize",
@@ -245,25 +245,25 @@ class VuzeRPC {
 			"seedRatioMode"
 			"downloadDir"
 			*/
-			"id", 
-			"name", 
-			"hashString", 
-			"status", 
-			"rateDownload", 
-			"rateUpload", 
-			"downloadedEver", 
+			"id",
+			"name",
+			"hashString",
+			"status",
+			"rateDownload",
+			"rateUpload",
+			"downloadedEver",
 			"uploadedEver",
 			"sizeWhenDone",
-			"totalSize", 
-			"eta", 
-			"leechers", 
-			"seeders", 
+			"totalSize",
+			"eta",
+			"leechers",
+			"seeders",
 			"peersConnected",
-			"peersGettingFromUs", 
-			"peersSendingToUs", 
-			
-			"error", 
-			"errorString", 
+			"peersGettingFromUs",
+			"peersSendingToUs",
+
+			"error",
+			"errorString",
 			"downloadDir",
 			"seedRatioLimit"
 		);
@@ -275,10 +275,10 @@ class VuzeRPC {
 		$req = $this->vuze_rpc('torrent-get',$args);
 		return $req;
 	}
-	
+
 	public function torrent_get_namesids($ids=array()) {
 		$fields = array(
-			"id", 
+			"id",
 			"name",
 			"hashString"
 		);
@@ -342,10 +342,10 @@ class VuzeRPC {
 	public function torrent_remove($ids,$bDeleteData=false) {
 		$args = new stdclass;
 		$args->ids = $ids;
-		
+
 		$member = "delete-local-data";
 		$args->$member = ($bDeleteData ? 'true' : 'false');
-		
+
 		$req = $this->vuze_rpc('torrent-remove',$args);
 		return $req;
 	}
@@ -359,10 +359,10 @@ class VuzeRPC {
 			$host = str_replace(':80','',$host);
 		return $host;
 	}
-	
+
 	public function torrent_add_tf($transfer,$content) {
 		$params = explode("\n",$content);
-		
+
 		$save_path  = $params[1];
 		$max_ul = (int)$params[2];
 		$max_dl = (int)$params[3];
@@ -374,14 +374,14 @@ class VuzeRPC {
 		$max_port = (int)$params[9];
 		//$ = (int)$params[10];
 		//$ = (int)$params[11];
-	
+
 		//$url = $this->http_server()."/dispatcher.php?action=metafileDownload&transfer=$transfer";
 		//"file:///".$this->torrents_path.$transfer;
 		$url = $this->http_server()."/inc/classes/VuzeRPC.php?getUrl=$transfer";
-		
+
 		//set download directory
 		$this->session_set('download-dir',$save_path);
-		
+
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req)) {
 			//return $req->id;
@@ -398,7 +398,7 @@ class VuzeRPC {
 			//$req = $this->torrent_get(array($id));
 			return $id;
 		}
-		
+
 		return $req;
 	}
 
@@ -407,10 +407,10 @@ class VuzeRPC {
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req))
 			return $req->id;
-		
+
 		return $req;
 	}
-	
+
 	public function torrent_stop_tf($hash) {
 		$req = $this->torrent_get_namesids();
 		if ($req && $req->result == 'success') {
@@ -461,10 +461,10 @@ class VuzeRPC {
 			'seeds' => $stat->seeders,
 			'peers' => $stat->leechers,
 			'cons' => $stat->peersConnected,
-			
+
 			'status' => $stat->status,
 			'hashString' => strtolower($stat->hashString),
-			
+
 			"error" => $stat->error,
 			"errorString" => $stat->errorString,
 			'downloadDir' => $stat->downloadDir,
@@ -481,7 +481,7 @@ class VuzeRPC {
 
 		return $tfStat;
 	}
-	
+
 	public function vuze_status_to_tf($status) {
 		// 1 - waiting to verify
 		// 2 - verifying
@@ -524,7 +524,7 @@ class VuzeRPC {
 		$req = $this->torrent_get($ids);
 		if ($req && $req->result == 'success') {
 			$vuze = (array) $req->arguments->torrents;
-			
+
 			foreach($vuze as $t) {
 				$this->torrents[$t->name] = $this->vuze_to_tf($t);
 			}
@@ -543,7 +543,7 @@ class VuzeRPC {
 			$filter = $this->filter;
 		if (empty($filter))
 			return;
-		
+
 		$torrents = array();
 		foreach ($this->torrents as $name => $tfstat) {
 
@@ -570,14 +570,14 @@ class VuzeRPC {
 	public function torrent_get_tf($ids=array()) {
 
 		$torrents = array();
-		
+
 		$session = $this->session_get();
 		if ($session && $session->result == 'success') {
-			
+
 			$torrents = $this->torrent_get_tf_array($ids);
-			
+
 		}
-		
+
 		return $torrents;
 
 	}
@@ -600,17 +600,17 @@ class VuzeRPC {
 
 		$session = $this->session_get();
 		if ($session && $session->result == 'success') {
-			
+
 			$request->torrents = $this->torrent_get_tf_array();
 			$request->status = 'OK';
-			
+
 		}
-		
+
 		echo json_encode($request);
 
 	}
 
-	//STATIC HELPERS 
+	//STATIC HELPERS
 	public function getInstance() {
 		global $instance;
 		if (!is_object($instance)) {
@@ -630,7 +630,7 @@ class VuzeRPC {
 	//VuzeRPC::transferExists($transfer)
 	public function transferExists($hash) {
 		$instance = VuzeRPC::getInstance();
-		
+
 		$req = $instance->torrent_get_namesids();
 		if ($req && $req->result == 'success') {
 			$torrents = (array) $req->arguments->torrents;
@@ -645,7 +645,7 @@ class VuzeRPC {
 
 	public function delTransfer($hash) {
 		$instance = VuzeRPC::getInstance();
-		
+
 		$req = $instance->torrent_get_namesids();
 		if ($req && $req->result == 'success') {
 			$torrents = (array) $req->arguments->torrents;
@@ -662,7 +662,7 @@ class VuzeRPC {
 
 	public function getMessages() {
 		$instance = VuzeRPC::getInstance();
-		
+
 		return array($instance->lastError);
 	}
 
