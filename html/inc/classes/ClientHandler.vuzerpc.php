@@ -137,8 +137,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		if (is_int($req)) {
 			$id = $req;
-			$tf = $vuze->torrent_get_tf(array($id));
-			
+			$tfs = $vuze->torrent_get_tf(array($id));
+			$tf = array_pop($tfs);
+
 			$sf = new StatFile($transfer);
 			$sf->running = $tf['running'];
 			$sf->percent_done=$tf['percentDone'];
@@ -149,6 +150,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			
 			$sf->write();
 		}
+
+		$this->updateStatFiles();
 
 		// state
 		$this->state = CLIENTHANDLER_STATE_READY;
@@ -180,21 +183,36 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			array_push($this->messages , "VuzeRPC not running, cannot stop transfer ".$transfer);
 			return false;
 		}
-		if (!VuzeRPC::transferExists($transfer)) {
+		
+		$hash = getTransferHash($transfer);
+		if (!VuzeRPC::transferExists($hash)) {
 			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (stop).";
 			$this->logMessage($msg."\n", true);
-			$this->cleanStoppedStatFile();
+			$this->cleanStoppedStatFile($transfer);
 			//return false;
 		}
+
+		// log
+		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
 		
-		if (!$vuze->torrent_stop_tf($transfer)) {
+		if (!$vuze->torrent_stop_tf($hash)) {
 			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (stop).";
 			$this->logMessage($msg."\n", true);
 			$this->cleanStoppedStatFile();
+			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
 		}
-		
+
 		// stop the client
-		$this->_stop($kill, $transferPid);
+		//$this->_stop($kill, $transferPid);
+		
+		// flag the transfer as stopped (in db)
+		stopTransferSettings($this->transfer);
+		// set transfers-cache
+		cacheTransfersSet();
+		
+		@unlink($this->transferFilePath.".pid");
+		
+		$this->updateStatFiles();
 	}
 
 	/**
@@ -209,8 +227,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// FluAzu
 		require_once("inc/classes/VuzeRPC.php");
 		
+		$hash = getTransferHash($transfer);
+		
 		// only if transfer exists in fluazu
-		if (VuzeRPC::transferExists($transfer)) {
+		if (VuzeRPC::transferExists($hash)) {
 			// only if fluazu running
 			if (!FluAzu::isRunning()) {
 				array_push($this->messages , "fluazu not running, cannot delete transfer ".$transfer);
@@ -218,7 +238,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			}
 			else
 			// remove from vuze
-			if (!VuzeRPC::delTransfer($transfer)) {
+			if (!VuzeRPC::delTransfer($hash)) {
 				array_push($this->messages , $this->client.": error when deleting transfer ".$transfer." :");
 				$this->messages = array_merge($this->messages, FluAzu::getMessages());
 				return false;
@@ -228,6 +248,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$this->logMessage($msg."\n", true);
 			unlink($this->transferFilePath.".pid");
 		}
+		$this->updateStatFiles();
+		
 		// delete
 		return $this->_delete();
 	}
@@ -383,7 +405,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @return boolean
 	 */
 	function cleanStoppedStatFile($transfer) {
-		unlink($this->transferFilePath.".pid");
+		$this->updateStatFiles();
+
+		@unlink($this->transferFilePath.".pid");
 		$sf = new StatFile($this->transfer, $this->owner);
 		$sf->running = "0";
 		$sf->percent_done=100;
@@ -393,6 +417,101 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$sf->up_speed = "";
 		//var_dump($sf);die();
 		return $sf->write();
+	}
+
+
+	function updateStatFiles() {
+		global $cfg, $db;
+		
+		$this->vuze = VuzeRPC::getInstance();
+		$vuze = & $this->vuze;
+
+		// do special-pre-start-checks
+		if (!VuzeRPC::isRunning()) {
+			return;
+		}
+
+		// log
+		$this->logMessage($this->client."-stat\n", true);
+
+		$tfs = $vuze->torrent_get_tf();
+		//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles.log",serialize($tfs));
+		
+		if (empty($tfs))
+			return;
+
+		$hashes = array("''");
+		foreach ($tfs as $name => $t)
+			$hashes[$t['hashString']] = "'".$t['hashString']."'";
+
+		$sql = "SELECT hash, transfer FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
+		$recordset = $db->Execute($sql);
+		$hashes=array();
+		while (list($hash, $transfer) = $recordset->FetchRow()) {
+			$hashes[$hash] = $transfer;
+		}
+
+		//convertTime
+		require_once("inc/functions/functions.core.php");
+
+		foreach ($tfs as $name => $t) {
+			if (isset($hashes[$t['hashString']])) {
+
+				$transfer = $hashes[$t['hashString']];
+				//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles4.log",serialize($t));
+				$sf = new StatFile($transfer);
+				$sf->running = $t['running'];
+
+				if ($t['eta'] < -1) {
+					$t['eta'] = "Finished in ".convertTime(abs($t['eta']));
+				} elseif ($t['eta'] > 0) {
+					$t['eta'] = convertTime($t['eta']);
+				} elseif ($t['eta'] == -1) {
+					$t['eta'] = "";
+				}
+				$sf->time_left = $t['eta'];
+				
+				if ($sf->running) {
+				
+					$sf->percent_done = max($t['percentDone'],$t['sharing']);
+					
+					if ($t['status'] != 9 && $t['status'] != 5) {
+						$sf->down_speed = GetSpeedValue($t['speedDown']);
+						$sf->up_speed = GetSpeedValue($t['speedUp']);
+						$sf->peers = $t['peers'];
+						$sf->seeds = $t['seeds'];
+					} else {
+						
+					}
+					if ($t['status'] == 8) {
+						$sf->percent_done = 100;
+						$sf->down_speed = "";
+					}
+					if ($t['status'] == 9) {
+						$sf->percent_done = 100;
+						$sf->up_speed = "";
+						$sf->down_speed = "";
+					}
+				
+				} else {
+					$sf->down_speed = "";
+					$sf->up_speed = "";
+					$sf->peers = "";
+					if ($sf->percent_done >= 100)
+						$sf->time_left = "Download Succeeded!";
+				}
+				if ($t['downTotal'] > 0 || $t['upTotal'] > 0) {
+					$sf->downtotal = formatBytesTokBMBGBTB($t['downTotal']);
+					$sf->uptotal = formatBytesTokBMBGBTB($t['upTotal']);
+				}
+				
+				if ($sf->seeds = -1);
+					$sf->seeds = '';
+				if ($sf->size > 0) {
+					$sf->write();
+				}
+			}
+		}
 	}
 
 
