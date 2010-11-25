@@ -326,7 +326,7 @@ CREATE TABLE tf_transfers (
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (transfer),
-  KEY `hash_idx` (`hash`(8))
+  KEY hash_idx (`hash`(8))
 ) TYPE=MyISAM");
 // tf_transfer_totals
 array_push($queries[$cqt][$cdb], "
