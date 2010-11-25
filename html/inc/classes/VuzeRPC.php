@@ -259,12 +259,11 @@ class VuzeRPC {
 			"leechers",
 			"seeders",
 			"peersConnected",
-			"peersGettingFromUs",
-			"peersSendingToUs",
 
 			"error",
 			"errorString",
 			"downloadDir",
+			"seedRatioMode",
 			"seedRatioLimit"
 		);
 
@@ -363,9 +362,9 @@ class VuzeRPC {
 	public function torrent_add_tf($transfer,$content) {
 		$params = explode("\n",$content);
 
-		$save_path  = $params[1];
-		$max_ul = (int)$params[2];
-		$max_dl = (int)$params[3];
+		$save_path  = $params[1]; //ok, by session
+		$max_ul = (int)$params[2]; //ok, by session
+		$max_dl = (int)$params[3]; //ok, by session
 		$max_uc = (int)$params[4];
 		$max_dc = (int)$params[5];
 		//$ = $params[6];
@@ -381,6 +380,12 @@ class VuzeRPC {
 
 		//set download directory
 		$this->session_set('download-dir',$save_path);
+		
+		//speed limits
+		$this->session_set('speed-limit-up',$max_ul);
+		$this->session_set('speed-limit-up-enabled',($max_dl > 0));
+		$this->session_set('speed-limit-down',$max_ul);
+		$this->session_set('speed-limit-down-enabled',($max_dl > 0));
 
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req)) {
@@ -390,6 +395,7 @@ class VuzeRPC {
 				'rateUpload' => $max_ul,
 				'rateDownload' => $max_dl,
 				'downloadDir' => $save_path,
+				'seedRatioMode' => 1,
 				'seedRatioLimit' => ((float)$sharekill / 100.0)
 			);
 			$req = $this->torrent_set_multi(array($id),$values);

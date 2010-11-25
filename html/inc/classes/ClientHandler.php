@@ -812,8 +812,6 @@ class ClientHandler
 		usleep(500000);
 		// flag the transfer as stopped (in db)
 		stopTransferSettings($this->transfer);
-		// set transfers-cache
-		cacheTransfersSet();
 		// see if the transfer process is hung.
 		$running = $this->runningProcesses();
 		$isHung = false;
@@ -905,6 +903,7 @@ class ClientHandler
 	 */
 	function _updateTotals() {
 		global $db;
+		AuditAction($cfg["constants"]["debug"], "_updateTotals: ".$this->transfer);
 		$tid = getTransferHash($this->transfer);
 		$transferTotals = $this->getTransferTotal($this->transfer);
 		$sql = ($db->GetOne("SELECT 1 FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)))
