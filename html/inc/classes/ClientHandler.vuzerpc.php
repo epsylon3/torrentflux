@@ -185,9 +185,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		$hash = getTransferHash($transfer);
 		if (!VuzeRPC::transferExists($hash)) {
-			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (stop).";
+			$msg = "transfer ".$transfer." does not exist in vuze.";
 			$this->logMessage($msg."\n", true);
-			$this->cleanStoppedStatFile($transfer);
+			//$this->cleanStoppedStatFile($transfer);
 			//return false;
 		}
 
@@ -195,9 +195,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
 
 		if (!$vuze->torrent_stop_tf($hash)) {
-			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (stop).";
+			$msg = "transfer ".$transfer." does not exist in vuze (2).";
 			$this->logMessage($msg."\n", true);
-			$this->cleanStoppedStatFile();
+			//$this->cleanStoppedStatFile();
 			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
 		}
 
@@ -206,8 +206,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		// flag the transfer as stopped (in db)
 		stopTransferSettings($transfer);
-		// set transfers-cache
-		cacheTransfersSet();
 
 		@unlink($this->transferFilePath.".pid");
 
@@ -408,7 +406,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		@unlink($this->transferFilePath.".pid");
 		$sf = new StatFile($this->transfer, $this->owner);
 		$sf->running = "0";
-		$sf->percent_done=100;
+		if ($sf->percent_done > 100)
+			$sf->percent_done=100;
 		$sf->peers = "";
 		$sf->time_left = "Stopped";
 		$sf->down_speed = "";
@@ -429,24 +428,22 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			return;
 		}
 
-		// log
-		AuditAction($cfg["constants"]["debug"], $this->client."-stat.");
-
 		$tfs = $vuze->torrent_get_tf();
-		//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles.log",serialize($tfs));
 
 		if (empty($tfs))
 			return;
 
 		$hashes = array("''");
-		foreach ($tfs as $name => $t)
-			$hashes[$t['hashString']] = "'".$t['hashString']."'";
+		foreach ($tfs as $hash => $t) {
+			$hashes[] = "'".strtolower($hash)."'";
+		}
 
 		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
 		$recordset = $db->Execute($sql);
 		$hashes=array();
 		$sharekills=array();
 		while (list($hash, $transfer, $sharekill) = $recordset->FetchRow()) {
+			$hash = strtoupper($hash);
 			$hashes[$hash] = $transfer;
 			$sharekills[$hash] = $sharekill;
 		}
@@ -454,11 +451,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		//convertTime
 		require_once("inc/functions/functions.core.php");
 
-		foreach ($tfs as $name => $t) {
-			if (isset($hashes[$t['hashString']])) {
+		foreach ($tfs as $hash => $t) {
+			if (isset($hashes[$hash])) {
 
-				$transfer = $hashes[$t['hashString']];
-				//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles4.log",serialize($t));
+				$transfer = $hashes[$hash];
 				$sf = new StatFile($transfer);
 				$sf->running = $t['running'];
 
@@ -522,13 +518,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		}
 		
 		//SHAREKILLS
-		foreach ($tfs as $name => $t) {
-			if (isset($sharekills[$t['hashString']])) {
-				if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$t['hashString']]) {
+		foreach ($tfs as $hash => $t) {
+			if (isset($sharekills[$hash])) {
+				if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$hash]) {
 					
-					$transfer = $hashes[$t['hashString']];
+					$transfer = $hashes[$hash];
 					
-					if (!$vuze->torrent_stop_tf($t['hashString'])) {
+					if (!$vuze->torrent_stop_tf($hash)) {
 						$msg = "transfer ".$transfer." does not exist in vuze.";
 						$this->logMessage($msg."\n", true);
 						AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");

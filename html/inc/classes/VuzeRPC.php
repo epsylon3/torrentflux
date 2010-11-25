@@ -274,10 +274,9 @@ class VuzeRPC {
 		return $req;
 	}
 
-	public function torrent_get_namesids($ids=array()) {
+	public function torrent_get_hashids($ids=array()) {
 		$fields = array(
 			"id",
-			"name",
 			"hashString"
 		);
 		$args = new stdclass;
@@ -285,7 +284,13 @@ class VuzeRPC {
 			$args->ids = $ids;
 		$args->fields = $fields;
 		$req = $this->vuze_rpc('torrent-get',$args);
-		return $req;
+		$hashes = array();
+		if ($req && $req->result == 'success') {
+			$tids = (array) $req->arguments->torrents;
+			foreach ($tids as $k => $obj)
+				$hashes[$obj->hashString] = $obj->id;
+		}
+		return $hashes;
 	}
 
 	/*
@@ -416,31 +421,23 @@ class VuzeRPC {
 		return $req;
 	}
 
-	public function torrent_stop_tf($hash) {
-		$req = $this->torrent_get_namesids();
-		if ($req && $req->result == 'success') {
-			$torrents = (array) $req->arguments->torrents;
-			foreach ($torrents as $k => $t) {
-				if (strtolower($t->hashString) == $hash) {
-					$req = $this->torrent_stop(array($t->id));
-					return true;
-				}
-			}
+	public function torrent_start_tf($hash) {
+		$torrents = $this->torrent_get_hashids();
+		if ( array_key_exists(strtoupper($hash),$torrents) ) {
+			$tid = $torrents[strtoupper($hash)];
+			$this->torrent_start(array($tid));
+			return true;
 		}
 		//not found
 		return false;
 	}
 
-	public function torrent_start_tf($hash) {
-		$req = $this->torrent_get_namesids();
-		if ($req && $req->result == 'success') {
-			$torrents = (array) $req->arguments->torrents;
-			foreach ($torrents as $k => $t) {
-				if (strtolower($t->hashString) == $hash) {
-					$req = $this->torrent_start(array($t->id));
-					return true;
-				}
-			}
+	public function torrent_stop_tf($hash) {
+		$torrents = $this->torrent_get_hashids();
+		if ( array_key_exists(strtoupper($hash),$torrents) ) {
+			$tid = $torrents[strtoupper($hash)];
+			$this->torrent_stop(array($tid));
+			return true;
 		}
 		//not found
 		return false;
@@ -469,8 +466,8 @@ class VuzeRPC {
 			
 			'size' => $stat->totalSize,
 			'status' => $stat->status,
-			'hashString' => strtolower($stat->hashString),
 
+			'name' => $stat->name,
 			"error" => $stat->error,
 			"errorString" => $stat->errorString,
 			'downloadDir' => $stat->downloadDir,
@@ -532,7 +529,7 @@ class VuzeRPC {
 			$vuze = (array) $req->arguments->torrents;
 
 			foreach($vuze as $t) {
-				$this->torrents[$t->name] = $this->vuze_to_tf($t);
+				$this->torrents[$t->hashString] = $this->vuze_to_tf($t);
 			}
 		}
 
@@ -625,31 +622,18 @@ class VuzeRPC {
 	//VuzeRPC::transferExists($transfer)
 	public function transferExists($hash) {
 		$instance = VuzeRPC::getInstance();
-
-		$req = $instance->torrent_get_namesids();
-		if ($req && $req->result == 'success') {
-			$torrents = (array) $req->arguments->torrents;
-			foreach ($torrents as $k => $t) {
-				if (strtolower($t->hashString) == $hash)
-					return true;
-			}
-		}
-		//not found
-		return false;
+		$torrents = $instance->torrent_get_hashids();
+		return array_key_exists(strtoupper($hash),$torrents);
 	}
 
 	public function delTransfer($hash) {
 		$instance = VuzeRPC::getInstance();
 
-		$req = $instance->torrent_get_namesids();
-		if ($req && $req->result == 'success') {
-			$torrents = (array) $req->arguments->torrents;
-			foreach ($torrents as $k => $t) {
-				if (strtolower($t->hashString) == $hash) {
-					$instance->torrent_remove(array($t->id),false);
-					return true;
-				}
-			}
+		$torrents = $instance->torrent_get_hashids();
+		if ( array_key_exists(strtoupper($hash),$torrents) ) {
+			$tid = $torrents[strtoupper($hash)];
+			$instance->torrent_remove(array($tid),false);
+			return true;
 		}
 		//not found
 		return false;

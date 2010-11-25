@@ -53,14 +53,16 @@ function updateStatFiles() {
 		return;
 
 	$hashes = array("''");
-	foreach ($tfs as $name => $t)
-		$hashes[$t['hashString']] = "'".$t['hashString']."'";
+	foreach ($tfs as $hash => $t) {
+		$hashes[] = "'".strtolower($hash)."'";
+	}
 
 	$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
 	$recordset = $db->Execute($sql);
 	$hashes=array();
 	$sharekills=array();
 	while (list($hash, $transfer, $sharekill) = $recordset->FetchRow()) {
+		$hash = strtoupper($hash);
 		$hashes[$hash] = $transfer;
 		$sharekills[$hash] = $sharekill;
 	}
@@ -69,12 +71,12 @@ function updateStatFiles() {
 	require_once("inc/functions/functions.core.php");
 
 	$nbUpdate=0;
-	foreach ($tfs as $name => $t) {
-		if (isset($hashes[$t['hashString']])) {
+	foreach ($tfs as $hash => $t) {
+		if (isset($hashes[$hash])) {
 
 			$nbUpdate++;
 			
-			$transfer = $hashes[$t['hashString']];
+			$transfer = $hashes[$hash];
 			
 			//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles4.log",serialize($t));
 			$sf = new StatFile($transfer);
@@ -141,15 +143,15 @@ function updateStatFiles() {
 	
 	//SHAREKILLS
 	$nbUpdate=0;
-	foreach ($tfs as $name => $t) {
-		if (isset($sharekills[$t['hashString']])) {
-			if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$t['hashString']]) {
+	foreach ($tfs as $hash => $t) {
+		if (isset($sharekills[$hash])) {
+			if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$hash]) {
 				
-				$transfer = $hashes[$t['hashString']];
+				$transfer = $hashes[$hash];
 				
 				$nbUpdate++;
 				
-				if (!$vuze->torrent_stop_tf($t['hashString'])) {
+				if (!$vuze->torrent_stop_tf($hash)) {
 					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
 				} else {
 					// log
@@ -161,12 +163,13 @@ function updateStatFiles() {
 		}
 	}
 	echo " stopped $nbUpdate torrents.\n";
+//	echo $vuze->lastError."\n";
 }
 //--------------------------------------------------------------------
 
 global $argv;
 
-if ($argv[1] == 'list') {
+if (isset($argv[1]) && $argv[1] == 'list') {
 	$v = VuzeRPC::getInstance();
 	$torrents = $v->torrent_get_tf();
 	//$filter = array('running' => 1);
@@ -174,7 +177,7 @@ if ($argv[1] == 'list') {
 	echo print_r($torrents,true);
 }
 
-if (empty($argv[1]) or $argv[1] == 'update')
+if (empty($argv[1]) or $argv[1] == 'update') {
 	updateStatFiles();
-
+}
 ?>
