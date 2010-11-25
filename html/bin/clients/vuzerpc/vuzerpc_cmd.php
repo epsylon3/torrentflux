@@ -13,14 +13,16 @@ Require PHP 5 for public/protected members
 
 chdir('../../../');
 
+$_SESSION['user'] = 'cron';
+	
 //get $cfg
 require("inc/main.core.php");
 
 require("inc/classes/VuzeRPC.php");
 
-//--------------------------------------------------------
-//Test config
 global $cfg;
+
+$cfg["uid"] = 'cron';
 
 //commented to keep default
 //$cfg['vuze_rpc_host']='127.0.0.1';
@@ -29,7 +31,9 @@ global $cfg;
 //$cfg['vuze_rpc_pass']='mypassword';
 
 function updateStatFiles() {
-	global $cfg, $db, $argv;
+	global $cfg, $db;
+
+	$client = 'vuzerpc_cmd.php';
 
 	$vuze = VuzeRPC::getInstance();
 
@@ -39,8 +43,8 @@ function updateStatFiles() {
 	}
 
 	// log
-	echo $argv[0].": updateStatFiles()\n";
-	//AuditAction($cfg["constants"]["debug"], $argv[0].": updateStatFiles()");
+	echo $client.": updateStatFiles()\n";
+	//AuditAction($cfg["constants"]["debug"], $client.": updateStatFiles()");
 
 	$tfs = $vuze->torrent_get_tf();
 	//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles.log",serialize($tfs));
@@ -87,7 +91,7 @@ function updateStatFiles() {
 
 			if ($sf->running) {
 
-				$sf->percent_done = max($t['percentDone'],$t['sharing']);
+				$sf->percent_done = $t['percentDone'];
 
 				if ($t['status'] != 9 && $t['status'] != 5) {
 					$sf->peers = $t['peers'];
@@ -100,13 +104,15 @@ function updateStatFiles() {
 					$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp'])."/s";
 
 				if ($t['status'] == 8) {
-					$sf->percent_done = 100;
-					$sf->down_speed = "";
+					$sf->percent_done = 100 + $t['sharing'];
+					$sf->down_speed = "&nbsp;";
+					if (trim($sf->up_speed) == '')
+						$sf->up_speed = "0";
 				}
 				if ($t['status'] == 9) {
-					$sf->percent_done = 100;
-					$sf->up_speed = "";
-					$sf->down_speed = "";
+					$sf->percent_done = 100 + $t['sharing'];
+					$sf->up_speed = "&nbsp;";
+					$sf->down_speed = "&nbsp;";
 				}
 
 			} else {
@@ -115,6 +121,8 @@ function updateStatFiles() {
 				$sf->peers = "";
 				if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false)
 					$sf->time_left = "Finished!";
+				if ($sf->percent_done < 100 && $sf->percent_done > 0)
+					$sf->percent_done = 0 - $sf->percent_done;
 			}
 			
 			$sf->downtotal = $t['downTotal'];
@@ -142,10 +150,10 @@ function updateStatFiles() {
 				$nbUpdate++;
 				
 				if (!$vuze->torrent_stop_tf($t['hashString'])) {
-					AuditAction($cfg["constants"]["debug"], $argv[0].": stop error $transfer.");
+					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
 				} else {
 					// log
-					AuditAction($cfg["constants"]["debug"], $argv[0].": sharekill stopped $transfer");
+					AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
 					// flag the transfer as stopped (in db)
 					stopTransferSettings($transfer);
 				}
@@ -161,6 +169,8 @@ function updateStatFiles() {
 //$torrents = $v->torrent_filter_tf($filter);
 //echo print_r($torrents,true);
 
-updateStatFiles();
+global $argv;
+if (empty($argv[1]) or $argv[1] == 'update')
+	updateStatFiles();
 
 ?>

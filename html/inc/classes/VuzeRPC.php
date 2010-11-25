@@ -23,7 +23,6 @@ if (isset($_REQUEST['getUrl'])) {
 
 	// main.core to get $cfg
 	chdir('../../');
-	$_SESSION['check']['dbconf'] = 1;
 	require_once('inc/main.core.php');
 
 	// security replace
@@ -46,7 +45,7 @@ class VuzeRPC {
 	public $DEBUG = false;
 
 	public $HOST = '127.0.0.1';
-	public $PORT = '19091';
+	public $PORT = '9091';
 	public $USER = 'vuze';
 	public $PASS = 'mypassword';
 
@@ -172,7 +171,7 @@ class VuzeRPC {
 			$data=json_decode($res);
 
 			if ($data->result != 'success')
-				$this->lastError = $req->result;
+				$this->lastError = $data->result;
 
 		}
 		elseif ($this->DEBUG) {
@@ -363,16 +362,16 @@ class VuzeRPC {
 		$params = explode("\n",$content);
 
 		$save_path  = $params[1]; //ok, by session
-		$max_ul = (int)$params[2]; //ok, by session
-		$max_dl = (int)$params[3]; //ok, by session
+		$max_ul = (int)$params[2]; // by session
+		$max_dl = (int)$params[3]; // by session
 		$max_uc = (int)$params[4];
 		$max_dc = (int)$params[5];
-		//$ = $params[6];
+		$runtime = $params[6];
 		$sharekill = (int)$params[7];
 		$min_port = (int)$params[8];
 		$max_port = (int)$params[9];
-		//$ = (int)$params[10];
-		//$ = (int)$params[11];
+		$maxcons = (int)$params[10];
+		$rerequest = (int)$params[11];
 
 		//$url = $this->http_server()."/dispatcher.php?action=metafileDownload&transfer=$transfer";
 		//"file:///".$this->torrents_path.$transfer;
@@ -381,7 +380,7 @@ class VuzeRPC {
 		//set download directory
 		$this->session_set('download-dir',$save_path);
 		
-		//speed limits
+		//speed limits, not the right way but waiting for torrent-set key in xmwebui
 		$this->session_set('speed-limit-up',$max_ul);
 		$this->session_set('speed-limit-up-enabled',($max_dl > 0));
 		$this->session_set('speed-limit-down',$max_ul);
@@ -575,18 +574,7 @@ class VuzeRPC {
 	 * @return array
 	*/
 	public function torrent_get_tf($ids=array()) {
-
-		$torrents = array();
-
-		$session = $this->session_get();
-		if ($session && $session->result == 'success') {
-
-			$torrents = $this->torrent_get_tf_array($ids);
-
-		}
-
-		return $torrents;
-
+		return $this->torrent_get_tf_array($ids);
 	}
 
 	/*

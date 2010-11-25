@@ -473,7 +473,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 				if ($sf->running) {
 
-					$sf->percent_done = max($t['percentDone'],$t['sharing']);
+					$sf->percent_done = $t['percentDone'];
 
 					if ($t['status'] != 9 && $t['status'] != 5) {
 						$sf->peers = $t['peers'];
@@ -486,13 +486,17 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp'])."/s";
 
 					if ($t['status'] == 8) {
-						$sf->percent_done = 100;
-						$sf->down_speed = "";
+						//seeding
+						$sf->percent_done = 100 + $t['sharing'];
+						$sf->down_speed = "&nbsp;";
+						if (trim($sf->up_speed) == '')
+							$sf->up_speed = "0";
 					}
 					if ($t['status'] == 9) {
-						$sf->percent_done = 100;
-						$sf->up_speed = "";
-						$sf->down_speed = "";
+						//seeding queued
+						$sf->percent_done = 100 + $t['sharing'];
+						$sf->up_speed = "&nbsp;";
+						$sf->down_speed = "&nbsp;";
 					}
 
 				} else {
@@ -501,6 +505,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$sf->peers = "";
 					if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false)
 						$sf->time_left = "Finished!";
+					if ($sf->percent_done < 100 && $sf->percent_done > 0)
+						$sf->percent_done = 0 - $sf->percent_done;
 				}
 				
 				$sf->downtotal = $t['downTotal'];
@@ -521,8 +527,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 				if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$t['hashString']]) {
 					
 					$transfer = $hashes[$t['hashString']];
-					// log
-					AuditAction($cfg["constants"]["debug"], $this->client."-stat. : need to kill $transfer");
 					
 					if (!$vuze->torrent_stop_tf($t['hashString'])) {
 						$msg = "transfer ".$transfer." does not exist in vuze.";
@@ -530,6 +534,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
 					} else {
 						// flag the transfer as stopped (in db)
+						// log
+						AuditAction($cfg["constants"]["stop_transfer"], $this->client."-stat. : sharekill stopped $transfer");
 						stopTransferSettings($transfer);
 					}
 				}
