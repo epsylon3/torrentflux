@@ -241,6 +241,9 @@ function loadLanguageFile($language) {
 	$cfg['_ID_HOST'] = _ID_HOST;
 	$cfg['_ID_HOSTS'] = _ID_HOSTS;
 	$cfg['_ID_IMAGES'] = _ID_IMAGES;
+	$cfg['_INBOX'] = _INBOX;
+	$cfg['_CHOOSEAUSER'] = _CHOOSEAUSER;
+	$cfg['_EMAILADDRESS'] = _EMAILADDRESS;
 }
 
 ?>

@@ -79,7 +79,7 @@ define("_LINKS_MENU", "liens");
 define("_NEWUSER_MENU", "nouvel utilisateur");
 define("_BACKUP_MENU", "sauvegarde");
 define("_ALLUSERS", "Tous les Utilisateurs");
-define("_NORECORDSFOUND", "PAS D'ENREGISTREMENT TROUVÉ");
+define("_NORECORDSFOUND", "Pas de données");
 define("_SHOWPREVIOUS", "Précédent");
 define("_SHOWMORE", "Voir Plus");
 define("_ACTIVITYSEARCH", "Activité des Recherches");
@@ -204,6 +204,8 @@ define("_USERS", "Utilisateurs");
 
 //NG
 define("_EMAILADDRESS","Adresse Email");
+define("_CHOOSEAUSER","Utilisateur...");
+define("_INBOX","Boîte de Réception");
 
 include('lang-common.php');
 
