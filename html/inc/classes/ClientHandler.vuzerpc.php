@@ -40,9 +40,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$this->client = "azureus";
 		$this->binSystem = "php";
 		$this->binSocket = "php";
-		$this->binClient = "php";
-		$this->vuzerpcBin = $cfg["docroot"]."bin/clients/vuzerpc/vuzerpc.php";
-
+		$this->binClient = $cfg["docroot"]."bin/clients/vuzerpc/vuzerpc_cmd.php";
 	}
 
 	// =========================================================================
@@ -251,7 +249,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$this->logMessage($msg."\n", true);
 			unlink($this->transferFilePath.".pid");
 		}
-		$this->updateStatFiles();
 
 		// delete
 		return $this->_delete();
@@ -483,10 +480,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						$sf->seeds = $t['seeds'];
 					}
 
-					if ($t['speedDown'] > 0)
-						$sf->down_speed = formatBytesTokBMBGBTB($t['speedDown']);
-					if ($t['speedUp'] > 0)
-						$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp']);
+					if ((float)$t['speedDown'] > 0.0)
+						$sf->down_speed = formatBytesTokBMBGBTB($t['speedDown'])."/s";
+					if ((float)$t['speedUp'] > 0.0)
+						$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp'])."/s";
 
 					if ($t['status'] == 8) {
 						$sf->percent_done = 100;
@@ -502,8 +499,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$sf->down_speed = "";
 					$sf->up_speed = "";
 					$sf->peers = "";
-					if ($sf->percent_done >= 100)
-						$sf->time_left = "Download Succeeded!";
+					if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false)
+						$sf->time_left = "Finished!";
 				}
 				
 				$sf->downtotal = $t['downTotal'];
