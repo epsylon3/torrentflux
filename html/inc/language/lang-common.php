@@ -63,6 +63,7 @@ $defines = array(
 '_DRIVESPACEUSED' => "Drive Space is used!",
 '_EDIT' => "Edit",
 '_EDITUSER' => "Edit User",
+'_EMAILADDRESS' => "Email Address",
 '_ENDED' =>  "Ended",
 '_ERRORSREPORTED' => "Errors",
 '_ESTIMATEDTIME' => "Estimated Time",
