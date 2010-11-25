@@ -379,7 +379,7 @@ foreach ($arList as $transfer) {
 	
 	// ================================================================ progress
 	if ($settings[5] != 0) {
-		if (($percentDone >= 100) && (trim($sf->up_speed) != "")) {
+		if ($percentDone >= 100 && $sf->size>0  && trim($sf->up_speed) != "") {
 			$graph_width = -1;
 			$percentage = @number_format((($transferTotals["uptotal"] / $sf->size) * 100), 2) . '%';
 		} else {
@@ -394,6 +394,7 @@ foreach ($arList as $transfer) {
 				$percentage = '0%';
 			}
 		}
+		$graph_width = min($graph_width,100);
 		$background = ($graph_width == 100) ? $progress_color : "#000000";
 	} else {
 		$graph_width = 0;
@@ -404,7 +405,7 @@ foreach ($arList as $transfer) {
 	// ==================================================================== down
 	if ($settings[6] != 0) {
 		if ($transferRunning == 1)
-			$down_speed = (trim($sf->down_speed) != "") ? $sf->down_speed : '0.0 kB/s';
+			$down_speed = (trim($sf->down_speed) != "") ? $sf->down_speed : '&nbsp;';
 		else
 			$down_speed = "&nbsp;";
 	} else {
@@ -414,7 +415,7 @@ foreach ($arList as $transfer) {
 	// ====================================================================== up
 	if ($settings[7] != 0) {
 		if ($transferRunning == 1)
-			$up_speed = (trim($sf->up_speed) != "") ? $sf->up_speed : '0.0 kB/s';
+			$up_speed = (trim($sf->up_speed) != "") ? $sf->up_speed : '&nbsp;';
 		else
 			$up_speed = "&nbsp;";
 	} else {
