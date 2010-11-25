@@ -490,7 +490,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						$sf->percent_done = 100 + $t['sharing'];
 						$sf->down_speed = "&nbsp;";
 						if (trim($sf->up_speed) == '')
-							$sf->up_speed = "0";
+							$sf->up_speed = "&nbsp;";
 					}
 					if ($t['status'] == 9) {
 						//seeding queued

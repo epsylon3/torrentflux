@@ -107,7 +107,7 @@ function updateStatFiles() {
 					$sf->percent_done = 100 + $t['sharing'];
 					$sf->down_speed = "&nbsp;";
 					if (trim($sf->up_speed) == '')
-						$sf->up_speed = "0";
+						$sf->up_speed = "&nbsp;";
 				}
 				if ($t['status'] == 9) {
 					$sf->percent_done = 100 + $t['sharing'];
@@ -162,14 +162,18 @@ function updateStatFiles() {
 	}
 	echo " stopped $nbUpdate torrents.\n";
 }
-
-//$v = VuzeRPC::getInstance();
-//$v->torrent_get_tf();
-//$filter = array('running' => 1);
-//$torrents = $v->torrent_filter_tf($filter);
-//echo print_r($torrents,true);
+//--------------------------------------------------------------------
 
 global $argv;
+
+if ($argv[1] == 'list') {
+	$v = VuzeRPC::getInstance();
+	$torrents = $v->torrent_get_tf();
+	//$filter = array('running' => 1);
+	//$torrents = $v->torrent_filter_tf($filter);
+	echo print_r($torrents,true);
+}
+
 if (empty($argv[1]) or $argv[1] == 'update')
 	updateStatFiles();
 
