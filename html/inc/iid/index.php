@@ -316,12 +316,10 @@ foreach ($arList as $transfer) {
 			break;
 		default: // running
 			// increment the totals
-			if (!isset($cfg["total_upload"]))
-				$cfg["total_upload"] = 0;
-			if (!isset($cfg["total_download"]))
-				 $cfg["total_download"] = 0;
-			$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($sf->up_speed);
-			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($sf->down_speed);
+			if (!isset($cfg["total_upload"])) $cfg["total_upload"] = 0;
+			if (!isset($cfg["total_download"])) $cfg["total_download"] = 0;
+			$cfg["total_upload"] += GetSpeedValue($sf->up_speed);
+			$cfg["total_download"] += GetSpeedValue($sf->down_speed);
 			// $estTime
 			if ($transferRunning == 0) {
 				$estTime = $sf->time_left;
