@@ -5,7 +5,12 @@ VUZE xmwebui (0.2.8) RPC interface for PHP
 		by Epsylon3 on gmail.com, Nov 2010
 
 Require PHP 5 for public/protected members
+
 */
+
+# sample cron.d update vuze rpc stat files every minutes
+# */1 * * * *     www-data cd /var/www/dedib.ath.cx/bin/clients/vuzerpc ;./vuzerpc_cmd.php update
+
 chdir('../../../');
 
 //get $cfg
@@ -24,7 +29,7 @@ global $cfg;
 //$cfg['vuze_rpc_pass']='mypassword';
 
 function updateStatFiles() {
-	global $cfg, $db;
+	global $cfg, $db, $argv;
 
 	$vuze = VuzeRPC::getInstance();
 
@@ -34,8 +39,8 @@ function updateStatFiles() {
 	}
 
 	// log
-	echo "vuzerpc_cmd: updateStatFiles() :\n";
-	AuditAction($cfg["constants"]["debug"], "vuzerpc_cmd: "."updateStatFiles.");
+	echo $argv[0].": updateStatFiles()\n";
+	//AuditAction($cfg["constants"]["debug"], $argv[0].": updateStatFiles()");
 
 	$tfs = $vuze->torrent_get_tf();
 	//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles.log",serialize($tfs));
@@ -59,12 +64,13 @@ function updateStatFiles() {
 	//convertTime
 	require_once("inc/functions/functions.core.php");
 
+	$nbUpdate=0;
 	foreach ($tfs as $name => $t) {
 		if (isset($hashes[$t['hashString']])) {
 
-			$transfer = $hashes[$t['hashString']];
+			$nbUpdate++;
 			
-			echo "  $transfer \n";
+			$transfer = $hashes[$t['hashString']];
 			
 			//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles4.log",serialize($t));
 			$sf = new StatFile($transfer);
@@ -122,33 +128,37 @@ function updateStatFiles() {
 			$sf->write();
 		}
 	}
+	$nb = count($tfs);
+	echo " updated $nbUpdate/$nb stat files.\n";
 	
 	//SHAREKILLS
+	$nbUpdate=0;
 	foreach ($tfs as $name => $t) {
 		if (isset($sharekills[$t['hashString']])) {
 			if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$t['hashString']]) {
 				
 				$transfer = $hashes[$t['hashString']];
-				// log
-				echo "  need to kill $transfer\n";
-				AuditAction($cfg["constants"]["debug"], "vuzerpc_cmd: "." need to kill $transfer");
+				
+				$nbUpdate++;
 				
 				if (!$vuze->torrent_stop_tf($t['hashString'])) {
-					AuditAction($cfg["constants"]["debug"], "vuzerpc_cmd: "." stop : error $hash $transfer.");
+					AuditAction($cfg["constants"]["debug"], $argv[0].": stop error $transfer.");
 				} else {
+					// log
+					AuditAction($cfg["constants"]["debug"], $argv[0].": sharekill stopped $transfer");
 					// flag the transfer as stopped (in db)
 					stopTransferSettings($transfer);
 				}
 			}
 		}
 	}
+	echo " stopped $nbUpdate torrents.\n";
 }
 
-$v = VuzeRPC::getInstance();
-
-$v->torrent_get_tf();
-$filter = array('running' => 1);
-$torrents = $v->torrent_filter_tf($filter);
+//$v = VuzeRPC::getInstance();
+//$v->torrent_get_tf();
+//$filter = array('running' => 1);
+//$torrents = $v->torrent_filter_tf($filter);
 //echo print_r($torrents,true);
 
 updateStatFiles();
