@@ -171,7 +171,7 @@ class VuzeRPC {
 			//ok
 			$data=json_decode($res);
 
-			if ($req->result != 'success')
+			if ($data->result != 'success')
 				$this->lastError = $req->result;
 
 		}
