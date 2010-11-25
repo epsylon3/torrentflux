@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS tf_test (
 ) TYPE=MyISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX ( `hash`)");
+
 // sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
