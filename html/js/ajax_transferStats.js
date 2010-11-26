@@ -2,6 +2,7 @@
 
 // fields
 var ajax_fieldIds = new Array(
+	"dummy",
 	"running",
 	"speedDown",
 	"speedUp",
@@ -75,6 +76,8 @@ function ajax_updateContent(content)
 	document.getElementById('barImage2').style.width = (100 - currentPercentage) + '%';
 	// fields
 	for (i = 1; i < ajax_idCount; i++) {
+		if (document.getElementById(ajax_fieldIds[i]) === null)
+			continue;
 		if ((ajax_fieldIds[i] == 'eta') && (content[i] == '-'))
 			document.getElementById(ajax_fieldIds[i]).innerHTML = '&#8734';
 		else
