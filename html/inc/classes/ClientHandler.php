@@ -903,7 +903,6 @@ class ClientHandler
 	 */
 	function _updateTotals() {
 		global $db;
-		AuditAction($cfg["constants"]["debug"], "_updateTotals: ".$this->transfer);
 		$tid = getTransferHash($this->transfer);
 		$transferTotals = $this->getTransferTotal($this->transfer);
 		$sql = ($db->GetOne("SELECT 1 FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)))
