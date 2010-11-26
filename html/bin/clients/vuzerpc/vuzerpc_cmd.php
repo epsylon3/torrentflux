@@ -33,6 +33,9 @@ $cfg["uid"] = 'cron';
 function updateStatFiles() {
 	global $cfg, $db;
 
+	//convertTime
+	require_once("inc/functions/functions.core.php");
+	
 	$client = 'vuzerpc_cmd.php';
 
 	$vuze = VuzeRPC::getInstance();
@@ -67,9 +70,29 @@ function updateStatFiles() {
 		$sharekills[$hash] = $sharekill;
 	}
 
-	//convertTime
-	require_once("inc/functions/functions.core.php");
-
+	//SHAREKILLS
+	$nbUpdate=0;
+	foreach ($tfs as $hash => $t) {
+		if (isset($sharekills[$hash])) {
+			if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$hash]) {
+				
+				$transfer = $hashes[$hash];
+				
+				$nbUpdate++;
+				
+				if (!$vuze->torrent_stop_tf($hash)) {
+					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
+				} else {
+					// log
+					AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
+					// flag the transfer as stopped (in db)
+					stopTransferSettings($transfer);
+				}
+			}
+		}
+	}
+	echo " stopped $nbUpdate torrents.\n";
+	
 	$nbUpdate=0;
 	foreach ($tfs as $hash => $t) {
 		if (isset($hashes[$hash])) {
@@ -118,13 +141,17 @@ function updateStatFiles() {
 				}
 
 			} else {
+				//Stopped or finished...
+				
 				$sf->down_speed = "";
 				$sf->up_speed = "";
 				$sf->peers = "";
-				if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false)
+				if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
 					$sf->time_left = "Finished!";
-				if ($sf->percent_done < 100 && $sf->percent_done > 0)
-					$sf->percent_done = 0 - $sf->percent_done;
+					$sf->percent_done = 100;
+				}
+				//if ($sf->percent_done < 100 && $sf->percent_done > 0)
+				//	$sf->percent_done = 0 - $sf->percent_done;
 			}
 			
 			$sf->downtotal = $t['downTotal'];
@@ -141,28 +168,6 @@ function updateStatFiles() {
 	$nb = count($tfs);
 	echo " updated $nbUpdate/$nb stat files.\n";
 	
-	//SHAREKILLS
-	$nbUpdate=0;
-	foreach ($tfs as $hash => $t) {
-		if (isset($sharekills[$hash])) {
-			if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$hash]) {
-				
-				$transfer = $hashes[$hash];
-				
-				$nbUpdate++;
-				
-				if (!$vuze->torrent_stop_tf($hash)) {
-					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
-				} else {
-					// log
-					AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
-					// flag the transfer as stopped (in db)
-					stopTransferSettings($transfer);
-				}
-			}
-		}
-	}
-	echo " stopped $nbUpdate torrents.\n";
 //	echo $vuze->lastError."\n";
 }
 //--------------------------------------------------------------------

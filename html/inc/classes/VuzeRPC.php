@@ -200,6 +200,13 @@ class VuzeRPC {
 		$this->session = $this->vuze_rpc('session-get');
 		return $this->session;
 	}
+	
+	public function session_set_multi($values) {
+		$args = new stdclass;
+		foreach ($values as $key => $value)
+			$args->$key = $value;
+		$req = $this->vuze_rpc('session-set',$args);
+	}
 
 	// Get Vuze data (all torrents)
 	public function torrent_get($ids=array()) {
@@ -386,10 +393,17 @@ class VuzeRPC {
 		$this->session_set('download-dir',$save_path);
 		
 		//speed limits, not the right way but waiting for torrent-set key in xmwebui
-		$this->session_set('speed-limit-up',$max_ul);
-		$this->session_set('speed-limit-up-enabled',($max_dl > 0));
-		$this->session_set('speed-limit-down',$max_ul);
-		$this->session_set('speed-limit-down-enabled',($max_dl > 0));
+		$limits = array(
+			'speed-limit-up' => $max_ul,
+			'speed-limit-down' => $max_dl,
+			'speed-limit-up-enabled' => ($max_ul > 0),
+			'speed-limit-down-enabled' => ($max_dl > 0)
+		);
+		$this->session_set_multi($limits);
+		//$this->session_set('speed-limit-up',$max_ul);
+		//$this->session_set('speed-limit-up-enabled',($max_ul > 0));
+		//$this->session_set('speed-limit-down',$max_dl);
+		//$this->session_set('speed-limit-down-enabled',($max_dl > 0));
 
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req)) {

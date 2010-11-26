@@ -483,14 +483,14 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 					if ($t['status'] == 8) {
 						//seeding
-						$sf->percent_done = 100 + $t['sharing'];
+						//$sf->percent_done = 100 + $t['sharing'];
 						$sf->down_speed = "&nbsp;";
 						if (trim($sf->up_speed) == '')
 							$sf->up_speed = "&nbsp;";
 					}
 					if ($t['status'] == 9) {
 						//seeding queued
-						$sf->percent_done = 100 + $t['sharing'];
+						//$sf->percent_done = 100 + $t['sharing'];
 						$sf->up_speed = "&nbsp;";
 						$sf->down_speed = "&nbsp;";
 					}
@@ -499,10 +499,12 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$sf->down_speed = "";
 					$sf->up_speed = "";
 					$sf->peers = "";
-					if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false)
+					if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
 						$sf->time_left = "Finished!";
-					if ($sf->percent_done < 100 && $sf->percent_done > 0)
-						$sf->percent_done = 0 - $sf->percent_done;
+						$sf->percent_done = 100;
+					}
+					//if ($sf->percent_done < 100 && $sf->percent_done > 0)
+						//$sf->percent_done = 0 - $sf->percent_done;
 				}
 				
 				$sf->downtotal = $t['downTotal'];
