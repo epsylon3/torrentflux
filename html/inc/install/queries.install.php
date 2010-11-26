@@ -190,6 +190,13 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_cksfv','/
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_sockstat','/usr/bin/sockstat')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_vlc','/usr/local/bin/vlc')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_uudeview','/usr/local/bin/uudeview')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword')");
+
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_read','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_write','0')");
@@ -332,6 +339,7 @@ CREATE TABLE tf_transfers (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
   PRIMARY KEY  (tid)
@@ -507,6 +515,7 @@ CREATE TABLE tf_transfers (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
   PRIMARY KEY  (tid)
@@ -697,6 +706,7 @@ CREATE TABLE tf_transfers (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL DEFAULT '',
+  uid INTEGER NOT NULL DEFAULT '0',
   uptotal BIGINT NOT NULL DEFAULT '0',
   downtotal BIGINT NOT NULL DEFAULT '0',
   PRIMARY KEY (tid)

@@ -110,7 +110,8 @@ CREATE TABLE tf_transfers (
   maxport SMALLINT(5) unsigned NOT NULL default '0',
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
-  PRIMARY KEY  (transfer)
+  PRIMARY KEY  (transfer),
+  KEY hash_idx (hash(8))
 ) TYPE=MyISAM;
 
 --
@@ -118,6 +119,7 @@ CREATE TABLE tf_transfers (
 --
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
   PRIMARY KEY  (tid)
@@ -329,6 +331,13 @@ INSERT INTO tf_settings VALUES ('fluxd_Watch_jobs','');
 INSERT INTO tf_settings VALUES ('fluxd_Maintenance_interval','600');
 INSERT INTO tf_settings VALUES ('fluxd_Maintenance_trestart','0');
 INSERT INTO tf_settings VALUES ('fluxd_Trigger_interval','600');
+
+INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0');
+INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0');
+INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1');
+INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091');
+INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze');
+INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword');
 
 --
 -- tf_settings_dir

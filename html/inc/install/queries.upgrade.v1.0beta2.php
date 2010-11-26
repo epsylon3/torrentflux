@@ -29,8 +29,16 @@ $cdb = 'common';
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 
+
 // insert
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword')");
+
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // updates + deletes
@@ -55,7 +63,9 @@ CREATE TABLE IF NOT EXISTS tf_test (
 ) TYPE=MyISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
+// ALTER TABLE (need to check for sqlite and postgre)
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX hash_idx ( `hash`(8))");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD `uid` INT(10) NOT NULL default '0' AFTER `tid`");
 
 // sql-queries : Data
 $cqt = 'data';
@@ -78,6 +88,9 @@ CREATE TABLE tf_test (
   PRIMARY KEY (tf_key) )");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
+// ALTER TABLE 
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER(10) NOT NULL default '0'");
+
 // sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
@@ -98,6 +111,9 @@ CREATE TABLE tf_test (
   tf_value TEXT DEFAULT '' NOT NULL,
   PRIMARY KEY (tf_key) )");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
+
+// ALTER TABLE 
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER NOT NULL DEFAULT '0'");
 
 // sql-queries : Data
 $cqt = 'data';

@@ -117,6 +117,7 @@ CREATE TABLE tf_transfers (
 --
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
   PRIMARY KEY  (tid)
@@ -357,6 +358,11 @@ INSERT INTO tf_settings_dir VALUES ('dir_restricted','lost+found:CVS:Temporary I
 INSERT INTO tf_settings_dir VALUES ('enable_vlc','1');
 INSERT INTO tf_settings_dir VALUES ('vlc_port','8080');
 
+INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0');
+INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1');
+INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091');
+INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze');
+INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword');
 --
 -- tf_settings_stats
 --

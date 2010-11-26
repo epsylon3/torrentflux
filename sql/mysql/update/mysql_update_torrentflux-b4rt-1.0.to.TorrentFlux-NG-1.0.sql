@@ -12,6 +12,8 @@
 --
 -- alter
 --
+ALTER TABLE tf_transfers ADD INDEX hash_idx ( `hash`(8));
+ALTER TABLE tf_transfer_totals ADD `uid` INT(10) NOT NULL DEFAULT '0' AFTER `tid`;
 
 --
 -- delete
@@ -21,6 +23,11 @@
 -- inserts
 --
 INSERT IGNORE INTO tf_settings VALUES ('btclient_transmission_enable','0');
+INSERT IGNORE INTO tf_settings VALUES ('vuze_rpc_enable','0');
+INSERT IGNORE INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1');
+INSERT IGNORE INTO tf_settings VALUES ('vuze_rpc_port','9091');
+INSERT IGNORE INTO tf_settings VALUES ('vuze_rpc_user','vuze');
+INSERT IGNORE INTO tf_settings VALUES ('vuze_rpc_password','mypassword');
 
 --
 -- updates
