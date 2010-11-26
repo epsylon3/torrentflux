@@ -28,13 +28,12 @@
  * @param $userType
  * @param $userEmail
  */
-function addNewUser($newUser, $pass1, $userType, $userEmail) {
+function addNewUser($newUser, $pass1, $userType, $userEmail="") {
 	global $cfg, $db;
 	$create_time = time();
 	$record = array(
 					'user_id'=>strtolower($newUser),
 					'password'=>md5($pass1),
-					'email_address'=>strtolower($userEmail),
 					'hits'=>0,
 					'last_visit'=>$create_time,
 					'time_created'=>$create_time,
@@ -47,7 +46,11 @@ function addNewUser($newUser, $pass1, $userType, $userEmail) {
 	$sTable = 'tf_users';
 	$sql = $db->GetInsertSql($sTable, $record);
 	$result = $db->Execute($sql);
-	if ($db->ErrorNo() != 0) dbError($sql);
+	if ($db->ErrorNo() != 0) 
+		dbError($sql);
+	elseif (!empty($userEmail)) {
+		UpdateUserEmail($user_id, $userEmail);
+	}
 	// flush session-cache
 	cacheFlush();
 }
@@ -61,7 +64,7 @@ function addNewUser($newUser, $pass1, $userType, $userEmail) {
  * @param $theme
  * @param $language
  */
-function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language, $userEmail) {
+function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language, $userEmail="") {
 	global $cfg, $db;
 	if (empty($hideOffline) || $hideOffline == "" || !isset($hideOffline))
 		$hideOffline = "0";
@@ -74,7 +77,6 @@ function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language, $u
 	$sql = "select * from tf_users where user_id = ".$db->qstr($user_id);
 	$rs = $db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
-	$rec['email_address'] = strtolower($userEmail);
 	$rec['hide_offline'] = $hideOffline;
 	$rec['theme'] = $theme;
 	$rec['language_file'] = $language;
@@ -85,8 +87,29 @@ function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language, $u
 		// flush session-cache
 		cacheFlush($cfg["user"]);
 	}
+	if (!empty($userEmail)) {
+		UpdateUserEmail($user_id, $userEmail);
+	}
 }
-	
+
+/**
+ * update the Email
+ *
+ * @param $user_id string
+ * @param $email string
+ * @return boolean
+ */
+function UpdateUserEmail($user_id, $email) {
+	global $db;
+	$sql = "UPDATE tf_users SET email_address = ".$db->qstr($email)." WHERE user_id = ".$db->qstr($user_id);
+	$rs = $db->Execute($sql);
+	if ($db->ErrorNo() != 0) {
+		dbError($sql); die();
+		return false;
+	}
+	return true;
+}
+
 /**
  * check the username
  *
@@ -103,7 +126,7 @@ function checkUsername($username) {
 		return $cfg['_USERIDREQUIRED'];
 	}
 }
-	
+
 /**
  * check the password
  *
@@ -117,7 +140,7 @@ function checkPassword($pass1, $pass2) {
 		if ($pass1 != $pass2) {
 			return $cfg['_PASSWORDNOTMATCH'];
 		} else {
-			return (strlen($pass1) > 5) 
+			return (strlen($pass1) > 5)
 				? true
 				: $cfg['_PASSWORDLENGTH'];
 		}
@@ -126,4 +149,16 @@ function checkPassword($pass1, $pass2) {
 	}
 }
 
+/**
+ * check the Email
+ *
+ * @param $email string
+ * @return boolean true or string with error-message
+ */
+function checkEmail($email) {
+	global $cfg;
+	if (empty($email) or trim($email) == '' or strpos($email,'@') === false)
+		return 'Bad Email';
+	return true;
+}
 ?>

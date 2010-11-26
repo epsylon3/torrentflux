@@ -55,6 +55,10 @@ if ((IsUser($org_user_id)) && (!IsUser($user_id)) && ($user_id != '') && ($user_
 	AuditAction($cfg["constants"]["admin"], $cfg['_EDITUSER'].": ".$user_id);
 	@header("location: admin.php");
 	exit();
+} elseif($email_address != "") {
+	UpdateUserEmail($user_id, $email_address);
+	@header("location: admin.php?op=editUser&user_id=".urlencode($user_id));
+	exit();
 }
 
 // init template-instance

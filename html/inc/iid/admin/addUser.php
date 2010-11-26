@@ -29,6 +29,7 @@ if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 
 /******************************************************************************/
 
+$email = tfb_getRequestVar('email_address');
 $newUser = tfb_getRequestVar('newUser');
 $pass1 = tfb_getRequestVar('pass1');
 $pass2 = tfb_getRequestVar('pass2');
@@ -36,14 +37,17 @@ $userType = tfb_getRequestVar('userType');
 
 // check username
 $usernameCheck = checkUsername($newUser);
-	
+
 // check password
 $passwordCheck = checkPassword($pass1, $pass2);
-	
+
+// fast check email
+$emailCheck = checkEmail($email);
+
 // new user ?
 $newUser = strtolower($newUser);
-if (($usernameCheck === true) && ($passwordCheck === true)) {
-	addNewUser($newUser, $pass1, $userType);
+if (($usernameCheck === true) && ($passwordCheck === true) && ($emailCheck === true)) {
+	addNewUser($newUser, $pass1, $userType, $email);
 	AuditAction($cfg["constants"]["admin"], $cfg['_NEWUSER'].": ".$newUser);
 	@header("location: admin.php?op=showUsers");
 	exit();
@@ -66,7 +70,8 @@ $tmpl->setvar('errUsername', ($usernameCheck !== true) ? 1 : 0);
 $tmpl->setvar('errMsgUsername', ($usernameCheck !== true) ? $usernameCheck : '');
 $tmpl->setvar('errPassword', ($passwordCheck !== true) ? 1 : 0);
 $tmpl->setvar('errMsgPassword', ($passwordCheck !== true) ? $passwordCheck : '');
-	
+$tmpl->setvar('errMsgEmail', ($emailCheck !== true) ? $emailCheck : '');
+
 //
 tmplSetTitleBar("Administration - Add User");
 tmplSetAdminMenu();
