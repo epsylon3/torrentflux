@@ -6,12 +6,16 @@
 		<th colspan="2" class="head">add new user</th>
 	</tr>
 	<tr>
-		<th><tmpl_var name="_USER"></th>
-		<td><input name="newUser" id="newUser" type="Text" size="15" value="test user" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test user'; }"></td>
+		<th class="alt"><tmpl_var name="_USER"></th>
+		<td class="alt"><input name="newUser" id="newUser" type="text" size="15" value="test user" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test user'; }"></td>
+	</tr>
+	<tr>
+		<th><tmpl_var name="_EMAILADDRESS"></th>
+		<td><input name="email_address" id="emailAddress" type="text" size="27" value="email" onfocus="this.value = '';" onblur="if(this.value == 'email') { this.value=''; }"></td>
 	</tr>
 	<tr>
 		<th class="alt"><tmpl_var name="_PASSWORD"></th>
-		<td class="alt"><input name="pass1" id="pass1" type="Password" size="15" value="test" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test'; }"></td>
+		<td class="alt"><input name="pass1" id="pass1" type="password" size="15" value="test" onfocus="this.value = '';" onblur="if(this.value == '') { this.value='test'; }"></td>
 	</tr>
 		<tr>
 			<th><tmpl_var name="_CONFIRMPASSWORD"></th>

@@ -58,11 +58,15 @@
 						<tr>
 							<th colspan="2" class="head">edit user settings</th>
 						<tr>
-							<th><tmpl_var name="_USER"></th>
-							<td>
+							<th class="alt"><tmpl_var name="_USER"></th>
+							<td class="alt">
 								<input name="user_id" id="user_id" type="text" value="<tmpl_var name="user_id">" size="15">
 								<input name="org_user_id" type="Hidden" value="<tmpl_var name="user_id">">
 							</td>
+						</tr>
+						<tr>
+							<th><tmpl_var name="_EMAILADDRESS"></th>
+							<td><input name="email_address" id="emailAddress" type="text" value="<tmpl_var name="email_address">" size="27"></td>
 						</tr>
 						<tr>
 							<th class="alt"><tmpl_var name="_NEWPASSWORD"></th>

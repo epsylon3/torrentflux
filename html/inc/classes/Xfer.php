@@ -325,12 +325,12 @@ class Xfer
 			$this->xfer_newday = 2;
 			$lastDate = $db->GetOne('SELECT date FROM tf_xfer ORDER BY date DESC');
 			$sql = ($db->GetOne("SELECT 1 FROM tf_xfer WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->qstr($lastDate)))
-				? "UPDATE tf_xfer SET download = download+".@($transferTotalsCurrent["downtotal"] + 0).", upload = upload+".@($transferTotalsCurrent["uptotal"] + 0)." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->qstr($lastDate)
-				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->qstr($lastDate).",".@($transferTotalsCurrent["downtotal"] + 0).",".@($transferTotalsCurrent["uptotal"] + 0).")";
+				? "UPDATE tf_xfer SET download = download+".@((int) $transferTotalsCurrent["downtotal"]).", upload = upload+".@((int) $transferTotalsCurrent["uptotal"])." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->qstr($lastDate)
+				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->qstr($lastDate).",".@((int) $transferTotalsCurrent["downtotal"]).",".@((int) $transferTotalsCurrent["uptotal"]).")";
 			$db->Execute($sql);
 			$sql = ($db->GetOne("SELECT 1 FROM tf_xfer WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->DBDate(time())))
-				? "UPDATE tf_xfer SET download = download-".@($transferTotalsCurrent["downtotal"] + 0).", upload = upload-".@($transferTotalsCurrent["uptotal"] + 0)." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->DBDate(time())
-				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->DBDate(time()).",".@($transferTotalsCurrent["downtotal"] + 0).",".@($transferTotalsCurrent["uptotal"] + 0).")";
+				? "UPDATE tf_xfer SET download = download-".@((int) $transferTotalsCurrent["downtotal"]).", upload = upload-".@((int) $transferTotalsCurrent["uptotal"])." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->DBDate(time())
+				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->DBDate(time()).",".@((int) $transferTotalsCurrent["downtotal"]).",".@((int) $transferTotalsCurrent["uptotal"]).")";
 			$db->Execute($sql);
 		}
 	}
@@ -381,12 +381,17 @@ class Xfer
 	 * @param $period
 	 */
 	function _sumUsage($user, $download, $upload, $period) {
+		if (!isset($this->xfer[$user][$period]))
+			$this->xfer[$user][$period] = array();
 		@ $this->xfer[$user][$period]['download'] += $download;
 		@ $this->xfer[$user][$period]['upload'] += $upload;
-		@ $this->xfer[$user][$period]['total'] += $download + $upload;
-		@ $this->xfer_total[$period]['download'] += $download;
-		@ $this->xfer_total[$period]['upload'] += $upload;
-		@ $this->xfer_total[$period]['total'] += $download + $upload;
+		@ $this->xfer[$user][$period]['total'] += ($download + $upload);
+		
+		if (!isset($this->xfer_total[$period]))
+			$this->xfer_total[$period] = array();
+		$this->xfer_total[$period]['download'] = $download + (int) @ $this->xfer_total[$period]['download'];
+		$this->xfer_total[$period]['upload'] = $upload + (int) @ $this->xfer_total[$period]['upload'];
+		$this->xfer_total[$period]['total'] = ($download + $upload) + (int) @ $this->xfer_total[$period]['total'];
 	}
 
 }

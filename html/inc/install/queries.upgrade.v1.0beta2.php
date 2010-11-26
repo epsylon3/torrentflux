@@ -66,6 +66,8 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 // ALTER TABLE (need to check for sqlite and postgre)
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX hash_idx ( `hash`(8))");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD `uid` INT(10) NOT NULL default '0' AFTER `tid`");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default '' AFTER `password`");
+  
 
 // sql-queries : Data
 $cqt = 'data';
@@ -90,6 +92,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // ALTER TABLE 
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER(10) NOT NULL default '0'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default ''");
 
 // sql-queries : Data
 $cqt = 'data';
@@ -114,6 +117,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // ALTER TABLE 
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER NOT NULL DEFAULT '0'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default ''");
 
 // sql-queries : Data
 $cqt = 'data';

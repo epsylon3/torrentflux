@@ -363,7 +363,7 @@ switch ($op) {
 		$tmpl->setvar('_TOTALPAGEVIEWS', $cfg['_TOTALPAGEVIEWS']);
 		$tmpl->setvar('_PERCENTPARTICIPATION', $cfg['_PERCENTPARTICIPATION']);
 		$tmpl->setvar('_USER', $cfg['_USER']);
-		$tmpl->setvar('_EMAIL', $cfg['_EMAIL']);
+		$tmpl->setvar('_EMAIL', $cfg['_EMAILADDRESS']);
 		$tmpl->setvar('_NEWPASSWORD', $cfg['_NEWPASSWORD']);
 		$tmpl->setvar('_CONFIRMPASSWORD', $cfg['_CONFIRMPASSWORD']);
 		$tmpl->setvar('_THEME', $cfg['_THEME']);
