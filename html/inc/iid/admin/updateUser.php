@@ -31,11 +31,13 @@ if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 
 $user_id = tfb_getRequestVar('user_id');
 $org_user_id = tfb_getRequestVar('org_user_id');
+$email_address = tfb_getRequestVar('email_address');
 $pass1 = tfb_getRequestVar('pass1');
 $pass2 = tfb_getRequestVar('pass2');
 $userType = tfb_getRequestVar('userType');
 $hideOffline = tfb_getRequestVar('hideOffline');
 $user_id = strtolower($user_id);
+$email_address = strtolower($email_address);
 
 // check password
 $passwordCheck = (($pass1 != '') && ($pass2 != ''))
@@ -49,7 +51,7 @@ if ((IsUser($org_user_id)) && (!IsUser($user_id)) && ($user_id != '') && ($user_
 		// this will expire the user
 		$_SESSION['user'] = md5($cfg["pagetitle"]);
 	}
-	updateThisUser($user_id, $org_user_id, $pass1, $userType, $hideOffline);
+	updateThisUser($user_id, $org_user_id, $pass1, $userType, $hideOffline, $email_address);
 	AuditAction($cfg["constants"]["admin"], $cfg['_EDITUSER'].": ".$user_id);
 	@header("location: admin.php");
 	exit();
@@ -61,6 +63,7 @@ tmplInitializeInstance($cfg["theme"], "page.admin.updateUser.tmpl");
 // set vars
 $tmpl->setvar('user_id', $user_id);
 $tmpl->setvar('org_user_id', $org_user_id);
+$tmpl->setvar('email_address', $email_address);
 	
 // error
 	

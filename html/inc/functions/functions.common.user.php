@@ -26,13 +26,15 @@
  * @param $newUser
  * @param $pass1
  * @param $userType
+ * @param $userEmail
  */
-function addNewUser($newUser, $pass1, $userType) {
+function addNewUser($newUser, $pass1, $userType, $userEmail) {
 	global $cfg, $db;
 	$create_time = time();
 	$record = array(
 					'user_id'=>strtolower($newUser),
 					'password'=>md5($pass1),
+					'email_address'=>strtolower($userEmail),
 					'hits'=>0,
 					'last_visit'=>$create_time,
 					'time_created'=>$create_time,
@@ -59,7 +61,7 @@ function addNewUser($newUser, $pass1, $userType) {
  * @param $theme
  * @param $language
  */
-function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language) {
+function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language, $userEmail) {
 	global $cfg, $db;
 	if (empty($hideOffline) || $hideOffline == "" || !isset($hideOffline))
 		$hideOffline = "0";
@@ -72,6 +74,7 @@ function UpdateUserProfile($user_id, $pass1, $hideOffline, $theme, $language) {
 	$sql = "select * from tf_users where user_id = ".$db->qstr($user_id);
 	$rs = $db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
+	$rec['email_address'] = strtolower($userEmail);
 	$rec['hide_offline'] = $hideOffline;
 	$rec['theme'] = $theme;
 	$rec['language_file'] = $language;

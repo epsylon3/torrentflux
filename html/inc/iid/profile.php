@@ -333,8 +333,8 @@ switch ($op) {
 		if ($cfg["hide_offline"] == 1)
 			$hideChecked = "checked=\"checked\"";
 		$total_activity = GetActivityCount();
-		$sql= "SELECT user_id, hits, last_visit, time_created, user_level FROM tf_users WHERE user_id=".$db->qstr($cfg["user"]);
-		list ($user_id, $hits, $last_visit, $time_created, $user_level) = $db->GetRow($sql);
+		$sql= "SELECT user_id, email_address, hits, last_visit, time_created, user_level FROM tf_users WHERE user_id=".$db->qstr($cfg["user"]);
+		list ($user_id, $email_address, $hits, $last_visit, $time_created, $user_level) = $db->GetRow($sql);
 		$user_type = $cfg['_NORMALUSER'];
 		if ($cfg['isAdmin'])
 			$user_type = $cfg['_ADMINISTRATOR'];
@@ -352,6 +352,7 @@ switch ($op) {
 		$tmpl->setvar('user_percent', $user_percent);
 		$tmpl->setvar('days_to_keep', $cfg["days_to_keep"]);
 		$tmpl->setvar('hits', $hits);
+		$tmpl->setvar('email_address', $email_address);
 		$tmpl->setvar('user_type', $user_type);
 		$tmpl->setvar('_UPLOADS', $cfg['_UPLOADS']);
 		$tmpl->setvar('_DAYS', $cfg['_DAYS']);
@@ -362,6 +363,7 @@ switch ($op) {
 		$tmpl->setvar('_TOTALPAGEVIEWS', $cfg['_TOTALPAGEVIEWS']);
 		$tmpl->setvar('_PERCENTPARTICIPATION', $cfg['_PERCENTPARTICIPATION']);
 		$tmpl->setvar('_USER', $cfg['_USER']);
+		$tmpl->setvar('_EMAIL', $cfg['_EMAIL']);
 		$tmpl->setvar('_NEWPASSWORD', $cfg['_NEWPASSWORD']);
 		$tmpl->setvar('_CONFIRMPASSWORD', $cfg['_CONFIRMPASSWORD']);
 		$tmpl->setvar('_THEME', $cfg['_THEME']);

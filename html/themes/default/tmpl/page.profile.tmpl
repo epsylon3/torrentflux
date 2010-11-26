@@ -104,6 +104,12 @@
 												</td>
 											</tr>
 											<tr>
+												<td align="right"><label for="email_address"><tmpl_var name="_EMAIL">:</label></td>
+												<td>
+													<input readonly="true" id="email_address" type="Text" value="<tmpl_var name="email_address">" size="25">
+												</td>
+											</tr>
+											<tr>
 												<td align="right"><label for="pass1"><tmpl_var name="_NEWPASSWORD">:</label></td>
 												<td>
 													<input name="pass1" id="pass1" type="Password" value="" size="15">
@@ -421,15 +427,6 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="300">&nbsp;<label for="savepath">Save path:</label></td>
-					<td width="80" nowrap>
-						<input type="Text" size="26" maxlength="255" name="savepath" id="savepath" <tmpl_var name="savepath">>
-					</td>
-					<td width="200">
-						(default: <tmpl_var name="default_savepath">)
-					</td>
-				</tr>
-				<tr>
 					<td>&nbsp;</td>
 					<td colspan="2">
 						<input type="Submit" value="<tmpl_var name="add1">">
@@ -472,4 +469,4 @@
 		</form>
 	</div>
 </tmpl_if>
-<tmpl_include name="inc.subfoot.tmpl">
+<tmpl_include name="inc.subfoot.tmpl"> 
