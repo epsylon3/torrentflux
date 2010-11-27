@@ -89,33 +89,38 @@ $arList = getTransferArray($sortOrder);
 $progress_color = "#00ff00";
 $bar_width = "4";
 
-require ('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php') ;
-$rpc = new Transmission ();
-$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
-$result = $rpc->get ( array(), $fields );
-//print_r($result[arguments][torrents]);
+$result = getUserTransmissionTransfers($cfg['uid']);
 
 // eta
 //  -1 : Done
 //  -2 : Unknown
 
-foreach ($result[arguments][torrents] as $aTorrent)
+
+foreach ($result as $aTorrent)
 {
 #	print_r($aTorrent);
 	// fill in eta
-	if ( $aTorrent[eta] == '-1' ) {
+	if ( $aTorrent['eta'] == '-1' && $aTorrent['percentDone'] != 1 ) {
 		$eta = 'n/a';
+	} elseif ( $aTorrent['percentDone'] == 1 ) {
+		$eta = 'Download Succeeded!';
 	} elseif ( $aTorrent[eta] == '-2' ) {
 		$eta = 'Unknown';
 	} else {
-		$eta = convertTime( $aTorrent[eta] );
+		$eta = convertTime( $aTorrent['eta'] );
 	}
 
-	$status = $aTorrent[status];
-	switch ($aTorrent[status]) {
+	$status = $aTorrent['status'];
+	switch ($aTorrent['status']) {
 	    case 16:
-		$status = "Stopped";
-		$transferRunning = 0;
+		if ( $aTorrent['percentDone'] == 1 ) {
+			$status = "Done";
+			$transferRunning = false;
+		} else {
+			$status = "Stopped";
+			$transferRunning = false;
+			$eta = 'Torrent Stopped'; # this might be fixed in a cleaner way
+		}
 		break;
 	    case 4:
 		if ( $aTorrent[rateDownload] == 0 ) {
@@ -123,17 +128,17 @@ foreach ($result[arguments][torrents] as $aTorrent)
 		} else {
 			$status = "Downloading";
 		}
-		$transferRunning = 1;
+		$transferRunning = true;
 		break;
 	    case 8:
 		$status = "Seeding";
-		$transferRunning = 1;
+		$transferRunning = true;
 		break;
 	}
 
 	$tArray = array(
 		'is_owner' => true,
-		'transferRunning' => $transferRunning,
+		'transferRunning' => ($transferRunning ? 1 : 0),
 		'url_entry' => $aTorrent[hashString],
 		'hd_image' => 'black.gif',
 		'hd_title' => $nothing,
@@ -157,7 +162,7 @@ foreach ($result[arguments][torrents] as $aTorrent)
 		'clientType' => 'torrent',
 		'upload_support_enabled' => 1,
 		'client' => $nothing,
-		'url_path' => 'fakepath',
+		'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
 		'datapath' => $aTorrent[name],
 		'is_no_file' => 1,
 		'show_run' => 1,
@@ -165,6 +170,17 @@ foreach ($result[arguments][torrents] as $aTorrent)
 
 	);
 	array_push($arUserTorrent, $tArray);
+
+	// Adds the transfer rate for this torrent to the total transfer rate
+	if ($transferRunning) {
+		if (!isset($cfg["total_upload"]))
+			$cfg["total_upload"] = 0;
+		if (!isset($cfg["total_download"]))
+			 $cfg["total_download"] = 0;
+		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent[rateUpload]/1000);
+		$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent[rateDownload]/1000);
+
+	}
 }
 	// -------------------------------------------------------------------------
 	// create temp-array

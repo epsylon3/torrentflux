@@ -167,7 +167,7 @@ function getServerStats() {
 	array_push($serverStats, $loadavg);
 	// running
 	$running = "n/a";
-	$running = @getRunningTransferCount();
+	$running = @getRunningTransferCount() + getRunningTransmissionTransferCount();
 	array_push($serverStats, $running);
 	// queued
 	$queued = FluxdQmgr::countQueuedTransfers();
