@@ -30,7 +30,7 @@ function transfer_init() {
 	if (empty($transfer))
 		@error("missing params", "", "", array('transfer'));
 	
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get( array(), array('hashString', 'id', 'name') );
@@ -182,7 +182,7 @@ function transfer_setFileVars() {
 				@fclose($fd);
 			}
 			$transferSizeSum = 0;
-			require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+			require_once('inc/classes/Transmission.class.php');
 			$isTransmissionTorrent = false;
 			$trans = new Transmission();
 			$response = $trans->get( array(), array('hashString', 'id', 'name') );

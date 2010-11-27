@@ -151,7 +151,7 @@ function deleteTransferData($transfer) {
 	global $cfg, $transfers;
 	$msgs = array();
 
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get( array(), array('hashString', 'id', 'name') );
@@ -255,7 +255,7 @@ function calcTransferSavepath($transfer, $profile = NULL) {
  */
 function setFilePriority($transfer) {
     global $cfg;
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get( array(), array('hashString', 'id', 'name') );

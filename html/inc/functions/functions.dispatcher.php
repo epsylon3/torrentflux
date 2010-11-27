@@ -453,7 +453,7 @@ function dispatcher_multi($action) {
 		// url-decode
 		$transfer = urldecode($element);
 
-		require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+		require_once('inc/classes/Transmission.class.php');
 		$isTransmissionTorrent = false;
 		$trans = new Transmission();
 		$response = $trans->get(array(), array("id","hashString"));

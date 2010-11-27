@@ -40,7 +40,7 @@ function getTransferPid($transfer) {
 function isTransferRunning($transfer) {
 	global $cfg;
 
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$trans = new Transmission();
 	$response = $trans->get(array(), array("id","hashString","status"));
 	$torrentlist = $response[arguments][torrents];
@@ -468,7 +468,7 @@ function isValidTransmissionTransfer($uid = 0,$tid) {
  * @return void
  */
 function startTransmissionTransfer($hash) {
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$trans = new Transmission();
 
 	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
@@ -484,7 +484,7 @@ function startTransmissionTransfer($hash) {
  * @return void
  */
 function stopTransmissionTransfer($hash) {
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$trans = new Transmission();
 
 	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
@@ -501,7 +501,7 @@ function stopTransmissionTransfer($hash) {
  * TODO: test delete :)
  */
 function deleteTransmissionTransfer($uid, $hash, $deleteData = false) {
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$trans = new Transmission();
 
 	if ( isValidTransmissionTransfer($uid, $hash) ) {
@@ -529,7 +529,7 @@ function deleteTransmissionTransferWithData($uid, $hash) {
  * @return transmissionTransferId
  */
 function getTransmissionTransferIdByHash($hash) {
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
+	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
 	$trans = new Transmission();
 	$response = $trans->get(array(), array("id","hashString"));
@@ -608,7 +608,7 @@ function getUserTransmissionTransfers($uid = 0) {
 		if ( sizeof($userTransferHashes) == 0 ) return $retVal;
 	}
 
-	require_once ('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php') ;
+	require_once('inc/classes/Transmission.class.php');
 	$rpc = new Transmission ();
 	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
 	$result = $rpc->get ( array(), $fields );
