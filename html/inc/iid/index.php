@@ -136,11 +136,12 @@ foreach ($result as $aTorrent)
 		break;
 	}
 
+	// TODO: transferowner is always admin... probably not what we want
 	$tArray = array(
 		'is_owner' => true,
 		'transferRunning' => ($transferRunning ? 1 : 0),
 		'url_entry' => $aTorrent[hashString],
-		'hd_image' => 'black.gif',
+		'hd_image' => ($transferRunning ? 'green.gif' : 'black.gif'),
 		'hd_title' => $nothing,
 		'displayname' => $aTorrent[name],
 		'transferowner' => 'administrator',
