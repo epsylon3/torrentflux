@@ -39,24 +39,10 @@ function getTransferPid($transfer) {
  */
 function isTransferRunning($transfer) {
 	global $cfg;
-
-	$isTransmissionTorrent = false;
 	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/classes/Transmission.class.php');
-		$trans = new Transmission();
-		$response = $trans->get(array(), array("id","hashString","status"));
-		$torrentlist = $response[arguments][torrents];
-		foreach ($torrentlist as $aTorrent) {
-			if ( $aTorrent[hashString] == $transfer ) {
-				$isTransmissionTorrent = true;
-				$torrentId = $aTorrent[id];
-				if ( $aTorrent['status'] == 16 ) return false;
-				else return true;
-				break;
-			}
-		}
+		require_once('inc/functions/functions.transmission.transfer.php');
+		return isTransmissionTransferRunning($transfer);
 	}
-	
 	return file_exists($cfg["transfer_file_path"].$transfer.'.pid');
 }
 
@@ -109,6 +95,11 @@ function getTransferClient($transfer) {
  */
 function getRunningTransferCount() {
 	global $cfg;
+	if ($cfg["btclient_transmission_enable"]) {
+		require_once('inc/functions/functions.transmission.transfer.php');
+		return getRunningTransmissionTransferCount();
+	}
+	
 	// use pid-files-direct-access for now because all clients of currently
 	// available handlers write one. then its faster and correct meanwhile.
 	if ($dirHandle = @opendir($cfg["transfer_file_path"])) {
@@ -529,6 +520,25 @@ function getTransferListHeadArray($settings = null) {
  */
 function getTransferListArray() {
 	global $cfg, $db, $transfers;
+
+	$isTransmission = ($cfg["btclient_transmission_enable"] != 0);
+	if ($isTransmission) {
+		require_once('inc/functions/functions.transmission.transfer.php');
+		
+		// New method for transmission-daemon transfers
+		$result = getUserTransmissionTransfers($cfg['uid']);
+		foreach ($result as $aTorrent) {
+			if ( $aTorrent['status']==4 || $aTorrent['status'] == 8 ) {
+				if (!isset($cfg["total_upload"]))
+					$cfg["total_upload"] = 0;
+				if (!isset($cfg["total_download"]))
+					$cfg["total_download"] = 0;
+				$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent['rateUpload']/1000);
+				$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent['rateDownload']/1000);
+			}
+		}
+	}
+	
 	$kill_id = "";
 	$lastUser = "";
 	$arUserTransfers = array();
@@ -539,8 +549,13 @@ function getTransferListArray() {
 	$sortOrder = tfb_getRequestVar("so");
 	if ($sortOrder == "")
 		$sortOrder = $cfg["index_page_sortorder"];
+
 	// t-list
-	$arList = getTransferArray($sortOrder);
+	if ($isTransmission)
+		$arList = array();
+	else
+		$arList = getTransferArray($sortOrder);
+
 	foreach ($arList as $transfer) {
 		// init some vars
 		$displayname = $transfer;
