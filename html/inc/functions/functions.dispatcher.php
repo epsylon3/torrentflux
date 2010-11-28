@@ -465,6 +465,7 @@ function dispatcher_multi($action) {
 				break;
 			}    
 		}    
+		// TODO: complete this, not implemented for Transmission atm
 
 		if ( !$isTransmissionTorrent ) {
 			// is valid transfer ? + check permissions
@@ -890,19 +891,31 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 				return false;
 			} else {
 				if (@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename)) {
-					@chmod($cfg["transfer_file_path"].$filename, 0644);
-					AuditAction($cfg["constants"]["file_upload"], $filename);
-					// inject
-					injectTransfer($filename);
-					// instant action ?
-					if ($actionId > 1)
-						array_push($tStack,$filename);
-					// return
-					return true;
+					// If transmission is default
+					// TODO: edit with the setting configuration
+					if (true) {
+						@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename);
+						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
+						unlink($cfg['transfer_file_path'].$filename);
+
+						if ( $actionId > 1 ) startTransmissionTransfer( $hash );
+						return true;
+					} else {
+						@chmod($cfg["transfer_file_path"].$filename, 0644);
+						AuditAction($cfg["constants"]["file_upload"], $filename);
+						
+						// inject
+						injectTransfer($filename);
+						// instant action ?
+						if ($actionId > 1)
+							array_push($tStack,$filename);
+						// return
+						return true;
+					}
 				} else {
 					array_push($uploadMessages, "File not uploaded, file could not be found or could not be moved: ".$cfg["transfer_file_path"].$filename);
 					return false;
-			  	}
+				}
 			}
 		} else {
 			array_push($uploadMessages, "File not uploaded, file size limit is ".$cfg["upload_limit"].". file has ".$size);

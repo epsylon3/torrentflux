@@ -594,6 +594,7 @@ function addTransmissionTransfer($uid = 0, $url, $path) {
 	//print_r("The hash is: $hash. The uid is $uid"); exit();
 
 	addTransmissionTransferToDB($uid, $hash);
+	return $hash;
 }
 
 /**
