@@ -611,7 +611,7 @@ function getUserTransmissionTransfers($uid = 0) {
 
 	require_once('inc/classes/Transmission.class.php');
 	$rpc = new Transmission ();
-	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
+	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
 	$result = $rpc->get ( array(), $fields );
 	
 	if ($result['result']!=="success") dbError("Transmission could not get transfers");

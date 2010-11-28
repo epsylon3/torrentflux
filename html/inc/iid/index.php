@@ -141,22 +141,22 @@ foreach ($result as $aTorrent)
 		'is_owner' => true,
 		'transferRunning' => ($transferRunning ? 1 : 0),
 		'url_entry' => $aTorrent[hashString],
-		'hd_image' => ($transferRunning ? 'green.gif' : 'black.gif'),
+		'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload']),
 		'hd_title' => $nothing,
-		'displayname' => $aTorrent[name],
+		'displayname' => $aTorrent['name'],
 		'transferowner' => 'administrator',
-		'format_af_size' => formatBytesTokBMBGBTB( $aTorrent[totalSize] ),
+		'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
 		'format_downtotal' => $nothing,
 		'format_uptotal' => $nothing,
 		'statusStr' => $status,
-		'graph_width' => floor($aTorrent[percentDone]*100),
-		'percentage' => floor($aTorrent[percentDone]*100) . '%',
+		'graph_width' => floor($aTorrent['percentDone']*100),
+		'percentage' => floor($aTorrent['percentDone']*100) . '%',
 		'progress_color' => '#00ff00',
 		'bar_width' => 4,
 		'background' => '#000000',
-		'100_graph_width' => 100 - floor($aTorrent[percentDone]*100),
-		'down_speed' => formatBytesTokBMBGBTB( $aTorrent[rateDownload] ) . '/s',
-		'up_speed' => formatBytesTokBMBGBTB( $aTorrent[rateUpload] ) . '/s',
+		'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
+		'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
+		'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
 		'seeds' => $nothing,
 		'peers' => $nothing,
 		'estTime' => $eta,
@@ -164,10 +164,10 @@ foreach ($result as $aTorrent)
 		'upload_support_enabled' => 1,
 		'client' => $nothing,
 		'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
-		'datapath' => $aTorrent[name],
+		'datapath' => $aTorrent['name'],
 		'is_no_file' => 1,
 		'show_run' => 1,
-		'entry' => $aTorrent[name]
+		'entry' => $aTorrent['name']
 
 	);
 	array_push($arUserTorrent, $tArray);
@@ -178,11 +178,31 @@ foreach ($result as $aTorrent)
 			$cfg["total_upload"] = 0;
 		if (!isset($cfg["total_download"]))
 			 $cfg["total_download"] = 0;
-		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent[rateUpload]/1000);
-		$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent[rateDownload]/1000);
+		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent['rateUpload']/1000);
+		$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent['rateDownload']/1000);
 
 	}
 }
+
+function getTransmissionStatusImage($running, $seederCount, $uploadRate){
+	$statusImage = "black.gif";
+	if ($running) {
+		// running
+                if ($seederCount < 2)
+                        $statusImage = "yellow.gif";
+                if ($seederCount == 0)
+                        $statusImage = "red.gif";
+                if ($seederCount >= 2)
+                        $statusImage = "green.gif";
+	}
+	if ( floor($aTorrent[percentDone]*100) >= 100 ) {
+		$statusImage = ( $uploadRate != 0 && $running )
+                        ? "green.gif" /* seeding */
+                        : "black.gif"; /* finished */
+	}
+	return $statusImage;
+}
+
 	// -------------------------------------------------------------------------
 	// create temp-array
 /*	$tArray = array(
