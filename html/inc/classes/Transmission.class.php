@@ -41,7 +41,7 @@ class Transmission
    * If your Transmission RPC requires authentication, supply username here 
    * @var string
    */
-  public $username = '';
+  public $username = 'transmission';
 
   /**
    * If your Transmission RPC requires authentication, supply password here 
