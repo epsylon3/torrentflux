@@ -66,7 +66,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
-  uid INT(10) NOT NULL default '0'
+  uid INT(10) NOT NULL default '0',
   PRIMARY KEY  (tid,uid)
 ) TYPE=MyISAM");
 
@@ -105,7 +105,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
-  uid INT(10) NOT NULL default '0'
+  uid INT(10) NOT NULL default '0',
   PRIMARY KEY (tid,uid)
 )");
 

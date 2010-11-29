@@ -163,7 +163,7 @@ CREATE TABLE tf_transfer_totals (
   uid INTEGER NOT NULL DEFAULT '0',
   uptotal BIGINT NOT NULL DEFAULT '0',
   downtotal BIGINT NOT NULL DEFAULT '0',
-  PRIMARY KEY (tid)
+  PRIMARY KEY (tid,uid)
 );
 
 --
@@ -435,6 +435,15 @@ INSERT INTO tf_settings_stats VALUES ('stats_default_type','all');
 INSERT INTO tf_settings_stats VALUES ('stats_default_format','xml');
 INSERT INTO tf_settings_stats VALUES ('stats_default_attach','0');
 INSERT INTO tf_settings_stats VALUES ('stats_default_compress','0');
+
+--
+-- tf_transmission_user
+--
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL DEFAULT '',
+  uid INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (tid,uid)
+);
 
 --
 -- Sequences for table tf_users

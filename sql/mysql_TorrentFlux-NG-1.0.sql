@@ -122,7 +122,7 @@ CREATE TABLE tf_transfer_totals (
   uid INT(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
-  PRIMARY KEY  (tid)
+  PRIMARY KEY (tid,uid)
 ) TYPE=MyISAM;
 
 --
@@ -385,3 +385,11 @@ INSERT INTO tf_settings_stats VALUES ('stats_default_format','xml');
 INSERT INTO tf_settings_stats VALUES ('stats_default_attach','0');
 INSERT INTO tf_settings_stats VALUES ('stats_default_compress','0');
 
+--
+-- tf_transmission_user
+--
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0',
+  PRIMARY KEY (tid,uid)
+) TYPE=MyISAM;

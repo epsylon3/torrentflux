@@ -120,7 +120,7 @@ CREATE TABLE tf_transfer_totals (
   uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
-  PRIMARY KEY  (tid)
+  PRIMARY KEY  (tid,uid)
 ) ;
 
 --
@@ -363,6 +363,7 @@ INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1');
 INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091');
 INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze');
 INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword');
+
 --
 -- tf_settings_stats
 --
@@ -381,6 +382,15 @@ INSERT INTO tf_settings_stats VALUES ('stats_default_type','all');
 INSERT INTO tf_settings_stats VALUES ('stats_default_format','xml');
 INSERT INTO tf_settings_stats VALUES ('stats_default_attach','0');
 INSERT INTO tf_settings_stats VALUES ('stats_default_compress','0');
+
+--
+-- tf_transmission_user
+--
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default 0,
+  PRIMARY KEY (tid,uid)
+);
 
 --
 -- commit
