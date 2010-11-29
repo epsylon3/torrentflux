@@ -74,15 +74,15 @@ function initRestrictedDirEntries() {
 function checkIncomingPath() {
 	global $cfg;
 	switch ($cfg["enable_home_dirs"]) {
-	    case 1:
-	    default:
+		case 1:
+		default:
 			// is there a user dir?
 			checkDirectory($cfg["path"].$cfg["user"], 0777);
-	        break;
-	    case 0:
+			break;
+		case 0:
 			// is there a incoming dir?
 			checkDirectory($cfg["path"].$cfg["path_incoming"], 0777);
-	        break;
+			break;
 	}
 }
 
@@ -194,7 +194,7 @@ function downloadFile($down) {
 				}
 				// write the session to close so you can continue to browse on the site.
 				@session_write_close();
-				
+
 				if (!$is_image && $cfg["enable_xsendfile"] == 1)
 					@header('X-Sendfile: '.$path);
 				else {
@@ -374,12 +374,12 @@ function findSFV($dirName) {
 	$sfv = false;
 	$d = dir($dirName);
 	while (false !== ($entry = $d->read())) {
-   		if($entry != '.' && $entry != '..' && !empty($entry)) {
+		if($entry != '.' && $entry != '..' && !empty($entry)) {
 			if((isFile($dirName.'/'.$entry)) && (strtolower(substr($entry, -4, 4)) == '.sfv')) {
 				$sfv['dir'] = $dirName;
 				$sfv['sfv'] = $dirName.'/'.$entry;
 			}
-	   	}
+		}
 	}
 	$d->close();
 	return $sfv;
@@ -450,66 +450,66 @@ function UrlHTMLSlashesDecode($input){
  */
 function dirsize($path)
 {
-    // Init a float for big sizes
-    $size = 0.0;
+	// Init a float for big sizes
+	$size = 0.0;
 
-    // Trailing slash
-    if (substr($path, -1, 1) !== DIRECTORY_SEPARATOR) {
-        $path .= DIRECTORY_SEPARATOR;
-    }
+	// Trailing slash
+	if (substr($path, -1, 1) !== DIRECTORY_SEPARATOR) {
+		$path .= DIRECTORY_SEPARATOR;
+	}
 
-    // Sanity check
-    if (is_file($path)) {
-        return sprintf("%.0f",filesize($path));
-    } elseif (!is_dir($path)) {
-        return false;
-    }
-    
-    if (!isWinOS())
+	// Sanity check
+	if (is_file($path)) {
+		return sprintf("%.0f",filesize($path));
+	} elseif (!is_dir($path)) {
+		return false;
+	}
+
+	if (!isWinOS())
 	{
 		$size += @trim(shell_exec('du -ksL '.tfb_shellencode($path)));
 		$size *= 1024;
 		if ($size > 0.0) return sprintf("%.0f", $size);
 	}
 
-    // Iterate queue
-    $queue = array($path);
-    for ($i = 0, $j = count($queue); $i < $j; ++$i)
-    {
-        // Open directory
-        $parent = $i;
-        if (is_dir($queue[$i]) && $dir = @dir($queue[$i])) {
-            $subdirs = array();
-            while (false !== ($entry = $dir->read())) {
-                // Skip pointers
-                if ($entry == '.' || $entry == '..') {
-                    continue;
-                }
+	// Iterate queue
+	$queue = array($path);
+	for ($i = 0, $j = count($queue); $i < $j; ++$i)
+	{
+		// Open directory
+		$parent = $i;
+		if (is_dir($queue[$i]) && $dir = @dir($queue[$i])) {
+			$subdirs = array();
+			while (false !== ($entry = $dir->read())) {
+				// Skip pointers
+				if ($entry == '.' || $entry == '..') {
+					continue;
+				}
 
-                // Get list of directories or filesizes
-                $path = $queue[$i] . $entry;
-                if (is_dir($path)) {
-                    $path .= DIRECTORY_SEPARATOR;
-                    $subdirs[] = $path;
-                } elseif (is_file($path)) {
-                    $size += sprintf("%u", filesize($path));
-                }
-            }
+				// Get list of directories or filesizes
+				$path = $queue[$i] . $entry;
+				if (is_dir($path)) {
+					$path .= DIRECTORY_SEPARATOR;
+					$subdirs[] = $path;
+				} elseif (is_file($path)) {
+					$size += sprintf("%u", filesize($path));
+				}
+			}
 
-            // Add subdirectories to start of queue
-            unset($queue[0]);
-            $queue = array_merge($subdirs, $queue);
+			// Add subdirectories to start of queue
+			unset($queue[0]);
+			$queue = array_merge($subdirs, $queue);
 
-            // Recalculate stack size
-            $i = -1;
-            $j = count($queue);
+			// Recalculate stack size
+			$i = -1;
+			$j = count($queue);
 
-            // Clean up
-            $dir->close();
-            unset($dir);
-        }
-    }
+			// Clean up
+			$dir->close();
+			unset($dir);
+		}
+	}
 
-    return $size;
+	return $size;
 }
 ?>

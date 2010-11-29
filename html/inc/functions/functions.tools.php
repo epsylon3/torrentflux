@@ -87,7 +87,7 @@ function printFileList($basedir, $type = 1, $mode = 2) {
 	define('_URL_SVNFILE_SUFFIX','?op=log&rev=0&sc=0&isdir=0');
 	$fileList = array();
 	$fileList['files'] = array();
-	$fileList['types'] = array(".php", ".dist", ".pl", ".pm", ".tmpl", ".html", ".js", ".css", ".xml", ".xsd", ".py");
+	$fileList['types'] = array(".php", ".dist", ".pl", ".pm", ".tmpl", ".html", ".js", ".css", ".xml", ".xsd", ".py", ".sh");
 	$fileList['count'] = 0;
 	$fileList['size'] = 0;
 	$fileList['revision'] = 1;
@@ -193,20 +193,20 @@ function getSVNRevisionFromId($filename) {
 	$len = strlen($data);
 	for ($i = 0; $i < $len; $i++) {
 		if ($data{$i} == '$') {
-            if (($data{$i+1} == 'I') && ($data{$i+2} == 'd')) {
-            	$revision = "";
-            	$j = $i + 3;
-                while ($j < $len) {
-                	if ($data{$j} == '$') {
-                		$rev = explode(" ", $revision);
-                		return trim($rev[2]);
-                	} else {
-                		$revision .= $data{$j};
-                	}
-                	$j++;
-                }
-            }
-        }
+			if (($data{$i+1} == 'I') && ($data{$i+2} == 'd')) {
+				$revision = "";
+				$j = $i + 3;
+				while ($j < $len) {
+					if ($data{$j} == '$') {
+						$rev = explode(" ", $revision);
+						return trim($rev[2]);
+					} else {
+						$revision .= $data{$j};
+					}
+					$j++;
+				}
+			}
+		}
 	}
 	return 'NoID';
 }

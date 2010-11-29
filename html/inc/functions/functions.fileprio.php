@@ -79,7 +79,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 
 	$files = array();
 	if ( $isTransmissionTorrent ) {
-		
+
 		$response = $trans->get($theTorrent[id], array("files"));
 		$responseWantedFiles = $trans->get( $theTorrent[id], array('wanted') );
 		$wantedFiles = $responseWantedFiles[arguments][torrents][0][wanted];
@@ -120,7 +120,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 		$torrent_announceurl = $aTorrent[comment];
 		$torrent_creationdate = $aTorrent[dateCreated];
 		$torrent_filescount = $filescount;
-		
+
 	} else {
 		$prioFileName = $cfg["transfer_file_path"].$transfer.".prio";
 		$ftorrent = $cfg["transfer_file_path"].$transfer;
@@ -165,7 +165,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 		$torrent_creationdate = $btmeta['creation date'];
 		$torrent_filescount = count($btmeta['info']['files']);
 	}
-	
+
 	$retVal .= "<table><tr>";
 	$retVal .= "<tr><td width=\"110\">Metainfo File:</td><td>".$transfer."</td></tr>";
 	$retVal .= "<tr><td>Directory Name:</td><td>".$torrent_directoryname."</td></tr>";
