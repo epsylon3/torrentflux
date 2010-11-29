@@ -7,10 +7,14 @@ Recent Versions
 
 1. Get Transmission Source Archive from
    http://download.m0k.org/transmission/files/
-   
+   example : wget http://download.m0k.org/transmission/files/transmission-1.92.tar.bz2
+
 2. Replace cli.c in folder cli and transmission.h in folder libtransmission.
 
 3. Configure and Compile Transmission
+   apt-get install intltool libssl-dev libcurl4-openssl-dev
+   ./configure --with-zlib --enable-shared --enable-cli --enable-daemon
+   make
 
 Transmission 0.96 and later
 ---------------------------
