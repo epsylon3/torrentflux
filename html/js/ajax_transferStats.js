@@ -2,20 +2,19 @@
 
 // fields
 var ajax_fieldIds = new Array(
-	"dummy",
-	"running",
-	"speedDown",
-	"speedUp",
-	"downCurrent",
-	"upCurrent",
-	"downTotal",
-	"upTotal",
-	"percentDone",
-	"sharing",
-	"eta",
-	"seeds",
-	"peers",
-	"cons"
+	"running",		//0
+	"speedDown",	//1
+	"speedUp",		//2
+	"downCurrent",	//3
+	"upCurrent",	//4
+	"downTotal",	//5
+	"upTotal",		//6
+	"percentDone",	//7
+	"sharing",		//8
+	"eta",			//9
+	"seeds",		//10
+	"peers",		//11
+	"cons"			//12
 );
 var ajax_idCount = ajax_fieldIds.length;
 var ajax_transferName = "";
@@ -71,11 +70,11 @@ function ajax_processText(content) {
 function ajax_updateContent(content) 
 {
 	// progress-bar
-	currentPercentage = content[7];
+	var currentPercentage = parseFloat(content[7]);
 	document.getElementById('barImage1').style.width = currentPercentage + '%';
-	document.getElementById('barImage2').style.width = (100 - currentPercentage) + '%';
+	document.getElementById('barImage2').style.width = (100.0 - currentPercentage) + '%';
 	// fields
-	for (i = 1; i < ajax_idCount; i++) {
+	for (i = 0; i < ajax_idCount; i++) {
 		if (document.getElementById(ajax_fieldIds[i]) === null)
 			continue;
 		if ((ajax_fieldIds[i] == 'eta') && (content[i] == '-'))

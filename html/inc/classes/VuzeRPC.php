@@ -25,9 +25,10 @@ if (isset($_REQUEST['getUrl'])) {
 	chdir('../../');
 	require_once('inc/main.core.php');
 
-	// security replace
+	// security replace (dl only local torrent files)
 	$transfer = str_replace('/','',$_REQUEST['getUrl']);
 
+	global $cfg;
 	$path = $cfg["transfer_file_path"];
 	//$data = file_get_contents($path.$transfer);
 	if (is_file($path.$transfer)) {
@@ -38,6 +39,7 @@ if (isset($_REQUEST['getUrl'])) {
 	}
 }
 
+//for static calls like VuzeRPC::getInstance()
 $instance=NULL;
 
 class VuzeRPC {
@@ -80,7 +82,12 @@ class VuzeRPC {
 		}
 
 		global $cfg;
-		$cfg = & $_cfg;
+		if (!empty($_cfg)) {
+		 	if (!empty($cfg))
+				$cfg = array_merge($cfg, $_cfg);
+			else
+				$cfg = $_cfg;
+		}
 
 		if (isset($cfg['vuze_rpc_host']))
 			$this->HOST = $cfg['vuze_rpc_host'];

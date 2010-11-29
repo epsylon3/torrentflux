@@ -45,7 +45,7 @@ class Stats
 
 	// ids of transfer-details
 	var $_transferIds = array(
-	0=>	"running",            //  0  1;3.6 MB/s;110.5 kB/s;1.08 GB;21.87 MB;1.08 GB;21.87 MB;78.5;1.98;01:24;;3;134
+	0=>	"running",            //  0
 		"speedDown",          //  1
 		"speedUp",            //  2
 		"downCurrent",        //  3
@@ -280,6 +280,7 @@ class Stats
 			echo $contentCompressed;
 		} else {
 			@header("Content-Type: ".$contentType);
+			@header("Content-Charset: ".$cfg["_CHARSET"]);
 			if ($sendAsAttachment != 0) {
 				@header("Content-Length: ".(string)strlen($this->_content));
 				@header('Content-Disposition: attachment; filename="'.$fileName.'"');
@@ -467,6 +468,10 @@ class Stats
 	 */
 	function _sendTXT() {
 		global $cfg;
+		
+		// field separator
+		$delim = $cfg['stats_txt_delim'];
+		
 		// build content
 		$this->_content = "";
 		// server stats
@@ -474,17 +479,17 @@ class Stats
 			case "all":
 			case "server":
 				if ($this->_header == 1) {
-					for ($j = 0; $j < $this->_serverIdCount; $j++) {
-						$this->_content .= $this->_serverLabels[$j];
-						if ($j < ($this->_serverIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+					for ($i = 0; $i < $this->_serverIdCount; $i++) {
+						$this->_content .= $this->_serverLabels[$i];
+						if ($i < ($this->_serverIdCount - 1))
+							$this->_content .= $delim;
 					}
 					$this->_content .= "\n";
 				}
 				for ($i = 0; $i < $this->_serverIdCount; $i++) {
 					$this->_content .= $this->_serverStats[$i];
 					if ($i < ($this->_serverIdCount - 1))
-						$this->_content .= $cfg['stats_txt_delim'];
+						$this->_content .= $delim;
 				}
 				$this->_content .= "\n";
 		}
@@ -493,17 +498,17 @@ class Stats
 			case "all":
 			case "xfer":
 				if ($this->_header == 1) {
-					for ($j = 0; $j < $this->_xferIdCount; $j++) {
-						$this->_content .= $this->_xferLabels[$j];
-						if ($j < ($this->_xferIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+					for ($i = 0; $i < $this->_xferIdCount; $i++) {
+						$this->_content .= $this->_xferLabels[$i];
+						if ($i < ($this->_xferIdCount - 1))
+							$this->_content .= $delim;
 					}
 					$this->_content .= "\n";
 				}
 				for ($i = 0; $i < $this->_xferIdCount; $i++) {
 					$this->_content .= $this->_xferStats[$i];
 					if ($i < ($this->_xferIdCount - 1))
-						$this->_content .= $cfg['stats_txt_delim'];
+						$this->_content .= $delim;
 				}
 				$this->_content .= "\n";
 		}
@@ -512,20 +517,20 @@ class Stats
 			case "all":
 			case "users":
 				if ($this->_header == 1) {
-					$this->_content .= "name" . $cfg['stats_txt_delim'];
-					for ($j = 0; $j < $this->_userIdCount; $j++) {
-						$this->_content .= $this->_userIds[$j];
-						if ($j < ($this->_userIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+					$this->_content .= "name" . $delim;
+					for ($i = 0; $i < $this->_userIdCount; $i++) {
+						$this->_content .= $this->_userIds[$i];
+						if ($i < ($this->_userIdCount - 1))
+							$this->_content .= $delim;
 					}
 					$this->_content .= "\n";
 				}
 				for ($i = 0; $i < $this->_userCount; $i++) {
-					$this->_content .= $this->_userList[$i][0].$cfg['stats_txt_delim'];
+					$this->_content .= $this->_userList[$i][0].$delim;
 					for ($j = 1; $j <= $this->_userIdCount; $j++) {
 						$this->_content .= $this->_userList[$i][$j];
 						if ($j < ($this->_userIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+							$this->_content .= $delim;
 					}
 					$this->_content .= "\n";
 				}
@@ -535,12 +540,12 @@ class Stats
 			case "all":
 			case "transfers":
 				if ($this->_header == 1) {
-					$this->_content .= "Name" . $cfg['stats_txt_delim'];
+					$this->_content .= "Name" . $delim;
 					$sizeHead = count($this->_transferHeads);
-					for ($j = 0; $j < $sizeHead; $j++) {
-						$this->_content .= $this->_transferHeads[$j];
-						if ($j < ($sizeHead - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+					for ($i = 0; $i < $sizeHead; $i++) {
+						$this->_content .= $this->_transferHeads[$i];
+						if ($i < ($sizeHead - 1))
+							$this->_content .= $delim;
 					}
 					$this->_content .= "\n";
 				}
@@ -549,7 +554,7 @@ class Stats
 					for ($i = 0; $i < $size; $i++) {
 						$this->_content .= $transferAry[$i];
 						if ($i < ($size - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+							$this->_content .= $delim;
 					}
 					$this->_content .= "\n";
 				}
@@ -558,19 +563,23 @@ class Stats
 		switch ($this->_type) {
 		case "transfer":
 			if ($this->_header == 1) {
-					for ($j = 0; $j < $this->_transferIdCount; $j++) {
-						$this->_content .= $this->_transferIds[$j];
-						if ($j < ($this->_transferIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
-					}
-					$this->_content .= "\n";
-				}
 				for ($i = 0; $i < $this->_transferIdCount; $i++) {
-					$this->_content .= $this->_transferDetails[$this->_transferIds[$i]];
+					$this->_content .= $this->_transferIds[$i];
 					if ($i < ($this->_transferIdCount - 1))
-						$this->_content .= $cfg['stats_txt_delim'];
+						$this->_content .= $delim;
 				}
 				$this->_content .= "\n";
+			}
+			for ($i = 0; $i < $this->_transferIdCount; $i++) {
+				$this->_content .= $this->_transferDetails[$this->_transferIds[$i]];
+				if ($i < ($this->_transferIdCount - 1))
+					$this->_content .= $delim;
+			}
+			$this->_content .= "\n";
+		}
+		if ($delim == ';') {
+			//fix html chars like &nbsp; which contains the delim
+			$this->_content = html_entity_decode($this->_content,ENT_QUOTES,$cfg["_CHARSET"]);
 		}
 		// send content
 		$this->_sendContent("text/plain", "stats.txt", $this->_compressed, $this->_attachment);
