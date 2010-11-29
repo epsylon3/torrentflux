@@ -143,14 +143,12 @@ foreach ($result as $aTorrent)
 	}
 
 	// TODO: transferowner is always admin... probably not what we want
-		//'graph_width' => floor($aTorrent['percentDone']*100),
-		//'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
-		//'percentage' => floor($aTorrent['percentDone']*100) . '%',
+	// TODO: hd_image function arguments should be different
 	$tArray = array(
 		'is_owner' => true,
 		'transferRunning' => ($transferRunning ? 1 : 0),
 		'url_entry' => $aTorrent[hashString],
-		'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload']),
+		'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats'][0]['seederCount'], $aTorrent['rateUpload']),
 		'hd_title' => $nothing,
 		'displayname' => $aTorrent['name'],
 		'transferowner' => 'administrator',
