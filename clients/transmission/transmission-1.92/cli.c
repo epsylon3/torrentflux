@@ -425,7 +425,7 @@ main( int     argc,
     uint8_t     * fileContents;
     size_t        fileLength;
 
-    printf( "Transmission %s - http://www.transmissionbt.com/ - modified for Torrentflux-b4rt\n",
+    printf( "Transmission %s - http://www.transmissionbt.com/ - modified for TorrentFlux-NG\n",
             LONG_VERSION_STRING );
 
     /* user needs to pass in at least one argument */
