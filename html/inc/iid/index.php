@@ -113,17 +113,23 @@ foreach ($result as $aTorrent)
 	$status = $aTorrent['status'];
 	switch ($aTorrent['status']) {
 	    case 16:
-		if ( $aTorrent['percentDone'] == 1 ) {
+		if ( $aTorrent['percentDone'] >= 1 ) {
 			$status = "Done";
 			$transferRunning = false;
+			$eta = '';
 		} else {
 			$status = "Stopped";
 			$transferRunning = false;
 			$eta = 'Torrent Stopped'; # this might be fixed in a cleaner way
+			if ( $aTorrent['downloadedEver'] == 0 ) {
+				$status = "New";
+				$transferRunning = false;
+				$eta = '';
+			}
 		}
 		break;
 	    case 4:
-		if ( $aTorrent[rateDownload] == 0 ) {
+		if ( $aTorrent['rateDownload'] == 0 ) {
 			$status = "Idle";
 		} else {
 			$status = "Downloading";
@@ -137,6 +143,9 @@ foreach ($result as $aTorrent)
 	}
 
 	// TODO: transferowner is always admin... probably not what we want
+		//'graph_width' => floor($aTorrent['percentDone']*100),
+		//'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
+		//'percentage' => floor($aTorrent['percentDone']*100) . '%',
 	$tArray = array(
 		'is_owner' => true,
 		'transferRunning' => ($transferRunning ? 1 : 0),
@@ -149,8 +158,8 @@ foreach ($result as $aTorrent)
 		'format_downtotal' => $nothing,
 		'format_uptotal' => $nothing,
 		'statusStr' => $status,
-		'graph_width' => floor($aTorrent['percentDone']*100),
-		'percentage' => floor($aTorrent['percentDone']*100) . '%',
+		'graph_width' => ( $status==='New' ? -1 : floor($aTorrent['percentDone']*100) ),
+		'percentage' => ( $status==='New' ? '' : floor($aTorrent['percentDone']*100) . '%' ),
 		'progress_color' => '#00ff00',
 		'bar_width' => 4,
 		'background' => '#000000',
