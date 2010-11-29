@@ -32,8 +32,8 @@ function dispatcher_startTransfer($transfer) {
 		require_once('inc/functions/functions.transmission.transfer.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			startTransmissionTransfer($transfer);
+			return;
 		}
-		return;
 	}
 
 	// valid
@@ -87,8 +87,8 @@ function dispatcher_stopTransfer($transfer) {
 		require_once('inc/functions/functions.transmission.transfer.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			stopTransmissionTransfer($transfer);
+			return;
 		}
-		return;
 	}
 
 	// valid
@@ -160,8 +160,8 @@ function dispatcher_deleteTransfer($transfer) {
 		require_once('inc/functions/functions.transmission.transfer.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			deleteTransmissionTransfer($transfer);
+			return;
 		}
-		return;
 	}
 
 	// valid
@@ -211,8 +211,8 @@ function dispatcher_deleteDataTransfer($transfer) {
 		require_once('inc/functions/functions.transmission.transfer.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			deleteTransmissionTransferWithData($transfer);
+			return;
 		}
-		return;
 	}
 
 	// valid

@@ -521,8 +521,18 @@ function getTransferListHeadArray($settings = null) {
 function getTransferListArray() {
 	global $cfg, $db, $transfers;
 
-	$isTransmission = ($cfg["btclient_transmission_enable"] != 0);
-	if ($isTransmission) {
+	$kill_id = "";
+	$lastUser = "";
+	$arUserTransfers = array();
+	$arListTransfers = array();
+	// settings
+	$settings = convertIntegerToArray($cfg["index_page_settings"]);
+	// sortOrder
+	$sortOrder = tfb_getRequestVar("so");
+	if ($sortOrder == "")
+		$sortOrder = $cfg["index_page_sortorder"];
+
+	if ($cfg["btclient_transmission_enable"]) {
 		require_once('inc/functions/functions.transmission.transfer.php');
 		
 		// New method for transmission-daemon transfers
@@ -536,26 +546,11 @@ function getTransferListArray() {
 				$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent['rateUpload']/1000);
 				$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent['rateDownload']/1000);
 			}
+			array_push($arUserTransfers, $aTorrent);
 		}
 	}
-	
-	$kill_id = "";
-	$lastUser = "";
-	$arUserTransfers = array();
-	$arListTransfers = array();
-	// settings
-	$settings = convertIntegerToArray($cfg["index_page_settings"]);
-	// sortOrder
-	$sortOrder = tfb_getRequestVar("so");
-	if ($sortOrder == "")
-		$sortOrder = $cfg["index_page_sortorder"];
 
-	// t-list
-	if ($isTransmission)
-		$arList = array();
-	else
-		$arList = getTransferArray($sortOrder);
-
+	$arList = getTransferArray($sortOrder);
 	foreach ($arList as $transfer) {
 		// init some vars
 		$displayname = $transfer;

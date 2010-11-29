@@ -21,24 +21,54 @@
 *******************************************************************************/
 
 /**
- * checks if transfer is running by checking for existence of pid-file.
+ * get one Transmission transfer data array
  *
- * @param $transfer name of the transfer
+ * @param $transfer hash of the transfer
+ * @param $fields array of fields needed
+ * @return array or false
+ */
+function getTransmissionTransfer($transfer, $fields=array() ) {
+	//$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
+	//			"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" )
+	$required = array('hashString');
+	$afields = array_merge($required, $fields);
+	
+	require_once('inc/classes/Transmission.class.php');
+	$trans = new Transmission();
+	$response = $trans->get(array(), $afields);
+	$torrentlist = $response['arguments']['torrents'];
+	
+	if (!empty($torrentlist))
+	foreach ($torrentlist as $aTorrent) {
+		if ( $aTorrent['hashString'] == $transfer )
+			return $aTorrent;
+	}
+	return false;
+}
+
+/**
+ * checks if transfer is running
+ *
+ * @param $transfer hash of the transfer
  * @return boolean
  */
 function isTransmissionTransferRunning($transfer) {
-	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString","status"));
-	$torrentlist = $response[arguments][torrents];
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$torrentId = $aTorrent[id];
-			if ( $aTorrent['status'] == 16 ) return false;
-			else return true;
-			break;
-		}
+	$aTorrent = getTransmissionTransfer($transfer, array('status'));
+	if (is_array($aTorrent)) {
+		return ( $aTorrent['status'] != 16 );
 	}
+	return false;
+}
+
+/**
+ * checks if transfer is Transmission
+ *
+ * @param $transfer hash of the transfer
+ * @return boolean
+ */
+function isTransmissionTransfer($transfer) {
+	$aTorrent = getTransmissionTransfer($transfer);
+	return is_array($aTorrent);
 }
 
 /**
@@ -162,7 +192,7 @@ function getTransmissionTransferIdByHash($hash) {
 	require_once('inc/classes/Transmission.class.php');
 	$transmissionTransferId = false;
 	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString"));
+	$response = $trans->get(array(), array('id','hashString'));
 	if ( $response['result'] != "success" ) @error("Getting ID for Hash failed: ", "", "", $response['result']);
 	$torrentlist = $response['arguments']['torrents'];
 	foreach ($torrentlist as $aTorrent) {
@@ -235,7 +265,7 @@ function getUserTransmissionTransfers($uid = 0) {
 	$retVal = array();
 	if ( $uid!=0 ) {
 		$userTransferHashes = getUserTransmissionTransferArrayFromDB($uid);
-		if ( sizeof($userTransferHashes) == 0 ) return $retVal;
+		if ( empty($userTransferHashes) ) return $retVal;
 	}
 
 	require_once('inc/classes/Transmission.class.php');
@@ -252,6 +282,7 @@ function getUserTransmissionTransfers($uid = 0) {
 	return $retVal;
 }
 
+//used in iid/index
 function getTransmissionStatusImage($running, $seederCount, $uploadRate){
 	$statusImage = "black.gif";
 	if ($running) {

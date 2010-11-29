@@ -148,7 +148,7 @@ if ($cfg["btclient_transmission_enable"]) {
 			'is_owner' => true,
 			'transferRunning' => ($transferRunning ? 1 : 0),
 			'url_entry' => $aTorrent['hashString'],
-			'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload'])
+			'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload']),
 			'hd_title' => $nothing,
 			'displayname' => $aTorrent['name'],
 			'transferowner' => 'administrator',
