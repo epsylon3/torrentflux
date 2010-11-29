@@ -117,15 +117,20 @@ if ($cfg["btclient_transmission_enable"]) {
 		switch ($aTorrent['status']) {
 		case 16:
 			$transferRunning = false;
-			if ( $aTorrent['percentDone'] == 1 ) {
+			if ( $aTorrent['percentDone'] >= 1 ) {
 				$status = "Done";
+				$eta = '';
 			} else {
 				$status = "Stopped";
 				$eta = 'Torrent Stopped'; # this might be fixed in a cleaner way
+				if ( $aTorrent['downloadedEver'] == 0 ) {
+					$status = "New";
+					$eta = '';
+				}
 			}
 			break;
 		case 4:
-			if ( $aTorrent[rateDownload] == 0 ) {
+			if ( $aTorrent['rateDownload'] == 0 ) {
 				$status = "Idle";
 			} else {
 				$status = "Downloading";
@@ -137,12 +142,13 @@ if ($cfg["btclient_transmission_enable"]) {
 			$transferRunning = true;
 			break;
 		}
-	
+		
+		// TODO: transferowner is always admin... probably not what we want
 		$tArray = array(
 			'is_owner' => true,
 			'transferRunning' => ($transferRunning ? 1 : 0),
 			'url_entry' => $aTorrent[hashString],
-			'hd_image' => 'black.gif',
+			'hd_image' => ($transferRunning ? 'green.gif' : 'black.gif'),
 			'hd_title' => $nothing,
 			'displayname' => $aTorrent[name],
 			'transferowner' => 'administrator',
@@ -150,12 +156,12 @@ if ($cfg["btclient_transmission_enable"]) {
 			'format_downtotal' => $nothing,
 			'format_uptotal' => $nothing,
 			'statusStr' => $status,
-			'graph_width' => floor($aTorrent[percentDone]*100),
-			'percentage' => floor($aTorrent[percentDone]*100) . '%',
+			'graph_width' => ( $status==='New' ? -1 : floor($aTorrent['percentDone']*100) ),
+			'percentage' => ( $status==='New' ? '' : floor($aTorrent['percentDone']*100) . '%' ),
 			'progress_color' => '#22BB22',
 			'bar_width' => 4,
 			'background' => '#000000',
-			'100_graph_width' => 100 - floor($aTorrent[percentDone]*100),
+			'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
 			'down_speed' => formatBytesTokBMBGBTB( $aTorrent[rateDownload] ) . '/s',
 			'up_speed' => formatBytesTokBMBGBTB( $aTorrent[rateUpload] ) . '/s',
 			'seeds' => $nothing,
@@ -169,8 +175,8 @@ if ($cfg["btclient_transmission_enable"]) {
 			'is_no_file' => 1,
 			'show_run' => 1,
 			'entry' => $aTorrent[name]
-	
 		);
+		
 		array_push($arUserTorrent, $tArray);
 
 		// Adds the transfer rate for this torrent to the total transfer rate
