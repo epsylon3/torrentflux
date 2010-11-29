@@ -13,8 +13,10 @@ Recent Versions
 
 3. Configure and Compile Transmission
    apt-get install intltool libssl-dev libcurl4-openssl-dev
-   ./configure --with-zlib --enable-shared --enable-cli --enable-daemon
+   ./configure --enable-cli --enable-daemon
    make
+   make install
+   strip /usr/local/bin/transmission*
 
 Transmission 0.96 and later
 ---------------------------
