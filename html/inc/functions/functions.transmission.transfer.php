@@ -139,7 +139,7 @@ function deleteTransmissionTransfer($uid, $hash, $deleteData = false) {
 		$response = $trans->remove($transmissionId,$deleteData);
 		if ( $response['result'] != "success" ) @error("Delete failed", "", "", $response['result']);
 	}
-	
+
 	deleteTransmissionTransferFromDB($uid, $hash);
 }
 
@@ -240,9 +240,9 @@ function getUserTransmissionTransfers($uid = 0) {
 
 	require_once('inc/classes/Transmission.class.php');
 	$rpc = new Transmission ();
-	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
+	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
 	$result = $rpc->get ( array(), $fields );
-	
+
 	if ($result['result']!=="success") dbError("Transmission could not get transfers");
 	foreach ( $result['arguments']['torrents'] as $transfer ) {
 		if ( $uid==0 || in_array ( $transfer['hashString'], $userTransferHashes ) ) {
@@ -250,6 +250,25 @@ function getUserTransmissionTransfers($uid = 0) {
 		}
 	}
 	return $retVal;
+}
+
+function getTransmissionStatusImage($running, $seederCount, $uploadRate){
+	$statusImage = "black.gif";
+	if ($running) {
+		// running
+				if ($seederCount < 2)
+						$statusImage = "yellow.gif";
+				if ($seederCount == 0)
+						$statusImage = "red.gif";
+				if ($seederCount >= 2)
+						$statusImage = "green.gif";
+	}
+	if ( floor($aTorrent[percentDone]*100) >= 100 ) {
+		$statusImage = ( $uploadRate != 0 && $running )
+						? "green.gif" /* seeding */
+						: "black.gif"; /* finished */
+	}
+	return $statusImage;
 }
 
 ?>

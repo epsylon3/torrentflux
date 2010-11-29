@@ -147,12 +147,12 @@ if ($cfg["btclient_transmission_enable"]) {
 		$tArray = array(
 			'is_owner' => true,
 			'transferRunning' => ($transferRunning ? 1 : 0),
-			'url_entry' => $aTorrent[hashString],
-			'hd_image' => ($transferRunning ? 'green.gif' : 'black.gif'),
+			'url_entry' => $aTorrent['hashString'],
+			'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload'])
 			'hd_title' => $nothing,
-			'displayname' => $aTorrent[name],
+			'displayname' => $aTorrent['name'],
 			'transferowner' => 'administrator',
-			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent[totalSize] ),
+			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
 			'format_downtotal' => $nothing,
 			'format_uptotal' => $nothing,
 			'statusStr' => $status,
@@ -162,8 +162,8 @@ if ($cfg["btclient_transmission_enable"]) {
 			'bar_width' => 4,
 			'background' => '#000000',
 			'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
-			'down_speed' => formatBytesTokBMBGBTB( $aTorrent[rateDownload] ) . '/s',
-			'up_speed' => formatBytesTokBMBGBTB( $aTorrent[rateUpload] ) . '/s',
+			'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
+			'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
 			'seeds' => $nothing,
 			'peers' => $nothing,
 			'estTime' => $eta,
@@ -171,10 +171,10 @@ if ($cfg["btclient_transmission_enable"]) {
 			'upload_support_enabled' => 1,
 			'client' => $nothing,
 			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
-			'datapath' => $aTorrent[name],
+			'datapath' => $aTorrent['name'],
 			'is_no_file' => 1,
 			'show_run' => 1,
-			'entry' => $aTorrent[name]
+			'entry' => $aTorrent['name']
 		);
 		
 		array_push($arUserTorrent, $tArray);
