@@ -90,51 +90,57 @@ $arList = getTransferArray($sortOrder);
 $progress_color = "#22BB22";
 $bar_width = "4";
 
+// ---------------------------------------------------------------------
 if ($cfg["btclient_transmission_enable"]) {
 
-	require_once('inc/classes/Transmission.class.php') ;
-	$rpc = new Transmission();
-	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files" );
-	$result = $rpc->get ( array(), $fields );
+	require_once('inc/functions/functions.transmission.transfer.php');
+	$result = getUserTransmissionTransfers($cfg['uid']);
 
 	// eta
 	//  -1 : Done
 	//  -2 : Unknown
 	
-	foreach ($result[arguments][torrents] as $aTorrent)
+	foreach($result as $aTorrent)
 	{
 		// fill in eta
-		if ( $aTorrent[eta] == '-1' ) {
+		if ( $aTorrent['eta'] == '-1' && $aTorrent['percentDone'] != 1 ) {
 			$eta = 'n/a';
-		} elseif ( $aTorrent[eta] == '-2' ) {
+		} elseif ( $aTorrent['percentDone'] == 1 ) {
+			$eta = 'Download Succeeded!';
+		} elseif ( $aTorrent['eta'] == '-2' ) {
 			$eta = 'Unknown';
 		} else {
-			$eta = convertTime( $aTorrent[eta] );
+			$eta = convertTime( $aTorrent['eta'] );
 		}
 	
-		$status = $aTorrent[status];
-		switch ($aTorrent[status]) {
-		    case 16:
-			$status = "Stopped";
-			$transferRunning = 0;
+		$status = $aTorrent['status'];
+		switch ($aTorrent['status']) {
+		case 16:
+			$transferRunning = false;
+			if ( $aTorrent['percentDone'] == 1 ) {
+				$status = "Done";
+			} else {
+				$status = "Stopped";
+				$eta = 'Torrent Stopped'; # this might be fixed in a cleaner way
+			}
 			break;
-		    case 4:
+		case 4:
 			if ( $aTorrent[rateDownload] == 0 ) {
 				$status = "Idle";
 			} else {
 				$status = "Downloading";
 			}
-			$transferRunning = 1;
+			$transferRunning = true;
 			break;
-		    case 8:
+		case 8:
 			$status = "Seeding";
-			$transferRunning = 1;
+			$transferRunning = true;
 			break;
 		}
 	
 		$tArray = array(
 			'is_owner' => true,
-			'transferRunning' => $transferRunning,
+			'transferRunning' => ($transferRunning ? 1 : 0),
 			'url_entry' => $aTorrent[hashString],
 			'hd_image' => 'black.gif',
 			'hd_title' => $nothing,
@@ -158,7 +164,7 @@ if ($cfg["btclient_transmission_enable"]) {
 			'clientType' => 'torrent',
 			'upload_support_enabled' => 1,
 			'client' => $nothing,
-			'url_path' => 'fakepath',
+			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
 			'datapath' => $aTorrent[name],
 			'is_no_file' => 1,
 			'show_run' => 1,
@@ -166,47 +172,22 @@ if ($cfg["btclient_transmission_enable"]) {
 	
 		);
 		array_push($arUserTorrent, $tArray);
-	}
 
-	// -------------------------------------------------------------------------
-	// create temp-array
-/*	$tArray = array(
-		'is_owner' => ($cfg['isAdmin']) ? true : $owner,
-		'transferRunning' => $transferRunning,
-		'url_entry' => urlencode($transfer),
-		'hd_image' => $hd->image,
-		'hd_title' => $hd->title,
-		'displayname' => $displayname,
-		'transferowner' => $transferowner,
-		'format_af_size' => $format_af_size,
-		'format_downtotal' => $format_downtotal,
-		'format_uptotal' => $format_uptotal,
-		'statusStr' => $statusStr,
-		'graph_width' => $graph_width,
-		'percentage' => $percentage,
-		'progress_color' => $progress_color,
-		'bar_width' => $bar_width,
-		'background' => $background,
-		'100_graph_width' => (100 - $graph_width),
-		'down_speed' => $down_speed,
-		'up_speed' => $up_speed,
-		'seeds' => $seeds,
-		'peers' => $peers,
-		'estTime' => $estTime,
-		'clientType' => $settingsAry['type'],
-		'upload_support_enabled' => $cfg["supportMap"][$settingsAry['client']]['max_upload_rate'],
-		'client' => $client,
-		'url_path' => urlencode(str_replace($cfg["path"],'', $settingsAry['savepath']).$settingsAry['datapath']),
-		'datapath' => $settingsAry['datapath'],
-		'is_no_file' => $is_no_file,
-		'show_run' => $show_run,
-		'entry' => $transfer
-	);
-*/
-}
+		// Adds the transfer rate for this torrent to the total transfer rate
+		if ($transferRunning) {
+			if (!isset($cfg["total_upload"]))
+				$cfg["total_upload"] = 0;
+			if (!isset($cfg["total_download"]))
+				$cfg["total_download"] = 0;
+			$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent[rateUpload]/1000);
+			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent[rateDownload]/1000);
+		}
+	}
+} 
+// end of Transmission bloc
+// ---------------------------------------------------------------------
 
 foreach ($arList as $transfer) {
-	// ---------------------------------------------------------------------
 	// displayname
 	$displayname = $transfer;
 

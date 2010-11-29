@@ -29,7 +29,7 @@ function transfer_init() {
 	$transfer = tfb_getRequestVar('transfer');
 	if (empty($transfer))
 		@error("missing params", "", "", array('transfer'));
-	
+
 	$isTransmissionTorrent = false;
 	if ($cfg["btclient_transmission_enable"]) {
 		require_once('inc/classes/Transmission.class.php');
@@ -43,31 +43,33 @@ function transfer_init() {
 			}
 		}
 	}
-	
+
 	if ( $isTransmissionTorrent ) {
 		$transferLabel = (strlen($theTorrent[name]) >= 39) ? substr($theTorrent[name], 0, 35)."..." : $theTorrent[name];
 		$tmpl->setvar('transfer', $theTorrent[hashString]);
 		$tmpl->setvar('transferLabel', $transferLabel);
 		$tmpl->setvar('transfer_exists', 0);
-	} else {
-		// validate transfer
-		if (tfb_isValidTransfer($transfer) !== true) {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-			@error("Invalid Transfer", "", "", array($transfer));
-		}
-		// permission
-		if ((!$cfg['isAdmin']) && (!IsOwner($cfg["user"], getOwner($transfer)))) {
-			AuditAction($cfg["constants"]["error"], "ACCESS DENIED: ".$transfer);
-			@error("Access Denied", "", "", array($transfer));
-		}
-		// get label
-	        $transferLabel = preg_replace("#\.torrent$#","",$transfer);
-	        $transferLabel = (strlen($transferLabel) >= 39) ? substr($transferLabel, 0, 35)."..." : $transferLabel;
-		// set transfer vars
-		$tmpl->setvar('transfer', $transfer);
-		$tmpl->setvar('transferLabel', $transferLabel);
-		$tmpl->setvar('transfer_exists', (transferExists($transfer)) ? 1 : 0);
+		return;
 	}
+
+	// validate transfer
+	if (tfb_isValidTransfer($transfer) !== true) {
+		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+		@error("Invalid Transfer", "", "", array($transfer));
+	}
+	// permission
+	if ((!$cfg['isAdmin']) && (!IsOwner($cfg["user"], getOwner($transfer)))) {
+		AuditAction($cfg["constants"]["error"], "ACCESS DENIED: ".$transfer);
+		@error("Access Denied", "", "", array($transfer));
+	}
+	// get label
+	$transferLabel = preg_replace("#\.torrent$#","",$transfer);
+	$transferLabel = (strlen($transferLabel) >= 39) ? substr($transferLabel, 0, 35)."..." : $transferLabel;
+	// set transfer vars
+	$tmpl->setvar('transfer', $transfer);
+	$tmpl->setvar('transferLabel', $transferLabel);
+	$tmpl->setvar('transfer_exists', (transferExists($transfer)) ? 1 : 0);
+
 }
 
 /**
