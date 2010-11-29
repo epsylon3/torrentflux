@@ -63,11 +63,22 @@ CREATE TABLE IF NOT EXISTS tf_test (
 ) TYPE=MyISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0'
+  PRIMARY KEY  (tid,uid)
+) TYPE=MyISAM");
+
 // ALTER TABLE (need to check for sqlite and postgre)
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX hash_idx ( `hash`(8))");
+
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD `uid` INT(10) NOT NULL default '0' AFTER `tid`");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (`tid`,`uid`)");
+
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default '' AFTER `password`");
-  
+
 
 // sql-queries : Data
 $cqt = 'data';
@@ -90,8 +101,19 @@ CREATE TABLE tf_test (
   PRIMARY KEY (tf_key) )");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
-// ALTER TABLE 
+// CREATE
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0'
+  PRIMARY KEY (tid,uid)
+)");
+
+// ALTER
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER(10) NOT NULL default '0'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");
+
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default ''");
 
 // sql-queries : Data
@@ -117,6 +139,9 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // ALTER TABLE 
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER NOT NULL DEFAULT '0'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");
+
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default ''");
 
 // sql-queries : Data

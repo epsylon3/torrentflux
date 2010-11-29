@@ -343,7 +343,7 @@ CREATE TABLE tf_transfer_totals (
   uid INT(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
-  PRIMARY KEY  (tid)
+  PRIMARY KEY (`tid`,`uid`)
 ) TYPE=MyISAM");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "
@@ -402,7 +402,13 @@ CREATE TABLE tf_settings_stats (
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
 ) TYPE=MyISAM");
-
+// tf_transmission_user
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0',
+  PRIMARY KEY  (tid,uid)
+) TYPE=MyISAM");
 // sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
@@ -520,7 +526,7 @@ CREATE TABLE tf_transfer_totals (
   uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
-  PRIMARY KEY  (tid)
+  PRIMARY KEY (tid,uid)
 )");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "
@@ -578,7 +584,15 @@ CREATE TABLE tf_settings_stats (
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
 )");
-	// sql-queries : Data
+// tf_transmission_user
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default '0',
+  PRIMARY KEY  (tid,uid)
+)");
+
+// sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
@@ -712,7 +726,7 @@ CREATE TABLE tf_transfer_totals (
   uid INTEGER NOT NULL DEFAULT '0',
   uptotal BIGINT NOT NULL DEFAULT '0',
   downtotal BIGINT NOT NULL DEFAULT '0',
-  PRIMARY KEY (tid)
+  PRIMARY KEY (tid,uid)
 )");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "CREATE SEQUENCE tf_trprofiles_id_seq");
@@ -776,6 +790,13 @@ CREATE TABLE tf_settings_stats (
   tf_key VARCHAR(255) NOT NULL DEFAULT '',
   tf_value TEXT DEFAULT '' NOT NULL,
   PRIMARY KEY (tf_key)
+)");
+// tf_transmission_user
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER NOT NULL default '0',
+  PRIMARY KEY  (tid,uid)
 )");
 
 // sql-queries : Data
