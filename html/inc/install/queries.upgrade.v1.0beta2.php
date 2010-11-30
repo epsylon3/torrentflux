@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS tf_test (
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 array_push($queries[$cqt][$cdb], "
-CREATE TABLE tf_transmission_user (
+CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
   uid INT(10) NOT NULL default '0',
   PRIMARY KEY  (tid,uid)
@@ -111,18 +111,18 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // CREATE
 array_push($queries[$cqt][$cdb], "
-CREATE TABLE tf_transmission_user (
+CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
-  uid INT(10) NOT NULL default '0',
+  uid INTEGER(10) NOT NULL default 0,
   PRIMARY KEY (tid,uid)
 )");
 
 // ALTER
-array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER(10) NOT NULL default '0'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER(10) NOT NULL DEFAULT (0)");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");
 
-array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default ''");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL DEFAULT ''");
 
 // sql-queries : Data
 $cqt = 'data';
@@ -145,8 +145,15 @@ CREATE TABLE tf_test (
   PRIMARY KEY (tf_key) )");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
+// CREATE
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE IF NOT EXISTS tf_transmission_user (
+  tid VARCHAR(40) NOT NULL DEFAULT '',
+  uid INTEGER(10) NOT NULL DEFAULT 0,
+  PRIMARY KEY (tid,uid) )");
+
 // ALTER TABLE 
-array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER NOT NULL DEFAULT '0'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER NOT NULL DEFAULT 0");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");
 

@@ -534,6 +534,7 @@ if (isset($_REQUEST["1"])) {                                                    
 	$docroot = $_REQUEST["docroot"];
 	if (is_file(_FILE_DBCONF)) {
 		require_once(_FILE_DBCONF);
+		global $cfg;
 		$dbCon = getAdoConnection($cfg["db_type"], $cfg["db_host"], $cfg["db_user"], $cfg["db_pass"], $cfg["db_name"]);
 		if (!$dbCon) {
 			send('<font color="red"><strong>Error</strong></font><br>');
@@ -561,7 +562,7 @@ if (isset($_REQUEST["1"])) {                                                    
 		}
 	} else {
 		send('<font color="red"><strong>Error</strong></font><br>');
-		send('database-config-file <em>'._DIR._FILE_DBCONF.'</em> missing. setup cannot continue.');
+		send('database-config-file <em>'._FILE_DBCONF.'</em> missing. setup cannot continue.');
 	}
 } elseif (isset($_REQUEST["3"])) {                                             // 3 - rename files and dirs
 	sendHead(" - Rename Files and Dirs");
@@ -569,6 +570,7 @@ if (isset($_REQUEST["1"])) {                                                    
 	send("<h2>Rename Files and Dirs</h2>");
 	if (is_file(_FILE_DBCONF)) {
 		require_once(_FILE_DBCONF);
+		global $cfg;
 		$dbCon = getAdoConnection($cfg["db_type"], $cfg["db_host"], $cfg["db_user"], $cfg["db_pass"], $cfg["db_name"]);
 		if (!$dbCon) {
 			send('<font color="red"><strong>Error</strong></font><br>');
