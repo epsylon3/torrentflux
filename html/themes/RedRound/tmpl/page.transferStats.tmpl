@@ -1,9 +1,12 @@
 <tmpl_include name="inc.transferLayoutHeader.tmpl">
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.progressbar.min.js"></script>
+
 <h1>Stats</h1>
 <div style="display:none;"><span id="barImage2"></span></div>
 	<table id="transferStats">
 	<tr>
-		<td>Done: <span class="progressBar" id="barImage1"><tmpl_var name="graph_width1">%</span></td>
+		<td>Done: <span class="progressBar" id="barImage1"><tmpl_var name="percent_done"></span></td>
 	</tr>
 	</table>
 <table id="transferStats">
@@ -56,4 +59,20 @@
 	<td><label id="sharekill"><tmpl_var name="sharekill"></label></td>
 </tr>
 </table>
+<script type="text/javascript">
+	var progress_key = '<?= $uuid ?>';
+
+	jQuery(document).ready(function() {
+		//$("#pb4").progressBar(65, { showText: false, barImage: 'images/progressbg_red.gif'} );
+		//$(".pb5").progressBar({ max: 2000, textFormat: 'fraction', callback: function(data) { if (data.running_value == data.value) { alert("Callback example: Target reached!"); } }} );
+		var box = 'themes/<tmpl_var name="theme">/images/index/TransferList/blank.png';
+		var bar = 'themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_seed.png';
+		if (parseFloat('<tmpl_var name="percent_done">') < 100.0)
+			bar = 'themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png';
+		else if (parseFloat('<tmpl_var name="sharing">') >= parseFloat('<tmpl_var name="sharekill">'))
+			bar = 'themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_finished.png';
+		
+		jQuery("#barImage1").progressBar({ width: 378, max: parseFloat('<tmpl_var name="sharekill">'), boxImage: box, barImage: bar });
+	});
+</script>
 <tmpl_include name="inc.transferLayoutFooter.tmpl">
