@@ -5,6 +5,8 @@ $Id: INSTALL git 2010-12-01 00:30:00Z epsylon3 $
 Recent Versions
 ---------------
 
+This patch is made to add some missing features to Transmission (client version)
+
 1. Get Transmission Source Archive from
    http://download.m0k.org/transmission/files/
    example : wget http://download.m0k.org/transmission/files/transmission-1.92.tar.bz2
@@ -15,8 +17,8 @@ Recent Versions
    apt-get install intltool libevent-dev libssl-dev libcurl4-openssl-dev
    ./configure --enable-cli --enable-daemon
    make
-   strip /cli/transmission*
-   cp /cli/transmissioncli /usr/local/bin/
+   strip /cli/transmission-cli
+   cp /cli/transmission-cli /usr/local/bin/
 
 Transmission 0.96 and later
 ---------------------------
