@@ -72,8 +72,8 @@ function getFilePrioForm($transfer, $withForm = false) {
 	$retVal .= '<script type="text/javascript" src="js/dtree.js"></script>';
 
 	$isTransmissionTorrent = false;
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		$isTransmissionTorrent = isTransmissionTransfer($transfer);
 	}
 

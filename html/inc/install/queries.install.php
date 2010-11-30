@@ -76,7 +76,6 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_xfer',
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_public_xfer','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient','tornado')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_tornado_options','')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmissioncli')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_options','')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('metainfoclient','btshowmetainfo.py')");
@@ -193,9 +192,19 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_uudeview'
 
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','19091')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_user','transmission')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_password','')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_torrent','1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('nzbperl_ssl','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('nzbperl_port','119')");
 
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_read','1')");

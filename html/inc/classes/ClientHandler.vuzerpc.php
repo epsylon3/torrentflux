@@ -38,9 +38,12 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		$this->type = "torrent";
 		$this->client = "azureus";
-		$this->binSystem = "php";
-		$this->binSocket = "php";
-		$this->binClient = $cfg["docroot"]."bin/clients/vuzerpc/vuzerpc_cmd.php";
+		$this->binSystem = "java";
+		$this->binSocket = "java";
+		$this->binClient = "java";
+
+		$this->useRPC = true;
+		//$this->binClient = $cfg["docroot"]."bin/clients/vuzerpc/vuzerpc_cmd.php";
 	}
 
 	// =========================================================================

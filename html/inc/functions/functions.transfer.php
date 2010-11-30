@@ -31,17 +31,10 @@ function transfer_init() {
 		@error("missing params", "", "", array('transfer'));
 
 	$isTransmissionTorrent = false;
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/classes/Transmission.class.php');
-		$trans = new Transmission();
-		$response = $trans->get( array(), array('hashString', 'id', 'name') );
-		foreach ( $response[arguments][torrents] as $aTorrent ) {
-			if ( $aTorrent[hashString] == $transfer ) {
-				$isTransmissionTorrent = true;
-				$theTorrent = $aTorrent;
-				break;
-			}
-		}
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
+		$isTransmissionTorrent = is_array($theTorrent);
 	}
 
 	if ( $isTransmissionTorrent ) {
@@ -189,17 +182,10 @@ function transfer_setFileVars() {
 			$transferSizeSum = 0;
 			
 			$isTransmissionTorrent = false;
-			if ($cfg["btclient_transmission_enable"]) {
-				require_once('inc/classes/Transmission.class.php');
-				$trans = new Transmission();
-				$response = $trans->get( array(), array('hashString', 'id', 'name') );
-				foreach ( $response[arguments][torrents] as $aTorrent ) {
-					if ( $aTorrent[hashString] == $transfer ) {
-						$isTransmissionTorrent = true;
-						$theTorrent = $aTorrent;
-						break;
-					}
-				}
+			if ($cfg["transmission_rpc_enable"]) {
+				require_once('inc/functions/functions.rpc.transmission.php');
+				$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
+				$isTransmissionTorrent = is_array($theTorrent);
 			}
 			if ( $isTransmissionTorrent ) {
 				$response = $trans->get( $theTorrent[id], array('files') );

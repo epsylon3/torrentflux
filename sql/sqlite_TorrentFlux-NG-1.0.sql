@@ -221,7 +221,6 @@ INSERT INTO tf_settings VALUES ('bin_cksfv','/usr/bin/cksfv');
 INSERT INTO tf_settings VALUES ('bin_uudeview','/usr/local/bin/uudeview');
 INSERT INTO tf_settings VALUES ('btclient','tornado');
 INSERT INTO tf_settings VALUES ('btclient_tornado_options','');
-INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0');
 INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmissioncli');
 INSERT INTO tf_settings VALUES ('btclient_transmission_options','');
 INSERT INTO tf_settings VALUES ('metainfoclient','btshowmetainfo.py');
@@ -327,6 +326,19 @@ INSERT INTO tf_settings VALUES ('fluxd_Maintenance_trestart','0');
 INSERT INTO tf_settings VALUES ('fluxd_Trigger_interval','600');
 
 -- GIT UPDATES
+
+INSERT INTO tf_settings VALUES ('transmission_rpc_enable','0');
+INSERT INTO tf_settings VALUES ('transmission_rpc_host','127.0.0.1');
+INSERT INTO tf_settings VALUES ('transmission_rpc_port','9091');
+INSERT INTO tf_settings VALUES ('transmission_rpc_user','transmission');
+INSERT INTO tf_settings VALUES ('transmission_rpc_password','');
+
+INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0');
+INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1');
+INSERT INTO tf_settings VALUES ('vuze_rpc_port','19091');
+INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze');
+INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword');
+
 INSERT INTO tf_settings VALUES ('enable_torrent','1');
 INSERT INTO tf_settings VALUES ('nzbperl_ssl','0');
 INSERT INTO tf_settings VALUES ('nzbperl_port','119');

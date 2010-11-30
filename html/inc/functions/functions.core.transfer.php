@@ -39,8 +39,8 @@ function getTransferPid($transfer) {
  */
 function isTransferRunning($transfer) {
 	global $cfg;
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		return isTransmissionTransferRunning($transfer);
 	}
 	return file_exists($cfg["transfer_file_path"].$transfer.'.pid');
@@ -95,8 +95,8 @@ function getTransferClient($transfer) {
  */
 function getRunningTransferCount() {
 	global $cfg;
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		return getRunningTransmissionTransferCount();
 	}
 	
@@ -532,8 +532,8 @@ function getTransferListArray() {
 	if ($sortOrder == "")
 		$sortOrder = $cfg["index_page_sortorder"];
 
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		
 		// New method for transmission-daemon transfers
 		$result = getUserTransmissionTransfers($cfg['uid']);

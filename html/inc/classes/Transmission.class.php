@@ -12,13 +12,13 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
- * Transmission bittorrent client communication class
+ * Transmission RPC class for transmission-deamon (not patched one)
  *
  * Usage example:
  * <?php
@@ -35,25 +35,49 @@ class Transmission
 	 * @var string
 	 */
 	public $url = 'http://127.0.0.1:9091/transmission/rpc';
-	
+
 	/**
-	 * If your Transmission RPC requires authentication, supply username here 
+	 * If your Transmission RPC requires authentication, supply username here
 	 * @var string
 	 */
 	public $username = 'transmission';
 
 	/**
-	 * If your Transmission RPC requires authentication, supply password here 
+	 * If your Transmission RPC requires authentication, supply password here
 	 * @var string
 	 */
 	public $password = '';
 
 	/**
 	 * Transmission uses a session id to prevent CSRF attacks
-	 * @var string 
+	 * @var string
 	 */
 	protected $session_id = '';
 	
+	/*
+	 * Constructor
+	*/
+	public function __construct($_cfg = array()) {
+
+		global $cfg;
+		if (!empty($_cfg)) {
+		 	if (!empty($cfg))
+				$cfg = array_merge($cfg, $_cfg);
+			else
+				$cfg = $_cfg;
+		}
+
+		if (isset($cfg['transmission_rpc_host']))
+			$this->url = str_replace('127.0.0.1',$cfg['transmission_rpc_host'],$this->url);
+		if (isset($cfg['transmission_rpc_port']))
+			$this->url = str_replace('9091',$cfg['transmission_rpc_port'],$this->url);
+		if (isset($cfg['transmission_rpc_user']))
+			$this->username = $cfg['transmission_rpc_user'];
+		if (isset($cfg['transmission_rpc_password']))
+			$this->password = $cfg['transmission_rpc_password'];
+
+	}
+
 	/**
 	 * Start one or more torrents
 	 *
@@ -77,7 +101,7 @@ class Transmission
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-stop", $request );
 	}
-	
+
 	/**
 	 * Reannounce one or more torrents
 	 *
@@ -89,7 +113,7 @@ class Transmission
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-reannounce", $request );
 	}
-	
+
 	/**
 	 * Verify one or more torrents
 	 *
@@ -101,9 +125,9 @@ class Transmission
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-verify", $request );
 	}
-	
+
 	/**
-	 * Get information on torrents in transmission, if the ids parameter is 
+	 * Get information on torrents in transmission, if the ids parameter is
 	 * empty all torrents will be returned. The fields array can be used to return certain
 	 * fields. Default fields are: "id", "name", "status", "doneDate", "haveValid", "totalSize".
 	 * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
@@ -115,12 +139,12 @@ class Transmission
 	{
 		if ( !is_array( $ids ) ) $ids = array( $ids );
 		if ( count( $fields ) == 0 ) $fields = array( "id", "name", "status", "doneDate", "haveValid", "totalSize" );
-		
+
 		$request = array(
 			"fields" => $fields,
 			"ids" => $ids
 		);
-		
+
 		return $this->request( "torrent-get", $request );
 	}
 
@@ -146,16 +170,16 @@ class Transmission
 	 *
 	 * @param array arguments An associative array of arguments to set
 	 * @param int|array ids A list of transmission torrent ids
-	 */  
+	 */
 	public function set ( $ids = array(), $arguments = array() )
 	{
 		// See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
 		if ( !is_array( $ids ) ) $ids = array( $ids );
 		if ( !isset( $arguments['ids'] ) ) $arguments['ids'] = $ids;
-		
+
 		return $this->request( "torrent-set", $arguments );
 	}
-	
+
 	/**
 	 * Add a new torrent
 	 *
@@ -173,10 +197,10 @@ class Transmission
 	 *  "priority-high"      | array       indices of high-priority file(s)
 	 *  "priority-low"       | array       indices of low-priority file(s)
 	 *  "priority-normal"    | array       indices of normal-priority file(s)
-	 *  
+	 *
 	 *   Either "filename" OR "metainfo" MUST be included.
-	 *     All other arguments are optional.   
-	 * 
+	 *     All other arguments are optional.
+	 *
 	 * @param torrent_location The URL or path to the torrent file
 	 * @param save_path Folder to save torrent in
 	 * @param extra options Optional extra torrent options
@@ -185,7 +209,7 @@ class Transmission
 	{
 		$extra_options['download-dir'] = $save_path;
 		$extra_options['filename'] = $torrent_location;
-		
+
 		return $this->request( "torrent-add", $extra_options );
 	}
 
@@ -204,7 +228,7 @@ class Transmission
 		);
 		return $this->request( "torrent-remove", $request );
 	}
-	
+
 	/**
 	 * Move local storage location
 	 *
@@ -220,7 +244,7 @@ class Transmission
 			"location" => $target_location,
 			"move" => $move_existing_data
 		);
-		return $this->request( "torrent-set-location", $request );  
+		return $this->request( "torrent-set-location", $request );
 	}
 
 	/**
@@ -228,7 +252,7 @@ class Transmission
 	 *
 	 * @param array array The request associative array to clean
 	 * @returns array The cleaned array
-	 */  
+	 */
 	protected function cleanRequestData ( $array )
 	{
 		if ( !is_array( $array ) || count( $array ) == 0 ) return null;
@@ -238,14 +262,14 @@ class Transmission
 		}
 		return $array;
 	}
-	
+
 	/**
 	 * Clean up the result object. Replaces all minus(-) characters in the object properties with underscores
 	 * and converts any object with any all-digit property names to an array.
 	 *
 	 * @param object The request result to clean
 	 * @returns array The cleaned object
-	 */  
+	 */
 	protected function cleanResultData ( $object )
 	{
 		// Prepare and cast object to array
@@ -258,7 +282,7 @@ class Transmission
 			}
 			if ( strstr( $index, '-' ) ) {
 				$valid_index = str_replace( '-', '_', $index );
-				$array[$valid_index] = $array[$index]; 
+				$array[$valid_index] = $array[$index];
 				unset( $array[$index] );
 				$index = $valid_index;
 			}
@@ -272,7 +296,7 @@ class Transmission
 
 	/**
 	 * The request handler method handles all requests to the Transmission client
-	 * 
+	 *
 	 * @param string method The request method to use
 	 * @param array arguments The request arguments
 	 * @returns array The request result
@@ -280,13 +304,13 @@ class Transmission
 	protected function request( $method, $arguments )
 	{
 		$arguments = $this->cleanRequestData( $arguments );
-		
+
 		// Build request array
 		$data = array(
 			"method" => $method,
 			"arguments" => $arguments
 		);
-	
+
 		// Init curl
 		$handle = curl_init();
 
@@ -296,18 +320,18 @@ class Transmission
 		curl_setopt( $handle, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt( $handle, CURLOPT_HEADER, true );
 		curl_setopt( $handle, CURLOPT_POSTFIELDS, json_encode( $data ) );
-		
+
 		// Setup authentication
 		if ( $this->username && $this->password ) {
 			curl_setopt( $handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
 			curl_setopt( $handle, CURLOPT_USERPWD, $this->username . ':' . $this->password );
 		}
-		
+
 		// Handle session_id
 		if ( $this->session_id ) {
 			curl_setopt( $handle, CURLOPT_HTTPHEADER, array( 'X-Transmission-Session-Id: ' . $this->session_id ) );
 		}
-			
+
 		// Execute request
 		$raw_response = curl_exec( $handle );
 		if ( $raw_response === false ) {
@@ -315,13 +339,13 @@ class Transmission
 		}
 		// Get response headers and body
 		list( $header, $body ) = explode( "\r\n\r\n", $raw_response, 2 );
-		
+
 		// Get http code
 		$http_code = curl_getinfo( $handle, CURLINFO_HTTP_CODE );
-		
+
 		// Close connection
 		curl_close( $handle );
-	 
+
 		// CSRF session fix
 		if ( $http_code == 409 && !$this->session_id ) {
 			$matches = array();
@@ -336,7 +360,7 @@ class Transmission
 		} elseif ( $http_code == 401 && $this->username && $this->password ) {
 			die( "\nThe Transmission web client at {$this->url} needs authentication, the username and password you provided seem to be incorrect.\n" );
 		}
-					
+
 		//return $this->cleanResultData( json_decode( $body ) );
 		return json_decode( $body, true );
 	}

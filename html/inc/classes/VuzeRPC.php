@@ -95,8 +95,8 @@ class VuzeRPC {
 			$this->PORT = $cfg['vuze_rpc_port'];
 		if (isset($cfg['vuze_rpc_user']))
 			$this->USER = $cfg['vuze_rpc_user'];
-		if (isset($cfg['vuze_rpc_pass']))
-			$this->PASS = $cfg['vuze_rpc_pass'];
+		if (isset($cfg['vuze_rpc_password']))
+			$this->PASS = $cfg['vuze_rpc_password'];
 
 		if (isset($cfg["transfer_file_path"]))
 			$this->torrents_path = $cfg["transfer_file_path"];

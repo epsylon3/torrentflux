@@ -28,8 +28,8 @@
 function dispatcher_startTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			startTransmissionTransfer($transfer);
 			return;
@@ -83,8 +83,8 @@ function dispatcher_startTransfer($transfer) {
 function dispatcher_stopTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			stopTransmissionTransfer($transfer);
 			return;
@@ -156,8 +156,8 @@ function dispatcher_forceStopTransfer($transfer, $pid) {
 function dispatcher_deleteTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			deleteTransmissionTransfer($transfer);
 			return;
@@ -207,8 +207,8 @@ function dispatcher_deleteTransfer($transfer) {
 function dispatcher_deleteDataTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["btclient_transmission_enable"]) {
-		require_once('inc/functions/functions.transmission.transfer.php');
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			deleteTransmissionTransferWithData($transfer);
 			return;
@@ -472,21 +472,15 @@ function dispatcher_multi($action) {
 		$transfer = urldecode($element);
 
 		$isTransmissionTorrent = false;
-		if ($cfg["btclient_transmission_enable"]) {
-			require_once('inc/classes/Transmission.class.php');
-			$trans = new Transmission();
-			$response = $trans->get(array(), array("id","hashString"));
-			$torrentlist = $response[arguments][torrents];
-			foreach ($torrentlist as $aTorrent) {
-				if ( $aTorrent[hashString] == $transfer ) {
-					$isTransmissionTorrent = true;
-					$torrentId = $aTorrent[id];
-					break;
-				}
-			}
+		if ($cfg["transmission_rpc_enable"]) {
+			require_once('inc/functions/functions.rpc.transmission.php');
+			$theTorrent = getTransmissionTransfer($transfer, array('id'));
+			$isTransmissionTorrent = is_array($theTorrent);
+			if ($isTransmissionTorrent)
+				$torrentId = $theTorrent['id'];
 			// TODO: complete this, not implemented for Transmission atm
 		}
-		
+
 		if ( !$isTransmissionTorrent ) {
 			// is valid transfer ? + check permissions
 			$invalid = true;
@@ -673,9 +667,9 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 		if ( $type === 'torrent' && strlen( stristr( $url, 'magnet:' ) ) > 0 ) {
 			
 			// We have a magnet link :D
-			if ($cfg["btclient_transmission_enable"]) {
+			if ($cfg["transmission_rpc_enable"]) {
+				require_once('inc/functions/functions.rpc.transmission.php');
 				
-				require_once('inc/functions/functions.transmission.transfer.php');
 				addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
 				
 				//require_once('inc/classes/TransmissionRpc.php');
@@ -920,8 +914,8 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 				return false;
 			} else {
 
-				if ($cfg["btclient_transmission_enable"]) {
-					require_once('inc/functions/functions.transmission.transfer.php');
+				if ($cfg["transmission_rpc_enable"]) {
+					require_once('inc/functions/functions.rpc.transmission.php');
 					@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename);
 					$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
 					@unlink($cfg['transfer_file_path'].$filename);

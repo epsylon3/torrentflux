@@ -40,6 +40,8 @@ class ClientHandler
 	var $binSocket = ""; // the binary this client uses for socket-connections.
 	var $binClient = ""; // the binary of this client. (eg. python-script))
 
+	var $useRPC = false; // no client per transfer, use rpc calls
+
 	// generic vars for a transfer-start
 	var $rate = "";
 	var $drate = "";
@@ -115,11 +117,18 @@ class ClientHandler
 				require_once('inc/classes/ClientHandler.tornado.php');
 				return new ClientHandlerTornado();
 			case "transmission":
-				require_once('inc/classes/ClientHandler.transmission.php');
-				return new ClientHandlerTransmission();
-			case "mainline":
-				require_once('inc/classes/ClientHandler.mainline.php');
-				return new ClientHandlerMainline();
+				if ($cfg['transmission_rpc_enable'] == 1) {
+					//new transmission rpc class
+					require_once('inc/classes/ClientHandler.transmissionrpc.php');
+					return new ClientHandlerTransmissionRPC();
+				} else {
+					//patched transmissioncli
+					require_once('inc/classes/ClientHandler.transmission.php');
+					return new ClientHandlerTransmission();
+				}
+			case "transmissionrpc":
+				require_once('inc/classes/ClientHandler.transmissionrpc.php');
+				return new ClientHandlerTransmissionRPC();
 			case "azureus":
 				global $cfg;
 				if ($cfg['vuze_rpc_enable'] == 1) {
@@ -131,13 +140,18 @@ class ClientHandler
 					require_once('inc/classes/ClientHandler.azureus.php');
 					return new ClientHandlerAzureus();
 				}
-			case "azureus":
+			case "vuzerpc":
+				require_once('inc/classes/ClientHandler.vuzerpc.php');
+				return new ClientHandlerVuzeRPC();
 			case "wget":
 				require_once('inc/classes/ClientHandler.wget.php');
 				return new ClientHandlerWget();
 			case "nzbperl":
 				require_once('inc/classes/ClientHandler.nzbperl.php');
 				return new ClientHandlerNzbperl();
+			case "mainline":
+				require_once('inc/classes/ClientHandler.mainline.php');
+				return new ClientHandlerMainline();
 			default:
 				global $cfg;
 				return ClientHandler::getInstance($cfg["btclient"]);
@@ -457,7 +471,12 @@ class ClientHandler
 	function runningProcesses() {
 		global $cfg;
 		$retAry = array();
-		$screenStatus = shell_exec("ps x -o pid='' -o ppid='' -o command='' -ww | ".$cfg['bin_grep']." ".tfb_shellencode($this->binClient)." | ".$cfg['bin_grep']." ".tfb_shellencode($cfg["transfer_file_path"])." | ".$cfg['bin_grep']." -v grep");
+		
+		//no clients process to kill in RPC mode
+		if ($this->useRPC)
+			return array();
+		
+		$screenStatus = shell_exec("ps x a -o pid -o ppid -o command | ".$cfg['bin_grep']." ".tfb_shellencode($this->binClient)." | ".$cfg['bin_grep']." ".tfb_shellencode($cfg["transfer_file_path"])." | ".$cfg['bin_grep']." -v grep");
 		$arScreen = array();
 		$tok = strtok($screenStatus, "\n");
 		while ($tok) {
@@ -490,9 +509,13 @@ class ClientHandler
 	 * @return string
 	 */
 	function runningProcessInfo() {
+		if ($this->useRPC)
+			return $this->runningDaemonInfo();
+
 		global $cfg;
+
 		// ps-string
-		$screenStatus = shell_exec("ps x -o pid='' -o ppid='' -o command='' -ww | ".$cfg['bin_grep']." ".tfb_shellencode($this->binClient)." | ".$cfg['bin_grep']." ".tfb_shellencode($cfg["transfer_file_path"])." | ".$cfg['bin_grep']." -v grep");
+		$screenStatus = shell_exec("ps x a -o pid -o ppid -o command | ".$cfg['bin_grep']." ".tfb_shellencode($this->binClient)." | ".$cfg['bin_grep']." ".tfb_shellencode($cfg["transfer_file_path"])." | ".$cfg['bin_grep']." -v grep");
 		$arScreen = array();
 		$tok = strtok($screenStatus, "\n");
 		while ($tok) {
@@ -507,16 +530,16 @@ class ClientHandler
 			if (strpos($arScreen[$i], $this->binClient) !== false) {
 				$pinfo = new ProcessInfo($arScreen[$i]);
 				if (intval($pinfo->ppid) == 1) {
-					if (!strpos($pinfo->cmdline, "rep ". $this->binSystem) > 0) {
-						if (!strpos($pinfo->cmdline, "ps x") > 0) {
+					if (strpos($pinfo->cmdline, "rep ". $this->binSystem) === false) {
+						if (strpos($pinfo->cmdline, "ps x") === false) {
 							array_push($pProcess,$pinfo->pid);
 							$rt = RunningTransfer::getInstance($pinfo->pid." ".$pinfo->cmdline, $this->client);
 							array_push($ProcessCmd, $rt->transferowner."\t".$rt->transferFile);
 						}
 					}
 				} else {
-					if (!strpos($pinfo->cmdline, "rep ". $this->binSystem) > 0) {
-						if (!strpos($pinfo->cmdline, "ps x") > 0) {
+					if (strpos($pinfo->cmdline, "rep ". $this->binSystem) === false) {
+						if (strpos($pinfo->cmdline, "ps x") === false) {
 							array_push($cProcess, $pinfo->pid);
 							array_push($cpProcess, $pinfo->ppid);
 						}
@@ -528,10 +551,27 @@ class ClientHandler
 		$retVal .= " Parents  : " . count($pProcess) . "\n";
 		$retVal .= " Children : " . count($cProcess) . "\n";
 		$retVal .= "\n";
-		$retVal .= " PID \tOwner\tTransfer File\n";
+		$retVal .= " PID \tOwner\tCommand\n";
 		foreach ($pProcess as $key => $value)
 			$retVal .= " " . $value . "\t" . $ProcessCmd[$key] . "\n";
+		return $retVal;
+	}
+
+	function runningDaemonInfo() {
+		global $cfg;
+		// ps-string
+		$screenStatus = shell_exec("ps x a -o pid -o %cpu -o command | ".$cfg['bin_grep']." ".tfb_shellencode($this->binClient)." | ".$cfg['bin_grep']." -v grep");
+		$arScreen = array();
+		$tok = strtok($screenStatus, "\n");
+		while ($tok) {
+			array_push($arScreen, $tok);
+			$tok = strtok("\n");
+		}
+		$retVal  = " --- Running Processes ---\n";
+		$retVal .= " Daemon  : " . count($screenStatus) . "\n";
 		$retVal .= "\n";
+		$retVal .= " PID  %CPU Command\n";
+		$retVal .= $screenStatus . "\n";
 		return $retVal;
 	}
 

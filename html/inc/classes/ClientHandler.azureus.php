@@ -38,7 +38,7 @@ class ClientHandlerAzureus extends ClientHandler
 		$this->client = "azureus";
 		$this->binSystem = "java";
 		$this->binSocket = "java";
-		$this->binClient = "java";
+		$this->binClient = "fluazu.py";
 	}
 
 	// =========================================================================

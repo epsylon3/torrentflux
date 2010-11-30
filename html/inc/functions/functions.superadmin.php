@@ -143,21 +143,26 @@ function sa_processes($action = "") {
 			$htmlMain .= '<pre>';
 			$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." fluxd | ".$cfg['bin_grep']." -v grep"));
 			$htmlMain .= '</pre>';
-			$htmlMain .= '<p><strong>fluazu</strong>';
-			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." fluazu.py | ".$cfg['bin_grep']." -v grep"));
-			$htmlMain .= '</pre>';
-			$clients = array('tornado', 'transmission', 'mainline', 'wget', 'nzbperl', 'azureus');
+			
+			$clients = array();
+			if ($cfg['transmission_rpc_enable'] == 1)
+				$clients[] = 'transmissionrpc';
+			else
+				$clients[] = 'transmission'; //transmissioncli
+			if ($cfg['vuze_rpc_enable'] == 1)
+				$clients[] = 'vuzerpc';
+			else
+				$clients[] = 'azureus'; //fluazu
+				
+			$clients += array('tornado','wget','nzbperl','mainline');
+			
 			foreach ($clients as $client) {
 				$ch = ClientHandler::getInstance($client);
 				$htmlMain .= '<p><strong>'.$client.'</strong>';
-				$htmlMain .= '<br>';
-				$htmlMain .= '<pre>';
-				$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." ".tfb_shellencode($ch->binClient)." | ".$cfg['bin_grep']." -v grep"));
-				$htmlMain .= '</pre>';
-				$htmlMain .= '<br>';
-				$htmlMain .= '<pre>';
+				$htmlMain .= '<br/>';
+				$htmlMain .= '<pre style="overflow-x:hidden;">';
 				$htmlMain .= $ch->runningProcessInfo();
+				//$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." ".tfb_shellencode($ch->binClient)." | ".$cfg['bin_grep']." -v grep"));
 				$htmlMain .= '</pre>';
 			}
 			$htmlMain .= '</div>';
@@ -168,14 +173,14 @@ function sa_processes($action = "") {
 			$htmlMain .= '<div align="left" id="BodyLayer" name="BodyLayer" style="border: thin solid '.$cfg['main_bgcolor'].'; position:relative; width:740; height:498; padding-left: 5px; padding-right: 5px; z-index:1; overflow: scroll; visibility: visible">';
 			$htmlMain .= '<br>
 				<table width="700" border=1 bordercolor="'.$cfg["table_admin_border"].'" cellpadding="2" cellspacing="0" bgcolor="'.$cfg["table_data_bg"].'">
-			    <tr><td colspan=6 bgcolor="'.$cfg["table_header_bg"].'" background="themes/'.$cfg["theme"].'/images/bar.gif">
-			    	<table width="100%" cellpadding=0 cellspacing=0 border=0><tr><td><font class="title"> Running Items </font></td></tr></table>
-			    </td></tr>
-			    <tr>
-			        <td bgcolor="'.$cfg["table_header_bg"].'" width="15%" nowrap><div align=center class="title">'.$cfg["_USER"].'</div></td>
-			        <td bgcolor="'.$cfg["table_header_bg"].'" nowrap><div align=center class="title">'.$cfg["_FILE"].'</div></td>
-			        <td bgcolor="'.$cfg["table_header_bg"].'" width="1%" nowrap><div align=center class="title">'.$cfg["_FORCESTOP"].'</div></td>
-			    </tr>
+				<tr><td colspan=6 bgcolor="'.$cfg["table_header_bg"].'" background="themes/'.$cfg["theme"].'/images/bar.gif">
+					<table width="100%" cellpadding=0 cellspacing=0 border=0><tr><td><font class="title"> Running Items </font></td></tr></table>
+				</td></tr>
+				<tr>
+					<td bgcolor="'.$cfg["table_header_bg"].'" width="15%" nowrap><div align=center class="title">'.$cfg["_USER"].'</div></td>
+					<td bgcolor="'.$cfg["table_header_bg"].'" nowrap><div align=center class="title">'.$cfg["_FILE"].'</div></td>
+					<td bgcolor="'.$cfg["table_header_bg"].'" width="1%" nowrap><div align=center class="title">'.$cfg["_FORCESTOP"].'</div></td>
+				</tr>
 			';
 			$running = getRunningClientProcesses();
 			foreach ($running as $rng) {

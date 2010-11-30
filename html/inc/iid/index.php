@@ -91,9 +91,9 @@ $progress_color = "#22BB22";
 $bar_width = "4";
 
 // ---------------------------------------------------------------------
-if ($cfg["btclient_transmission_enable"]) {
+if ($cfg["transmission_rpc_enable"]) {
 
-	require_once('inc/functions/functions.transmission.transfer.php');
+	require_once('inc/functions/functions.rpc.transmission.php');
 	$result = getUserTransmissionTransfers($cfg['uid']);
 
 	// eta
