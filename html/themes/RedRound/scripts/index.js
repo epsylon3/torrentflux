@@ -50,7 +50,8 @@ jQuery(document).ready(function(){
 		.css('vertical-align','bottom');
 	
 	//comboboxes
-	jQuery('select#searchEngine').droplist({width:110});
-	jQuery('select[name!="action"]').droplist({maxwidth:300,autoresize:true,slide:false,height:150});
+	jQuery('select#searchEngine').droplist({width:120});
+	jQuery('#indexWget select').droplist({width:120});
+	jQuery('select[name!="action"]').droplist({autoresize:true,slide:false,height:150});
  
 });

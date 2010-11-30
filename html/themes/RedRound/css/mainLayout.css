@@ -320,7 +320,7 @@ div#indexStats {
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 5px;
 	padding-bottom: 15px;
-	padding-left: 0px;
+	padding-left: 130px;
 	background: #fff url('../images/index/Stats/bg.png') no-repeat top left;
 }
 
