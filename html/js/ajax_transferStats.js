@@ -73,15 +73,16 @@ function ajax_updateContent(content)
 	var currentPercentage = parseFloat(content[7]);
 	var barImage1 = document.getElementById('barImage1');
 	if (barImage1 !== null) {
-		if (jQuery('#barImage1').progressBar) {
+		if (typeof(jQuery) != 'undefined') {
 			jQuery('#barImage1').progressBar(currentPercentage);
 		}
 		else {
-			barImage1 = document.getElementById('barImage1_pbImage');
-			barImage1.style.width = (Math.round(parseFloat(currentPercentage) / 100) * 378) + 'px';
+			barImage1.style.width = Math.round(currentPercentage) + '%';
+			if (document.getElementById('barImage2') !== null)
+				document.getElementById('barImage2').style.width = Math.round(100.0 - currentPercentage) + '%';
 		}
 	}
-	//document.getElementById('barImage2').style.width = (100.0 - currentPercentage) + '%';
+	//
 	// fields
 	for (i = 0; i < ajax_idCount; i++) {
 		if (document.getElementById(ajax_fieldIds[i]) === null)
