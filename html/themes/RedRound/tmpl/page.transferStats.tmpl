@@ -10,7 +10,7 @@
 <div style="display:none;"><span id="barImage2"></span></div>
 	<table id="transferStats">
 	<tr>
-		<td>Done: <span class="progressBar" id="barImage1"><tmpl_var name="percent_done"></span></td>
+		<td><span class="progressBar" id="barImage1"><tmpl_var name="percent_done"></span></td>
 	</tr>
 	</table>
 <table id="transferStats">
@@ -64,24 +64,30 @@
 </tr>
 </table>
 <script type="text/javascript">
-	var progress_key = '<?= $uuid ?>';
-
+	
 	jQuery(document).ready(function() {
-		//$("#pb4").progressBar(65, { showText: false, barImage: 'images/progressbg_red.gif'} );
 		//$(".pb5").progressBar({ max: 2000, textFormat: 'fraction', callback: function(data) { if (data.running_value == data.value) { alert("Callback example: Target reached!"); } }} );
 		var box = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbar.png';
 		var bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_blue.png';
 		var maxval = 100;
+		var percent = parseFloat('<tmpl_var name="percent_done">')
+		var sharing = parseFloat('<tmpl_var name="sharing">');
+		var sharekill = parseFloat('<tmpl_var name="sharekill">');
+		if (percent === NaN) percent = 0.0;
+		if (sharing === NaN) sharing = 0.0;
+		if (sharekill === NaN) sharekill = 0.0;
 		
-		if (parseFloat('<tmpl_var name="percent_done">') < 100.0) {
+		if (percent < 100.0) {
 			bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_red.png';
-		} else if (parseFloat('<tmpl_var name="sharing">') >= parseFloat('<tmpl_var name="sharekill">')) {
+		} else if (sharing >= sharekill) {
 			bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_green.png';
-			maxval = parseFloat('<tmpl_var name="sharing">');
-		} else
-			maxval = parseFloat('<tmpl_var name="sharekill">');
+			maxval = sharing;
+		} else if (sharekill > 0.0) {
+			maxval = sharekill;
+		}
 		
 		jQuery("#barImage1").progressBar({ max: maxval, boxImage: box, barImage: bar });
 	});
+	
 </script>
 <tmpl_include name="inc.transferLayoutFooter.tmpl">
