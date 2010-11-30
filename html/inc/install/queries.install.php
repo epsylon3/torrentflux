@@ -317,7 +317,7 @@ CREATE TABLE tf_users (
   time_created VARCHAR(14) NOT NULL default '0',
   user_level TINYINT(1) NOT NULL default '0',
   hide_offline TINYINT(1) NOT NULL default '0',
-  theme VARCHAR(100) NOT NULL default 'default',
+  theme VARCHAR(100) NOT NULL default 'RedRound',
   language_file VARCHAR(60) default 'lang-english.php',
   state TINYINT(1) NOT NULL default '1',
   PRIMARY KEY  (uid)
@@ -497,12 +497,12 @@ CREATE TABLE tf_users (
   user_id VARCHAR(32) NOT NULL default '',
   password VARCHAR(34) NOT NULL default '',
   email_address VARCHAR(100) NOT NULL default '',
-  hits INT(10) NOT NULL default '0',
+  hits INTEGER(10) NOT NULL default '0',
   last_visit VARCHAR(14) NOT NULL default '0',
   time_created VARCHAR(14) NOT NULL default '0',
   user_level TINYINT(1) NOT NULL default '0',
   hide_offline TINYINT(1) NOT NULL default '0',
-  theme VARCHAR(100) NOT NULL default 'default',
+  theme VARCHAR(100) NOT NULL default 'RedRound',
   language_file VARCHAR(60) default 'lang-english.php',
   state TINYINT(1) NOT NULL default '1'
 )");
@@ -695,7 +695,7 @@ CREATE TABLE tf_users (
   time_created VARCHAR(14) NOT NULL DEFAULT '0',
   user_level SMALLINT NOT NULL DEFAULT '0',
   hide_offline SMALLINT NOT NULL DEFAULT '0',
-  theme VARCHAR(100) NOT NULL DEFAULT 'default',
+  theme VARCHAR(100) NOT NULL DEFAULT 'RedRound',
   language_file VARCHAR(60) DEFAULT 'lang-english.php',
   state SMALLINT NOT NULL DEFAULT '1',
   PRIMARY KEY (uid)

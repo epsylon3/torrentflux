@@ -29,7 +29,6 @@ $cdb = 'common';
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 
-
 // insert
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_enable','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_host','127.0.0.1')");
@@ -71,6 +70,7 @@ CREATE TABLE IF NOT EXISTS tf_test (
 ) TYPE=MyISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
+$cqt = 'create';
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
@@ -110,19 +110,55 @@ CREATE TABLE tf_test (
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // CREATE
+$cqt = 'create';
+array_push($queries[$cqt][$cdb], "DROP TABLE tf_transmission_user");
 array_push($queries[$cqt][$cdb], "
-CREATE TABLE IF NOT EXISTS tf_transmission_user (
+CREATE TABLE tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
-  uid INTEGER(10) NOT NULL default 0,
+  uid INTEGER(10) NOT NULL default '0',
   PRIMARY KEY (tid,uid)
 )");
 
 // ALTER
-array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER(10) NOT NULL DEFAULT (0)");
+//array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD COLUMN uid INTEGER(10) NOT NULL DEFAULT 0");
+array_push($queries[$cqt][$cdb], "CREATE TEMPORARY TABLE bk_transfer_totals AS SELECT * FROM tf_transfer_totals");
+array_push($queries[$cqt][$cdb], "DROP TABLE tf_transfer_totals");
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transfer_totals (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default '0',
+  uptotal BIGINT(80) NOT NULL default '0',
+  downtotal BIGINT(80) NOT NULL default '0',
+  PRIMARY KEY (tid,uid)
+)");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_transfer_totals(tid,uid,uptotal,downtotal) SELECT tid,0,uptotal,downtotal FROM bk_transfer_totals");
+array_push($queries[$cqt][$cdb], "DROP TABLE bk_transfer_totals");
+
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");
 
-array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL DEFAULT ''");
+//array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD COLUMN email_address VARCHAR(100) NOT NULL DEFAULT ''");
+array_push($queries[$cqt][$cdb], "CREATE TEMPORARY TABLE bk_users AS SELECT * FROM tf_users");
+array_push($queries[$cqt][$cdb], "DROP TABLE tf_users");
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_users (
+  uid INTEGER PRIMARY KEY,
+  user_id VARCHAR(32) NOT NULL default '',
+  password VARCHAR(34) NOT NULL default '',
+  email_address VARCHAR(100) NOT NULL default '',
+  hits INTEGER(10) NOT NULL default '0',
+  last_visit VARCHAR(14) NOT NULL default '0',
+  time_created VARCHAR(14) NOT NULL default '0',
+  user_level TINYINT(1) NOT NULL default '0',
+  hide_offline TINYINT(1) NOT NULL default '0',
+  theme VARCHAR(100) NOT NULL default 'RedRound',
+  language_file VARCHAR(60) default 'lang-english.php',
+  state TINYINT(1) NOT NULL default '1'
+)");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_users (uid,user_id,password,email_address,hits,last_visit,time_created,user_level,hide_offline,theme,language_file,state)
+SELECT uid,user_id,password,'',hits,last_visit,time_created,user_level,hide_offline,theme,language_file,state FROM bk_users");
+array_push($queries[$cqt][$cdb], "DROP TABLE bk_users");
+
 
 // sql-queries : Data
 $cqt = 'data';
@@ -146,6 +182,7 @@ CREATE TABLE tf_test (
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // CREATE
+$cqt = 'create';
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL DEFAULT '',

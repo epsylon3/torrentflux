@@ -694,7 +694,7 @@ if (isset($_REQUEST["1"])) {                                                    
 		}
 	} else {
 		send('<font color="red"><strong>Error</strong></font><br>');
-		send('database-config-file <em>'._DIR._FILE_DBCONF.'</em> missing. setup cannot continue.');
+		send('database-config-file <em>'._FILE_DBCONF.'</em> missing. setup cannot continue.');
 	}
 } elseif (isset($_REQUEST["4"])) {                                              // 4 - End
 	sendHead(" - End");
