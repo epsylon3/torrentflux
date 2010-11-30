@@ -111,7 +111,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // CREATE
 $cqt = 'create';
-array_push($queries[$cqt][$cdb], "DROP TABLE tf_transmission_user");
+//array_push($queries[$cqt][$cdb], "DROP TABLE tf_transmission_user");
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
