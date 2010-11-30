@@ -28,7 +28,7 @@ $cfg["uid"] = 'cron';
 //$cfg['vuze_rpc_host']='127.0.0.1';
 //$cfg['vuze_rpc_port']='19091';
 //$cfg['vuze_rpc_user']='vuze';
-//$cfg['vuze_rpc_pass']='mypassword';
+//$cfg['vuze_rpc_password']='mypassword';
 
 function updateStatFiles() {
 	global $cfg, $db;
