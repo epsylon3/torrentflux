@@ -242,6 +242,16 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 	</tr>
 </table>
 
+<div class="ui-state-highlight ui-corner-all" style="margin-top: 4px; padding: 0 .7em; width: 778px;">
+	<p style="font-size: 75%; text-align: left;"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+	<strong>Note : </strong>To install Transmission RPC (not cli) on Debian/Ubuntu, execute this command :<br/>
+	<span style="margin-left: 62px;"><span style="font-family:courier;">sudo apt-get install transmission-daemon</span><br/>
+	<span style="margin-left: 54px;">To set password and edit settings, stop transmission-daemon first, then edit /etc/transmission-daemon/settings.json</span><br/>
+	<span style="margin-left: 54px;">It is <b>highly recommended</b> to change rpc-bind-address to localhost (127.0.0.1)</span>, so you can set an empty password<br/>
+	<span style="margin-left: 54px;">You also need to run transmission-daemon with same user or same group as your webserver, on debian/ubuntu you can do : </span><br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">adduser debian-transmission www-data</span>
+	</p>
+</div>
 
 <h2>Vuze RPC</h2>
 <p class="NormalText">New TorrentFlux-NG method to use with xmwebui Vuze plugin (disable fluazu)</p>
