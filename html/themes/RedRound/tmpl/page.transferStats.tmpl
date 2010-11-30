@@ -1,7 +1,11 @@
 <tmpl_include name="inc.transferLayoutHeader.tmpl">
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.progressbar.min.js"></script>
-
+<style rel="stylesheet" type="text/css">
+	ximg#barImage1_pbImage {
+		background-repeat : no-repeat;
+	}
+</style>
 <h1>Stats</h1>
 <div style="display:none;"><span id="barImage2"></span></div>
 	<table id="transferStats">
@@ -65,14 +69,19 @@
 	jQuery(document).ready(function() {
 		//$("#pb4").progressBar(65, { showText: false, barImage: 'images/progressbg_red.gif'} );
 		//$(".pb5").progressBar({ max: 2000, textFormat: 'fraction', callback: function(data) { if (data.running_value == data.value) { alert("Callback example: Target reached!"); } }} );
-		var box = 'themes/<tmpl_var name="theme">/images/index/TransferList/blank.png';
-		var bar = 'themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_seed.png';
-		if (parseFloat('<tmpl_var name="percent_done">') < 100.0)
-			bar = 'themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png';
-		else if (parseFloat('<tmpl_var name="sharing">') >= parseFloat('<tmpl_var name="sharekill">'))
-			bar = 'themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_finished.png';
+		var box = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbar.png';
+		var bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_blue.png';
+		var maxval = 100;
 		
-		jQuery("#barImage1").progressBar({ width: 378, max: parseFloat('<tmpl_var name="sharekill">'), boxImage: box, barImage: bar });
+		if (parseFloat('<tmpl_var name="percent_done">') < 100.0) {
+			bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_red.png';
+		} else if (parseFloat('<tmpl_var name="sharing">') >= parseFloat('<tmpl_var name="sharekill">')) {
+			bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_green.png';
+			maxval = parseFloat('<tmpl_var name="sharing">');
+		} else
+			maxval = parseFloat('<tmpl_var name="sharekill">');
+		
+		jQuery("#barImage1").progressBar({ max: maxval, boxImage: box, barImage: bar });
 	});
 </script>
 <tmpl_include name="inc.transferLayoutFooter.tmpl">
