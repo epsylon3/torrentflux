@@ -24,6 +24,10 @@
 // SQL : common
 // -----------------------------------------------------------------------------
 $cdb = 'common';
+$queries = array();
+$queries['test'] = array();
+$queries['create'] = array();
+$queries['data'] = array();
 
 // sql-queries : Data
 $cqt = 'data';
@@ -71,6 +75,7 @@ CREATE TABLE IF NOT EXISTS tf_test (
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 $cqt = 'create';
+$queries[$cqt][$cdb] = array();
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
@@ -111,6 +116,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // CREATE
 $cqt = 'create';
+$queries[$cqt][$cdb] = array();
 //array_push($queries[$cqt][$cdb], "DROP TABLE tf_transmission_user");
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transmission_user (
@@ -183,6 +189,7 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // CREATE
 $cqt = 'create';
+$queries[$cqt][$cdb] = array();
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL DEFAULT '',
