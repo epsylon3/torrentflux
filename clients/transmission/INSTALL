@@ -1,5 +1,5 @@
 =================================================================
-$Id: INSTALL 3404 2008-05-15 19:58:53Z b4rt $
+$Id: INSTALL git 2010-12-01 00:30:00Z epsylon3 $
 =================================================================
 
 Recent Versions
@@ -12,11 +12,11 @@ Recent Versions
 2. Replace cli.c in folder cli and transmission.h in folder libtransmission.
 
 3. Configure and Compile Transmission
-   apt-get install intltool libssl-dev libcurl4-openssl-dev
+   apt-get install intltool libevent-dev libssl-dev libcurl4-openssl-dev
    ./configure --enable-cli --enable-daemon
    make
-   make install
-   strip /usr/local/bin/transmission*
+   strip /cli/transmission*
+   cp /cli/transmissioncli /usr/local/bin/
 
 Transmission 0.96 and later
 ---------------------------
