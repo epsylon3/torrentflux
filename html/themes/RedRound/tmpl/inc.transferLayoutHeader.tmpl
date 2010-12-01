@@ -1,44 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <tmpl_if name="iid" value="transferStats">
 	<tmpl_if name="transferStatsType" value="ajax">
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 		<!-- IF TRANSFER WINDOW AJAX UPDATE IS ENABLED, THIS HEADER IS USED FOR STATS-->
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 			<head>
 				<title><tmpl_var name="_DOWNLOADDETAILS"></title>
 				<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
 				<meta http-equiv="Pragma" content="no-cache" />
-				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
-				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+				<script type="text/javascript" src="js/jquery.min.js"></script>
 				<script src="js/ajax.js" type="text/javascript"></script>
 				<script src="js/ajax_transferStats.js" type="text/javascript"></script>
+				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
+				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
 			</head>
 		<body onLoad="<tmpl_var name="onLoad">">
 	<tmpl_else>
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 		<!-- IF TRANSFER WINDOW STANDARD UPDATE IS ENABLED, THIS HEADER IS USED FOR ALL PAGES -->
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 			<head>
 				<title><tmpl_var name="_DOWNLOADDETAILS"></title>
 				<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
 				<meta http-equiv="Pragma" content="no-cache" />
+				<script type="text/javascript" src="js/jquery.min.js"></script>
 				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
 				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
 			</head>
 		<body>
 	</tmpl_if>
 <tmpl_else>
-		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 		<!-- THIS IS SHOWN FOR ALL OTHERS -->
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 			<head>
 				<title><tmpl_var name="_DOWNLOADDETAILS"></title>
 				<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
 				<meta http-equiv="Pragma" content="no-cache" />
+				<script type="text/javascript" src="js/jquery.min.js"></script>
 				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
 				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
-				<tmpl_if name="iid" value="transferControl">
-					<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transferSettings.css" type="text/css" media="screen">
-				</tmpl_if>
+			<tmpl_if name="iid" value="transferControl">
+				<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transferSettings.css" type="text/css" media="screen">
+			</tmpl_if>
 			</head>
 		<body>
 </tmpl_if>
