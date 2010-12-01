@@ -111,6 +111,8 @@ class ClientHandler
 	 * @return ClientHandler
 	 */
 	function getInstance($client = "") {
+		global $cfg;
+		
 		// create and return object-instance
 		switch ($client) {
 			case "tornado":
@@ -130,7 +132,6 @@ class ClientHandler
 				require_once('inc/classes/ClientHandler.transmissionrpc.php');
 				return new ClientHandlerTransmissionRPC();
 			case "azureus":
-				global $cfg;
 				if ($cfg['vuze_rpc_enable'] == 1) {
 					//xmwebui (json) (fast)
 					require_once('inc/classes/ClientHandler.vuzerpc.php');
