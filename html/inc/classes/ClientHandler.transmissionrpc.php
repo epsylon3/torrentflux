@@ -169,7 +169,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 
 		$host = $cfg['transmission_rpc_host'].":".$cfg['transmission_rpc_port'];
 		$userpw = $cfg['transmission_rpc_user'];
-		if (!empty($cfg['transmission_rpc_password'])
+		if (!empty($cfg['transmission_rpc_password']))
 			$userpw .= ':'.$cfg['transmission_rpc_password'];
 
 		$screenStatus = shell_exec("/usr/bin/transmission-remote $userpw@$host --list");
