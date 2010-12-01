@@ -472,7 +472,7 @@ function dispatcher_multi($action) {
 		$transfer = urldecode($element);
 
 		$isTransmissionTorrent = false;
-		if ($cfg["transmission_rpc_enable"]) {
+		if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 			require_once('inc/functions/functions.rpc.transmission.php');
 			$theTorrent = getTransmissionTransfer($transfer, array('id'));
 			$isTransmissionTorrent = is_array($theTorrent);
@@ -663,16 +663,28 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 	$origurl = $url; // Added by deadeyes; copied as later $url gets changed
 	if (!empty($url)) {
 		
+		$hash = false;
 		// Added by deadeyes to detect a magnet link
 		if ( $type === 'torrent' && strlen( stristr( $url, 'magnet:' ) ) > 0 ) {
 			
+			$client = getTransferClient('magnet.torrent');
 			// We have a magnet link :D
-			if ($cfg["transmission_rpc_enable"]) {
+			if ($client == 'transmission' && $cfg["transmission_rpc_enable"]) {
 				require_once('inc/functions/functions.rpc.transmission.php');
-				addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
+				$hash = addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
+			}
+			if ($client == 'azureus' && $cfg["vuze_rpc_enable"]) {
+				require_once('inc/functions/functions.rpc.vuze.php');
+				$hash = addVuzeMagnetTransfer($cfg['uid'], $url, $cfg['transfer_file_path']);
+			}
+			if ($cfg['debuglevel'] > 0) {
+				AuditAction($cfg["constants"]["debug"], "Download Magnet ($client) : $hash ".htmlentities(addslashes($url), ENT_QUOTES));
 			}
 			
-		} else {
+		}
+
+		if (!$hash)
+		{
 			// not a magnet torrent..
 			
 			$arURL = explode("/", $url);

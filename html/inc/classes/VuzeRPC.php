@@ -443,13 +443,19 @@ class VuzeRPC {
 		return $req;
 	}
 
+	//for magnets
 	public function torrent_add_url($url,$content) {
 		$params = explode("\n",$content);
+		$save_path  = $params[1]; //ok, by session
+		
+		//set download directory
+		$this->session_set('download-dir',$save_path);
+		
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req))
 			return $req->id;
 
-		return $req;
+		return false;
 	}
 
 	public function torrent_start_tf($hash) {
