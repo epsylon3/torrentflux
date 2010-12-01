@@ -40,7 +40,7 @@ if (isset($_REQUEST['getUrl'])) {
 }
 
 //for static calls like VuzeRPC::getInstance()
-$instance=NULL;
+$VuzeRPC_instance=NULL;
 
 class VuzeRPC {
 
@@ -635,12 +635,12 @@ class VuzeRPC {
 
 	//STATIC HELPERS
 	public function getInstance() {
-		global $instance;
-		if (!is_object($instance)) {
+		global $VuzeRPC_instance;
+		if (!is_object($VuzeRPC_instance)) {
 			global $cfg;
-			$instance = new VuzeRPC($cfg);
+			$VuzeRPC_instance = new VuzeRPC($cfg);
 		}
-		return $instance;
+		return $VuzeRPC_instance;
 	}
 
 	//VuzeRPC::isRunning()

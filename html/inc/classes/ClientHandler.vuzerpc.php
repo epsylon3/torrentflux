@@ -51,7 +51,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	// =========================================================================
 
 	/**
-	 * starts a client
+	 * starts a transfer
 	 *
 	 * @param $transfer name of the transfer
 	 * @param $interactive (boolean) : is this a interactive startup with dialog ?
@@ -160,7 +160,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	}
 
 	/**
-	 * stops a client
+	 * stops a transfer
 	 *
 	 * @param $transfer name of the transfer
 	 * @param $kill kill-param (optional)
@@ -222,6 +222,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @return boolean of success
 	 */
 	function delete($transfer) {
+		global $cfg;
+
 		// set vars
 		$this->_setVarsForTransfer($transfer);
 		// FluAzu
