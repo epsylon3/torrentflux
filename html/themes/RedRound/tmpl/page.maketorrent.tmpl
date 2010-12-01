@@ -1,13 +1,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
 <title><tmpl_var name="pagetitle"> - Torrent Maker</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script src="js/maketorrent.js" type="text/javascript"></script>
-<tmpl_if name="client" value="tornado">
+<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name='_CHARSET'>">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/dirActionsDefault.css" type="text/css">
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+	<script src="js/jquery.min.js" type="text/javascript"></script>
+	<script src="js/maketorrent.js" type="text/javascript"></script>
 	<script src="js/tooltip.js" type="text/javascript"></script>
-<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/dirActionsDefault.css" type="text/css">
-<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
 </head>
+<tmpl_if name="client" value="tornado">
 	<body onLoad="
 	<tmpl_if name="is_private">
 		toggleDHT(true);
@@ -19,7 +22,7 @@
 		<tmpl_var name="onLoad">
 	</tmpl_if>
 	">
-	<tmpl_else>
+<tmpl_else>
 	<body onLoad="toggleTracker(<tmpl_var name="use_tracker">);
 	<tmpl_if name="onLoad">
 		<tmpl_var name="onLoad">
