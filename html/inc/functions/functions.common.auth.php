@@ -52,7 +52,7 @@ function performAuthentication($username = '', $password = '', $md5password = ''
 	if ($result->RecordCount() == 1) { // suc. auth.
 		// Add a hit to the user
 		$hits++;
-		$sql = "select * from tf_users where uid = ".$db->qstr($uid);
+		$sql = "SELECT * FROM tf_users WHERE uid = ".$db->qstr($uid);
 		$rs = $db->Execute($sql);
 		if ($db->ErrorNo() != 0) dbError($sql);
 		$rec = array(
@@ -69,6 +69,22 @@ function performAuthentication($username = '', $password = '', $md5password = ''
 		$cfg["user"] = $_SESSION['user'];
 		$cfg['uid'] = $uid;
 		@session_write_close();
+		
+		//Store server root in db
+		$sql = "SELECT tf_value FROM tf_settings WHERE tf_key = 'server_name'";
+		$server_name = $db->getOne($sql);
+		if (!$server_name) {
+			$sql = "INSERT INTO tf_settings(tf_key, tf_value) VALUES ('server_name',".$db->qstr(getHttpServer()).")";
+			$rs = $db->Execute($sql);
+			$sql = "INSERT INTO tf_settings(tf_key, tf_value) VALUES ('server_root',".$db->qstr(getHttpServerRootURL()).")";
+			$rs = $db->Execute($sql);
+		} else {
+			$sql = "UPDATE tf_settings SET tf_value=".$db->qstr(getHttpServer())." WHERE tf_key='server_name' ";
+			$rs = $db->Execute($sql);
+			$sql = "UPDATE tf_settings SET tf_value=".$db->qstr(getHttpServerRootURL())." WHERE tf_key='server_root' ";
+			$rs = $db->Execute($sql);
+		}
+		
 		return 1;
 	} else { // wrong credentials
 		// log
@@ -84,6 +100,44 @@ function performAuthentication($username = '', $password = '', $md5password = ''
 	}
 	// return
 	return 0;
+}
+
+/**
+ * get HttpServer url (or last used)
+ *
+ * @return string like "http://192.168.0.1" or "http://www.mybox.com:8080"
+ */
+function getHttpServer() {
+	if (empty($_SERVER['SERVER_NAME'])) {
+		//for external scripts (like cron or classes)
+		global $db;
+		$sql = "SELECT tf_value FROM tf_settings WHERE tf_key = 'server_name'";
+		return $db->getOne($sql);
+	}
+	$host = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
+	if (isset($_SERVER['HTTPS']))
+		$host = str_replace('http:','https:',$host);
+	else
+		$host = str_replace(':80','',$host);
+	return $host;
+}
+
+/**
+ * get HttpServer Root URL Path (or last used)
+ *
+ * @return string like "/" or "/torrentflux/"
+ */
+function getHttpServerRootURL() {
+	if (empty($_SERVER['SERVER_NAME'])) {
+		//for external scripts (like cron or classes)
+		global $db;
+		$sql = "SELECT tf_value FROM tf_settings WHERE tf_key = 'server_root'";
+		return $db->getOne($sql);
+	}
+	$url = $_SERVER['SCRIPT_NAME'];
+	$url = str_replace("\\","/",$url);
+	$url = substr($url,0,strrpos($url,'/')+1);
+	return $url;
 }
 
 /**

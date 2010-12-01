@@ -71,6 +71,8 @@ class VuzeRPC {
 	protected $ch = NULL;
 
 	protected $torrents_path;
+	
+	protected $cfg;
 
 	/*
 	 * Constructor
@@ -100,6 +102,8 @@ class VuzeRPC {
 
 		if (isset($cfg["transfer_file_path"]))
 			$this->torrents_path = $cfg["transfer_file_path"];
+
+		$this->cfg = & $cfg;
 
 		global $instance;
 		$instance = & $this;
@@ -369,15 +373,21 @@ class VuzeRPC {
 
 	//##############################################################
 	public function http_server() {
+		require_once('inc/functions/functions.common.auth.php');
+		$host = getHttpServer().getHttpServerRootURL();
+		return $host;
+		/*
 		$host = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
 		if (isset($_SERVER['HTTPS']))
 			$host = str_replace('http:','https:',$host);
 		else
 			$host = str_replace(':80','',$host);
 		return $host;
+		*/
 	}
 
 	public function torrent_add_tf($transfer,$content) {
+
 		$params = explode("\n",$content);
 
 		$save_path  = $params[1]; //ok, by session

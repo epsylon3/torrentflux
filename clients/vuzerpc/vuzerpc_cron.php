@@ -9,22 +9,21 @@ Require PHP 5 for public/protected members
 */
 
 # sample cron.d update vuze rpc stat files every minutes
-# */1 * * * *     www-data cd /var/www/dedib.ath.cx/bin/clients/vuzerpc ;./vuzerpc_cmd.php update
+# */1 * * * *     www-data cd /var/git/torrentflux/clients/vuzerpc ;./vuzerpc_cron.php update
 
-chdir('../../../');
+chdir('../../html');
 
-$_SESSION['user'] = 'cron';
-	
 //get $cfg
 require("inc/main.core.php");
 
 require("inc/classes/VuzeRPC.php");
 
 global $cfg;
+$cfg["user"] = 'cron';
 
-$cfg["uid"] = 'cron';
+//print_r($cfg);
 
-//commented to keep default
+//commented to keep default (use db cfg)
 //$cfg['vuze_rpc_host']='127.0.0.1';
 //$cfg['vuze_rpc_port']='19091';
 //$cfg['vuze_rpc_user']='vuze';
@@ -35,8 +34,8 @@ function updateStatFiles() {
 
 	//convertTime
 	require_once("inc/functions/functions.core.php");
-	
-	$client = 'vuzerpc_cmd.php';
+
+	$client = 'vuzerpc';
 
 	$vuze = VuzeRPC::getInstance();
 
@@ -81,7 +80,7 @@ function updateStatFiles() {
 				$nbUpdate++;
 				
 				if (!$vuze->torrent_stop_tf($hash)) {
-					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
+					AuditAction($cfg["constants"]["admin"], $client.": stop error $transfer.");
 				} else {
 					// log
 					AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
