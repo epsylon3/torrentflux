@@ -27,54 +27,66 @@ class RunningTransfer
 {
 
 	// public fields
-    var $transferFile = "";
-    var $filePath = "";
-    var $transferowner = "";
-    var $processId = "";
-    var $args = "";
+	var $transferFile = "";
+	var $filePath = "";
+	var $transferowner = "";
+	var $processId = "";
+	var $args = "";
 
-    /**
-     * factory
-     *
-     * @param $psLine ps-line
-     * @param $client client
-     * @return RunningTransfer
-     */
-    function getInstance($psLine, $client = '') {
-    	// create and return object-instance
-        switch ($client) {
-            case "tornado":
-            	require_once('inc/classes/RunningTransfer.tornado.php');
-                return new RunningTransferTornado($psLine);
-            case "transmission":
-            	require_once('inc/classes/RunningTransfer.transmission.php');
-                return new RunningTransferTransmission($psLine);
-            case "mainline":
-            	require_once('inc/classes/RunningTransfer.mainline.php');
-                return new RunningTransferMainline($psLine);
-            case "azureus":
-            	require_once('inc/classes/RunningTransfer.azureus.php');
-                return new RunningTransferAzureus($psLine);
-            case "wget":
-            	require_once('inc/classes/RunningTransfer.wget.php');
-                return new RunningTransferWget($psLine);
+	/**
+	 * factory
+	 *
+	 * @param $psLine ps-line
+	 * @param $client client
+	 * @return RunningTransfer
+	 */
+	function getInstance($psLine, $client = '') {
+		global $cfg;
+		
+		// create and return object-instance
+		switch ($client) {
+			case "tornado":
+				require_once('inc/classes/RunningTransfer.tornado.php');
+				return new RunningTransferTornado($psLine);
+			case "transmission":
+				if ($cfg['transmission_rpc_enable'] == 1) {
+					require_once('inc/classes/RunningTransfer.transmissionrpc.php');
+					return new RunningTransferTransmission($psLine);
+				} else {
+					require_once('inc/classes/RunningTransfer.transmission.php');
+					return new RunningTransferTransmission($psLine);
+				}
+			case "mainline":
+				require_once('inc/classes/RunningTransfer.mainline.php');
+				return new RunningTransferMainline($psLine);
+			case "azureus":
+				if ($cfg['vuze_rpc_enable'] == 1) {
+					require_once('inc/classes/RunningTransfer.vuzerpc.php');
+					return new ClientHandlerVuzeRPC();
+				} else {
+					require_once('inc/classes/RunningTransfer.azureus.php');
+					return new RunningTransferAzureus($psLine);
+				}
+			case "wget":
+				require_once('inc/classes/RunningTransfer.wget.php');
+				return new RunningTransferWget($psLine);
 			case "nzbperl":
 				require_once('inc/classes/RunningTransfer.nzbperl.php');
 				return new RunningTransferNzbperl($psLine);
-            default:
-            	global $cfg;
-            	return RunningTransfer::getInstance($psLine, $cfg["btclient"]);
-        }
-    }
+			default:
+				global $cfg;
+				return RunningTransfer::getInstance($psLine, $cfg["btclient"]);
+		}
+	}
 
 	/**
 	 * ctor
 	 *
 	 * @return RunningTransfer
 	 */
-    function RunningTransfer() {
-        die('base class -- dont do this');
-    }
+	function RunningTransfer() {
+		die('base class -- dont do this');
+	}
 
 }
 
