@@ -19,8 +19,10 @@
 <link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/mainLayout.css" type="text/css" />
 <link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
 
-<!-- jQuery script -->
+<!-- jQuery core -->
 <script type="text/javascript" src="js/jquery.min.js"></script>
+
+<!-- Theme scripts -->
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui-1.8.6.custom.min.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/linkControl.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/common.js"></script>
@@ -35,6 +37,7 @@
 </tmpl_if>
 
 <!-- JS files -->
+<script type="text/javascript" src="js/jquery.jgrowl.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 
 <!-- JS files included depending on page -->
@@ -43,15 +46,15 @@
 	<!--<script type="text/javascript" src="js/multiup.js"></script>-->
 	<script type="text/javascript">
 		jQuery(function(){
-			$('#drivespacebar').progressbar({
+			jQuery('#drivespacebar').progressbar({
 			value : <tmpl_var name="drivespacebar_space2">
 			});
 			
-			$('#uploadbar').progressbar({
+			jQuery('#uploadbar').progressbar({
 			value : <tmpl_var name="bandwidthbars_upload_percent">
 			});
 				
-			$('#downloadbar').progressbar({
+			jQuery('#downloadbar').progressbar({
 			value : <tmpl_var name="bandwidthbars_download_percent">
 			});
 		});
@@ -76,12 +79,12 @@
 
 <tmpl_if name="iid" value="index">
 	<style type="text/css">
-		/* .container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;} */
-		/* Fix droplists autoresize in tabs */
-		.ui-tabs .ui-tabs-hide {
-		 position: absolute;
-		 left: -10000px;
-		}
+	/* .container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;} */
+	/* Fix droplists autoresize in tabs, or not :/ */
+	.ui-tabs .ui-tabs-hide {
+		position: absolute;
+		left: -10000px;
+	}
 	</style>
 </tmpl_if>
 </head>

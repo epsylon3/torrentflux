@@ -2,15 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>TorrentFlux-NG dashboard</title>
-<meta http-equiv="Content-Language" content="English" />
-<meta http-equiv="content-type" content="text/html;charset=<tmpl_var name="_CHARSET">" />
+<meta http-equiv="content-type" content="text/html;charset=<tmpl_var name='_CHARSET'>" />
 
 <!-- prevent caching and search engine indexing -->
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="Mon, 14 Dec 1981 11:12:01 GMT" />
+<meta http-equiv="expires" content="Mon, 14 Dec 1981 00:00:00 GMT" />
 <meta name="robots" content="noindex,nofollow,noarchive" />
 
+<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/red/jquery-ui-1.8.6.custom.css"  />
+<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/adminMenu.css" />
+<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/admin.css" media="screen" />
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/functions.js"></script>
 <script type="text/javascript" src="js/userSettings.js"></script>
@@ -18,18 +22,14 @@
 <script type="text/javascript" src="js/moveSettings.js"></script>
 <script type="text/javascript" src="js/resdirSettings.js"></script>
 <script type="text/javascript" src="js/fluxdSettings.js"></script>
-<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui-1.8.6.custom.min.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/adminMenu.js"></script>
+<script type="text/javascript" src="js/jquery.jgrowl.js"></script>
 
 <script type="text/javascript">
 //jkoutlinemenu.definemenu("anchorid", "menuid", "mouseover|click", optional_width, optional_height)
 jkoutlinemenu.definemenu("designanchor", "mymenu1", "mouseover", 200)
 </script>
-
-<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name="theme">/css/red/jquery-ui-1.8.6.custom.css"  />
-<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name="theme">/css/adminMenu.css" />
-<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name="theme">/css/admin.css" media="screen" />
 </head>
 <body>
 <div id="wrap">
@@ -39,7 +39,7 @@ jkoutlinemenu.definemenu("designanchor", "mymenu1", "mouseover", 200)
 			<a href="admin.php" id="designanchor">dashboard home</a>
 		</div>
 	<div id="header">
-		<a href="index.php"><h1>TorrentFlux-NG dashboard <span>&larr; back to site</span></h1></a>
+		<a href="index.php"><h1>TorrentFlux-NG Dashboard <span>&larr; back to site</span></h1></a>
 	</div>
 </div>
 <div class="middle">
