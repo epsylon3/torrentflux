@@ -1,0 +1,8 @@
+<IfModule mod_expires.c>
+ExpiresActive On
+#images cache expires after a week
+ExpiresByType image/gif A604800
+ExpiresByType image/png A604800
+ExpiresByType image/jpg A604800
+ExpiresByType image/x-icon A604800
+</IfModule>
