@@ -28,7 +28,7 @@
 function dispatcher_startTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			startTransmissionTransfer($transfer);
@@ -83,7 +83,7 @@ function dispatcher_startTransfer($transfer) {
 function dispatcher_stopTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			stopTransmissionTransfer($transfer);
@@ -156,7 +156,7 @@ function dispatcher_forceStopTransfer($transfer, $pid) {
 function dispatcher_deleteTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer) ) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
 			deleteTransmissionTransfer($transfer);
@@ -207,10 +207,10 @@ function dispatcher_deleteTransfer($transfer) {
 function dispatcher_deleteDataTransfer($transfer) {
 	global $cfg;
 
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
-			deleteTransmissionTransferWithData($transfer);
+			deleteTransmissionTransferWithData($cfg['uid'],$transfer);
 			return;
 		}
 	}
@@ -669,19 +669,7 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 			// We have a magnet link :D
 			if ($cfg["transmission_rpc_enable"]) {
 				require_once('inc/functions/functions.rpc.transmission.php');
-				
 				addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
-				
-				//require_once('inc/classes/TransmissionRpc.php');
-				//$myclass = new TransmissionRpc("127.0.0.1", "9091", "me", "mypassword");
-				//$myclass->login();
-	
-				//$arguments = array ( "filename" => $url, "paused" => true );
-				//$rpccall = array("arguments" => $arguments,"method" => "torrent-add") ;
-				//$myclass->doRpcCall($rpccall, $result, $status);
-	
-				// closing connection
-				//$myclass->logout();
 			}
 			
 		} else {
@@ -913,20 +901,21 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 				array_push($uploadMessages, "the file ".$filename." already exists on the server.");
 				return false;
 			} else {
-
-				if ($cfg["transmission_rpc_enable"]) {
-					require_once('inc/functions/functions.rpc.transmission.php');
-					@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename);
-					$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
-					@unlink($cfg['transfer_file_path'].$filename);
-					if ( $actionId > 1 )
-						startTransmissionTransfer( $hash );
-					return true;
-				}
 				
 				if (@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename)) {
 					@chmod($cfg["transfer_file_path"].$filename, 0644);
 					AuditAction($cfg["constants"]["file_upload"], $filename);
+					
+					if ($cfg["transmission_rpc_enable"]) {
+						require_once('inc/functions/functions.rpc.transmission.php');
+						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
+						//@unlink($cfg['transfer_file_path'].$filename);
+						//if ( $actionId > 1 ) {
+							//startTransmissionTransfer( $hash );
+							//array_push($tStack,$filename);
+						//}
+						//return true;
+					}
 					// inject
 					injectTransfer($filename);
 					// instant action ?

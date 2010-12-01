@@ -93,6 +93,8 @@ $bar_width = "4";
 // ---------------------------------------------------------------------
 if ($cfg["transmission_rpc_enable"]) {
 
+	// add transmission rpc torrent to current user list
+	
 	require_once('inc/functions/functions.rpc.transmission.php');
 	$result = getUserTransmissionTransfers($cfg['uid']);
 
@@ -190,7 +192,7 @@ if ($cfg["transmission_rpc_enable"]) {
 		}
 	}
 } 
-// end of Transmission bloc
+// end of Transmission RPC bloc
 // ---------------------------------------------------------------------
 
 foreach ($arList as $transfer) {

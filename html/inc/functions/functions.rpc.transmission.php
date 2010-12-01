@@ -27,6 +27,14 @@
  * @param $fields array of fields needed
  * @return array or false
  */
+
+function rpc_error($errorstr,$dummy,$dummy,$response) {
+	global $cfg;
+	AuditAction($cfg["constants"]["error"], "Transmission RPC : $errorstr - $response");
+	@error($errorstr, "", "", $response);
+	//dbError($errorstr);
+}
+
 function getTransmissionTransfer($transfer, $fields=array() ) {
 	//$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
 	//			"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" )
@@ -126,7 +134,7 @@ function isValidTransmissionTransfer($uid = 0,$tid) {
  *
  * @return void
  */
-function startTransmissionTransfer($hash) {
+function startTransmissionTransfer($hash,$startPaused=false) {
 	global $cfg;
 	require_once('inc/classes/Transmission.class.php');
 	$trans = new Transmission();
@@ -134,7 +142,11 @@ function startTransmissionTransfer($hash) {
 	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
 		$response = $trans->start($transmissionId);
-		if ( $response['result'] != "success" ) @error("Start failed", "", "", $response['result']);
+		if ( $response['result'] != "success" ) {
+			rpc_error("Start failed", "", "", $response['result']);
+			return false;
+		}
+		return true;
 	}
 }
 
@@ -151,7 +163,7 @@ function stopTransmissionTransfer($hash) {
 	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
 		$response = $trans->stop($transmissionId);
-		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
+		if ( $response['result'] != "success" ) rpc_error("Stop failed", "", "", $response['result']);
 	}
 }
 
@@ -168,7 +180,8 @@ function deleteTransmissionTransfer($uid, $hash, $deleteData = false) {
 	if ( isValidTransmissionTransfer($uid, $hash) ) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
 		$response = $trans->remove($transmissionId,$deleteData);
-		if ( $response['result'] != "success" ) @error("Delete failed", "", "", $response['result']);
+		if ( $response['result'] != "success" )
+			rpc_error("Delete failed", "", "", $response['result']);
 	}
 
 	deleteTransmissionTransferFromDB($uid, $hash);
@@ -194,7 +207,7 @@ function getTransmissionTransferIdByHash($hash) {
 	$transmissionTransferId = false;
 	$trans = new Transmission();
 	$response = $trans->get(array(), array('id','hashString'));
-	if ( $response['result'] != "success" ) @error("Getting ID for Hash failed: ", "", "", $response['result']);
+	if ( $response['result'] != "success" ) rpc_error("Getting ID for Hash failed: ", "", "", $response['result']);
 	$torrentlist = $response['arguments']['torrents'];
 	foreach ($torrentlist as $aTorrent) {
 		if ( $aTorrent['hashString'] == $hash ) {
@@ -241,17 +254,17 @@ function addTransmissionTransferToDB($uid = 0,$tid) {
  * @return array with uid and transmission transfer hash
  * TODO: generate an error when adding does fail
  */
-function addTransmissionTransfer($uid = 0, $url, $path) {
+function addTransmissionTransfer($uid = 0, $url, $path, $paused=true) {
 	// $path holds the download path
 
 	require_once('inc/classes/Transmission.class.php');
 	$rpc = new Transmission();
 
-	$result = $rpc->add( $url, $path, array ('paused'=>true)  );
-	if($result["result"]!=="success") print($result["result"]);
+	$result = $rpc->add( $url, $path, array ('paused' => $paused)  );
+	if($result["result"]!=="success") rpc_error("addTransmissionTransfer : ".$result["result"]);
 
 	$hash = $result['arguments']['torrent-added']['hashString'];
-	//print_r("The hash is: $hash. The uid is $uid"); exit();
+	//rpc_error("The hash is: $hash. The uid is $uid"); exit();
 
 	addTransmissionTransferToDB($uid, $hash);
 	return $hash;
@@ -274,7 +287,7 @@ function getUserTransmissionTransfers($uid = 0) {
 	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
 	$result = $rpc->get ( array(), $fields );
 
-	if ($result['result']!=="success") dbError("Transmission could not get transfers");
+	if ($result['result']!=="success") rpc_error("Transmission RPC could not get transfers : ".$result['result']);
 	foreach ( $result['arguments']['torrents'] as $transfer ) {
 		if ( $uid==0 || in_array ( $transfer['hashString'], $userTransferHashes ) ) {
 			array_push($retVal, $transfer);

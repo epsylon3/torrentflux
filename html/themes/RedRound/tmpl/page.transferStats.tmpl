@@ -80,6 +80,7 @@
 		if (percent === NaN) percent = 0.0;
 		if (sharing === NaN) sharing = 0.0;
 		if (sharekill === NaN) sharekill = 0.0;
+		else sharekill = sharekill - 1;
 		
 		if (percent < 100.0) {
 			bar = rbar;

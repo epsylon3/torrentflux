@@ -85,9 +85,9 @@ class Transmission
 	 *
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function start ( $ids )
+	public function start( $ids )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
+		if( !is_array( $ids ) ) $ids = array( $ids );
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-start", $request );
 	}
@@ -97,9 +97,9 @@ class Transmission
 	 *
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function stop ( $ids )
+	public function stop( $ids )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
+		if( !is_array( $ids ) ) $ids = array( $ids );
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-stop", $request );
 	}
@@ -109,9 +109,9 @@ class Transmission
 	 *
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function reannounce ( $ids )
+	public function reannounce( $ids )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
+		if( !is_array( $ids ) ) $ids = array( $ids );
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-reannounce", $request );
 	}
@@ -121,9 +121,9 @@ class Transmission
 	 *
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function verify ( $ids )
+	public function verify( $ids )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
+		if( !is_array( $ids ) ) $ids = array( $ids );
 		$request = array( "ids" => $ids );
 		return $this->request( "torrent-verify", $request );
 	}
@@ -137,10 +137,10 @@ class Transmission
 	 * @param array fields An array of return fields
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function get ( $ids = array(), $fields = array() )
+	public function get( $ids = array(), $fields = array() )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
-		if ( count( $fields ) == 0 ) $fields = array( "id", "name", "status", "doneDate", "haveValid", "totalSize" );
+		if( !is_array( $ids ) ) $ids = array( $ids );
+		if( count( $fields ) == 0 ) $fields = array( "id", "name", "status", "doneDate", "haveValid", "totalSize" );
 
 		$request = array(
 			"fields" => $fields,
@@ -173,11 +173,11 @@ class Transmission
 	 * @param array arguments An associative array of arguments to set
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function set ( $ids = array(), $arguments = array() )
+	public function set( $ids = array(), $arguments = array() )
 	{
 		// See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
-		if ( !is_array( $ids ) ) $ids = array( $ids );
-		if ( !isset( $arguments['ids'] ) ) $arguments['ids'] = $ids;
+		if( !is_array( $ids ) ) $ids = array( $ids );
+		if( !isset( $arguments['ids'] ) ) $arguments['ids'] = $ids;
 
 		return $this->request( "torrent-set", $arguments );
 	}
@@ -221,9 +221,9 @@ class Transmission
 	 * @param bool delete_local_data Also remove local data?
 	 * @param int|array ids A list of transmission torrent ids
 	 */
-	public function remove ( $ids, $delete_local_data = false )
+	public function remove( $ids, $delete_local_data = false )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
+		if( !is_array( $ids ) ) $ids = array( $ids );
 		$request = array(
 			"ids" => $ids,
 			"delete-local-data" => $delete_local_data
@@ -238,9 +238,9 @@ class Transmission
 	 * @param string target_location The new storage location
 	 * @param string move_existing_data Move existing data or scan new location for available data
 	 */
-	public function move ( $ids, $target_location, $move_existing_data = true )
+	public function move( $ids, $target_location, $move_existing_data = true )
 	{
-		if ( !is_array( $ids ) ) $ids = array( $ids );
+		if( !is_array( $ids ) ) $ids = array( $ids );
 		$request = array(
 			"ids" => $ids,
 			"location" => $target_location,
@@ -255,12 +255,12 @@ class Transmission
 	 * @param array array The request associative array to clean
 	 * @returns array The cleaned array
 	 */
-	protected function cleanRequestData ( $array )
+	protected function cleanRequestData( $array )
 	{
-		if ( !is_array( $array ) || count( $array ) == 0 ) return null;
-		foreach ( $array as $index => $value ) {
+		if( !is_array( $array ) || count( $array ) == 0 ) return null;
+		foreach( $array as $index => $value ) {
 			if( is_array( $array[$index] ) ) $array[$index] = $this->cleanRequestData( $array[$index] ); // Recursion
-			if ( empty( $value ) && $value!=0) unset( $array[$index] );
+			if( empty( $value ) && $value!=0) unset( $array[$index] );
 		}
 		return $array;
 	}
@@ -272,25 +272,25 @@ class Transmission
 	 * @param object The request result to clean
 	 * @returns array The cleaned object
 	 */
-	protected function cleanResultData ( $object )
+	protected function cleanResultData( $object )
 	{
 		// Prepare and cast object to array
 		$return_as_array = false;
 		$array = $object;
-		if ( !is_array( $array ) ) $array = (array) $array;
-		foreach ( $array as $index => $value ) {
+		if( !is_array( $array ) ) $array = (array) $array;
+		foreach( $array as $index => $value ) {
 			if( is_array( $array[$index] ) || is_object( $array[$index] ) ) {
 				$array[$index] = $this->cleanResultData( $array[$index] ); // Recursion
 			}
-			if ( strstr( $index, '-' ) ) {
+			if( strstr( $index, '-' ) ) {
 				$valid_index = str_replace( '-', '_', $index );
 				$array[$valid_index] = $array[$index];
 				unset( $array[$index] );
 				$index = $valid_index;
 			}
 			// Might be an array, check index for digits, if so, an array should be returned
-			if ( ctype_digit( (string) $index ) ) { $return_as_array = true; }
-			if ( empty( $value ) ) unset( $array[$index] );
+			if( ctype_digit( (string) $index ) ) { $return_as_array = true; }
+			if( empty( $value ) ) unset( $array[$index] );
 		}
 		// Return array cast to object
 		return $return_as_array ? $array : (object) $array;
@@ -303,9 +303,10 @@ class Transmission
 	 * @param array arguments The request arguments
 	 * @returns array The request result
 	 */
-	protected function request( $method, $arguments )
+	protected function request( $method, $args=array() )
 	{
-		$arguments = $this->cleanRequestData( $arguments );
+		$arguments = $this->cleanRequestData( $args );
+		//$arguments = $args;
 
 		// Build request array
 		$data = array(
@@ -325,24 +326,23 @@ class Transmission
 		curl_setopt( $handle, CURLOPT_POSTFIELDS, json_encode( $data ) );
 
 		// Setup authentication
-		if ( $this->username ) {
+		if( $this->username ) {
 			curl_setopt( $handle, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
 			curl_setopt( $handle, CURLOPT_USERPWD, $this->username . ':' . $this->password );
 		}
 
 		// Handle session_id
-		if ( $this->session_id ) {
+		if( $this->session_id ) {
 			curl_setopt( $handle, CURLOPT_HTTPHEADER, array( 'X-Transmission-Session-Id: ' . $this->session_id ) );
 		}
 
 		// Execute request
 		$raw_response = curl_exec( $handle );
-		if ( $raw_response === false ) {
+		if( $raw_response === false ) {
 			die( "\nThe Transmission server at {$this->url} did not respond. Please make sure Transmission is running and the web client is enabled..\n" );
 		} elseif (strpos($raw_response,'Unauthorized') !== false) {
 			die( "\nBad Transmission RPC authentification informations (session_id ?) !\n $raw_response" );
 		}
-
 		// Get response headers and body
 		list( $header, $body ) = explode( "\r\n\r\n", $raw_response, 2 );
 
@@ -353,17 +353,17 @@ class Transmission
 		curl_close( $handle );
 
 		// CSRF session fix
-		if ( $http_code == 409 && !$this->session_id ) {
+		if( $http_code == 409 && !$this->session_id ) {
 			$matches = array();
 			$session_id = preg_match( "/X-Transmission-Session-Id: ([A-z0-9]*)/", $header, $matches );
-			if ( isset( $matches[1] ) ) $this->session_id = $matches[1];
-			if ( !$this->session_id ) die( "Needed a session id but could not find one..\n" );
+			if( isset( $matches[1] ) ) $this->session_id = $matches[1];
+			if( !$this->session_id ) die( "Needed a session id but could not find one..\n" );
 			return $this->request( $method, $arguments ); // Recursion, loop should be blocked by elseif below this line
-		} elseif ( $http_code == 409 && $this->session_id ) {
+		} elseif( $http_code == 409 && $this->session_id ) {
 			die( "Session id '{$this->session_id}' was found and set but not accepted by transmission..\n" );
-		} elseif ( $http_code == 401 && !$this->username ) {
+		} elseif( $http_code == 401 && !$this->username ) {
 			die( "\nThe Transmission web client at {$this->url} needs authentication..\n" );
-		} elseif ( $http_code == 401 && $this->username ) {
+		} elseif( $http_code == 401 && $this->username ) {
 			die( "\nThe Transmission web client at {$this->url} needs authentication, the username and password you provided seem to be incorrect.\n" );
 		}
 
@@ -391,7 +391,8 @@ class Transmission
 	public function isRunning() {
 		$instance = Transmission::getInstance();
 		$session = $instance->session_get();
-		return  ($session && $session->result == 'success');
+		//var_dump($session); die();
+		return  (isset($session['result']) && $session['result'] == 'success');
 	}
 }
 

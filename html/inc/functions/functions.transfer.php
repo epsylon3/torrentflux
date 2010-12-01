@@ -30,19 +30,21 @@ function transfer_init() {
 	if (empty($transfer))
 		@error("missing params", "", "", array('transfer'));
 
-	$isTransmissionTorrent = false;
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
-		$isTransmissionTorrent = is_array($theTorrent);
-	}
-
-	if ( $isTransmissionTorrent ) {
-		$transferLabel = (strlen($theTorrent[name]) >= 39) ? substr($theTorrent[name], 0, 35)."..." : $theTorrent[name];
-		$tmpl->setvar('transfer', $theTorrent[hashString]);
-		$tmpl->setvar('transferLabel', $transferLabel);
-		$tmpl->setvar('transfer_exists', 0);
-		return;
+		if ( is_array($theTorrent) ) {
+			$transferLabel = (strlen($theTorrent[name]) >= 39) ? substr($theTorrent[name], 0, 35)."..." : $theTorrent[name];
+			$tmpl->setvar('transfer', $theTorrent[hashString]);
+			$tmpl->setvar('transferLabel', $transferLabel);
+			$tmpl->setvar('transfer_exists', 0);
+		//	return;
+			
+			//tf compatible... erk
+			$transfer = getTransferFromHash($transfer);
+			if (empty($transfer))
+				$transfer = $theTorrent[name];
+		}
 	}
 
 	// validate transfer
@@ -182,14 +184,15 @@ function transfer_setFileVars() {
 			$transferSizeSum = 0;
 			
 			$isTransmissionTorrent = false;
-			if ($cfg["transmission_rpc_enable"]) {
+			if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 				require_once('inc/functions/functions.rpc.transmission.php');
-				$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
+				$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name', 'files'));
 				$isTransmissionTorrent = is_array($theTorrent);
 			}
 			if ( $isTransmissionTorrent ) {
-				$response = $trans->get( $theTorrent[id], array('files') );
-				foreach ( $response[arguments][torrents][0][files] as $aFile ) {
+				foreach ( $theTorrent[files] as $aFile ) {
+				//$response = $trans->get( $theTorrent[id], array('files') );
+				//foreach ( $response[arguments][torrents][0][files] as $aFile ) {
 					$transferSizeSum += $aFile[length];
 					$fileNameParts = explode ( "/", $aFile[name] );
 					$name = $fileNameParts[ count($fileNameParts) - 1 ];
@@ -348,6 +351,13 @@ function transfer_setProfiledVars() {
 		}
 	}
 	$tmpl->setvar('with_profiles', $with_profiles);
+}
+
+/**
+ * isHash return true if its a valid transfer hash
+ */
+function isHash($transfer) {
+	return (strlen($transfer) == 40 && preg_match('#^[a-f0-9]{40}#i',$transfer));
 }
 
 ?>

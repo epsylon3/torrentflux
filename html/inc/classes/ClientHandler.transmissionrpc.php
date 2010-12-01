@@ -64,22 +64,31 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		// set vars
 		$this->_setVarsForTransfer($transfer);
 
-		// log
-		$this->logMessage($this->client."-start : ".$transfer."\n", true);
-
 		if (!Transmission::isRunning()) {
 			$msg = "Transmission RPC not reacheable, cannot start transfer ".$transfer;
+			$this->logMessage($this->client."-start : ".$msg."\n", true);
 			AuditAction($cfg["constants"]["error"], $msg);
 			$this->logMessage($msg."\n", true);
 			// return
 			return false;
 		}
-
+		
 		$hash = getTransferHash($transfer);
-		startTransmissionTransfer($hash);
 
-		// start the client
-		//$this->_start();
+		if (!empty($hash) && !isTransmissionTransfer($hash)) {
+			$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
+		}
+
+		$res = (int) startTransmissionTransfer($hash, $enqueue);
+		
+		// log
+		$this->logMessage($this->client."-start : hash=".$hash.": $res \n", true);
+
+		// no client needed
+		$this->state = CLIENTHANDLER_STATE_READY;
+
+		// ClientHandler start
+		$this->_start();
 	}
 
 	/**
@@ -105,12 +114,22 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		}
 
 		$hash = getTransferHash($transfer);
+		if (empty($hash)) {
+			//not in db, clean it
+			@unlink($this->transferFilePath.".pid");
+			AuditAction($cfg["constants"]["debug"], $this->client."-stop : $transfer not in db, cleaning...");
+			$this->delete($transfer);
+			return true;
+		}
 
 		if (!stopTransmissionTransfer($hash)) {
 			$msg = "transfer ".$transfer." does not exist in Transmission.";
 			$this->logMessage($msg."\n", true);
 			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
 		}
+
+		// stop the client
+		//$this->_stop($kill, $transferPid);
 
 		// flag the transfer as stopped (in db)
 		stopTransferSettings($transfer);
@@ -140,8 +159,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		}
 
 		$hash = getTransferHash($transfer);
-
-		deleteTransmissionTransfer($transfer);
+		deleteTransmissionTransfer($cfg['uid'], $hash, false);
 
 		// delete
 		return $this->_delete();

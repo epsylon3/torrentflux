@@ -41,6 +41,13 @@ function tfb_getRequestVar($varName, $return = '') {
 		}
 		*/
 		$return = htmlentities(trim($_REQUEST[$varName]), ENT_QUOTES);
+		if ($varName == 'transfer' && isHash($return)) {
+			$name = getTransferFromHash($return);
+			if (!empty($name))
+				return $name;
+			else
+				return $return;
+		}
 	}
 	return $return;
 }

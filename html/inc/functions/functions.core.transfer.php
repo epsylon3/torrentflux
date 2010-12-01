@@ -206,6 +206,12 @@ function getTransferHash($transfer) {
 	}
 }
 
+function getTransferFromHash($hash) {
+	global $cfg, $db, $transfers;
+	$transfer = $db->GetOne("SELECT transfer FROM tf_transfers WHERE hash = ".$db->qstr($hash)."");
+	return $transfer;
+}
+
 /**
  * gets metainfo of a torrent as string
  *
