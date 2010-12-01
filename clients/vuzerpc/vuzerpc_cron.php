@@ -80,7 +80,7 @@ function updateStatFiles() {
 				$nbUpdate++;
 				
 				if (!$vuze->torrent_stop_tf($hash)) {
-					AuditAction($cfg["constants"]["admin"], $client.": stop error $transfer.");
+					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
 				} else {
 					// log
 					AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
