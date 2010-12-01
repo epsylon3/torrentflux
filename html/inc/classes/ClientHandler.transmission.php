@@ -21,7 +21,7 @@
 *******************************************************************************/
 
 /**
- * class ClientHandler for (patched) transmissioncli
+ * class ClientHandler for (patched) transmission-cli
  */
 class ClientHandlerTransmission extends ClientHandler
 {
@@ -36,9 +36,9 @@ class ClientHandlerTransmission extends ClientHandler
 	function ClientHandlerTransmission() {
 		$this->type = "torrent";
 		$this->client = "transmission";
-		$this->binSystem = "transmissioncli";
-		$this->binSocket = "transmissioncli";
-		$this->binClient = "transmissioncli";
+		$this->binSystem = "transmission-cli";
+		$this->binSocket = "transmission-cli";
+		$this->binClient = "transmission-cli";
 	}
 
 	// =========================================================================
@@ -65,7 +65,7 @@ class ClientHandlerTransmission extends ClientHandler
 		// check to see if the path to the transmission-bin is valid
 		if (!is_executable($cfg["btclient_transmission_bin"])) {
 			$this->state = CLIENTHANDLER_STATE_ERROR;
-			$msg = "transmissioncli cannot be executed";
+			$msg = "transmission-cli cannot be executed";
 			AuditAction($cfg["constants"]["error"], $msg);
 			$this->logMessage($msg."\n", true);
 			array_push($this->messages, $msg);
@@ -76,6 +76,10 @@ class ClientHandlerTransmission extends ClientHandler
 			$sf->write();
 			// return
 			return false;
+		} else if (basename($cfg["btclient_transmission_bin"])) {
+			$this->binSystem = basename($cfg["btclient_transmission_bin"]);
+			$this->binSocket = basename($cfg["btclient_transmission_bin"]);
+			$this->binClient = basename($cfg["btclient_transmission_bin"]);
 		}
 
 		// init starting of client

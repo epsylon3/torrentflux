@@ -148,7 +148,7 @@ function sa_processes($action = "") {
 			if ($cfg['transmission_rpc_enable'] == 1)
 				$clients[] = 'transmissionrpc';
 			else
-				$clients[] = 'transmission'; //transmissioncli
+				$clients[] = 'transmission'; //transmission-cli
 			if ($cfg['vuze_rpc_enable'] == 1)
 				$clients[] = 'vuzerpc';
 			else
@@ -217,6 +217,9 @@ function sa_maintenance($action = "") {
 	if ($action == "")
 		return;
 	buildPage("m");
+	
+	$GREP = $cfg['bin_grep'];
+	
 	switch ($action) {
 
 		case "0": // Maintenance-main
@@ -287,9 +290,9 @@ function sa_maintenance($action = "") {
 			$htmlMain .= 'Kill all perl processes:<br>';
 			$htmlMain .= '<a href="' . _FILE_THIS . '?m=23"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="perl-kill" border="0"> Perl Kill</a>';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<strong>Transmissioncli</strong><br>';
-			$htmlMain .= 'Kill all transmissioncli processes:<br>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?m=24"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="transmissioncli-kill" border="0"> Transmissioncli Kill</a>';
+			$htmlMain .= '<strong>Transmission-cli</strong><br>';
+			$htmlMain .= 'Kill all transmission-cli processes:<br>';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?m=24"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="transmissioncli-kill" border="0"> Transmission-cli Kill</a>';
 			$htmlMain .= '<p>';
 			$htmlMain .= '<strong>Wget</strong><br>';
 			$htmlMain .= 'Kill all wget processes:<br>';
@@ -308,7 +311,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." php | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP php | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 php 2> /dev/null"));
@@ -321,7 +324,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." php | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP php | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -333,7 +336,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." python | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP python | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 python 2> /dev/null"));
@@ -346,7 +349,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." python | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP python | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -358,7 +361,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." perl | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP perl | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 perl 2> /dev/null"));
@@ -371,34 +374,37 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." perl | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP perl | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
 
-		case "24": // Maintenance-Kill: transmissioncli
-			$htmlTitle = "Maintenance - Kill - Transmissioncli";
+		case "24": // Maintenance-Kill: transmission-cli
+			$htmlTitle = "Maintenance - Kill - Transmission-cli";
 			$htmlMain .= '<br>';
-			$htmlMain .= 'Kill all transmissioncli processes: <font color="green">done</font>';
+			$htmlMain .= 'Kill all transmission-cli processes: <font color="green">done</font>';
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
-			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." transmissioncli | ".$cfg['bin_grep']." -v grep")));
-			$htmlMain .= '</pre>';
-			$htmlMain .= '<br>';
-			$callResult = trim(shell_exec("killall -9 transmissioncli 2> /dev/null"));
-			if ((isset($callResult)) && ($callResult != "")) {
+			$transmission = basename($cfg["btclient_transmission_bin"]);
+			if ($transmission) {
+				$htmlMain .= '<pre>';
+				$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP $transmission | $GREP cli |  $GREP -v grep")));
+				$htmlMain .= '</pre>';
 				$htmlMain .= '<br>';
-				$htmlMain .= 'Call Result: <br>';
-				$htmlMain .= '<pre>'.tfb_htmlencode($callResult).'</pre>';
+				$callResult = trim(shell_exec("killall -9 $transmission 2> /dev/null"));
+				if ((isset($callResult)) && ($callResult != "")) {
+					$htmlMain .= '<br>';
+					$htmlMain .= 'Call Result: <br>';
+					$htmlMain .= '<pre>'.tfb_htmlencode($callResult).'</pre>';
+					$htmlMain .= '<br>';
+				}
+				sleep(2); // just 2 sec
+				$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
+				$htmlMain .= '<pre>';
+				$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP transmissioncli | $GREP -v grep")));
+				$htmlMain .= '</pre>';
 				$htmlMain .= '<br>';
 			}
-			sleep(2); // just 2 sec
-			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
-			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." transmissioncli | ".$cfg['bin_grep']." -v grep")));
-			$htmlMain .= '</pre>';
-			$htmlMain .= '<br>';
 			break;
 
 		case "25": // Maintenance-Kill: wget
@@ -408,7 +414,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." wget | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP wget | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 wget 2> /dev/null"));
@@ -421,7 +427,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." wget | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP wget | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -433,7 +439,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." vlc | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP vlc | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 vlc 2> /dev/null"));
@@ -446,7 +452,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." vlc | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP vlc | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;

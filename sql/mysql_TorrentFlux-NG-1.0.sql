@@ -225,7 +225,7 @@ INSERT INTO tf_settings VALUES ('bin_uudeview','/usr/local/bin/uudeview');
 INSERT INTO tf_settings VALUES ('btclient','tornado');
 INSERT INTO tf_settings VALUES ('btclient_tornado_options','');
 INSERT INTO tf_settings VALUES ('btclient_transmission_enable','0');
-INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmissioncli');
+INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmission-cli');
 INSERT INTO tf_settings VALUES ('btclient_transmission_options','');
 INSERT INTO tf_settings VALUES ('metainfoclient','btshowmetainfo.py');
 INSERT INTO tf_settings VALUES ('enable_restrictivetview','1');
@@ -294,7 +294,6 @@ INSERT INTO tf_settings VALUES ('enable_sharekill','1');
 INSERT INTO tf_settings VALUES ('transfer_window_default','transferStats');
 INSERT INTO tf_settings VALUES ('index_show_seeding','1');
 INSERT INTO tf_settings VALUES ('enable_personal_settings','1');
-INSERT INTO tf_settings VALUES ('enable_torrent','1');
 INSERT INTO tf_settings VALUES ('enable_nzbperl','0');
 INSERT INTO tf_settings VALUES ('nzbperl_badAction','0');
 INSERT INTO tf_settings VALUES ('nzbperl_server','');
@@ -305,8 +304,6 @@ INSERT INTO tf_settings VALUES ('nzbperl_conn','1');
 INSERT INTO tf_settings VALUES ('nzbperl_rate','0');
 INSERT INTO tf_settings VALUES ('nzbperl_create','0');
 INSERT INTO tf_settings VALUES ('nzbperl_options','');
-INSERT INTO tf_settings VALUES ('nzbperl_ssl','0');
-INSERT INTO tf_settings VALUES ('nzbperl_port','119');
 INSERT INTO tf_settings VALUES ('fluazu_host','localhost');
 INSERT INTO tf_settings VALUES ('fluazu_port','6884');
 INSERT INTO tf_settings VALUES ('fluazu_secure','0');
@@ -332,6 +329,11 @@ INSERT INTO tf_settings VALUES ('fluxd_Maintenance_interval','600');
 INSERT INTO tf_settings VALUES ('fluxd_Maintenance_trestart','0');
 INSERT INTO tf_settings VALUES ('fluxd_Trigger_interval','600');
 
+-- GIT UPDATES
+INSERT INTO tf_settings VALUES ('enable_torrent','1');
+INSERT INTO tf_settings VALUES ('nzbperl_ssl','0');
+INSERT INTO tf_settings VALUES ('nzbperl_port','119');
+
 INSERT INTO tf_settings VALUES ('transmission_rpc_enable','0');
 INSERT INTO tf_settings VALUES ('transmission_rpc_host','127.0.0.1');
 INSERT INTO tf_settings VALUES ('transmission_rpc_port','9091');
@@ -342,7 +344,7 @@ INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0');
 INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1');
 INSERT INTO tf_settings VALUES ('vuze_rpc_port','19091');
 INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze');
-INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword');
+INSERT INTO tf_settings VALUES ('vuze_rpc_password','');
 
 --
 -- tf_settings_dir

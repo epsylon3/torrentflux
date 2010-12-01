@@ -17,8 +17,8 @@ This patch is made to add some missing features to Transmission (client version)
    apt-get install intltool libevent-dev libssl-dev libcurl4-openssl-dev
    ./configure --enable-cli --enable-daemon
    make
-   strip /cli/transmission-cli
-   cp /cli/transmission-cli /usr/local/bin/
+   strip cli/transmission-cli
+   cp cli/transmission-cli /usr/local/bin/
 
 Transmission 0.96 and later
 ---------------------------

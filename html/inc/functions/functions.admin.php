@@ -857,7 +857,7 @@ function validatePhpCli($the_file) {
 }
 
 /**
- * Validates existence + exec + valid version of transmissioncli and returns the status image
+ * Validates existence + exec + valid version of transmission-cli and returns the status image
  *
  * @param $the_file
  * @return string
@@ -870,11 +870,11 @@ function validateTransmissionCli($the_file) {
 		return validationMsg(false, 'File exists but is not executable');
 	$transmissionHelp = strtolower(shell_exec("HOME=".tfb_shellencode($cfg["path"])."; export HOME; ".$the_file.' --help'));
 	return (
-		strpos($transmissionHelp, 'transmission') === false ||
-		((strpos($transmissionHelp, 'tfcli') === false) &&
-		 (strpos($transmissionHelp, 'torrentflux') === false))
+		stripos($transmissionHelp, 'transmission') === false ||
+		((stripos($transmissionHelp, 'tfcli') === false) &&
+		 (stripos($transmissionHelp, 'torrentflux') === false))
 	)
-		? validationMsg(false, 'Executable is not TorrentFlux-bundled transmissioncli')
+		? validationMsg(false, 'Executable is not TorrentFlux-NG bundled transmission-cli')
 		: validationMsg(true);
 }
 

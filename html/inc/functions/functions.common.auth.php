@@ -188,7 +188,7 @@ function firstLogin($username = '', $password = '') {
 						"bin_cksfv" => "cksfv",
 						"bin_vlc" => "vlc",
 						"bin_uudeview" => "uudeview",
-						"btclient_transmission_bin" => "transmissioncli",
+						"btclient_transmission_bin" => "transmission-cli",
 						"bin_netstat" => "netstat",
 						"bin_sockstat" => "sockstat"
 					);
