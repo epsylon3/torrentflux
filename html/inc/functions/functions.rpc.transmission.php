@@ -144,6 +144,7 @@ function startTransmissionTransfer($hash) {
  * @return void
  */
 function stopTransmissionTransfer($hash) {
+	global $cfg;
 	require_once('inc/classes/Transmission.class.php');
 	$trans = new Transmission();
 

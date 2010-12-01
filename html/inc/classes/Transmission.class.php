@@ -27,6 +27,8 @@
  * ?>
  *
  */
+$Transmission_inst=NULL;
+ 
 class Transmission
 {
 	/**
@@ -367,6 +369,29 @@ class Transmission
 
 		//return $this->cleanResultData( json_decode( $body ) );
 		return json_decode( $body, true );
+	}
+	
+	public function session_get() {
+		$req = $this->request('session-get');
+		$this->session = $req;
+		return $this->session;
+	}
+	
+	//Transmission::getInstance()
+	public function getInstance() {
+		global $Transmission_inst;
+		if (!is_object($Transmission_inst)) {
+			global $cfg;
+			$Transmission_inst = new Transmission($cfg);
+		}
+		return $Transmission_inst;
+	}
+	
+	//Transmission::isRunning()
+	public function isRunning() {
+		$instance = Transmission::getInstance();
+		$session = $instance->session_get();
+		return  ($session && $session->result == 'success');
 	}
 }
 

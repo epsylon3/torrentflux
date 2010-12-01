@@ -20,6 +20,11 @@
 
 *******************************************************************************/
 
+require_once("inc/classes/Transmission.class.php");
+
+// Transmission RPC functions
+require_once("inc/functions/functions.rpc.transmission.php");
+
 /**
  * class ClientHandler for future transmission-daemon RPC - for superadmin stats...
  */
@@ -45,6 +50,102 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	// =========================================================================
 	// public methods
 	// =========================================================================
+
+	/**
+	 * starts a transfer
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $interactive (boolean) : is this a interactive startup with dialog ?
+	 * @param $enqueue (boolean) : enqueue ?
+	 */
+	function start($transfer, $interactive = false, $enqueue = false) {
+		global $cfg;
+
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+
+		// log
+		$this->logMessage($this->client."-start : ".$transfer."\n", true);
+
+		if (!Transmission::isRunning()) {
+			$msg = "Transmission RPC not reacheable, cannot start transfer ".$transfer;
+			AuditAction($cfg["constants"]["error"], $msg);
+			$this->logMessage($msg."\n", true);
+			// return
+			return false;
+		}
+
+		$hash = getTransferHash($transfer);
+		startTransmissionTransfer($hash);
+
+		// start the client
+		//$this->_start();
+	}
+
+	/**
+	 * stops a transfer
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $kill kill-param (optional)
+	 * @param $transferPid transfer Pid (optional)
+	 */
+	function stop($transfer, $kill = false, $transferPid = 0) {
+		global $cfg;
+
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+
+		// log
+		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
+
+		// only if Transmission running
+		if (!Transmission::isRunning()) {
+			array_push($this->messages , "Transmission not running, cannot stop transfer ".$transfer);
+			return false;
+		}
+
+		$hash = getTransferHash($transfer);
+
+		if (!stopTransmissionTransfer($hash)) {
+			$msg = "transfer ".$transfer." does not exist in Transmission.";
+			$this->logMessage($msg."\n", true);
+			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
+		}
+
+		// flag the transfer as stopped (in db)
+		stopTransferSettings($transfer);
+
+		@unlink($this->transferFilePath.".pid");
+	}
+
+	/**
+	 * deletes a transfer
+	 *
+	 * @param $transfer name of the transfer
+	 * @return boolean of success
+	 */
+	function delete($transfer) {
+		global $cfg;
+
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+
+		// log
+		$this->logMessage($this->client."-delete : ".$transfer."\n", true);
+
+		// only if vuze running and transfer exists in fluazu
+		if (!Transmission::isRunning()) {
+			array_push($this->messages , "Transmission not running, cannot stop transfer ".$transfer);
+			return false;
+		}
+
+		$hash = getTransferHash($transfer);
+
+		deleteTransmissionTransfer($transfer);
+
+		// delete
+		return $this->_delete();
+	}
 
 	/**
 	 * gets current transfer-vals of a transfer
@@ -158,7 +259,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		// return
 		return true;
 	}
-	
+
 	/**
 	 * (test) gets array of running transfers (via call to transmission-remote)
 	 *
