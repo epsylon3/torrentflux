@@ -32,21 +32,21 @@ class RunningTransferNzbperl extends RunningTransfer
 	 * @param $psLine
 	 * @return RunningTransferNzbperl
 	 */
-    function RunningTransferNzbperl($psLine) {
-    	global $cfg;
-        // ps-parse
-        if (strlen($psLine) > 0) {
-            while (strpos($psLine,"  ") > 0)
-                $psLine = str_replace("  ",' ',trim($psLine));
-            $arr = explode(' ',$psLine);
-            $count = count($arr);
-            $this->processId = $arr[0];
-            $this->args = "";
-            $this->filePath = $arr[($count - 4)];
-            $this->transferowner = $arr[($count - 2)];
-            $this->transferFile = str_replace($cfg['transfer_file_path'],'', $arr[($count - 1)]);
-        }
-    }
+	function RunningTransferNzbperl($psLine) {
+		global $cfg;
+		// ps-parse
+		if (strlen($psLine) > 0) {
+			while (strpos($psLine,'  ') > 0)
+				$psLine = str_replace('  ',' ',trim($psLine));
+			$arr = explode(' ',$psLine);
+			$count = count($arr);
+			$this->processId = $arr[0];
+			$this->args = "";
+			$this->filePath = $arr[($count - 4)];
+			$this->transferowner = $arr[($count - 2)];
+			$this->transferFile = str_replace($cfg['transfer_file_path'],'', $arr[($count - 1)]);
+		}
+	}
 
 }
 

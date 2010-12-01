@@ -32,21 +32,21 @@ class RunningTransferWget extends RunningTransfer
 	 * @param $psLine
 	 * @return RunningTransferWget
 	 */
-    function RunningTransferWget($psLine) {
-    	global $cfg;
-        // ps-parse
-        if (strlen($psLine) > 0) {
-            while (strpos($psLine,"  ") > 0)
-                $psLine = str_replace("  ",' ',trim($psLine));
-            $arr = explode(' ',$psLine);
-            $count = count($arr);
-            $this->processId = $arr[0];
-            $this->args = "";
+	function RunningTransferWget($psLine) {
+		global $cfg;
+		// ps-parse
+		if (strlen($psLine) > 0) {
+			while (strpos($psLine,"  ") > 0)
+				$psLine = str_replace("  ",' ',trim($psLine));
+			$arr = explode(' ',$psLine);
+			$count = count($arr);
+			$this->processId = $arr[0];
+			$this->args = "";
 			$this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[($count - 6)]);
-            $this->transferowner = $arr[($count - 5)];
-            $this->filePath = substr($arr[($count - 4)], 0, strrpos($arr[($count - 4)], "/")+1);
-        }
-    }
+			$this->transferowner = $arr[($count - 5)];
+			$this->filePath = substr($arr[($count - 4)], 0, strrpos($arr[($count - 4)], "/")+1);
+		}
+	}
 
 }
 

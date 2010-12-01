@@ -32,51 +32,51 @@ class RunningTransferTornado extends RunningTransfer
 	 * @param $psLine
 	 * @return RunningTransferTornado
 	 */
-    function RunningTransferTornado($psLine) {
-    	global $cfg;
-        // tornadoBin
-        $tornadoBin = $cfg["docroot"]."bin/clients/tornado/tftornado.py";
-        // ps-parse
-        if (strlen($psLine) > 0) {
-            while (strpos($psLine,"  ") > 0)
-                $psLine = str_replace("  ",' ',trim($psLine));
-            $arr = explode(' ',$psLine);
-            $this->processId = $arr[0];
-            foreach($arr as $key =>$value) {
-                if ($key == 0)
-                    $startArgs = false;
-                if ($value == $tornadoBin) {
-                    $offset = 1;
-                    if(!@strpos($arr[$key+$offset],"/",1) > 0)
-                        $offset += 1;
-                    if(!@strpos($arr[$key+$offset],"/",1) > 0)
-                        $offset += 1;
-                    $this->filePath = substr($arr[$key+$offset],0,strrpos($arr[$key+$offset],"/")+1);
-                    $this->transferowner = $arr[$key+$offset];
-                    $this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[$key+$offset+1]);
-                }
-                if ($value == '--display_interval')
-                    $startArgs = true;
-                if ($startArgs) {
-                    if (!empty($value)) {
-                        if (strpos($value, "-", 1) > 0) {
-                            if (array_key_exists($key + 1, $arr)) {
-                            	$this->args .= (strpos($value,"priority") > 0)
-                            		? "\n file ".$value." set"
-                            		: $value.":".$arr[$key+1].",";
-                            } else {
-                                $this->args .= "";
-                            }
-                        }
-                    }
-                }
-                if ($value == '--responsefile')
-                    $this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[$key+1]);
-            }
-            $this->args = str_replace("--","",$this->args);
-            $this->args = substr($this->args,0,strlen($this->args));
-        }
-    }
+	function RunningTransferTornado($psLine) {
+		global $cfg;
+		// tornadoBin
+		$tornadoBin = $cfg["docroot"]."bin/clients/tornado/tftornado.py";
+		// ps-parse
+		if (strlen($psLine) > 0) {
+			while (strpos($psLine,"  ") > 0)
+				$psLine = str_replace("  ",' ',trim($psLine));
+			$arr = explode(' ',$psLine);
+			$this->processId = $arr[0];
+			foreach($arr as $key =>$value) {
+				if ($key == 0)
+					$startArgs = false;
+				if ($value == $tornadoBin) {
+					$offset = 1;
+					if(!@strpos($arr[$key+$offset],"/",1) > 0)
+						$offset += 1;
+					if(!@strpos($arr[$key+$offset],"/",1) > 0)
+						$offset += 1;
+					$this->filePath = substr($arr[$key+$offset],0,strrpos($arr[$key+$offset],"/")+1);
+					$this->transferowner = $arr[$key+$offset];
+					$this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[$key+$offset+1]);
+				}
+				if ($value == '--display_interval')
+					$startArgs = true;
+				if ($startArgs) {
+					if (!empty($value)) {
+						if (strpos($value, "-", 1) > 0) {
+							if (array_key_exists($key + 1, $arr)) {
+								$this->args .= (strpos($value,"priority") > 0)
+									? "\n file ".$value." set"
+									: $value.":".$arr[$key+1].",";
+							} else {
+								$this->args .= "";
+							}
+						}
+					}
+				}
+				if ($value == '--responsefile')
+					$this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[$key+1]);
+			}
+			$this->args = str_replace("--","",$this->args);
+			$this->args = substr($this->args,0,strlen($this->args));
+		}
+	}
 
 }
 
