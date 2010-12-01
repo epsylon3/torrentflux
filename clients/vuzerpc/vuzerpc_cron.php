@@ -72,21 +72,21 @@ function updateStatFiles() {
 	//SHAREKILLS
 	$nbUpdate=0;
 	foreach ($tfs as $hash => $t) {
-		if (isset($sharekills[$hash])) {
-			if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$hash]) {
-				
-				$transfer = $hashes[$hash];
-				
-				$nbUpdate++;
-				
-				if (!$vuze->torrent_stop_tf($hash)) {
-					AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
-				} else {
-					// log
-					AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
-					// flag the transfer as stopped (in db)
-					stopTransferSettings($transfer);
-				}
+		if (!isset($sharekills[$hash]))
+			continue;
+		if (($t['status']==8 || $t['status']==9) && $t['sharing'] > $sharekills[$hash]) {
+			
+			$transfer = $hashes[$hash];
+			
+			$nbUpdate++;
+			
+			if (!$vuze->torrent_stop_tf($hash)) {
+				AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
+			} else {
+				// log
+				AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
+				// flag the transfer as stopped (in db)
+				stopTransferSettings($transfer);
 			}
 		}
 	}

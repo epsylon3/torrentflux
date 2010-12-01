@@ -68,7 +68,11 @@
 	jQuery(document).ready(function() {
 		//$(".pb5").progressBar({ max: 2000, textFormat: 'fraction', callback: function(data) { if (data.running_value == data.value) { alert("Callback example: Target reached!"); } }} );
 		var box = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbar.png';
-		var bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_blue.png';
+		var rbar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_red.png';
+		var gbar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_green.png';
+		var bbar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_blue.png';
+		
+		var bar = bbar;
 		var maxval = 100;
 		var percent = parseFloat('<tmpl_var name="percent_done">')
 		var sharing = parseFloat('<tmpl_var name="sharing">');
@@ -78,15 +82,15 @@
 		if (sharekill === NaN) sharekill = 0.0;
 		
 		if (percent < 100.0) {
-			bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_red.png';
+			bar = rbar;
 		} else if (sharing >= sharekill) {
-			bar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_green.png';
+			bar = gbar;
 			maxval = sharing;
 		} else if (sharekill > 0.0) {
 			maxval = sharekill;
 		}
 		
-		jQuery("#barImage1").progressBar({ max: maxval, boxImage: box, barImage: bar });
+		jQuery("#barImage1").progressBar({ max: maxval, boxImage: box, barImage: {0:bar,100:bbar,maxval:gbar} });
 	});
 	
 </script>
