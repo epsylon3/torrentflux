@@ -6,27 +6,25 @@
 <!-- prevent caching and search engine indexing -->
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="cache-control" content="no-cache" />
-<meta http-equiv="expires" content="Mon, 14 Dec 1981 11:12:01 GMT" />
+<meta http-equiv="expires" content="Mon, 10 Dec 2000 00:00:00 GMT" />
 <meta name="robots" content="noindex,nofollow,noarchive" />
+<tmpl_if name="stats_enable_public">
 <link rel="alternate" title="Transfer-Stats" href="stats.php?f=rss" type="application/rss+xml" />
+</tmpl_if>
 <link rel="icon" href="themes/<tmpl_var name="theme">/images/mainLayout/faviconRedRound.ico" type="image/x-icon" />
-
 <!-- jQuery css -->
 <link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/red/jquery-ui-1.8.6.custom.css" type="text/css" />
 <link rel="stylesheet" href="themes/<tmpl_var name="theme">/scripts/jquery.droplist.css" type="text/css" />
-
+<link rel="stylesheet" href="js/jquery.jgrowl.css" type="text/css" media="screen" />
 <!-- Theme css -->
 <link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/mainLayout.css" type="text/css" />
 <link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
-
 <!-- jQuery core -->
 <script type="text/javascript" src="js/jquery.min.js"></script>
-
 <!-- Theme scripts -->
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui-1.8.6.custom.min.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/linkControl.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/common.js"></script>
-
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.jScrollPane.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.droplist.js"></script>
