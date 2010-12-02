@@ -36,115 +36,115 @@ switch ($action) {
 /*******************************************************************************
  * dummy
  ******************************************************************************/
-    case "---":
-    	break;
+	case "---":
+		break;
 
 /*******************************************************************************
  * single transfer ops
  ******************************************************************************/
-    case "start":
+	case "start":
 		dispatcher_startTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "delete":
-    	dispatcher_deleteTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "deleteWithData":
-    	dispatcher_deleteDataTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "wipe":
-    	dispatcher_wipeTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "stop":
-    	dispatcher_stopTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "forceStop":
-    	dispatcher_forceStopTransfer(urldecode(tfb_getRequestVar('transfer')), tfb_getRequestVar('pid'));
-    	break;
-    case "restart":
-    	dispatcher_restartTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "deQueue":
-    	dispatcher_deQueueTransfer(urldecode(tfb_getRequestVar('transfer')));
-    	break;
-    case "setFilePriority":
+		break;
+	case "delete":
+		dispatcher_deleteTransfer(urldecode(tfb_getRequestVar('transfer')));
+		break;
+	case "deleteWithData":
+		dispatcher_deleteDataTransfer(urldecode(tfb_getRequestVar('transfer')));
+		break;
+	case "wipe":
+		dispatcher_wipeTransfer(urldecode(tfb_getRequestVar('transfer')));
+		break;
+	case "stop":
+		dispatcher_stopTransfer(urldecode(tfb_getRequestVar('transfer')));
+		break;
+	case "forceStop":
+		dispatcher_forceStopTransfer(urldecode(tfb_getRequestVar('transfer')), tfb_getRequestVar('pid'));
+		break;
+	case "restart":
+		dispatcher_restartTransfer(urldecode(tfb_getRequestVar('transfer')));
+		break;
+	case "deQueue":
+		dispatcher_deQueueTransfer(urldecode(tfb_getRequestVar('transfer')));
+		break;
+	case "setFilePriority":
 		dispatcher_setFilePriority(urldecode(tfb_getRequestVar('transfer')));
-    	break;
+		break;
 
 /*******************************************************************************
  * injects
  ******************************************************************************/
 	case "fileUpload":
 		dispatcher_processUpload();
-    	break;
-    case "urlUpload":
+		break;
+	case "urlUpload":
 		dispatcher_processDownload(tfb_getRequestVarRaw('url'), tfb_getRequestVar('type'));
-    	break;
-    case "wget":
+		break;
+	case "wget":
 		dispatcher_injectWget(tfb_getRequestVarRaw('url'));
-    	break;
+		break;
 
 /*******************************************************************************
  * metafile-download
  ******************************************************************************/
 	case "metafileDownload":
 		dispatcher_sendMetafile(tfb_getRequestVar('transfer'));
-    	break;
+		break;
 
 /*******************************************************************************
  * set
  ******************************************************************************/
-    case "set":
-    	dispatcher_set(tfb_getRequestVar('key'), tfb_getRequestVar('val'));
-    	break;
+	case "set":
+		dispatcher_set(tfb_getRequestVar('key'), tfb_getRequestVar('val'));
+		break;
 
 /*******************************************************************************
  * Maintenance
  ******************************************************************************/
-    case "maintenance":
+	case "maintenance":
 		require_once("inc/classes/MaintenanceAndRepair.php");
 		$type = tfb_getRequestVar('type',(tfb_getRequestVar('trestart') == "true") ?
 			MAINTENANCEANDREPAIR_TYPE_EXT : MAINTENANCEANDREPAIR_TYPE_STD);
 		MaintenanceAndRepair::maintenance($type);
 		// set transfers-cache
 		cacheTransfersSet();
-    	break;
+		break;
 
 /*******************************************************************************
  * Cache-Flush
  ******************************************************************************/
-    case "cacheFlush":
-    	// flush session-cache
+	case "cacheFlush":
+		// flush session-cache
 		cacheFlush();
 		// flush transfers-cache (not really needed as reload is triggered)
 		cacheTransfersFlush();
-    	break;
+		break;
 
 /*******************************************************************************
  * Cookie-Flush
  ******************************************************************************/
-    case "cookieFlush":
+	case "cookieFlush":
 		@setcookie("autologin", "", time() - 3600);
-    	break;
+		break;
 
 /*******************************************************************************
  * bulk operations
  ******************************************************************************/
-    case "bulkStop":
-    	dispatcher_bulk("stop");
-    	break;
-    case "bulkResume":
-    	dispatcher_bulk("resume");
-    	break;
-    case "bulkStart":
-    	dispatcher_bulk("start");
-    	break;
+	case "bulkStop":
+		dispatcher_bulk("stop");
+		break;
+	case "bulkResume":
+		dispatcher_bulk("resume");
+		break;
+	case "bulkStart":
+		dispatcher_bulk("start");
+		break;
 
 /*******************************************************************************
  * multi operations
  ******************************************************************************/
-    default:
-    	dispatcher_multi($action);
-    	break;
+	default:
+		dispatcher_multi($action);
+		break;
 }
 
 /*******************************************************************************

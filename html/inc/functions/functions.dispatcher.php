@@ -662,11 +662,11 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 	$downloadMessages = array();
 	$origurl = $url; // Added by deadeyes; copied as later $url gets changed
 	if (!empty($url)) {
-		
+
 		$hash = false;
 		// Added by deadeyes to detect a magnet link
 		if ( $type === 'torrent' && strlen( stristr( $url, 'magnet:' ) ) > 0 ) {
-			
+
 			$client = getTransferClient('magnet.torrent');
 			// We have a magnet link :D
 			if ($client == 'transmission' && $cfg["transmission_rpc_enable"]) {
@@ -680,13 +680,13 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 			if ($cfg['debuglevel'] > 0) {
 				AuditAction($cfg["constants"]["debug"], "Download Magnet ($client) : $hash ".htmlentities(addslashes($url), ENT_QUOTES));
 			}
-			
+
 		}
 
 		if (!$hash)
 		{
 			// not a magnet torrent..
-			
+
 			$arURL = explode("/", $url);
 			$filename = urldecode($arURL[count($arURL)-1]); // get the file name
 			$filename = str_replace(array("'",","), "", $filename);
@@ -913,11 +913,11 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 				array_push($uploadMessages, "the file ".$filename." already exists on the server.");
 				return false;
 			} else {
-				
+
 				if (@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename)) {
 					@chmod($cfg["transfer_file_path"].$filename, 0644);
 					AuditAction($cfg["constants"]["file_upload"], $filename);
-					
+
 					if ($cfg["transmission_rpc_enable"]) {
 						require_once('inc/functions/functions.rpc.transmission.php');
 						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
