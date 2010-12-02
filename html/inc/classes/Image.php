@@ -97,13 +97,13 @@ class Image
 					? false
 					: $img;
 			case IMG_PNG:
-				$img->image = @imagecreatefromjpeg($r);
+				$img->image = @imagecreatefrompng($r);
 				return (!$img->image)
 					? false
 					: $img;
 				break;
 			case IMG_JPG:
-				$img->image = @imagecreatefrompng($r);
+				$img->image = @imagecreatefromjpeg($r);
 				return (!$img->image)
 					? false
 					: $img;
@@ -127,10 +127,10 @@ class Image
 				return true;
 			// png
 			if ($imageTypes & IMG_PNG)
-			   return true;
+				return true;
 			// jpg
 			if ($imageTypes & IMG_JPG)
-			   return true;
+				return true;
 		}
 		return false;
 	}
@@ -194,11 +194,11 @@ class Image
 			$r = 0, $g = 0, $b = 0) {
 		// img
 		$imageObject = false;
-		// gif
-		$imageObject = Image::getImageFromRessource(IMG_GIF, $bgimage.".gif");
-		// try png if failed
+		// try png
+		$imageObject = Image::getImageFromRessource(IMG_PNG, $bgimage.".png");
+		// try gif if failed
 		if (!$imageObject)
-			$imageObject = Image::getImageFromRessource(IMG_PNG, $bgimage.".png");
+			$imageObject = Image::getImageFromRessource(IMG_GIF, $bgimage.".gif");
 		// try jpg if failed
 		if (!$imageObject)
 			$imageObject = Image::getImageFromRessource(IMG_JPG, $bgimage.".jpg");
