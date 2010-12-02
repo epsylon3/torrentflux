@@ -6,7 +6,6 @@
 
 .dtree {
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 8px;
 	color: #666;
 	white-space: nowrap;
 }
@@ -37,4 +36,14 @@
 
 .dtree .clip {
 	overflow: hidden;
+}
+
+.dTreeNode {
+	padding: 0;
+}
+
+.dTreeNode input[type="checkbox"] {
+	margin: 0;
+	margin-right: 4px;
+	vertical-align: middle;
 }
