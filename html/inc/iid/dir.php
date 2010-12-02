@@ -252,6 +252,7 @@ if ($down != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($down))) && (hasPermission($down, $cfg["user"], 'r'))) {
+		@ ini_set("zlib.output_compression","Off");
 		$current = downloadFile($down);
 	} else {
 		AuditAction($cfg["constants"]["error"], "ILLEGAL DOWNLOAD: ".$cfg["user"]." tried to download ".$down);
@@ -285,6 +286,7 @@ if ($tar != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($tar))) && (hasPermission($tar, $cfg["user"], 'r'))) {
+		@ ini_set("zlib.output_compression","Off");
 		$current = downloadArchive($tar);
 	} else {
 		AuditAction($cfg["constants"]["error"], "ILLEGAL TAR DOWNLOAD: ".$cfg["user"]." tried to download ".$tar);
