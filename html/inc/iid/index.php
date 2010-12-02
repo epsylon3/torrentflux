@@ -195,7 +195,7 @@ if ($cfg["transmission_rpc_enable"]) {
 // end of Transmission RPC bloc
 // ---------------------------------------------------------------------
 
-foreach ($arList as $transfer) {
+foreach ($arList as $mtimecrc => $transfer) {
 	// displayname
 	$displayname = $transfer;
 
@@ -205,14 +205,22 @@ foreach ($arList as $transfer) {
 	$displayname = preg_replace('#([^_]+_(com|org|net|info)_)#i',"",$displayname);
 	$displayname = preg_replace('#(_torrent)$#i',"",$displayname);
 
-	$arToClean = array ("http","download_php","_www_","isohunt");
+	$arToClean = array ("http_","_www_","isohunt");
 	$displayname = str_ireplace($arToClean,"",$displayname);
 
 	$displayname = str_replace('_',".",$displayname);
 	$displayname = str_replace('..',".",$displayname);
 	$displayname = trim($displayname,'.');
 
-	$displayname = (strlen($displayname) >= 47) ? substr($displayname, 0, 44)."..." : $displayname;
+	$displayname = (strlen($displayname) > 53) ? substr($displayname, 0, 50)."..." : $displayname;
+
+	if ($displayname == 'download.php') {
+		//must fix $transfer torrent filename before...
+		//$name = getTransferFromHash($hash);
+		$displayname = 'dup:'.$mtimecrc;
+		addGrowlMessage('[dup]','This torrent has already been downloaded');
+	}
+
 	// owner
 	$transferowner = getOwner($transfer);
 	$owner = IsOwner($cfg["user"], $transferowner);
@@ -637,12 +645,21 @@ if ($isAjaxUpdate) {
 			$isFirst = false;
 		else
 			$content .= "¤";
+
+		//Messages jGrowl
+		global $growl;
+		$jGrowls = "";
+		if (!empty($growl)) {
+			foreach($growl as $msg) {
+				$jGrowls .= "jQuery.jGrowl('".addslashes($msg)."');";
+			}
+		}
 		//Growl message on ajax refresh
 		if (!empty($msgGrowl)) {
-			$jGrowl = "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
-		
-			$content .= $jGrowl;
+			$jGrowls .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
 		}
+		$content .= $jGrowls;
+
 	}
 	// send and out
 	@header("Cache-Control: no-cache");
@@ -710,12 +727,18 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 	$onLoad .= $ajaxInit;
 } 
 
-//Growl message
-if (!empty($msgGrowl)) {
-	$ajaxInit .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
-
-	$onLoad .= $ajaxInit;
+//Index Growl messages
+global $growl;
+$jGrowls = "";
+if (!empty($growl)) {
+	foreach($growl as $msg) {
+		$jGrowls .= "jQuery.jGrowl('".addslashes($msg)."');";
+	}
 }
+if (!empty($msgGrowl)) {
+	$jGrowls .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
+}
+$onLoad .= $jGrowls;
 
 
 //Hide Seeds

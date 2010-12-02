@@ -438,7 +438,7 @@ function getTransferArray($sortOrder = '') {
 				default:
 					$transferName=str_replace('.imported','',$transfer);
 					if (tfb_isValidTransfer($transferName))
-						$retVal[filemtime($cfg["transfer_file_path"].$transfer).md5($transfer)] = $transfer;
+						$retVal[date('YmdHi',filemtime($cfg["transfer_file_path"].$transfer)).'_'.sprintf('%u',crc32($transfer))] = $transfer;
 					else
 						AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transferName);
 					break;
