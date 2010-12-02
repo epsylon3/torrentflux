@@ -624,15 +624,15 @@ $msgSticky = false;
 $nbMsg = numUnreadMsg();
 if ($nbMsg > 0) {
 	if (IsForceReadMsg()) {
-
 		//disabled page lock
 		//$tmpl->setvar('IsForceReadMsg', 1);
-		
+
+		 //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute, quoted dblquotes (\") seems not working 
 		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
-	
+
 		//dont auto-hide growl message
 		$msgSticky = true;
-	
+
 	} elseif ($nbMsg > 1) {
 		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have new messages !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
 	} else {
@@ -685,10 +685,16 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 	$ajaxInit .= ",'".$cfg['bandwidthbar']."'";
 	$ajaxInit .= ");onbeforeunload = ajax_unload;";
 	
-	if (!empty($msgGrowl)) //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute
+	if (!empty($msgGrowl))
 	$ajaxInit .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
 	
 	$onLoad .= $ajaxInit;
+} else {
+	
+	if (!empty($msgGrowl))
+	$jsInit  = "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
+	
+	$onLoad .= $jsInit;
 }
 
 //Hide Seeds
