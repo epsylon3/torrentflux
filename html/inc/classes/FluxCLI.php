@@ -22,8 +22,9 @@
 
 // defines
 define('_DUMP_DELIM', '*');
-preg_match('|.*\s(\d+)\s.*|', '$Revision$', $revisionMatches);
-define('_REVISION_FLUXCLI', $revisionMatches[1]);
+//preg_match('|.*\s(\d+)\s.*|', '$Revision$', $revisionMatches);
+//define('_REVISION_FLUXCLI', isset($revisionMatches[1]) ? $revisionMatches[1] : 'git');
+define('_REVISION_FLUXCLI', 'v1.0git');
 
 /**
  * FluxCLI
