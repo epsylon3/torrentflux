@@ -42,6 +42,7 @@ var imgSrcDriveSpaceBlank = "themes/default/images/blank.gif";
 var imgHeightDriveSpaceBlank = 12;
 var indexTimer = null;
 var updateTimeLeft = 0;
+var ajaxScriptEnabled = 1;
 
 /**
  * ajax_initialize
@@ -148,32 +149,52 @@ function ajax_processXML(content) {
  * @param content
  */
 function ajax_processText(content) {
-	var aryCount = 1;
+	var aryCount = 0;
 	if ((bottomStatsEnabled == 1) && (xferEnabled == 1))
 		aryCount++;
 	if (usersEnabled == 1)
 		aryCount++;
 	if (transferListEnabled == 1)
 		aryCount++;
-	if (aryCount == 1) {
-		// update
-		ajax_updateContent(content, "", "", "");
-	} else {
-		var tempAry = content.split("|");
+	if (ajaxScriptEnabled == 1)
+		aryCount++;
+	
+	if (aryCount > 0) {
+		var tempAry = content.split("¤");
+		
+		// ajax-script (jgrowl)
+		var ajaxScript = "";
+		if (ajaxScriptEnabled == 1)
+			ajaxScript = tempAry.pop();
+		
 		// transfer-list
 		var transferList = "";
 		if (transferListEnabled == 1)
 			transferList = tempAry.pop();
+		
 		// users
 		var users = "";
 		if (usersEnabled == 1)
 			users = tempAry.pop();
+		
 		// xfer
 		var statsXfer = "";
 		if ((bottomStatsEnabled == 1) && (xferEnabled == 1))
 			statsXfer = tempAry.pop();
+		
 		// update
 		ajax_updateContent(tempAry.pop(), statsXfer, users, transferList);
+		
+		if (ajaxScript != "") {
+			try {
+				eval(ajaxScript);
+			} catch(e) {
+				if (typeof(console) != 'undefined') {
+					console.log("something wrong in ajax script after updateContent() :");
+					console.log(e);
+				}
+			}
+		}
 	}
 	// timer
 	updateTimeLeft = ajax_updateTimer / 1000;
@@ -310,6 +331,14 @@ function ajax_updateContent(statsServerStr, statsXferStr, usersStr, transferList
 	}
 	// transfer-list
 	if (transferListEnabled == 1) {
+		// update content
+		document.getElementById("transferList").innerHTML = transferListStr;
+		// re-init sort-table
+		if (sortTableEnabled == 1)
+			sortables_init();
+	}
+	// transfer-list
+	if (ajaxScriptEnabled == 1) {
 		// update content
 		document.getElementById("transferList").innerHTML = transferListStr;
 		// re-init sort-table

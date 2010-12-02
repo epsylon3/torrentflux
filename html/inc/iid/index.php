@@ -21,7 +21,7 @@
 *******************************************************************************/
 
 // prevent direct invocation
-if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
+if ((!isset($cfg['user'])) or (isset($_REQUEST['cfg']))) {
 	@ob_end_clean();
 	@header("location: ../../index.php");
 	exit();
@@ -526,6 +526,34 @@ if ($cfg['enable_restrictivetview'] == 1)
 	$boolCond = $cfg['isAdmin'];
 $tmpl->setvar('are_transfer', (($boolCond) && (sizeof($arListTorrent) > 0)) ? 1 : 0);
 
+
+// =============================================================================
+
+$onLoad = "";
+
+$msgGrowl = "";
+$msgSticky = false;
+
+// pm
+$nbMsg = numUnreadMsg();
+if ($nbMsg > 0) {
+	if (IsForceReadMsg()) {
+		//disabled page lock
+		//$tmpl->setvar('IsForceReadMsg', 1);
+
+		 //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute, quoted dblquotes (\") seems not working
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+
+		//dont auto-hide growl message
+		$msgSticky = true;
+
+	} elseif ($nbMsg > 1) {
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have new messages !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	} else {
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have a new message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	}
+}
+
 // =============================================================================
 // ajax-index
 // =============================================================================
@@ -549,7 +577,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= "¤";
 		$xferStats = Xfer::getStatsFormatted();
 		$xferCount = count($xferStats);
 		for ($i = 0; $i < $xferCount; $i++) {
@@ -563,7 +591,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= "¤";
 		$countUsers = count($cfg['users']);
 		$arOnlineUsers = array();
 		$arOfflineUsers = array();
@@ -594,8 +622,21 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= "¤";
 		$content .= $tmpl->grab();
+	}
+	// javascript
+	if (true) {
+		if ($isFirst)
+			$isFirst = false;
+		else
+			$content .= "¤";
+		//Growl message on ajax refresh
+		if (!empty($msgGrowl)) {
+			$jGrowl = "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
+		
+			$content .= $jGrowl;
+		}
 	}
 	// send and out
 	@header("Cache-Control: no-cache");
@@ -613,31 +654,6 @@ if ($isAjaxUpdate) {
 if ($cfg["enable_goodlookstats"] != "0") {
 	$tmpl->setvar('enable_goodlookstats', 1);
 	$settingsHackStats = convertByteToArray($cfg["hack_goodlookstats_settings"]);
-}
-
-$onLoad = "";
-
-$msgGrowl = "";
-$msgSticky = false;
-
-// pm
-$nbMsg = numUnreadMsg();
-if ($nbMsg > 0) {
-	if (IsForceReadMsg()) {
-		//disabled page lock
-		//$tmpl->setvar('IsForceReadMsg', 1);
-
-		 //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute, quoted dblquotes (\") seems not working
-		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
-
-		//dont auto-hide growl message
-		$msgSticky = true;
-
-	} elseif ($nbMsg > 1) {
-		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have new messages !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
-	} else {
-		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have a new message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
-	}
 }
 
 // page refresh
@@ -684,18 +700,17 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 	$ajaxInit .= ",".$cfg["ui_displaybandwidthbars"];
 	$ajaxInit .= ",'".$cfg['bandwidthbar']."'";
 	$ajaxInit .= ");onbeforeunload = ajax_unload;";
+	
+	$onLoad .= $ajaxInit;
+} 
 
-	if (!empty($msgGrowl))
+//Growl message
+if (!empty($msgGrowl)) {
 	$ajaxInit .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
 
 	$onLoad .= $ajaxInit;
-} else {
-
-	if (!empty($msgGrowl))
-	$jsInit  = "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
-
-	$onLoad .= $jsInit;
 }
+
 
 //Hide Seeds
 if ($_SESSION['settings']['index_show_seeding'] != 0) {
