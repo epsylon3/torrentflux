@@ -20,6 +20,9 @@
 
 *******************************************************************************/
 
+// VuzeRPC
+require_once("inc/classes/VuzeRPC.php");
+
 /**
  * class ClientHandler for vuze xmwebui rpc
  */
@@ -65,9 +68,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		// log
 		$this->logMessage($this->client."-start : ".$transfer."\n", true);
-
-		// VuzeRPC
-		require_once("inc/classes/VuzeRPC.php");
 
 		$this->vuze = VuzeRPC::getInstance();
 		$vuze = & $this->vuze;
@@ -173,9 +173,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$this->_setVarsForTransfer($transfer);
 
 		addGrowlMessage($this->client."-stop","$transfer");
-		
-		// VuzeRPC
-		require_once("inc/classes/VuzeRPC.php");
 
 		if (!isset($this->vuze))
 			$this->vuze = new VuzeRPC($cfg);
@@ -201,17 +198,15 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			if (!$vuze->torrent_stop_tf($hash)) {
 				$msg = "transfer ".$transfer." does not exist in vuze (2).";
 				$this->logMessage($msg."\n", true);
-				//$this->cleanStoppedStatFile();
 				AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
 			}
 		}
-		
-		// stop the client
-		//$this->_stop($kill, $transferPid);
 
-		// flag the transfer as stopped (in db)
-		stopTransferSettings($transfer);
+		// set .stat stopped
 		$this->cleanStoppedStatFile($transfer);
+		
+		// delete .pid
+		$this->_stop($kill, $transferPid);
 
 		$this->updateStatFiles();
 	}
@@ -227,9 +222,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		// set vars
 		$this->_setVarsForTransfer($transfer);
-		// FluAzu
-		require_once("inc/classes/VuzeRPC.php");
-
+		
 		$hash = getTransferHash($transfer);
 
 		// only if transfer exists in vuze
@@ -334,79 +327,98 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * set upload rate of a transfer
 	 *
 	 * @param $transfer
-	 * @param $uprate
+	 * @param $uprate int
 	 * @param $autosend
 	 */
 	function setRateUpload($transfer, $uprate, $autosend = false) {
 		// set rate-field
 		$this->rate = $uprate;
-		// add command
-		//CommandHandler::add($transfer, "u".$uprate);
-		// send command to client
+		
 		if ($autosend) {
-			//CommandHandler::send($transfer);
 			$rpc = VuzeRPC::getInstance();
-			$req = $rpc->torrent_set(array($id),'rateUpload',$uprate);
-			if (!is_object($req) || $req->result != "success") {
-				$msg = "setRateUpload: ".$req->lastError;
+			
+			$hash = getTransferHash($transfer);
+			$torrents = $rpc->torrent_get_hashids();
+			if ( array_key_exists(strtoupper($hash),$torrents) ) {
+				$tid = $torrents[strtoupper($hash)];
+				
+				$req = $rpc->torrent_set(array($tid),'rateUpload',$this->rate);
+				if (!isset($req->result) || $req->result != 'success') {
+					return false;
+				}
+				
 				$this->logMessage($msg."\n", true);
 			}
 		}
+		return true;
 	}
 
 	/**
 	 * set download rate of a transfer
 	 *
 	 * @param $transfer
-	 * @param $downrate
+	 * @param $downrate int
 	 * @param $autosend
 	 */
 	function setRateDownload($transfer, $downrate, $autosend = false) {
 		// set rate-field
 		$this->drate = $downrate;
-		// add command
-		CommandHandler::add($transfer, "d".$downrate);
-		// send command to client
-		if ($autosend)
-			CommandHandler::send($transfer);
+		
+		if ($autosend) {
+			$rpc = VuzeRPC::getInstance();
+			
+			$hash = getTransferHash($transfer);
+			$torrents = $rpc->torrent_get_hashids();
+			if ( array_key_exists(strtoupper($hash),$torrents) ) {
+				$tid = $torrents[strtoupper($hash)];
+				
+				$req = $rpc->torrent_set(array($tid),'rateUpload',$this->rate);
+				if (!isset($req->result) || $req->result != 'success') {
+					return false;
+				}
+				
+				$msg = "setRateUpload: ".$req->result;
+				$this->logMessage($msg."\n", true);
+			}
+		}
+		return true;
 	}
 
 	/**
 	 * set runtime of a transfer
 	 *
 	 * @param $transfer
-	 * @param $runtime
+	 * @param $runtime bool
 	 * @param $autosend
 	 * @return boolean
 	 */
 	function setRuntime($transfer, $runtime, $autosend = false) {
 		// set runtime-field
 		$this->runtime = $runtime;
-		// add command
-		CommandHandler::add($transfer, "r".(($this->runtime == "True") ? "1" : "0"));
-		// send command to client
-		if ($autosend)
-			CommandHandler::send($transfer);
+		
+		if ($autosend) {
+		//	CommandHandler::send($transfer);
+		}
+		return true;
 	}
 
 	/**
 	 * set sharekill of a transfer
 	 *
 	 * @param $transfer
-	 * @param $sharekill
+	 * @param $sharekill int
 	 * @param $autosend
 	 * @return boolean
 	 */
 	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
 		$this->sharekill = $sharekill;
-		// add command
-		CommandHandler::add($transfer, "s".$this->sharekill);
+		
 		// send command to client
-		if ($autosend)
-			CommandHandler::send($transfer);
-			// return
-			return true;
+		if ($autosend) {
+			// CommandHandler::send($transfer);
+		}
+		return true;
 	}
 
 	/**
@@ -416,7 +428,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @return boolean
 	 */
 	function cleanStoppedStatFile($transfer) {
-		@ unlink($this->transferFilePath.".pid");
 		$stat = new StatFile($this->transfer, $this->owner);
 		//if ($stat->percent_done > 100)
 		//	$stat->percent_done=100;

@@ -197,10 +197,10 @@ class ClientHandler
 	function setRateDownload($transfer, $downrate, $autosend = false) { return; }
 
 	/**
-	 * set runtime of a transfer
+	 * set completion runtime of a transfer
 	 *
 	 * @param $transfer
-	 * @param $runtime
+	 * @param $runtime bool
 	 * @param $autosend
 	 * @return boolean
 	 */
@@ -210,7 +210,7 @@ class ClientHandler
 	 * set sharekill of a transfer
 	 *
 	 * @param $transfer
-	 * @param $sharekill
+	 * @param $sharekill int
 	 * @param $autosend
 	 * @return boolean
 	 */
@@ -775,6 +775,9 @@ class ClientHandler
 		cacheFlush($cfg['user']);
 		// write the session to close so older version of PHP will not hang
 		@session_write_close();
+		if ($this->useRPC) {
+			file_put_contents($this->transferFilePath.".pid","rpc");
+		}
 		// sf
 		$sf = new StatFile($this->transfer, $this->owner);
 		// queue or start ?
@@ -833,30 +836,35 @@ class ClientHandler
 		global $cfg;
 		// log
 		AuditAction($cfg["constants"]["stop_transfer"], $this->transfer);
+		
+		if ($this->useRPC) {
+			unlink($this->transferFilePath.".pid");
+			stopTransferSettings($this->transfer);
+			return;
+		}
+		
 		// send quit-command to client
 		CommandHandler::add($this->transfer, "q");
 		CommandHandler::send($this->transfer);
+
 		// wait until transfer is down
 		waitForTransfer($this->transfer, false, 20);
-		if (!$this->useRPC) {
-			// one more demi-second
-			usleep(500000);
-			// see if the transfer process is hung.
-			$running = $this->runningProcesses();
-			$isHung = false;
-			foreach ($running as $rng) {
-				$rt = RunningTransfer::getInstance($rng['pinfo'], $this->client);
-				if ($rt->transferFile == $this->transfer) {
-					$isHung = true;
-					AuditAction($cfg["constants"]["error"], "Possible Hung Process for ".$rt->transferFile." (".$rt->processId.")");
-					//$kill = true;
-					break;
-				}
+
+		// see if the transfer process is hung.
+		$running = $this->runningProcesses();
+		$isHung = false;
+		foreach ($running as $rng) {
+			$rt = RunningTransfer::getInstance($rng['pinfo'], $this->client);
+			if ($rt->transferFile == $this->transfer) {
+				$isHung = true;
+				AuditAction($cfg["constants"]["error"], "Possible Hung Process for ".$rt->transferFile." (".$rt->processId.")");
+				//$kill = true;
+				break;
 			}
 		}
 		if (!$isHung) {
 			// flag the transfer as stopped (in db)
-			stopTransferSettings($this->transfer);	
+			stopTransferSettings($this->transfer);
 		}
 		// kill-request
 		if ($kill && $isHung) {

@@ -39,7 +39,7 @@ function getTransferPid($transfer) {
  */
 function isTransferRunning($transfer) {
 	global $cfg;
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		return isTransmissionTransferRunning($transfer);
 	}
