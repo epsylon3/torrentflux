@@ -13,13 +13,18 @@ Require PHP 5 for public/protected members
 
 chdir('../../html');
 
+// check for home
+if (!is_file('inc/main.core.php'))
+	exit("Error: this script can't find main.core.php, please run it in current directory or change chdir in sources.\n");
+
 //get $cfg
 require("inc/main.core.php");
+global $cfg;
+
+//set username for logs
+$cfg["user"] = 'cron';
 
 require("inc/classes/VuzeRPC.php");
-
-global $cfg;
-$cfg["user"] = 'cron';
 
 //print_r($cfg);
 
@@ -173,6 +178,11 @@ function updateStatFiles() {
 
 global $argv;
 
+// prevent invocation from web
+if (empty($argv[0])) die("command line only");
+if (isset($_REQUEST['argv'])) die("command line only");
+
+// list vuze torrents (via rpc)
 if (isset($argv[1]) && $argv[1] == 'list') {
 	$v = VuzeRPC::getInstance();
 	$torrents = $v->torrent_get_tf();
@@ -181,6 +191,7 @@ if (isset($argv[1]) && $argv[1] == 'list') {
 	echo print_r($torrents,true);
 }
 
+// default, update stat files and stop seeding if needed (sharekill)
 if (empty($argv[1]) or $argv[1] == 'update') {
 	updateStatFiles();
 }
