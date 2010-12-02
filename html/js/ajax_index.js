@@ -43,6 +43,7 @@ var imgHeightDriveSpaceBlank = 12;
 var indexTimer = null;
 var updateTimeLeft = 0;
 var ajaxScriptEnabled = 1;
+var lastAjaxScript = "";
 
 /**
  * ajax_initialize
@@ -185,9 +186,10 @@ function ajax_processText(content) {
 		// update
 		ajax_updateContent(tempAry.pop(), statsXfer, users, transferList);
 		
-		if (ajaxScript != "") {
+		if (ajaxScript != lastAjaxScript) {
 			try {
 				eval(ajaxScript);
+				lastAjaxScript = ajaxScript;
 			} catch(e) {
 				if (typeof(console) != 'undefined') {
 					console.log("something wrong in ajax script after updateContent() :");
