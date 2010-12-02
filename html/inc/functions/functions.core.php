@@ -69,11 +69,21 @@ require_once("inc/functions/functions.core.user.php");
 /**
  * Returns true if user has message from admin with force_read
  *
- * @return boolean
+ * @return int
  */
 function IsForceReadMsg() {
 	global $cfg, $db;
-	return ($db->GetOne("SELECT count(*) FROM tf_messages WHERE to_user=".$db->qstr($cfg["user"])." AND force_read=1") >= 1);
+	return (int) ($db->GetOne("SELECT count(*) FROM tf_messages WHERE to_user=".$db->qstr($cfg["user"])." AND force_read=1") >= 1);
+}
+
+/**
+ * Returns true if user has new messages
+ *
+ * @return int
+ */
+function numUnreadMsg() {
+	global $cfg, $db;
+	return (int) ($db->GetOne("SELECT count(*) FROM tf_messages WHERE to_user=".$db->qstr($cfg["user"])." AND IsNew=1") >= 1);
 }
 
 /**

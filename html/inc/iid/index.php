@@ -621,14 +621,23 @@ $msgGrowl = "";
 $msgSticky = false;
 
 // pm
-if (IsForceReadMsg()) {
+$nbMsg = numUnreadMsg();
+if ($nbMsg > 0) {
+	if (IsForceReadMsg()) {
+
+		//disabled page lock
+		//$tmpl->setvar('IsForceReadMsg', 1);
+		
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
 	
-	//disabled page lock
-	//$tmpl->setvar('IsForceReadMsg', 1);
+		//dont auto-hide growl message
+		$msgSticky = true;
 	
-	//need to fix this image path
-	$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
-	$msgSticky = true;
+	} elseif ($nbMsg > 1) {
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have new messages !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	} else {
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have a new message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	}
 }
 
 // page refresh
