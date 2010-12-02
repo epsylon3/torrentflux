@@ -536,7 +536,7 @@ closedir($handle);
  
 natcasesort($entrysDirs);
 natcasesort($entrysFiles); 
-$entrys = array_merge ($entrysDirs, $entrysFiles, $entrys);
+$entrys = array_merge ($entrysFiles, $entrysDirs, $entrys);
 
 // process entries and fill dir- + file-array
 $list = array();
