@@ -207,6 +207,7 @@ function getServerStats() {
 /**
  * print message
  *
+ * @param $mod
  * @param $msg
  */
 function printMessage($mod, $msg) {
@@ -216,6 +217,7 @@ function printMessage($mod, $msg) {
 /**
  * print error
  *
+ * @param $mod
  * @param $msg
  */
 function printError($mod, $msg) {
@@ -223,17 +225,55 @@ function printError($mod, $msg) {
 }
 
 /**
- * store errors in $growl array if set
+ * store messages in jGrowl array 
  *
  * @param $mod
  * @param $msg
  */
-function addGrowlMessage($mod, $msg) {
-	global $growl;
-	if (is_array($growl)) {
+function addGrowlMessage($mod, $msg, $theme="redround") {
+	global $cfg;
+	if (isset($cfg['growl'])) {
 		//no double quotes
-		$growl[] = str_replace("\"","","$mod :<br/> $msg");
+		$growl_msg = array(
+			'title'=> str_replace("\"","", $mod),
+			'msg'=> str_replace("\"","", $msg),
+			'sticky' => false,
+			'life'   => '5000',
+			'theme'   => $theme,
+		);
+		if ($mod == 'Audit') {
+			$growl_msg['theme'] = 'audit';
+		}
+		$cfg['growl'][] = $growl_msg;
 	}
+}
+
+/**
+ * reinitialize jGrowl array
+ *
+ * @return string javascript
+ */
+function getGrowlMessages() {
+	global $cfg;
+	$jGrowls="";
+	foreach($cfg['growl'] as $msg) {
+		if ($msg['msg']!='H') // !!?!
+		$jGrowls .= "jQuery.jGrowl('".addslashes($msg['title'].'<br/><br/>'.$msg['msg'])."',".
+		"{".
+		" sticky:".($msg['sticky'] ? 'true':'false').",".
+		" life:".intval($msg['life']).",".
+		" theme: '".$msg['theme']."'".
+		"}); ";
+	}
+	return $jGrowls;
+}
+
+/**
+ * reinitialize jGrowl array
+ */
+function clearGrowlMessages() {
+	global $cfg;
+	$cfg['growl'] = array();
 }
 
 /**
@@ -256,7 +296,8 @@ function AuditAction($action, $file = "") {
     	. $db->qstr(time())
     	.")"
     );
-    addGrowlMessage($action,$file);
+    if ($action != 'HIT')
+    	addGrowlMessage('Audit',"$action $file");
 }
 
 /**

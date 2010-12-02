@@ -20,9 +20,6 @@
 
 *******************************************************************************/
 
-// initialize jGrowl messages
-$growl = array();
-
 // cache
 require_once('inc/main.cache.php');
 
@@ -123,6 +120,11 @@ $cfg['mainMenu'] = array(
 	"message" => "msg",
 	"admin" => "admin"
 );
+
+// initialize jGrowl messages
+if ( !isset($cfg['growl']) ) {
+	$cfg['growl'] = array();
+}
 
 // db
 if (@is_file('inc/config/config.db.php')) {

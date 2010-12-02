@@ -647,12 +647,10 @@ if ($isAjaxUpdate) {
 			$content .= "¤";
 
 		//Messages jGrowl
-		global $growl;
 		$jGrowls = "";
-		if (!empty($growl)) {
-			foreach($growl as $msg) {
-				$jGrowls .= "jQuery.jGrowl('".addslashes($msg)."');";
-			}
+		if (!empty($cfg['growl'])) {
+			$jGrowls .= getGrowlMessages();
+			clearGrowlMessages();
 		}
 		//Growl message on ajax refresh
 		if (!empty($msgGrowl)) {
@@ -728,12 +726,10 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 } 
 
 //Index Growl messages
-global $growl;
 $jGrowls = "";
-if (!empty($growl)) {
-	foreach($growl as $msg) {
-		$jGrowls .= "jQuery.jGrowl('".addslashes($msg)."');";
-	}
+if (!empty($cfg['growl'])) {
+	$jGrowls .= getGrowlMessages();
+	clearGrowlMessages();
 }
 if (!empty($msgGrowl)) {
 	$jGrowls .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";

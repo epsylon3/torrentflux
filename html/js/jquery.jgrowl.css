@@ -83,8 +83,8 @@ div.center div.jGrowl-notification, div.center div.jGrowl-closer {
 div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
 	background-color: 		#000;
 	opacity: 				.85;
-    -ms-filter: 			"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)"; 
-    filter: 				progid:DXImageTransform.Microsoft.Alpha(Opacity=85); 
+	-ms-filter: 			"progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
+	filter: 				progid:DXImageTransform.Microsoft.Alpha(Opacity=85);
 	zoom: 					1;
 	width: 					235px;
 	padding: 				10px;
@@ -99,34 +99,48 @@ div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
 }
 
 div.jGrowl div.jGrowl-notification {
-	min-height: 			40px;
+	min-height: 	40px;
 }
 
 div.jGrowl div.jGrowl-notification div.jGrowl-header {
-	font-weight: 			bold;
-	font-size:				.85em;
+	font-weight: 	bold;
+	font-size:		.85em;
 }
 
 div.jGrowl div.jGrowl-notification div.jGrowl-close {
-	z-index:				99;
-	float: 					right;
-	font-weight: 			bold;
-	font-size: 				1em;
-	cursor:					pointer;
+	z-index:		99;
+	float: 			right;
+	font-weight: 	bold;
+	font-size: 		1em;
+	cursor:			pointer;
 }
 
 div.jGrowl div.jGrowl-closer {
-	padding-top: 			4px;
-	padding-bottom: 		4px;
-	cursor: 				pointer;
-	font-size:				.9em;
-	font-weight: 			bold;
-	text-align: 			center;
+	padding-top: 	4px;
+	padding-bottom: 4px;
+	cursor: 		pointer;
+	font-size:		.9em;
+	font-weight: 	bold;
+	text-align: 	center;
 }
 
 /** Hide jGrowl when printing **/
 @media print {
 	div.jGrowl {
-		display: 			none;
+		display: none;
 	}
+}
+
+/** Themes **/
+
+div.jGrowl div.audit {
+	border: 1px solid #961D1D;
+	background-color: white;
+	color: white;
+}
+
+div.jGrowl div.redround {
+	border: 1px solid #460D0D;
+	background-color: #961D1D;
+	color: white;
 }
