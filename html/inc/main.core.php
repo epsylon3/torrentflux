@@ -20,6 +20,9 @@
 
 *******************************************************************************/
 
+// initialize jGrowl messages
+$growl = array();
+
 // cache
 require_once('inc/main.cache.php');
 
@@ -32,7 +35,7 @@ require_once('inc/functions/functions.core.php');
 // common functions
 require_once('inc/functions/functions.common.php');
 
-// torrentflux-b4rt Version from version-file
+// TorrentFlux Version from version-file
 if (@is_file('version.php')) {
 	require_once('version.php');
 	$cfg["version"] = _VERSION;

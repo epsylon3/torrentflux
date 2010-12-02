@@ -223,6 +223,20 @@ function printError($mod, $msg) {
 }
 
 /**
+ * store errors in $growl array if set
+ *
+ * @param $mod
+ * @param $msg
+ */
+function addGrowlMessage($mod, $msg) {
+	global $growl;
+	if (is_array($growl)) {
+		//no double quotes
+		$growl[] = str_replace("\"","","$mod :<br/> $msg");
+	}
+}
+
+/**
  * Audit Action
  *
  * @param $action
@@ -242,6 +256,7 @@ function AuditAction($action, $file = "") {
     	. $db->qstr(time())
     	.")"
     );
+    addGrowlMessage($action,$file);
 }
 
 /**
