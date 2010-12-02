@@ -617,6 +617,20 @@ if ($cfg["enable_goodlookstats"] != "0") {
 
 $onLoad = "";
 
+$msgGrowl = "";
+$msgSticky = false;
+
+// pm
+if (IsForceReadMsg()) {
+	
+	//disabled page lock
+	//$tmpl->setvar('IsForceReadMsg', 1);
+	
+	//need to fix this image path
+	$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	$msgSticky = true;
+}
+
 // page refresh
 if ($_SESSION['settings']['index_meta_refresh'] != 0) {
 	$tmpl->setvar('page_refresh', $cfg["page_refresh"]);
@@ -661,6 +675,10 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 	$ajaxInit .= ",".$cfg["ui_displaybandwidthbars"];
 	$ajaxInit .= ",'".$cfg['bandwidthbar']."'";
 	$ajaxInit .= ");onbeforeunload = ajax_unload;";
+	
+	if (!empty($msgGrowl)) //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute
+	$ajaxInit .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
+	
 	$onLoad .= $ajaxInit;
 }
 
@@ -825,10 +843,6 @@ if ($cfg['index_page_stats'] != 0) {
 	$tmpl->setvar('drivespace1', $cfg['freeSpaceFormatted']);
 	$tmpl->setvar('serverload1', $loadavgString);
 }
-
-// pm
-if (IsForceReadMsg())
-	$tmpl->setvar('IsForceReadMsg', 1);
 
 // Graphical Bandwidth Bar
 if ($cfg["ui_displaybandwidthbars"] != 0) {
