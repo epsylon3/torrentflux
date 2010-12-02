@@ -119,29 +119,18 @@ class ClientHandler
 				require_once('inc/classes/ClientHandler.tornado.php');
 				return new ClientHandlerTornado();
 			case "transmission":
-				if ($cfg['transmission_rpc_enable'] == 1) {
-					//new transmission rpc class
-					require_once('inc/classes/ClientHandler.transmissionrpc.php');
-					return new ClientHandlerTransmissionRPC();
-				} else {
-					//patched transmissioncli
-					require_once('inc/classes/ClientHandler.transmission.php');
-					return new ClientHandlerTransmission();
-				}
+				//patched transmissioncli
+				require_once('inc/classes/ClientHandler.transmission.php');
+				return new ClientHandlerTransmission();
 			case "transmissionrpc":
 				require_once('inc/classes/ClientHandler.transmissionrpc.php');
 				return new ClientHandlerTransmissionRPC();
 			case "azureus":
-				if ($cfg['vuze_rpc_enable'] == 1) {
-					//xmwebui (json) (fast)
-					require_once('inc/classes/ClientHandler.vuzerpc.php');
-					return new ClientHandlerVuzeRPC();
-				} else {
-					//fluazu/dopal/xml_http (slow)
-					require_once('inc/classes/ClientHandler.azureus.php');
-					return new ClientHandlerAzureus();
-				}
+				//fluazu/dopal/xml_http (slow)
+				require_once('inc/classes/ClientHandler.azureus.php');
+				return new ClientHandlerAzureus();
 			case "vuzerpc":
+				//xmwebui (json) (fast)
 				require_once('inc/classes/ClientHandler.vuzerpc.php');
 				return new ClientHandlerVuzeRPC();
 			case "wget":

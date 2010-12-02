@@ -15,7 +15,7 @@
 				<div align="center">
 					<form name="theForm" action="admin.php?op=updateTransferSettings" method="post" onsubmit="return validateSettings('transfer')">
 						<table cellpadding="5" cellspacing="0" border="0" width="100%">
-							<tr><td colspan="2"><strong>Legend:</strong><br/>B = BitTornado<br/>T = Transmission<br/>M = BitTorrent Mainline<br/>A = Azureus<br/>W = Wget<br/>N = Nzbperl</td></tr>
+							<tr><td colspan="2"><strong>Legend:</strong><br/>B = BitTornado<br/>T = Transmission<br/>M = BitTorrent Mainline<br/>A = Azureus, V = Vuze<br/>W = Wget<br/>N = Nzbperl</td></tr>
 							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>BitTorrent</strong></td></tr>
 							<tr>
 								<td align="left" width="350" valign="top">
@@ -30,33 +30,19 @@
 									</select>
 								</td>
 							</tr>
-            	<tr>
+							<tr>
 								<td align="left" width="350" valign="top">
 									<label for="btclient"><strong>Default BitTorrent Client:</strong></label><br/>
 									Set the client to use by default to start torrent transfers.
 								</td>
 								<td valign="top">
 									<select name="btclient" id="btclient">
-										<option value="tornado"
-										<tmpl_if name="btclient" value="tornado">
-											 selected
-										</tmpl_if>
-										>BitTornado</option>
-										<option value="transmission"
-										<tmpl_if name="btclient" value="transmission">
-											 selected
-										</tmpl_if>
-										>Transmission</option>
-										<option value="mainline"
-										<tmpl_if name="btclient" value="mainline">
-											selected
-										</tmpl_if>
-										>BitTorrent Mainline</option>
-										<option value="azureus"
-										<tmpl_if name="btclient" value="azureus">
-											selected
-										</tmpl_if>
-										>Azureus</option>
+										<option value="tornado"			<tmpl_if name="btclient" value="tornado">selected</tmpl_if> >BitTornado</option>
+										<option value="transmission"	<tmpl_if name="btclient" value="transmission">selected</tmpl_if> >Transmission Client</option>
+										<option value="transmissionrpc"	<tmpl_if name="btclient" value="transmissionrpc">selected</tmpl_if> >Transmission Daemon</option>
+										<option value="azureus"			<tmpl_if name="btclient" value="azureus">selected</tmpl_if> >Azureus (fluazu)</option>
+										<option value="vuzerpc"			<tmpl_if name="btclient" value="vuzerpc">selected</tmpl_if> >Vuze RPC</option>
+										<option value="mainline"		<tmpl_if name="btclient" value="mainline">selected</tmpl_if> >BitTorrent Mainline</option>
 									</select>
 								</td>
 							</tr>

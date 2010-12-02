@@ -440,11 +440,17 @@ foreach ($arList as $transfer) {
 			case "transmission":
 				$client = "T";
 				break;
+			case "transmissionrpc":
+				$client = "Tr";
+				break;
 			case "mainline":
 				$client = "M";
 				break;
 			case "azureus":
 				$client = "A";
+				break;
+			case "vuzerpc":
+				$client = "V";
 				break;
 			case "wget":
 				$client = "W";

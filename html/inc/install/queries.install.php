@@ -327,8 +327,8 @@ CREATE TABLE tf_users (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfers (
   transfer VARCHAR(255) NOT NULL default '',
-  type ENUM('torrent','wget','nzb') NOT NULL default 'torrent',
-  client ENUM('tornado','transmission','mainline','azureus','wget','nzbperl') NOT NULL default 'tornado',
+  type VARCHAR(32) NOT NULL default 'torrent',
+  client VARCHAR(32) NOT NULL default 'tornado',
   hash VARCHAR(40) NOT NULL DEFAULT '',
   datapath VARCHAR(255) NOT NULL default '',
   savepath VARCHAR(255) NOT NULL default '',

@@ -37,7 +37,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		global $cfg;
 
 		$this->type = "torrent";
-		$this->client = "azureus";
+		$this->client = "vuzerpc";
 		$this->binSystem = "java";
 		$this->binSocket = "java";
 		$this->binClient = "java";

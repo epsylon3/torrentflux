@@ -49,13 +49,8 @@ class RunningTransfer
 				require_once('inc/classes/RunningTransfer.tornado.php');
 				return new RunningTransferTornado($psLine);
 			case "transmission":
-				if ($cfg['transmission_rpc_enable'] == 1) {
-					require_once('inc/classes/RunningTransfer.transmissionrpc.php');
-					return new RunningTransferTransmissionRPC($psLine);
-				} else {
-					require_once('inc/classes/RunningTransfer.transmission.php');
-					return new RunningTransferTransmission($psLine);
-				}
+				require_once('inc/classes/RunningTransfer.transmissionrpc.php');
+				return new RunningTransferTransmissionRPC($psLine);
 			case "transmissionrpc":
 				require_once('inc/classes/RunningTransfer.transmissionrpc.php');
 				return new RunningTransferTransmissionRPC($psLine);
@@ -63,13 +58,8 @@ class RunningTransfer
 				require_once('inc/classes/RunningTransfer.mainline.php');
 				return new RunningTransferMainline($psLine);
 			case "azureus":
-				if ($cfg['vuze_rpc_enable'] == 1) {
-					require_once('inc/classes/RunningTransfer.vuzerpc.php');
-					return new RunningTransferVuzeRPC();
-				} else {
-					require_once('inc/classes/RunningTransfer.azureus.php');
-					return new RunningTransferAzureus($psLine);
-				}
+				require_once('inc/classes/RunningTransfer.azureus.php');
+				return new RunningTransferAzureus($psLine);
 			case "vuzerpc":
 				require_once('inc/classes/RunningTransfer.vuzerpc.php');
 				return new RunningTransferVuzeRPC();

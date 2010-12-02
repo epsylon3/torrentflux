@@ -39,7 +39,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		global $cfg;
 
 		$this->type = "torrent";
-		$this->client = "transmission";
+		$this->client = "transmissionrpc";
 		$this->binSystem = "transmission-daemon";
 		$this->binSocket = "transmission-daemon";
 		$this->binClient = "transmission-daemon";

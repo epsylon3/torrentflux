@@ -86,12 +86,17 @@ CREATE TABLE IF NOT EXISTS tf_transmission_user (
 // ALTER TABLE (need to check for sqlite and postgre)
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX hash_idx ( `hash`(8))");
 
+//only needed in mysql, remove enums
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers CHANGE `type` `type` VARCHAR(32) NOT NULL DEFAULT  'torrent'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers CHANGE `client` `client` VARCHAR(32) NOT NULL DEFAULT  'tornado'");
+
+//add user id
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD `uid` INT(10) NOT NULL default '0' AFTER `tid`");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (`tid`,`uid`)");
 
+//add user email
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default '' AFTER `password`");
-
 
 // sql-queries : Data
 $cqt = 'data';
@@ -164,7 +169,6 @@ CREATE TABLE tf_users (
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_users (uid,user_id,password,email_address,hits,last_visit,time_created,user_level,hide_offline,theme,language_file,state)
 SELECT uid,user_id,password,'',hits,last_visit,time_created,user_level,hide_offline,theme,language_file,state FROM bk_users");
 array_push($queries[$cqt][$cdb], "DROP TABLE bk_users");
-
 
 // sql-queries : Data
 $cqt = 'data';

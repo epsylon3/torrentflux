@@ -3,7 +3,7 @@
 <h1>transfer settings</h1>
 <p><input type="Submit" value="Update Settings"></p>
 <h2>Legend</h2>
-B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget, N = Nzbperl
+B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent Mainline, A = Azureus(fluazu), V = Vuze RPC, W = Wget, N = Nzbperl
 <h2>BitTorrent</h2>
 <table id="adminTransferSettings">
 	<tr>
@@ -20,26 +20,12 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 		<th>Default BitTorrent Client<br /><span>Set the client to use by default to start torrent transfers</span></th>
 		<td>
 			<select name="btclient" id="btclient">
-				<option value="tornado"
-			<tmpl_if name="btclient" value="tornado">
-				selected
-			</tmpl_if>
-				>BitTornado</option>
-				<option value="transmission"
-			<tmpl_if name="btclient" value="transmission">
-				selected
-			</tmpl_if>
-				>Transmission</option>
-				<option value="mainline"
-			<tmpl_if name="btclient" value="mainline">
-				selected
-			</tmpl_if>
-				>BitTorrent Mainline</option>
-				<option value="azureus"
-			<tmpl_if name="btclient" value="azureus">
-				selected
-			</tmpl_if>
-				>Azureus</option>
+				<option value="tornado"			<tmpl_if name="btclient" value="tornado">selected</tmpl_if> >BitTornado</option>
+				<option value="transmission"	<tmpl_if name="btclient" value="transmission">selected</tmpl_if> >Transmission Client</option>
+				<option value="transmissionrpc"	<tmpl_if name="btclient" value="transmissionrpc">selected</tmpl_if> >Transmission Daemon</option>
+				<option value="azureus"			<tmpl_if name="btclient" value="azureus">selected</tmpl_if> >Azureus (fluazu)</option>
+				<option value="vuzerpc"			<tmpl_if name="btclient" value="vuzerpc">selected</tmpl_if> >Vuze RPC</option>
+				<option value="mainline"		<tmpl_if name="btclient" value="mainline">selected</tmpl_if> >BitTorrent Mainline</option>
 			</select>
 		</td>
 	</tr>
@@ -107,7 +93,7 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 		</td>
 	</tr>
 	<tr>
-		<th>Max Connections (B M)<br /><span>Set the maximum number of concurrent connections allowed</span></th>
+		<th>Max Connections (B M V)<br /><span>Set the maximum number of concurrent connections allowed</span></th>
 		<td>
 			<input name="maxcons" id="maxcons" type="Text" maxlength="5" value="<tmpl_var name="maxcons">" size="5">
 		</td>
@@ -140,7 +126,7 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 	</tr>
 	<tr>
 		<th>
-			Default Percentage When Seeding Should Stop (B T M A)<br /><span>Set the default share percentage at which torrents will die if 'Keep Seeding' is 
+			Default Percentage When Seeding Should Stop (B T M A V)<br /><span>Set the default share percentage at which torrents will die if 'Keep Seeding' is 
 			selected as completion activity above</span>
 		</th>
 		<td>
@@ -203,9 +189,50 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 		</tr>
 </table>
 
+<h2>Vuze RPC - Beta</h2>
+<p class="NormalText">New TorrentFlux-NG method to use with xmwebui Vuze plugin</p>
+<table id="adminTransferSettings">
+	<tr>
+		<th>Use Vuze Daemon (RPC)<br /><span>Enable/Disable Vuze RPC</span></th>
+		<td>
+			<select name="vuze_rpc_enable" id="vuze_rpc_enable">
+				<option value="0" <tmpl_if name="vuze_rpc_enable" value="0"> selected</tmpl_if>>Disabled</option>
+				<option value="1" <tmpl_if name="vuze_rpc_enable" value="1"> selected</tmpl_if>>Enabled</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Vuze RPC Host<br /><span>IP of vuze-daemon (def. 127.0.0.1)</span></th>
+		<td class="alt">
+			<input name="vuze_rpc_host" id="vuze_rpc_host" type="Text" maxlength="254" value="<tmpl_var name="vuze_rpc_host">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>Vuze RPC Port<br /><span>Port of vuze-daemon (def. 9091)</span></th>
+		<td>
+			<input name="vuze_rpc_port" id="vuze_rpc_port" type="Text" maxlength="5" value="<tmpl_var name="vuze_rpc_port">" size="5">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Vuze RPC User<br /><span>Http User Auth for vuze-daemon (def. "vuze")</span></th>
+		<td class="alt">
+			<input name="vuze_rpc_user" id="vuze_rpc_user" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_user">" size="10">
+		</td>
+	</tr>
+	<tr>
+		<th>Vuze RPC Password<br /><span>Http password for vuze-daemon </span></th>
+		<td>
+			<input name="vuze_rpc_password" id="vuze_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_password">" size="10">
+		</td>
+	</tr>
+</table>
 
-<h2>Transmission Daemon (RPC)</h2>
-<p class="NormalText">New TorrentFlux-NG method to use with official Transmission daemon (will disable transmissioncli)</p>
+<h2>Fluazu Daemon</h2>
+<p class="NormalText">Fluazu is a proxy to use an Azureus backend as client for torrents.
+<a href="admin.php?op=fluazuSettings">Edit Fluazu Settings</a></p>
+
+<h2>Transmission Daemon (RPC) - Under development</h2>
+<p class="NormalText">New method to use with official Transmission daemon (will disable other clients support)</p>
 <table id="adminTransferSettings">
 	<tr>
 		<th>Use Transmission Daemon (RPC)<br /><span>Enable/Disable Transmission RPC</span></th>
@@ -252,48 +279,6 @@ B = BitTornado, T = Transmission, M = BitTorrent Mainline, A = Azureus, W = Wget
 	<span style="margin-left: 62px;"></span><span style="font-family:courier;">adduser debian-transmission www-data</span>
 	</p>
 </div>
-
-<h2>Vuze RPC</h2>
-<p class="NormalText">New TorrentFlux-NG method to use with xmwebui Vuze plugin (disable fluazu)</p>
-<table id="adminTransferSettings">
-	<tr>
-		<th>Use Vuze Daemon (RPC)<br /><span>Enable/Disable Vuze RPC</span></th>
-		<td>
-			<select name="vuze_rpc_enable" id="vuze_rpc_enable">
-				<option value="0" <tmpl_if name="vuze_rpc_enable" value="0"> selected</tmpl_if>>Disabled</option>
-				<option value="1" <tmpl_if name="vuze_rpc_enable" value="1"> selected</tmpl_if>>Enabled</option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th class="alt">Vuze RPC Host<br /><span>IP of vuze-daemon (def. 127.0.0.1)</span></th>
-		<td class="alt">
-			<input name="vuze_rpc_host" id="vuze_rpc_host" type="Text" maxlength="254" value="<tmpl_var name="vuze_rpc_host">" size="35">
-		</td>
-	</tr>
-	<tr>
-		<th>Vuze RPC Port<br /><span>Port of vuze-daemon (def. 9091)</span></th>
-		<td>
-			<input name="vuze_rpc_port" id="vuze_rpc_port" type="Text" maxlength="5" value="<tmpl_var name="vuze_rpc_port">" size="5">
-		</td>
-	</tr>
-	<tr>
-		<th class="alt">Vuze RPC User<br /><span>Http User Auth for vuze-daemon (def. "vuze")</span></th>
-		<td class="alt">
-			<input name="vuze_rpc_user" id="vuze_rpc_user" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_user">" size="10">
-		</td>
-	</tr>
-	<tr>
-		<th>Vuze RPC Password<br /><span>Http password for vuze-daemon </span></th>
-		<td>
-			<input name="vuze_rpc_password" id="vuze_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_password">" size="10">
-		</td>
-	</tr>
-</table>
-
-<h2>Fluazu Daemon</h2>
-<p class="NormalText">Fluazu is a proxy to use an Azureus backend as client for torrents.
-<a href="admin.php?op=fluazuSettings">Edit Fluazu Settings</a></p>
 
 <h2>WGET</h2>
 <table id="adminTransferSettings">
