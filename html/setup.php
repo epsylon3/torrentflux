@@ -22,9 +22,9 @@
 
 // version
 if (is_file('version.php'))
-    require_once('version.php');
+	require_once('version.php');
 else
-    die("Fatal Error. version.php is missing.");
+	die("Fatal Error. version.php is missing.");
 
 // install-functions
 if ((@is_file('inc/install/functions.install.php')) === true)

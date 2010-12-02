@@ -36,17 +36,17 @@ class Image
 {
 	// public fields
 
-    // type
-    var $type = 0;
+	// type
+	var $type = 0;
 
-    // dim
-    var $width = 0;
-    var $height = 0;
+	// dim
+	var $width = 0;
+	var $height = 0;
 
-    // image
-    var $image;
+	// image
+	var $image;
 
-    // private fields
+	// private fields
 
 	// content-types
 	var $_contentTypes = array(
@@ -54,8 +54,8 @@ class Image
 		IMG_JPG => 'image/png',
 		IMG_PNG => 'image/jpeg');
 
-    // imagetypes
-    var $_imagetypes = 0;
+	// imagetypes
+	var $_imagetypes = 0;
 
 	// =========================================================================
 	// public static methods
@@ -63,33 +63,33 @@ class Image
 
 	/* factories */
 
-    /**
-     * getImage
-     *
-     * @param $t
-     * @param $w
-     * @param $h
-     */
-    function getImage($t = IMG_GIF, $w = 0, $h = 0) {
-    	$img = new Image($t, $w, $h);
-    	if (!$img)
-    		return false;
-    	$img->image = @imagecreate($w, $h);
+	/**
+	 * getImage
+	 *
+	 * @param $t
+	 * @param $w
+	 * @param $h
+	 */
+	function getImage($t = IMG_GIF, $w = 0, $h = 0) {
+		$img = new Image($t, $w, $h);
+		if (!$img)
+			return false;
+		$img->image = @imagecreate($w, $h);
 		return (!$img->image)
 			? false
 			: $img;
-    }
+	}
 
-    /**
-     * getImageFromRessource
-     *
-     * @param $t
-     * @param $r
-     */
-    function getImageFromRessource($t = IMG_GIF, $r) {
-    	$img = new Image($t);
-    	if (!$img)
-    		return false;
+	/**
+	 * getImageFromRessource
+	 *
+	 * @param $t
+	 * @param $r
+	 */
+	function getImageFromRessource($t = IMG_GIF, $r) {
+		$img = new Image($t);
+		if (!$img)
+			return false;
 		switch ($t) {
 			case IMG_GIF:
 				$img->image = @imagecreatefromgif($r);
@@ -109,9 +109,9 @@ class Image
 					: $img;
 				break;
 		}
-    }
+	}
 
-    /* generic static helper-meths */
+	/* generic static helper-meths */
 
 	/**
 	 * check image support of PHP + GD
@@ -321,31 +321,31 @@ class Image
 	function paintNotSupported() {
 		$d = "";
 		$d .= 'R0lGODlhXAAkAIcAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAACH5BAMAAAIALAAAAABcACQAAAj/AAUIHEiwoMGDCBMqXMiw'
-		    . 'ocAAAQ5CdEgQosWJFDNqxDjQokGODi+K1EiyIUgBFwueZHhyZcmXHSNW9DgzJk2J'
-		    . 'MiuizPkwokiOP3nuvBl05M6jMXsa/Xgzac2iSpcGjQoVKVCfQl0OJZoVq0qvT7si'
-		    . 'dUoW48SWQmemHNuT7VG0bs+Kran07dyFHuHqFbv3q9+kcv+yBAuYr2G/cOnaJNyW'
-		    . 'KWKeeSEHthmXcWWmMqfi/Lk4ZdWqW2milYy5M961neWiDp1WamvRad3CRDjZ8cbY'
-		    . 'WmfD1Jpbt2/fvGP/Hj47OPHjyJObXK28eUnOL6E7By78NvPp0auT7I2dInTX1xuz'
-		    . 'g8baVPp406kle/6+VHBR9vCNagYtvu9psmzNPt4fVqX7w/eJl19OU9lXWFOKGZjQ'
-		    . 'VYpZVaBh87VXH4AKMYhfbW3tpRlV//FXIYGkFabWgJYteNd5stk2YFgRxreeeZVx'
-		    .'9eF6DV4F3mqcbYifiTNGVqNwxnUnZI8IDmlkakcmqeSSSQYEADs=';
-	    Image::paintData('image/gif', base64_decode($d), 1190);
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAACH5BAMAAAIALAAAAABcACQAAAj/AAUIHEiwoMGDCBMqXMiw'
+			. 'ocAAAQ5CdEgQosWJFDNqxDjQokGODi+K1EiyIUgBFwueZHhyZcmXHSNW9DgzJk2J'
+			. 'MiuizPkwokiOP3nuvBl05M6jMXsa/Xgzac2iSpcGjQoVKVCfQl0OJZoVq0qvT7si'
+			. 'dUoW48SWQmemHNuT7VG0bs+Kran07dyFHuHqFbv3q9+kcv+yBAuYr2G/cOnaJNyW'
+			. 'KWKeeSEHthmXcWWmMqfi/Lk4ZdWqW2milYy5M961neWiDp1WamvRad3CRDjZ8cbY'
+			. 'WmfD1Jpbt2/fvGP/Hj47OPHjyJObXK28eUnOL6E7By78NvPp0auT7I2dInTX1xuz'
+			. 'g8baVPp406kle/6+VHBR9vCNagYtvu9psmzNPt4fVqX7w/eJl19OU9lXWFOKGZjQ'
+			. 'VYpZVaBh87VXH4AKMYhfbW3tpRlV//FXIYGkFabWgJYteNd5stk2YFgRxreeeZVx'
+			.'9eF6DV4F3mqcbYifiTNGVqNwxnUnZI8IDmlkakcmqeSSSQYEADs=';
+		Image::paintData('image/gif', base64_decode($d), 1190);
 	}
 
 	/**
@@ -354,18 +354,18 @@ class Image
 	function paintInvalidReferer() {
 		$d = "";
 		$d .= 'R0lGODlhEAAQAOZpAJJzRlFFOU4vKOjPNOzTNOvTMkowJ0k5MmU3J1k6OEo8NO3S'
-		    . 'KvDUM4VFKuLEMjciIe7WKz4iHVUxJNPAbUgwNKBTLY1HLPTbK/PaLezRMu3TMIVw'
-		    . 'X8K5q+bOM75nL6yJO0QtM+7RN8+ILm86KeXLLYduZaCpyuXZWOrMMt+1MsFqMWEy'
-		    . 'Ir/Ej4iEakM6RmxHNufiiO3PMdyqMdeZMOvSMqiusezPT3dEL7a2t+7gUKmFUHpK'
-		    . 'OT8pJmQ3KFoxJz8rKPXcLpJiUu7QMXhIObJkLujQMpWBU+rSM+rLMbTApfHjQtCH'
-		    . 'MWxWN+3VM5uPhkIrJuXGM+bIbEEqJ5SivsemMOrPL+W/LsO5nGlVQst5Mu3QMZ50'
-		    . 'MdWZLF44M+3TNdK8POK7M8CTMUssJ3tWN8/Qin5XR725ofDVNFk4KwAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAACH5BAEAAGkALAAAAAAQABAAAAeSgGmCAAoHWIKIiYMAg0yK'
-		    . 'ik6KRo+IjIkBV5QtG4oTXzCUAYJRNiFAF0pmjwEvKlxWQmdeEGQcimgPFllgWgwE'
-		    . 'VTk1j08+HjJIMRoFCyw4ihI8FTMoGTRFJCdTijc/I0tQRwMdAxhJJolBAmJEKU0E'
-		    . 'DlQfOo89Ug0iYVtjCSARZYo7BCAY0oWCC0qCSqwwgLAhwkAAOw==';
-	    Image::paintData('image/gif', base64_decode($d), 565);
+			. 'KvDUM4VFKuLEMjciIe7WKz4iHVUxJNPAbUgwNKBTLY1HLPTbK/PaLezRMu3TMIVw'
+			. 'X8K5q+bOM75nL6yJO0QtM+7RN8+ILm86KeXLLYduZaCpyuXZWOrMMt+1MsFqMWEy'
+			. 'Ir/Ej4iEakM6RmxHNufiiO3PMdyqMdeZMOvSMqiusezPT3dEL7a2t+7gUKmFUHpK'
+			. 'OT8pJmQ3KFoxJz8rKPXcLpJiUu7QMXhIObJkLujQMpWBU+rSM+rLMbTApfHjQtCH'
+			. 'MWxWN+3VM5uPhkIrJuXGM+bIbEEqJ5SivsemMOrPL+W/LsO5nGlVQst5Mu3QMZ50'
+			. 'MdWZLF44M+3TNdK8POK7M8CTMUssJ3tWN8/Qin5XR725ofDVNFk4KwAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAACH5BAEAAGkALAAAAAAQABAAAAeSgGmCAAoHWIKIiYMAg0yK'
+			. 'ik6KRo+IjIkBV5QtG4oTXzCUAYJRNiFAF0pmjwEvKlxWQmdeEGQcimgPFllgWgwE'
+			. 'VTk1j08+HjJIMRoFCyw4ihI8FTMoGTRFJCdTijc/I0tQRwMdAxhJJolBAmJEKU0E'
+			. 'DlQfOo89Ug0iYVtjCSARZYo7BCAY0oWCC0qCSqwwgLAhwkAAOw==';
+		Image::paintData('image/gif', base64_decode($d), 565);
 	}
 
 	/**
@@ -374,17 +374,17 @@ class Image
 	function paintNoOp() {
 		$d = "";
 		$d .= 'R0lGODlhDQAMAOZeAP///44LDoYLDWMJC18XGKNmZ6cNEXQJDFsHCsUQFbwPFLkP'
-		    . 'FKQNEaENEZMMEIoLDokLD4cLD34KDXIJDHAJDG4JDGYIC7YPFJ0NEZoNEYILDncK'
-		    . 'DXMKDWcJDMgXHpAaHmwXGlokJsRpbK5maKxqbdmoqrkaIr4hLOHQ0cYkMc0sO7kp'
-		    . 'NswxQkoTGXYhKtuvtOvh4lAWHdE6TmgdJ4YtOeSxt784S8Y+UkQYH5o9TLxAVdNK'
-		    . 'YkgaIk0cJdy2vdZPaVQfKtZQal0jMMZPadhaecpYdtpggZhFXOW8x9tlh9ZjhHs6'
-		    . 'Tttpjd5vlYVJYYtTbrV2nplliLqAqqJzmZltkqh9pquEqpyrxp2tx196o6e3zr3J'
-		    . '28bQ393Q0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAACH5BAEAAF4ALAAAAAANAAwAAAeHgF6CXlZVU1RRg4NSTUxJ'
-		    . 'REE7MkeDUEpFSEM7NjUrKTSCRpgAPjcvACUmCV5RPzo5AAAwsR8GF0JPMiwrLrMw'
-		    . 'IBgGDEJOKiknJLEABRgNGUBLHgoisSGxIxEQPV4LDA8oIAcEXQMTG4IuDQEUBxoW'
-		    . 'CBYVMYMzDhACEhwVHS2Kgj09eODAoSgQADs=';
+			. 'FKQNEaENEZMMEIoLDokLD4cLD34KDXIJDHAJDG4JDGYIC7YPFJ0NEZoNEYILDncK'
+			. 'DXMKDWcJDMgXHpAaHmwXGlokJsRpbK5maKxqbdmoqrkaIr4hLOHQ0cYkMc0sO7kp'
+			. 'NswxQkoTGXYhKtuvtOvh4lAWHdE6TmgdJ4YtOeSxt784S8Y+UkQYH5o9TLxAVdNK'
+			. 'YkgaIk0cJdy2vdZPaVQfKtZQal0jMMZPadhaecpYdtpggZhFXOW8x9tlh9ZjhHs6'
+			. 'Tttpjd5vlYVJYYtTbrV2nplliLqAqqJzmZltkqh9pquEqpyrxp2tx196o6e3zr3J'
+			. '28bQ393Q0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAACH5BAEAAF4ALAAAAAANAAwAAAeHgF6CXlZVU1RRg4NSTUxJ'
+			. 'REE7MkeDUEpFSEM7NjUrKTSCRpgAPjcvACUmCV5RPzo5AAAwsR8GF0JPMiwrLrMw'
+			. 'IBgGDEJOKiknJLEABRgNGUBLHgoisSGxIxEQPV4LDA8oIAcEXQMTG4IuDQEUBxoW'
+			. 'CBYVMYMzDhACEhwVHS2Kgj09eODAoSgQADs=';
 		Image::paintData('image/gif', base64_decode($d), 554);
 	}
 
@@ -394,7 +394,7 @@ class Image
 	function paintSpacer() {
 		$d = "";
 		$d .= 'R0lGODlhAQABAIcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
-		    . 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
+			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
 			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
 			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
 			. 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'
@@ -422,55 +422,55 @@ class Image
 	 */
 	function paintData($type, $data, $len) {
 		@header('Accept-Ranges: bytes');
-	    @header('Content-Length: '.$len);
-	    @header('Content-Type: '.$type);
-	    echo $data;
-	    exit();
+		@header('Content-Length: '.$len);
+		@header('Content-Type: '.$type);
+		echo $data;
+		exit();
 	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * do not use direct, use the factory-methods !
-     *
-     * @return Image
-     */
-    function Image($t = IMG_GIF, $w = 0, $h = 0) {
+	/**
+	 * do not use direct, use the factory-methods !
+	 *
+	 * @return Image
+	 */
+	function Image($t = IMG_GIF, $w = 0, $h = 0) {
 
-    	// GD required
+		// GD required
 		if (extension_loaded('gd')) {
 
-	    	// types Supported
+			// types Supported
 			$this->_imagetypes = imagetypes();
 
-	    	// type
-	    	if ($this->_imagetypes & $t)
-	    		$this->type = $t;
-	    	else
-	    		return false;
+			// type
+			if ($this->_imagetypes & $t)
+				$this->type = $t;
+			else
+				return false;
 
-	    	// dim
-	    	$this->width = $w;
-	    	$this->height = $h;
+			// dim
+			$this->width = $w;
+			$this->height = $h;
 
 		} else {
 			// return false
 			return false;
 		}
 
-    }
+	}
 
 	// =========================================================================
 	// public methods
 	// =========================================================================
 
-    /**
-     * paint
-     */
-    function paint() {
-    	@header("Content-type: ".$this->_contentTypes[$this->type]);
+	/**
+	 * paint
+	 */
+	function paint() {
+		@header("Content-type: ".$this->_contentTypes[$this->type]);
 		switch ($this->type) {
 			case IMG_GIF:
 				imagegif($this->image);
@@ -484,7 +484,7 @@ class Image
 		}
 		imagedestroy($this->image);
 		exit();
-    }
+	}
 
 }
 

@@ -92,13 +92,13 @@ switch ($cfg['auth_type']) {
 				$iamhim = addslashes($requestPW);
 				$md5password = "";
 				$setcookie = tfb_getRequestVar('setcookie');
-
+				
 				// test the captcha if this is login type 6.  If it fails then don't set the cookie.
 				if($cfg["auth_type"] == 6)
 					if(!auth_validateRecaptcha($user, $iamhim, $bSetRecaptcha))
 						if($setcookie == "true")
 							$setcookie = "false";
-							
+				
 				// set cookie if wanted
 				if ($setcookie == "true")
 					setcookie("autologin", $user.$cookieDelim.md5($requestPW), time() + 60 * 60 * 24 * 30);
@@ -106,7 +106,7 @@ switch ($cfg['auth_type']) {
 				// check if cookie-set
 				if (isset($_COOKIE["autologin"])) {
 					// state: user is logged out, but login page senses cookie credentials.  We need a new recaptcha for user change.
-				
+					
 					// cookie is set
 					$tmpl->setvar('cookie_set', 1);
 					$creds = explode($cookieDelim, $_COOKIE["autologin"]);
@@ -115,7 +115,7 @@ switch ($cfg['auth_type']) {
 				}
 				// Either user is logged out and form is sensing login credentials, so a user change form needs the recaptcha -OR-
 				// cookie is not set for this login.  The auth form with cookie checkbox is shown
-				if($cfg["auth_type"] == 6) 
+				if($cfg["auth_type"] == 6)
 					$bSetReCaptcha = true;
 			}
 		}
@@ -160,12 +160,12 @@ switch ($cfg['auth_type']) {
 		$md5password = "";
 		if (!empty($user)) {
 			$isLoginRequest = true;
-			
+
 			// test the captcha.
 			auth_validateRecaptcha($user, $iamhim, $bSetRecaptcha);
 		} else {
-		  // this is not a login request
-		  $bSetReCaptcha = true;
+			// this is not a login request
+			$bSetReCaptcha = true;
 		}
 		break;
 	case 0: /* Form-Based Auth Standard */
@@ -194,7 +194,7 @@ if ($isLoginRequest) {
 		exit();
 	} else {
 		$tmpl->setvar('login_failed', 1);
-
+		
 		// reset the captcha if this was an auth types of 5 or 6.
 		$bSetReCaptcha = ($cfg["auth_type"] == 5 || $cfg["auth_type"] == 6);
 	}
@@ -202,10 +202,9 @@ if ($isLoginRequest) {
 
 // Do we need to reset the captcha for this page?
 if($bSetReCaptcha) {
-  // write recaptcha code
-  $tmpl->setvar('recaptcha_html', recaptcha_get_html($cfg["recaptcha_public_key"], $error));
+	// write recaptcha code
+	$tmpl->setvar('recaptcha_html', recaptcha_get_html($cfg["recaptcha_public_key"], $error));
 }
-
 
 // defines
 $tmpl->setvar('auth_type', $cfg["auth_type"]);

@@ -94,14 +94,14 @@ $bar_width = "4";
 if ($cfg["transmission_rpc_enable"]) {
 
 	// add transmission rpc torrent to current user list
-	
+
 	require_once('inc/functions/functions.rpc.transmission.php');
 	$result = getUserTransmissionTransfers($cfg['uid']);
 
 	// eta
 	//  -1 : Done
 	//  -2 : Unknown
-	
+
 	foreach($result as $aTorrent)
 	{
 		// fill in eta
@@ -114,7 +114,7 @@ if ($cfg["transmission_rpc_enable"]) {
 		} else {
 			$eta = convertTime( $aTorrent['eta'] );
 		}
-	
+
 		$status = $aTorrent['status'];
 		switch ($aTorrent['status']) {
 		case 16:
@@ -144,7 +144,7 @@ if ($cfg["transmission_rpc_enable"]) {
 			$transferRunning = true;
 			break;
 		}
-		
+
 		// TODO: transferowner is always admin... probably not what we want
 		$tArray = array(
 			'is_owner' => true,
@@ -178,7 +178,7 @@ if ($cfg["transmission_rpc_enable"]) {
 			'show_run' => 1,
 			'entry' => $aTorrent['name']
 		);
-		
+
 		array_push($arUserTorrent, $tArray);
 
 		// Adds the transfer rate for this torrent to the total transfer rate
@@ -191,7 +191,7 @@ if ($cfg["transmission_rpc_enable"]) {
 			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent[rateDownload]/1000);
 		}
 	}
-} 
+}
 // end of Transmission RPC bloc
 // ---------------------------------------------------------------------
 
@@ -201,13 +201,13 @@ foreach ($arList as $transfer) {
 
 	// may need a special config panel to clean names...
 	$displayname = str_replace('.',"_",$displayname);
-	
+
 	$displayname = preg_replace('#([^_]+_(com|org|net|info)_)#i',"",$displayname);
 	$displayname = preg_replace('#(_torrent)$#i',"",$displayname);
 
 	$arToClean = array ("http","download_php","_www_","isohunt");
 	$displayname = str_ireplace($arToClean,"",$displayname);
-	
+
 	$displayname = str_replace('_',".",$displayname);
 	$displayname = str_replace('..',".",$displayname);
 	$displayname = trim($displayname,'.');
@@ -245,12 +245,12 @@ foreach ($arList as $transfer) {
 	}
 	// Fix FluAzu progression 100% (client to check, not set to "azureus")
 	if ($settingsAry["client"] == "") {
-	
+
 		if (!$sf->seedlimit)
 			$sf->seedlimit=$settingsAry["sharekill"];
-	
+
 		if ((int)$sf->size > 0) {
-			if (!$sf->sharing) 
+			if (!$sf->sharing)
 				$sf->sharing=(0+$sf->uptotal)/(0+$sf->size)*100;
 		}
 	}
@@ -365,7 +365,7 @@ foreach ($arList as $transfer) {
 		if($format_uptotal == "") $format_uptotal = "&nbsp;";
 	}
 	// ================================================================== status
-	
+
 	// ================================================================ progress
 	if ($settings[5] != 0) {
 		if ($percentDone >= 100 && $sf->size>0  && trim($sf->up_speed) != "") {
@@ -598,8 +598,8 @@ if ($isAjaxUpdate) {
 		$content .= $tmpl->grab();
 	}
 	// send and out
-    @header("Cache-Control: no-cache");
-    @header("Pragma: no-cache");
+	@header("Cache-Control: no-cache");
+	@header("Pragma: no-cache");
 	@header("Content-Type: text/plain");
 	echo $content;
 	exit();
@@ -627,7 +627,7 @@ if ($nbMsg > 0) {
 		//disabled page lock
 		//$tmpl->setvar('IsForceReadMsg', 1);
 
-		 //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute, quoted dblquotes (\") seems not working 
+		 //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute, quoted dblquotes (\") seems not working
 		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
 
 		//dont auto-hide growl message
@@ -684,16 +684,16 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 	$ajaxInit .= ",".$cfg["ui_displaybandwidthbars"];
 	$ajaxInit .= ",'".$cfg['bandwidthbar']."'";
 	$ajaxInit .= ");onbeforeunload = ajax_unload;";
-	
+
 	if (!empty($msgGrowl))
 	$ajaxInit .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
-	
+
 	$onLoad .= $ajaxInit;
 } else {
-	
+
 	if (!empty($msgGrowl))
 	$jsInit  = "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
-	
+
 	$onLoad .= $jsInit;
 }
 

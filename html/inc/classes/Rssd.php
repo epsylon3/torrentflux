@@ -43,16 +43,16 @@ class Rssd
 	// public fields
 	var $name = "Rssd";
 
-    // state
-    var $state = RSSD_STATE_NULL;
+	// state
+	var $state = RSSD_STATE_NULL;
 
-    // messages-array
-    var $messages = array();
+	// messages-array
+	var $messages = array();
 
-    // private fields
+	// private fields
 
-    // mode
-    var $_mode = 0;
+	// mode
+	var $_mode = 0;
 
 	// job-vars
 	var $_fileFilters = "";
@@ -80,52 +80,52 @@ class Rssd
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return Rssd
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return Rssd
+	 */
+	function getInstance() {
 		global $instanceRssd;
 		// initialize if needed
 		if (!isset($instanceRssd))
 			Rssd::initialize();
 		return $instanceRssd;
-    }
+	}
 
-    /**
-     * initialize Rssd.
-     */
-    function initialize() {
-    	global $instanceRssd;
-    	// create instance
-    	if (!isset($instanceRssd))
-    		$instanceRssd = new Rssd();
-    }
+	/**
+	 * initialize Rssd.
+	 */
+	function initialize() {
+		global $instanceRssd;
+		// create instance
+		if (!isset($instanceRssd))
+			$instanceRssd = new Rssd();
+	}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-    function getState() {
+	function getState() {
 		global $instanceRssd;
 		return (isset($instanceRssd))
 			? $instanceRssd->state
 			: RSSD_STATE_NULL;
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	function getMessages() {
 		global $instanceRssd;
 		return (isset($instanceRssd))
 			? $instanceRssd->messages
 			: array();
-    }
+	}
 
 	/**
 	 * process a feed
@@ -136,35 +136,35 @@ class Rssd
 	 * @param $url
 	 * @return boolean
 	 */
-    function processFeed($sdir, $filter, $hist, $url) {
+	function processFeed($sdir, $filter, $hist, $url) {
 		global $instanceRssd;
 		// initialize if needed
 		if (!isset($instanceRssd))
 			Rssd::initialize();
 		// call instance-method
 		return $instanceRssd->instance_processFeed($sdir, $filter, $hist, $url);
-    }
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * do not use direct, use the factory-methods !
-     *
-     * @return Rssd
-     */
-    function Rssd() {
-    	global $argv;
-        // cli/web
+	/**
+	 * do not use direct, use the factory-methods !
+	 *
+	 * @return Rssd
+	 */
+	function Rssd() {
+		global $argv;
+		// cli/web
 		$this->_mode = (empty($argv[0]))
 			? RSSD_MODE_WEB
 			: RSSD_MODE_CLI;
-        // init lastRSS-instance
+		// init lastRSS-instance
 		$this->_lastRSS = new lastRSS();
 		$this->_lastRSS->cache_dir = '';
 		$this->_lastRSS->stripHTML = false;
-    }
+	}
 
 	// =========================================================================
 	// public methods
@@ -179,36 +179,36 @@ class Rssd
 	 * @param $url
 	 * @return boolean
 	 */
-    function instance_processFeed($sdir, $filter, $hist, $url) {
-    	// (re)set state
-    	$this->state = RSSD_STATE_NULL;
-   		// validate
-   		if (!checkDirectory($sdir, 0777)) {
-            $this->state = RSSD_STATE_ERROR;
-            $msg = "Save-Dir ".$sdir." not valid.";
-            array_push($this->messages , $msg);
+	function instance_processFeed($sdir, $filter, $hist, $url) {
+		// (re)set state
+		$this->state = RSSD_STATE_NULL;
+		// validate
+		if (!checkDirectory($sdir, 0777)) {
+			$this->state = RSSD_STATE_ERROR;
+			$msg = "Save-Dir ".$sdir." not valid.";
+			array_push($this->messages , $msg);
 			$this->_outputError($msg."\n");
-            return false;
-   		}
-   		if (!is_file($filter)) {
-            $this->state = RSSD_STATE_ERROR;
-            $msg = "Filter-File ".$filter." not valid.";
-            array_push($this->messages , $msg);
+			return false;
+		}
+		if (!is_file($filter)) {
+			$this->state = RSSD_STATE_ERROR;
+			$msg = "Filter-File ".$filter." not valid.";
+			array_push($this->messages , $msg);
 			$this->_outputError($msg."\n");
-            return false;
-   		}
+			return false;
+		}
 		// output
 		$this->_outputMessage("Processing feed ".$url." ...\n");
-    	// set vars
-    	$this->_dirSave = checkDirPathString($sdir);
-    	$this->_fileFilters = $filter;
-    	$this->_fileHistory = $hist;
-    	$this->_urlRSS = $url;
-    	$this->_filters = array();
-    	$this->_history = array();
-    	$this->_historyNew = array();
-    	$this->_data = array();
-    	$this->_filesSaved = array();
+		// set vars
+		$this->_dirSave = checkDirPathString($sdir);
+		$this->_fileFilters = $filter;
+		$this->_fileHistory = $hist;
+		$this->_urlRSS = $url;
+		$this->_filters = array();
+		$this->_history = array();
+		$this->_historyNew = array();
+		$this->_data = array();
+		$this->_filesSaved = array();
 		// load _filters
 		if (!$this->_loadFilters())
 			return false;
@@ -236,28 +236,28 @@ class Rssd
 		$this->_outputMessage("feed processed. downloaded and saved ".count($this->_filesSaved)." torrents.\n");
 		// return
 		return true;
-    }
+	}
 
 	// =========================================================================
 	// private methods
 	// =========================================================================
 
-    /**
-     * load filters
-     *
-     * @return boolean
-     */
+	/**
+	 * load filters
+	 *
+	 * @return boolean
+	 */
 	function _loadFilters() {
 		$fifi = file($this->_fileFilters);
 		$this->_filters = array_map('rtrim', $fifi);
 		return true;
-    }
+	}
 
-    /**
-     * load history
-     *
-     * @return boolean
-     */
+	/**
+	 * load history
+	 *
+	 * @return boolean
+	 */
 	function _loadHistory() {
 		if (is_file($this->_fileHistory)) {
 			$fihi = file($this->_fileHistory);
@@ -266,30 +266,30 @@ class Rssd
 			$this->_history = array();
 		}
 		return true;
-    }
+	}
 
-    /**
-     * load data
-     *
-     * @return boolean
-     */
+	/**
+	 * load data
+	 *
+	 * @return boolean
+	 */
 	function _loadData() {
 		$this->_data = $this->_lastRSS->Get($this->_urlRSS);
 		if ($this->_data !== false) {
 			return (empty($this->_data) === false);
 		} else {
-            $msg = "Problem getting feed-data from ".$this->_urlRSS;
-            array_push($this->messages , $msg);
+			$msg = "Problem getting feed-data from ".$this->_urlRSS;
+			array_push($this->messages , $msg);
 			$this->_outputError($msg."\n");
-            return false;
+			return false;
 		}
-    }
+	}
 
-    /**
-     * process data
-     *
-     * @return boolean
-     */
+	/**
+	 * process data
+	 *
+	 * @return boolean
+	 */
 	function _processData() {
 		$itemCount = count($this->_data["items"]);
 		// filter-loop
@@ -324,13 +324,13 @@ class Rssd
 		}
 		// return
 		return true;
-    }
+	}
 
-    /**
-     * update history
-     *
-     * @return boolean
-     */
+	/**
+	 * update history
+	 *
+	 * @return boolean
+	 */
 	function _updateHistory() {
 		global $cfg;
 		if (count($this->_historyNew) > 0) {
@@ -339,32 +339,32 @@ class Rssd
 			$handle = @fopen($this->_fileHistory, "a");
 			if (!$handle) {
 				$this->state = RSSD_STATE_ERROR;
-	            $msg = "cannot open history ".$this->_fileHistory." for writing.";
-	            array_push($this->messages , $msg);
-	            AuditAction($cfg["constants"]["error"], "Rssd _updateHistory-Error : ".$msg);
+				$msg = "cannot open history ".$this->_fileHistory." for writing.";
+				array_push($this->messages , $msg);
+				AuditAction($cfg["constants"]["error"], "Rssd _updateHistory-Error : ".$msg);
 				$this->_outputError($msg."\n");
 				return false;
 			}
-	        $result = @fwrite($handle, implode("\n", $this->_historyNew)."\n");
+			$result = @fwrite($handle, implode("\n", $this->_historyNew)."\n");
 			@fclose($handle);
 			if ($result === false) {
 				$this->state = RSSD_STATE_ERROR;
-	            $msg = "cannot write content to history ".$this->_fileHistory.".";
-	            array_push($this->messages , $msg);
-	            AuditAction($cfg["constants"]["error"], "Rssd _updateHistory-Error : ".$msg);
+				$msg = "cannot write content to history ".$this->_fileHistory.".";
+				array_push($this->messages , $msg);
+				AuditAction($cfg["constants"]["error"], "Rssd _updateHistory-Error : ".$msg);
 				$this->_outputError($msg."\n");
 				return false;
 			}
 		}
 		// return
 		return true;
-    }
+	}
 
-    /**
-     * download and save a torrent-file
-     *
-     * @return boolean
-     */
+	/**
+	 * download and save a torrent-file
+	 *
+	 * @return boolean
+	 */
 	function _saveTorrent($url, $title) {
 		global $cfg;
 		$content = SimpleHTTP::getTorrent($url);
@@ -398,9 +398,9 @@ class Rssd
 			// check if file already exists
 			if (@is_file($file)) {
 				// Error
-	            $msg = "the file ".$file." already exists in ".$this->_dirSave;
-	            array_push($this->messages , $msg);
-	            AuditAction($cfg["constants"]["error"], "Rssd downloadMetafile-Error : ".$msg);
+				$msg = "the file ".$file." already exists in ".$this->_dirSave;
+				array_push($this->messages , $msg);
+				AuditAction($cfg["constants"]["error"], "Rssd downloadMetafile-Error : ".$msg);
 				$this->_outputError($msg."\n");
 				return false;
 			}
@@ -408,17 +408,17 @@ class Rssd
 			$handle = false;
 			$handle = @fopen($file, "w");
 			if (!$handle) {
-	            $msg = "cannot open ".$file." for writing.";
-	            array_push($this->messages , $msg);
+				$msg = "cannot open ".$file." for writing.";
+				array_push($this->messages , $msg);
 				AuditAction($cfg["constants"]["error"], "Rssd downloadMetafile-Error : ".$msg);
 				$this->_outputError($msg."\n");
 				return false;
 			}
-	        $result = @fwrite($handle, $content);
+			$result = @fwrite($handle, $content);
 			@fclose($handle);
 			if ($result === false) {
-	            $msg = "cannot write content to ".$file.".";
-	            array_push($this->messages , $msg);
+				$msg = "cannot write content to ".$file.".";
+				array_push($this->messages , $msg);
 				AuditAction($cfg["constants"]["error"], "Rssd downloadMetafile-Error : ".$msg);
 				$this->_outputError($msg."\n");
 				return false;
@@ -441,29 +441,29 @@ class Rssd
 			$this->_outputError("could not download torrent with title ".$title." from url ".$url." : \n".implode("\n", $msgs));
 			return false;
 		}
-    }
+	}
 
-    /**
-     * output message
-     *
-     * @param $message
-     */
+	/**
+	 * output message
+	 *
+	 * @param $message
+	 */
 	function _outputMessage($message) {
-        // only in cli-mode
+		// only in cli-mode
 		if ($this->_mode == RSSD_MODE_CLI)
 			printMessage($this->name, $message);
-    }
+	}
 
-    /**
-     * output error
-     *
-     * @param $message
-     */
+	/**
+	 * output error
+	 *
+	 * @param $message
+	 */
 	function _outputError($message) {
-        // only in cli-mode
+		// only in cli-mode
 		if ($this->_mode == RSSD_MODE_CLI)
 			printError($this->name, $message);
-    }
+	}
 
 }
 
