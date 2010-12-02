@@ -1094,7 +1094,6 @@ class ClientHandler
 		global $cfg;
 		$portString = netstatPortList();
 		$portAry = explode("\n", $portString);
-		$this->port = intval($this->minport);
 
 		if ($this->minport == 0)
 			$this->minport = (int) $cfg['minport'];
@@ -1105,6 +1104,8 @@ class ClientHandler
 			$this->minport = 50000;
 		if ($this->maxport == 0)
 			$this->maxport = 60000;
+		
+		$this->port = intval($this->minport);
 
 		while (1) {
 			if (in_array($this->port, $portAry))
