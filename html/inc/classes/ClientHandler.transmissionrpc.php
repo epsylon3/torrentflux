@@ -63,20 +63,43 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 
 		// set vars
 		$this->_setVarsForTransfer($transfer);
+		addGrowlMessage($this->client."-start",$transfer);
 
 		if (!Transmission::isRunning()) {
 			$msg = "Transmission RPC not reacheable, cannot start transfer ".$transfer;
 			$this->logMessage($this->client."-start : ".$msg."\n", true);
 			AuditAction($cfg["constants"]["error"], $msg);
 			$this->logMessage($msg."\n", true);
+			addGrowlMessage($this->client."-start",$msg);
+			
+			// write error to stat
+			$sf = new StatFile($this->transfer, $this->owner);
+			$sf->time_left = 'Error: RPC down';
+			$sf->write();
+			
 			// return
 			return false;
 		}
-		
+
+		/*
+		if (!is_dir($cfg["path"].'.config/transmissionrpc/torrents')) {
+			if (!is_dir($cfg["path"].'.config'))
+				mkdir($cfg["path"].'.config',0775);
+			
+			if (!is_dir($cfg["path"].'.config/transmissionrpc'))
+				mkdir($cfg["path"].'.config/transmissionrpc',0775);
+			
+			mkdir($cfg["path"].'.config/transmissionrpc/torrents',0775);
+		}
+		*/
+
 		$hash = getTransferHash($transfer);
 
 		if (!empty($hash) && !isTransmissionTransfer($hash)) {
-			$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
+			$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$transfer, $cfg['path'].$cfg['user'] );
+			$this->command = 'torrent-add'; //log purpose
+		} else {
+			$this->command = 'torrent-start'; //log purpose
 		}
 
 		$res = (int) startTransmissionTransfer($hash, $enqueue);

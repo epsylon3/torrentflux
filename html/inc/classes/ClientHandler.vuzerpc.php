@@ -116,13 +116,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$content .= $this->rerequest;
 
 		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.vuzerpc/run/'.$transfer);
-		$this->command .= " && ";
-		$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
+		//$this->command .= " && ";
+		//$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
 
-		if ($this->isWinOS()) {
-			file_put_contents($cfg["path"].'.vuzerpc/run/'.$transfer, $content);
-			$this->command = "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
-		}
+		//if ($this->isWinOS()) {
+		//	file_put_contents($cfg["path"].'.vuzerpc/run/'.$transfer, $content);
+		//	$this->command = "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
+		//}
 
 		if (!is_dir($cfg["path"].'.vuzerpc'))
 			mkdir($cfg["path"].'.vuzerpc',0775);
@@ -172,6 +172,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// set vars
 		$this->_setVarsForTransfer($transfer);
 
+		addGrowlMessage($this->client."-stop","$transfer");
+		
 		// VuzeRPC
 		require_once("inc/classes/VuzeRPC.php");
 
@@ -339,10 +341,17 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// set rate-field
 		$this->rate = $uprate;
 		// add command
-		CommandHandler::add($transfer, "u".$uprate);
+		//CommandHandler::add($transfer, "u".$uprate);
 		// send command to client
-		if ($autosend)
-			CommandHandler::send($transfer);
+		if ($autosend) {
+			//CommandHandler::send($transfer);
+			$rpc = VuzeRPC::getInstance();
+			$req = $rpc->torrent_set(array($id),'rateUpload',$uprate);
+			if (!is_object($req) || $req->result != "success") {
+				$msg = "setRateUpload: ".$req->lastError;
+				$this->logMessage($msg."\n", true);
+			}
+		}
 	}
 
 	/**

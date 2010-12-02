@@ -691,27 +691,31 @@ class MaintenanceAndRepair
 
 	/* output-methods */
 
-    /**
-     * output message
-     *
-     * @param $message
-     */
+	/**
+	 * output message
+	 *
+	 * @param $message
+	 */
 	function _outputMessage($message) {
-        // only in cli-mode
+		// in cli-mode
 		if ($this->_mode == MAINTENANCEANDREPAIR_MODE_CLI)
 			printMessage($this->name, $message);
-    }
+		else
+			addGrowlMessage($this->name, $message);
+	}
 
-    /**
-     * output error
-     *
-     * @param $message
-     */
+	/**
+	 * output error
+	 *
+	 * @param $message
+	 */
 	function _outputError($message) {
-        // only in cli-mode
+		// in cli-mode
 		if ($this->_mode == MAINTENANCEANDREPAIR_MODE_CLI)
 			printError($this->name, $message);
-    }
+		else
+			addGrowlMessage($this->name, $message);
+	}
 
 }
 

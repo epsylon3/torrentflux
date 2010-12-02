@@ -20,6 +20,14 @@
 
 *******************************************************************************/
 
+function rpc_error($errorstr,$dummy="",$dummy="",$response="") {
+	global $cfg;
+	AuditAction($cfg["constants"]["error"], "Transmission RPC : $errorstr - $response");
+	@error($errorstr, "", "", $response);
+	addGrowlMessage('transmission-rpc',$errorstr.$response);
+	//dbError($errorstr);
+}
+
 /**
  * get one Transmission transfer data array
  *
@@ -27,14 +35,6 @@
  * @param $fields array of fields needed
  * @return array or false
  */
-
-function rpc_error($errorstr,$dummy,$dummy,$response) {
-	global $cfg;
-	AuditAction($cfg["constants"]["error"], "Transmission RPC : $errorstr - $response");
-	@error($errorstr, "", "", $response);
-	//dbError($errorstr);
-}
-
 function getTransmissionTransfer($transfer, $fields=array() ) {
 	//$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
 	//			"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" )
@@ -147,6 +147,9 @@ function startTransmissionTransfer($hash,$startPaused=false) {
 			return false;
 		}
 		return true;
+	} else {
+		rpc_error("startTransmissionTransfer : Not ValidTransmissionTransfer hash=$hash ");
+		return false;
 	}
 }
 
@@ -207,7 +210,7 @@ function getTransmissionTransferIdByHash($hash) {
 	$transmissionTransferId = false;
 	$trans = new Transmission();
 	$response = $trans->get(array(), array('id','hashString'));
-	if ( $response['result'] != "success" ) rpc_error("Getting ID for Hash failed: ", "", "", $response['result']);
+	if ( $response['result'] != "success" ) rpc_error("Getting ID for Hash failed: ".$response['result']);
 	$torrentlist = $response['arguments']['torrents'];
 	foreach ($torrentlist as $aTorrent) {
 		if ( $aTorrent['hashString'] == $hash ) {
@@ -261,7 +264,7 @@ function addTransmissionTransfer($uid = 0, $url, $path, $paused=true) {
 	$rpc = new Transmission();
 
 	$result = $rpc->add( $url, $path, array ('paused' => $paused)  );
-	if($result["result"]!=="success") rpc_error("addTransmissionTransfer : ".$result["result"]);
+	if($result["result"]!=="success") rpc_error("addTransmissionTransfer","","",$result["result"]. " url=$url");
 
 	$hash = $result['arguments']['torrent-added']['hashString'];
 	//rpc_error("The hash is: $hash. The uid is $uid"); exit();
