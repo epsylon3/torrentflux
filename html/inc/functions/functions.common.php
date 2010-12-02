@@ -26,6 +26,11 @@
 require_once("inc/functions/functions.common.auth.php");
 
 /*
+ * charset (utf8 encode/decode)
+ */
+require_once("inc/functions/functions.common.charset.php");
+
+/*
  * cookie
  */
 require_once("inc/functions/functions.common.cookie.php");
@@ -167,6 +172,7 @@ function check_html ($str, $strip="") {
 
 /**
  * sendLine - sends a line to the browser
+ *
  */
 function sendLine($line = "") {
 	echo $line;

@@ -12,6 +12,7 @@ from unittest import *
 
 from BitTorrent import RawServer_twisted
 
+from hashlib import sha1
 from khashmir import *
 import khash
 from copy import copy
@@ -124,14 +125,14 @@ class AASimpleTests(TestCase):
     def testStoreRetrieve(self):
         self.addContacts()
         self.got = 0
-        self.a.storeValueForKey(sha('foo').digest(), 'foobar')
+        self.a.storeValueForKey(sha1('foo').digest(), 'foobar')
         self.r.listen_once(1)
         self.r.listen_once(1)
         self.r.listen_once(1)
         self.r.listen_once(1)
         self.r.listen_once(1)
         self.r.listen_once(1)
-        self.a.valueForKey(sha('foo').digest(), self._cb)
+        self.a.valueForKey(sha1('foo').digest(), self._cb)
         self.r.listen_once(1)
         self.r.listen_once(1)
         self.r.listen_once(1)

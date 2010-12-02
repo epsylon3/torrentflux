@@ -1,0 +1,146 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<form name="theForm" action="admin.php?op=updateXferSettings" method="post" onsubmit="return validateSettings('xfer')">
+<h1>XFER settings</h1>
+<p><input type="Submit" value="Update Settings"></p>
+<p class="NormalText"><a href="index.php?iid=serverStats&type=xfer">show stats</a> | <tmpl_var name="SuperAdminLink">
+<h2>Xfer (Data Transfer) Settings</h2>
+<table id="adminXferSettings">
+	<tr>
+		<th>Enable Xfer Statistics<br /><span>Enable/disable logging of data transfer stats - when disabled no transfer data statistics will be recorded.</span></th>
+		<td>
+			<select name="enable_xfer" id="enable_xfer">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_xfer" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Realtime Xfer Statistics<br /><span>Enable/disable update of xfer stats in realtime - when enabled, data transfer statistics will be updated on every index page reload.</span></th>
+		<td class="alt">
+			<select name="xfer_realtime" id="xfer_realtime">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="xfer_realtime" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Public Xfer Statistics<br /><span>Enable/disable display of public xfer stats - when enabled, data transfer statistics will be visible for all users.</span></th>
+		<td>
+			<select name="enable_public_xfer" id="enable_public_xfer">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_public_xfer" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+</table>
+<h2>Xfer (Data Transfer) Limit Settings</h2>
+<p class="NormalText">
+	Data transfer (xfer) limits can be configured in this section for daily, weekly and monthly consumption of 
+	bandwidth. Xfer limits have the effect of adding an xfer limit bar to the TorrentFlux-NG frontend to indicate how 
+	much bandwidth data can still be transferred for each period until the respective data transfer limit is reached.
+</p>
+
+<p class="NormalText">
+	Notes:
+	<ul>
+		<li>The totals apply globally - ie for all users.</li>
+		<li>The limits are specified in megabytes - 1024 =~ 1Gb, 1048576 =~ 1Tb.</li>
+		<li>Limits are not enforced automatically! (see below for info)</li>
+	</ul>
+</p>
+<h3>Enforce XFER limits</h3>
+<p class="NormalText">
+	To enforce xfer limits, the fluxcli.php script must be run via a scheduled job (ie cron) in 'xfer' mode - ie 'fluxcli.php xfer [period]', 
+	where [period] is one of day/week/month.  This will check if the associated xfer limit has already been met 
+	for the period and if true, stop all currently running transfers.
+</p>
+<h3>Guide: 1Gb = 1024, 1Tb = 1048576</h3>
+<table id="adminXferSettings">
+	<tr>
+		<th>Xfer Limit - Total<br /><span>Specify total xfer limit in megabytes - the data transfer limit for all periods</span></th>
+		<td><input name="xfer_total" id="xfer_total" type="Text" maxlength="20" value="<tmpl_var name="xfer_total">" size="20"></td>
+	</tr>
+	<tr>
+		<th class="alt">Xfer Limit - Month<br /><span>Specify monthly xfer limit in megabytes - the monthly data transfer limit</span></th>
+		<td class="alt"><input name="xfer_month" "xfer_month" type="Text" maxlength="20" value="<tmpl_var name="xfer_month">" size="20"></td>
+	</tr>
+	<tr>
+		<th>Xfer Limit - Week<br /><span>Specify weekly xfer limit in megabytes - the weekly data transfer limit</span></th>
+		<td><input name="xfer_week" id="xfer_week" type="Text" maxlength="20" value="<tmpl_var name="xfer_week">" size="20"></td>
+	</tr>
+	<tr>
+		<th class="alt">Xfer Limit - Day<br /><span>Specify daily xfer limit in megabytes - the daily data transfer limit</span></th>
+		<td class="alt"><input name="xfer_day" id="xfer_day" type="Text" maxlength="20" value="<tmpl_var name="xfer_day">" size="20"></td>
+	</tr>
+	<tr>
+		<th>Xfer Stats - Week Start<br /><span>Specify the first day of the week for stats tracking purposes - the day of the week that transfer statistics will be counted from</span></th>
+		<td>
+			<select name="week_start" id="week_start">
+			<option value="Monday"
+			<tmpl_if name="week_start" value="Monday">
+				selected
+			</tmpl_if>
+				>Monday</option>
+				<option value="Tuesday"
+			<tmpl_if name="week_start" value="Tuesday">
+				selected
+			</tmpl_if>
+				>Tuesday</option>
+				<option value="Wednesday"
+			<tmpl_if name="week_start" value="Wednesday">
+				selected
+			</tmpl_if>
+				>Wednesday</option>
+				<option value="Thursday"
+			<tmpl_if name="week_start" value="Thursday">
+				selected
+			</tmpl_if>
+				>Thursday</option>
+				<option value="Friday"
+			<tmpl_if name="week_start" value="Friday">
+				selected
+			</tmpl_if>
+				>Friday</option>
+				<option value="Saturday"
+			<tmpl_if name="week_start" value="Saturday">
+				selected
+			</tmpl_if>
+				>Saturday</option>
+				<option value="Sunday"
+			<tmpl_if name="week_start" value="Sunday">
+				selected
+			</tmpl_if>
+				>Sunday</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Xfer Stats - Month Start<br /><span>Specify the first day of the month for stats tracking purposes - the day of the month that transfer statistics will be counted from.</span></th>
+		<td class="alt">
+			<select name="month_start" id="month_start">
+			<tmpl_loop name="month_list">
+				<option value="<tmpl_var name="i">"
+			<tmpl_if name="month_start_true" value="1">
+				selected
+			</tmpl_if>
+				><tmpl_var name="i"></option>
+			</tmpl_loop>
+			</select>
+		</td>
+	</tr>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+</form>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

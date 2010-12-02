@@ -39,20 +39,10 @@ function getTransferPid($transfer) {
  */
 function isTransferRunning($transfer) {
 	global $cfg;
-
-	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString","status"));
-	$torrentlist = $response['arguments']['torrents'];
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent['hashString'] == $transfer ) {
-			$torrentId = $aTorrent[id];
-			if ( $aTorrent['status'] == 16 ) return false;
-			else return true;
-			break;
-		}
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		return isTransmissionTransferRunning($transfer);
 	}
-	
 	return file_exists($cfg["transfer_file_path"].$transfer.'.pid');
 }
 
@@ -105,6 +95,11 @@ function getTransferClient($transfer) {
  */
 function getRunningTransferCount() {
 	global $cfg;
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		return getRunningTransmissionTransferCount();
+	}
+	
 	// use pid-files-direct-access for now because all clients of currently
 	// available handlers write one. then its faster and correct meanwhile.
 	if ($dirHandle = @opendir($cfg["transfer_file_path"])) {
@@ -118,24 +113,6 @@ function getRunningTransferCount() {
 	} else {
 		return 0;
 	}
-}
-
-/**
- * getRunningTransmissionTransferCount
- *
- * @return int with number of running transfers for transmission daemon
- * TODO: make it return a correct value
- */
-function getRunningTransmissionTransferCount() {
-	global $cfg;
-	$result = getUserTransmissionTransfers(0);
-	$count = 0;
-
-	// Note that this also counts the downloads that are not added through torrentflux
-	foreach ($result as $aTorrent) {
-		if ( $aTorrent['status']==4 || $aTorrent['status']==8 ) $count++;
-	}
-	return $count;
 }
 
 /**
@@ -227,6 +204,12 @@ function getTransferHash($transfer) {
 		$transfers['settings'][$transfer]['hash'] = $hash;
 		return $hash;
 	}
+}
+
+function getTransferFromHash($hash) {
+	global $cfg, $db, $transfers;
+	$transfer = $db->GetOne("SELECT transfer FROM tf_transfers WHERE hash = ".$db->qstr($hash)."");
+	return $transfer;
 }
 
 /**
@@ -430,200 +413,6 @@ function getTransferArrayFromDB() {
 }
 
 /**
- * This method gets Transmission transfers from a certain user from database in an array
- *
- * @return array with uid and transmission transfer hash
- */
-function getUserTransmissionTransferArrayFromDB($uid = 0) {
-	global $db;
-	$retVal = array();
-	$sql = "SELECT tid FROM tf_transmission_user" . ($uid!=0 ? ' WHERE uid=' . $uid : '' );
-	$recordset = $db->Execute($sql);
-	if ($db->ErrorNo() != 0) dbError($sql);
-	while(list($transfer) = $recordset->FetchRow())
-		array_push($retVal, $transfer);
-	return $retVal;
-}
-
-/**
- * This method checks if a certain transfer is existing and from the same user
- *
- * @return array with uid and transmission transfer hash
- * TODO: check if $tid is filled in and return error
- * TODO: check that uid being zero cannot lead to security breach (information disclosure)
- */
-function isValidTransmissionTransfer($uid = 0,$tid) {
-	global $db;
-	$retVal = array();
-	$sql = "SELECT tid FROM tf_transmission_user WHERE tid='$tid' AND uid='$uid'";
-	$recordset = $db->Execute($sql);
-	if ($db->ErrorNo() != 0) dbError($sql);
-	if ( sizeof($recordset)!=0 ) return true;
-	else return false;
-}
-
-/**
- * This method starts the Transmission transfer with the matching hash
- *
- * @return void
- */
-function startTransmissionTransfer($hash) {
-	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
-
-	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
-		$transmissionId = getTransmissionTransferIdByHash($hash);
-		$response = $trans->start($transmissionId);
-		if ( $response['result'] != "success" ) @error("Start failed", "", "", $response['result']);
-	}
-}
-
-/**
- * This method stops the Transmission transfer with the matching hash
- *
- * @return void
- */
-function stopTransmissionTransfer($hash) {
-	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
-
-	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
-		$transmissionId = getTransmissionTransferIdByHash($hash);
-		$response = $trans->stop($transmissionId);
-		if ( $response['result'] != "success" ) @error("Stop failed", "", "", $response['result']);
-	}
-}
-
-/**
- * This method deletes the Transmission transfer with the matching hash, without removing the data
- *
- * @return void
- * TODO: test delete :)
- */
-function deleteTransmissionTransfer($uid, $hash, $deleteData = false) {
-	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
-
-	if ( isValidTransmissionTransfer($uid, $hash) ) {
-		$transmissionId = getTransmissionTransferIdByHash($hash);
-		$response = $trans->remove($transmissionId,$deleteData);
-		if ( $response['result'] != "success" ) @error("Delete failed", "", "", $response['result']);
-	}
-	
-	deleteTransmissionTransferFromDB($uid, $hash);
-}
-
-/**
- * This method deletes the Transmission transfer with the matching hash, and its data
- *
- * @return void
- * TODO: test delete :)
- */
-function deleteTransmissionTransferWithData($uid, $hash) {
-	deleteTransmissionTransfer($uid, $hash, true);
-}
-
-/**
- * This method retrieves the current ID in transmission for the transfer that matches the $hash hash
- *
- * @return transmissionTransferId
- */
-function getTransmissionTransferIdByHash($hash) {
-	require_once('inc/classes/Transmission.class.php');
-	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get(array(), array("id","hashString"));
-	if ( $response['result'] != "success" ) @error("Getting ID for Hash failed: ", "", "", $response['result']);
-	$torrentlist = $response['arguments']['torrents'];
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent['hashString'] == $hash ) {
-			$isTransmissionTorrent = true;
-			$transmissionTransferId = $aTorrent['id'];
-			break;
-		}
-	}
-	return $transmissionTransferId;
-}
-
-/**
- * This method deletes a Transmission transfer for a certain user from the database
- *
- * @return void
- * TODO: return error if deletion from db does fail
- */
-function deleteTransmissionTransferFromDB($uid = 0,$tid) {
-	global $db;
-	$retVal = array();
-	$sql = "DELETE FROM tf_transmission_user WHERE uid='$uid' AND tid='$tid'";
-	$recordset = $db->Execute($sql);
-	if ($db->ErrorNo() != 0) dbError($sql);
-	/*return $retVal;*/
-}
-
-/**
- * This method adds a Transmission transfer for a certain user in database
- *
- * @return array with uid and transmission transfer hash
- * TODO: check if $tid is filled in and return error
- */
-function addTransmissionTransferToDB($uid = 0,$tid) {
-	global $db;
-	$retVal = array();
-	$sql = "INSERT INTO tf_transmission_user (uid,tid) VALUES ('$uid','$tid')";
-	$recordset = $db->Execute($sql);
-	if ($db->ErrorNo() != 0) dbError($sql);
-	/*return $retVal;*/
-}
-
-/**
- * This method adds a Transmission transfer to transmission-daemon
- *
- * @return array with uid and transmission transfer hash
- * TODO: generate an error when adding does fail
- */
-function addTransmissionTransfer($uid = 0, $url, $path) {
-	// $path holds the download path
-
-	require_once('inc/classes/Transmission.class.php');
-	$rpc = new Transmission();
-
-	$result = $rpc->add( $url, $path, array ('paused'=>true)  );
-	if($result["result"]!=="success") print($result["result"]);
-
-	$hash = $result['arguments']['torrent-added']['hashString'];
-	//print_r("The hash is: $hash. The uid is $uid"); exit();
-
-	addTransmissionTransferToDB($uid, $hash);
-	return $hash;
-}
-
-/**
- * This method adds a Transmission transfer for a certain user in database
- *
- * @return array with uid and transmission transfer hash
- */
-function getUserTransmissionTransfers($uid = 0) {
-	$retVal = array();
-	if ( $uid!=0 ) {
-		$userTransferHashes = getUserTransmissionTransferArrayFromDB($uid);
-		if ( sizeof($userTransferHashes) == 0 ) return $retVal;
-	}
-
-	require_once('inc/classes/Transmission.class.php');
-	$rpc = new Transmission ();
-	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
-	$result = $rpc->get ( array(), $fields );
-	
-	if ($result['result']!=="success") dbError("Transmission could not get transfers");
-	foreach ( $result['arguments']['torrents'] as $transfer ) {
-		if ( $uid==0 || in_array ( $transfer['hashString'], $userTransferHashes ) ) {
-			array_push($retVal, $transfer);
-		}
-	}
-	return $retVal;
-}
-
-/**
  * This method gets transfers in an array
  *
  * @param $sortOrder
@@ -648,8 +437,10 @@ function getTransferArray($sortOrder = '') {
 					break;
 				default:
 					$transferName=str_replace('.imported','',$transfer);
-					if (tfb_isValidTransfer($transferName))
-						$retVal[filemtime($cfg["transfer_file_path"].$transfer).md5($transfer)] = $transfer;
+					if (tfb_isValidTransfer($transferName)) {
+						$datecrc = date('YmdHi', filemtime($cfg['transfer_file_path'].$transfer) ).'_'.sprintf('%u', crc32($transfer) );
+						$retVal[$datecrc] = $transfer;
+					}
 					else
 						AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transferName);
 					break;
@@ -738,21 +529,6 @@ function getTransferListHeadArray($settings = null) {
 function getTransferListArray() {
 	global $cfg, $db, $transfers;
 
-	// New method for transmission-daemon transfers
-	$result = getUserTransmissionTransfers($cfg['uid']);
-	foreach ($result as $aTorrent) {
-		if ( $aTorrent['status']==4 || $aTorrent['status'] == 8 ) {
-			if (!isset($cfg["total_upload"]))
-				$cfg["total_upload"] = 0;
-			if (!isset($cfg["total_download"]))
-				 $cfg["total_download"] = 0;
-			$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent['rateUpload']/1000);
-			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent['rateDownload']/1000);
-		}
-	}
-
-
-	// Normal transfers
 	$kill_id = "";
 	$lastUser = "";
 	$arUserTransfers = array();
@@ -763,9 +539,26 @@ function getTransferListArray() {
 	$sortOrder = tfb_getRequestVar("so");
 	if ($sortOrder == "")
 		$sortOrder = $cfg["index_page_sortorder"];
-	// t-list
+
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		
+		// New method for transmission-daemon transfers
+		$result = getUserTransmissionTransfers($cfg['uid']);
+		foreach ($result as $aTorrent) {
+			if ( $aTorrent['status']==4 || $aTorrent['status'] == 8 ) {
+				if (!isset($cfg["total_upload"]))
+					$cfg["total_upload"] = 0;
+				if (!isset($cfg["total_download"]))
+					$cfg["total_download"] = 0;
+				$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent['rateUpload']/1000);
+				$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent['rateDownload']/1000);
+			}
+			array_push($arUserTransfers, $aTorrent);
+		}
+	}
+
 	$arList = getTransferArray($sortOrder);
-	$arList = array();
 	foreach ($arList as $transfer) {
 		// init some vars
 		$displayname = $transfer;
@@ -843,8 +636,8 @@ function getTransferListArray() {
 				// increment the totals
 				if (!isset($cfg["total_upload"])) $cfg["total_upload"] = 0;
 				if (!isset($cfg["total_download"])) $cfg["total_download"] = 0;
-				$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($sf->up_speed);
-				$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($sf->down_speed);
+				$cfg["total_upload"] += GetSpeedValue($sf->up_speed);
+				$cfg["total_download"] += GetSpeedValue($sf->down_speed);
 				// $estTime
 				if ($transferRunning == 0) {
 					$estTime = $sf->time_left;
@@ -962,11 +755,17 @@ function getTransferListArray() {
 				case "transmission":
 					array_push($transferAry, "T");
 					break;
+				case "transmissionrpc":
+					array_push($transferAry, "Tr");
+					break;
 				case "mainline":
 					array_push($transferAry, "M");
 					break;
 				case "azureus":
 					array_push($transferAry, "A");
+					break;
+				case "vuzerpc":
+					array_push($transferAry, "V");
 					break;
 				case "wget":
 					array_push($transferAry, "W");

@@ -21,6 +21,9 @@
 										<tmpl_var name="size">
 									</td>
 									<td class="buttonLinks">
+										<tmpl_var name="dlinfo">
+									</td>
+									<td class="buttonLinks">
 										<tmpl_var name="date">
 									</td>
 								</tmpl_if>
@@ -57,6 +60,9 @@
 								<tmpl_if name="enable_dirstats" value="1">
 									<td class="buttonLinks">
 										<tmpl_var name="size">
+									</td>
+									<td class="buttonLinks">
+										<tmpl_var name="dlinfo">
 									</td>
 									<td class="buttonLinks">
 										<tmpl_var name="date">
@@ -97,7 +103,7 @@
 					<input type="hidden" name="action" value="fileDelete">
 					<tr>
 						<tmpl_if name="enable_dirstats" value="1">
-							<td colspan="4">
+							<td colspan="5">
 						<tmpl_else>
 							<td colspan="2">
 						</tmpl_if>
@@ -108,11 +114,17 @@
 				</tmpl_if>
 				<tmpl_if name="enable_dirstats" value="1">
 					<tr>
-						<td colspan="4"><span id="newUser"><tmpl_var name="_TDDU"> <tmpl_var name="duTotal"></span></td>
+						<td colspan="5"><span id="newUser"><tmpl_var name="_TDDU"> <tmpl_var name="duTotal"></span></td>
 					</tr>
 				</tmpl_if>
 			</table>
 		</form>
+		<div id="wgetBottom">
+		<form method="post">
+		<br/>
+			<nobr><input type="text" size=105 value="<tmpl_var name="_WGET">" name="wget_url" /> <input type="submit" value="wget file" name="wget_submit" /></nobr>
+		</form>
+		</div>
 	</div>
 	<div id="uploadBottom"></div>
 	<div id="uploadBottomEnd"></div>

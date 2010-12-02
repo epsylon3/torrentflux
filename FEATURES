@@ -3,15 +3,14 @@ $Id$
 =======================================================================
 
 /**********************************************************************
-Torrentflux-b4rt FEATURES file
+TorrentFlux-NG FEATURES file
 **********************************************************************/
 
 	Some of the most popular features of torrentflux-b4rt are listed
 	below.
 
 	NOTE! This list is definitely NOT exhaustive, there are
-	a massive number of features that can be configured via the
-	torrentflux-b4rt admin panel!
+	a massive number of features that can be configured in admin panel!
 
 	o Supports multiple internet transfer protocols:
 
@@ -26,9 +25,15 @@ Torrentflux-b4rt FEATURES file
 			* Transmission - much smaller memory footprint without much
 			  loss in functionality
 
-			* Azureus - control a number of transfers from a single
+		  And by RPC (Remote Procedure Call to a single Daemon)
+
+			* Azureus/Vuze - control a number of transfers from a single
 			  control process, tighter control on total max bandwidth
 			  for all torrents
+			  
+			  Vuze RPC support via xmwebui is under development
+			 
+			* Transmission Daemon (RPC) support is under development
 
 		- HTTP/FTP - supported client(s) include:
 
@@ -46,7 +51,7 @@ Torrentflux-b4rt FEATURES file
 		- Perform stop/start/resume/kill/delete operations on individual
 		  transfers, all transfers or a selection of transfers
 
-        - Changes Settings of running transfers on the fly - down/up
+		- Changes Settings of running transfers on the fly - down/up
 		  rates, what ratio to stop seeding at, how many connections to
 		  use at same time, ...
 
@@ -86,9 +91,9 @@ Torrentflux-b4rt FEATURES file
 		- Upload metafiles directly to your web server from another
 		  web server
 
-        - Multiple operations in "fluxcli.php" allow inject and more
-          from command-line (cron, etc.)
-          eg.: "inject", "watch", "rss"
+		- Multiple operations in "fluxcli.php" allow inject and more
+		  from command-line (cron, etc.)
+		  eg.: "inject", "watch", "rss"
 
 	o fluxcli.php - a complete command-line version of torrentflux-b4rt:
 

@@ -1,0 +1,40 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<h1>Users</h1>
+<p class="NormalText">
+	View a list of all users registered to your TorrentFlux-NG server. You can get more information about a user by clicking on appropriate links in table below.
+<ul>
+	<li>Click on username to send a message</li>
+	<li>Click on diskuseage to view users download directory</li>
+	<li>Xfer stats shows you XFER usage of system</li>
+	<li>Activity percentage will fetch a list of users activity</li>
+</ul>
+</p>
+<div style="height:25px;"></div>
+<table id="adminShowUsersList">
+	<tr>
+		<th class="nobg">Legend</th>
+		<th></th>
+		<th></th>
+		<th></th>
+	</tr>
+	<tr>
+		<th class="row">User Types</th>
+		<td><img src="themes/<tmpl_var name="theme">/images/user.gif" alt="" title="Normal User" /> Normal User</td>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin_user.gif" alt="" title="Normal User" /> Administrator</td>
+		<td><img src="themes/<tmpl_var name="theme">/images/superadmin.gif" alt="" title="Normal User" /> Super Admin</td>
+	</tr>
+	<tr>
+		<th class="rowalt">Status</th>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin/showUsers/activated.png" alt="" title="Normal User" /> Activated</td>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin/showUsers/activated_de.png" alt="" title="Normal User" /> Deactivated</td>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin/showUsers/activated_always.png" alt="" title="Normal User" /> Always activated</td>
+	</tr>
+	<tr>
+		<th class="row">Actions</th>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin/showUsers/edit.png" alt="" title="Normal User" /> Edit user</td>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin/showUsers/delete.png" alt="" title="Normal User" /> Delete user</td>
+		<td><img src="themes/<tmpl_var name="theme">/images/admin/showUsers/delete_off.png" alt="" title="Normal User" /> Delete user off</td>
+	</tr>
+</table>
+<tmpl_include name="inc.userSection.tmpl">
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

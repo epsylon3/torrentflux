@@ -21,7 +21,7 @@
 *******************************************************************************/
 
 // prevent direct invocation
-if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
+if ((!isset($cfg['user'])) or (isset($_REQUEST['cfg']))) {
 	@ob_end_clean();
 	@header("location: ../../index.php");
 	exit();
@@ -58,6 +58,7 @@ $tmpl->setvar('_STOPPING', $cfg['_STOPPING']);
 $tmpl->setvar('_TRANSFERFILE', $cfg['_TRANSFERFILE']);
 $tmpl->setvar('_ADMIN', $cfg['_ADMIN']);
 $tmpl->setvar('_USER', $cfg['_USER']);
+$tmpl->setvar('_USERS', $cfg['_USERS']);
 
 // username
 $tmpl->setvar('user', $cfg["user"]);
@@ -85,181 +86,141 @@ $sortOrder = tfb_getRequestVar("so");
 $tmpl->setvar('sortOrder', (empty($sortOrder)) ? $cfg["index_page_sortorder"] : $sortOrder);
 // t-list
 $arList = getTransferArray($sortOrder);
-//print_r($arList);
-$progress_color = "#00ff00";
+
+$progress_color = "#22BB22";
 $bar_width = "4";
 
-$result = getUserTransmissionTransfers($cfg['uid']);
+// ---------------------------------------------------------------------
+if ($cfg["transmission_rpc_enable"]) {
 
-// eta
-//  -1 : Done
-//  -2 : Unknown
+	// add transmission rpc torrent to current user list
 
+	require_once('inc/functions/functions.rpc.transmission.php');
+	$result = getUserTransmissionTransfers($cfg['uid']);
 
-foreach ($result as $aTorrent)
-{
-#	print_r($aTorrent);
-	// fill in eta
-	if ( $aTorrent['eta'] == '-1' && $aTorrent['percentDone'] != 1 ) {
-		$eta = 'n/a';
-	} elseif ( $aTorrent['percentDone'] == 1 ) {
-		$eta = 'Download Succeeded!';
-	} elseif ( $aTorrent[eta] == '-2' ) {
-		$eta = 'Unknown';
-	} else {
-		$eta = convertTime( $aTorrent['eta'] );
-	}
+	// eta
+	//  -1 : Done
+	//  -2 : Unknown
 
-	$status = $aTorrent['status'];
-	switch ($aTorrent['status']) {
-	    case 16:
-		if ( $aTorrent['percentDone'] >= 1 ) {
-			$status = "Done";
-			$transferRunning = false;
-			$eta = '';
+	foreach($result as $aTorrent)
+	{
+		// fill in eta
+		if ( $aTorrent['eta'] == '-1' && $aTorrent['percentDone'] != 1 ) {
+			$eta = 'n/a';
+		} elseif ( $aTorrent['percentDone'] == 1 ) {
+			$eta = 'Download Succeeded!';
+		} elseif ( $aTorrent['eta'] == '-2' ) {
+			$eta = 'Unknown';
 		} else {
-			$status = "Stopped";
+			$eta = convertTime( $aTorrent['eta'] );
+		}
+
+		$status = $aTorrent['status'];
+		switch ($aTorrent['status']) {
+		case 16:
 			$transferRunning = false;
-			$eta = 'Torrent Stopped'; # this might be fixed in a cleaner way
-			if ( $aTorrent['downloadedEver'] == 0 ) {
-				$status = "New";
-				$transferRunning = false;
+			if ( $aTorrent['percentDone'] >= 1 ) {
+				$status = "Done";
 				$eta = '';
+			} else {
+				$status = "Stopped";
+				$eta = 'Torrent Stopped'; # this might be fixed in a cleaner way
+				if ( $aTorrent['downloadedEver'] == 0 ) {
+					$status = "New";
+					$eta = '';
+				}
 			}
+			break;
+		case 4:
+			if ( $aTorrent['rateDownload'] == 0 ) {
+				$status = "Idle";
+			} else {
+				$status = "Downloading";
+			}
+			$transferRunning = true;
+			break;
+		case 8:
+			$status = "Seeding";
+			$transferRunning = true;
+			break;
 		}
-		break;
-	    case 4:
-		if ( $aTorrent['rateDownload'] == 0 ) {
-			$status = "Idle";
-		} else {
-			$status = "Downloading";
+
+		// TODO: transferowner is always admin... probably not what we want
+		$tArray = array(
+			'is_owner' => true,
+			'transferRunning' => ($transferRunning ? 1 : 0),
+			'url_entry' => $aTorrent['hashString'],
+			'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload']),
+			'hd_title' => $nothing,
+			'displayname' => $aTorrent['name'],
+			'transferowner' => 'administrator',
+			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
+			'format_downtotal' => $nothing,
+			'format_uptotal' => $nothing,
+			'statusStr' => $status,
+			'graph_width' => ( $status==='New' ? -1 : floor($aTorrent['percentDone']*100) ),
+			'percentage' => ( $status==='New' ? '' : floor($aTorrent['percentDone']*100) . '%' ),
+			'progress_color' => '#22BB22',
+			'bar_width' => 4,
+			'background' => '#000000',
+			'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
+			'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
+			'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
+			'seeds' => $nothing,
+			'peers' => $nothing,
+			'estTime' => $eta,
+			'clientType' => 'torrent',
+			'upload_support_enabled' => 1,
+			'client' => $nothing,
+			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
+			'datapath' => $aTorrent['name'],
+			'is_no_file' => 1,
+			'show_run' => 1,
+			'entry' => $aTorrent['name']
+		);
+
+		array_push($arUserTorrent, $tArray);
+
+		// Adds the transfer rate for this torrent to the total transfer rate
+		if ($transferRunning) {
+			if (!isset($cfg["total_upload"]))
+				$cfg["total_upload"] = 0;
+			if (!isset($cfg["total_download"]))
+				$cfg["total_download"] = 0;
+			$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent[rateUpload]/1000);
+			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent[rateDownload]/1000);
 		}
-		$transferRunning = true;
-		break;
-	    case 8:
-		$status = "Seeding";
-		$transferRunning = true;
-		break;
-	}
-
-	// TODO: transferowner is always admin... probably not what we want
-	// TODO: hd_image function arguments should be different
-	$tArray = array(
-		'is_owner' => true,
-		'transferRunning' => ($transferRunning ? 1 : 0),
-		'url_entry' => $aTorrent[hashString],
-		'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats'][0]['seederCount'], $aTorrent['rateUpload']),
-		'hd_title' => $nothing,
-		'displayname' => $aTorrent['name'],
-		'transferowner' => 'administrator',
-		'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
-		'format_downtotal' => $nothing,
-		'format_uptotal' => $nothing,
-		'statusStr' => $status,
-		'graph_width' => ( $status==='New' ? -1 : floor($aTorrent['percentDone']*100) ),
-		'percentage' => ( $status==='New' ? '' : floor($aTorrent['percentDone']*100) . '%' ),
-		'progress_color' => '#00ff00',
-		'bar_width' => 4,
-		'background' => '#000000',
-		'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
-		'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
-		'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
-		'seeds' => $nothing,
-		'peers' => $nothing,
-		'estTime' => $eta,
-		'clientType' => 'torrent',
-		'upload_support_enabled' => 1,
-		'client' => $nothing,
-		'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
-		'datapath' => $aTorrent['name'],
-		'is_no_file' => 1,
-		'show_run' => 1,
-		'entry' => $aTorrent['name']
-
-	);
-	array_push($arUserTorrent, $tArray);
-
-	// Adds the transfer rate for this torrent to the total transfer rate
-	if ($transferRunning) {
-		if (!isset($cfg["total_upload"]))
-			$cfg["total_upload"] = 0;
-		if (!isset($cfg["total_download"]))
-			 $cfg["total_download"] = 0;
-		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent['rateUpload']/1000);
-		$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent['rateDownload']/1000);
-
 	}
 }
+// end of Transmission RPC bloc
+// ---------------------------------------------------------------------
 
-function getTransmissionStatusImage($running, $seederCount, $uploadRate){
-	$statusImage = "black.gif";
-	if ($running) {
-		// running
-                if ($seederCount < 2)
-                        $statusImage = "yellow.gif";
-                if ($seederCount == 0)
-                        $statusImage = "red.gif";
-                if ($seederCount >= 2)
-                        $statusImage = "green.gif";
-	}
-	if ( floor($aTorrent[percentDone]*100) >= 100 ) {
-		$statusImage = ( $uploadRate != 0 && $running )
-                        ? "green.gif" /* seeding */
-                        : "black.gif"; /* finished */
-	}
-	return $statusImage;
-}
-
-	// -------------------------------------------------------------------------
-	// create temp-array
-/*	$tArray = array(
-		'is_owner' => ($cfg['isAdmin']) ? true : $owner,
-		'transferRunning' => $transferRunning,
-		'url_entry' => urlencode($transfer),
-		'hd_image' => $hd->image,
-		'hd_title' => $hd->title,
-		'displayname' => $displayname,
-		'transferowner' => $transferowner,
-		'format_af_size' => $format_af_size,
-		'format_downtotal' => $format_downtotal,
-		'format_uptotal' => $format_uptotal,
-		'statusStr' => $statusStr,
-		'graph_width' => $graph_width,
-		'percentage' => $percentage,
-		'progress_color' => $progress_color,
-		'bar_width' => $bar_width,
-		'background' => $background,
-		'100_graph_width' => (100 - $graph_width),
-		'down_speed' => $down_speed,
-		'up_speed' => $up_speed,
-		'seeds' => $seeds,
-		'peers' => $peers,
-		'estTime' => $estTime,
-		'clientType' => $settingsAry['type'],
-		'upload_support_enabled' => $cfg["supportMap"][$settingsAry['client']]['max_upload_rate'],
-		'client' => $client,
-		'url_path' => urlencode(str_replace($cfg["path"],'', $settingsAry['savepath']).$settingsAry['datapath']),
-		'datapath' => $settingsAry['datapath'],
-		'is_no_file' => $is_no_file,
-		'show_run' => $show_run,
-		'entry' => $transfer
-	);
-*/
-
-foreach ($arList as $transfer) {
-	// ---------------------------------------------------------------------
+foreach ($arList as $mtimecrc => $transfer) {
 	// displayname
 	$displayname = $transfer;
 
 	// may need a special config panel to clean names...
-	$displayname = preg_replace('#(_www\.[^_]+_)#',"",$displayname);
-	$displayname = preg_replace('#(_[^\.]+\.com_)#',"",$displayname);
+	$displayname = str_replace('.',"_",$displayname);
 
-	$arToClean = array ("http","download.php","_isoHunt_","__");	
+	$displayname = preg_replace('#([^_]+_(com|org|net|info)_)#i',"",$displayname);
+	$displayname = preg_replace('#(_torrent)$#i',"",$displayname);
 
-	$displayname = str_replace($arToClean,"",$displayname);
+	$arToClean = array ("http_","_www_","isohunt");
+	$displayname = str_ireplace($arToClean,"",$displayname);
 
-	$displayname = (strlen($displayname) >= 47) ? substr($displayname, 0, 44)."..." : $displayname;
+	$displayname = str_replace('_',".",$displayname);
+	$displayname = str_replace('..',".",$displayname);
+	$displayname = trim($displayname,'.');
+
+	$displayname = (strlen($displayname) > 53) ? substr($displayname, 0, 50)."..." : $displayname;
+
+	if ($displayname == 'download.php') {
+		//must fix $transfer torrent filename before...
+		//$name = getTransferFromHash($hash);
+		$displayname = 'dup:'.$mtimecrc;
+		addGrowlMessage('[dup]','This torrent has already been downloaded');
+	}
+
 	// owner
 	$transferowner = getOwner($transfer);
 	$owner = IsOwner($cfg["user"], $transferowner);
@@ -292,12 +253,12 @@ foreach ($arList as $transfer) {
 	}
 	// Fix FluAzu progression 100% (client to check, not set to "azureus")
 	if ($settingsAry["client"] == "") {
-	
+
 		if (!$sf->seedlimit)
 			$sf->seedlimit=$settingsAry["sharekill"];
-	
-		if ((0+$sf->size) > 0) {
-			if (!$sf->sharing) 
+
+		if ((int)$sf->size > 0) {
+			if (!$sf->sharing)
 				$sf->sharing=(0+$sf->uptotal)/(0+$sf->size)*100;
 		}
 	}
@@ -305,7 +266,6 @@ foreach ($arList as $transfer) {
 	$transferRunning = $sf->running;
 	// cache percent-done in local var. ...
 	$percentDone = $sf->percent_done;
-//print_r($sf);
 	// hide seeding - we do it asap to keep things as fast as possible
 	if (($_SESSION['settings']['index_show_seeding'] == 0) && ($percentDone >= 100) && ($transferRunning == 1)) {
 		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($sf->up_speed);
@@ -353,12 +313,10 @@ foreach ($arList as $transfer) {
 			break;
 		default: // running
 			// increment the totals
-			if (!isset($cfg["total_upload"]))
-				$cfg["total_upload"] = 0;
-			if (!isset($cfg["total_download"]))
-				 $cfg["total_download"] = 0;
-			$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($sf->up_speed);
-			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($sf->down_speed);
+			if (!isset($cfg["total_upload"])) $cfg["total_upload"] = 0;
+			if (!isset($cfg["total_download"])) $cfg["total_download"] = 0;
+			$cfg["total_upload"] += GetSpeedValue($sf->up_speed);
+			$cfg["total_download"] += GetSpeedValue($sf->down_speed);
 			// $estTime
 			if ($transferRunning == 0) {
 				$estTime = $sf->time_left;
@@ -397,6 +355,7 @@ foreach ($arList as $transfer) {
 	if($settings[1] != 0)
 	{
 		$format_af_size = formatBytesTokBMBGBTB($sf->size);
+		if(strstr($format_af_size,"G")) $format_af_size = "<b>".$format_af_size."</b>";
 		if($format_af_size == "") $format_af_size = "&nbsp;";
 	}
 	// =============================================================== downtotal
@@ -414,10 +373,10 @@ foreach ($arList as $transfer) {
 		if($format_uptotal == "") $format_uptotal = "&nbsp;";
 	}
 	// ================================================================== status
-	
+
 	// ================================================================ progress
 	if ($settings[5] != 0) {
-		if (($percentDone >= 100) && (trim($sf->up_speed) != "")) {
+		if ($percentDone >= 100 && $sf->size>0  && trim($sf->up_speed) != "") {
 			$graph_width = -1;
 			$percentage = @number_format((($transferTotals["uptotal"] / $sf->size) * 100), 2) . '%';
 		} else {
@@ -432,6 +391,7 @@ foreach ($arList as $transfer) {
 				$percentage = '0%';
 			}
 		}
+		$graph_width = min($graph_width,100);
 		$background = ($graph_width == 100) ? $progress_color : "#000000";
 	} else {
 		$graph_width = 0;
@@ -442,7 +402,7 @@ foreach ($arList as $transfer) {
 	// ==================================================================== down
 	if ($settings[6] != 0) {
 		if ($transferRunning == 1)
-			$down_speed = (trim($sf->down_speed) != "") ? $sf->down_speed : '0.0 kB/s';
+			$down_speed = (trim($sf->down_speed) != "") ? $sf->down_speed : '&nbsp;';
 		else
 			$down_speed = "&nbsp;";
 	} else {
@@ -452,7 +412,7 @@ foreach ($arList as $transfer) {
 	// ====================================================================== up
 	if ($settings[7] != 0) {
 		if ($transferRunning == 1)
-			$up_speed = (trim($sf->up_speed) != "") ? $sf->up_speed : '0.0 kB/s';
+			$up_speed = (trim($sf->up_speed) != "") ? $sf->up_speed : '&nbsp;';
 		else
 			$up_speed = "&nbsp;";
 	} else {
@@ -488,11 +448,17 @@ foreach ($arList as $transfer) {
 			case "transmission":
 				$client = "T";
 				break;
+			case "transmissionrpc":
+				$client = "Tr";
+				break;
 			case "mainline":
 				$client = "M";
 				break;
 			case "azureus":
 				$client = "A";
+				break;
+			case "vuzerpc":
+				$client = "V";
 				break;
 			case "wget":
 				$client = "W";
@@ -541,7 +507,6 @@ foreach ($arList as $transfer) {
 		'show_run' => $show_run,
 		'entry' => $transfer
 	);
-//print_r($tArray);
 	// Is this transfer for the user list or the general list?
 	if ($owner)
 		array_push($arUserTorrent, $tArray);
@@ -575,6 +540,34 @@ if ($cfg['enable_restrictivetview'] == 1)
 	$boolCond = $cfg['isAdmin'];
 $tmpl->setvar('are_transfer', (($boolCond) && (sizeof($arListTorrent) > 0)) ? 1 : 0);
 
+
+// =============================================================================
+
+$onLoad = "";
+
+$msgGrowl = "";
+$msgSticky = false;
+
+// pm
+$nbMsg = numUnreadMsg();
+if ($nbMsg > 0) {
+	if (IsForceReadMsg()) {
+		//disabled page lock
+		//$tmpl->setvar('IsForceReadMsg', 1);
+
+		 //Dont use " dblquotes in msgs, because this javascript will be in a onload="" attribute, quoted dblquotes (\") seems not working
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have an important message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+
+		//dont auto-hide growl message
+		$msgSticky = true;
+
+	} elseif ($nbMsg > 1) {
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have new messages !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	} else {
+		$msgGrowl .= "<img src=images/msg_new.png width=16 height=16> You have a new message !<br/><br/><a href=index.php?iid=readmsg>Please read...</a>";
+	}
+}
+
 // =============================================================================
 // ajax-index
 // =============================================================================
@@ -598,7 +591,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= "¤";
 		$xferStats = Xfer::getStatsFormatted();
 		$xferCount = count($xferStats);
 		for ($i = 0; $i < $xferCount; $i++) {
@@ -612,7 +605,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= "¤";
 		$countUsers = count($cfg['users']);
 		$arOnlineUsers = array();
 		$arOfflineUsers = array();
@@ -643,12 +636,32 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= "¤";
 		$content .= $tmpl->grab();
 	}
+	// javascript
+	if (true) {
+		if ($isFirst)
+			$isFirst = false;
+		else
+			$content .= "¤";
+
+		//Messages jGrowl
+		$jGrowls = "";
+		if (!empty($cfg['growl'])) {
+			$jGrowls .= getGrowlMessages();
+			clearGrowlMessages();
+		}
+		//Growl message on ajax refresh
+		if (!empty($msgGrowl)) {
+			$jGrowls .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
+		}
+		$content .= $jGrowls;
+
+	}
 	// send and out
-    @header("Cache-Control: no-cache");
-    @header("Pragma: no-cache");
+	@header("Cache-Control: no-cache");
+	@header("Pragma: no-cache");
 	@header("Content-Type: text/plain");
 	echo $content;
 	exit();
@@ -663,8 +676,6 @@ if ($cfg["enable_goodlookstats"] != "0") {
 	$tmpl->setvar('enable_goodlookstats', 1);
 	$settingsHackStats = convertByteToArray($cfg["hack_goodlookstats_settings"]);
 }
-
-$onLoad = "";
 
 // page refresh
 if ($_SESSION['settings']['index_meta_refresh'] != 0) {
@@ -710,8 +721,21 @@ if ($_SESSION['settings']['index_ajax_update'] != 0) {
 	$ajaxInit .= ",".$cfg["ui_displaybandwidthbars"];
 	$ajaxInit .= ",'".$cfg['bandwidthbar']."'";
 	$ajaxInit .= ");onbeforeunload = ajax_unload;";
+	
 	$onLoad .= $ajaxInit;
+} 
+
+//Index Growl messages
+$jGrowls = "";
+if (!empty($cfg['growl'])) {
+	$jGrowls .= getGrowlMessages();
+	clearGrowlMessages();
 }
+if (!empty($msgGrowl)) {
+	$jGrowls .= "jQuery.jGrowl('".addslashes($msgGrowl)."',{sticky:".($msgSticky ?'true':'false')."});";
+}
+$onLoad .= $jGrowls;
+
 
 //Hide Seeds
 if ($_SESSION['settings']['index_show_seeding'] != 0) {
@@ -874,10 +898,6 @@ if ($cfg['index_page_stats'] != 0) {
 	$tmpl->setvar('drivespace1', $cfg['freeSpaceFormatted']);
 	$tmpl->setvar('serverload1', $loadavgString);
 }
-
-// pm
-if (IsForceReadMsg())
-	$tmpl->setvar('IsForceReadMsg', 1);
 
 // Graphical Bandwidth Bar
 if ($cfg["ui_displaybandwidthbars"] != 0) {

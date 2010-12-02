@@ -9,7 +9,7 @@ try:
 except:
     seed()
     urandom = lambda x: ''.join([chr(randint(0,255)) for i in xrange(x)])
-from sha import sha
+from hashlib import sha1
 
 try:
     True
@@ -49,12 +49,12 @@ class Crypto:
 
     def received_key(self, k):
         self.S = numtobyte(pow(bytetonum(k), self.privkey, DH_PRIME))
-        self.block3a = sha('req1'+self.S).digest()
-        self.block3bkey = sha('req3'+self.S).digest()
+        self.block3a = sha1('req1'+self.S).digest()
+        self.block3bkey = sha1('req3'+self.S).digest()
         self.block3b = None
 
     def _gen_block3b(self, SKEY):
-        a = sha('req2'+SKEY).digest()
+        a = sha1('req2'+SKEY).digest()
         return ''.join([ chr(ord(a[i])^ord(self.block3bkey[i]))
                          for i in xrange(20) ])
 
@@ -70,8 +70,8 @@ class Crypto:
     def set_skey(self, SKEY):
         if not self.block3b:
             self.block3b = self._gen_block3b(SKEY)
-        crypta = ARC4.new(sha('keyA'+self.S+SKEY).digest())
-        cryptb = ARC4.new(sha('keyB'+self.S+SKEY).digest())
+        crypta = ARC4.new(sha1('keyA'+self.S+SKEY).digest())
+        cryptb = ARC4.new(sha1('keyB'+self.S+SKEY).digest())
         if self.initiator:
             self.encrypt = crypta.encrypt
             self.decrypt = cryptb.decrypt

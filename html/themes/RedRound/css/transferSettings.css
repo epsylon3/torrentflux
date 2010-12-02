@@ -1,0 +1,23 @@
+#transferSettings {
+	border-width: 2px 2px 2px 2px;
+	border-spacing: 2px;
+	border-collapse: collapse;
+	background-color: white;
+	margin: 0 auto;
+	width: 500px;
+}
+
+#transferSettings th {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: right;
+	width: 60%;
+	padding-right: 5px;
+}
+
+#transferSettings td {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+}

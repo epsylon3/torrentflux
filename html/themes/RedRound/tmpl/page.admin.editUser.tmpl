@@ -1,0 +1,144 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<h1><tmpl_var name="_EDITUSER"></h1>
+<h2><tmpl_var name="user_id"></h2>
+<table id="admineditUser">
+	<tr>
+		<td>
+			<table>
+				<tr>
+					<td>
+						<table id="admineditUserInfo">
+							<tr>
+								<th><tmpl_var name="_JOINED"></th>
+								<td><tmpl_var name="time_created"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_LASTVISIT"></th>
+								<td><strong><tmpl_var name="last_visit"></strong></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_UPLOADPARTICIPATION"></th>
+								<td><tmpl_var name="percent1"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_UPLOADS"></th>
+								<td><tmpl_var name="user_activity"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_PERCENTPARTICIPATION"><br /><span><tmpl_var name="_PARTICIPATIONSTATEMENT"> <tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS"></span></th>
+								<td><tmpl_var name="user_percent">%</td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_TOTALPAGEVIEWS"></th>
+								<td><tmpl_var name="hits"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_THEME"></th>
+								<td><tmpl_var name="theme"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_LANGUAGE"></th>
+								<td><tmpl_var name="language_file"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_USERTYPE"></th>
+								<td><tmpl_var name="user_type"></td>
+							</tr>
+							<tr>
+								<th><tmpl_var name="_USERSACTIVITY"></th>
+								<td><a href="admin.php?op=showUserActivity&user_id=<tmpl_var name="user_id">">view</a></td>
+							</tr>
+						</table>
+				</td>
+				<td>
+					<form name="theForm" action="admin.php?op=updateUser" method="post" onsubmit="return validateUser('<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+					<table id="admineditUserForm">
+						<tr>
+							<th colspan="2" class="head">edit user settings</th>
+						<tr>
+							<th class="alt"><tmpl_var name="_USER"></th>
+							<td class="alt">
+								<input name="user_id" id="user_id" type="text" value="<tmpl_var name="user_id">" size="15">
+								<input name="org_user_id" type="Hidden" value="<tmpl_var name="user_id">">
+							</td>
+						</tr>
+						<tr>
+							<th><tmpl_var name="_EMAILADDRESS"></th>
+							<td><input name="email_address" id="emailAddress" type="text" value="<tmpl_var name="email_address">" size="27"></td>
+						</tr>
+						<tr>
+							<th class="alt"><tmpl_var name="_NEWPASSWORD"></th>
+							<td class="alt"><input name="pass1" id="pass1" type="password" value="" size="15"></td>
+						</tr>
+						<tr>
+							<th><tmpl_var name="_CONFIRMPASSWORD"></th>
+							<td><input name="pass2" id="pass2" type="password" value="" size="15"></td>
+						</tr>
+						<tr>
+							<th class="alt"><tmpl_var name="_USERTYPE"></th>
+							<td class="alt">
+								<tmpl_if name="user_level" op="<=" value="1">
+								<select name="userType" id="userType">
+									<option value="0" <tmpl_var name="selected_n">><tmpl_var name="_NORMALUSER"></option>
+									<option value="1" <tmpl_var name="selected_a">><tmpl_var name="_ADMINISTRATOR"></option>
+								</select>
+								<tmpl_else>
+								<tmpl_var name="_SUPERADMIN">
+									<input type="Hidden" name="userType" value="2">
+								</tmpl_if>
+							</td>
+						</tr>
+						<tr>
+							<th colspan="2"><tmpl_var name="_HIDEOFFLINEUSERS">
+							<input name="hideOffline" id="hideOffline" type="Checkbox" value="1" <tmpl_var name="hide_checked">> <label for="hideOffline"></th>
+						</tr>
+<!-- FluxFTPD Settings, REMOVE THIS LINE AND LINE 129 (see below)
+						<tr>
+							<th colspan="2" class="head">FluxFTPD Settings</th>
+						<tr>
+						<tr>
+							<th>FTP enabled (1 = enabled)</th>
+							<td><input name="ftpEnabled" id="ftpEnabled" type="text" value="<tmpl_var name="ftpEnabled">" size="15"></td>
+						</tr>
+						<tr>
+							<th class="alt">FTP Folder</th>
+							<td class="alt"><input name="Dir" id="Dir" type="text" value="<tmpl_var name="Dir">" size="15"></td>
+						</tr>
+						<tr>
+							<th>FTP UserID</th>
+							<td><input name="ftpUid" id="ftpUid" type="text" value="<tmpl_var name="ftpUid">" size="15"></td>
+						</tr>
+						<tr>
+							<th class="alt">FTP GroupID</th>
+							<td class="alt"><input name="ftpGid" id="ftpGid" type="text" value="<tmpl_var name="ftpGid">" size="15"></td>
+						</tr>
+						<tr>
+							<th>Ftp Upload limit</th>
+							<td><input name="ftpUploadBand" id="ftpUploadBand" type="text" value="<tmpl_var name="ftpUploadBand">" size="15"></td>
+						</tr>
+						<tr>
+							<th class="alt">Ftp Download limit</th>
+							<td class="alt"><input name="ftpDownloadBand" id="ftpDownloadBand" type="text" value="<tmpl_var name="ftpDownloadBand">" size="15"></td>
+						</tr>
+						<tr>
+							<th>Ftp Quota Size</th>
+							<td><input name="ftpQuotaSize" id="ftpQuotaSize" type="text" value="<tmpl_var name="ftpQuotaSize">" size="15"></td>
+						</tr>
+						<tr>
+							<th class="alt">FTP Quota files</th>
+							<td class="alt"><input name="ftpQuotaFiles" id="ftpQuotaFiles" type="text" value="<tmpl_var name="ftpQuotaFiles">" size="15"></td>
+						</tr>
+ END OF FluxFTPD Settings, REMOVE -->
+						<tr>
+							<th colspan="2" class="button"><input type="Submit" value="<tmpl_var name="_UPDATE">"></th>
+						</tr>
+					</table>
+					</form>
+			</table>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.userSection.tmpl">
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

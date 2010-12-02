@@ -35,7 +35,7 @@ $queries[$cqt][$cdb] = array();
 
 // platform specific
 if ($win) {
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('path','C:/torrentflux/')");		
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('path','C:/torrentflux/')");		//not supported but...
 } else {
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('path','/usr/local/torrentflux/')");	
 }
@@ -53,7 +53,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('days_to_keep'
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('minutes_to_keep','3')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('rss_cache_min','20')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('page_refresh','60')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_theme','default')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_theme','RedRound')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_language','lang-english.php')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('debug_sql','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('die_when_done','False')");
@@ -76,7 +76,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_xfer',
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_public_xfer','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient','tornado')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_tornado_options','')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmissioncli')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmission-cli')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_options','')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('metainfoclient','btshowmetainfo.py')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_restrictivetview','1')");
@@ -122,7 +122,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_index_
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('index_ajax_update','10')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transferStatsType','ajax')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transferStatsUpdate','5')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('auth_basic_realm','torrentflux-b4rt')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('auth_basic_realm','TorrentFlux-NG')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('servermon_update','5')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_home_dirs','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('path_incoming','incoming')");
@@ -138,7 +138,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_btclie
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_profiles','3')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_customize_settings','2')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transferHosts','0')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('pagetitle','torrentflux-b4rt')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('pagetitle','TorrentFlux-NG')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_sharekill','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_window_default','transferStats')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('index_show_seeding','1')");
@@ -189,6 +189,23 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_cksfv','/
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_sockstat','/usr/bin/sockstat')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_vlc','/usr/local/bin/vlc')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_uudeview','/usr/local/bin/uudeview')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_torrent','1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('nzbperl_ssl','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('nzbperl_port','119')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','19091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_user','transmission')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_password','')");
+
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_read','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_write','0')");
@@ -207,6 +224,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('move_path
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_restricted','lost+found:CVS:Temporary Items:Network Trash Folder:TheVolumeSettingsFolder')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('enable_vlc','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('vlc_port','8080')");
+
 // tf_settings_stats
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_stats VALUES ('stats_enable_public','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_stats VALUES ('stats_show_usage','1')");
@@ -294,12 +312,13 @@ CREATE TABLE tf_users (
   uid int(10) NOT NULL auto_increment,
   user_id VARCHAR(32) BINARY NOT NULL default '',
   password VARCHAR(34) NOT NULL default '',
+  email_address VARCHAR(100) NOT NULL default '',
   hits int(10) NOT NULL default '0',
   last_visit VARCHAR(14) NOT NULL default '0',
   time_created VARCHAR(14) NOT NULL default '0',
   user_level TINYINT(1) NOT NULL default '0',
   hide_offline TINYINT(1) NOT NULL default '0',
-  theme VARCHAR(100) NOT NULL default 'default',
+  theme VARCHAR(100) NOT NULL default 'RedRound',
   language_file VARCHAR(60) default 'lang-english.php',
   state TINYINT(1) NOT NULL default '1',
   PRIMARY KEY  (uid)
@@ -308,8 +327,8 @@ CREATE TABLE tf_users (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfers (
   transfer VARCHAR(255) NOT NULL default '',
-  type ENUM('torrent','wget','nzb') NOT NULL default 'torrent',
-  client ENUM('tornado','transmission','mainline','azureus','wget','nzbperl') NOT NULL default 'tornado',
+  type VARCHAR(32) NOT NULL default 'torrent',
+  client VARCHAR(32) NOT NULL default 'tornado',
   hash VARCHAR(40) NOT NULL DEFAULT '',
   datapath VARCHAR(255) NOT NULL default '',
   savepath VARCHAR(255) NOT NULL default '',
@@ -324,15 +343,17 @@ CREATE TABLE tf_transfers (
   maxport SMALLINT(5) unsigned NOT NULL default '0',
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
-  PRIMARY KEY  (transfer)
+  PRIMARY KEY  (transfer),
+  KEY hash_idx (`hash`(8))
 ) TYPE=MyISAM");
 // tf_transfer_totals
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
-  PRIMARY KEY  (tid)
+  PRIMARY KEY (`tid`,`uid`)
 ) TYPE=MyISAM");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "
@@ -391,14 +412,20 @@ CREATE TABLE tf_settings_stats (
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
 ) TYPE=MyISAM");
-
+// tf_transmission_user
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INT(10) NOT NULL default '0',
+  PRIMARY KEY  (tid,uid)
+) TYPE=MyISAM");
 // sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://tf-b4rt.berlios.de/','tf-b4rt','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // -----------------------------------------------------------------------------
 // SQL : sqlite
@@ -470,12 +497,13 @@ CREATE TABLE tf_users (
   uid INTEGER PRIMARY KEY,
   user_id VARCHAR(32) NOT NULL default '',
   password VARCHAR(34) NOT NULL default '',
-  hits INT(10) NOT NULL default '0',
+  email_address VARCHAR(100) NOT NULL default '',
+  hits INTEGER(10) NOT NULL default '0',
   last_visit VARCHAR(14) NOT NULL default '0',
   time_created VARCHAR(14) NOT NULL default '0',
   user_level TINYINT(1) NOT NULL default '0',
   hide_offline TINYINT(1) NOT NULL default '0',
-  theme VARCHAR(100) NOT NULL default 'default',
+  theme VARCHAR(100) NOT NULL default 'RedRound',
   language_file VARCHAR(60) default 'lang-english.php',
   state TINYINT(1) NOT NULL default '1'
 )");
@@ -505,9 +533,10 @@ CREATE TABLE tf_transfers (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
-  PRIMARY KEY  (tid)
+  PRIMARY KEY (tid,uid)
 )");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "
@@ -565,13 +594,21 @@ CREATE TABLE tf_settings_stats (
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
 )");
-	// sql-queries : Data
+// tf_transmission_user
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER(10) NOT NULL default '0',
+  PRIMARY KEY  (tid,uid)
+)");
+
+// sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://tf-b4rt.berlios.de/','tf-b4rt','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // -----------------------------------------------------------------------------
 // SQL : postgres
@@ -653,12 +690,13 @@ CREATE TABLE tf_users (
   uid INTEGER DEFAULT nextval('tf_users_uid_seq'),
   user_id VARCHAR(32) NOT NULL DEFAULT '',
   password VARCHAR(34) NOT NULL DEFAULT '',
+  email_address VARCHAR(100) NOT NULL default '',
   hits INTEGER NOT NULL DEFAULT '0',
   last_visit VARCHAR(14) NOT NULL DEFAULT '0',
   time_created VARCHAR(14) NOT NULL DEFAULT '0',
   user_level SMALLINT NOT NULL DEFAULT '0',
   hide_offline SMALLINT NOT NULL DEFAULT '0',
-  theme VARCHAR(100) NOT NULL DEFAULT 'default',
+  theme VARCHAR(100) NOT NULL DEFAULT 'RedRound',
   language_file VARCHAR(60) DEFAULT 'lang-english.php',
   state SMALLINT NOT NULL DEFAULT '1',
   PRIMARY KEY (uid)
@@ -695,9 +733,10 @@ CREATE TABLE tf_transfers (
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
   tid VARCHAR(40) NOT NULL DEFAULT '',
+  uid INTEGER NOT NULL DEFAULT '0',
   uptotal BIGINT NOT NULL DEFAULT '0',
   downtotal BIGINT NOT NULL DEFAULT '0',
-  PRIMARY KEY (tid)
+  PRIMARY KEY (tid,uid)
 )");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "CREATE SEQUENCE tf_trprofiles_id_seq");
@@ -762,6 +801,13 @@ CREATE TABLE tf_settings_stats (
   tf_value TEXT DEFAULT '' NOT NULL,
   PRIMARY KEY (tf_key)
 )");
+// tf_transmission_user
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transmission_user (
+  tid VARCHAR(40) NOT NULL default '',
+  uid INTEGER NOT NULL default '0',
+  PRIMARY KEY  (tid,uid)
+)");
 
 // sql-queries : Data
 $cqt = 'data';
@@ -769,7 +815,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES ('0','http://tf-b4rt.berlios.de/','tf-b4rt','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES ('0','http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 // sequences
 array_push($queries[$cqt][$cdb], "SELECT SETVAL('tf_users_uid_seq',(select case when max(uid)>0 then max(uid)+1 else 1 end from tf_users))");
 array_push($queries[$cqt][$cdb], "SELECT SETVAL('tf_messages_mid_seq',(select case when max(mid)>0 then max(mid)+1 else 1 end from tf_messages))");

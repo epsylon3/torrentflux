@@ -4,7 +4,7 @@
 <script src="js/adminSettings.js" type="text/javascript"></script>
 <div id="content">
 	<form name="theForm" action="admin.php?op=updateTransferSettings" method="post" onsubmit="return validateSettings('transfer')">
-		<div align="left"><strong>Legend:</strong><br/>B = BitTornado<br/>T = Transmission<br/>M = BitTorrent Mainline<br/>A = Azureus<br/>W = Wget<br/>N = Nzbperl<br/><br/></div>
+		<div align="left"><strong>Legend:</strong><br/>B = BitTornado<br/>T = Transmission, Tr = Transmission Daemon<br/>M = BitTorrent Mainline<br/>A = Azureus, V = Vuze RPC<br/>W = Wget<br/>N = Nzbperl<br/><br/></div>
 		<div id="upload">
 			<div id="uploadLast"></div>
 			<div id="uploadFirst">
@@ -21,26 +21,12 @@
 					</td>
 					<td class="settingsSetting" rowspan="2">
 						<select name="btclient" id="btclient">
-							<option value="tornado"
-							<tmpl_if name="btclient" value="tornado">
-								 selected
-							</tmpl_if>
-							>BitTornado</option>
-							<option value="transmission"
-							<tmpl_if name="btclient" value="transmission">
-								 selected
-							</tmpl_if>
-							>Transmission</option>
-							<option value="mainline"
-							<tmpl_if name="btclient" value="mainline">
-								selected
-							</tmpl_if>
-							>BitTorrent Mainline</option>
-							<option value="azureus"
-							<tmpl_if name="btclient" value="azureus">
-								selected
-							</tmpl_if>
-							>Azureus</option>
+							<option value="tornado"			<tmpl_if name="btclient" value="tornado">selected</tmpl_if> >BitTornado</option>
+							<option value="transmission"	<tmpl_if name="btclient" value="transmission">selected</tmpl_if> >Transmission Client</option>
+							<option value="transmissionrpc"	<tmpl_if name="btclient" value="transmissionrpc">selected</tmpl_if> >Transmission Daemon</option>
+							<option value="azureus"			<tmpl_if name="btclient" value="azureus">selected</tmpl_if> >Azureus (fluazu)</option>
+							<option value="vuzerpc"			<tmpl_if name="btclient" value="vuzerpc">selected</tmpl_if> >Vuze RPC</option>
+							<option value="mainline"		<tmpl_if name="btclient" value="mainline">selected</tmpl_if> >BitTorrent Mainline</option>
 						</select>
 					</td>
 				</tr>

@@ -74,15 +74,15 @@ function initRestrictedDirEntries() {
 function checkIncomingPath() {
 	global $cfg;
 	switch ($cfg["enable_home_dirs"]) {
-	    case 1:
-	    default:
+		case 1:
+		default:
 			// is there a user dir?
 			checkDirectory($cfg["path"].$cfg["user"], 0777);
-	        break;
-	    case 0:
+			break;
+		case 0:
 			// is there a incoming dir?
 			checkDirectory($cfg["path"].$cfg["path_incoming"], 0777);
-	        break;
+			break;
 	}
 }
 
@@ -140,7 +140,7 @@ function downloadFile($down) {
 		}
 		if (file_exists($path)) {
 			// size
-			$filesize = file_size($path);
+			$filesize = sprintf("%.0f",filesize($path));
 			// filenames in IE containing dots will screw up the filename
 			$headerName = (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE"))
 				? preg_replace('/\./', '%2e', $file, substr_count($file, '.') - 1)
@@ -181,15 +181,27 @@ function downloadFile($down) {
 				}
 			} else {
 				// standard download
-				@header("Content-type: application/octet-stream\n");
-				@header("Content-disposition: attachment; filename=\"".$headerName."\"\n");
 				@header("Content-transfer-encoding: binary\n");
 				@header("Content-length: " . $filesize . "\n");
+				$fileExt = getExtension($headerName);
+				$is_image = preg_match("#(jpg|gif|png)#",$fileExt);
+				if (!$is_image) {
+					@header("Content-type: application/octet-stream\n");
+					@header("Content-disposition: attachment; filename=\"".$headerName."\"\n");
+					@header("Accept-Ranges: bytes\n");
+				} else {
+					@header("Content-type: image/$fileExt\n");
+				}
 				// write the session to close so you can continue to browse on the site.
 				@session_write_close();
-				$fp = popen("cat ".tfb_shellencode($path), "r");
-				fpassthru($fp);
-				pclose($fp);
+
+				if (!$is_image && $cfg["enable_xsendfile"] == 1)
+					@header('X-Sendfile: '.$path);
+				else {
+					$fp = popen("cat ".tfb_shellencode($path), "r");
+					fpassthru($fp);
+					pclose($fp);
+				}
 			}
 			// log
 			AuditAction($cfg["constants"]["fm_download"], $down);
@@ -209,14 +221,14 @@ function downloadFile($down) {
  * @param $down
  * @return string with current
  */
-function downloadArchive($down) {
+function downloadArchive($download) {
 	global $cfg;
 	$current = "";
 
-	if (tfb_isValidPath($down)) {
+	if (tfb_isValidPath($download)) {
 		// This prevents the script from getting killed off when running lengthy tar jobs.
 		@ini_set("max_execution_time", 3600);
-		$down = $cfg["path"].$down;
+		$down = $cfg["path"].$download;
 		$arTemp = explode("/", $down);
 		if (count($arTemp) > 1) {
 			array_pop($arTemp);
@@ -246,6 +258,7 @@ function downloadArchive($down) {
 				: $sendname;
 			@header("Cache-Control: no-cache");
 			@header("Pragma: no-cache");
+			// XSendfile not possible here (passthru)
 			@header("Content-Description: File Transfer");
 			@header("Content-Type: application/force-download");
 			@header('Content-Disposition: attachment; filename="'.$headerName.'.'.$cfg["package_type"].'"');
@@ -254,13 +267,13 @@ function downloadArchive($down) {
 			// Make it a bit easier for tar/zip.
 			chdir(dirname($down));
 			passthru($command);
-			AuditAction($cfg["constants"]["fm_download"], $sendname.".".$cfg["package_type"]);
+			AuditAction($cfg["constants"]["fm_download"], $download.".".$cfg["package_type"]);
 			exit();
 		} else {
-			AuditAction($cfg["constants"]["error"], "Illegal download: ".$cfg["user"]." tried to download ".$down);
+			AuditAction($cfg["constants"]["error"], "Illegal download: ".$cfg["user"]." tried to download ".$download);
 		}
 	} else {
-		AuditAction($cfg["constants"]["error"], "ILLEGAL TAR DOWNLOAD: ".$cfg["user"]." tried to download ".$down);
+		AuditAction($cfg["constants"]["error"], "ILLEGAL TAR DOWNLOAD: ".$cfg["user"]." tried to download ".$download);
 	}
 	return $current;
 }
@@ -361,12 +374,12 @@ function findSFV($dirName) {
 	$sfv = false;
 	$d = dir($dirName);
 	while (false !== ($entry = $d->read())) {
-   		if($entry != '.' && $entry != '..' && !empty($entry)) {
+		if($entry != '.' && $entry != '..' && !empty($entry)) {
 			if((isFile($dirName.'/'.$entry)) && (strtolower(substr($entry, -4, 4)) == '.sfv')) {
 				$sfv['dir'] = $dirName;
 				$sfv['sfv'] = $dirName.'/'.$entry;
 			}
-	   	}
+		}
 	}
 	$d->close();
 	return $sfv;
@@ -387,7 +400,7 @@ function chmodRecursive($path, $mode = 0777) {
 		if (isValidEntry(basename($file))) {
 			$fullpath = $path.'/'.$file;
 			if (!@is_dir($fullpath)) {
-				if (!@chmod($fullpath, $mode))
+				if (!@chmod($fullpath, $mode & 0666))
 					return false;
 			} else {
 				if (!chmodRecursive($fullpath, $mode))
@@ -437,59 +450,66 @@ function UrlHTMLSlashesDecode($input){
  */
 function dirsize($path)
 {
-    // Init a float for big sizes
-    $size = 0.0;
+	// Init a float for big sizes
+	$size = 0.0;
 
-    // Trailing slash
-    if (substr($path, -1, 1) !== DIRECTORY_SEPARATOR) {
-        $path .= DIRECTORY_SEPARATOR;
-    }
+	// Trailing slash
+	if (substr($path, -1, 1) !== DIRECTORY_SEPARATOR) {
+		$path .= DIRECTORY_SEPARATOR;
+	}
 
-    // Sanity check
-    if (is_file($path)) {
-        return filesize($path);
-    } elseif (!is_dir($path)) {
-        return false;
-    }
+	// Sanity check
+	if (is_file($path)) {
+		return sprintf("%.0f",filesize($path));
+	} elseif (!is_dir($path)) {
+		return false;
+	}
 
-    // Iterate queue
-    $queue = array($path);
-    for ($i = 0, $j = count($queue); $i < $j; ++$i)
-    {
-        // Open directory
-        $parent = $i;
-        if (is_dir($queue[$i]) && $dir = @dir($queue[$i])) {
-            $subdirs = array();
-            while (false !== ($entry = $dir->read())) {
-                // Skip pointers
-                if ($entry == '.' || $entry == '..') {
-                    continue;
-                }
+	if (!isWinOS())
+	{
+		$size += @trim(shell_exec('du -ksL '.tfb_shellencode($path)));
+		$size *= 1024;
+		if ($size > 0.0) return sprintf("%.0f", $size);
+	}
 
-                // Get list of directories or filesizes
-                $path = $queue[$i] . $entry;
-                if (is_dir($path)) {
-                    $path .= DIRECTORY_SEPARATOR;
-                    $subdirs[] = $path;
-                } elseif (is_file($path)) {
-                    $size += sprintf("%u", filesize($path));
-                }
-            }
+	// Iterate queue
+	$queue = array($path);
+	for ($i = 0, $j = count($queue); $i < $j; ++$i)
+	{
+		// Open directory
+		$parent = $i;
+		if (is_dir($queue[$i]) && $dir = @dir($queue[$i])) {
+			$subdirs = array();
+			while (false !== ($entry = $dir->read())) {
+				// Skip pointers
+				if ($entry == '.' || $entry == '..') {
+					continue;
+				}
 
-            // Add subdirectories to start of queue
-            unset($queue[0]);
-            $queue = array_merge($subdirs, $queue);
+				// Get list of directories or filesizes
+				$path = $queue[$i] . $entry;
+				if (is_dir($path)) {
+					$path .= DIRECTORY_SEPARATOR;
+					$subdirs[] = $path;
+				} elseif (is_file($path)) {
+					$size += sprintf("%u", filesize($path));
+				}
+			}
 
-            // Recalculate stack size
-            $i = -1;
-            $j = count($queue);
+			// Add subdirectories to start of queue
+			unset($queue[0]);
+			$queue = array_merge($subdirs, $queue);
 
-            // Clean up
-            $dir->close();
-            unset($dir);
-        }
-    }
+			// Recalculate stack size
+			$i = -1;
+			$j = count($queue);
 
-    return $size;
+			// Clean up
+			$dir->close();
+			unset($dir);
+		}
+	}
+
+	return $size;
 }
 ?>

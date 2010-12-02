@@ -37,6 +37,7 @@ $tmpl->setvar('enable_xfer', $cfg["enable_xfer"]);
 //
 $tmpl->setvar('_NEWUSER', $cfg['_NEWUSER']);
 $tmpl->setvar('_USER', $cfg['_USER']);
+$tmpl->setvar('_EMAILADDRESS', $cfg['_EMAILADDRESS']);
 $tmpl->setvar('_PASSWORD', $cfg['_PASSWORD']);
 $tmpl->setvar('_CONFIRMPASSWORD', $cfg['_CONFIRMPASSWORD']);
 $tmpl->setvar('_USERTYPE', $cfg['_USERTYPE']);

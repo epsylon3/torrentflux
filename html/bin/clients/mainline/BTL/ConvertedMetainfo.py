@@ -17,7 +17,7 @@ import os
 import sys
 import logging
 import urlparse
-from BTL.hash import sha
+from hashlib import sha1
 import socket
 
 #debug=True
@@ -210,7 +210,7 @@ class ConvertedMetainfo(object):
 
         self.hashes = [info['pieces'][x:x+20] for x in xrange(0,
             len(info['pieces']), 20)]
-        self.infohash = InfoHashType(sha(bencode(info)).digest())
+        self.infohash = InfoHashType(sha1(bencode(info)).digest())
 
 
     def show_encoding_errors(self, errorfunc):

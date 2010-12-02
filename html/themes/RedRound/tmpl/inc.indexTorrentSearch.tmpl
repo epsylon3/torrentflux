@@ -1,0 +1,15 @@
+<div id="indexTorrentSearch">
+<form id="form_search" style="margin-left:50px" action="index.php" method="get" onsubmit="return actionSubmit('Searching')">
+<fieldset>
+	<label for="searchterm"><tmpl_var name="_SEARCH"> :</label><br />
+	<input type="hidden" name="iid" value="torrentSearch" />
+	<input type="text" name="searchterm" id="searchterm" size="40" maxlength="50" />
+	<select id="searchEngine" name="searchEngine" width="200px">
+		<tmpl_loop name="Engine_List">
+			<option <tmpl_if name="selected">selected="selected"</tmpl_if>><tmpl_var name="Engine"></option>
+		</tmpl_loop>
+	</select>
+	<input style="padding: 0 5px" type="submit" value="<tmpl_var name="_SEARCH">" />
+</fieldset>
+</form>
+</div>

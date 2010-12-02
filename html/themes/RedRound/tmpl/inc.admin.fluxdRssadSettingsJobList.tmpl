@@ -1,0 +1,44 @@
+<tmpl_if name="rssad_jobs">
+<table id="adminfluxdSettingsRSSadJobList">
+	<tr>
+		<th>Savedir</th>
+		<th>URL</th>
+		<th>Filter</th>
+		<th>Action</th>
+	</tr>
+	<tmpl_loop name="rssad_jobs">
+	<tr>
+		<td class="row" id="adminfluxdSettingsRSSadJobListSaveDir">
+			<tmpl_var name="savedir">
+		</td>
+		<td>
+			<tmpl_if name="enable_dereferrer">
+				<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="url">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="url"></a>
+			<tmpl_else>
+				<a href="<tmpl_var escape="html" name="url">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="url"></a>
+			</tmpl_if>
+		</td>
+		<td>
+			<a href="admin.php?op=fluxdRssadSettings&pageop=editFilter&filtername=<tmpl_var name="filtername">"><tmpl_var name="filtername"></a>
+		</td>
+		<td id="adminfluxdSettingsRSSadJobListAction">
+			<a href="admin.php?op=fluxdRssadSettings&pageop=deleteJob&job=<tmpl_var name="__ROWNUM__">"  onclick="return confirm('Delete Job ?')"><img src="themes/<tmpl_var name="theme">/images/admin/fluxdRSSad/job_delete.png" width="16px" height="16px" title="Delete Job" align="absmiddle"></a>&nbsp;
+			<a href="admin.php?op=fluxdRssadSettings&pageop=editJob&job=<tmpl_var name="__ROWNUM__">"><img src="themes/<tmpl_var name="theme">/images/admin/fluxdRSSad/job_edit.png" width="16px" height="16px" title="Edit Job" align="absmiddle"></a>&nbsp;
+		</td>
+	</tmpl_loop>
+<tmpl_else><p class="NormalText">No Jobs defined.</p></tmpl_if>
+
+<table id="adminfluxdSettingsRSSadFilterListAdd">
+	<tr>
+		<th>
+			<tmpl_if name="rssad_filters">
+			<form action="admin.php?op=fluxdRssadSettings" method="post">
+				<input type="hidden" name="pageop" value="addJob">
+				<input type="Submit" value="Add Job">
+			</form>
+			<tmpl_else>
+			<form><input type="Submit" value="Add Job" disabled></form>
+			</tmpl_if>
+		</th>
+	</tr>
+</table>

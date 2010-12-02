@@ -111,7 +111,7 @@ function image_pieTransferPeers() {
 	$peerData['seedsLabel'] = ($seeds != "") ? $seeds : 0;
 	$peerData['peersLabel'] = ($peers != "") ? $peers : 0;
 	$client = getTransferClient($transfer);
-    switch ($client) {
+	switch ($client) {
 		case "tornado":
 			if ($seeds != "") {
 				if (strpos($seeds, "+") !== false)
@@ -127,8 +127,10 @@ function image_pieTransferPeers() {
 					$peerData['peers'] = $peers;
 				$peerData['peersLabel'] = $peers;
 			}
-        	break;
-        case "transmission":
+			break;
+		case "transmission":
+		case "transmissionrpc":
+		case "vuzerpc":
 		case "azureus":
 			if ($seeds != "") {
 				if (strpos($seeds, "(") !== false)
@@ -144,26 +146,26 @@ function image_pieTransferPeers() {
 					$peerData['peers'] = $peers;
 				$peerData['peersLabel'] = $peers;
 			}
-        	break;
-        case "mainline":
-        	if (($seeds != "") && (is_numeric($seeds))) {
-        		$peerData['seeds'] = $seeds;
-        		$peerData['seedsLabel'] = $seeds;
-        	}
-        	if (($peers != "") && (is_numeric($peers))) {
-        		$peerData['peers'] = $peers;
-        		$peerData['peersLabel'] = $peers;
-        	}
-        	break;
-        case "wget":
+			break;
+		case "mainline":
+			if (($seeds != "") && (is_numeric($seeds))) {
+				$peerData['seeds'] = $seeds;
+				$peerData['seedsLabel'] = $seeds;
+			}
+			if (($peers != "") && (is_numeric($peers))) {
+				$peerData['peers'] = $peers;
+				$peerData['peersLabel'] = $peers;
+			}
+			break;
+		case "wget":
 		case "nzbperl":
 			$peerData['seeds'] = ($seeds != "") ? $seeds : 0;
 			$peerData['peers'] = ($peers != "") ? $peers : 0;
 			break;
-        default:
-        	AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+		default:
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
 			Image::paintNoOp();
-    }
+	}
 	// draw image
 	Image::paintPie3D(
 		202,

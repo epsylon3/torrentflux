@@ -1,0 +1,12 @@
+<script language="JavaScript">
+function SuperAdmin(name_file) {
+		window.open (name_file,"_blank","toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600")
+}
+</script>
+<a href="JavaScript:SuperAdmin('superadmin.php<tmpl_var name="param">')">
+<tmpl_if name="linkText">
+	<tmpl_var name="linkText">
+<tmpl_else>
+	<img src="themes/default/images/arrow.gif" width="9" height="9" title="Version" border="0">
+	</a>
+</tmpl_if>

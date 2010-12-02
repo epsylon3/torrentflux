@@ -1,0 +1,33 @@
+<!-- THIS PAGE IS VERY SENSITIVE TO ERRORS. SMALL MISTAKES CAN LEAD AJAX NOT UPDATE. -->
+<table id="indexUsers">
+	<tr>
+		<td>
+			<table id="UsersOnline">
+				<tr>
+					<td id="usersOnline" valign="top"> <!-- ID IS NEEDED FOR AJAX -->
+						<tmpl_if name="arOnlineUsers">
+							<tmpl_loop name="arOnlineUsers">
+							<a href="index.php?iid=message&amp;to_user=<tmpl_var name="user">"><tmpl_var name="user"></a><br />
+							</tmpl_loop>
+						</tmpl_if>
+					</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<tmpl_if name="hide_offline" value="0">
+				<table id="UsersOffline"> <!-- ID IS NEEDED FOR AJAX -->
+					<tr>
+						<td id="usersOffline" valign="top">
+							<tmpl_if name="arOfflineUsers">
+								<tmpl_loop name="arOfflineUsers">
+								<a href="index.php?iid=message&amp;to_user=<tmpl_var name="user">"><tmpl_var name="user"></a><br />
+								</tmpl_loop>
+							</tmpl_if>
+						</td>
+					</tr>
+				</table>
+			</tmpl_if>
+		</td>
+	</tr>
+</table>

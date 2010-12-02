@@ -1,0 +1,36 @@
+<table id="indexStatsBar">
+		<tmpl_if name="drivespacebar_type" value="xfer">
+			<tr><td><tmpl_include name="inc.driveSpaceBar_xfer.tmpl"></td>
+		<tmpl_else>
+			<tr><td><tmpl_include name="inc.driveSpaceBar_tf.tmpl"></td>
+		</tmpl_if>
+		
+		<tmpl_if name="ui_displaybandwidthbars">
+			<tmpl_if name="bandwidthbars_type" value="xfer">
+				<tmpl_include name="inc.bandwidthBars_xfer.tmpl">
+			<tmpl_else>
+				<tmpl_include name="inc.bandwidthBars_tf.tmpl">
+			</tmpl_if>
+			<tmpl_if name="xfer_realtime">
+				<tr>
+				<td>
+					<tmpl_var name="xfer_day">
+					<tmpl_var name="xfer_week">
+					<tmpl_var name="xfer_month">
+					<tmpl_var name="xfer_total">
+				</td>
+				</tr>
+			</tmpl_if>
+		</tmpl_if>
+</table>
+<!-- IF WE ENABLE AJAX UPDATE THEN TF-B4RT WILL LOOK FOR THIS ID'S. 
+SINCE WE DON'T USE THEM WE HAVE TO DO THIS, TO TRICK AJAX INTO CONTINUE UPDATING
+OTHERWISE AJAX STOPS. -->
+<div style="display:none;">
+	<span id="barSpeedUp1"></span>
+	<span id="barSpeedUp2"></span>
+	<span id="barSpeedUpPercent"></span>
+	<span id="barSpeedDown1"></span>
+	<span id="barSpeedDown2"></span>
+	<span id="barSpeedDownPercent"></span>
+</div>

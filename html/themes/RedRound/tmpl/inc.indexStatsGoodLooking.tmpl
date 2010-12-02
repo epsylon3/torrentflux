@@ -1,0 +1,33 @@
+<tmpl_if name="settingsHackStats1">
+	<b>Speed:</b>
+		<a href="index.php?iid=serverStats&amp;type=who"><img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/speed_down.png" alt="" /></a>
+		<a href="index.php?iid=serverStats&amp;type=who"><span id="g_speedDown"><tmpl_var name="settingsHackStats11"></span> kB/s</a>
+</tmpl_if>
+
+<tmpl_if name="settingsHackStats2">
+			<a href="index.php?iid=serverStats&amp;type=who"><img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/speed_up.png" alt="" /></a>
+			<a href="index.php?iid=serverStats&amp;type=who"><span id="g_speedUp"><tmpl_var name="settingsHackStats22"></span> kB/s</a>
+</tmpl_if>
+
+<tmpl_if name="settingsHackStats3">
+			<a href="index.php?iid=serverStats&amp;type=who"><img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/speed_total.png" alt="" /></a>
+			<a href="index.php?iid=serverStats&amp;type=who"><span id="g_speedTotal"><tmpl_var name="settingsHackStats33"></span> kB/s</a>
+</tmpl_if>
+
+<tmpl_if name="settingsHackStats4">
+		<img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/connections.png" alt="" /> <b><tmpl_var name="_ID_CONNECTIONS">:</b>
+		<a href="index.php?iid=serverStats&amp;type=all"><span id="g_cons"><tmpl_var name="settingsHackStats44"></span></a>
+</tmpl_if>
+
+<tmpl_if name="settingsHackStats5">
+		<img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/storage.png" alt="" /> <b>Storage:</b>
+		<a href="index.php?iid=serverStats&amp;type=drivespace"><span id="g_freeSpace"><tmpl_var name="settingsHackStats55"></span></a>
+</tmpl_if>
+
+<tmpl_if name="settingsHackStats6">
+		<img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/load.png" alt="" /> <b>Load:</b>
+		<a href="index.php?iid=serverStats&amp;type=who"><span id="g_loadavg"><tmpl_var name="settingsHackStats66"></span></a>
+</tmpl_if>
+
+<img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/chart.png" alt="" /> <a href="index.php?iid=images">Charts</a> 
+<img src="themes/<tmpl_var name="theme">/images/index/GoodLookingStats/stats.png" alt="" /> <a href="index.php?iid=serverStats">Stats</a>

@@ -1,0 +1,55 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<h1>administration</h1>
+<table id="adminMain">
+<tr>
+<td><a href="admin.php?op=serverSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/server.png"></a></td>
+<td><a href="admin.php?op=transferSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/transfer.png"></a></td>
+<td><a href="admin.php?op=controlSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/control.png"></a></td>
+<td><a href="admin.php?op=webappSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/webapp.png"></a></td>
+<td><a href="admin.php?op=indexSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/index.png"></a></td>
+<td><a href="admin.php?op=dirSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/dir.png"></a></td>
+<td><a href="admin.php?op=statsSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/stats.png"></a></td>
+</tr>
+<tr>
+<th>server</th>
+<th>transfer</th>
+<th>control</th>
+<th>webapp</th>
+<th>index</th>
+<th>dir</th>
+<th>stats</th>
+</tr>
+<!-- SECOND ROW -->
+<tr>
+<td><a href="admin.php?op=fluxdSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/fluxd.png"></a></td>
+<td><a href="admin.php?op=xferSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/xfer.png"></a></td>
+<td><a href="admin.php?op=searchSettings"><img src="themes/<tmpl_var name="theme">/images/admin/main/search.png"></a></td>
+<td><a href="admin.php?op=editLinks"><img src="themes/<tmpl_var name="theme">/images/admin/main/links.png"></a></td>
+<td><a href="admin.php?op=editRSS"><img src="themes/<tmpl_var name="theme">/images/admin/main/rss.png"></a></td>
+<td><a href="admin.php?op=showUsers"><img src="themes/<tmpl_var name="theme">/images/admin/main/users.png"></a></td>
+<td><a href="admin.php?op=showUserActivity"><img src="themes/<tmpl_var name="theme">/images/admin/main/activity.png"></a></td>
+</tr>
+<tr>
+<th><tmpl_var name="_FLUXD_MENU"></th>
+<th>XFER</th>
+<th><tmpl_var name="_SEARCHSETTINGS_MENU"></th>
+<th><tmpl_var name="_LINKS_MENU"></th>
+<th>RSS</th>
+<th>Users</th>
+<th><tmpl_var name="_ACTIVITY_MENU"></th>
+</table>
+<h1>statistics</h1>
+<!-- STATS -->
+<table id="adminMainStats">
+	<tr>
+		<th class="head">TF-NG</th>
+		<th class="head">Database</th>
+		<th class="head">System</th>
+	</tr>
+	<tr>
+		<td valign="top"><tmpl_include name="inc.adminMainStatsTF.tmpl"></td>
+		<td valign="top"><tmpl_include name="inc.adminMainStatsDatabase.tmpl"></td>
+		<td valign="top"><tmpl_include name="inc.adminMainStatsSystem.tmpl"></td>
+	</tr>
+</table>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

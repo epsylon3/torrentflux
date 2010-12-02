@@ -22,8 +22,9 @@
 
 // defines
 define('_DUMP_DELIM', '*');
-preg_match('|.*\s(\d+)\s.*|', '$Revision$', $revisionMatches);
-define('_REVISION_FLUXCLI', $revisionMatches[1]);
+//preg_match('|.*\s(\d+)\s.*|', '$Revision$', $revisionMatches);
+//define('_REVISION_FLUXCLI', isset($revisionMatches[1]) ? $revisionMatches[1] : 'git');
+define('_REVISION_FLUXCLI', 'v1.0git');
 
 /**
  * FluxCLI
@@ -35,60 +36,60 @@ class FluxCLI
 	// name
 	var $name = "FluxCLI";
 
-    // private fields
+	// private fields
 
 	// script
 	var $_script = "fluxcli.php";
 
-    // action
-    var $_action = "";
+	// action
+	var $_action = "";
 
-    // args
-    var $_args = array();
-    var $_argc = 0;
+	// args
+	var $_args = array();
+	var $_argc = 0;
 
-    // arg-errors-array
-    var $_argErrors = array();
+	// arg-errors-array
+	var $_argErrors = array();
 
 	// =========================================================================
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return FluxCLI
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return FluxCLI
+	 */
+	function getInstance() {
 		global $instanceFluxCLI;
 		return (isset($instanceFluxCLI))
 			? $instanceFluxCLI
 			: false;
-    }
+	}
 
-    /**
-     * getAction
-     *
-     * @return string
-     */
-    function getAction() {
+	/**
+	 * getAction
+	 *
+	 * @return string
+	 */
+	function getAction() {
 		global $instanceFluxCLI;
 		return (isset($instanceFluxCLI))
 			? $instanceFluxCLI->_action
 			: "";
-    }
+	}
 
-    /**
-     * getArgs
-     *
-     * @return array
-     */
-    function getArgs() {
+	/**
+	 * getArgs
+	 *
+	 * @return array
+	 */
+	function getArgs() {
 		global $instanceFluxCLI;
 		return (isset($instanceFluxCLI))
 			? $instanceFluxCLI->_args
 			: array();
-    }
+	}
 
 	/**
 	 * process a request
@@ -96,28 +97,28 @@ class FluxCLI
 	 * @param $args
 	 * @return mixed
 	 */
-    function processRequest($args) {
+	function processRequest($args) {
 		global $instanceFluxCLI;
-    	// create new instance
-    	$instanceFluxCLI = new FluxCLI($args);
+		// create new instance
+		$instanceFluxCLI = new FluxCLI($args);
 		// call instance-method
 		return (!$instanceFluxCLI)
 			? false
 			: $instanceFluxCLI->instance_processRequest();
-    }
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * do not use direct, use the public static methods !
-     *
+	/**
+	 * do not use direct, use the public static methods !
+	 *
 	 * @param $args
-     * @return FluxCLI
-     */
-    function FluxCLI($args) {
-    	global $cfg;
+	 * @return FluxCLI
+	 */
+	function FluxCLI($args) {
+		global $cfg;
 
 		// set user-var
 		$cfg["user"] = GetSuperAdmin();
@@ -146,7 +147,7 @@ class FluxCLI
 			$this->_args = array();
 			$this->_argc = 0;
 		}
-    }
+	}
 
 	// =========================================================================
 	// public methods
@@ -157,8 +158,8 @@ class FluxCLI
 	 *
 	 * @return mixed
 	 */
-    function instance_processRequest() {
-    	global $cfg;
+	function instance_processRequest() {
+		global $cfg;
 
 		// action-switch
 		switch ($this->_action) {
@@ -171,20 +172,20 @@ class FluxCLI
 			case "transfers":
 				return $this->_transfers();
 
-                        /* pm */
-                        case "pm":
-                                if ($this->_argc < 3) {
-                                        array_push($this->_argErrors, "Missing arguments: sender, recipient, message text");
-                                        break;
-                                } else {
-                                        $sender = array_shift($this->_args);
-                                        $user = array_shift($this->_args);
-                                        $message = implode(" ",$this->_args);
-                                        return $this->_pm(
-                                                $sender,
-                                                $user,
-                                                $message
-                                        );
+						/* pm */
+						case "pm":
+								if ($this->_argc < 3) {
+										array_push($this->_argErrors, "Missing arguments: sender, recipient, message text");
+										break;
+								} else {
+										$sender = array_shift($this->_args);
+										$user = array_shift($this->_args);
+										$message = implode(" ",$this->_args);
+										return $this->_pm(
+												$sender,
+												$user,
+												$message
+										);
 				}
 
 			/* start */
@@ -336,11 +337,11 @@ class FluxCLI
 			case "repair":
 				return $this->_repair();
 
-	        /* maintenance */
+			/* maintenance */
 			case "maintenance":
 				return $this->_maintenance(((isset($this->_args[0])) && (strtolower($this->_args[0]) == "true")) ? true : false);
 
-	        /* dump */
+			/* dump */
 			case "dump":
 				if (empty($this->_args[0])) {
 					array_push($this->_argErrors, "missing argument: type. (settings/users) (extra-arg 1)");
@@ -378,7 +379,7 @@ class FluxCLI
 
 		// help
 		return $this->_printUsage();
-    }
+	}
 
 	// =========================================================================
 	// private methods -- options parsing helpers
@@ -515,10 +516,10 @@ class FluxCLI
 			echo "- ".implode(" - ", $transferAry)."\n";
 		// print out stats
 		echo "Server:\n";
-	    if (! array_key_exists("total_download", $cfg))
-	        $cfg["total_download"] = 0;
-	    if (! array_key_exists("total_upload", $cfg))
-	        $cfg["total_upload"] = 0;
+		if (! array_key_exists("total_download", $cfg))
+			$cfg["total_download"] = 0;
+		if (! array_key_exists("total_upload", $cfg))
+			$cfg["total_upload"] = 0;
 		echo $cfg['_UPLOADSPEED']."\t".': '.number_format($cfg["total_upload"], 2).' kB/s'."\n";
 		echo $cfg['_DOWNLOADSPEED']."\t".': '.number_format($cfg["total_download"], 2).' kB/s'."\n";
 		echo $cfg['_TOTALSPEED']."\t".': '.number_format($cfg["total_download"]+$cfg["total_upload"], 2).' kB/s'."\n";
@@ -599,19 +600,19 @@ class FluxCLI
 		}
 	}
 
-        /**
-         * PM a user
-         *
-         * @param $user, $message
-         * @return $string
-         */
-        function _pm($sender, $recipient, $message) {
-                global $cfg;
-                // 
-                require_once("inc/functions/functions.common.message.php");
-                check_html($message, "nohtml");
-                SaveMessage($recipient, $sender, $message);
-        }
+		/**
+		 * PM a user
+		 *
+		 * @param $user, $message
+		 * @return $string
+		 */
+		function _pm($sender, $recipient, $message) {
+				global $cfg;
+				// 
+				require_once("inc/functions/functions.common.message.php");
+				check_html($message, "nohtml");
+				SaveMessage($recipient, $sender, $message);
+		}
 
 	/**
 	 * Stop Transfer
@@ -637,8 +638,8 @@ class FluxCLI
 		$this->_outputMessage("Stopping ".$transfer." for user ".$cfg["user"]."...\n");
 		// stop
 		$ch = ClientHandler::getInstance(getTransferClient($transfer));
-        $ch->stop($transfer);
-        $this->_outputMessage("done.\n");
+		$ch->stop($transfer);
+		$this->_outputMessage("done.\n");
 		return true;
 	}
 
@@ -755,16 +756,16 @@ class FluxCLI
 			$this->_outputMessage("transfer is running, stopping first...\n");
 			$ch->stop($transfer);
 			$tRunningFlag = isTransferRunning($transfer);
-        }
-        if (!$tRunningFlag) {
-        	$this->_outputMessage("Deleting...\n");
-        	$ch->delete($transfer);
+		}
+		if (!$tRunningFlag) {
+			$this->_outputMessage("Deleting...\n");
+			$ch->delete($transfer);
 			$this->_outputMessage("done.\n");
 			return true;
-        } else {
-        	$this->_outputError("transfer still up... cannot delete\n");
-        	return false;
-        }
+		} else {
+			$this->_outputError("transfer still up... cannot delete\n");
+			return false;
+		}
 	}
 
 	/**
@@ -791,28 +792,28 @@ class FluxCLI
 			$this->_outputMessage("transfer is running, stopping first...\n");
 			$ch->stop($transfer);
 			$tRunningFlag = isTransferRunning($transfer);
-        }
-        if (!$tRunningFlag) {
-        	$this->_outputMessage("Deleting...\n");
-    		$msgsDelete = deleteTransferData($transfer);
-    		$countDelete = count($msgsDelete);
+		}
+		if (!$tRunningFlag) {
+			$this->_outputMessage("Deleting...\n");
+			$msgsDelete = deleteTransferData($transfer);
+			$countDelete = count($msgsDelete);
 			$msgsReset = resetTransferTotals($transfer, true);
 			$countReset = count($msgsReset);
-        	if (($countDelete + $countReset) == 0) {
+			if (($countDelete + $countReset) == 0) {
 				$this->_outputMessage("done.\n");
 				return true;
-        	} else {
+			} else {
 				$this->_outputError("there were problems: "
 					.(($countDelete > 0) ? implode("\n", $msgsDelete)."\n" : "")
 					.(($countReset > 0) ? implode("\n", $msgsReset) : "")
 					."\n"
 				);
 				return false;
-        	}
-        } else {
-        	$this->_outputError("transfer still up... cannot delete\n");
-        	return false;
-        }
+			}
+		} else {
+			$this->_outputError("transfer still up... cannot delete\n");
+			return false;
+		}
 	}
 
 	/**
@@ -1036,31 +1037,31 @@ class FluxCLI
 		);
 
 		// set user
-	    $cfg["user"] = $username;
-	    // set filename
-	    $transfer = basename($transferFile);
-        $transfer = tfb_cleanFileName($transfer);
-        // only inject valid transfers
-        $msgs = array();
-        if ($transfer !== false) {
-        	$targetFile = $cfg["transfer_file_path"].$transfer;
-            if (@is_file($targetFile)) {
-            	array_push($msgs, "transfer ".$transfer.", already exists.");
-            } else {
-            	$this->_outputMessage("copy ".$transferFile." to ".$targetFile." ...\n");
-                if (@copy($transferFile, $targetFile)) {
-                	// chmod
-                    @chmod($cfg["transfer_file_path"].$transfer, 0644);
-                    // make owner entry
-                    AuditAction($cfg["constants"]["file_upload"], $transfer);
-                    // inject
-                    $this->_outputMessage("injecting ".$transfer." ...\n");
-                    injectTransfer($transfer);
-	            	// delete source-file
-	            	if (isset($optionsSet['d'])) {
-		            	$this->_outputMessage("deleting source-file ".$transferFile." ...\n");
-		            	@unlink($transferFile);
-	            	}
+		$cfg["user"] = $username;
+		// set filename
+		$transfer = basename($transferFile);
+		$transfer = tfb_cleanFileName($transfer);
+		// only inject valid transfers
+		$msgs = array();
+		if ($transfer !== false) {
+			$targetFile = $cfg["transfer_file_path"].$transfer;
+			if (@is_file($targetFile)) {
+				array_push($msgs, "transfer ".$transfer.", already exists.");
+			} else {
+				$this->_outputMessage("copy ".$transferFile." to ".$targetFile." ...\n");
+				if (@copy($transferFile, $targetFile)) {
+					// chmod
+					@chmod($cfg["transfer_file_path"].$transfer, 0644);
+					// make owner entry
+					AuditAction($cfg["constants"]["file_upload"], $transfer);
+					// inject
+					$this->_outputMessage("injecting ".$transfer." ...\n");
+					injectTransfer($transfer);
+					// delete source-file
+					if (isset($optionsSet['d'])) {
+						$this->_outputMessage("deleting source-file ".$transferFile." ...\n");
+						@unlink($transferFile);
+					}
 					// start
 					if (isset($optionsSet['s'])) {
 						// build args for _transferStart
@@ -1070,15 +1071,15 @@ class FluxCLI
 					// return
 					else
 						return true;
-                } else {
-                	array_push($msgs, "File could not be copied: ".$transferFile);
-                }
-            }
-        } else {
-        	array_push($msgs, "The type of file you are injecting is not allowed.");
+				} else {
+					array_push($msgs, "File could not be copied: ".$transferFile);
+				}
+			}
+		} else {
+			array_push($msgs, "The type of file you are injecting is not allowed.");
 			array_push($msgs, "valid file-extensions: ");
 			array_push($msgs, $cfg["file_types_label"]);
-        }
+		}
 		if (count($msgs) == 0) {
 			$this->_outputMessage("done.\n");
 			return true;
@@ -1124,40 +1125,40 @@ class FluxCLI
 			" ...\n"
 		);
 
-        // process dir
-        if ($dirHandle = @opendir($watchDir)) {
-        	// get input-files
-        	$input = array();
+		// process dir
+		if ($dirHandle = @opendir($watchDir)) {
+			// get input-files
+			$input = array();
 			while (false !== ($file = @readdir($dirHandle)))
 				if (@is_file($watchDir.$file))
-        			array_push($input, $file);
-            @closedir($dirHandle);
-            if (empty($input)) {
-            	$this->_outputMessage("done. no files found.\n");
-            	return true;
-            }
+					array_push($input, $file);
+			@closedir($dirHandle);
+			if (empty($input)) {
+				$this->_outputMessage("done. no files found.\n");
+				return true;
+			}
 			// trailing slash
-        	$watchDir = checkDirPathString($watchDir);
+			$watchDir = checkDirPathString($watchDir);
 			// build args for _inject
 			$newOptions = $this->_buildOptions('dsp', $optionsSet);	// Pass-thru options 'd', 's' and 'p'.
-            // process input-files
-            $ctr = array('files' => count($input), 'ok' => 0);
-            foreach ($input as $transfer) {
-            	// inject, increment if ok
-            	if ($this->_inject($watchDir.$transfer, $username, $newOptions[0], $newOptions[1]) !== false)
-            		$ctr['ok']++;
-            }
-            if ($ctr['files'] == $ctr['ok']) {
-            	$this->_outputMessage("done. files: ".$ctr['files']."; ok: ".$ctr['ok']."\n");
-            	return true;
-            } else {
-            	$this->_outputError("done with errors. files: ".$ctr['files']."; ok: ".$ctr['ok']."\n");
-            	return false;
-            }
-        } else {
-        	$this->_outputError("failed to open watch-dir ".$watchDir.".\n");
+			// process input-files
+			$ctr = array('files' => count($input), 'ok' => 0);
+			foreach ($input as $transfer) {
+				// inject, increment if ok
+				if ($this->_inject($watchDir.$transfer, $username, $newOptions[0], $newOptions[1]) !== false)
+					$ctr['ok']++;
+			}
+			if ($ctr['files'] == $ctr['ok']) {
+				$this->_outputMessage("done. files: ".$ctr['files']."; ok: ".$ctr['ok']."\n");
+				return true;
+			} else {
+				$this->_outputError("done with errors. files: ".$ctr['files']."; ok: ".$ctr['ok']."\n");
+				return false;
+			}
+		} else {
+			$this->_outputError("failed to open watch-dir ".$watchDir.".\n");
 			return false;
-        }
+		}
 	}
 
 	/**
@@ -1179,11 +1180,11 @@ class FluxCLI
 			return false;
 		}
 		$this->_outputMessage('checking xfer-limit(s) for "'.$delta.'" ...'."\n");
-    	// set xfer-realtime
+		// set xfer-realtime
 		$cfg['xfer_realtime'] = 1;
 		// set xfer-newday
 		Xfer::setNewday();
-    	// getTransferListArray to update xfer-stats
+		// getTransferListArray to update xfer-stats
 		$transferList = @getTransferListArray();
 		// get xfer-totals
 		$xfer_total = Xfer::getStatsTotal();
@@ -1316,7 +1317,7 @@ class FluxCLI
 		global $cfg, $db;
 		switch ($type) {
 			case "settings":
-			    $sql = "SELECT tf_key, tf_value FROM tf_settings";
+				$sql = "SELECT tf_key, tf_value FROM tf_settings";
 				break;
 			case "users":
 				$sql = "SELECT uid, user_id FROM tf_users";
@@ -1325,49 +1326,49 @@ class FluxCLI
 				$this->_outputError("invalid type : ".$type."\n");
 				return false;
 		}
-	    $recordset = $db->Execute($sql);
-	    if ($db->ErrorNo() != 0) dbError($sql);
-	    $content = "";
-	    while (list($a, $b) = $recordset->FetchRow())
-	    	 $content .= $a._DUMP_DELIM.$b."\n";
-	    echo $content;
+		$recordset = $db->Execute($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);
+		$content = "";
+		while (list($a, $b) = $recordset->FetchRow())
+			 $content .= $a._DUMP_DELIM.$b."\n";
+		echo $content;
 		return ($content != "");
 	}
 
-    /**
-     * output message
-     *
-     * @param $message
-     */
+	/**
+	 * output message
+	 *
+	 * @param $message
+	 */
 	function _outputMessage($message) {
 		printMessage($this->name, $message);
-    }
+	}
 
-    /**
-     * output error
-     *
-     * @param $message
-     */
+	/**
+	 * output error
+	 *
+	 * @param $message
+	 */
 	function _outputError($message) {
 		printError($this->name, $message);
-    }
+	}
 
-    /**
-     * prints version
-     *
+	/**
+	 * prints version
+	 *
 	 * @return mixed
-     */
-    function _printVersion() {
-    	echo $this->name." Revision "._REVISION_FLUXCLI."\n";
-    	return (_REVISION_FLUXCLI > 0);
-    }
+	 */
+	function _printVersion() {
+		echo $this->name." Revision "._REVISION_FLUXCLI."\n";
+		return (_REVISION_FLUXCLI > 0);
+	}
 
-    /**
-     * prints usage
-     *
+	/**
+	 * prints usage
+	 *
 	 * @return mixed
-     */
-    function _printUsage() {
+	 */
+	function _printUsage() {
 		$this->_printVersion();
 		echo "\n"
 		. "Usage: ".$this->_script." action [extra-args]\n"
@@ -1392,11 +1393,11 @@ class FluxCLI
 		. "                extra-arg : name of transfer as known inside webapp\n"
 		. "  dequeue     : dequeue a transfer.\n"
 		. "                extra-arg : name of transfer as known inside webapp\n"
-	    . "  start-all   : start all transfers.\n"
+		. "  start-all   : start all transfers.\n"
 		. "                extra-arg 1 : options (p) (optional, default: none)\n"
 		. "                              options-arg contains 'p' : use transfer-profile\n"
 		. "                extra-arg 2 : transfer-profile name (optional, default: none)\n"
-	    . "  resume-all  : resume all transfers.\n"
+		. "  resume-all  : resume all transfers.\n"
 		. "                extra-arg 1 : options (p) (optional, default: none)\n"
 		. "                              options-arg contains 'p' : use transfer-profile\n"
 		. "                extra-arg 2 : transfer-profile name (optional, default: none)\n"
@@ -1446,10 +1447,10 @@ class FluxCLI
 		. "                extra-arg 1 : dir (optional, default: docroot)\n"
 		. "  checksums   : print checksum-list.\n"
 		. "                extra-arg 1 : dir (optional, default: docroot)\n"
-                . "  pm          : Send a private message to another user.\n"
-                . "                extra-arg 1 : username of sender\n"
-                . "                extra-arg 2 : username of recipient\n"
-                . "                extra-arg 3 : text to send\n"
+				. "  pm          : Send a private message to another user.\n"
+				. "                extra-arg 1 : username of sender\n"
+				. "                extra-arg 2 : username of recipient\n"
+				. "                extra-arg 3 : text to send\n"
 		. "\n"
 		. "examples:\n"
 		. $this->_script." transfers\n"
@@ -1473,19 +1474,19 @@ class FluxCLI
 		. $this->_script." inject /path/to/foo.torrent fluxuser\n"
 		. $this->_script." inject /path/to/foo.torrent fluxuser ds\n"
 		. $this->_script." inject /path/to/foo.torrent fluxuser sp profilename\n"
-	    . $this->_script." watch /path/to/watch-dir/ fluxuser\n"
-	    . $this->_script." watch /path/to/watch-dir/ fluxuser d\n"
-	    . $this->_script." watch /path/to/watch-dir/ fluxuser dsp profilename\n"
-	    . $this->_script." rss /path/to/rss-torrents/ /path/to/filter.dat /path/to/filter.hist http://www.example.com/rss.xml\n"
-	    . $this->_script." rss /path/to/rss-torrents/ /path/to/filter.dat /path/to/filter.hist http://www.example.com/rss.xml fluxuser\n"
-	    . $this->_script." xfer month\n"
+		. $this->_script." watch /path/to/watch-dir/ fluxuser\n"
+		. $this->_script." watch /path/to/watch-dir/ fluxuser d\n"
+		. $this->_script." watch /path/to/watch-dir/ fluxuser dsp profilename\n"
+		. $this->_script." rss /path/to/rss-torrents/ /path/to/filter.dat /path/to/filter.hist http://www.example.com/rss.xml\n"
+		. $this->_script." rss /path/to/rss-torrents/ /path/to/filter.dat /path/to/filter.hist http://www.example.com/rss.xml fluxuser\n"
+		. $this->_script." xfer month\n"
 		. $this->_script." repair\n"
 		. $this->_script." maintenance true\n"
 		. $this->_script." dump settings\n"
 		. $this->_script." dump users\n"
 		. $this->_script." filelist /var/www\n"
 		. $this->_script." checksums /var/www\n"
-                . $this->_script." pm admin user here is a message for you\n"
+				. $this->_script." pm admin user here is a message for you\n"
 		. "\n";
 		if (count($this->_argErrors) > 0) {
 			echo "arg-error(s) :\n"
@@ -1494,7 +1495,7 @@ class FluxCLI
 			return false;
 		}
 		return true;
-    }
+	}
 
 
 }

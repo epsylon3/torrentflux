@@ -43,7 +43,7 @@ class Transfer(object):
     """ azu states """
     AZ_DOWNLOADING = 4
     AZ_ERROR = 8
-    AZ_PREPARING = 2
+    AZ_PREPARING = 2 # Checking
     AZ_QUEUED = 9
     AZ_READY = 3
     AZ_SEEDING = 5
@@ -61,7 +61,7 @@ class Transfer(object):
         AZ_SEEDING: TF_RUNNING, \
         AZ_STOPPED: TF_STOPPED, \
         AZ_STOPPING: TF_STOPPED, \
-        AZ_WAITING: TF_STOPPED \
+        AZ_WAITING: TF_RUNNING \
     }
 
     """ -------------------------------------------------------------------- """
@@ -119,10 +119,10 @@ class Transfer(object):
         self.state_azu = download.getState()
         
         # and auto stopped (sharekill)
-        if self.state_azu == Transfer.AZ_STOPPED and self.sf.running == '1':
+        if self.state_azu == Transfer.AZ_STOPPED and self.sf.running == "1" and float(self.sf.percent_done) >= 100.0 :
 
-            printMessage("Torrent autostopped by Azureus %s " % self.sf.sharing)
-            self.log("Torrent autostopped by Azureus %s " % self.sf.sharing)
+            printMessage("Torrent autostopped by Azureus %s " % self.sf.percent_done)
+            self.log("Torrent autostopped by Azureus %s " % self.sf.percent_done)
             
             # stat
             self.statShutdown(download)
@@ -132,12 +132,11 @@ class Transfer(object):
 
         # only when running
         if self.state == Transfer.TF_RUNNING:
-
             # stat
             self.statRunning(download)
             
         else:
-          if self.state_azu != 7:
+          if self.state_azu != Transfer.AZ_STOPPED:
             printMessage(self.name + ": update() state_azu=%d" % self.state_azu)
 
     """ -------------------------------------------------------------------- """
@@ -167,8 +166,11 @@ class Transfer(object):
         # refresh
         download.refresh_object()
 
+        # azu-state
+        self.state_azu = download.getState()
+
         # set state
-        self.state = Transfer.STATE_MAP[download.getState()]
+        self.state = Transfer.STATE_MAP[self.state_azu]
 
         # set rates
         self.setRateU(download, int(self.tf.max_upload_rate))
@@ -375,7 +377,7 @@ class Transfer(object):
     def statStartup(self, download):
         # set some values
         self.sf.running = Transfer.TF_RUNNING
-        self.sf.percent_done = 0
+        self.sf.percent_done = str(0)
         self.sf.time_left = "Starting..."
         self.sf.down_speed = "0.00 kB/s"
         self.sf.up_speed = "0.00 kB/s"
@@ -409,7 +411,24 @@ class Transfer(object):
             self.log("die-when-done set, setting shutdown-flag...")
             self.stop(download)
             return True
-        
+
+        # Checking
+        if self.state_azu == Transfer.AZ_PREPARING:
+            self.sf.time_left = "Checking..."
+            self.sf.down_speed = ""
+            self.sf.up_speed = ""
+            try:
+                stats = download.getStats()
+                if stats == None:
+                    raise
+                pctf = (float(stats.getCompleted())) / 10
+                self.sf.percent_done = str(pctf)
+            except:
+                printException()
+            
+            self.sf.write()
+            return True
+
         # stats
         if download == None:
             return False
@@ -554,7 +573,7 @@ class Transfer(object):
 
                 # done
                 if download.isComplete():
-                    self.sf.percent_done = 100
+                    self.sf.percent_done = str(100)
                     self.sf.time_left = "Download Succeeded!"
 
                 # not done
@@ -650,6 +669,8 @@ class Transfer(object):
         if self.state == Transfer.TF_STOPPED:
             return False
             
+        return True
+        
         if self.state_azu == Transfer.AZ_WAITING:
             return True
 
@@ -665,5 +686,7 @@ class Transfer(object):
         if self.state_azu == Transfer.AZ_QUEUED:
             return True
         
+        if self.state_azu == Transfer.AZ_STOPPED:
+            return True
         
         return False

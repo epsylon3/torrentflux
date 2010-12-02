@@ -32,24 +32,24 @@ class RunningTransferTransmission extends RunningTransfer
 	 * @param $psLine
 	 * @return RunningTransferTransmission
 	 */
-    function RunningTransferTransmission($psLine) {
-    	global $cfg;
-        // ps-parse
-        if (strlen($psLine) > 0) {
-            while (strpos($psLine,"  ") > 0)
-                $psLine = str_replace("  ",' ',trim($psLine));
-            $arr = explode(' ',$psLine);
-            $this->processId = $arr[0];
-            $this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[(count($arr) - 1)]);
-            $this->filePath = substr($this->transferFile,0,strrpos($this->transferFile,"/")+1);
-            foreach ($arr as $key =>$value) {
-                if ($value == '-O')
-                    $this->transferowner = $arr[$key+1];
-            }
-            $this->args = str_replace("-","",$this->args);
-            $this->args = substr($this->args,0,strlen($this->args));
-        }
-    }
+	function RunningTransferTransmission($psLine) {
+		global $cfg;
+		// ps-parse
+		if (strlen($psLine) > 0) {
+			while (strpos($psLine,'  ') > 0)
+				$psLine = str_replace('  ',' ',trim($psLine));
+			$arr = explode(' ',$psLine);
+			$this->processId = $arr[0];
+			$this->transferFile = str_replace($cfg['transfer_file_path'],'',$arr[(count($arr) - 1)]);
+			$this->filePath = substr($this->transferFile,0,strrpos($this->transferFile,"/")+1);
+			foreach ($arr as $key =>$value) {
+				if ($value == '-O')
+					$this->transferowner = $arr[$key+1];
+			}
+			$this->args = str_replace("-","",$this->args);
+			$this->args = substr($this->args,0,strlen($this->args));
+		}
+	}
 
 }
 

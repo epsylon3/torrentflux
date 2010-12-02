@@ -3,13 +3,18 @@ $Id$
 =======================================================================
 
 /**********************************************************************
-Torrentflux-b4rt SUPPORT file
+TorrentFlux-NG SUPPORT file
 **********************************************************************/
 
-	For support with your torrentflux-b4rt installation please see the
-	torrentflux-b4rt forum:
+	For support with your TorrentFlux-NG installation please see the
+	forum:
+
+		http://www.torrentflux-ng.org/forum/
+
+	or the torrentflux-b4rt forum :
 
 		http://tf-b4rt.berlios.de/forum/
+		
 
 	Please take the time to search the forum first for a solution to your
 	problem.  If you still can't find the solution after searching, please
@@ -17,13 +22,13 @@ Torrentflux-b4rt SUPPORT file
 
 	1.	Ensure the subject of your message takes the format:
 
-			[torrentflux-b4rt-VersionXXX] Description
+			[VersionXXX] Description
 
 		where:
 
 			VersionXXX is the version of torrentflux-b4rt you are
 			running
-			- ie 1.0-alpha7.
+			- ie 1.0-beta3.
 
 			and
 
@@ -34,7 +39,7 @@ Torrentflux-b4rt SUPPORT file
 		For example, a good subject for a message would be something
 		like:
 
-		[torrentflux-b4rt-alpha7] Transfers fail to start when template
+		[1.0-beta3] Transfers fail to start when template
 		caching enabled
 
 

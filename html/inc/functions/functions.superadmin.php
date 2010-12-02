@@ -128,7 +128,7 @@ function sa_processes($action = "") {
 		case "0": // Processes-main
 			$htmlTitle = "Processes";
 			$htmlMain .= '<p>';
-			$htmlMain .= 'View currently running torrentflux-b4rt processes:<br><br>';
+			$htmlMain .= 'View currently running TorrentFlux-NG processes:<br><br>';
 			$htmlMain .= '<a href="' . _FILE_THIS . '?p=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="All" border="0"> All</a> - detailed process list';
 			$htmlMain .= '<p>';
 			$htmlMain .= '<a href="' . _FILE_THIS . '?p=2"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Transfers" border="0"> Transfers</a> - simple list of running transfers with option to force stop individual transfers';
@@ -143,21 +143,26 @@ function sa_processes($action = "") {
 			$htmlMain .= '<pre>';
 			$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." fluxd | ".$cfg['bin_grep']." -v grep"));
 			$htmlMain .= '</pre>';
-			$htmlMain .= '<p><strong>fluazu</strong>';
-			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." fluazu.py | ".$cfg['bin_grep']." -v grep"));
-			$htmlMain .= '</pre>';
-			$clients = array('tornado', 'transmission', 'mainline', 'wget', 'nzbperl', 'azureus');
+			
+			$clients = array();
+			if ($cfg['transmission_rpc_enable'] == 1)
+				$clients[] = 'transmissionrpc';
+			else
+				$clients[] = 'transmission'; //transmission-cli
+			if ($cfg['vuze_rpc_enable'] == 1)
+				$clients[] = 'vuzerpc';
+			else
+				$clients[] = 'azureus'; //fluazu
+				
+			$clients += array('tornado','wget','nzbperl','mainline');
+			
 			foreach ($clients as $client) {
 				$ch = ClientHandler::getInstance($client);
 				$htmlMain .= '<p><strong>'.$client.'</strong>';
-				$htmlMain .= '<br>';
-				$htmlMain .= '<pre>';
-				$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." ".tfb_shellencode($ch->binClient)." | ".$cfg['bin_grep']." -v grep"));
-				$htmlMain .= '</pre>';
-				$htmlMain .= '<br>';
-				$htmlMain .= '<pre>';
+				$htmlMain .= '<br/>';
+				$htmlMain .= '<pre style="overflow-x:hidden;">';
 				$htmlMain .= $ch->runningProcessInfo();
+				//$htmlMain .= tfb_htmlencode(shell_exec("ps auxww | ".$cfg['bin_grep']." ".tfb_shellencode($ch->binClient)." | ".$cfg['bin_grep']." -v grep"));
 				$htmlMain .= '</pre>';
 			}
 			$htmlMain .= '</div>';
@@ -168,14 +173,14 @@ function sa_processes($action = "") {
 			$htmlMain .= '<div align="left" id="BodyLayer" name="BodyLayer" style="border: thin solid '.$cfg['main_bgcolor'].'; position:relative; width:740; height:498; padding-left: 5px; padding-right: 5px; z-index:1; overflow: scroll; visibility: visible">';
 			$htmlMain .= '<br>
 				<table width="700" border=1 bordercolor="'.$cfg["table_admin_border"].'" cellpadding="2" cellspacing="0" bgcolor="'.$cfg["table_data_bg"].'">
-			    <tr><td colspan=6 bgcolor="'.$cfg["table_header_bg"].'" background="themes/'.$cfg["theme"].'/images/bar.gif">
-			    	<table width="100%" cellpadding=0 cellspacing=0 border=0><tr><td><font class="title"> Running Items </font></td></tr></table>
-			    </td></tr>
-			    <tr>
-			        <td bgcolor="'.$cfg["table_header_bg"].'" width="15%" nowrap><div align=center class="title">'.$cfg["_USER"].'</div></td>
-			        <td bgcolor="'.$cfg["table_header_bg"].'" nowrap><div align=center class="title">'.$cfg["_FILE"].'</div></td>
-			        <td bgcolor="'.$cfg["table_header_bg"].'" width="1%" nowrap><div align=center class="title">'.$cfg["_FORCESTOP"].'</div></td>
-			    </tr>
+				<tr><td colspan=6 bgcolor="'.$cfg["table_header_bg"].'" background="themes/'.$cfg["theme"].'/images/bar.gif">
+					<table width="100%" cellpadding=0 cellspacing=0 border=0><tr><td><font class="title"> Running Items </font></td></tr></table>
+				</td></tr>
+				<tr>
+					<td bgcolor="'.$cfg["table_header_bg"].'" width="15%" nowrap><div align=center class="title">'.$cfg["_USER"].'</div></td>
+					<td bgcolor="'.$cfg["table_header_bg"].'" nowrap><div align=center class="title">'.$cfg["_FILE"].'</div></td>
+					<td bgcolor="'.$cfg["table_header_bg"].'" width="1%" nowrap><div align=center class="title">'.$cfg["_FORCESTOP"].'</div></td>
+				</tr>
 			';
 			$running = getRunningClientProcesses();
 			foreach ($running as $rng) {
@@ -212,6 +217,9 @@ function sa_maintenance($action = "") {
 	if ($action == "")
 		return;
 	buildPage("m");
+	
+	$GREP = $cfg['bin_grep'];
+	
 	switch ($action) {
 
 		case "0": // Maintenance-main
@@ -268,7 +276,7 @@ function sa_maintenance($action = "") {
 			$htmlTitle = "Maintenance - Kill";
 			$htmlMain .= '<br>';
 			$htmlMain .= '<font color="red"><strong>DON\'T</strong> do this or you will screw up things for sure!</font><br><br>';
-			$htmlMain .= 'This is only meant as emergency \'last resort\' if things have already gone terribly wrong already.<br>Please use this only if you know what you are doing.<br><br><hr><strong>ALL the selected process types will be killed, not just those related to torrentflux-b4rt!!!</strong><hr><br>';
+			$htmlMain .= 'This is only meant as emergency \'last resort\' if things have already gone terribly wrong already.<br>Please use this only if you know what you are doing.<br><br><hr><strong>ALL the selected process types will be killed, not just those related to TorrentFlux-NG!!!</strong><hr><br>';
 			$htmlMain .= '<p>';
 			$htmlMain .= '<strong>PHP</strong><br>';
 			$htmlMain .= 'Kill all PHP processes:<br>';
@@ -282,9 +290,9 @@ function sa_maintenance($action = "") {
 			$htmlMain .= 'Kill all perl processes:<br>';
 			$htmlMain .= '<a href="' . _FILE_THIS . '?m=23"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="perl-kill" border="0"> Perl Kill</a>';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<strong>Transmissioncli</strong><br>';
-			$htmlMain .= 'Kill all transmissioncli processes:<br>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?m=24"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="transmissioncli-kill" border="0"> Transmissioncli Kill</a>';
+			$htmlMain .= '<strong>Transmission-cli</strong><br>';
+			$htmlMain .= 'Kill all transmission-cli processes:<br>';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?m=24"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="transmissioncli-kill" border="0"> Transmission-cli Kill</a>';
 			$htmlMain .= '<p>';
 			$htmlMain .= '<strong>Wget</strong><br>';
 			$htmlMain .= 'Kill all wget processes:<br>';
@@ -303,7 +311,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." php | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP php | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 php 2> /dev/null"));
@@ -316,7 +324,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." php | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP php | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -328,7 +336,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." python | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP python | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 python 2> /dev/null"));
@@ -341,7 +349,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." python | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP python | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -353,7 +361,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." perl | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP perl | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 perl 2> /dev/null"));
@@ -366,34 +374,37 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." perl | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP perl | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
 
-		case "24": // Maintenance-Kill: transmissioncli
-			$htmlTitle = "Maintenance - Kill - Transmissioncli";
+		case "24": // Maintenance-Kill: transmission-cli
+			$htmlTitle = "Maintenance - Kill - Transmission-cli";
 			$htmlMain .= '<br>';
-			$htmlMain .= 'Kill all transmissioncli processes: <font color="green">done</font>';
+			$htmlMain .= 'Kill all transmission-cli processes: <font color="green">done</font>';
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
-			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." transmissioncli | ".$cfg['bin_grep']." -v grep")));
-			$htmlMain .= '</pre>';
-			$htmlMain .= '<br>';
-			$callResult = trim(shell_exec("killall -9 transmissioncli 2> /dev/null"));
-			if ((isset($callResult)) && ($callResult != "")) {
+			$transmission = basename($cfg["btclient_transmission_bin"]);
+			if ($transmission) {
+				$htmlMain .= '<pre>';
+				$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP $transmission | $GREP cli |  $GREP -v grep")));
+				$htmlMain .= '</pre>';
 				$htmlMain .= '<br>';
-				$htmlMain .= 'Call Result: <br>';
-				$htmlMain .= '<pre>'.tfb_htmlencode($callResult).'</pre>';
+				$callResult = trim(shell_exec("killall -9 $transmission 2> /dev/null"));
+				if ((isset($callResult)) && ($callResult != "")) {
+					$htmlMain .= '<br>';
+					$htmlMain .= 'Call Result: <br>';
+					$htmlMain .= '<pre>'.tfb_htmlencode($callResult).'</pre>';
+					$htmlMain .= '<br>';
+				}
+				sleep(2); // just 2 sec
+				$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
+				$htmlMain .= '<pre>';
+				$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP transmissioncli | $GREP -v grep")));
+				$htmlMain .= '</pre>';
 				$htmlMain .= '<br>';
 			}
-			sleep(2); // just 2 sec
-			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
-			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." transmissioncli | ".$cfg['bin_grep']." -v grep")));
-			$htmlMain .= '</pre>';
-			$htmlMain .= '<br>';
 			break;
 
 		case "25": // Maintenance-Kill: wget
@@ -403,7 +414,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." wget | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP wget | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 wget 2> /dev/null"));
@@ -416,7 +427,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." wget | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP wget | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -428,7 +439,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<br><br>';
 			$htmlMain .= '<strong>Process list (filtered) before call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." vlc | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP vlc | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			$callResult = trim(shell_exec("killall -9 vlc 2> /dev/null"));
@@ -441,7 +452,7 @@ function sa_maintenance($action = "") {
 			sleep(2); // just 2 sec
 			$htmlMain .= '<strong>Process list (filtered) after call:</strong><br>';
 			$htmlMain .= '<pre>';
-			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | ".$cfg['bin_grep']." vlc | ".$cfg['bin_grep']." -v grep")));
+			$htmlMain .= tfb_htmlencode(trim(shell_exec("ps auxww | $GREP vlc | $GREP -v grep")));
 			$htmlMain .= '</pre>';
 			$htmlMain .= '<br>';
 			break;
@@ -466,7 +477,7 @@ function sa_maintenance($action = "") {
 			$htmlMain .= '<a href="' . _FILE_THIS . '?m=34"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="mainline-clean" border="0"> BitTorrent Mainline Clean</a>';
 			$htmlMain .= '<p>';
 			$htmlMain .= '<strong>Template Cache</strong><br>';
-			$htmlMain .= 'Delete the Torrentflux-b4rt template cache:<br>';
+			$htmlMain .= 'Delete the TorrentFlux-NG template cache:<br>';
 			$htmlMain .= '<a href="' . _FILE_THIS . '?m=35"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="template-cache-clean" border="0"> Template Cache Clean</a>';
 			$htmlMain .= '<br><br>';
 			break;
@@ -552,9 +563,9 @@ function sa_maintenance($action = "") {
 
 		case "35": // Maintenance-Clean:template-cache-clean
 			$htmlTitle = "Maintenance - Clean - Template Cache";
-			$htmlMain .= '<br><strong>Cleaning Torrentflux-b4rt Template Cache:</strong><br>';
+			$htmlMain .= '<br><strong>Cleaning TorrentFlux-NG Template Cache:</strong><br>';
 			$result = cleanDir($cfg["path"].'.templateCache');
-			if (is_dir("/tmp/.templateCache")
+			if (is_dir("/tmp/.templateCache"))
 				$result = cleanDir("/tmp/.templateCache");
 			if (strlen($result) > 0)
 				$htmlMain .= '<br>Deleted compiled templates: <br><pre>'.$result.'</pre><br>';
@@ -574,7 +585,7 @@ function sa_maintenance($action = "") {
 		case "41": // Maintenance: Repair
 			$htmlTitle = "Maintenance - Repair";
 			$htmlMain .= '<br>';
-			$htmlMain .= 'Repairing Torrentflux-b4rt:';
+			$htmlMain .= 'Repairing TorrentFlux-NG:';
 			require_once("inc/classes/MaintenanceAndRepair.php");
 			MaintenanceAndRepair::repair();
 			$htmlMain .= ' <font color="green">done</font>';
@@ -632,8 +643,8 @@ function sa_maintenance($action = "") {
 			break;
 
 		case "6": // Maintenance: Lock
-			$htmlTitle = "Maintenance - Lock Torrentflux-b4rt Frontend";
-			$htmlMain .= '<br>Lock/unlock access to the Torrentflux-b4rt frontend.  Only the superadmin can access the locked frontend.<br><br><hr>';
+			$htmlTitle = "Maintenance - Lock TorrentFlux-NG Frontend";
+			$htmlMain .= '<br>Lock/unlock access to the TorrentFlux-NG frontend.  Only the superadmin can access the locked frontend.<br><br><hr>';
 			switch ($cfg['webapp_locked']) {
 				case 0:
 					$htmlMain .= '<strong><font color="green">Frontend currently unlocked.</font></strong>';
@@ -716,11 +727,11 @@ function sa_backup($action = "") {
 			$htmlMain .= '"Backup to Client" will create the backup archive and prompt you to save in your web browser.<br><br><strong>Please wait</strong> until the backup is complete.  Don\'t click stuff while backup archive is being created - you will be informed if something goes wrong so no need to stress it.<br><br>';
 			$htmlMain .= "<hr><strong>What Data is Backed Up?</strong><br>";
 			$htmlMain .= "<ul>";
-			$htmlMain .= "<li>Document root directory structure -<br>all files underneath the webserver document root folder where you installed Torrentflux-b4rt.<br><br></li>";
+			$htmlMain .= "<li>Document root directory structure -<br>all files underneath the webserver document root folder where you installed TorrentFlux-NG.<br><br></li>";
 			$htmlMain .= "<li>The Transfers folder directory structure -<br>all files in the .transfers folder located in the path configured in the admin pages 'server' tab.<br><br></li>";
 			$htmlMain .= "<li>The fluxd folder directory structure -<br>all files in the .fluxd folder located in the path configured in the admin pages 'server' tab.<br><br></li>";
 			$htmlMain .= "<li>The MRTG folder directory structure -<br>all files in the .mrtg folder located in the path configured in the admin pages 'server' tab.<br><br></li>";
-			$htmlMain .= "<li>The Torrentflux-b4rt database -<br>the database used to store information used in the day to day running of torrentflux-b4rt.<br><br></li>";
+			$htmlMain .= "<li>The TorrentFlux-NG database -<br>the database used to store information used in the day to day running of TorrentFlux-NG.<br><br></li>";
 			$htmlMain .= "</ul><hr>";
 
 			printPage();
@@ -821,9 +832,9 @@ function sa_log($action = "") {
 		case "0": // log-main
 			$htmlTitle = "Log Viewer";
 			$htmlMain .= '<br>Select the type of log you want to view below:<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?l=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="fluxd" border="0"> fluxd</a> - STDOUT logfiles for the torrentflux-b4rt fluxd daemon';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?l=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="fluxd" border="0"> fluxd</a> - STDOUT logfiles for the TorrentFlux-NG fluxd daemon';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?l=2"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="fluxd-error" border="0"> fluxd-error</a> - STDERR logfiles for the torrentflux-b4rt fluxd daemon';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?l=2"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="fluxd-error" border="0"> fluxd-error</a> - STDERR logfiles for the TorrentFlux-NG fluxd daemon';
 			$htmlMain .= '<p>';
 			$htmlMain .= '<a href="' . _FILE_THIS . '?l=3"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="fluazu" border="0"> fluazu</a> - logfiles for the fluazu interface to Azureus';
 			$htmlMain .= '<p>';
@@ -930,11 +941,11 @@ function sa_misc($action = "") {
 		case "0": // misc-main
 			$htmlTitle = "Miscellaneous Admin Tasks";
 			$htmlMain .= '<br>Select the task you wish to perform from below:<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?y=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="List files installed" border="0"> Lists</a> - view a list of currently installed torrentflux-b4rt files';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?y=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="List files installed" border="0"> Lists</a> - view a list of currently installed TorrentFlux-NG files';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?y=3"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Checksum Validation" border="0"> Checksum Validation</a> - check the integrity of installed torrentflux-b4rt files';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?y=3"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Checksum Validation" border="0"> Checksum Validation</a> - check the integrity of installed TorrentFlux-NG files';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?y=5"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Check Requirements" border="0"> Check Requirements</a> - check your server meets the requirements to run torrentflux-b4rt';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?y=5"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Check Requirements" border="0"> Check Requirements</a> - check your server meets the requirements to run TorrentFlux-NG';
 			$htmlMain .= '<br><br>';
 			break;
 
@@ -994,11 +1005,11 @@ function sa_misc($action = "") {
 		case "5": // misc - Check
 			$htmlTitle = "Misc - Check Requirements";
 			$htmlMain .= '<br>Select the requirements you wish to check from below:<p>';
-			$htmlMain .= "<strong>PHP Web</strong><br>Check your PHP web installation meets the requirements for web based activities in torrentflux-b4rt:<br>";
+			$htmlMain .= "<strong>PHP Web</strong><br>Check your PHP web installation meets the requirements for web based activities in TorrentFlux-NG:<br>";
 			$htmlMain .= '<a href="' . _FILE_THIS . '?y=51"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="php-web" border="0"> Check PHP Web Requirements</a><br><br>';
-			$htmlMain .= "<strong>PHP CLI</strong><br>Check your PHP commandline binary installation meets the requirements for commandline based activities in torrentflux-b4rt:<br>";
+			$htmlMain .= "<strong>PHP CLI</strong><br>Check your PHP commandline binary installation meets the requirements for commandline based activities in TorrentFlux-NG:<br>";
 			$htmlMain .= '<a href="' . _FILE_THIS . '?y=52"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="php-cli" border="0"> Check PHP CLI Binary Requirements</a><br><br>';
-			$htmlMain .= "<strong>Perl</strong><br>Check your Perl installation meets the requirements for perl based activities in torrentflux-b4rt:<br>";
+			$htmlMain .= "<strong>Perl</strong><br>Check your Perl installation meets the requirements for perl based activities in TorrentFlux-NG:<br>";
 			$htmlMain .= '<a href="' . _FILE_THIS . '?y=53"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Perl" border="0"> Check Perl Requirements</a>';
 			$htmlMain .= '<br><br>';
 			break;
@@ -1057,11 +1068,11 @@ function sa_tfb($action = "") {
 		case "0": // main
 			$htmlTitle = "About";
 			$htmlMain .= '<br>Select the information you wish to view from below:<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?z=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Version" border="0"> Version</a> - check your torrentflux-b4rt version is up to date';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?z=1"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Version" border="0"> Version</a> - check your TorrentFlux-NG version is up to date';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?z=2"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="News" border="0"> News</a> - view the release news for each version of torrentflux-b4rt';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?z=2"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="News" border="0"> News</a> - view the release news for each version of TorrentFlux-NG';
 			$htmlMain .= '<p>';
-			$htmlMain .= '<a href="' . _FILE_THIS . '?z=3"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Changelog" border="0"> Changelog</a> - view the changelogs for each version of torrentflux-b4rt';
+			$htmlMain .= '<a href="' . _FILE_THIS . '?z=3"><img src="themes/'.$cfg["theme"].'/images/arrow.gif" width="9" height="9" title="Changelog" border="0"> Changelog</a> - view the changelogs for each version of TorrentFlux-NG';
 			$htmlMain .= '<br><br>';
 			break;
 
@@ -1312,7 +1323,7 @@ function sa_update($action = "") {
 			sendLine('<strong>Update - Files</strong><br><br><em>Updating Files... Please Wait...</em><br><ul>');
 			sendLine('<li>Getting Update-Archive:<br>');
 			@ini_set("allow_url_fopen", "1");
-			@ini_set("user_agent", "torrentflux-b4rt/". _VERSION);
+			@ini_set("user_agent", "TorrentFlux-NG/". _VERSION);
 			// get md5
 			$md5hash = getDataFromUrl(_SUPERADMIN_URLBASE . _SUPERADMIN_PROXY ."?u=4&v=" . _VERSION);
 			if ((!isset($md5hash)) || (strlen($md5hash) != 32)) {
@@ -2323,7 +2334,7 @@ function validateLocalFiles() {
 	// download list
 	$checksumsString = "";
 	@ini_set("allow_url_fopen", "1");
-	@ini_set("user_agent", "torrentflux-b4rt/". _VERSION);
+	@ini_set("user_agent", "TorrentFlux-NG/". _VERSION);
 	if ($urlHandle = @fopen(_SUPERADMIN_URLBASE._FILE_CHECKSUMS_PRE._VERSION._FILE_CHECKSUMS_SUF, 'r')) {
 		stream_set_timeout($urlHandle, 15);
 		$info = stream_get_meta_data($urlHandle);
@@ -2571,20 +2582,20 @@ function phpCheckWeb() {
 		$state .= '<font color="green">Ok</font>';
 		$state .= "</strong><br>";
 		$retVal .= $state;
-		$retVal .= "torrentflux-b4rt should run on this system.";
+		$retVal .= "TorrentFlux-NG should run on this system.";
 	} else {
 		if (($errors == 0) && ($warnings > 0)) {
 			// may run with flaws
 			$state .= '<font color="orange">Warning</font>';
 			$state .= "</strong><br>";
 			$retVal .= $state;
-			$retVal .= "torrentflux-b4rt may run on this system, but there may be problems.";
+			$retVal .= "TorrentFlux-NG may run on this system, but there may be problems.";
 		} else {
 			// not ok
 			$state .= '<font color="red">Failed</font>';
 			$state .= "</strong><br>";
 			$retVal .= $state;
-			$retVal .= "torrentflux-b4rt cannot run on this system.";
+			$retVal .= "TorrentFlux-NG cannot run on this system.";
 		}
 	}
 	// errors

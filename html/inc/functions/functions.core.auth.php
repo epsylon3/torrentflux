@@ -95,7 +95,8 @@ function isAuthenticated() {
 	// user exists ?
 	$recordset = $db->Execute("SELECT uid, hits FROM tf_users WHERE user_id=".$db->qstr($cfg["user"]));
 	if (!$recordset) {
-		print "<b>Error in query isAuthenticated()</b><p>";
+		print "<p><b>Error in query isAuthenticated()</b></p>";
+		print "<p>".$db->ErrorMsg()."<p/>";
 		return 0;
 	}
 	if ($recordset->RecordCount() != 1) {

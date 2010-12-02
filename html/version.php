@@ -1,1 +1,1 @@
-<?php define("_VERSION", "svn-trunk"); ?>
+<?php define("_VERSION", "1.0git"); ?>

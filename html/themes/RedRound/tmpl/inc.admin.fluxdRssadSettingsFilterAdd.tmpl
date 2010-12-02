@@ -1,0 +1,39 @@
+<h1>add filter</h1>
+<p class="NormalText"><a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a></p>
+<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_filter_add')">
+<table id="adminfluxdSettingsRSSadFilterAdd">
+	<tmpl_if name="filtername">
+		<p><input type="Submit" value="Add Filter"></p>
+		<tr>
+			<th>Name</th>
+			<td><input type="Text" size="30" maxlength="255" name="filtername" id="filtername" value="<tmpl_var name="filtername">">
+					<input type="hidden" name="pageop" value="saveFilter">
+					<input type="hidden" name="new" value="true">
+					<input type="hidden" name="rssad_filtercontent" value="<tmpl_var name="rssad_filtercontent">">
+			</td>
+		</tr>
+		<tr>
+			<th>Add Filter-Entry</th>
+			<td>
+				<input type="text" name="rssad_filter_entry" id="rssad_filter_entry" size="45">
+				<input type="button" name="addButton" value="add" onclick="addRssadFilterEntry()">
+			</td>
+		</tr>
+		<tr>
+			<th>Filter-Entries</th>
+			<td>
+				<select name="rssad_filters" id="rssad_filters" size="10" style="width:350px;">
+				<tmpl_if name="rssad_filter_list">
+				<tmpl_loop name="rssad_filter_list">
+					<option value="<tmpl_var name="filter">"><tmpl_var name="filter"></option>
+				</tmpl_loop>
+				</tmpl_if>
+				</select>
+				<input type="button" name="remButton" value="remove" onclick="removeRssadFilterEntry()">
+			</td>
+		</tr>
+	</table>
+</form>
+	<tmpl_else>
+		<p class="NormalText">There was an error.</p>
+</tmpl_if>

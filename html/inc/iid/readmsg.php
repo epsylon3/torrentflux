@@ -96,6 +96,7 @@ if (isset($_REQUEST['mid'])) {
 	}
 	$tmpl->setvar('_SENDMESSAGETO', $cfg['_SENDMESSAGETO']);
 	$tmpl->setvar('_COMPOSE', $cfg['_COMPOSE']);
+	$tmpl->setvar('_CHOOSEAUSER', $cfg['_CHOOSEAUSER']);
 	$userList = array();
 	for ($inx = 0; $inx < sizeof($cfg['users']); $inx++)
 		array_push($userList, array('user' => htmlentities($cfg['users'][$inx], ENT_QUOTES)));
@@ -111,6 +112,7 @@ $tmpl->setvar('_DELETE', $cfg['_DELETE']);
 $tmpl->setvar('_DATE', $cfg['_DATE']);
 $tmpl->setvar('_ADMIN', $cfg['_ADMIN']);
 $tmpl->setvar('_MESSAGE', $cfg['_MESSAGE']);
+$tmpl->setvar('_INBOX', $cfg['_INBOX']);
 $tmpl->setvar('_RETURNTOMESSAGES', $cfg['_RETURNTOMESSAGES']);
 //
 $tmpl->setvar('table_admin_border', $cfg["table_admin_border"]);

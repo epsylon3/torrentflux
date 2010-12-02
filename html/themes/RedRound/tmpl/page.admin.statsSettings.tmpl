@@ -1,0 +1,180 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<form name="theForm" action="admin.php?op=updateStatsSettings" method="post" onsubmit="return validateSettings('stats')">
+<h1>stats settings</h1>
+<p><input type="Submit" value="Update Settings"></p>
+<h2>Overview</h2>
+<p class="NormalText">
+	The <a href="stats.php?t=all" target="_blank" title="TorrentFlux-NG stats script">stats.php</a> script is used to display various statistics for various aspects of TorrentFlux-NG, including:
+	<ul>
+		<li><a href="stats.php?t=server" target="_blank" title="TorrentFlux-NG server stats">Server</a> - up/down bandwidth, net connections, diskspace, etc</li>
+		<li><a href="stats.php?t=xfer" target="_blank" title="TorrentFlux-NG xfer stats">Xfer</a> - totals transferred globally and per user per day/week/month</li>
+		<li><a href="stats.php?t=users" target="_blank" title="TorrentFlux-NG users stats">Users</a> - current online status of TorrentFlux-NG users</li>
+		<li><a href="stats.php?t=transfers" target="_blank" title="TorrentFlux-NG transfers stats">Transfers</a> - current status, up/down bandwidth, estimated time left etc for all transfers in the transfer list</li>
+		<li><a href="stats.php?usage" target="_blank" title="TorrentFlux-NG stats">Transfer</a> - stats for individual transfers in the transfer list</li>
+	</ul>
+</p>
+<p class="NormalText">
+	The stats output is available in RSS, plain text or customized XML. <a href="stats.php?usage" target="_blank" title="TorrentFlux-NG stats usage">More info about Stats Script usage</a><br/>&nbsp;
+</p>
+<table id="adminStatsSettings">
+	<tr>
+		<th>
+			Publicly Visible Stats<br /><span>Enable/disable publicly visible statistics - if enabled, superadmin 
+			level stats (server load, all transfer details, etc) are visible to the public without needing to authenticate.</span>
+		</th>
+		<td>
+			<select name="stats_enable_public" id="stats_enable_public">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="stats_enable_public" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Show Usage When Called Without Arguments<br /><span>Enable/disable the option to display 
+			usage/help when the stats.php script is called without any arguments in the URL. 
+			<a href="stats.php?usage" target="_blank">Show Usage</a></span>
+		</th>
+		<td class="alt">
+			<select name="stats_show_usage" id="stats_show_usage">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="stats_show_usage" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Use Compression<br /><span>Enable/disable the use of compression by default when sending statistics - 
+			using compression uses less bandwidth but takes up more CPU time on the server.</span>
+		</th>
+		<td>
+			<select name="stats_default_compress" id="stats_default_compress">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="stats_default_compress" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Compression Level<br /><span>Specify the level of compression to use when transferring data - level 0 = no compression 
+			(data is sent out 'as is'), level 9 = maximum compression (data is compressed as small as possible 
+			before sending but takes up some minor extra CPU time to compress).</span>
+		</th>
+	<td class="alt">
+		<select name="stats_deflate_level" id="stats_deflate_level">
+		<tmpl_loop name="deflate_list">
+			<option value="<tmpl_var name="i">"
+		<tmpl_if name="is_selected" value="1">
+			selected
+		</tmpl_if>
+			><tmpl_var name="i"></option>
+		</tmpl_loop>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Delimiting Character To Use In TXT Mode<br /><span>Specify the character to use for delimiting/separating fields when the format 
+			type is 'txt' - this character will be used to split one item in the output from the next.</span>
+		</th>
+		<td><input name="stats_txt_delim" id="stats_txt_delim" type="Text" maxlength="1" value="<tmpl_var name="stats_txt_delim">" size="1"></td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Send Header Fields In TXT Mode<br /><span>Enable/disable sending of header fields at the top of text mode output - when enabled, each of 
+			the statistics column headers will be sent out at the top of the output. Note: Only used in txt mode.</span>
+		</th>
+		<td class="alt">
+			<select name="stats_default_header" id="stats_default_header">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="stats_default_header" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Default Statistic Type To Send<br /><span>Specify the default type of statistic to send out.</span></th>
+		<td>
+			<select name="stats_default_type" id="stats_default_type">
+				<option value="all"
+			<tmpl_if name="stats_default_type" value="all">
+				selected
+			</tmpl_if>
+				>all</option>
+				<option value="server"
+			<tmpl_if name="stats_default_type" value="server">
+				selected
+			</tmpl_if>
+				>server</option>
+				<option value="xfer"
+			<tmpl_if name="stats_default_type" value="xfer">
+				selected
+			</tmpl_if>
+				>xfer</option>
+				<option value="users"
+			<tmpl_if name="stats_default_type" value="users">
+				selected
+			</tmpl_if>
+				>users</option>
+				<option value="transfers"
+			<tmpl_if name="stats_default_type" value="transfers">
+				selected
+			</tmpl_if>
+				>transfers</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Default Output Format<br />Specify the default output format to use when sending statistics - rss/txt/xml.<span></th>
+			<td class="alt">
+				<select name="stats_default_format" id="stats_default_format">
+					<option value="xml"
+				<tmpl_if name="stats_default_format" value="xml">
+					selected
+				</tmpl_if>
+					>xml</option>
+				<option value="rss"
+				<tmpl_if name="stats_default_format" value="rss">
+					selected
+				</tmpl_if>
+					>rss</option>
+				<option value="txt"
+				<tmpl_if name="stats_default_format" value="txt">
+					selected
+				</tmpl_if>
+					>txt</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Send As Attachment<br /><span>Enable/disable sending of statistics as an HTTP attachment - browser client will prompt to save the attachment as a file.</span></th>
+			<td>
+				<select name="stats_default_attach" id="stats_default_attach">
+					<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="stats_default_attach" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+				</select>
+			</td>
+		</tr>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+</form>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

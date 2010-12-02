@@ -33,6 +33,7 @@ if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 tmplInitializeInstance($cfg["theme"], "page.admin.transferSettings.tmpl");
 
 // torrent
+$tmpl->setvar('enable_torrent', $cfg["enable_torrent"]);
 $tmpl->setvar('btclient', $cfg["btclient"]);
 $tmpl->setvar('metainfoclient', $cfg["metainfoclient"]);
 $tmpl->setvar('btclient_tornado_options', $cfg["btclient_tornado_options"]);
@@ -51,6 +52,19 @@ $tmpl->setvar('enable_file_priority', $cfg["enable_file_priority"]);
 $tmpl->setvar('superseeder', $cfg["superseeder"]);
 $tmpl->setvar('skiphashcheck', $cfg["skiphashcheck"]);
 $tmpl->setvar('enable_sharekill', $cfg["enable_sharekill"]);
+
+$tmpl->setvar('transmission_rpc_enable', $cfg["transmission_rpc_enable"]);
+$tmpl->setvar('transmission_rpc_host', $cfg["transmission_rpc_host"]);
+$tmpl->setvar('transmission_rpc_port', $cfg["transmission_rpc_port"]);
+$tmpl->setvar('transmission_rpc_user', $cfg["transmission_rpc_user"]);
+$tmpl->setvar('transmission_rpc_password', $cfg["transmission_rpc_password"]);
+
+$tmpl->setvar('vuze_rpc_enable', $cfg["vuze_rpc_enable"]);
+$tmpl->setvar('vuze_rpc_host', $cfg["vuze_rpc_host"]);
+$tmpl->setvar('vuze_rpc_port', $cfg["vuze_rpc_port"]);
+$tmpl->setvar('vuze_rpc_user', $cfg["vuze_rpc_user"]);
+$tmpl->setvar('vuze_rpc_password', $cfg["vuze_rpc_password"]);
+
 // wget
 $tmpl->setvar('enable_wget', $cfg["enable_wget"]);
 $tmpl->setvar('wget_limit_rate', $cfg["wget_limit_rate"]);
@@ -69,6 +83,8 @@ $tmpl->setvar('nzbperl_badAction', $cfg['nzbperl_badAction']);
 $tmpl->setvar('nzbperl_server', $cfg['nzbperl_server']);
 $tmpl->setvar('nzbperl_user', $cfg['nzbperl_user']);
 $tmpl->setvar('nzbperl_pw', $cfg['nzbperl_pw']);
+$tmpl->setvar('nzbperl_ssl', $cfg['nzbperl_ssl']);
+$tmpl->setvar('nzbperl_port', $cfg['nzbperl_port']);
 $tmpl->setvar('nzbperl_threads', $cfg['nzbperl_threads']);
 $nzbThreadList = array();
 array_push($nzbThreadList, array(

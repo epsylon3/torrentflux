@@ -1,0 +1,81 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<h1>link settings</h1>
+<p class="NormalText">Edit the links you want displayed on the index page in the link tab for all users.</p>
+<table id="adminEditLinksForm">
+	<tr>
+		<th colspan="2">Add new link</th>
+	</tr>
+	<tr>
+		<form action="admin.php?op=addLink" method="post">
+		<td>
+			<label for="newLink"><tmpl_var name="_FULLURLLINK">:</label>
+			<input type="Text" size="30" maxlength="255" name="newLink" id="newLink">
+		</td>
+		<td class="alt">	
+			<label for="newSite"><tmpl_var name="_FULLSITENAME">:</label>
+			<input type="Text" size="30" maxlength="255" name="newSite" id="newSite">
+		</td>
+	</tr>
+	<tr>
+		<th colspan="2" class="button"><input type="Submit" value="<tmpl_var name="_UPDATE">"></th>
+	</tr>	
+		</form>
+	</tr>
+</table>
+<div style="height:25px;"></div>
+<table id="adminEditLinksList">
+	<tr>
+		<th class="nobg">Links</th>
+		<th>move</th>
+	</tr>
+	<tmpl_loop name="link_list">
+	<tr>
+		<tmpl_if name="is_edit">
+			<td colspan="2" class="edit">
+				<form action="admin.php?op=editLink" method="post">
+					<input type="hidden" name="lid" value="<tmpl_var name="lid">">
+					<label for="editLink"><tmpl_var name="_FULLURLLINK">:</label>
+					<input type="Text" size="30" maxlength="255" name="editLink" id="editLink" value="<tmpl_var escape="html" name="url">">
+					<label for="editSite"><tmpl_var name="_FULLSITENAME">:</label>
+					<input type="Text" size="30" maxlength="255" name="editSite" id="editSite" value="<tmpl_var escape="html" name="sitename">">
+					<input type="Submit" value="<tmpl_var name="_UPDATE">"><br>
+				</form>
+			</td>
+		</tmpl_else>
+		<tmpl_if name="__ODD__">
+			<th class="row">
+		<tmpl_else>
+			<th class="rowalt">
+		</tmpl_if>
+				<a href="admin.php?op=deleteLink&lid=<tmpl_var name="lid">" onclick="return confirm('Delete Link <tmpl_var name="sitename"> ?')">
+					<img src="themes/<tmpl_var name="theme">/images/admin/editLinks/delete.png" title="<tmpl_var name="_DELETE"> <tmpl_var name="lid">">
+				</a>
+				<a href="admin.php?op=editLinks&edit=<tmpl_var name="lid">">
+					<img src="themes/<tmpl_var name="theme">/images/admin/editLinks/edit.png" title="<tmpl_var name="_EDIT"> <tmpl_var name="lid">"></a>
+			<tmpl_if name="enable_dereferrer">
+				<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="url">" target="_blank"><tmpl_var escape="html" name="sitename"></a>
+			<tmpl_else>
+				<a href="<tmpl_var escape="html" name="url">" target="_blank"><tmpl_var escape="html" name="sitename"></a>
+			</tmpl_if>
+		</th>
+	<tmpl_if name="__ODD__">
+		<td>
+	<tmpl_else>
+		<td class="alt">
+	</tmpl_if>
+	<tmpl_if name="counter" value="2">
+		<a href='admin.php?op=moveLink&amp;direction=up&amp;lid=<tmpl_var name="lid">'>
+		<img src="themes/<tmpl_var name="theme">/images/admin/editLinks/up.png" title='Move link up' alt='Up'></a>
+	<tmpl_elseif name="counter" value="1">
+		<img src="themes/<tmpl_var name="theme">/images/admin/editLinks/blank.png">
+	</tmpl_if>
+	<tmpl_if name="counter2">
+		<a href='admin.php?op=moveLink&amp;direction=down&amp;lid=<tmpl_var name="lid">'>
+		<img src="themes/<tmpl_var name="theme">/images/admin/editLinks/down.png" title='Move link down' alt='Down'></a>
+	</tmpl_if>
+	</td>	
+</tmpl_if>
+</tr>
+</tmpl_loop>
+</table>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

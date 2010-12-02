@@ -1,0 +1,21 @@
+<tmpl_include name="inc.transferLayoutHeader.tmpl">
+<h1>Scrape</h1>
+<table class="transferScrape">
+	<tr>
+		<td>
+			<table>
+				<tr>
+					<td><tmpl_var name="scrapeInfo"></td>
+				</tr>
+				<tmpl_if name="hasScrape" value="1">
+				<tr>
+					<td>
+						<img src="image.php?i=pieTransferScrape&transfer=<tmpl_var name="transfer">" border="0" title="Scrape">
+					</td>
+				</tr>
+				</tmpl_if>
+			</table>
+		</td>
+	</tr>
+</table>
+<tmpl_include name="inc.transferLayoutFooter.tmpl">

@@ -1,0 +1,314 @@
+RedRound for TorrentFlux-NG consist of 4 parts.
+	- Users UI which users see e.g main/history/message/dir/rss torrents
+	- Sub Users UI which control each download & dir. You access this by clicking on pencil icon in index or various icons in dir
+	- Admin pages
+	- Super Admin pages
+
+PAGE: 
+* inc.LayoutHeader.tmpl		header of each page contains <html> <head></head> <title></title> <body> inc.UserBar
+* inc.LayoutFooter.tmpl		footer of each page contains </body> </html>
+* inc.LayoutUserBar.tmpl	top right bar contains links to home/dir/profile/history/msg/rss_torrents/admin/help/logout icons
+CSS: default.css
+IMAGES:
+* images/mainLayout
+* images/UserBar
+/****************************
+PAGE: page.index.tmpl
+CSS: index.css
+IMAGES: images/index
+SUB-PAGES:
+INC-PAGES:
+* inc.indexRefreshOptions.tmpl		Page refresh options, meta/ajax, list/users/stats
+* inc.indexStatsBar.tmpl		top bar which displays xfer/tf storage/bandwidth stats NEEDS scripts/progress-jsProgressBarHandler.js (contains hardcoded paths to images)
+ * inc.driveSpaceBar_xfer.tmpl
+ * inc.driveSpaceBar_tf.tmpl
+ * inc.bandwidthBars_xfer.tmpl
+ * inc.bandwidthBars_tf.tmpl
+* inc.indexStatsGoodLooking.tmpl	top bar which displays good looking stats
+**** TABS
+* inc.transferList.tmpl		display transfer table with downloads & actions edit/download/stop/start/seed/delete
+ !!! SEE SECTION CONTROL FOR page.transferXXXX.tmpl (transfer control settings)
+* inc.indexTorrentSearch.tmpl	search torrents
+* inc.indexWget.tmpl		WGET inject
+* inc.indexNZB.tmpl		NZBPerl
+* inc.indexUsers.tmpl		List of Online/Offline users
+* inc.indexLinks.tmpl		List of Links
+* inc.indexStats.tmpl		Server Transfer stats
+* inc.indexTorrentUpload.tmpl	meta upload
+* inc.indexTorrentGet.tmpl	upload torrent by web
+NOTES:
+* tab uses scripts/tab-view.js and scripts/tab-ajax.js
+* tab-view.js contains hardcoded paths to right side images of the tab
+* tab-view.js requires at least 2 fixed tabs because of javascript syntax which uses a , after each tab and none for the last. if a , is added for the last, it will not work.
+/****************************
+PAGE: page.dir.tmpl
+CSS: dir.css
+IMAGES: images/dir/
+SUB-PAGES:
+* page.maketorrent.tmpl	CANNOT TEST MAINLINE
+* page.move.tmpl
+* page.rename.tmpl
+* page.vlc.tmpl
+* page.viewnfo.tmpl
+* page.uncomp.tmpl
+* page.checkSFV.tmpl
+INC-PAGES:
+NOTES: 
+/****************************
+PAGE: page.history.tmpl
+CSS: history.css
+IMAGES: images/history
+SUB-PAGES:
+INC-PAGES:
+ * inc.historyNav.tmpl
+/****************************
+PAGE: page.profile.tmpl
+CSS: profile.css
+IMAGES: images/profile
+SUB-PAGES:
+* page.cookiehelp.tmpl
+INC-PAGES:
+* inc.personalSettingsForm.tmpl
+* inc.profileUpdateMessage.tmpl
+* inc.profileShowCookies.tmpl
+* inc.profileShowTransferProfile.tmpl
+* inc.goodLookingStatsForm.tmpl
+* inc.sortOrderSettings.tmpl
+* inc.indexPageSettingsForm.tmpl
+NOTES:
+/****************************
+PAGE: page.readmsg.tmpl
+CSS: readmsg.css
+IMAGES: images/msg
+SUB-PAGES:
+INC-PAGES:
+* inc.readmsgReadMSG.tmpl
+* inc.readmsgComposeBar.tmpl
+NOTES:
+/****************************
+PAGE: page.message.tmpl
+CSS: message.css
+IMAGES:
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.readrss.tmpl
+CSS: readrss.css
+IMAGES: images/readrss
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+
+
+/****************************
+Control
+/****************************
+PAGES:
+* inc.transferFoot.tmpl footer of each page contains </body></html>
+* inc.transferHead.tmpl header of each page contains <html><head></head><body>
+* inc.transferNavi.tmpl navigation menu of each page
+CSS: transfer.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.transferStats.tmpl
+CSS: transferStats.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+contains html tags which is unknow why there're used. Before <tmpl_else>. (fixed in v0.3)
+/****************************
+PAGE: page.transferHosts.tmpl
+CSS: transferHosts.css
+IMAGES: images/transferHosts
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.transferScrape.tmpl
+CSS: transferScrape.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES: UNTESTED
+/****************************
+PAGE: page.transferImages.tmpl
+CSS: transferImages.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES: Uses syntax which only work with svn release. If older version is used, it shows pie in default color.
+/****************************
+PAGE: page.transferLog.tmpl
+CSS: transferLog.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.transferDetails.tmpl
+CSS: transferDetails.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.transferFiles.tmpl
+CSS: transferFiles.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES: contains something that actually needs to be removed.
+/****************************
+PAGE: page.transferSettings.tmpl
+CSS: transferSettings.css
+IMAGES:
+SUB-PAGES: 
+INC-PAGES:
+* inc.transferProfile.tmpl
+* inc.transferSettings.tmpl
+* inc.dirTree.tmpl
+* inc.goodLookingStatsForm.tmpl (REMOVED)
+NOTES: contains 3x msg for error/success
+/****************************
+PAGE: page.transferControl.tmpl
+CSS: transferControl.css
+IMAGES:
+SUB-PAGES:
+INC-PAGES:
+* inc.transferProfile.tmpl
+* inc.transferSettings.tmpl
+* inc.dirTree.tmpl
+NOTES:
+/****************************
+
+
+/****************************
+Admin
+/****************************
+PAGE: page.admin.serverSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.admin.transferSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+* page.admin.fluazuSettings.tmpl (TO BE DONE!)
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.admin.indexSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+* inc.goodLookingStatsForm.tmpl (NO LONGER IN USE)
+* inc.sortOrderSettings.tmpl (NO LONGER IN USE)
+* inc.indexPageSettingsForm.tmpl (NO LONGER IN USE)
+* inc.moveSettings.tmpl (NO LONGER IN USE)
+NOTES:
+/****************************
+PAGE: page.admin.dirSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+JS:
+* js/functions.js
+* js/adminSettings.js
+* js/moveSettings.js
+* js/resdirSettings.js
+NOTES:
+/****************************
+PAGES: page.admin.statsSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+JS:
+* js/functions.js
+* js/adminSettings.js
+NOTES:
+/****************************
+PAGE: page.admin.fluxdSettings.tmpl 
+CSS: admin.css
+IMAGES: images/admin/fluxdSettings
+SUB-PAGES: 2
+INC-PAGES:
+JS:
+* js/functions.js
+* js/adminSettings.js
+* js/fluxdSettings.js
+NOTES:
+/****************************
+PAGE: page.admin.xferSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+JS:
+* js/functions.js
+* js/adminSettings.js
+NOTES:
+/****************************
+PAGE: page.admin.searchSettings.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.admin.editLinks.tmpl
+CSS: admin.css
+IMAGES: images/admin/editLinks
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+PAGE: page.admin.ShowUsers.tmpl
+CSS: admin.css
+IMAGES: images/admin/editUsers, images/user.gif/superadmin.gif
+SUB-PAGES:
+* page.admin.CreateUser.tmpl
+* page.admin.addUser.tmpl
+* page.admin.editUser.tmpl
+INC-PAGES:
+* inc.userSection.tmpl
+JS:
+* js/functions.js (don't work)
+* js/userSettings.js (don't work)
+NOTES:
+/****************************
+PAGE: page.admin.ShowUserActivity.tmpl
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************
+
+FOLLOWING PAGES BELONG TO A BAR IN THE MIDDLE OF DEFAULT TF LAYOUT. REMOVED FOR REDROUND v0.5
+
+<a href="JavaScript:openServerMonitor()"> --> page.servermon.tmpl DELETED. Server Stats/Que Stats are shown under Stats tab as well.
+<a href="stats.php?t=all&amp;f=rss" title="RSS Stats" target="_blank"> Link
+<a href="index.php?iid=dir&amp;dir=<tmpl_var name="path_incoming">"> NO LONGER IN USE, link in top bar directs users to their own folder, from there you can browse to anywhere if (super)admin
+<a href="index.php?iid=dir"> link to user directory SEE ABOVE
+
+/****************************
+PAGES:
+* 
+CSS: admin.css
+IMAGES: none
+SUB-PAGES:
+INC-PAGES:
+NOTES:
+/****************************

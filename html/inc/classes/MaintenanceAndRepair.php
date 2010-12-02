@@ -180,6 +180,7 @@ class MaintenanceAndRepair
 			$this->_maintenanceFluxd();
 			// fluazu
 			$this->_maintenanceFluazu();
+			$this->_maintenanceFluazuTransfers();
 			// transfers
 			$this->_maintenanceTransfers($type == MAINTENANCEANDREPAIR_TYPE_EXT);
 			// database
@@ -204,6 +205,7 @@ class MaintenanceAndRepair
 		$this->_maintenanceFluxd();
 		// fluazu
 		$this->_maintenanceFluazu();
+		$this->_maintenanceFluazuTransfers();
 		// repair app
 		$this->_repairApp();
 		// database
@@ -315,6 +317,41 @@ class MaintenanceAndRepair
 		}
 		/* done */
 		$this->_outputMessage("fluazu-maintenance done.\n");
+	}
+	
+	/**
+	 * _maintenanceFluazuTransfers
+	 * delete leftovers of fluazu (only do this if daemon is not running)
+	 */
+	function _maintenanceFluazuTransfers() {
+
+		global $cfg;
+		// output
+		$this->_outputMessage("fluazu-Transfers maintenance...\n");
+	
+		// cmd-files of transfer-clients
+		$pidFiles = array();
+		if ($dirHandle = @opendir($cfg["transfer_file_path"])) {
+			while (false !== ($file = @readdir($dirHandle))) {
+				if ((strlen($file) > 3) && ((substr($file, -4, 4)) == ".pid"))
+					array_push($pidFiles, $file);
+			}
+			@closedir($dirHandle);
+		}
+		
+		foreach ($pidFiles as $pidFile) {
+			$transfer = (substr($pidFile, 0, -4));
+			if (getTransferClient($transfer) == "azureus") {
+				$sf = new StatFile($transfer, getOwner($transfer)); 
+				if ($sf->running == "0") {
+					// set stopped flag in db
+					stopTransferSettings($transfer);
+					unlink($cfg["transfer_file_path"].$pidFile);
+				}
+			}
+		}
+		/* done */
+		$this->_outputMessage("fluazu-Transfers maintenance done.\n");
 	}
 	
 	/**
@@ -654,27 +691,31 @@ class MaintenanceAndRepair
 
 	/* output-methods */
 
-    /**
-     * output message
-     *
-     * @param $message
-     */
+	/**
+	 * output message
+	 *
+	 * @param $message
+	 */
 	function _outputMessage($message) {
-        // only in cli-mode
+		// in cli-mode
 		if ($this->_mode == MAINTENANCEANDREPAIR_MODE_CLI)
 			printMessage($this->name, $message);
-    }
+		else
+			addGrowlMessage($this->name, $message);
+	}
 
-    /**
-     * output error
-     *
-     * @param $message
-     */
+	/**
+	 * output error
+	 *
+	 * @param $message
+	 */
 	function _outputError($message) {
-        // only in cli-mode
+		// in cli-mode
 		if ($this->_mode == MAINTENANCEANDREPAIR_MODE_CLI)
 			printError($this->name, $message);
-    }
+		else
+			addGrowlMessage($this->name, $message);
+	}
 
 }
 

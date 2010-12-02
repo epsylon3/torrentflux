@@ -1,0 +1,8 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<h1>View NFO</h1>
+	<a href="index.php?iid=viewnfo&path=<tmpl_var name="file">&dos=1">DOS Format</a> :-:
+	<a href="index.php?iid=viewnfo&path=<tmpl_var name="file">&win=1">WIN Format</a> :-:
+	<a href="index.php?iid=dir&dir=<tmpl_var name="folder">">Back</a>
+<div style="height:10px;"></div>
+<div id="ViewNFO"><pre><tmpl_var name="output"></pre></div>
+<tmpl_include name="inc.LayoutFooter.tmpl">

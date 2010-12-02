@@ -1,0 +1,25 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<h1><tmpl_var name="_UPLOADACTIVITY"></h1>
+<p>(<tmpl_var name="days_to_keep"> <tmpl_var name="_DAYS">)</p>
+<table id="history" class="strip">
+<tmpl_include name="inc.historyNav.tmpl">
+	<tr>
+		<th><tmpl_var name="_USER"></th>
+		<th><tmpl_var name="_FILE"></th>
+		<th><tmpl_var name="_TIMESTAMP"></th>
+	</tr>
+<tmpl_if name="inx">
+		<tr>
+			<td colspan="6">-- <tmpl_var name="_NORECORDSFOUND"> --</td>
+		</tr>
+<tmpl_else>
+		<tmpl_loop name="file_result">
+	<tr>
+		<td class="historyUser"><a href="index.php?iid=message&amp;to_user=<tmpl_var name="user_id">"><tmpl_var name="user_id"></a></td>
+		<td class="historyFile"><tmpl_var name="file"></td>
+		<td class="historyDate"><tmpl_var name="date"></td>
+	</tr>
+</tmpl_loop>
+</tmpl_if>
+</table>
+<tmpl_include name="inc.LayoutFooter.tmpl">

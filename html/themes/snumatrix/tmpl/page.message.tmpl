@@ -1,0 +1,40 @@
+<tmpl_include name="inc.head.tmpl">
+<tmpl_include name="inc.subhead.tmpl">
+<form name="theForm" method="post" action="index.php?iid=message">
+	<table border="0" cellpadding="3" cellspacing="2" width="100%">
+		<tr>
+			<td bgcolor="<tmpl_var name="table_data_bg">" align="right"><font size=2 face=Arial><label for="to_user"><tmpl_var name="_TO">:</label></font></td>
+			<td bgcolor="<tmpl_var name="table_data_bg">"><font size=2 face=Arial><input type="Text" name="to_user" id="to_user" value="<tmpl_var name="to_user">" size="20" readonly="true"></font></td>
+		</tr>
+		<tr>
+			<td bgcolor="<tmpl_var name="table_data_bg">" align="right"><font size=2 face=Arial><label for="from_user"><tmpl_var name="_FROM">:</label></font></td>
+			<td bgcolor="<tmpl_var name="table_data_bg">"><font size=2 face=Arial><input type="Text" name="from_user" id="from_user" value="<tmpl_var name="user">" size="20" readonly="true"></font></td>
+		</tr>
+		<tr>
+			<td bgcolor="<tmpl_var name="table_data_bg">" colspan="2">
+				<div align="center">
+					<table border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td>
+								<font size=2 face=Arial><label for="message"><tmpl_var name="_YOURMESSAGE">:</label><br>
+								<textarea cols="72" rows="10" name="message" id="message" wrap="hard" tabindex="1"><tmpl_var name="message"></textarea><br>
+								<input type="Checkbox" name="to_all" id="to_all" value=1><label for="to_all"><tmpl_var name="_SENDTOALLUSERS"></label>
+								<tmpl_if name="isAdmin">
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<input type="Checkbox" name="force_read" id="force_read" value=1><label for="force_read"><tmpl_var name="_FORCEUSERSTOREAD"></label>
+								</tmpl_if>
+								<br>
+								<div align="center">
+									<input type="Submit" name="Submit" value="<tmpl_var name="_SEND">">
+								</div>
+								</font>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+</form>
+<script>document.theForm.message.focus();</script>
+<tmpl_include name="inc.subfoot.tmpl">

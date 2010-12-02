@@ -1,0 +1,435 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	background: #eeeeee;
+	background-repeat: repeat-x;
+	color: black;
+}
+
+body, .ui-widget {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+
+.container { 
+	margin: 0 auto; 
+	min-width: 900px; 
+	display: table;
+}
+
+#AngleTopLeft { background:url('../images/mainLayout/Box/round.png') no-repeat top left; height:30px; }
+#AngleTopRight { background: url('../images/mainLayout/Box/round.png') no-repeat top right; height:30px; }
+#AngleTopBorder { background:url('../images/mainLayout/Box/top.png') repeat-x top; height:30px; margin:-30px 30px; }
+#ContentBorderLeft { background:#fff url('../images/mainLayout/Box/left.png') repeat-y left; }
+#ContentBorderRight { background:url('../images/mainLayout/Box/right.png') repeat-y right; padding: 0 30px;}
+#AngleBottomLeft { background:url('../images/mainLayout/Box/round.png') no-repeat bottom left; height:40px; }
+#AngleBottomRight { background:url('../images/mainLayout/Box/round.png') no-repeat bottom right;height:40px; }
+#AngleBottomBorder { background:url('../images/mainLayout/Box/bottom.png') repeat-x bottom; height:40px; margin:-40px 40px;}
+
+a {
+	color: #B22037;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img { border: none;}
+
+#header {
+	margin: 0 auto;
+	width: 1024px;
+	height: 100px;
+	background: #B22037 url('../images/mainLayout/Box/header.jpg');
+	background-repeat: no-repeat;
+}
+
+#UserBar {
+	text-align: center;
+	padding-top: 15px;
+	margin: 0 auto;
+}
+
+#UserBar img {
+	vertical-align: middle;
+}
+
+#UserBar ul {
+	margin: 0;
+	white-space: nowrap;
+	padding: 0;
+}
+
+#UserBar ul li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 10px;
+}
+
+#UserBar a:link, #UserBar a:visited {
+	color: #fff;
+	text-decoration: none;
+}
+
+#UserBar .overlay a {
+	color: black;
+}
+
+#UserBar .overlay a:hover {
+	text-decoration: underline;
+}
+
+#UserBar a:hover {
+	color: #333;
+}
+
+#header h1 { padding-left: 30px; padding-top: 25px; font-size: 1.2em; color: #FFF;}
+.right h1{ font-size: 1.6em; }
+.right h2{ color: #B22037; font-size: 14px; margin-bottom: 10px;}
+
+
+#footer {
+	margin: 0px auto 0 auto;
+	text-align: center;
+	padding: 10px 0 10px 0;
+	color: #666;
+	background: #eee;
+}
+
+fieldset {
+	border: none;
+}
+
+tr.gray {
+	background-color: #ccc;
+}
+
+tr.white {
+	background-color: #fff;
+}
+
+table#indexStatsBarWarning {
+	width: 1024px;
+	background-color: white;
+	margin: 0 auto;
+}
+
+table#indexStatsBarWarning td {
+	background-color: white;
+	font-size: 24px;
+	color: red;
+	width: 100%;
+	text-align: center;
+}
+
+table#indexStatsBarWarning img {vertical-align: middle;}
+
+table#indexStatsBar {
+	margin: 0 auto;
+	width: 100%;
+}
+
+table#indexStatsBar td {
+	font-size: 12px;
+	font-family: verdana;
+	width: 33%;
+	padding: 0 5px;
+	text-align: center;
+}
+
+table#indexRefreshOptions  {
+	background-color: white;
+	margin: 0 auto;
+	width: auto;
+}
+
+table#indexRefreshOptions td {
+	width: 33%;
+	text-align: center;
+	background-color: transparent;
+}
+
+table#indexStatsGoodLooking {
+	width: auto;
+	margin: 0 auto;
+	background-color: transparent;
+}
+
+table#indexStatsGoodLooking td {
+	text-align: center;
+	font-size: 12px;
+	background-color: white;
+}
+
+h3 { /* YOUR/FOREIGN TRANSFERS */
+	padding: 3px 0 3px 0;
+	margin: 7px 0 0 0;
+}
+
+/* Transfer List Header */
+
+.container div#tabs {
+	min-width: 900px;
+}
+
+table#transfer_table th, table#transfer_table th a {
+	background-color: black;
+	color: white;
+	font-weight: normal;
+	text-align: left;
+	font-size: 1.1em;
+}
+
+table#transfer_table {
+	border-collapse: collapse;
+	background-color: transparent;
+	font-size: .8em;
+}
+
+table#transfer_table td {
+	background-color: transparent;
+}
+ 
+table#transfer_table tr.gray {
+	background-color: #cccccc;
+}
+
+table#transfer_table tr.white {
+	background-color: #fff;
+}
+
+.hover, .hover a {
+	background-color: #B22037;
+	color: white;
+}
+
+table#transfer_table a{
+	color: #222;
+}
+
+table#transfer_table tr.hover a{
+	color: white;
+}
+
+table.sortable a.sortheader { color: white; text-decoration: none; }
+table.sortable span.sortarrow { color: white; text-decoration: none; }
+
+table#TransferListBulkActions {
+	width: 100%;
+	background-color: white;
+	padding-top:10px;
+}
+
+table#TransferListBulkActions td a, table#TransferListBulkActions td a:visited {
+	color: #B22037;
+}
+
+table#TransferListBulkActions td a:hover {
+	color: #333;
+}
+
+table#indexUsers {
+	height: 128px;
+	background-color: transparent;
+}
+
+table#indexUsers td { background-color: transparent; }
+
+table#UsersOnline {
+	background: white url('../images/index/Users/online.png') no-repeat top left;
+	vertical-align: top;
+	width: 400px;
+	height: 128px;
+	padding-left: 100px;
+}
+
+table#UsersOnline td, table#UsersOffline td { background-color: transparent; }
+
+table#UsersOffline {
+	background: white url('../images/index/Users/offline.png') no-repeat top left;
+	vertical-align: top;
+	width: 400px;
+	min-height: 128px;
+	height: 128px; /* IE6 */
+	padding-left: 100px;
+}
+
+#indexTorrentSearch {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 25px;
+	padding-left: 100px;
+	background: #fff url('../images/index/TorrentSearch/bg.png') no-repeat top left;
+}
+
+#indexWget {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 25px;
+	padding-left: 100px;
+	background: #fff url('../images/index/Wget/bg.png') no-repeat top left;
+}
+
+#indexNZBPerl {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 25px;
+	padding-left: 100px;
+	background: #fff url('../images/index/NZBPerl/bg.png') no-repeat top left;
+}
+
+#indexLinks {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 10px;
+	padding-bottom: 15px;
+	padding-left: 100px;
+	background: #fff url('../images/index/Links/bg.png') no-repeat top left;
+}
+
+#indexLinks ul {
+	list-style-image: url('../images/index/Links/link.png');
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+#indexTorrentUpload {
+	margin: 0 auto;
+	min-height: 96px; height: 96px; /* IE6 */
+	padding-top: 5px;
+	padding-left: 100px;
+	margin-left: 10px;
+	background: #fff url('../images/index/TorrentUpload/bg.png') no-repeat top left;
+}
+
+#indexTorrentGet {
+	margin: 0 auto;
+	min-height: 96px; height: 96px; /* IE6 */
+	padding-top: 5px;
+	padding-left: 100px;
+	margin-left: 10px;
+	background: #fff url('../images/index/TorrentGet/bg.png') no-repeat top left;
+}
+
+div#indexStats {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 5px;
+	padding-bottom: 15px;
+	padding-left: 130px;
+	background: #fff url('../images/index/Stats/bg.png') no-repeat top left;
+}
+
+div#indexStats table {
+	background-color: transparent;
+	width: 100%;
+}
+
+#indexStats td {
+	background-color: transparent;
+	color: black;
+}
+
+.progress {
+width:99%;
+height:10px;
+border:1px solid black;
+background-color: white;
+padding:0;
+margin:0;
+color:white;
+
+}
+
+.progress img {
+margin:0;
+width:100%;
+height:10px;
+
+}
+
+.progressLeft {
+float:left;
+padding:0px;
+height:10px;
+background-color:#fd8b05;
+line-height:10px;
+}
+
+.progressRight {
+line-height:10px;
+float:right;
+height:10px;
+background-color:black;
+}
+
+.clear {
+	height:0px;
+	font-size:0px;
+	line-height:0px;
+	clear:both;
+	overflow:hidden;
+}
+
+/* PROGRESS INDICATOR WHEN ACTIONS IS BEING DONE */
+.hidden { visibility:hidden; }
+
+#action_in_progress { 
+	background: #eee;
+	border: 1px dashed black;
+	color: #564b47;
+	text-align: center;
+	font-weight: bold;
+	font-size: 100%;
+	padding: 3px;
+	position: fixed;
+	top:0px;
+	left:0px;
+	z-index:10102 !important;
+}
+
+#grey_out {
+	position: fixed;
+	height:100%;
+	width:100%;
+	z-index:10100 !important;
+	top: 0px;
+	left: 0px;
+	background-color:#000000;
+	filter:alpha(opacity=50);
+	-moz-opacity: 0.5;
+	opacity: 0.5;
+}
+
+/*********************************************
+Credit dialog styles
+**********************************************/
+
+#credit_tabs {
+	font-size: 10px;
+}
+
+#credit_tabs-1 ul, #credit_tabs-2 ul, #credit_tabs-3 ul {
+	list-style-position: inside;
+	list-style-type: square;
+}
+
+#credit_tabs-1 li a, #credit_tabs-2 li a, #credit_tabs-3 li a {
+	color: #B22037;
+}
+
+#credit_tabs-1 a {
+	color: #B22037;
+}
+
+#credit_tabs-1 a:hover {
+	text-decoration: underline;
+}
+
+#credit_tabs-1 li a:hover, #credit_tabs-2 li a:hover, #credit_tabs-3 li a:hover {
+	text-decoration: underline;
+}

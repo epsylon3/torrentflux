@@ -173,11 +173,20 @@ function tmplSetGoodLookingStatsForm() {
  */
 function tmplSetClientSelectForm($client = 'tornado') {
 	global $cfg, $tmpl;
-	$clients = array("tornado", "transmission", "mainline", "azureus");
+	$clients = array(
+		"tornado"			=> "BitTornado",
+		"transmission"		=> "Transmission Client", 
+		"transmissionrpc"	=> "Transmission Daemon", 
+		"mainline"			=> "BitTorrent Mainline", 
+		"azureus"			=> "Azureus (fluazu)", 
+		"vuzerpc"			=> "Vuze RPC"
+	);
+	$labels = array("BitTornado", "transmission", "transmissionrpc", "mainline", "azureus", "vuzerpc");
 	$client_list = array();
-	foreach ($clients as $clnt) {
+	foreach ($clients as $clnt => $label) {
 		array_push($client_list, array(
 			'client' => $clnt,
+			'label' => $label,
 			'selected' => ($client == $clnt) ? 1 : 0
 			)
 		);

@@ -28,7 +28,6 @@ the item:
 
 vlc
 */
-
 // prevent direct invocation
 if ((!isset($cfg['user'])) || (isset($_REQUEST['cfg']))) {
 	@ob_end_clean();
@@ -53,6 +52,12 @@ initRestrictedDirEntries();
 // check incoming path
 checkIncomingPath();
 
+
+// to be able to execute shell commands with utf8 accents
+if (isset($cfg['_LC_CTYPE'])) {
+	setlocale(LC_CTYPE, $cfg['_LC_CTYPE']); //"fr_FR.UTF-8" or "de_DE.UTF-8"
+}
+
 // get request-vars
 $chmod = UrlHTMLSlashesDecode(tfb_getRequestVar('chmod'));
 $del = UrlHTMLSlashesDecode(tfb_getRequestVar('del'));
@@ -60,11 +65,137 @@ $down = UrlHTMLSlashesDecode(tfb_getRequestVar('down'));
 $tar = UrlHTMLSlashesDecode(tfb_getRequestVar('tar'));
 $multidel = UrlHTMLSlashesDecode(tfb_getRequestVar('multidel'));
 $dir = UrlHTMLSlashesDecode(tfb_getRequestVar('dir'));
+$wget_url = UrlHTMLSlashesDecode(tfb_getRequestVar('wget_url'));
+
 
 // check dir-var
 if (tfb_isValidPath($dir) !== true) {
 	AuditAction($cfg["constants"]["error"], "ILLEGAL DIR: ".$cfg["user"]." tried to access ".$dir);
 	@error("Invalid Dir", "index.php?iid=dir", "", array($dir));
+}
+
+/*******************************************************************************
+ * log history
+ ******************************************************************************/
+function getDownloadLogs($path) {
+	global $cfg, $db;
+	$srchAction = "File Download";
+	
+	$sqlWhere  = "file LIKE ".$db->qstr($path."%")." AND ";
+	$sqlWhere .= "action LIKE ".$db->qstr($srchAction."%")." AND ";
+
+	$sql = "SELECT user_id, file, max(time) as time FROM tf_log WHERE ".$sqlWhere."action!=".$db->qstr($cfg["constants"]["hit"])." GROUP BY user_id, file ORDER BY time desc";
+	$result = $db->SelectLimit($sql, 999, 0);
+	if ($db->ErrorNo() != 0) dbError($sql);
+	$array = array();
+	while ($row = $result->FetchNextObject(false))
+		$array[] = $row;
+	
+	return $array;
+}
+
+function getDownloadFtpLogUsers($srchFile, $logNumber="") {
+	global $cfg, $db, $dlLog;
+	$userlist=array();
+	$userRenamer=array(); 
+
+	//xferlog or xferlog.0 (last month)
+	//$ftplog = '/var/log/proftpd/xferlog'.$logNumber;
+	$ftplog = "/var/log/pure-ftpd/stats_transfer$logNumber.log";
+
+	if (!is_file($ftplog))
+		return array();
+
+	//Search in Log (for old or external log insert, todo)
+	$srchFile   = str_replace($cfg["path"],'',$srchFile);
+
+	//Search in cached db log array
+	foreach ($dlLog as $row) {
+		if ($row->file == $srchFile) {
+			$userlist[$row->user_id] = htmlentities(substr($row->user_id, 0, 3), ENT_QUOTES);
+		}
+	}
+	
+	if (count($userlist) > 0) return $userlist;
+	if (!file_exists($ftplog)) return $userlist;
+
+	$userRenamer["root"]="epsylon3";
+
+	$cmdLog = "cat $ftplog|".$cfg["bin_grep"].' '.tfb_shellencode(str_replace(' ','_',$srchFile)); //.'|'.$cfg["bin_grep"]." -o -E ' r (.*) ftp'"
+
+	$dlInfos=trim( @ shell_exec($cmdLog) );
+	if ($dlInfos) {
+		$ftpusers = explode("\n", $dlInfos);
+		foreach ($ftpusers as $key=>$value) {
+/* PROFTPD
+			$value=substr($value,4);
+			$time=strtotime(substr($value,0,20));
+			$value=substr($value,21);
+			$lineWords=explode(' ',$value);
+			$hostname=$lineWords[1];
+			$size=0+($lineWords[2]);
+			$username=$lineWords[count($lineWords)-5];
+			$complete=$lineWords[count($lineWords)-1]; */
+
+/* pure-ftpd (stats:/var/log/pure-ftpd/stats_transfer.log) */
+			$lineWords=explode(' ',$value);
+			$time=0+($lineWords[0]);
+			$username=$lineWords[2];
+			$hostname=$lineWords[3];
+			$complete=str_replace("D","c",$lineWords[4]);
+			$size=0.0+($lineWords[5]);
+
+//die( "<pre>$size-$complete-$hostname-$username-$time\n$value\n</pre>");
+
+			if ($complete=="c") {
+
+				//rename user ?
+				if (array_key_exists($username,$userRenamer)) $username=$userRenamer[$username];	
+			
+				if (!array_key_exists($username,$userlist)) {
+					
+					$srchAction = "File Download (FTP)";
+					
+					$db->Execute("INSERT INTO tf_log (user_id,file,action,ip,ip_resolved,user_agent,time)"
+ 					   	." VALUES ("
+  					  	. $db->qstr($username).","
+  					  	. $db->qstr($srchFile).","
+  					  	. $db->qstr($srchAction).","
+ 					   	. $db->qstr('FTP')."," //IP
+ 					   	. $db->qstr($hostname).","
+ 					   	. $db->qstr('FTP')."," //user-agent
+   					 	. $time
+   					 	.")"
+					);
+					if ($db->ErrorNo() != 0) dbError($sql);
+				}
+
+				$userlist[$username]=substr($username,0,3);
+			}
+
+		}
+	}
+	return $userlist;
+}
+
+function getDownloadWebLogUsers($srchFile,$is_dir) {
+	global $cfg, $db, $dlLog;
+	$userlist=array();
+
+	//$srchFile=str_replace('/var/cache/torrentflux/','',$srchFile);
+	$srchFile=str_replace($cfg["path"],'',$srchFile);
+
+	foreach ($dlLog as $row) {
+		$downloaded = ($row->file == $srchFile);
+		if (!$downloaded && $is_dir && $srchFile) {
+			$downloaded = (strpos($row->file,$srchFile) !== false);
+		}
+		if ($downloaded) {
+			$userlist[$row->user_id] = htmlentities(substr($row->user_id, 0, 3), ENT_QUOTES);
+		}
+	}
+	
+	return $userlist;
 }
 
 /*******************************************************************************
@@ -79,7 +210,7 @@ if ($chmod != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($dir))) && (hasPermission($dir, $cfg["user"], 'w')))
-		chmodRecursive($cfg["path"].$dir);
+		chmodRecursive($cfg["path"].$dir,0775);
 	else
 		AuditAction($cfg["constants"]["error"], "ILLEGAL CHMOD: ".$cfg["user"]." tried to chmod ".$dir);
 	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
@@ -111,22 +242,6 @@ if ($del != "") {
 }
 
 /*******************************************************************************
- * multi-delete
- ******************************************************************************/
-if ($multidel != "") {
-	foreach($_POST['file'] as $key => $element) {
-		$element = urldecode($element);
-		// only valid entry with permission
-		if ((isValidEntry(basename($element))) && (hasPermission($element, $cfg["user"], 'w')))
-			delDirEntry($element);
-		else
-			AuditAction($cfg["constants"]["error"], "ILLEGAL DELETE: ".$cfg["user"]." tried to delete ".$element);
-	}
-	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
-	exit();
-}
-
-/*******************************************************************************
  * download
  ******************************************************************************/
 if ($down != "") {
@@ -137,6 +252,7 @@ if ($down != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($down))) && (hasPermission($down, $cfg["user"], 'r'))) {
+		@ ini_set("zlib.output_compression","Off");
 		$current = downloadFile($down);
 	} else {
 		AuditAction($cfg["constants"]["error"], "ILLEGAL DOWNLOAD: ".$cfg["user"]." tried to download ".$down);
@@ -170,6 +286,7 @@ if ($tar != "") {
 	}
 	// only valid entry with permission
 	if ((isValidEntry(basename($tar))) && (hasPermission($tar, $cfg["user"], 'r'))) {
+		@ ini_set("zlib.output_compression","Off");
 		$current = downloadArchive($tar);
 	} else {
 		AuditAction($cfg["constants"]["error"], "ILLEGAL TAR DOWNLOAD: ".$cfg["user"]." tried to download ".$tar);
@@ -188,6 +305,132 @@ if ($tar != "") {
 }
 
 /*******************************************************************************
+ * wget
+ ******************************************************************************/
+function _dir_cleanFileName($inName) {
+	global $cfg;
+	$arURL = explode("/", $inName);
+	$inName = urldecode($arURL[count($arURL)-1]); // get the file name
+	$outName = preg_replace("/[^0-9a-zA-Z.-]+/",'_', $inName);
+	return $outName;
+}
+
+function _dir_WgetFile($url,$target_dir) {
+	require_once('inc/functions/functions.core.tfb.php');
+	global $cfg;
+	$filename = "";
+	$downloadMessages = array();
+	if (!empty($url)) {
+		$arURL = explode("/", $url);
+		$filename = urldecode($arURL[count($arURL)-1]); // get the file name
+		$filename = str_replace(array("'",","), "", $filename);
+		$filename = stripslashes($filename);
+		
+		// Check to see if url has something like ?passkey=12345
+		// If so remove it.
+		if (($point = strrpos($filename, "?")) !== false )
+			$filename = substr($filename, 0, $point);
+		$ret = strrpos($filename, ".");
+
+		$url = str_replace(" ", "%20", $url);
+		// This is to support Sites that pass an id along with the url for downloads.
+		$tmpId = tfb_getRequestVar("id");
+		if(!empty($tmpId))
+			$url .= "&id=".$tmpId;
+
+		// retrieve the file
+		require_once("inc/classes/SimpleHTTP.php");
+
+		$content = SimpleHTTP::getData($url);
+		if ((SimpleHTTP::getState() == SIMPLEHTTP_STATE_OK) && (strlen($content) > 0)) {
+			$fileNameBackup = $filename;
+			$filename = SimpleHTTP::getFilename();
+			if ($filename != "") {
+				$filename = _dir_cleanFileName($filename);
+			}
+			if (($filename == "") || ($filename === false)) {
+				$filename = _dir_cleanFileName($fileNameBackup);
+				if ($filename === false || $filename=="") {
+					$filename = _dir_cleanFileName(SimpleHTTP::getRealUrl($url));
+					if ($filename === false || $filename=="") {
+						$filename = _dir_cleanFileName(md5($url.strval(@microtime())));
+						if ($filename === false || $filename=="") {
+							// Error
+							array_push($downloadMessages , "failed to get a valid filename for ".$url);
+						}
+					}
+				}
+			}
+			if (empty($downloadMessages)) { // no messages
+				// check if content contains html
+				if ($cfg['debuglevel'] > 0) {
+					if (strpos($content, "<br />") !== false)
+						AuditAction($cfg["constants"]["debug"], "download-content contained html : ".htmlentities(addslashes($url), ENT_QUOTES));
+				}
+				if (is_file($target_dir.$filename)) {
+					// Error
+					array_push($downloadMessages, "the file ".$filename." already exists on the server.");
+				} else {
+					// write to file
+					$handle = false;
+					$handle = @fopen($target_dir.$filename, "w");
+					if (!$handle) {
+						array_push($downloadMessages, "cannot open ".$target_dir.$filename." for writing.");
+					} else {
+						$result = @fwrite($handle, $content);
+						@fclose($handle);
+						if ($result === false)
+							array_push($downloadMessages, "cannot write content to ".$filename.".");
+					}
+				}
+			}
+		} else {
+			$msgs = SimpleHTTP::getMessages();
+			if (count($msgs) > 0)
+				$downloadMessages = array_merge($downloadMessages, $msgs);
+		}
+		if (empty($downloadMessages)) { // no messages
+			AuditAction($cfg["constants"]["url_upload"], $filename);
+		}
+	} else {
+		array_push($downloadMessages, "Invalid Url : ".$url);
+	}
+	if (count($downloadMessages) > 0) {
+		AuditAction($cfg["constants"]["error"], $cfg["constants"]["url_upload"]." :: ".$filename);
+		@error("There were Problems", "", "", $downloadMessages);
+	}
+}
+
+
+if ($wget_url != "") {
+	if ($dir != "" && substr($dir,strlen($dir)-1,1)!="/") {
+		$dir = $dir."/";	
+	}
+	if ($dir != "") {
+		_dir_WgetFile($wget_url,$cfg["path"].$dir);
+	}
+	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
+	exit();
+}
+
+/*******************************************************************************
+ * multi-delete
+ ******************************************************************************/
+if ($multidel != "") {
+	foreach($_POST['file'] as $key => $element) {
+		$element = urldecode($element);
+		// only valid entry with permission
+		if ((isValidEntry(basename($element))) && (hasPermission($element, $cfg["user"], 'w')))
+			delDirEntry($element);
+		else
+			AuditAction($cfg["constants"]["error"], "ILLEGAL DELETE: ".$cfg["user"]." tried to delete ".$element);
+	}
+	@header("Location: index.php?iid=dir&dir=".UrlHTMLSlashesEncode($dir));
+	exit();
+}
+
+
+/*******************************************************************************
  * dir-page
  ******************************************************************************/
 $tDirPs=array();
@@ -201,18 +444,23 @@ if (isset($dir)) {
 	}
 	if ($dir != "") {
 		//get list of processes of known running transfers
-		$tDirPs=explode("\n", shell_exec('ls "'.rtrim($cfg['transfer_file_path'],'/').'/*.pid"'));
+		$handle = opendir($cfg['transfer_file_path']);
+		$tDirPs = array();
+		while (false !== ($entry = readdir($handle))) {
+			if (substr($entry,-3) == 'pid')
+				$tDirPs[] = $entry;
+		}
 	}
 } else {
 	$dir = "";
 }
 
-foreach($tDirPs as $key => $value) {
-	$value=preg_replace('#(.*\.torrent)\.pid#','\1',$value);	
-	$stats=explode("\n",file_get_contents($value.".stat"));	
+foreach($tDirPs as $value) {
+	$value=$cfg['transfer_file_path'].'/'.preg_replace('#(.*\.torrent)\.pid#','\1',$value);
+	$stats=explode("\n",@file_get_contents($value.".stat"));
 	$value=preg_replace('#.*\.transfers/([^ ]+\.torrent)#','\1',$value);
 	$path=getTransferDatapath($value);
-	if ((0+$stats[1]) < 100) {
+	if ((int) @$stats[1] < 100) {
 		$tRunning[$path]=$value;
 	} else {
 		$tSeeding[$path]=$value;
@@ -248,7 +496,7 @@ if (($dir != "") && (hasPermission($dir, $cfg["user"], 'r') !== true)) {
 
 // init template-instance
 tmplInitializeInstance($cfg["theme"], "page.dir.tmpl");
-
+	
 // dirstats
 if ($cfg['enable_dirstats'] == 1) {
 	$tmpl->setvar('enable_dirstats', 1);
@@ -263,6 +511,9 @@ else
 
 // read in entries
 $entrys = array();
+$entrysDirs = array();
+$entrysFiles = array();
+
 $handle = opendir($dirName);
 while (false !== ($entry = readdir($handle))) {
 	if (empty($dir)) { // parent dir
@@ -270,28 +521,44 @@ while (false !== ($entry = readdir($handle))) {
 			array_push($entrys, $entry);
 	} else { // sub-dir
 		if (hasPermission($dir, $cfg["user"], 'r')) {
-			if (isValidEntry($entry))
-				array_push($entrys, $entry);
+			if (isValidEntry($entry)) {
+				if (is_dir($dirName.$entry)) {
+					array_push($entrysDirs, $entry);
+				} else {
+					array_push($entrysFiles, $entry);
+				}
+			}
+
 		}
 	}
 }
 closedir($handle);
-natsort($entrys);
+ 
+natcasesort($entrysDirs);
+natcasesort($entrysFiles); 
+$entrys = array_merge ($entrysFiles, $entrysDirs, $entrys);
 
 // process entries and fill dir- + file-array
 $list = array();
 
+// files downloaded (from log)
+$dlLog = getDownloadLogs($dir);
+
 foreach ($entrys as $entry) {
+	$slink="";
+	$dlInfos="";
+	
 	// acl-write-check
 	if (empty($dir)) /* parent dir */
 		$aclWrite = (hasPermission($entry, $cfg["user"], 'w')) ? 1 : 0;
 	else /* sub-dir */
 		$aclWrite = (hasPermission($dir, $cfg["user"], 'w')) ? 1 : 0;
-		
+
 	// symbolic links
 	if(!is_link($dirName.$entry))
 	{
 		$islink = 0;
+		$slink = $entry;
 	}
 	else
 	{
@@ -299,39 +566,42 @@ foreach ($entrys as $entry) {
 			$slink = "";
 		$islink = 1;
 	}
+	
 	// dirstats
-	$size = 0.0;
-	$ssz  = 0.0;
 	$date = "";
+	$size = 0.0;
+	$show_sfv = 0;
+	$sfvdir = "";
+	$sfvsfv = "";
+	$userlist = array();
 
-	if ($cfg['enable_dirstats'] == 1) 
+	$realentry=$entry_iso=$entry;
+	if(function_exists('mb_detect_encoding') && function_exists('utf8_decode') && mb_detect_encoding(" ".$entry." ",'UTF-8,ISO-8859-1') == 'UTF-8')
+		$entry_iso = utf8_decode($entry);
+
+	if ($cfg['enable_dirstats'] == 1)
 	{
 		$path = $dirName.$entry;
+		$stat = stat($path);
+		$ssz = 0.0;
 		
 		if($islink == 0) // it's not a symbolic link
-		{	
-			$ssz += is_dir($dirName.$entry)? dirsize($path) : sprintf("%u", filesize($path));
-			//if ( $ssz < 0 && !isWinOS() )
-			//	$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
+		{
+			$ssz += is_dir($path)? dirsize($path) : sprintf("%.0f", $stat['size']);
+			if (($ssz < 0 || $stat['blocks'] > 2000000) && !isWinOS()) $ssz = @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($dirName.$entry)));
 		}
 		elseif (!isWinOS()) // it's a symbolic link
 		{
-			$ssz = @trim(shell_exec('stat -c%s '.tfb_shellencode($path)));
+			$ssz += @trim(1024.0 * shell_exec('du -ksL '.tfb_shellencode($slink)));
 			$date = "";
 		}
-		
-		$size = formatBytesTokBMBGBTB( sprintf("%u", $ssz) );
+		$size = formatBytesTokBMBGBTB( sprintf("%.0f", $ssz) );
 		
 		if (strstr($size,"G")) $size="<b>$size</b>";
 
-		$timeStamp = filemtime($dirName.$entry);
-		$date = date("m-d-Y h:i a", $timeStamp);
-	} 
-	else 
-	{
-		$size = 0;
-		$date = "";
-	}	
+		$timeStamp = $stat['mtime'];
+		$date = date($cfg['_DATETIMEFORMAT'],$timeStamp);
+	}
 	if (is_dir($dirName.$entry)) // dir
 	{ 
 		// sfv
@@ -340,34 +610,47 @@ foreach ($entrys as $entry) {
 			$show_sfv = 1;
 			$sfvdir = $sfv['dir'];
 			$sfvsfv = $sfv['sfv'];
-		} 
-		else 
-		{
-			$show_sfv = 0;
-			$sfvdir = "";
-			$sfvsfv = "";
 		}
 		$isdir = 1;
 		$show_nfo = 0;
 		$show_rar = 0;
-	} 
+		
+		$image = "";
+		
+		if ($dir != '') {
+			$userlist = getDownloadWebLogUsers($dirName.$entry,1);
+		}
+	}
 	else if (!@is_dir($dirName.$entry)) // file
-	{ 
-		// image
-		$image = "themes/".$cfg['theme']."/images/time.gif";
-		$imageOption = "themes/".$cfg['theme']."/images/files/".getExtension($entry).".png";
-		if (file_exists("./".$imageOption))
-			$image = $imageOption;
+	{
+
+		if ((0+$size) > 0 && $cfg['enable_dirstats'] == 1) {
+
+			//WEB DL Users (Who Downloaded it ?)
+			$userlist = getDownloadWebLogUsers($dirName.$entry,0);
+			//FTP DL Users (Who Downloaded it ?)
+			$userlist = array_merge($userlist, getDownloadFtpLogUsers($dirName.$entry) );
+			//FTP DL Users (Who Downloaded it last month?)
+			$userlist = array_merge($userlist, getDownloadFtpLogUsers($dirName.$entry, ".0") );
+		}
+		
 		// nfo
 		$show_nfo = ($cfg["enable_view_nfo"] == 1) ? isNfo($entry) : 0;
 		// rar
 		$show_rar = (($cfg["enable_rar"] == 1) && ($aclWrite == 1)) ? isRar($entry) : 0;
 		// add entry to file-array
 		$isdir = 0;
-		$show_sfv = 0;
-		$sfvdir = "";
-		$sfvsfv = "";
+
+		// image
+		$image = "themes/".$cfg['theme']."/images/time.gif";
+		$imageOption = "themes/".$cfg['theme']."/images/files/".getExtension($entry);
+		
+		if (file_exists("./".$imageOption.".png"))
+			$image = $imageOption.".png";
+		else if (file_exists("./".$imageOption.".gif"))
+			$image = $imageOption.".gif";
 	}
+	
 	// get Permission and format it userfriendly
 	if(($fperm = fileperms($dirName.$entry)) !== FALSE)
 	{
@@ -382,15 +665,22 @@ foreach ($entrys as $entry) {
 		}
 		$permission .= " (0".$permission_oct.")";
 	}
-	$realentry=$entry;
-	if(function_exists('mb_detect_encoding') && function_exists('utf8_decode') && mb_detect_encoding(" ".$entry." ",'UTF-8,ISO-8859-1') == 'UTF-8')
-		$entry = utf8_decode($entry);
-	
+
 	if (array_key_exists($realentry,$tRunning)) {
 		$size='<span style="color:red;">'.$size.'</span>';
 	} elseif (array_key_exists($realentry,$tSeeding)) {
-		$size='<span style="color:blue;">'.$size.'</span>';
+		$size='<span style="color:navy;">'.$size.'</span>';
 	}
+	
+	$dlFullInfo = implode(', ',array_keys($userlist));
+	if ($dlFullInfo) {
+		if (file_exists('./themes/'.$cfg['theme'].'/images/dir/dlinfo.png'))
+			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/dir/dlinfo.png" title="Downloaded by '.$dlFullInfo.'">';
+		else
+			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/download_owner.gif" title="Downloaded by '.$dlFullInfo.'">';
+	}
+	if ($cfg['_CHARSET']!='utf-8')
+		$entry = $entry_iso;
 	
 	// add entry to dir-array
 	array_push($list, array(
@@ -399,13 +689,14 @@ foreach ($entrys as $entry) {
 		'aclWrite'    => $aclWrite,
 		'permission'  => $permission,
 		'entry'       => $entry,
-		'real_entry'  => $slink,
+		'real_entry'  => $realentry,
 		'urlencode1'  => UrlHTMLSlashesEncode($dir.$entry),
 		'urlencode2'  => UrlHTMLSlashesEncode($dir),
 		'urlencode3'  => UrlHTMLSlashesEncode($entry),
 		'addslashes1' => addslashes($entry),
 		'size'        => $size,
-		'date'        => $date,
+		'date'        => "<nobr>$date</nobr>",
+		'dlinfo'      => $dlFullInfo,
 		'image'       => $image,
 		'show_sfv'    => $show_sfv,
 		'sfvdir'      => UrlHTMLSlashesEncode($sfvdir),
@@ -462,6 +753,8 @@ $tmpl->setvar('_DIR_MOVE_LINK', $cfg['_DIR_MOVE_LINK']);
 $tmpl->setvar('_ABOUTTODELETE', $cfg['_ABOUTTODELETE']);
 $tmpl->setvar('_BACKTOPARRENT', $cfg['_BACKTOPARRENT']);
 $tmpl->setvar('_ID_IMAGES', $cfg['_ID_IMAGES']);
+//
+$tmpl->setvar('_WGET', $wget_url);
 //
 tmplSetTitleBar($cfg["pagetitle"].' - '.$cfg['_DIRECTORYLIST']);
 tmplSetDriveSpaceBar();

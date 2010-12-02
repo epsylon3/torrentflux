@@ -14,7 +14,7 @@
 			<a href="<tmpl_var name="parentURL">"><img src="themes/default/images/up_dir.gif" width="16" height="16" title="<tmpl_var name="_BACKTOPARRENT">" border="0">[<tmpl_var name="_BACKTOPARRENT">]</a>
 		</td>
 		<tmpl_if name="enable_dirstats" value="1">
-			<td colspan="2">&nbsp;</td>
+			<td colspan="3">&nbsp;</td>
 		</tmpl_if>
 		<td align="right">
 			<tmpl_if name="show_chmod" value="1">
@@ -37,6 +37,7 @@
 					</td>
 					<tmpl_if name="enable_dirstats" value="1">
 						<td align="right" nowrap><tmpl_var name="size"></td>
+						<td align="right" nowrap><tmpl_var name="dlinfo"></td>
 						<td width="140" nowrap><tmpl_var name="date"></td>
 					</tmpl_if>
 					<td align="right" nowrap>
@@ -79,6 +80,7 @@
 					</td>
 					<tmpl_if name="enable_dirstats" value="1">
 						<td align="right" nowrap><tmpl_var name="size"></td>
+						<td align="right" nowrap><tmpl_var name="dlinfo"></td>
 						<td width="140" nowrap><tmpl_var name="date"></td>
 					</tmpl_if>
 					<td align="right" nowrap>
@@ -128,6 +130,11 @@
 				</td>
 		</tr>
 	</tmpl_if>
+	<form method="post">
+	<tr bgcolor="#829FB5">
+		<td align="center" colspan="4"><input type="text" size=105 value="<tmpl_var name="_WGET">" name="wget_url" /> <input type="submit" value="wget file" name="wget_submit" /></td>
+	</tr>
+	</form>
 <tmpl_if name="enable_dirstats" value="1">
 	<tr bgcolor="#829FB5">
 		<td align="center" colspan="4"><tmpl_var name="_TDDU"> <tmpl_var name="duTotal"></td>

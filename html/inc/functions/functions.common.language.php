@@ -61,7 +61,9 @@ function loadLanguageFile($language) {
 	// load language
 	require_once("inc/language/".$language);
 	// set vars
-	$cfg['_CHARSET'] = _CHARSET;
+	$cfg['_CHARSET'] = _CHARSET;   //output
+	$cfg['_LC_CTYPE'] = _LC_CTYPE; //shell
+
 	$cfg['_SELECTFILE'] = _SELECTFILE;
 	$cfg['_URLFILE'] = _URLFILE;
 	$cfg['_UPLOAD'] = _UPLOAD;
@@ -98,6 +100,7 @@ function loadLanguageFile($language) {
 	$cfg['_UPLOADSPEED'] = _UPLOADSPEED;
 	$cfg['_SHARING'] = _SHARING;
 	$cfg['_USER'] = _USER;
+	$cfg['_USERS'] = _USERS;
 	$cfg['_DONE'] = _DONE;
 	$cfg['_INCOMPLETE'] = _INCOMPLETE;
 	$cfg['_NEW'] = _NEW;
@@ -238,6 +241,9 @@ function loadLanguageFile($language) {
 	$cfg['_ID_HOST'] = _ID_HOST;
 	$cfg['_ID_HOSTS'] = _ID_HOSTS;
 	$cfg['_ID_IMAGES'] = _ID_IMAGES;
+	$cfg['_INBOX'] = _INBOX;
+	$cfg['_CHOOSEAUSER'] = _CHOOSEAUSER;
+	$cfg['_EMAILADDRESS'] = _EMAILADDRESS;
 }
 
 ?>

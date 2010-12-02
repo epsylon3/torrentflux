@@ -1,0 +1,11 @@
+<tmpl_var name="_STORAGE"> (<span id="barFreeSpace"><tmpl_var name="drivespacebar_freeSpace"></span> Free)
+	<div style="height: 8px;" id="drivespacebar"></div> 
+	
+<!-- IF WE ENABLE AJAX UPDATE THEN TF-B4RT WILL LOOK FOR THIS ID'S. 
+SINCE WE DON'T USE THEM WE HAVE TO USE IT TO TRICK AJAX INTO CONTINUE UPDATING
+OTHERWISE AJAX STOPS. -->
+<div style="display:none;">
+	<span id="barDriveSpace1"></span>
+	<span id="barDriveSpace2"></span>
+	<span id="barDriveSpacePercent"></span>
+</div>

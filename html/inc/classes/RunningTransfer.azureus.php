@@ -32,14 +32,14 @@ class RunningTransferAzureus extends RunningTransfer
 	 * @param $psLine
 	 * @return RunningTransferAzureus
 	 */
-    function RunningTransferAzureus($psLine) {
-    	global $cfg;
-    	$this->processId = 0;
-    	$this->transferFile = "";
-    	$this->filePath = $cfg['transfer_file_path'];
-    	$this->transferowner = $cfg['user'];
-    	$this->args = "";
-    }
+	function RunningTransferAzureus($psLine) {
+		global $cfg;
+		$this->processId = 0;
+		$this->transferFile = "";
+		$this->filePath = $cfg['transfer_file_path'];
+		$this->transferowner = $cfg['user'];
+		$this->args = "";
+	}
 
 }
 

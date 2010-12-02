@@ -1,0 +1,32 @@
+<!-- READ MESSAGE  -->
+<a href="index.php?iid=readmsg"><tmpl_var name="_RETURNTOMESSAGES"></a>
+<table id="readmsgRead">
+	<tr>
+		<td class="User"><h3><tmpl_var name="from_user"> to me</h3></td>
+		<td class="Date">
+			<tmpl_var name="date1"> <a href="index.php?iid=message&amp;to_user=<tmpl_var name="from_user">&amp;rmid=<tmpl_var name="mid">">
+			<img src="themes/<tmpl_var name="theme">/images/msg/message_reply.png" title="<tmpl_var name="_REPLY">" alt="<tmpl_var name="_REPLY">" />
+			<tmpl_var name="_REPLY"></a> 
+			<a href="index.php?iid=readmsg&amp;delete=<tmpl_var name="mid">">
+			<img src="themes/<tmpl_var name="theme">/images/msg/message_delete.png" title="<tmpl_var name="_DELETE">" alt="<tmpl_var name="_DELETE">" />
+			<tmpl_var name="_DELETE"></a>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="MSG">
+			<table id="readmsgReadMessage">
+				<tr>
+					<td class="messsage"><tmpl_var name="message"></td>
+				</tr>
+				<tr>
+					<td class="reply">
+						<a href="index.php?iid=message&amp;to_user=<tmpl_var name="from_user">&amp;rmid=<tmpl_var name="mid">">
+						<img src="themes/<tmpl_var name="theme">/images/msg/message_reply.png" title="<tmpl_var name="_REPLY">" alt="<tmpl_var name="_REPLY">" />
+						<tmpl_var name="_REPLY"></a>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+<div style="height: 1px;"></div> <!-- this is a spacer to fix space between table and footer links in Opera/Safari/IE. FF can do without -->

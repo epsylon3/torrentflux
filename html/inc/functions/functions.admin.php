@@ -788,7 +788,14 @@ function safePhpCli($php, $args) {
 		$cmd = 'unset SERVER_SOFTWARE SERVER_NAME GATEWAY_INTERFACE REQUEST_METHOD ; ';
 		$cmd .= $php . ' ' . $args . ' < /dev/null';
 	}
-	return shell_exec($cmd);
+	$return = shell_exec($cmd);
+	if (empty($return)) {
+		$cmd.=' > /tmp/phpver';
+		shell_exec($cmd);
+		$return = file_get_contents('/tmp/phpver');
+		@unlink('/tmp/phpver');
+	}
+	return $return; 
 }
 
 /**
@@ -843,14 +850,14 @@ function validatePhpCli($the_file) {
 		return validationMsg(false, 'Path is not valid');
 	if (!is_executable($the_file))
 		return validationMsg(false, 'File exists but is not executable');
-	$phpVersion = safePhpCli($the_file, '-v');
+	$phpVersion = safePhpCli($the_file, '-v -n');
 	if ((strpos($phpVersion, 'PHP')) === false || (strpos($phpVersion, '(cli)')) === false)
 		return validationMsg(false, 'Executable is not PHP-CLI');
 	return validationMsg(true);
 }
 
 /**
- * Validates existence + exec + valid version of transmissioncli and returns the status image
+ * Validates existence + exec + valid version of transmission-cli and returns the status image
  *
  * @param $the_file
  * @return string
@@ -863,11 +870,11 @@ function validateTransmissionCli($the_file) {
 		return validationMsg(false, 'File exists but is not executable');
 	$transmissionHelp = strtolower(shell_exec("HOME=".tfb_shellencode($cfg["path"])."; export HOME; ".$the_file.' --help'));
 	return (
-		strpos($transmissionHelp, 'transmission') === false ||
-		((strpos($transmissionHelp, 'tfcli') === false) &&
-		 (strpos($transmissionHelp, 'torrentflux') === false))
+		stripos($transmissionHelp, 'transmission') === false ||
+		((stripos($transmissionHelp, 'tfcli') === false) &&
+		 (stripos($transmissionHelp, 'torrentflux') === false))
 	)
-		? validationMsg(false, 'Executable is not TorrentFlux-bundled transmissioncli')
+		? validationMsg(false, 'Executable is not TorrentFlux-NG bundled transmission-cli')
 		: validationMsg(true);
 }
 

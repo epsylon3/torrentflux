@@ -35,16 +35,16 @@ class ClientHandlerNzbperl extends ClientHandler
 	// ctor
 	// =====================================================================
 
-    /**
-     * ctor
-     */
+	/**
+	 * ctor
+	 */
 	function ClientHandlerNzbperl() {
 		global $cfg;
 		$this->type = "nzb";
 		$this->client = "nzbperl";
-        $this->binSystem = "perl";
-        $this->binSocket = "perl";
-        $this->binClient = "tfnzbperl.pl";
+		$this->binSystem = "perl";
+		$this->binSocket = "perl";
+		$this->binClient = "tfnzbperl.pl";
 		$this->nzbbin = $cfg["docroot"]."bin/clients/nzbperl/tfnzbperl.pl";
 	}
 
@@ -52,13 +52,13 @@ class ClientHandlerNzbperl extends ClientHandler
 	// Public Methods
 	// =====================================================================
 
-    /**
-     * starts a client
-     *
-     * @param $transfer name of the transfer
-     * @param $interactive (boolean) : is this a interactive startup with dialog ?
-     * @param $enqueue (boolean) : enqueue ?
-     */
+	/**
+	 * starts a client
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $interactive (boolean) : is this a interactive startup with dialog ?
+	 * @param $enqueue (boolean) : enqueue ?
+	 */
 	function start($transfer, $interactive = false, $enqueue = false) {
 		global $cfg;
 
@@ -77,7 +77,7 @@ class ClientHandlerNzbperl extends ClientHandler
 			$this->logMessage($msg."\n", true);
 			array_push($this->messages, $msg);
 			array_push($this->messages, "nzbbin : ".$this->nzbbin);
-            // write error to stat
+			// write error to stat
 			$sf = new StatFile($this->transfer, $this->owner);
 			$sf->time_left = 'Error';
 			$sf->write();
@@ -86,7 +86,7 @@ class ClientHandlerNzbperl extends ClientHandler
 		}
 
 		// init starting of client
-        $this->_init($interactive, $enqueue, false, false);
+		$this->_init($interactive, $enqueue, false, false);
 
 		// only continue if init succeeded (skip start / error)
 		if ($this->state != CLIENTHANDLER_STATE_READY) {
@@ -125,6 +125,12 @@ class ClientHandlerNzbperl extends ClientHandler
 		$this->command .= " --dthreadct ".tfb_shellencode($cfg['nzbperl_threads']);
 		$this->command .= " --speed ".tfb_shellencode($this->drate);
 		$this->command .= " --server ".tfb_shellencode($cfg['nzbperl_server']);
+		$this->command .= " --port ".tfb_shellencode($cfg['nzbperl_port']);
+
+		if ($cfg["nzbperl_ssl"] == 1)
+			$this->command .= " --ssl";
+
+
 		if ($cfg['nzbperl_user'] != "") {
 			$this->command .= " --user ".tfb_shellencode($cfg['nzbperl_user']);
 			$this->command .= " --pw ".tfb_shellencode($cfg['nzbperl_pw']);
@@ -135,9 +141,9 @@ class ClientHandlerNzbperl extends ClientHandler
 		$this->command .= " --dlpath ".tfb_shellencode($this->savepath);
 		$this->command .= " --tfuser ".tfb_shellencode($this->owner);
 		$this->command .= " ".tfb_shellencode($this->transferFilePath);
-        $this->command .= " 1>> ".tfb_shellencode($this->transferFilePath.".log");
-        $this->command .= " 2>> ".tfb_shellencode($this->transferFilePath.".log");
-        $this->command .= " &";
+		$this->command .= " 1>> ".tfb_shellencode($this->transferFilePath.".log");
+		$this->command .= " 2>> ".tfb_shellencode($this->transferFilePath.".log");
+		$this->command .= " &";
 
 		// state
 		$this->state = CLIENTHANDLER_STATE_READY;
@@ -146,37 +152,37 @@ class ClientHandlerNzbperl extends ClientHandler
 		$this->_start();
 	}
 
-    /**
-     * set download rate of a transfer
-     *
-     * @param $transfer
-     * @param $downrate
-     * @param $autosend
-     */
-    function setRateDownload($transfer, $downrate, $autosend = false) {
-    	// set rate-field
-    	$this->drate = $downrate;
-    	// add command
+	/**
+	 * set download rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $downrate
+	 * @param $autosend
+	 */
+	function setRateDownload($transfer, $downrate, $autosend = false) {
+		// set rate-field
+		$this->drate = $downrate;
+		// add command
 		CommandHandler::add($transfer, "d".$downrate);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
-     * sets fields from default-vals
-     *
-     * @param $transfer
-     */
-    function settingsDefault($transfer = "") {
-    	global $cfg;
+	/**
+	 * sets fields from default-vals
+	 *
+	 * @param $transfer
+	 */
+	function settingsDefault($transfer = "") {
+		global $cfg;
 		// transfer vars
-        if ($transfer != "")
-        	$this->_setVarsForTransfer($transfer);
-        // common vars
+		if ($transfer != "")
+			$this->_setVarsForTransfer($transfer);
+		// common vars
 		$this->hash        = getTransferHash($this->transfer);
-        $this->datapath    = getTransferDatapath($this->transfer);
-    	$this->savepath    = getTransferSavepath($this->transfer);
+		$this->datapath    = getTransferDatapath($this->transfer);
+		$this->savepath    = getTransferSavepath($this->transfer);
 		$this->running     = 0;
 		$this->rate        = 0;
 		$this->drate       = $cfg["nzbperl_rate"];
@@ -188,7 +194,7 @@ class ClientHandlerNzbperl extends ClientHandler
 		$this->maxport     = 65535;
 		$this->maxcons     = $cfg["nzbperl_conn"];
 		$this->rerequest   = 1;
-    }
+	}
 
 }
 

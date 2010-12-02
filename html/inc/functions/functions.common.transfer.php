@@ -98,11 +98,11 @@ function waitForTransfer($transfer, $state, $maxWait = 15) {
 		if (isTransferRunning($transfer) === $state) {
 			return true;
 		} else {
-		 	$loopCtr++;
-		 	if ($loopCtr > $maxLoops)
-		 		return false;
-		 	else
-		 		usleep(200000); // wait for 0.2 seconds
+			$loopCtr++;
+			if ($loopCtr > $maxLoops)
+				return false;
+			else
+				usleep(200000); // wait for 0.2 seconds
 		}
 	}
 	return true;
@@ -124,7 +124,7 @@ function resetTransferTotals($transfer, $delete = false) {
 		$ch = ClientHandler::getInstance(getTransferClient($transfer));
 		$ch->delete($transfer);
 		if (count($ch->messages) > 0)
-    		$msgs = array_merge($msgs, $ch->messages);
+			$msgs = array_merge($msgs, $ch->messages);
 	} else {
 		// reset in stat-file
 		$sf = new StatFile($transfer, getOwner($transfer));
@@ -151,18 +151,12 @@ function deleteTransferData($transfer) {
 	global $cfg, $transfers;
 	$msgs = array();
 
-	require_once('inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent['hashString'] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
-		}
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
+		$isTransmissionTorrent = is_array($theTorrent);
 	}
-
 
 	if ( $isTransmissionTorrent ) {
 		$response = $trans->remove($theTorrent['id'], true);
@@ -254,19 +248,14 @@ function calcTransferSavepath($transfer, $profile = NULL) {
  * @param $transfer
  */
 function setFilePriority($transfer) {
-    global $cfg;
-	require_once('inc/classes/Transmission.class.php');
+	global $cfg;
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent['hashString'] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
-		}
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
+		$isTransmissionTorrent = is_array($theTorrent);
 	}
-
+	
 	if ( $isTransmissionTorrent ) {
 		foreach ($_REQUEST[files] as $fileid ) {
 			$selectedFiles[] = (int)$fileid;
@@ -301,13 +290,13 @@ $counter++;
 		}
 #print_r($response);
 	} else {
-	    // we will use this to determine if we should create a prio file.
-	    // if the user passes all 1's then they want the whole thing.
-	    // so we don't need to create a prio file.
-	    // if there is a -1 in the array then they are requesting
-	    // to skip a file. so we will need to create the prio file.
-	    $okToCreate = false;
-	    if (!empty($transfer)) {
+		// we will use this to determine if we should create a prio file.
+		// if the user passes all 1's then they want the whole thing.
+		// so we don't need to create a prio file.
+		// if there is a -1 in the array then they are requesting
+		// to skip a file. so we will need to create the prio file.
+		$okToCreate = false;
+		if (!empty($transfer)) {
 		$fileName = $cfg["transfer_file_path"].$transfer.".prio";
 		$result = array();
 		$files = array();
@@ -319,30 +308,30 @@ $counter++;
 		}
 		// if there are files to get then process and create a prio file.
 		if (count($files) > 0) {
-		    for ($i=0; $i <= tfb_getRequestVar('count'); $i++) {
+			for ($i=0; $i <= tfb_getRequestVar('count'); $i++) {
 			if (in_array($i,$files)) {
-			    array_push($result, 1);
+				array_push($result, 1);
 			} else {
-			    $okToCreate = true;
-			    array_push($result, -1);
+				$okToCreate = true;
+				array_push($result, -1);
 			}
-		    }
-		    if ($okToCreate) {
+			}
+			if ($okToCreate) {
 			$fp = fopen($fileName, "w");
 			fwrite($fp,tfb_getRequestVar('filecount').",");
 			fwrite($fp,implode($result,','));
 			fclose($fp);
-		    } else {
+			} else {
 			// No files to skip so must be wanting them all.
 			// So we will remove the prio file.
 			@unlink($fileName);
-		    }
+			}
 		} else {
-		    // No files selected so must be wanting them all.
-		    // So we will remove the prio file.
-		    @unlink($fileName);
+			// No files selected so must be wanting them all.
+			// So we will remove the prio file.
+			@unlink($fileName);
 		}
-	    }
+		}
 	}
 }
 
@@ -356,7 +345,7 @@ function getTorrentScrapeInfo($transfer) {
 	global $cfg;
 	$hasClient = false;
 	// transmissioncli
-	if (is_executable($cfg["btclient_transmission_bin"])) {
+	if (!$cfg["transmission_rpc_enable"]) {
 		$hasClient = true;
 		$retVal = "";
 		$retVal = @shell_exec("HOME=".tfb_shellencode($cfg["path"])."; export HOME; ".$cfg["btclient_transmission_bin"] . " -s ".tfb_shellencode($cfg["transfer_file_path"].$transfer));

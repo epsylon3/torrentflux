@@ -1,0 +1,33 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<h1>Multi Upload</h1>
+<p><tmpl_var name="_SELECTFILE">. valid Metafile-types: <tmpl_var name="file_types_label"></p>
+<form name="form_file" action="dispatcher.php?action=fileUpload" method="post" enctype="multipart/form-data">
+<table id="indexMultiUp">
+	<tmpl_loop name="row_list">
+		<tr>
+			<td>
+				<input type="file" name="upload_files[]" id="upload_files_1_<tmpl_var name="__ROWNUM__">" size="40">
+			</td>
+			<td>
+				<input type="file" name="upload_files[]" id="upload_files_2_<tmpl_var name="__ROWNUM__">" size="40">
+			</td>
+		</tr>
+	</tmpl_loop>
+		<tr>
+			<td>
+				<select name="aid" size="1">
+					<option value="1" selected><tmpl_var name="_UPLOAD"></option>
+				<tmpl_if name="queueActive" value="1">
+				<tmpl_if name="isAdmin">
+					<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+				</tmpl_if>
+					<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
+				<tmpl_else>
+					<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
+				</tmpl_if>
+				</select><input type="Submit" value="Go">
+			</td>
+		</tr>
+</table>
+</form>
+<tmpl_include name="inc.LayoutFooter.tmpl">

@@ -1,0 +1,19 @@
+<table border="0" cellpadding="2" cellspacing="2" width="100%">
+	<tmpl_if name="transferFilesList">
+		<tr>
+			<td><div class="tiny"><strong>Name</strong></div></td>
+			<td><div class="tiny"><strong>Size</strong></div></td>
+		</tr>
+		<tmpl_loop name="transferFilesList">
+			<tr>
+				<td><div class="tiny"><tmpl_var name="name"></div></td>
+				<td nowrap><div class="tiny"><tmpl_var name="size"></div></td>
+			</tr>
+		</tmpl_loop>
+	</tmpl_if>
+	<tmpl_if name="transferFilesString">
+		<tr>
+			<td colspan="2"><pre><tmpl_var name="transferFilesString"></pre></td>
+		</tr>
+	</tmpl_if>
+</table>

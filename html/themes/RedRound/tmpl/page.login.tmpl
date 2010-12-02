@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title><tmpl_var name="pagetitle"> login</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<link rel="icon" href="themes/<tmpl_var name="theme">/images/faviconRedRound.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="themes/<tmpl_var name="theme">/images/faviconRedRound.ico" type="image/x-icon" />
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/login.css" type="text/css" />
+	<script src="js/login.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="login_in_progress"><p>logging you in<br /><img src="themes/<tmpl_var name="theme">/images/login/loader.gif" /></p></div>
+<div id="login_form">
+<div id="inhalt">
+<h1>login</h1>
+<p><img style="float:left" src="themes/RedRound/images/login/emblem.png"></p>
+
+<tmpl_if name="login_failed">
+	<p>Login failed. Please try again.</p>
+</tmpl_if>
+
+<!-- AUTH TYPE 1 LOGIN & COOKIE FOUND -->
+<tmpl_if name="auth_type" value="1">
+	<tmpl_if name="cookie_set" value="1">
+		<form name="cookieLogin" action="login.php" method="post">
+			<h2>Cookie found</h2>
+			<input name="docookielogin" type="hidden" value="true" />
+			<input name="username" type="hidden" value="<tmpl_var name="cookieuser">" />
+			<input name="md5pass" type="hidden" value="<tmpl_var name="cookiepass">" />
+			<input class="button" type="submit" value="Login as <tmpl_var name="cookieuser">" />
+		</form>
+
+		<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(0)">
+			<h2>Login as different User</h2>
+			<table id="loginCookie">									
+				<tr>
+					<th>Username</th>
+					<td><input type="text" name="username" id="username" size="15" /></td>
+				</tr>
+				<tr>
+					<th>Password</th>
+					<td><input type="password" name="iamhim" id="iamhim" size="15" /></td>
+				</tr>
+				<tr>
+					<th>Set "Auto-Login" Cookie</th>
+					<td><input type="checkbox" name="setcookie" id="setcookie" value="true" checked="checked" size="15" /></td>
+				</tr>
+				<tr>
+					<th colspan="2">
+						<input name="docookieloginnew" type="hidden" value="true" />
+						<input type="submit" value="Login" />
+					</th>
+				</tr>
+			</table>
+		</form>
+		
+<tmpl_else>
+
+<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(0)">
+	<table id="loginCookie">
+		<tr>
+			<th>Username</th>
+			<td><input type="text" name="username" id="username" size="15" /></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="password" name="iamhim" id="iamhim" size="15" /></td>
+		</tr>
+		<tr>
+			<th>Set "Auto-Login" Cookie</th>
+			<td><input type="checkbox" name="setcookie" id="setcookie" value="true" checked="checked" size="15" /></td>
+		</tr>
+		<tr>
+			<th colspan="2">
+				<input name="docookieloginnew" type="hidden" value="true" />
+				<input type="submit" value="Login" />
+			</th>
+		</tr>
+	</table>
+</form>
+
+</tmpl_if>
+
+<tmpl_elseif name="auth_type" value="4">
+	<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(<tmpl_var name="imageSupported">)">
+	<table id="loginImage">
+		<tr>
+			<th>Username</th>
+			<td><input type="text" name="username" id="username" size="15" /></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="password" name="iamhim" id="iamhim" size="15" /></td>
+		</tr>
+		<tmpl_if name="imageSupported" value="1">
+		<tr>
+			<th><img src="image.php?i=login&amp;rnd=<tmpl_var name="rnd">" style="border:1px solid #000000;" /></th>
+			<td>
+				<input type="text" name="security" id="security" value="" size="15" />
+				<input type="hidden" name="rnd_chk" value="<tmpl_var name="rnd">" />
+			</td>
+		</tr>
+		<tmpl_else>
+		<tr>
+			<td colspan="2" class="login_td" style="text-align:center;"><img src="image.php?i=notsup" /></td> <!-- WHEN DOES THIS APPEAR? -->
+		</tr>
+		</tmpl_if>
+		<tr>
+			<th colspan="2"><input type="submit" value="Login" /></th>
+		</tr>
+	</table>
+</form>
+
+<tmpl_else>
+<form name="theForm" action="login.php" method="post" onsubmit="return loginSubmit(0)">
+	<table id="loginForm">
+		<tr>
+			<th>Username</th>
+			<td><input type="text" name="username" id="username" size="15" /></td>
+		</tr>
+		<tr>
+			<th>Password</label></td>
+			<td class="login_td"><input type="password" name="iamhim" id="iamhim" size="15" /></td>
+		</tr>
+		<tr>
+			<th class="login_td" colspan="2"><input class="button" type="submit" value="Login" /></td>
+		</tr>
+	</table>
+</form>
+
+</tmpl_if>
+</div>
+</body>
+</html>

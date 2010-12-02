@@ -19,6 +19,19 @@
 							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>BitTorrent</strong></td></tr>
 							<tr>
 								<td align="left" width="350" valign="top">
+									<label for="enable_torrent"><strong>Enable Torrent:</strong></label><br/>
+									Set who can use torrents.
+								</td>
+								<td valign="top">
+									<select name="enable_torrent" id="enable_torrent">
+										<option value="0" <tmpl_if name="enable_torrent" value="0"> selected</tmpl_if>>Torrent Disabled</option>
+										<option value="1" <tmpl_if name="enable_torrent" value="1"> selected</tmpl_if>>Only Admins</option>
+										<option value="2" <tmpl_if name="enable_torrent" value="2"> selected</tmpl_if>>All Users</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
 									<label for="btclient"><strong>Default BitTorrent Client:</strong></label><br/>
 									Set the client to use by default to start torrent transfers.
 								</td>
@@ -246,6 +259,38 @@
 									</select>
 								</td>
 							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Transmission RPC</strong></td></tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="transmission_rpc_enable"><strong>Enable Transmission RPC Mode</strong></label><br/>
+								</td>
+								<td valign="top">
+									<select name="transmission_rpc_enable" id="transmission_rpc_enable">
+										<option value="1">Enabled</option>
+										<option value="0"
+											<tmpl_if name="transmission_rpc_enable" value="False">
+												 selected="selected"
+											</tmpl_if>
+										>Disabled</option>
+									</select>
+								</td>
+							</tr>
+							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Vuze RPC</strong></td></tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="vuze_rpc_enable"><strong>Enable Vuze RPC Mode</strong></label><br/>
+								</td>
+								<td valign="top">
+									<select name="vuze_rpc_enable" id="vuze_rpc_enable">
+										<option value="1">Enabled</option>
+										<option value="0"
+											<tmpl_if name="vuze_rpc_enable" value="False">
+												 selected="selected"
+											</tmpl_if>
+										>Disabled</option>
+									</select>
+								</td>
+							</tr>
 							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Fluazu</strong></td></tr>
 							<tr>
 								<td align="left" width="350" valign="top"><strong>Fluazu Daemon:</strong><br>
@@ -381,6 +426,27 @@
 								</td>
 								<td valign="top">
 									<input name="nzbperl_pw" id="nzbperl_pw" type="password" maxlength="254" value="<tmpl_var name="nzbperl_pw">" size="55">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="nzbperl_ssl"><strong>Use SSL:</strong></label><br/>
+									Use SSL.
+								</td>
+								<td valign="top">
+									<select name="nzbperl_ssl" id="nzbperl_ssl">
+										<option value="0" <tmpl_if name="nzbperl_ssl" value="0"> selected</tmpl_if>>No</option>
+										<option value="1" <tmpl_if name="nzbperl_ssl" value="1"> selected</tmpl_if>>Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="nzbperl_port"><strong>Port:</strong></label><br/>
+									The port number used by nzbperl.<br/>
+								</td>
+								<td valign="top">
+									<input name="nzbperl_port" id="nzbperl_port" type="text" maxlength="5" value="<tmpl_var name="nzbperl_port">" size="5">
 								</td>
 							</tr>
 							<tr>

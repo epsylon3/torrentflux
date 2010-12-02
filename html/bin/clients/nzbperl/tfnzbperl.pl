@@ -106,7 +106,7 @@ my (	$server, $port, $user, $pw, $keepparts,
 	);
 
 # How commandline args are mapped to vars.  This map is also used by config file processor
-my %optionsmap = ('server=s' => \$server, 'user=s' => \$user, 'pw=s' => \$pw,
+my %optionsmap = ('server=s' => \$server, 'port=i' => \$port, 'user=s' => \$user, 'pw=s' => \$pw,
 				'help' => \$help, 'med=s' => \$medbw, 'low=s' => \$lowbw,
 				'speed=s' => \$targkBps, 'keepparts' => \$keepparts,
 				'keepbroken' => \$keepbroken, 'keepbrokenbin' => \$keepbrokenbin,

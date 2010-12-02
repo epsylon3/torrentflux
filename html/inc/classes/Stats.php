@@ -25,83 +25,83 @@
  */
 class Stats
 {
-    // private fields
+	// private fields
 
 	// ids of server-details
 	var $_serverIds = array(
-		"speedDown",          /*  0 */
-		"speedUp",            /*  1 */
-		"speedTotal",         /*  2 */
-		"cons",               /*  3 */
-		"freeSpace",          /*  4 */
-		"loadavg",            /*  5 */
-		"running",            /*  6 */
-		"queued",             /*  7 */
-		"speedDownPercent",   /*  8 */
-		"speedUpPercent",     /*  9 */
-		"driveSpacePercent"   /* 10 */
+	0=>	"speedDown",          //  0
+		"speedUp",            //  1
+		"speedTotal",         //  2
+		"cons",               //  3
+		"freeSpace",          //  4
+		"loadavg",            //  5
+		"running",            //  6
+		"queued",             //  7
+		"speedDownPercent",   //  8
+		"speedUpPercent",     //  9
+		"driveSpacePercent"   // 10
 	);
 	var $_serverIdCount = 11;
 
 	// ids of transfer-details
 	var $_transferIds = array(
-		"running",            /*  0 */
-		"speedDown",          /*  1 */
-		"speedUp",            /*  2 */
-		"downCurrent",        /*  3 */
-		"upCurrent",          /*  4 */
-		"downTotal",          /*  5 */
-		"upTotal",            /*  6 */
-		"percentDone",        /*  7 */
-		"sharing",            /*  8 */
-		"eta",                /*  9 */
-		"seeds",              /* 10 */
-		"peers",              /* 11 */
-		"cons"                /* 12 */
+	0=>	"running",            //  0
+		"speedDown",          //  1
+		"speedUp",            //  2
+		"downCurrent",        //  3
+		"upCurrent",          //  4
+		"downTotal",          //  5
+		"upTotal",            //  6
+		"percentDone",        //  7
+		"sharing",            //  8
+		"eta",                //  9
+		"seeds",              // 10
+		"peers",              // 11
+		"cons"                // 12
 	);
 	var $_transferIdCount = 13;
 
 	// ids of xfer-details
 	var $_xferIds = array(
-		"xferGlobalTotal",    /* 0 */
-		"xferGlobalMonth",    /* 1 */
-		"xferGlobalWeek",     /* 2 */
-		"xferGlobalDay",      /* 3 */
-		"xferUserTotal",      /* 4 */
-		"xferUserMonth",      /* 5 */
-		"xferUserWeek",       /* 6 */
-		"xferUserDay"         /* 7 */
+	0=>	"xferGlobalTotal",    // 0
+		"xferGlobalMonth",    // 1
+		"xferGlobalWeek",     // 2
+		"xferGlobalDay",      // 3
+		"xferUserTotal",      // 4
+		"xferUserMonth",      // 5
+		"xferUserWeek",       // 6
+		"xferUserDay"         // 7
 	);
 	var $_xferIdCount = 8;
 
 	// ids of user-details
 	var $_userIds = array(
-		"state"               /* 0 */
+	0=>	"state"               // 0
 	);
 	var $_userIdCount = 1;
 
-    // stats-fields
-   	var $_serverLabels = array();
-   	var $_xferLabels = array();
-   	var $_transferList = array();
-   	var $_transferHeads = array();
-   	var $_serverStats = array();
-   	var $_xferStats = array();
-   	var $_transferDetails = array();
-   	var $_userList = array();
-   	var $_userCount = 0;
-   	var $_transferID = "";
+	// stats-fields
+	var $_serverLabels = array();
+	var $_xferLabels = array();
+	var $_transferList = array();
+	var $_transferHeads = array();
+	var $_serverStats = array();
+	var $_xferStats = array();
+	var $_transferDetails = array();
+	var $_userList = array();
+	var $_userCount = 0;
+	var $_transferID = "";
 
-    // options
-    var $_type = "";
-    var $_format = "";
-    var $_header = 0;
-    var $_compressed = 0;
-    var $_attachment = 0;
+	// options
+	var $_type = "";
+	var $_format = "";
+	var $_header = 0;
+	var $_compressed = 0;
+	var $_attachment = 0;
 
-    // content
-    var $_indent = "";
-    var $_content = "";
+	// content
+	var $_indent = "";
+	var $_content = "";
 
 	// =========================================================================
 	// public static methods
@@ -112,25 +112,25 @@ class Stats
 	 *
 	 * @param $params
 	 */
-    function processRequest($params) {
-    	// create new instance
-    	$instanceStats = new Stats($params);
+	function processRequest($params) {
+		// create new instance
+		$instanceStats = new Stats($params);
 		// call instance-method
 		$instanceStats->instance_processRequest();
-    }
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * do not use direct, use the public static methods !
-     *
+	/**
+	 * do not use direct, use the public static methods !
+	 *
 	 * @param $params
-     * @return Stats
-     */
-    function Stats($params) {
-    	global $cfg;
+	 * @return Stats
+	 */
+	function Stats($params) {
+		global $cfg;
 
 		// type
 		$this->_type = (isset($params["t"]))
@@ -170,7 +170,7 @@ class Stats
 				$this->_type = "usage";
 		}
 
-    }
+	}
 
 	// =========================================================================
 	// public methods
@@ -179,49 +179,49 @@ class Stats
 	/**
 	 * process a request
 	 */
-    function instance_processRequest() {
-    	global $cfg, $db;
+	function instance_processRequest() {
+		global $cfg, $db;
 
 		// type-switch
 		switch ($this->_type) {
-		    case "all":
-		    	if (!(($this->_format == "txt") && ($this->_header == 0)))
-		    		$this->_transferHeads = getTransferListHeadArray();
-		    	$this->_indent = " ";
-		    	// xfer-init
-		    	if ($cfg['xfer_realtime'] == 0) {
+			case "all":
+				if (!(($this->_format == "txt") && ($this->_header == 0)))
+					$this->_transferHeads = getTransferListHeadArray();
+				$this->_indent = " ";
+				// xfer-init
+				if ($cfg['xfer_realtime'] == 0) {
 					$cfg['xfer_realtime'] = 1;
 					// set xfer-newday
 					Xfer::setNewday();
-		    	}
-		    	$this->_transferList = getTransferListArray();
-		    	$this->_initServerStats();
-		    	$this->_initXferStats();
-		    	$this->_initUserStats();
-		    	break;
-		    case "server":
-		    	$this->_indent = "";
-		    	$this->_transferList = getTransferListArray();
-		    	$this->_initServerStats();
-		    	break;
-		    case "xfer":
-		    	$this->_indent = "";
-		    	// xfer-init
-		    	if ($cfg['xfer_realtime'] == 0) {
+				}
+				$this->_transferList = getTransferListArray();
+				$this->_initServerStats();
+				$this->_initXferStats();
+				$this->_initUserStats();
+				break;
+			case "server":
+				$this->_indent = "";
+				$this->_transferList = getTransferListArray();
+				$this->_initServerStats();
+				break;
+			case "xfer":
+				$this->_indent = "";
+				// xfer-init
+				if ($cfg['xfer_realtime'] == 0) {
 					$cfg['xfer_realtime'] = 1;
 					// set xfer-newday
 					Xfer::setNewday();
-		    	}
-		    	$this->_transferList = getTransferListArray();
-		    	$this->_initXferStats();
-		    	break;
-		    case "transfers":
-		    	$this->_indent = "";
-		    	$this->_transferList = getTransferListArray();
-		    	if (!(($this->_format == "txt") && ($this->_header == 0)))
-		    		$this->_transferHeads = getTransferListHeadArray();
-		    	break;
-		    case "transfer":
+				}
+				$this->_transferList = getTransferListArray();
+				$this->_initXferStats();
+				break;
+			case "transfers":
+				$this->_indent = "";
+				$this->_transferList = getTransferListArray();
+				if (!(($this->_format == "txt") && ($this->_header == 0)))
+					$this->_transferHeads = getTransferListHeadArray();
+				break;
+			case "transfer":
 				// transfer-id
 				if (empty($this->_transferID))
 					@error("missing params", "stats.php", "", array('i'));
@@ -230,15 +230,15 @@ class Stats
 					AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$this->_transferID);
 					@error("Invalid Transfer", "", "", array($this->_transferID));
 				}
-		    	$this->_indent = "";
-		    	$this->_transferDetails = getTransferDetails($this->_transferID, false);
-		    	break;
-		    case "users":
-		    	$this->_indent = "";
-		    	$this->_initUserStats();
-		    	break;
-		    case "usage":
-		    	$this->_sendUsage();
+				$this->_indent = "";
+				$this->_transferDetails = getTransferDetails($this->_transferID, false);
+				break;
+			case "users":
+				$this->_indent = "";
+				$this->_initUserStats();
+				break;
+			case "usage":
+				$this->_sendUsage();
 		}
 
 		// action
@@ -250,7 +250,7 @@ class Stats
 			case "txt":
 				$this->_sendTXT();
 		}
-    }
+	}
 
 	// =========================================================================
 	// private methods
@@ -266,11 +266,11 @@ class Stats
 	 */
 	function _sendContent($contentType, $fileName, $sendCompressed, $sendAsAttachment) {
 		global $cfg;
-	    // send content
-	    @header("Cache-Control: no-cache");
-	    @header("Pragma: no-cache");
-	    if ($sendCompressed != 0) {
-	    	$contentCompressed = gzdeflate($this->_content, $cfg['stats_deflate_level']);
+		// send content
+		@header("Cache-Control: no-cache");
+		@header("Pragma: no-cache");
+		if ($sendCompressed != 0) {
+			$contentCompressed = gzdeflate($this->_content, $cfg['stats_deflate_level']);
 			@header("Content-Type: application/octet-stream");
 			if ($sendAsAttachment != 0) {
 				@header("Content-Length: " .(string)(strlen($contentCompressed)) );
@@ -278,15 +278,16 @@ class Stats
 			}
 			@header("Content-Transfer-Encoding: binary\n");
 			echo $contentCompressed;
-	    } else {
-		    @header("Content-Type: ".$contentType);
-		    if ($sendAsAttachment != 0) {
-		        @header("Content-Length: ".(string)strlen($this->_content));
-		        @header('Content-Disposition: attachment; filename="'.$fileName.'"');
-		    }
-		    echo $this->_content;
-	    }
-	    exit();
+		} else {
+			@header("Content-Type: ".$contentType);
+			@header("Content-Charset: ".$cfg["_CHARSET"]);
+			if ($sendAsAttachment != 0) {
+				@header("Content-Length: ".(string)strlen($this->_content));
+				@header('Content-Disposition: attachment; filename="'.$fileName.'"');
+			}
+			echo $this->_content;
+		}
+		exit();
 	}
 
 	/**
@@ -294,7 +295,7 @@ class Stats
 	 * xml-schema defined in tfbstats.xsd/tfbserver.xsd/tfbxfer.xsd/tfbtransfers.xsd/tfbtransfer.xsd/tfbusers.xsd
 	 */
 	function _sendXML() {
-	    // build content
+		// build content
 		$this->_content = '<?xml version="1.0" encoding="utf-8"?>'."\n";
 		switch ($this->_type) {
 			case "all":
@@ -303,40 +304,40 @@ class Stats
 		}
 		// server stats
 		switch ($this->_type) {
-		    case "all":
-		    case "server":
-		    	$this->_content .= $this->_indent.'<server>'."\n";
+			case "all":
+			case "server":
+				$this->_content .= $this->_indent.'<server>'."\n";
 				for ($i = 0; $i < $this->_serverIdCount; $i++)
 					$this->_content .= $this->_indent.' <serverStat name="'.$this->_serverIds[$i].'">'.$this->_serverStats[$i].'</serverStat>'."\n";
 				$this->_content .= $this->_indent.'</server>'."\n";
 		}
 		// xfer stats
 		switch ($this->_type) {
-		    case "all":
-		    case "xfer":
-		    	$this->_content .= $this->_indent.'<xfer>'."\n";
+			case "all":
+			case "xfer":
+				$this->_content .= $this->_indent.'<xfer>'."\n";
 				for ($i = 0; $i < $this->_xferIdCount; $i++)
 					$this->_content .= $this->_indent.' <xferStat name="'.$this->_xferIds[$i].'">'.$this->_xferStats[$i].'</xferStat>'."\n";
 				$this->_content .= $this->_indent.'</xfer>'."\n";
 		}
-	    // user-list
+		// user-list
 		switch ($this->_type) {
-		    case "all":
-		    case "users":
-			    $this->_content .= $this->_indent.'<users>'."\n";
+			case "all":
+			case "users":
+				$this->_content .= $this->_indent.'<users>'."\n";
 				foreach ($this->_userList as $userAry) {
 					$this->_content .= $this->_indent.' <user name="'.$userAry[0].'">'."\n";
 					for ($i = 0; $i < $this->_userIdCount; $i++)
 						$this->_content .= $this->_indent.'  <userProp name="'.$this->_userIds[$i].'">'.$userAry[$i + 1].'</userProp>'."\n";
 					$this->_content .= $this->_indent.' </user>'."\n";
 				}
-			    $this->_content .= $this->_indent.'</users>'."\n";
+				$this->_content .= $this->_indent.'</users>'."\n";
 		}
-	    // transfer-list
+		// transfer-list
 		switch ($this->_type) {
-		    case "all":
-		    case "transfers":
-			    $this->_content .= $this->_indent.'<transfers>'."\n";
+			case "all":
+			case "transfers":
+				$this->_content .= $this->_indent.'<transfers>'."\n";
 				foreach ($this->_transferList as $transferAry) {
 					$this->_content .= $this->_indent.' <transfer name="'.$transferAry[0].'">'."\n";
 					$size = count($transferAry);
@@ -344,72 +345,72 @@ class Stats
 						$this->_content .= $this->_indent.'  <transferStat name="'.$this->_transferHeads[$i-1].'">'.$transferAry[$i].'</transferStat>'."\n";
 					$this->_content .= $this->_indent.' </transfer>'."\n";
 				}
-			    $this->_content .= $this->_indent.'</transfers>'."\n";
+				$this->_content .= $this->_indent.'</transfers>'."\n";
 		}
 		// transfer-details
 		switch ($this->_type) {
-		    case "transfer":
+			case "transfer":
 				$this->_content .= $this->_indent.'<transfer name="'.$this->_transferID.'">'."\n";
 				for ($i = 0; $i < $this->_transferIdCount; $i++)
 					$this->_content .= $this->_indent.' <transferStat name="'.$this->_transferIds[$i].'">'.$this->_transferDetails[$this->_transferIds[$i]].'</transferStat>'."\n";
 				$this->_content .= $this->_indent.'</transfer>'."\n";
 		}
-	    // end document
+		// end document
 		switch ($this->_type) {
 			case "all":
 				$this->_content .= '</tfbstats>'."\n";
 				break;
 		}
-	    // send content
-	    $this->_sendContent("text/xml", "stats.xml", $this->_compressed, $this->_attachment);
+		// send content
+		$this->_sendContent("text/xml", "stats.xml", $this->_compressed, $this->_attachment);
 	}
 
 	/**
 	 * This method sends stats as rss 0.91.
 	 */
 	function _sendRSS() {
-	    // build content
-	    $this->_content = "<?xml version='1.0' ?>\n\n";
-	    $this->_content .= "<rss version=\"0.91\">\n";
-	    $this->_content .= " <channel>\n";
-	    $this->_content .= "  <title>torrentflux Stats</title>\n";
-	    // server stats
+		// build content
+		$this->_content = "<?xml version='1.0' ?>\n\n";
+		$this->_content .= "<rss version=\"0.91\">\n";
+		$this->_content .= " <channel>\n";
+		$this->_content .= "  <title>torrentflux Stats</title>\n";
+		// server stats
 		switch ($this->_type) {
-		    case "all":
-		    case "server":
-			    $this->_content .= "   <item>\n";
-			    $this->_content .= "    <title>Server Stats</title>\n";
-			    $this->_content .= "    <description>";
+			case "all":
+			case "server":
+				$this->_content .= "   <item>\n";
+				$this->_content .= "    <title>Server Stats</title>\n";
+				$this->_content .= "    <description>";
 				for ($i = 0; $i < $this->_serverIdCount; $i++) {
 					$this->_content .= $this->_serverLabels[$i].": ".$this->_serverStats[$i];
 					if ($i < ($this->_serverIdCount - 1))
 						$this->_content .= " || ";
 				}
-			    $this->_content .= "    </description>\n";
-			    $this->_content .= "   </item>\n";
+				$this->_content .= "    </description>\n";
+				$this->_content .= "   </item>\n";
 		}
 		// xfer stats
 		switch ($this->_type) {
-		    case "all":
-		    case "xfer":
-			    $this->_content .= "   <item>\n";
-			    $this->_content .= "    <title>Xfer Stats</title>\n";
-			    $this->_content .= "    <description>";
+			case "all":
+			case "xfer":
+				$this->_content .= "   <item>\n";
+				$this->_content .= "    <title>Xfer Stats</title>\n";
+				$this->_content .= "    <description>";
 				for ($i = 0; $i < $this->_xferIdCount; $i++) {
 					$this->_content .= $this->_xferLabels[$i].": ".$this->_xferStats[$i];
 					if ($i < ($this->_xferIdCount - 1))
 						$this->_content .= " || ";
 				}
-			    $this->_content .= "    </description>\n";
-			    $this->_content .= "   </item>\n";
+				$this->_content .= "    </description>\n";
+				$this->_content .= "   </item>\n";
 		}
-	    // user-list
+		// user-list
 		switch ($this->_type) {
-		    case "all":
-		    case "users":
-			    $this->_content .= "   <item>\n";
-			    $this->_content .= "    <title>Users</title>\n";
-			    $this->_content .= "    <description>";
+			case "all":
+			case "users":
+				$this->_content .= "   <item>\n";
+				$this->_content .= "    <title>Users</title>\n";
+				$this->_content .= "    <description>";
 				for ($i = 0; $i < $this->_userCount; $i++) {
 					$this->_content .= $this->_userList[$i][0].": ";
 					for ($j = 1; $j <= $this->_userIdCount; $j++) {
@@ -420,13 +421,13 @@ class Stats
 					if ($i < ($this->_userCount - 1))
 						$this->_content .= " || ";
 				}
-			    $this->_content .= "    </description>\n";
-			    $this->_content .= "   </item>\n";
+				$this->_content .= "    </description>\n";
+				$this->_content .= "   </item>\n";
 		}
 		// transfer-list
 		switch ($this->_type) {
-		    case "all":
-		    case "transfers":
+			case "all":
+			case "transfers":
 				foreach ($this->_transferList as $transferAry) {
 					$this->_content .= "   <item>\n";
 					$this->_content .= "    <title>Transfer: ".$transferAry[0]."</title>\n";
@@ -443,7 +444,7 @@ class Stats
 		}
 		// transfer-details
 		switch ($this->_type) {
-		    case "transfer":
+			case "transfer":
 				$this->_content .= "   <item>\n";
 				$this->_content .= "    <title>Transfer: ".$this->_transferID."</title>\n";
 				$this->_content .= "    <description>";
@@ -455,125 +456,103 @@ class Stats
 				$this->_content .= "    </description>\n";
 				$this->_content .= "   </item>\n";
 		}
-	    // end document
-	    $this->_content .= " </channel>\n";
-	    $this->_content .= "</rss>";
-	    // send content
-	    $this->_sendContent("text/xml", "stats.xml", $this->_compressed, $this->_attachment);
+		// end document
+		$this->_content .= " </channel>\n";
+		$this->_content .= "</rss>";
+		// send content
+		$this->_sendContent("text/xml", "stats.xml", $this->_compressed, $this->_attachment);
 	}
 
 	/**
 	 * This method sends stats as txt.
 	 */
 	function _sendTXT() {
-	    global $cfg;
-	    // build content
-	    $this->_content = "";
+		global $cfg;
+		
+		// field separator
+		$delim = $cfg['stats_txt_delim'];
+		
+		// build content
+		$this->_content = "";
 		// server stats
 		switch ($this->_type) {
-		    case "all":
-		    case "server":
-		    	if ($this->_header == 1) {
-					for ($j = 0; $j < $this->_serverIdCount; $j++) {
-						$this->_content .= $this->_serverLabels[$j];
-						if ($j < ($this->_serverIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
-					}
-					$this->_content .= "\n";
-		    	}
-				for ($i = 0; $i < $this->_serverIdCount; $i++) {
-					$this->_content .= $this->_serverStats[$i];
-					if ($i < ($this->_serverIdCount - 1))
-						$this->_content .= $cfg['stats_txt_delim'];
+			case "all":
+			case "server":
+				if ($this->_header) {
+					$this->_content .= implode($delim,$this->_serverLabels)."\n";
 				}
-				$this->_content .= "\n";
+				$this->_content .= implode($delim,$this->_serverStats)."\n";
 		}
 		// xfer stats
 		switch ($this->_type) {
-		    case "all":
-		    case "xfer":
-		    	if ($this->_header == 1) {
-					for ($j = 0; $j < $this->_xferIdCount; $j++) {
-						$this->_content .= $this->_xferLabels[$j];
-						if ($j < ($this->_xferIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
-					}
-					$this->_content .= "\n";
-		    	}
-				for ($i = 0; $i < $this->_xferIdCount; $i++) {
-					$this->_content .= $this->_xferStats[$i];
-					if ($i < ($this->_xferIdCount - 1))
-						$this->_content .= $cfg['stats_txt_delim'];
+			case "all":
+			case "xfer":
+				if ($this->_header) {
+					$this->_content .= implode($delim,$this->_xferLabels)."\n";
 				}
-				$this->_content .= "\n";
+				$this->_content .= implode($delim,$this->_xferStats)."\n";
 		}
-	    // user-list
+		// user-list
 		switch ($this->_type) {
-		    case "all":
-		    case "users":
-		    	if ($this->_header == 1) {
-			    	$this->_content .= "name" . $cfg['stats_txt_delim'];
-					for ($j = 0; $j < $this->_userIdCount; $j++) {
-						$this->_content .= $this->_userIds[$j];
-						if ($j < ($this->_userIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+			case "all":
+			case "users":
+				if ($this->_header == 1) {
+					$this->_content .= "name" . $delim;
+					for ($i = 0; $i < $this->_userIdCount; $i++) {
+						$this->_content .= $this->_userIds[$i];
+						$this->_content .= $delim;
 					}
-			    	$this->_content .= "\n";
-		    	}
+					$this->_content = rtrim($this->_content,$delim)."\n";
+				}
 				for ($i = 0; $i < $this->_userCount; $i++) {
-					$this->_content .= $this->_userList[$i][0].$cfg['stats_txt_delim'];
+					$this->_content .= $this->_userList[$i][0].$delim;
 					for ($j = 1; $j <= $this->_userIdCount; $j++) {
 						$this->_content .= $this->_userList[$i][$j];
-						if ($j < ($this->_userIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+						$this->_content .= $delim;
 					}
-					$this->_content .= "\n";
+					$this->_content = rtrim($this->_content,$delim)."\n";
 				}
 		}
-	    // transfer-list
+		// transfer-list
 		switch ($this->_type) {
-		    case "all":
-		    case "transfers":
-		    	if ($this->_header == 1) {
-			    	$this->_content .= "Name" . $cfg['stats_txt_delim'];
-			    	$sizeHead = count($this->_transferHeads);
-					for ($j = 0; $j < $sizeHead; $j++) {
-						$this->_content .= $this->_transferHeads[$j];
-						if ($j < ($sizeHead - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+			case "all":
+			case "transfers":
+				if ($this->_header == 1) {
+					$this->_content .= "Name" . $delim;
+					$sizeHead = count($this->_transferHeads);
+					for ($i = 0; $i < $sizeHead; $i++) {
+						$this->_content .= $this->_transferHeads[$i];
+						$this->_content .= $delim;
 					}
-			    	$this->_content .= "\n";
-		    	}
+					$this->_content = rtrim($this->_content,$delim)."\n";
+				}
 				foreach ($this->_transferList as $transferAry) {
 					$size = count($transferAry);
 					for ($i = 0; $i < $size; $i++) {
 						$this->_content .= $transferAry[$i];
-						if ($i < ($size - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
+						$this->_content .= $delim;
 					}
-					$this->_content .= "\n";
+					$this->_content = rtrim($this->_content,$delim)."\n";
 				}
 		}
 		// transfer-details
 		switch ($this->_type) {
-		    case "transfer":
-		    	if ($this->_header == 1) {
-					for ($j = 0; $j < $this->_transferIdCount; $j++) {
-						$this->_content .= $this->_transferIds[$j];
-						if ($j < ($this->_transferIdCount - 1))
-							$this->_content .= $cfg['stats_txt_delim'];
-					}
-			    	$this->_content .= "\n";
-		    	}
-				for ($i = 0; $i < $this->_transferIdCount; $i++) {
-					$this->_content .= $this->_transferDetails[$this->_transferIds[$i]];
-					if ($i < ($this->_transferIdCount - 1))
-						$this->_content .= $cfg['stats_txt_delim'];
-				}
-				$this->_content .= "\n";
+		case "transfer":
+			if ($this->_header == 1) {
+				$this->_content .= implode($delim,$this->_transferIds)."\n";
+			}
+			for ($i = 0; $i < $this->_transferIdCount; $i++) {
+				$this->_content .= $this->_transferDetails[$this->_transferIds[$i]];
+				$this->_content .= $delim;
+			}
+			$this->_content = rtrim($this->_content,$delim)."\n";
 		}
-	    // send content
-	    $this->_sendContent("text/plain", "stats.txt", $this->_compressed, $this->_attachment);
+		if ($delim == ';') {
+			//fix html chars like &nbsp; which contains the delim
+			$this->_content = html_entity_decode($this->_content,ENT_NOQUOTES,$cfg["_CHARSET"]);
+		}
+		// send content
+		$this->_sendContent("text/plain", "stats.txt", $this->_compressed, $this->_attachment);
 	}
 
 	/**
@@ -641,12 +620,12 @@ class Stats
 		}
 	}
 
-    /**
-     * sends usage
-     */
-    function _sendUsage() {
-    	global $cfg;
-    	// content
+	/**
+	 * sends usage
+	 */
+	function _sendUsage() {
+		global $cfg;
+		// content
 		$url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
 		$this->_content = '
 
@@ -688,9 +667,9 @@ Examples :
 * '.$url.'?t=all&f=xml&username=admin&iamhim=seceret                            :  all stats sent as xml. use auth-credentials "admin/seceret"
 * '.$url.'?t=all&f=rss&username=admin&md5pass=dc5c74cfa3ba35eb87cf597a60fa756c  :  all stats sent as rss. use auth-credentials "admin/dc5c74cfa3ba35eb87cf597a60fa756c"
 	';
-	    // send content
+		// send content
 		$this->_sendContent("text/plain", "usage.txt", 0, 0);
-    }
+	}
 
 
 }

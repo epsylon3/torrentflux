@@ -4,7 +4,7 @@
 
 from os.path import getsize, split, join, abspath, isdir
 from os import listdir
-from sha import sha
+from hashlib import sha1
 from copy import copy
 from string import strip
 from BitTornado.bencode import bencode
@@ -156,7 +156,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
         subs = subfiles(file)
         subs.sort()
         pieces = []
-        sh = sha()
+        sh = sha1()
         done = 0L
         fs = []
         totalsize = 0.0
@@ -181,7 +181,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
                 if done == piece_length:
                     pieces.append(sh.digest())
                     done = 0
-                    sh = sha()
+                    sh = sha1()
                 if progress_percent:
                     progress(totalhashed / totalsize)
                 else:
@@ -201,7 +201,7 @@ def makeinfo(file, piece_length, encoding, flag, progress, progress_percent=1):
             x = h.read(min(piece_length, size - p))
             if flag.isSet():
                 return
-            pieces.append(sha(x).digest())
+            pieces.append(sha1(x).digest())
             p += piece_length
             if p > size:
                 p = size

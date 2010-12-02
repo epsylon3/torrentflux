@@ -71,20 +71,15 @@ function getFilePrioForm($transfer, $withForm = false) {
 	}
 	$retVal .= '<script type="text/javascript" src="js/dtree.js"></script>';
 
-	require_once('/usr/local/www/data-dist/nonssl/git/torrentflux/html/inc/classes/Transmission.class.php');
 	$isTransmissionTorrent = false;
-	$trans = new Transmission();
-	$response = $trans->get( array(), array('hashString', 'id', 'name') );
-	foreach ( $response[arguments][torrents] as $aTorrent ) {
-		if ( $aTorrent[hashString] == $transfer ) {
-			$isTransmissionTorrent = true;
-			$theTorrent = $aTorrent;
-			break;
-		}
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$isTransmissionTorrent = isTransmissionTransfer($transfer);
 	}
-	
+
 	$files = array();
 	if ( $isTransmissionTorrent ) {
+
 		$response = $trans->get($theTorrent[id], array("files"));
 		$responseWantedFiles = $trans->get( $theTorrent[id], array('wanted') );
 		$wantedFiles = $responseWantedFiles[arguments][torrents][0][wanted];
@@ -97,34 +92,35 @@ function getFilePrioForm($transfer, $withForm = false) {
 			array_push($files, $fileprops);
 		}
 		$filescount = count($files);
-		#print_r($files);
-			foreach( $files as $filenum => $file) {
-				$depth = count($file['path']);
-				$branch =& $tree;
-				for ($i=0; $i < $depth; $i++) {
-					if ($i != $depth - 1) {
-						$d =& $branch->findDir($file['path'][$i]);
-						if ($d) {
-							$branch =& $d;
-						} else {
-							$dirnum++;
-							$d =& $branch->addDir(new dir($file['path'][$i], $dirnum, -1));
-							$branch =& $d;
-						}
+		foreach( $files as $filenum => $file) {
+			$depth = count($file['path']);
+			$branch =& $tree;
+			for ($i=0; $i < $depth; $i++) {
+				if ($i != $depth - 1) {
+					$d =& $branch->findDir($file['path'][$i]);
+					if ($d) {
+						$branch =& $d;
 					} else {
-						$branch->addFile(new file($file['path'][$i]." (".$file['length'].")", $filenum,$file['length'], ($wantedFiles[$filenum] == 1? 1 : -1) ));
+						$dirnum++;
+						$d =& $branch->addDir(new dir($file['path'][$i], $dirnum, -1));
+						$branch =& $d;
 					}
+				} else {
+					$branch->addFile(new file($file['path'][$i]." (".$file['length'].")", $filenum,$file['length'], ($wantedFiles[$filenum] == 1? 1 : -1) ));
 				}
 			}
+		}
 		$response = $trans->get($theTorrent[id], array("pieceCount", "pieceSize", "totalSize", "dateCreated", "downloadDir", "comment"));
 
-		#$torrent_size = $response[arguments][torrents][0][pieceSize] * $response[arguments][torrents][0][pieceCount];
-		$torrent_size = $response[arguments][torrents][0][totalSize];
-		$torrent_chunksize = $response[arguments][torrents][0][pieceSize];
-		$torrent_directoryname = $response[arguments][torrents][0][downloadDir];
-		$torrent_announceurl = $response[arguments][torrents][0][comment];
-		$torrent_creationdate = $response[arguments][torrents][0][dateCreated];
+		$aTorrent = $response[arguments][torrents][0];
+		#$torrent_size = $aTorrent[pieceSize] * $aTorrent[pieceCount];
+		$torrent_size = $aTorrent[totalSize];
+		$torrent_chunksize = $aTorrent[pieceSize];
+		$torrent_directoryname = $aTorrent[downloadDir];
+		$torrent_announceurl = $aTorrent[comment];
+		$torrent_creationdate = $aTorrent[dateCreated];
 		$torrent_filescount = $filescount;
+
 	} else {
 		$prioFileName = $cfg["transfer_file_path"].$transfer.".prio";
 		$ftorrent = $cfg["transfer_file_path"].$transfer;
@@ -169,6 +165,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 		$torrent_creationdate = $btmeta['creation date'];
 		$torrent_filescount = count($btmeta['info']['files']);
 	}
+
 	$retVal .= "<table><tr>";
 	$retVal .= "<tr><td width=\"110\">Metainfo File:</td><td>".$transfer."</td></tr>";
 	$retVal .= "<tr><td>Directory Name:</td><td>".$torrent_directoryname."</td></tr>";

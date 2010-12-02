@@ -76,7 +76,7 @@ function IsOnline($user) {
 function GetUsers() {
 	global $db;
 	$user_array = array();
-	$user_array = $db->GetCol("select user_id from tf_users order by user_id");
+	$user_array = $db->GetCol("SELECT user_id FROM tf_users order by user_id");
 	return $user_array;
 }
 
@@ -87,7 +87,27 @@ function GetUsers() {
  */
 function GetSuperAdmin() {
 	global $db;
-	return $db->GetOne("select user_id from tf_users WHERE user_level=2");
+	return $db->GetOne("SELECT user_id FROM tf_users WHERE user_level=2");
+}
+
+/**
+ * Get UID
+ *
+ * @return int
+ */
+function GetUID($user) {
+	global $cfg, $db;
+	
+	if (empty($cfg['user_uids'])) {
+		$lst = $db->GetAll("SELECT uid,user_id FROM tf_users");
+		$uids = array();
+		foreach ($lst as $row) {
+			$uids[$row['user_id']] = $row['uid'];
+		}
+		$cfg['user_uids'] = $uids;
+	}
+	
+	return (int) @ $cfg['user_uids'][$user];
 }
 
 ?>

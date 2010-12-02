@@ -1,0 +1,185 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<form name="theForm" action="admin.php?op=updateServerSettings" method="post" onsubmit="return validateSettings('server')">
+<h1>server settings</h1>
+<p><input type="Submit" value="Update Settings"></p>
+<h2>TorrentFlux-NG Paths</h2>
+<table id="adminServerSettings">
+	<tr>
+		<th>
+			Transfer Parent Path<br /><span>Define the main TorrentFlux-NG parent path. Directory must be writable by the webserver user</span></th>
+		<td>
+			<input name="path" id="path" type="Text" maxlength="254" value="<tmpl_var name="path">">
+				<tmpl_if name="is_path" value="1">
+				<tmpl_if name="is_writable" value="1">
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/ok.png" align="absmiddle" title="Valid">
+				<tmpl_else>
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/error.png" align="absmiddle" title="Path is not Writable"><br /><font color="#ff0000">Path is not writable - make sure you chmod +w this path</font>
+				</tmpl_if>
+				<tmpl_else>
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/error.png" align="absmiddle" title="Path is not valid"><br><font color="#ff0000">Path is not valid</font>
+				</tmpl_if>
+			</td>
+	</tr>
+	<tr>
+		<th class="alt">Document Root Path<br /><span>Define the Document Root path of the installation. Directory must be readable by the webserver user</span></th>
+		<td class="alt">
+			<input name="docroot" id="docroot" type="Text" maxlength="254" value="<tmpl_var name="docroot">" size="55">
+				<tmpl_if name="is_docroot" value="1">
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/ok.png" align="absmiddle" title="Valid">
+				<tmpl_else>
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/error.png" align="absmiddle" title="Path is not valid"><br><font color="#ff0000">Path is not valid</font>
+				</tmpl_if>
+		</td>
+	</tr>
+</table>
+<h2>Home Directories</h2>
+<table id="adminServerSettings">
+	<tr>
+		<th>Enable Home Directories<br /><span>Enable/disable home directories. If disabled all downloads are saved to the 'incoming' directory specified below</span></th>
+		<td>
+			<select name="enable_home_dirs" id="enable_home_dirs">
+				<option value="1">True</option>
+				<option value="0"
+					<tmpl_if name="enable_home_dirs" value="0">
+				selected
+					</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Incoming Path<br /><span>Define the incoming path where downloads are saved when per user home directories are disabled</span></th>
+		<td class="alt">
+			<input name="path_incoming" id="path_incoming" type="Text" maxlength="254" value="<tmpl_var name="path_incoming">">
+				<tmpl_if name="path_incoming_ok" value="1">
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/ok.png" align="absmiddle" title="Valid">
+				<tmpl_else>
+					<img src="themes/<tmpl_var name="theme">/images/admin/serverSettings/error.png" align="absmiddle" title="Path is not valid">
+				</tmpl_if>
+		</td>
+	</tr>
+</table>
+<h2>Binary Paths</h2>
+<p class="NormalText">Specify the path to various applications on your system</p>
+<table id="adminServerSettings">
+	<tr>
+		<th>transmissioncli<br /><span>(/usr/local/bin/transmissioncli)</span></th>
+		<td>
+			<input name="btclient_transmission_bin" id="btclient_transmission_bin" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_bin">">
+			<tmpl_var name="validate_transmission_bin">
+		</td>	
+	</tr>
+		<tr>
+			<th class="alt">wget<br /><span>(/usr/bin/wget)</span></th>
+			<td class="alt">
+				<input name="bin_wget" id="bin_wget" type="Text" maxlength="254" value="<tmpl_var name="bin_wget">">
+				<tmpl_var name="validate_wget">
+			</td>
+		</tr>
+		<tr>
+			<th>uudeview<br /><span>(/usr/bin/uudeview)</span></th>
+			<td>
+				<input name="bin_uudeview" id="bin_uudeview" type="Text" maxlength="254" value="<tmpl_var name="bin_uudeview">">
+				<tmpl_var name="validate_uudeview">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">php (cli)<br /><span>Note: This must be the cli version of the PHP binary, NOT cgi or otherwise.</span></th>
+			<td class="alt">
+			<input name="bin_php" id="bin_php" type="Text" maxlength="254" value="<tmpl_var name="bin_php">">
+			<tmpl_var name="validate_php">
+			</td>
+		</tr>
+		<tr>
+			<th>python<br /><span>(/usr/bin/python)</span></th>
+			<td>
+				<input name="pythonCmd" id="pythonCmd" type="Text" maxlength="254" value="<tmpl_var name="pythonCmd">">
+				<tmpl_var name="validate_python">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">perl<br /><span>(/usr/bin/perl)</span></th>
+			<td class="alt">
+				<input name="perlCmd" id="perlCmd" type="Text" maxlength="254" value="<tmpl_var name="perlCmd">">
+				<tmpl_var name="validate_perl">
+			</td>
+		</tr>
+		<tr>
+			<th>grep</th>
+			<td>
+				<input name="bin_grep" id="bin_grep" type="Text" maxlength="254" value="<tmpl_var name="bin_grep">">
+				<tmpl_var name="validate_grep">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">awk<br /><span>(/usr/bin/awk)</span></th>
+			<td class="alt">
+				<input name="bin_awk" id="bin_awk" type="Text" maxlength="254" value="<tmpl_var name="bin_awk">">
+				<tmpl_var name="validate_awk">
+			</td>
+		</tr>
+		<tr>
+			<th>du<br /><span>(/usr/bin/du)</span></th>
+			<td>
+				<input name="bin_du" id="bin_du" type="Text" maxlength="254" value="<tmpl_var name="bin_du">">
+				<tmpl_var name="validate_du">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">unzip<br /><span>(/usr/bin/unzip)</span></th>
+			<td class="alt">
+				<input name="bin_unzip" id="bin_unzip" type="Text" maxlength="254" value="<tmpl_var name="bin_unzip">">
+				<tmpl_var name="validate_unzip">
+			</td>
+		</tr>
+		<tr>
+			<th>unrar<br /><span>(/usr/bin/unrar)</span></th>
+			<td>
+				<input name="bin_unrar" id="bin_unrar" type="Text" maxlength="254" value="<tmpl_var name="bin_unrar">">
+				<tmpl_var name="validate_unrar">
+			</td>
+		</tr>		
+		<tr>
+			<th>cksfv<br /><span>(/usr/bin/cksfv)</span></th>
+			<td>
+				<input name="bin_cksfv" id="bin_cksfv" type="Text" maxlength="254" value="<tmpl_var name="bin_cksfv">">
+				<tmpl_var name="validate_cksfv">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">vlc<br /><span>(/usr/bin/vlc)</span></th>
+			<td class="alt">
+				<input name="bin_vlc" id="bin_vlc" type="Text" maxlength="254" value="<tmpl_var name="bin_vlc">">
+				<tmpl_var name="validate_vlc">
+			</td>
+		</tr>
+</table>
+<h2>OS Specific Binary Paths <em>(<tmpl_var name="php_uname1"> <tmpl_var name="php_uname2">)</em></h2>
+<table id="adminServerSettings">
+	<tmpl_if name="_OS" value="1">
+		<tr>
+			<th>loadavg<br /><span>(/proc/loadavg)</span></th>
+			<td>
+				<input name="loadavg_path" id="loadavg_path" type="Text" maxlength="254" value="<tmpl_var name="loadavg_path">">
+				<tmpl_var name="validate_loadavg">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">netstat<br /><span>(/bin/netstat)</span></th>
+			<td class="alt">
+				<input name="bin_netstat" id="bin_netstat" type="Text" maxlength="254" value="<tmpl_var name="bin_netstat">">
+				<tmpl_var name="validate_netstat">
+			</td>
+		</tr>
+	<tmpl_elseif name="_OS" value="2">
+		<tr>
+			<th class="alt">sockstat<br /><span>(/usr/bin/sockstat)</span></th>
+			<td>
+				<input name="bin_sockstat" id="bin_sockstat" type="Text" maxlength="254" value="<tmpl_var name="bin_sockstat">">
+				<tmpl_var name="validate_sockstat">
+			</td>
+		</tr>
+	</tmpl_if>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

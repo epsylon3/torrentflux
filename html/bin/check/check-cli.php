@@ -28,7 +28,7 @@ if (isset($_REQUEST['argv'])) die();
 /******************************************************************************/
 
 // defines
-define('_NAME', 'torrentflux-b4rt 1.0');
+define('_NAME', 'TorrentFlux-NG 1.0');
 preg_match('|.* (\d+) .*|', '$Revision$', $revisionMatches);
 define('_REVISION', $revisionMatches[1]);
 define('_TITLE', _NAME.' - check-cli - Revision '._REVISION);

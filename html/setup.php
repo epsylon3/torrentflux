@@ -22,9 +22,9 @@
 
 // version
 if (is_file('version.php'))
-    require_once('version.php');
+	require_once('version.php');
 else
-    die("Fatal Error. version.php is missing.");
+	die("Fatal Error. version.php is missing.");
 
 // install-functions
 if ((@is_file('inc/install/functions.install.php')) === true)
@@ -33,12 +33,12 @@ else
 	die("Fatal Error. inc/install/functions.install.php is missing.");
 
 // defines
-define('_NAME', 'torrentflux-b4rt');
+define('_NAME', 'TorrentFlux-NG');
 define('_TITLE', _NAME.' '._VERSION.' - Setup');
 define('_DIR', dirname($_SERVER["SCRIPT_FILENAME"])."/");
 define('_FILE_DBCONF', 'inc/config/config.db.php');
 define('_FILE_THIS', $_SERVER['SCRIPT_NAME']);
-define('_FORUM_URL', "http://tf-b4rt.berlios.de/forum/");
+define('_FORUM_URL', "http://www.torrentflux-ng.org/forum/");
 
 // Database-Types
 $databaseTypes = array();

@@ -1,0 +1,11 @@
+#ViewNFO {
+	width: 800px;
+	overflow: auto;
+	margin: 0 auto;
+}
+
+pre {
+	width:100%;
+	font-size:10px;
+	font-family:'Courier New',monospace;"
+}

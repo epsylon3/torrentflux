@@ -1,0 +1,348 @@
+<form id="settingsForm" action="index.php?iid=profile&amp;op=updateSettingsUser" method="post" onsubmit="return validateSettings('')">
+<fieldset>
+<h2>Preferences</h2>
+<div id="accordion">
+<h3><a href="#">Refresh Settings</a></h3>
+<div>
+<table id="profileRefreshSettings">
+<tr><td>
+	<label>
+		<span>Page Refresh:</span>
+			<select name="enable_index_meta_refresh" id="enable_index_meta_refresh">
+			<option value="1">true</option>
+			<option value="0"
+			<tmpl_if name="enable_index_meta_refresh" value="0">
+				selected="selected"
+			</tmpl_if>
+				>false</option>
+			</select> Enable/disable page refresh
+	</label>
+
+	<label>
+		<span>Page Refresh Interval:</span>
+		<input name="page_refresh" id="page_refresh" type="text" maxlength="3" value="<tmpl_var name="page_refresh">" size="3" /> Number of seconds between page refreshes
+	</label>
+	
+	<label>
+		<span>AJAX Update:</span>
+		<select name="enable_index_ajax_update" id="enable_index_ajax_update">
+			<option value="1">true</option>
+				<option value="0"
+					<tmpl_if name="enable_index_ajax_update" value="0">
+						selected="selected"
+					</tmpl_if>
+						>false</option>
+		</select> Enable/disable AJAX updates
+	</label>
+	
+					<label><span>Page title AJAX Update:</span>			
+				<select name="enable_index_ajax_update_title" id="enable_index_ajax_update_title">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_index_ajax_update_title" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+		Enable/disable update of page title in AJAX updates
+		</label>
+		
+		<label><span>User list AJAX Update:</span>
+				<select name="enable_index_ajax_update_users" id="enable_index_ajax_update_users">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_index_ajax_update_users" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Enable/disable update of the user list in AJAX Updates</label>
+					<label><span>Transfer List AJAX Update:</span>
+				<select name="enable_index_ajax_update_list" id="enable_index_ajax_update_list">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_index_ajax_update_list" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Enable/disable update of the transfer list in AJAX updates</label>		
+		
+				<label><span>Silent AJAX Update:</span>
+				<select name="enable_index_ajax_update_silent" id="enable_index_ajax_update_silent">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_index_ajax_update_silent" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Do not display &quot;Update in Progress...&quot; during AJAX updates</label>
+			
+			<label><span>AJAX Update Interval:</span>
+				<input name="index_ajax_update" id="index_ajax_update" type="text" maxlength="3" value="<tmpl_var name="index_ajax_update">" size="3" />
+				Number of seconds between AJAX updates (default: 5)</label>
+				
+			<label><span>Transfer Stats Window Update Method:</span>
+				<select name="transferStatsType" id="transferStatsType">
+					<option value="standard">standard</option>
+					<option value="ajax"
+					<tmpl_if name="transferStatsType" value="ajax">
+						 selected="selected"
+					</tmpl_if>
+					>ajax</option>
+				</select>
+			Select method to use to update transfer stats window</label>		
+			<label>
+				<span>Transfer Stats Window Update Interval:</span>
+				<input name="transferStatsUpdate" id="transferStatsUpdate" type="text" maxlength="3" value="<tmpl_var name="transferStatsUpdate">" size="3" />
+				Number of seconds between transfer stats updates
+			</label>
+
+</td></tr></table>
+</div>
+<h3><a href="#">Transfer list Settings</a></h3>
+<div>
+<table id="profileTransferList">
+	<tr>
+		<td>
+			<label><span>Width:</span>
+				<input name="ui_dim_main_w" id="ui_dim_main_w" type="text" maxlength="5" value="<tmpl_var name="ui_dim_main_w">" size="5" />
+				Width in pixels of the transfer list (default: 900)</label>
+							
+			<label><span>Show Seeding Torrents:</span>
+				<select name="index_show_seeding" id="index_show_seeding">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="index_show_seeding" value="0">
+						selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Display seeding torrents on index page</label>
+		
+			<label><span>Estimated Time To Seed:</span>
+				<select name="display_seeding_time" id="display_seeding_time">
+                    <option value="1">true</option>
+                    <option value="0"
+                    	<tmpl_if name="display_seeding_time" value="0">
+                           selected="selected"
+                    	</tmpl_if>
+                    >false</option>
+                </select>
+		Display the estimated time until transfers reach seeding cutoff ratio</label>
+			<label><span>Sorting:</span>
+				<select name="enable_sorttable" id="enable_sorttable">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_sorttable" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+				Enable/disable reordering of transfer list by clicking on column headings</label>
+				
+			<label><span>Default Sort Order:</span>
+				<tmpl_include name="inc.sortOrderSettings.tmpl">
+			Select default sort order of transfers in transfer list</label>
+		
+			<label><span>Transfer List Display:</span>
+				Select the information to display in the transfer list</label>
+				<table class="profileChecks">
+					<tr>
+						<th>Owner</th><td><input name="index_page_settings_0" id="index_page_settings_0" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_0">checked="checked"</tmpl_if> /></td>
+						<th>Size</th><td><input name="index_page_settings_1" id="index_page_settings_1" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_1">checked="checked"</tmpl_if> /></td>
+						<th>Total Down</th><td><input name="index_page_settings_2" id="index_page_settings_2" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_2">checked="checked"</tmpl_if> /></td>
+						<th>Total Up</th><td><input name="index_page_settings_3" id="index_page_settings_3" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_3">checked="checked"</tmpl_if> /></td>
+						<th>Status</th><td><input name="index_page_settings_4" id="index_page_settings_4" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_4">checked="checked"</tmpl_if> /></td>
+						<th>Progress</th><td><input name="index_page_settings_5" id="index_page_settings_5" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_5">checked="checked"</tmpl_if> /></td>
+				</tr><tr>
+						<th>Down-Speed</th><td><input name="index_page_settings_6" id="index_page_settings_6" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_6">checked="checked"</tmpl_if> /></td>
+						<th>Up-Speed</th><td><input name="index_page_settings_7" id="index_page_settings_7" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_7">checked="checked"</tmpl_if> /></td>
+						<th>Seeds</th><td><input name="index_page_settings_8" id="index_page_settings_8" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_8">checked="checked"</tmpl_if> /></td>
+						<th>Peers</th><td><input name="index_page_settings_9" id="index_page_settings_9" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_9">checked="checked"</tmpl_if> /></td>
+						<th>Estimated Time</th><td><input name="index_page_settings_10" id="index_page_settings_10" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_10">checked="checked"</tmpl_if> /></td>
+						<th>Client</th><td><input name="index_page_settings_11" id="index_page_settings_11" type="checkbox" value="1" <tmpl_if name="indexPageSettingsForm_settings_11">checked="checked"</tmpl_if> /></td>
+					</tr>
+			</table>
+</td></tr></table>
+</div>
+<h3><a href="#">Transfer Settings Window</a></h3>
+<div>
+<table id="profileTransferSettingsWindow">
+	<tr>
+		<td>
+			<label><span>Transfer Hosts:</span>
+				<select name="transferHosts" id="transferHosts">
+					<option value="1">Hostnames</option>
+					<option value="0"
+					<tmpl_if name="transferHosts" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>IPs</option>
+				</select>
+				Enable/disable display of connected hosts in transfer hosts window</label>
+				
+			<label><span>Default Page:</span>
+				<select name="transfer_window_default" id="transfer_window_default">
+					<tmpl_loop name="transfer_window_default_list">
+						<option value="<tmpl_var name="value">" <tmpl_if name="is_selected" value="1">selected="selected"</tmpl_if>>
+							<tmpl_var name="name">
+						</option>
+					</tmpl_loop>
+				</select>
+			Select the default page to display in the transfer settings window</label>
+
+</td></tr></table>
+</div>
+<h3><a href="#">Homepage Settings</a></h3>
+<div>
+<table id="profileHomeSettings">
+<tr><td>
+				<label><span>Big Bold Drivespace Warning:</span>
+				<select name="enable_bigboldwarning" id="enable_bigboldwarning">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_bigboldwarning" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+				Enable/disable drivespace warning when disk space low</label>
+				
+							<label for="ui_displaylinks"><span>Display Links:</span>
+				<select name="ui_displaylinks" id="ui_displaylinks">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="ui_displaylinks" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Display list of links on the index page</label>
+			
+					<label for="ui_displayusers"><span>Display Users:</span>
+				<select name="ui_displayusers" id="ui_displayusers">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="ui_displayusers" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+				Display users on the index page</label>
+				
+								<label><span>Enable Good Looking Statistics:</span>
+				<select name="enable_goodlookstats" id="enable_goodlookstats">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="enable_goodlookstats" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+				Enable/disable &quot;Good looking statistics&quot;
+				</label>
+
+				<label><span>Good Looking Statistics Settings:</span>
+				Select Fields shown in &quot;Good looking statistics&quot;</label>
+				<table class="profileChecks">
+					<tr>
+						<th>Download Speed</th><td><input name="hack_goodlookstats_settings_0" id="hack_goodlookstats_settings_0" type="checkbox" value="1" <tmpl_if name="goodLookingStatsForm_settings_0">checked="checked"</tmpl_if> /></td>
+						<th>Upload Speed</th><td><input name="hack_goodlookstats_settings_1" id="hack_goodlookstats_settings_1" type="checkbox" value="1" <tmpl_if name="goodLookingStatsForm_settings_1">checked="checked"</tmpl_if> /></td>
+						<th>Total Speed</th><td><input name="hack_goodlookstats_settings_2" id="hack_goodlookstats_settings_2" type="checkbox" value="1" <tmpl_if name="goodLookingStatsForm_settings_2">checked="checked"</tmpl_if> /></td>
+						<th>Connections</th><td><input name="hack_goodlookstats_settings_3" id="hack_goodlookstats_settings_3" type="checkbox" value="1" <tmpl_if name="goodLookingStatsForm_settings_3">checked="checked"</tmpl_if> /></td>
+						<th>Drive Space</th><td><input name="hack_goodlookstats_settings_4" id="hack_goodlookstats_settings_4" type="checkbox" value="1" <tmpl_if name="goodLookingStatsForm_settings_4">checked="checked"</tmpl_if> /></td>
+						<th>Server Load</th><td><input name="hack_goodlookstats_settings_5" id="hack_goodlookstats_settings_5" type="checkbox" value="1" <tmpl_if name="goodLookingStatsForm_settings_5">checked="checked"</tmpl_if> /></td>
+					</tr>
+				</table>
+				<label for="ui_displaybandwidthbars"><span>Display Bandwidth Bars:</span>
+				<select name="ui_displaybandwidthbars" id="ui_displaybandwidthbars">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="ui_displaybandwidthbars" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+ 				Display bandwidth usage bars</label>
+				
+				<label><span>Bandwidth Bars Style:</span>
+				<select name="bandwidthbar" id="bandwidthbar">
+					<option value="tf"
+					<tmpl_if name="bandwidthbar" value="tf">
+						selected="selected"
+					</tmpl_if>
+					>tf</option>
+					<option value="xfer"
+					<tmpl_if name="bandwidthbar" value="xfer">
+						 selected="selected"
+					</tmpl_if>
+					>xfer</option>
+				</select>
+				Select style of bandwidth bars</label> 
+
+</td></tr></table>
+</div>
+<h3><a href="#">Server/Network/Storage Stats settings</a></h3>
+<div>
+<table id="profileServerStats">
+<tr><td>		
+
+
+				<label><span>Server Stats:</span>
+				<select name="index_page_stats" id="index_page_stats">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="index_page_stats" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+				Enable/disable display of server stats on index page</label>
+				
+			<label><span>Network Connections:</span>
+				<select name="index_page_connections" id="index_page_connections">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="index_page_connections" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Enable/disable display of total network connections</label>
+			
+			<label><span>Show Server Load:</span>
+				<select name="show_server_load" id="show_server_load">
+					<option value="1">true</option>
+					<option value="0"
+					<tmpl_if name="show_server_load" value="0">
+						 selected="selected"
+					</tmpl_if>
+					>false</option>
+				</select>
+			Enable/disable display of average server load over the last 15 minutes</label>
+	
+			<label><span>Drivespace Bar Style:</span>
+				<select name="drivespacebar" id="drivespacebar">
+					<option value="tf"
+					<tmpl_if name="drivespacebar" value="tf">
+						 selected="selected"
+					</tmpl_if>
+					>tf</option>
+					<option value="xfer"
+					<tmpl_if name="drivespacebar" value="xfer">
+						 selected="selected"
+					</tmpl_if>
+					>xfer</option>
+				</select>
+			Select style of drivespace bar</label>
+			<label><span>Server Monitor Update Interval:</span>
+				<input name="servermon_update" id="servermon_update" type="text" maxlength="3" value="<tmpl_var name="servermon_update">" size="3" />
+			Number of seconds between server monitor updates</label>
+</td></tr></table>
+</div></div>
+<p class="button"><input type="submit" value="Update Settings" /></p>		
+</fieldset>
+</form>
+

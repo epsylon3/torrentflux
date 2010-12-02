@@ -1,0 +1,9 @@
+<IfModule mod_expires.c>
+ExpiresActive On
+# expires after a year (prevent chrome audit warning)
+ExpiresByType image/png A29030400
+ExpiresByType image/gif A29030400
+ExpiresByType image/jpg A29030400
+# expires after a week
+ExpiresByType image/x-icon A604800
+</IfModule>

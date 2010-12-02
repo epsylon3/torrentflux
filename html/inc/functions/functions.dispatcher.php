@@ -28,46 +28,51 @@
 function dispatcher_startTransfer($transfer) {
 	global $cfg;
 
-	if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
-		startTransmissionTransfer($transfer);
-	} else {
-	// valid
-		if (tfb_isValidTransfer($transfer) !== true) {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-			@error("Invalid Transfer", "", "", array($transfer));
-		}
-		// interactive
-		$interactive = (tfb_getRequestVar('interactive') == 1) ? 1 : 0;
-		// ch
-		$ch = ($interactive == 1)
-			? ClientHandler::getInstance(tfb_getRequestVar('client'))
-			: ClientHandler::getInstance(getTransferClient($transfer));
-		// permission
-		dispatcher_checkTypePermission($transfer, $ch->type, "start");
-		// start
-		if ($interactive == 1)
-			$ch->start($transfer, true, (tfb_getRequestVar('queue') == '1') ? FluxdQmgr::isRunning() : false);
-		else
-			$ch->start($transfer, false, FluxdQmgr::isRunning());
-		// check
-		if ($ch->state == CLIENTHANDLER_STATE_ERROR) { // start failed
-			$msgs = array();
-			array_push($msgs, "transfer : ".$transfer);
-			array_push($msgs, "\nmessages :");
-			$msgs = array_merge($msgs, $ch->messages);
-			AuditAction($cfg["constants"]["error"], "Start failed: ".$transfer."\n".implode("\n", $ch->messages));
-			@error("Start failed", "", "", $msgs);
-		} else {
-			if (($interactive == 1) && (isset($_REQUEST["close"]))) {
-				echo '<script  language="JavaScript">';
-				echo ' window.opener.location.reload(true);';
-				echo ' window.close();';
-				echo '</script>';
-				// Prevent dispatcher_exit from running and redirecting client, otherwise script won't be executed.
-				exit();
-			}
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
+			startTransmissionTransfer($transfer);
+			return;
 		}
 	}
+
+	// valid
+	if (tfb_isValidTransfer($transfer) !== true) {
+		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+		@error("Invalid Transfer", "", "", array($transfer));
+	}
+	// interactive
+	$interactive = (tfb_getRequestVar('interactive') == 1) ? 1 : 0;
+	// ch
+	$ch = ($interactive == 1)
+		? ClientHandler::getInstance(tfb_getRequestVar('client'))
+		: ClientHandler::getInstance(getTransferClient($transfer));
+	// permission
+	dispatcher_checkTypePermission($transfer, $ch->type, "start");
+	// start
+	if ($interactive == 1)
+		$ch->start($transfer, true, (tfb_getRequestVar('queue') == '1') ? FluxdQmgr::isRunning() : false);
+	else
+		$ch->start($transfer, false, FluxdQmgr::isRunning());
+	// check
+	if ($ch->state == CLIENTHANDLER_STATE_ERROR) { // start failed
+		$msgs = array();
+		array_push($msgs, "transfer : ".$transfer);
+		array_push($msgs, "\nmessages :");
+		$msgs = array_merge($msgs, $ch->messages);
+		AuditAction($cfg["constants"]["error"], "Start failed: ".$transfer."\n".implode("\n", $ch->messages));
+		@error("Start failed", "", "", $msgs);
+	} else {
+		if (($interactive == 1) && (isset($_REQUEST["close"]))) {
+			echo '<script  language="JavaScript">';
+			echo ' window.opener.location.reload(true);';
+			echo ' window.close();';
+			echo '</script>';
+			// Prevent dispatcher_exit from running and redirecting client, otherwise script won't be executed.
+			exit();
+		}
+	}
+
 }
 
 /**
@@ -78,24 +83,28 @@ function dispatcher_startTransfer($transfer) {
 function dispatcher_stopTransfer($transfer) {
 	global $cfg;
 
-	if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
-                stopTransmissionTransfer($transfer);
-	} else {
-		// valid
-		if (tfb_isValidTransfer($transfer) !== true) {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-			@error("Invalid Transfer", "", "", array($transfer));
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
+			stopTransmissionTransfer($transfer);
+			return;
 		}
-		// ch
-		$ch = ClientHandler::getInstance(getTransferClient($transfer));
-		// permission
-		dispatcher_checkTypePermission($transfer, $ch->type, "stop");
-		// stop
-		$ch->stop($transfer);
-		// check
-		if (count($ch->messages) > 0)
-		@error("There were Problems", "", "", $ch->messages);
 	}
+
+	// valid
+	if (tfb_isValidTransfer($transfer) !== true) {
+		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+		@error("Invalid Transfer", "", "", array($transfer));
+	}
+	// ch
+	$ch = ClientHandler::getInstance(getTransferClient($transfer));
+	// permission
+	dispatcher_checkTypePermission($transfer, $ch->type, "stop");
+	// stop
+	$ch->stop($transfer);
+	// check
+	if (count($ch->messages) > 0)
+	@error("There were Problems", "", "", $ch->messages);
 }
 
 /**
@@ -147,42 +156,47 @@ function dispatcher_forceStopTransfer($transfer, $pid) {
 function dispatcher_deleteTransfer($transfer) {
 	global $cfg;
 
-	if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
-		deleteTransmissionTransfer($cfg['uid'], $transfer);
-	} else {
-		// valid
-		if (tfb_isValidTransfer($transfer) !== true) {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-			@error("Invalid Transfer", "", "", array($transfer));
-		}
-		// client
-		$client = getTransferClient($transfer);
-		// ch
-		$ch = ClientHandler::getInstance($client);
-		// permission
-		dispatcher_checkTypePermission($transfer, $ch->type, "delete");
-		// is transfer running ?
-		$tRunningFlag = isTransferRunning($transfer);
-		if ($tRunningFlag) {
-			// stop first
-			$ch->stop($transfer);
-			if (count($ch->messages) > 0)
-			@error("There were Problems", "", "", $ch->messages);
-			// is transfer running ?
-			$tRunningFlag = isTransferRunning($transfer);
-		}
-		// if it was running... hope the thing is down...
-		// only continue if it is
-		if ($tRunningFlag) {
-			@error("Delete failed, Transfer is running and stop failed", "", "", $ch->messages);
-		} else {
-			// delete
-			$ch->delete($transfer);
-			// check
-			if (count($ch->messages) > 0)
-			@error("There were Problems", "", "", $ch->messages);
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer) ) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
+			deleteTransmissionTransfer($transfer);
+			return;
 		}
 	}
+
+	// valid
+	if (tfb_isValidTransfer($transfer) !== true) {
+		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+		@error("Invalid Transfer", "", "", array($transfer));
+	}
+	// client
+	$client = getTransferClient($transfer);
+	// ch
+	$ch = ClientHandler::getInstance($client);
+	// permission
+	dispatcher_checkTypePermission($transfer, $ch->type, "delete");
+	// is transfer running ?
+	$tRunningFlag = isTransferRunning($transfer);
+	if ($tRunningFlag) {
+		// stop first
+		$ch->stop($transfer);
+		if (count($ch->messages) > 0)
+		@error("There were Problems", "", "", $ch->messages);
+		// is transfer running ?
+		$tRunningFlag = isTransferRunning($transfer);
+	}
+	// if it was running... hope the thing is down...
+	// only continue if it is
+	if ($tRunningFlag) {
+		@error("Delete failed, Transfer is running and stop failed", "", "", $ch->messages);
+	} else {
+		// delete
+		$ch->delete($transfer);
+		// check
+		if (count($ch->messages) > 0)
+		@error("There were Problems", "", "", $ch->messages);
+	}
+
 }
 
 /**
@@ -193,44 +207,48 @@ function dispatcher_deleteTransfer($transfer) {
 function dispatcher_deleteDataTransfer($transfer) {
 	global $cfg;
 
-	if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
-		deleteTransmissionTransferWithData($transfer);
-	} else {
-		// valid
-		if (tfb_isValidTransfer($transfer) !== true) {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
-			@error("Invalid Transfer", "", "", array($transfer));
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
+			deleteTransmissionTransferWithData($cfg['uid'],$transfer);
+			return;
 		}
-		// client
-		$client = getTransferClient($transfer);
-		// ch
-		$ch = ClientHandler::getInstance($client);
-		// permission
-		dispatcher_checkTypePermission($transfer, $ch->type, "deleteWithData");
+	}
+
+	// valid
+	if (tfb_isValidTransfer($transfer) !== true) {
+		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+		@error("Invalid Transfer", "", "", array($transfer));
+	}
+	// client
+	$client = getTransferClient($transfer);
+	// ch
+	$ch = ClientHandler::getInstance($client);
+	// permission
+	dispatcher_checkTypePermission($transfer, $ch->type, "deleteWithData");
+	// is transfer running ?
+	$tRunningFlag = isTransferRunning($transfer);
+	if ($tRunningFlag) {
+		// stop first
+		$ch->stop($transfer);
+		if (count($ch->messages) > 0)
+		@error("There were Problems", "", "", $ch->messages);
 		// is transfer running ?
 		$tRunningFlag = isTransferRunning($transfer);
-		if ($tRunningFlag) {
-			// stop first
-			$ch->stop($transfer);
-			if (count($ch->messages) > 0)
+	}
+	// if it was running... hope the thing is down...
+	// only continue if it is
+	if ($tRunningFlag) {
+		@error("Delete with Data failed, Transfer is running and stop failed", "", "", $ch->messages);
+	} else {
+		// transferData
+		$msgsDelete = deleteTransferData($transfer);
+		if (count($msgsDelete) > 0)
+			@error("There were Problems deleting Transfer-Data", "", "", $msgsDelete);
+		// transfer
+		$ch->delete($transfer);
+		if (count($ch->messages) > 0)
 			@error("There were Problems", "", "", $ch->messages);
-			// is transfer running ?
-			$tRunningFlag = isTransferRunning($transfer);
-		}
-		// if it was running... hope the thing is down...
-		// only continue if it is
-		if ($tRunningFlag) {
-			@error("Delete with Data failed, Transfer is running and stop failed", "", "", $ch->messages);
-		} else {
-			// transferData
-			$msgsDelete = deleteTransferData($transfer);
-			if (count($msgsDelete) > 0)
-				@error("There were Problems deleting Transfer-Data", "", "", $msgsDelete);
-			// transfer
-			$ch->delete($transfer);
-			if (count($ch->messages) > 0)
-				@error("There were Problems", "", "", $ch->messages);
-		}
 	}
 }
 
@@ -453,19 +471,15 @@ function dispatcher_multi($action) {
 		// url-decode
 		$transfer = urldecode($element);
 
-		require_once('inc/classes/Transmission.class.php');
 		$isTransmissionTorrent = false;
-		$trans = new Transmission();
-		$response = $trans->get(array(), array("id","hashString"));
-		$torrentlist = $response[arguments][torrents];
-		foreach ($torrentlist as $aTorrent) {
-			if ( $aTorrent[hashString] == $transfer ) {
-				$isTransmissionTorrent = true;
-				$torrentId = $aTorrent[id];
-				break;
-			}    
-		}    
-		// TODO: complete this, not implemented for Transmission atm
+		if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+			require_once('inc/functions/functions.rpc.transmission.php');
+			$theTorrent = getTransmissionTransfer($transfer, array('id'));
+			$isTransmissionTorrent = is_array($theTorrent);
+			if ($isTransmissionTorrent)
+				$torrentId = $theTorrent['id'];
+			// TODO: complete this, not implemented for Transmission atm
+		}
 
 		if ( !$isTransmissionTorrent ) {
 			// is valid transfer ? + check permissions
@@ -648,22 +662,31 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 	$downloadMessages = array();
 	$origurl = $url; // Added by deadeyes; copied as later $url gets changed
 	if (!empty($url)) {
+
+		$hash = false;
 		// Added by deadeyes to detect a magnet link
 		if ( $type === 'torrent' && strlen( stristr( $url, 'magnet:' ) ) > 0 ) {
+
+			$client = getTransferClient('magnet.torrent');
 			// We have a magnet link :D
-			addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
+			if ($client == 'transmission' && $cfg["transmission_rpc_enable"]) {
+				require_once('inc/functions/functions.rpc.transmission.php');
+				$hash = addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
+			}
+			if ($client == 'azureus' && $cfg["vuze_rpc_enable"]) {
+				require_once('inc/functions/functions.rpc.vuze.php');
+				$hash = addVuzeMagnetTransfer($cfg['uid'], $url, $cfg['transfer_file_path']);
+			}
+			if ($cfg['debuglevel'] > 0) {
+				AuditAction($cfg["constants"]["debug"], "Download Magnet ($client) : $hash ".htmlentities(addslashes($url), ENT_QUOTES));
+			}
 
-			//require_once('inc/classes/TransmissionRpc.php');
-			//$myclass = new TransmissionRpc("127.0.0.1", "9091", "me", "mypassword");
-			//$myclass->login();
+		}
 
-			//$arguments = array ( "filename" => $url, "paused" => true );
-			//$rpccall = array("arguments" => $arguments,"method" => "torrent-add") ;
-			//$myclass->doRpcCall($rpccall, $result, $status);
+		if (!$hash)
+		{
+			// not a magnet torrent..
 
-			// closing connection
-			//$myclass->logout();
-		} else {
 			$arURL = explode("/", $url);
 			$filename = urldecode($arURL[count($arURL)-1]); // get the file name
 			$filename = str_replace(array("'",","), "", $filename);
@@ -890,32 +913,32 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 				array_push($uploadMessages, "the file ".$filename." already exists on the server.");
 				return false;
 			} else {
-				if (@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename)) {
-					// If transmission is default
-					// TODO: edit with the setting configuration
-					if (true) {
-						@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename);
-						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
-						unlink($cfg['transfer_file_path'].$filename);
 
-						if ( $actionId > 1 ) startTransmissionTransfer( $hash );
-						return true;
-					} else {
-						@chmod($cfg["transfer_file_path"].$filename, 0644);
-						AuditAction($cfg["constants"]["file_upload"], $filename);
-						
-						// inject
-						injectTransfer($filename);
-						// instant action ?
-						if ($actionId > 1)
-							array_push($tStack,$filename);
-						// return
-						return true;
+				if (@move_uploaded_file($tmp_name, $cfg["transfer_file_path"].$filename)) {
+					@chmod($cfg["transfer_file_path"].$filename, 0644);
+					AuditAction($cfg["constants"]["file_upload"], $filename);
+
+					if ($cfg["transmission_rpc_enable"]) {
+						require_once('inc/functions/functions.rpc.transmission.php');
+						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
+						//@unlink($cfg['transfer_file_path'].$filename);
+						//if ( $actionId > 1 ) {
+							//startTransmissionTransfer( $hash );
+							//array_push($tStack,$filename);
+						//}
+						//return true;
 					}
+					// inject
+					injectTransfer($filename);
+					// instant action ?
+					if ($actionId > 1)
+						array_push($tStack,$filename);
+					// return
+					return true;
 				} else {
 					array_push($uploadMessages, "File not uploaded, file could not be found or could not be moved: ".$cfg["transfer_file_path"].$filename);
 					return false;
-				}
+			  	}
 			}
 		} else {
 			array_push($uploadMessages, "File not uploaded, file size limit is ".$cfg["upload_limit"].". file has ".$size);

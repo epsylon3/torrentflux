@@ -24,7 +24,7 @@ from BT1.Statistics import Statistics
 from ConfigDir import ConfigDir
 from bencode import bencode, bdecode
 from natpunch import UPnP_test
-from sha import sha
+from hashlib import sha1
 from os import path, makedirs, listdir
 from parseargs import parseargs, formatDefinitions, defaultargs
 from socket import error as socketerror
@@ -207,7 +207,7 @@ def download(params, filefunc, statusfunc, finfunc, errorfunc, doneflag, cols,
     if not response:
         return
 
-    infohash = sha(bencode(response['info'])).digest()
+    infohash = sha1(bencode(response['info'])).digest()
 
     d = BT1Download(statusfunc, finfunc, errorfunc, exchandler, doneflag,
                     config, response, infohash, myid, rawserver, listen_port)

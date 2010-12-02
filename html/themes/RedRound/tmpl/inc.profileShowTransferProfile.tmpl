@@ -1,0 +1,117 @@
+<h1>Transfer Profiles Management</h1>
+<a href="index.php?iid=profile">Return to Profile</a>
+
+<script src="js/profile.js" type="text/javascript"></script>
+<form id="theForm" action="index.php?iid=profile&amp;op=<tmpl_var name="op">" method="post" onsubmit="return validateProfileSettings()">
+<fieldset>
+<input type="hidden" name="pid" value="<tmpl_var name="pid">" />
+<table id="profileTransferProfileForm">
+	<tr>
+		<th>Name<br /></th>
+		<td colspan="2"><input type="text" size="45" maxlength="255" name="name" id="name"<tmpl_var name="name"> /></td>
+	</tr>
+	<tmpl_if name="isAdmin">
+	<tr>
+		<th>Public Profile</th>
+		<td><input name="public" id="public" type="checkbox" value="1" <tmpl_var name="public"> /></td>
+	</tr>
+	</tmpl_if>
+	<tr>
+		<th>Max Upload Rate<br /><span>(default: <tmpl_var name="default_rate">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="rate" id="rate" <tmpl_var name="rate"> value="<tmpl_var name="default_rate">" onfocus="this.value = '';" /> kB/second</td>
+	</tr>
+	<tr>
+		<th>Max Download Rate<br /><span>(default: <tmpl_var name="default_drate">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="drate" id="drate" <tmpl_var name="drate"> value="<tmpl_var name="default_drate">" onfocus="this.value = '';" /> kB/second</td>
+	</tr>
+	<tr>
+		<th>Max Upload Connections<br /><span>(default: <tmpl_var name="default_maxuploads">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="maxuploads" id="maxuploads" <tmpl_var name="maxuploads"> value="<tmpl_var name="default_drate">" onfocus="this.value = '';" /></td>
+	</tr>
+	<tr>
+		<th>Max Cons<br /><span>(default: <tmpl_var name="default_maxcons">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="maxcons" id="maxcons" <tmpl_var name="maxcons"> value="<tmpl_var name="default_maxcons">" onfocus="this.value = '';" /></td>
+	</tr>
+	<tr>
+		<th>Completion Activity<br /><span>(default: <tmpl_if name="default_runtime" value="False">Keep Seeding<tmpl_else>Die When Done</tmpl_if>)</span></th>
+		<td>
+			<select name="runtime" id="runtime">
+				<option value="True">Die When Done</option>
+				<option value="False"
+				<tmpl_if name="runtime" value="False">
+					selected="selected"
+				</tmpl_if>
+					>Keep Seeding</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Percentage When Seeding should Stop<br /><span>(default: <tmpl_var name="default_sharekill">)</span></th>
+		<td><input type="text" size="4" maxlength="4" name="sharekill" id="sharekill" <tmpl_var name="sharekill"> value="<tmpl_var name="default_sharekill">" onfocus="this.value = '';" /> %</td>
+	</tr>
+	<tr>
+		<th>Rerequest Interval<br /><span>(default: <tmpl_var name="default_rerequest">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="rerequest" id="rerequest" <tmpl_var name="rerequest"> value="<tmpl_var name="default_rerequest">" onfocus="this.value = '';" /></td>
+	</tr>
+	<tr>
+		<th>Superseeder<br /><span>(default: <tmpl_if name="default_superseeder" value="0">false<tmpl_else>true</tmpl_if>)</span></th>
+		<td>
+			<select name="superseeder" id="superseeder">
+				<option value="1">true</option>
+				<option value="0"
+			<tmpl_if name="superseeder" value="0">
+				selected="selected"
+			</tmpl_if>
+				>false</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Min Port<br /><span>(default: <tmpl_var name="default_minport">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="minport" id="minport" <tmpl_var name="minport"> value="<tmpl_var name="default_minport">" onfocus="this.value = '';" /></td>
+	</tr>
+	<tr>
+		<th>Max Port<br /><span>(default: <tmpl_var name="default_maxport">)</span></th>
+		<td><input type="text" size="5" maxlength="5" name="maxport" id="maxport" <tmpl_var name="maxport"> value="<tmpl_var name="default_maxport">" onfocus="this.value = '';" /></td>
+	</tr>
+	<tr>
+		<th>Save path<br /><span>(default: <tmpl_var name="default_savepath">)</span></th>
+		<td><input type="text" size="45" maxlength="255" name="savepath" id="savepath" <tmpl_var name="savepath"> value="<tmpl_var name="default_savepath">" /></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td colspan="2"><input type="submit" value="<tmpl_var name="add1">" /></td>
+	</tr>
+	<tmpl_if name="empty_pid">
+	<tr>
+		<td colspan="3"><center><a href="index.php?iid=profile&amp;op=editProfiles">back</a></center></td>
+	</tr>
+	<tmpl_else>
+</table>
+<table id="profileTransferProfileList">
+	<tr>
+		<th><h2>List of Transfer Profiles</h2></th>
+	</tr>
+	<tmpl_if name="empty_dat">
+	<tr>
+		<td colspan="3">No profile entries exist.</td>
+	</tr>
+	<tmpl_else>
+		<tmpl_loop name="profile_data">
+			<tmpl_if name="__ODD__">
+				<tr class="alt" onmouseover="this.className='hover';" onmouseout="this.className='alt';">
+			<tmpl_else>
+				<tr onmouseover="this.className='hover';" onmouseout="this.className='';">
+			</tmpl_if>
+					<td>
+						<a href="index.php?iid=profile&amp;op=deleteProfile&amp;pid=<tmpl_var name="pid">"><img src="themes/<tmpl_var name="theme">/images/profile/delete.png" title="<tmpl_var name="_DELETE"> <tmpl_var name="name">"></a>
+						<a href="index.php?iid=profile&amp;op=editProfiles&amp;pid=<tmpl_var name="pid">"><img src="themes/<tmpl_var name="theme">/images/profile/edit.png" title="<tmpl_var name="_EDIT"> <tmpl_var name="name">"></a> 
+						<tmpl_var name="name">
+					</td>
+			</tr>
+		</tmpl_loop>
+	</tmpl_if>
+</table>
+</fieldset>
+</tmpl_if>
+</form>

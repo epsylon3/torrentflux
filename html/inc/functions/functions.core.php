@@ -69,11 +69,21 @@ require_once("inc/functions/functions.core.user.php");
 /**
  * Returns true if user has message from admin with force_read
  *
- * @return boolean
+ * @return int
  */
 function IsForceReadMsg() {
 	global $cfg, $db;
-	return ($db->GetOne("SELECT count(*) FROM tf_messages WHERE to_user=".$db->qstr($cfg["user"])." AND force_read=1") >= 1);
+	return (int) ($db->GetOne("SELECT count(*) FROM tf_messages WHERE to_user=".$db->qstr($cfg["user"])." AND force_read=1") >= 1);
+}
+
+/**
+ * Returns true if user has new messages
+ *
+ * @return int
+ */
+function numUnreadMsg() {
+	global $cfg, $db;
+	return (int) ($db->GetOne("SELECT count(*) FROM tf_messages WHERE to_user=".$db->qstr($cfg["user"])." AND IsNew=1") >= 1);
 }
 
 /**
@@ -197,6 +207,7 @@ function getServerStats() {
 /**
  * print message
  *
+ * @param $mod
  * @param $msg
  */
 function printMessage($mod, $msg) {
@@ -206,10 +217,63 @@ function printMessage($mod, $msg) {
 /**
  * print error
  *
+ * @param $mod
  * @param $msg
  */
 function printError($mod, $msg) {
 	@fwrite(STDERR, @date("[Y/m/d - H:i:s]")."[".$mod."] ".$msg);
+}
+
+/**
+ * store messages in jGrowl array 
+ *
+ * @param $mod
+ * @param $msg
+ */
+function addGrowlMessage($mod, $msg, $theme="redround") {
+	global $cfg;
+	if (isset($cfg['growl'])) {
+		//no double quotes
+		$growl_msg = array(
+			'title'=> str_replace("\"","", $mod),
+			'msg'=> str_replace("\"","", $msg),
+			'sticky' => false,
+			'life'   => '5000',
+			'theme'   => $theme,
+		);
+		if ($mod == 'Audit') {
+			$growl_msg['theme'] = 'audit';
+		}
+		$cfg['growl'][] = $growl_msg;
+	}
+}
+
+/**
+ * reinitialize jGrowl array
+ *
+ * @return string javascript
+ */
+function getGrowlMessages() {
+	global $cfg;
+	$jGrowls="";
+	foreach($cfg['growl'] as $msg) {
+		if ($msg['msg']!='H') // !!?!
+		$jGrowls .= "jQuery.jGrowl('".addslashes($msg['title'].'<br/><br/>'.$msg['msg'])."',".
+		"{".
+		" sticky:".($msg['sticky'] ? 'true':'false').",".
+		" life:".intval($msg['life']).",".
+		" theme: '".$msg['theme']."'".
+		"}); ";
+	}
+	return $jGrowls;
+}
+
+/**
+ * reinitialize jGrowl array
+ */
+function clearGrowlMessages() {
+	global $cfg;
+	$cfg['growl'] = array();
 }
 
 /**
@@ -232,6 +296,8 @@ function AuditAction($action, $file = "") {
     	. $db->qstr(time())
     	.")"
     );
+    if ($action != 'HIT')
+    	addGrowlMessage('Audit',"$action $file");
 }
 
 /**

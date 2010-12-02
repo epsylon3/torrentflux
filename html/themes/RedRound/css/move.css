@@ -1,0 +1,27 @@
+div.box label{
+	display:block;
+	margin-bottom:10px;
+	color:#555555;
+}
+
+div.box label span{
+	display:block;
+	float:left;
+	padding-right:6px;
+	width: 100px;
+	text-align:right;
+	font-weight:bold;
+}
+.spacer{
+	margin-left:190px; 
+	margin-bottom:10px;
+	font-size:11px;
+	color:#555555;
+}
+
+#menu {
+  position: absolute;
+  width: 80px;
+  background: url('../images/dir/ActionsPages/actions-bg.png') no-repeat left 98%;
+  height:99%;
+}

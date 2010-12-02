@@ -97,7 +97,7 @@ function tmplSetTitleBar($pageTitleText, $showButtons = true) {
 	$tmpl->setvar('_MESSAGES', $cfg['_MESSAGES']);
 	$tmpl->setvar('_ADMINISTRATION', $cfg['_ADMINISTRATION']);
 	if ($showButtons)
-		$tmpl->setvar('titleBar_number_messages', $db->GetOne("select count(*) from tf_messages where to_user=".$db->qstr($cfg["user"])." and IsNew = 1"));
+		$tmpl->setvar('titleBar_number_messages', numUnreadMsg());
 }
 
 /**
@@ -280,8 +280,8 @@ function tmplGetXferBar($total, $used, $title, $type='xfer') {
  */
 function getTorrentFluxLink() {
 	global $cfg;
-	$torrentFluxLink['address'] = "http://tf-b4rt.berlios.de/";
-	$torrentFluxLink['name'] = "torrentflux-b4rt ".$cfg["version"];
+	$torrentFluxLink['address'] = "http://www.torrentflux-ng.org/";
+	$torrentFluxLink['name'] = "TorrentFlux-NG ".$cfg["version"];
 	return $torrentFluxLink;
 }
 

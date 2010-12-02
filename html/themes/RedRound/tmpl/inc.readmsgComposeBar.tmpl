@@ -1,0 +1,15 @@
+<!-- COMPOSE BOX TOP MESSAGES -->
+<form id="formMessage" action="index.php?iid=message" method="post">
+<table id="readmsgCompose">
+	<tr>
+		<td><tmpl_var name="_SENDMESSAGETO">
+			<select style="width:200px;" name="to_user" id="to_user" onchange="this.form.submit();">
+				<option><tmpl_var name="_CHOOSEAUSER"></option>
+				<tmpl_loop name="messageList_user">
+					<option><tmpl_var name="user"></option>
+				</tmpl_loop>
+			</select>
+		</td>
+	</tr>
+</table>
+</form>

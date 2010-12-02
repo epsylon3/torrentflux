@@ -1,0 +1,24 @@
+<tmpl_if name="image_list">
+	<table bgcolor="<tmpl_var name="body_data_bg">" width="100%" cellpadding="1">
+		<tr>
+			<td>
+				<div align="center">
+					<table border="0" cellpadding="2" cellspacing="2" width="100%">
+						<tmpl_loop name="image_list">
+							<tr>
+								<td align="center">
+									<strong><tmpl_var name="title"></strong>
+								</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<img src="<tmpl_var name="src">" border="0" title="<tmpl_var name="title">">
+								</td>
+							</tr>
+						</tmpl_loop>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+</tmpl_if>

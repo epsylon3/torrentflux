@@ -189,6 +189,13 @@
 				</td>
 		</tr>
 	</tmpl_if>
+	<form method="post">
+	<tr>
+		<td align="center" colspan="7">
+		<input type="text" size=105 value="<tmpl_var name="_WGET">" name="wget_url" /> <input type="submit" value="wget file" name="wget_submit" />
+		</td>
+	</tr>
+	</form>
 </tbody>
 </table>
 <input type="hidden" name="action" value="fileDelete" />

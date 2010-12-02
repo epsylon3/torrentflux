@@ -30,7 +30,7 @@ from BTL.yielddefer import launch_coroutine
 from BitTorrent import BTFailure
 from BTL.exceptions import str_exc
 
-from BTL.hash import sha
+from hashlib import sha1
 
 NO_PLACE = -1
 
@@ -500,7 +500,7 @@ class StorageWrapper(object):
             else:
                 data = r
 
-            sh = sha(buffer(data, 0, self.lastlen))
+            sh = sha1(buffer(data, 0, self.lastlen))
             sp = sh.digest()
             sh.update(buffer(data, self.lastlen))
             s = sh.digest()
@@ -541,7 +541,7 @@ class StorageWrapper(object):
             df = self._storage_read(index, self._piecelen(index))
             yield df
             data = df.getResult()
-        if sha(data).digest() != self.hashes[index]:
+        if sha1(data).digest() != self.hashes[index]:
             yield False
         self.checked_pieces.add(index)
         yield True
@@ -573,7 +573,7 @@ class StorageWrapper(object):
         if not self.have[piece]:
             return
         data = buffer(data, 0, self._piecelen(piece))
-        if sha(data).digest() != self.hashes[piece]:
+        if sha1(data).digest() != self.hashes[piece]:
             raise BTFailure(_("data corrupted on disk - "
                               "maybe you have two copies running?"))
     ############################################################################

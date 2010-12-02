@@ -25,13 +25,13 @@
  */
 class CommandHandler
 {
-    // private fields
+	// private fields
 
-    // messages-array
-    var $_messages = array();
+	// messages-array
+	var $_messages = array();
 
-    // commands-array
-    var $_commands = array();
+	// commands-array
+	var $_commands = array();
 
 	// =========================================================================
 	// public static methods
@@ -51,7 +51,7 @@ class CommandHandler
 			CommandHandler::initialize();
 		// call instance-method
 		return $instanceCommandHandler->instance_add($transfer, $command);
-    }
+	}
 
 	/**
 	 * send command(s) to transfer
@@ -59,14 +59,14 @@ class CommandHandler
 	 * @param $transfer
 	 * @return boolean
 	 */
-    function send($transfer) {
+	function send($transfer) {
 		global $instanceCommandHandler;
 		// return false if not set
 		if (!isset($instanceCommandHandler))
 			return false;
 		// call instance-method
 		return $instanceCommandHandler->instance_send($transfer);
-    }
+	}
 
 	/**
 	 * cleans command(s) of transfer
@@ -74,50 +74,50 @@ class CommandHandler
 	 * @param $transfer
 	 * @return boolean
 	 */
-    function clean($transfer) {
+	function clean($transfer) {
 		global $instanceCommandHandler;
 		// initialize if needed
 		if (!isset($instanceCommandHandler))
 			CommandHandler::initialize();
 		// call instance-method
 		return $instanceCommandHandler->instance_clean($transfer);
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	function getMessages() {
 		global $instanceCommandHandler;
 		return (isset($instanceCommandHandler))
 			? $instanceCommandHandler->_messages
 			: array();
-    }
+	}
 
-    /**
-     * initialize CommandHandler.
-     */
-    function initialize() {
-    	global $instanceCommandHandler;
-    	// create instance
-    	if (!isset($instanceCommandHandler))
-    		$instanceCommandHandler = new CommandHandler();
-    }
+	/**
+	 * initialize CommandHandler.
+	 */
+	function initialize() {
+		global $instanceCommandHandler;
+		// create instance
+		if (!isset($instanceCommandHandler))
+			$instanceCommandHandler = new CommandHandler();
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * do not use this, use only the public static methods !
-     *
-     * @return CommandHandler
-     */
-    function CommandHandler() {
-    	$this->_messages = array();
-    	$this->_commands = array();
-    }
+	/**
+	 * do not use this, use only the public static methods !
+	 *
+	 * @return CommandHandler
+	 */
+	function CommandHandler() {
+		$this->_messages = array();
+		$this->_commands = array();
+	}
 
 	// =========================================================================
 	// public methods
@@ -130,16 +130,16 @@ class CommandHandler
 	 * @param $command
 	 * @return boolean
 	 */
-    function instance_add($transfer, $command) {
-    	if (!isset($this->_commands[$transfer]))
-    		$this->_commands[$transfer] = array();
-    	if ((!in_array($command, $this->_commands[$transfer])) && (strlen($command) > 0)) {
-    		array_push($this->_commands[$transfer], $command);
-    		return true;
-    	} else {
+	function instance_add($transfer, $command) {
+		if (!isset($this->_commands[$transfer]))
+			$this->_commands[$transfer] = array();
+		if ((!in_array($command, $this->_commands[$transfer])) && (strlen($command) > 0)) {
+			array_push($this->_commands[$transfer], $command);
+			return true;
+		} else {
 			return false;
-    	}
-    }
+		}
+	}
 
 	/**
 	 * send command(s) to transfer
@@ -147,11 +147,11 @@ class CommandHandler
 	 * @param $transfer
 	 * @return boolean
 	 */
-    function instance_send($transfer) {
-    	return (empty($this->_commands[$transfer]))
-    		? false
-    		: $this->_writeCommandFile($transfer);
-    }
+	function instance_send($transfer) {
+		return (empty($this->_commands[$transfer]))
+			? false
+			: $this->_writeCommandFile($transfer);
+	}
 
 	/**
 	 * cleans command(s) of transfer
@@ -159,53 +159,53 @@ class CommandHandler
 	 * @param $transfer
 	 * @return boolean
 	 */
-    function instance_clean($transfer) {
-    	global $cfg;
-    	// if set unset
-    	if (isset($this->_commands[$transfer]))
-    		unset($this->_commands[$transfer]);
+	function instance_clean($transfer) {
+		global $cfg;
+		// if set unset
+		if (isset($this->_commands[$transfer]))
+			unset($this->_commands[$transfer]);
 		// if exist remove command-file
 		$file = $cfg["transfer_file_path"].$transfer.'.cmd';
 		if (@file_exists($file))
 			@unlink($file);
 		// return
 		return true;
-    }
+	}
 
 	// =========================================================================
 	// private methods
 	// =========================================================================
 
-    /**
-     * write the command-file
-     *
+	/**
+	 * write the command-file
+	 *
 	 * @param $transfer
-     * @return boolean
-     */
+	 * @return boolean
+	 */
 	function _writeCommandFile($transfer) {
 		global $cfg;
 		$file = $cfg["transfer_file_path"].$transfer.'.cmd';
 		$handle = false;
 		$handle = @fopen($file, "w");
 		if (!$handle) {
-            $msg = "cannot open command-file ".$file." for writing.";
-            array_push($this->_messages , $msg);
-            AuditAction($cfg["constants"]["error"], "CommandHandler _writeCommandFile-Error : ".$msg);
+			$msg = "cannot open command-file ".$file." for writing.";
+			array_push($this->_messages , $msg);
+			AuditAction($cfg["constants"]["error"], "CommandHandler _writeCommandFile-Error : ".$msg);
 			return false;
 		}
-        $result = @fwrite($handle, implode("\n", $this->_commands[$transfer])."\n");
+		$result = @fwrite($handle, implode("\n", $this->_commands[$transfer])."\n");
 		@fclose($handle);
 		if ($result === false) {
-            $msg = "cannot write content to command-file ".$file.".";
-            array_push($this->_messages , $msg);
-            AuditAction($cfg["constants"]["error"], "CommandHandler _writeCommandFile-Error : ".$msg);
+			$msg = "cannot write content to command-file ".$file.".";
+			array_push($this->_messages , $msg);
+			AuditAction($cfg["constants"]["error"], "CommandHandler _writeCommandFile-Error : ".$msg);
 			return false;
 		}
-    	// unset
-    	unset($this->_commands[$transfer]);
-    	// return
+		// unset
+		unset($this->_commands[$transfer]);
+		// return
 		return true;
-    }
+	}
 
 }
 

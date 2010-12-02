@@ -1,0 +1,232 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<form name="theForm" action="admin.php?op=updateWebappSettings" method="post" onsubmit="return validateSettings('webapp')">
+<h1>webApp settings</h1>
+<p><input type="Submit" value="Update Settings"></p>
+<h2>Authentication Type</h2>
+<h3>Form Auth</h3>
+	<p class="NormalText">Standard form based authentication.</p>
+<h3>Form Auth + Cookie</h3>
+	<p class="NormalText">Standard form based authentication using an 'autologin' cookie (expires after 30 days).</p>
+<h3>Form Auth + Image</h3>
+	<p class="NormalText">
+		Standard form based authentication using image based captcha 
+		validation (user must enter the characters displayed in a 
+		dynamically created image to validate).
+	</p>
+<h3>Basic Auth</h3>
+	<p class="NormalText">
+		Use HTTP Basic Authentication scheme (browser will handle user/password input).
+	</p>
+<h3>Basic Auth + Passthrough</h3>
+	<p class="NormalText">
+		Pass the credentials of a user authenticated externally via basic auth to the webapp.
+	</p>
+<table id="adminWebAppSettings">
+		<tr>
+			<th>Select Authentication Type<br /><span>see top for documentation</span></th>
+			<td>
+				<tmpl_if name="auth_type_list">
+					<select name="auth_type" id="auth_type">
+				<tmpl_loop name="auth_type_list">
+					<option value="<tmpl_var name="avalue">"<tmpl_if name="aselected" value="1"> selected</tmpl_if>><tmpl_var name="atype"></option>
+				</tmpl_loop>
+					</select>
+			</tmpl_if>
+				<img src="image.php?i=test" border="0" title="Test-Image">
+		</td>
+	</tr>
+		<tr>
+			<th class="alt">Basic Authentication Realm<br /><span>Specify the realm name to use if Basic Authentication method is used</span></th>
+			<td class="alt">
+				<input name="auth_basic_realm" id="auth_basic_realm" type="Text" maxlength="64" value="<tmpl_var name="auth_basic_realm">" size="30">
+			</td>
+		</tr>
+</table>
+<h2>General Settings</h2>
+<table id="adminWebAppSettings">
+		<tr>
+			<th>Default Page Title<br /><span>Specify the default page title</span></th>
+			<td>
+				<input name="pagetitle" id="pagetitle" type="Text" maxlength="64" value="<tmpl_var name="pagetitle">" size="30">
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Enable Personal Settings<span>Allow users to change their personal settings</span></th>
+			<td class="alt">
+				<select name="enable_personal_settings" id="enable_personal_settings">
+					<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="enable_personal_settings" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+					</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Display TorrentFlux-NG Site Link<br /><span>When enabled, will display a small link to the TorrentFlux-NG website at the bottom of all pages</span></th>
+			<td>
+				<select name="ui_displayfluxlink" id="ui_displayfluxlink">
+					<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="fluxlink_display" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Drivespace Bar Style<br /><span>Select the styling of the drivespace bar in the frontend</span></th>
+			<td class="alt">
+				<select name="drivespacebar" id="drivespacebar">
+					<option value="tf"
+				<tmpl_if name="drivespacebar" value="tf">
+					selected
+				</tmpl_if>
+					>tf</option>
+					<option value="xfer"
+				<tmpl_if name="drivespacebar" value="xfer">
+					selected
+				</tmpl_if>
+					>xfer</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Transfer Statistics Update Method<br /><span>Choose the method used to update the transfer statistics window</span></th>
+			<td>
+				<select name="transferStatsType" id="transferStatsType">
+					<option value="standard">HTML Meta Refresh</option>
+					<option value="ajax"
+				<tmpl_if name="transferStatsType" value="ajax">
+					selected
+				</tmpl_if>
+					>AJAX Update</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Transfer Statistics Update Interval<br /><span>Specify the interval in seconds between updates in the transfer statistics window</span></th>
+			<td class="alt">
+				<input name="transferStatsUpdate" id="transferStatsUpdate" type="Text" maxlength="3" value="<tmpl_var name="transferStatsUpdate">" size="3"> seconds.
+			</td>
+		</tr>
+		<tr>
+			<th>
+				Resolve Hostnames In Transfer Window Hosts Tab<br /><span>Whether to resolve transfer peer hostnames to IP addresses in the Hosts 
+				tab of the transfer window - selecting Hostnames will add load to the server</span></th>
+			<td>
+				<select name="transferHosts" id="transferHosts">
+					<option value="1">Hostnames</option>
+					<option value="0"
+				<tmpl_if name="transferHosts" value="0">
+					selected
+				</tmpl_if>
+					>IPs</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Server Monitor Update Interval<br /><span>Specify the interval in seconds between updates in the Server Monitor window</span></th>
+			<td class="alt">
+				<input name="servermon_update" id="servermon_update" type="Text" maxlength="3" value="<tmpl_var name="servermon_update">" size="3"> seconds.
+			</td>
+		</tr>						
+		<tr>
+			<th>Hide Referer When Following Links<br /><span>When enabled, referer information will not be forwarded to websites visited by clicking on links within TorrentFlux-NG</span></th>
+			<td>
+				<select name="enable_dereferrer" id="enable_dereferrer">
+					<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="enable_dereferrer" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Default Theme<br /><span>Select the default theme. Note: This theme will also be used for the login screen when a form based authentication method is used</span></th>
+			<td>
+				<select name="default_theme" id="default_theme">
+				<tmpl_loop name="theme_list">
+					<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected">><tmpl_var name="arThemes"></option>
+				</tmpl_loop>
+					<optgroup label="Standard TF Themes" style="background-color: #00EC00">
+				<tmpl_loop name="tfstandard_theme_list">
+					<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected"> style="background-color: #FFFFFF"><tmpl_var name="arThemes"></option>
+				</tmpl_loop>
+					</optgroup>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Default Language<br /><span>Select the default language</span></th>
+			<td class="alt">
+				<select name="default_language" id="default_language">
+				<tmpl_loop name="lang_list">
+					<option value="<tmpl_var name="arLanguage">" <tmpl_var name="selected">><tmpl_var name="GetLanguageFromFile"></option>
+				</tmpl_loop>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th>Days To Keep Logged Audit Actions<br /><span>Number of days that audit actions will be held in the database</span></th>
+			<td>
+				<input name="days_to_keep" id="days_to_keep" type="Text" maxlength="3" value="<tmpl_var name="days_to_keep">" size="3"> days.
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Minutes To Keep User Online Status<br /><span>Number of minutes after ending a browser session that user status changes to offline</span></th>
+			<td class="alt">
+				<input name="minutes_to_keep" id="minutes_to_keep" type="Text" maxlength="2" value="<tmpl_var name="minutes_to_keep">" size="2">
+			</td>
+		</tr>
+		<tr>
+			<th>Minutes To Cache RSS Feeds<br /><span>Number of minutes to cache RSS XML feeds on the server</span></th>
+			<td>
+				<input name="rss_cache_min" id="rss_cache_min" type="Text" maxlength="3" value="<tmpl_var name="rss_cache_min">" size="3"> minutes.
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Enable Template Cache<br /><span>Enable caching of HTML template files</span></th>
+			<td class="alt">
+				<select name="enable_tmpl_cache" id="enable_tmpl_cache">
+					<option value="1">True</option>
+					<option value="0"
+					<tmpl_if name="enable_tmpl_cache" value="0">
+						selected
+					</tmpl_if>
+						>False</option>
+					</select>
+					<span><tmpl_var name="SuperAdminLink_tmplCache"></span>
+			</td>
+		</tr>
+		<tr>
+			<th>Debug Level<br /><span>Set the debug level - higher values increase the debugging output in the logs</span></th>
+			<td>
+				<select name="debuglevel" id="debuglevel">
+					<option value="0"<tmpl_if name="debuglevel" value="0"> selected</tmpl_if>>0</option>
+					<option value="1"<tmpl_if name="debuglevel" value="1"> selected</tmpl_if>>1</option>
+					<option value="2"<tmpl_if name="debuglevel" value="2"> selected</tmpl_if>>2</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<th class="alt">Show SQL Debug Statements<br /><span>SQL Errors will always be displayed but when this feature is enabled the SQL Statement that caused the error will be displayed as well</span></th>
+			<td class="alt">
+				<select name="debug_sql" id="debug_sql">
+					<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="debug_sql" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+				</select>
+			</td>
+		</tr>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+</form>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

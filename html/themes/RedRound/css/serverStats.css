@@ -1,0 +1,12 @@
+table#serverStats, table#serverStats td{
+	background: transparent;
+}
+
+table#serverStatsXFER {
+	background: transparent;
+	width: 100%
+}
+
+table#serverStatsXFER td {
+	background: transparent;
+}

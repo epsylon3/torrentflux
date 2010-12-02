@@ -2,6 +2,31 @@
 $Id$
 ================================================================================
 
+TorrentFlux-NG v1.0git
+based on torrentflux-b4rt 1.0 beta2
+
+***** todo *****
+finish Transmission RPC implementation (Transmission-daemon)
+finish Vuze RPC implementation (need new features in xmwebui)
+
+***** changes *****
+Db related :
+ Email addresses in tf_users (based on studioeng work)
+ UserId in tf_transfer_totals
+
+RedRound is now default theme
+Vuze RPC implementation
+Transmission RPC implementation (based on deadeyes work)
+jQuery and jGrowl in core
+
+***** fixes *****
+too much to say, see git commit log
+
+***** updates *****
+Transmission-cli 2.12 patch and binary (x86)
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 torrentflux-b4rt 1.0 beta2
 http://svn.berlios.de/wsvn/tf-b4rt/trunk/?op=log&rev=3366

@@ -29,7 +29,7 @@ $cdb = 'common';
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();
 // updates + deletes
-array_push($queries[$cqt][$cdb], "UPDATE tf_users SET theme = 'default'");
+array_push($queries[$cqt][$cdb], "UPDATE tf_users SET theme = 'RedRound'");
 // tf_settings
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('max_upload_rate','10')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('max_download_rate','0')");
@@ -44,7 +44,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('days_to_keep'
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('minutes_to_keep','3')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('rss_cache_min','20')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('page_refresh','60')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_theme','default')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_theme','RedRound')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('default_language','lang-english.php')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('debug_sql','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('die_when_done','False')");
@@ -77,7 +77,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_cksfv','/
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('bin_uudeview','/usr/local/bin/uudeview')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient','tornado')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_tornado_options','')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmissioncli')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_bin','/usr/local/bin/transmission-cli')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('btclient_transmission_options','')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('metainfoclient','btshowmetainfo.py')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_restrictivetview','1')");
@@ -209,6 +209,18 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_stats VALUES ('stats_d
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_stats VALUES ('stats_default_attach','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_stats VALUES ('stats_default_compress','0')");
 
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword')");
+
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_enable','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_host','127.0.0.1')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_port','9091')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_user','transmission')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_password','')");
+
 // -----------------------------------------------------------------------------
 // SQL : mysql
 // -----------------------------------------------------------------------------
@@ -319,7 +331,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://tf-b4rt.berlios.de/','tf-b4rt','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // -----------------------------------------------------------------------------
 // SQL : postgres

@@ -1,0 +1,115 @@
+<tmpl_include name="inc.transferLayoutHeader.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/transfer.js" type="text/javascript"></script>
+<h1>Settings</h1>
+<!-- MSG 01 -->
+<table id="transferSettings">
+	<tr>
+		<td>
+			<tmpl_if name="isSave" value="1">
+				<tmpl_if name="message">
+					<h1 class="msg"><tmpl_var name="message"></h1>
+				</tmpl_if>
+				<tmpl_if name="error">
+					<h1 class="error"><tmpl_var name="error"></h1>
+				</tmpl_if>
+				<tmpl_if name="list_changes">
+					<table id="transferSettings">
+						<h2>Changes</h2>
+							<tmpl_loop name="list_changes">
+								<tr>
+									<td><tmpl_var name="lbl">:</td>
+									<td><tmpl_var name="val"></td>
+								</tr>
+						</tmpl_loop>
+					</table>
+			</tmpl_if>
+		</td>
+	</tr>
+</table>
+<!-- MSG 02 -->
+<tmpl_if name="list_send">
+	<h2>Changes sent to Client</h2>
+	<table id="transferSettings">
+		<tmpl_loop name="list_send">
+			<tr>
+				<td><tmpl_var name="lbl">:</td>
+				<td><tmpl_var name="val"></td>
+			</tr>
+		</tmpl_loop>
+	</table>
+</tmpl_if>
+<!-- MSG 03 -->
+<tmpl_if name="list_restart">
+	<h2>Changes that require a Client-Restart</h2>
+	<table id="transferSettings">
+		<tmpl_loop name="list_restart">
+			<tr>
+				<td><tmpl_var name="lbl">:</td>
+				<td><tmpl_var name="val"></td>
+			</tr>
+		</tmpl_loop>
+	</table>
+</tmpl_if>
+<tmpl_else>
+<!-- IF USER IS ALLOWED TO CHOOSE WHICH CLIENT IS USED, THIS IS SHOWN. (enable/disable in admin/control/Enable Client Chooser) -->
+	<tmpl_if name="enableClientChooser" value="1">
+		<tmpl_if name="enableBtclientChooser" value="1">
+			<form name="clientForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post">
+				<tmpl_if name="profile">
+					<input type="hidden" name="profile" value="<tmpl_var name="profile">" />
+				</tmpl_if>
+				<table id="transferSettings">
+					<tr class="alt">
+						<th>BitTorrent-Client:</th>
+						<td>
+							<select name="client" id="client" onChange="javascript:submit();">
+								<tmpl_loop name="clientSelectForm_client_list">
+								<option value="<tmpl_var name="client">" <tmpl_if name="selected">selected</tmpl_if>><tmpl_var name="client"></option>
+								</tmpl_loop>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</tmpl_if>
+	</tmpl_if>
+<tmpl_if name="with_profiles" value="1">
+	<form name="profileForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post">
+		<tmpl_if name="client">
+			<input type="hidden" name="client" value="<tmpl_var name="client">" />
+		</tmpl_if>
+		<tmpl_include name="inc.transferProfile.tmpl">
+	</form>
+</tmpl_if>
+<form name="theForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post" onsubmit="return validateSettings('<tmpl_var name="type">')">
+<input type="hidden" name="save" value="1" />
+	<tmpl_include name="inc.transferSettings.tmpl">
+<!-- IF USER IS ALLOWED TO CHOOSE SAVE PATH, THIS IS SHOWN. THIS CAN BE ENABLED/DISABLED IN admin/control/enable save path chooser -->
+	<tmpl_if name="showdirtree">
+		<table id="transferSettings">
+			<tr><th>Save Path:</th><td></td></tr>
+			<tr>
+				<td><input type="text" name="savepath" id="savepath" style="width:290px" value="<tmpl_var name="savepath">"></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><select style="width:290px" size="5" onchange="savepath.value= this.options[this.selectedIndex].value;"><tmpl_include name="inc.dirTree.tmpl"></select></td>
+				<td></td>
+			</tr>
+		</table>
+	</tmpl_if>
+	<tmpl_if name="sendboxShow" value="1">
+		<table id="transferSettings">
+		<tr class="alt">
+			<th>Send Changes to Client</th>
+			<td><input type="checkbox" name="sendbox" id="sendbox" <tmpl_var name="sendboxAttr">></td>
+		</tr>
+		</table>
+		</tmpl_if>
+		<table id="transferSettings">
+		<tr><th><input type="Submit" value="Save"></th><td></td></tr>
+		</table>
+</form>
+</tmpl_if>
+<tmpl_include name="inc.transferLayoutFooter.tmpl">

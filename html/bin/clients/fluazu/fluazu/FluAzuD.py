@@ -234,20 +234,20 @@ class FluAzuD(object):
         actifs = 1
         
         #if os.path.isfile("/usr/local/bin/flubartchkactive.php"):
-            
+        #    
         #    args = shlex.split("/usr/bin/php /usr/local/bin/flubartchkactive.php")
         #    data = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()[0]
-            #printMessage("os exec = %s ..." % data)
-            
-            #f = open("/tmp/flubartactif", 'r')
-            #data = f.read()
-            #f.close()
+        #    printMessage("os exec = %s ..." % data)
+        #    
+        #    f = open("/tmp/flubartactif", 'r')
+        #    data = f.read()
+        #    f.close()
         #    try:
         #        actifs = int(data)
         #    except:
         #        printMessage("bad data in /tmp/flubartactif %s ..." % data)
         #        actifs = 1
-            
+        
         return actifs
         
     
@@ -276,7 +276,7 @@ class FluAzuD(object):
             if (nloop == 50):
                 self.needUpdateAll = 1
 
-            if (nloop % 100) == 0:
+            if (nloop % 50) == 0:
                 self.needUpdate = 1
 
             if (nloop % 10) == 0:
@@ -307,9 +307,17 @@ class FluAzuD(object):
                             transfer.update(self.downloads[transfer.name])
                             #printMessage(transfer.name + " %d " % transfer.state_azu)
                     else:
+                      if "_"+transfer.name in self.downloads:
+                          printMessage(" found lost transfer: " + transfer.name + " = _" + transfer.name)
+                          transfer.name = "_"+transfer.name
+                          transfer.update(self.downloads[transfer.name])
+                      else:
                         if (transfer.state_azu != 7):
                             printMessage(" not in transfers: " + transfer.name + " %d " % transfer.state_azu)
                             #self.downloads[tfile]
+                            
+                            #for download in self.downloads:
+                            #  printMessage(download)
                 
                 self.needUpdateStat = 0
                 self.needUpdateAll = 0
@@ -317,7 +325,7 @@ class FluAzuD(object):
             #printMessage("processCommandStack")
             
             # inner loop which check if there is a command file to run
-            for i in range(20):
+            for i in range(15):
                 
                 # process daemon command stack (fast) CTRL+C ?
                 if self.processCommandStack():

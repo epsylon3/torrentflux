@@ -498,18 +498,23 @@ class WrapperWget
 	function _processBuffer() {
 
 		// downtotal
-		if (preg_match_all("/(\d*)K\s\./i", $this->_buffer, $matches, PREG_SET_ORDER))
-			$this->_downtotal = $matches[count($matches) - 1][1] * 1024;
-
-		// percent_done + down_speed + _speed
-		if (preg_match_all("/(\d*)%(\s*)(.*)\/s/i", $this->_buffer, $matches, PREG_SET_ORDER)) {
+		if (preg_match_all("/\d*(K)/i", $this->_buffer, $matches, PREG_SET_ORDER)) {
 			$matchIdx = count($matches) - 1;
-			// percentage
-			$this->_percent_done = $matches[$matchIdx][1];
-			// speed
-			$this->_down_speed = $matches[$matchIdx][3]."/s";
-			// we dont want upper-case k
-			$this->_down_speed = str_replace("KB/s", "kB/s", $this->_down_speed);
+			$res = preg_replace("/K/i", "",$matches[$matchIdx][0]);
+			$this->_downtotal = (int)$res*1024;
+		}
+
+		// percent_done
+		if (preg_match_all("/\d*(%)/i", $this->_buffer, $matches, PREG_SET_ORDER)) {
+			$matchIdx = count($matches) - 1;
+			$res = preg_replace("/%/i", "",$matches[$matchIdx][0]);
+			$this->_percent_done = (int)$res;
+		}
+
+		// down_speed
+		if (preg_match_all("/[0-9]*+[.]+[0-9]+/i", $this->_buffer, $matches, PREG_SET_ORDER)) {
+			$matchIdx = count($matches) - 1;
+			$this->_down_speed = $matches[$matchIdx][0]." kB/s";
 			// size as int + convert MB/s
 			$sizeTemp = substr($this->_down_speed, 0, -5);
 			if (is_numeric($sizeTemp)) {

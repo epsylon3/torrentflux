@@ -1,0 +1,42 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<h1>Messages</h1>
+<tmpl_if name="mid">
+<!-- READ MESSAGE  -->
+	<tmpl_include "inc.readmsgReadMSG.tmpl">
+<tmpl_else>
+<!-- COMPOSE BOX TOP MESSAGES -->
+	<tmpl_include "inc.readmsgComposeBar.tmpl">
+<!-- Message Table -->
+<h2><tmpl_var name="_INBOX"></h2>
+<table id="readmsgList">
+	<tr>
+		<th><tmpl_var name="_FROM"></th>
+		<th><tmpl_var name="_MESSAGE"></th>
+		<th><tmpl_var name="_DATE"></th>
+		<th>Action</th>
+	</tr>
+<tmpl_loop name="message_list">
+	<tmpl_if name="__ODD__">
+		<tr class="alt" onmouseover="this.className='hover';" onmouseout="this.className='alt';">
+	<tmpl_else>
+		<tr onmouseover="this.className='hover';" onmouseout="this.className='';">
+	</tmpl_if>
+		<td class="readmsgListUser"><tmpl_var name="from_user"></td>
+		<td class="readmsgListMSG"><a href="index.php?iid=readmsg&amp;mid=<tmpl_var name="mid">"><tmpl_var name="display_message"></a></td>
+		<td class="readmsgListDate"><tmpl_var name="date2"></td>
+			<td class="readmsgListActions">
+			<tmpl_if name="force_read">
+				<img src="themes/<tmpl_var name="theme">/images/msg/delete_off.png" alt="cannot delete" title="cannot delete these message before reading">
+			<tmpl_else>
+				<tmpl_if name="IsUser2">
+					<a href="index.php?iid=message&amp;to_user=<tmpl_var name="from_user">&amp;rmid=<tmpl_var name="mid">"><img src="themes/<tmpl_var name="theme">/images/msg/inbox_reply.png" alt="<tmpl_var name="_REPLY">" title="<tmpl_var name="_REPLY">" /></a>
+				</tmpl_if>
+					<a href="index.php?iid=readmsg&amp;delete=<tmpl_var name="mid">"><img src="themes/<tmpl_var name="theme">/images/msg/delete.png" alt="<tmpl_var name="_DELETE">" title="<tmpl_var name="_DELETE">" /></a>
+			</tmpl_if>
+		</td>
+	</tr>
+</tmpl_loop>
+</table>
+<tmpl_if name="no_inx"><table id="readmsgList"><tr><td><tmpl_var name="_NORECORDSFOUND"></td></tr></table></tmpl_if>	
+</tmpl_if>
+<tmpl_include name="inc.LayoutFooter.tmpl">

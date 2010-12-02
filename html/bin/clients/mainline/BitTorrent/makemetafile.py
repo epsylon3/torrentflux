@@ -17,7 +17,7 @@ from __future__ import division
 import os
 import sys
 import math
-from BTL.hash import sha
+from hashlib import sha1
 import time
 from threading import Event
 from BitTorrent.translation import _
@@ -169,7 +169,7 @@ def make_meta_file_dht(path, nodes, piece_len_exp, flag=Event(),
     if flag.isSet():
         return
     check_info(info)
-    info_hash = sha(bencode(info)).digest()
+    info_hash = sha1(bencode(info)).digest()
 
     if not nodes:
         x = open(os.path.join(data_dir, 'routing_table'), 'rb')
@@ -227,7 +227,7 @@ def makeinfo(path, piece_length, flag, progress, name = None,
         subs = subfiles(path)
         subs.sort()
         pieces = []
-        sh = sha()
+        sh = sha1()
         done = 0
         fs = []
         totalsize = 0.0
@@ -257,7 +257,7 @@ def makeinfo(path, piece_length, flag, progress, name = None,
                 if done == piece_length:
                     pieces.append(sh.digest())
                     done = 0
-                    sh = sha()
+                    sh = sha1()
                 progress(a)
             h.close()
         if done > 0:
@@ -281,7 +281,7 @@ def makeinfo(path, piece_length, flag, progress, name = None,
             x = h.read(min(piece_length, size - p))
             if flag.isSet():
                 return
-            pieces.append(sha(x).digest())
+            pieces.append(sha1(x).digest())
             p += piece_length
             if p > size:
                 p = size

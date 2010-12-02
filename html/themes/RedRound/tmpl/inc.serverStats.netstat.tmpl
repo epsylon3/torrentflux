@@ -1,0 +1,13 @@
+<h1>Net Stats</h1>
+<div align="left" id="BodyLayer" name="BodyLayer" style=";width:740; height:500; padding-left: 5px; padding-right: 5px; z-index:1; overflow: auto; visibility: visible">
+	<tmpl_if name="isAdmin">
+		<br>
+		<pre>
+			<strong><tmpl_var name="_ID_CONNECTIONS">: </strong><tmpl_var name="netstatConnectionsSum">
+		<br>
+			<strong><tmpl_var name="_ID_PORTS">: </strong><tmpl_var name="netstatPortList">
+		<br>
+		<strong><tmpl_var name="_ID_HOSTS">: </strong><tmpl_var name="netstatHostList">
+		</pre>
+	</tmpl_if>
+</div>

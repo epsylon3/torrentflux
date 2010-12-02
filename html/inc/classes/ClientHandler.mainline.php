@@ -35,58 +35,58 @@ class ClientHandlerMainline extends ClientHandler
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function ClientHandlerMainline() {
-    	global $cfg;
-    	$this->type = "torrent";
-        $this->client = "mainline";
-        $this->binSystem = "python";
-        $this->binSocket = "python";
-        $this->binClient = "tfmainline.py";
-        $this->mainlineBin = $cfg["docroot"]."bin/clients/mainline/tfmainline.py";
-    }
+	/**
+	 * ctor
+	 */
+	function ClientHandlerMainline() {
+		global $cfg;
+		$this->type = "torrent";
+		$this->client = "mainline";
+		$this->binSystem = "python";
+		$this->binSocket = "python";
+		$this->binClient = "tfmainline.py";
+		$this->mainlineBin = $cfg["docroot"]."bin/clients/mainline/tfmainline.py";
+	}
 
 	// =========================================================================
 	// public methods
 	// =========================================================================
 
-    /**
-     * starts a client
-     *
-     * @param $transfer name of the transfer
-     * @param $interactive (boolean) : is this a interactive startup with dialog ?
-     * @param $enqueue (boolean) : enqueue ?
-     */
-    function start($transfer, $interactive = false, $enqueue = false) {
-    	global $cfg;
+	/**
+	 * starts a client
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $interactive (boolean) : is this a interactive startup with dialog ?
+	 * @param $enqueue (boolean) : enqueue ?
+	 */
+	function start($transfer, $interactive = false, $enqueue = false) {
+		global $cfg;
 
-    	// set vars
+		// set vars
 		$this->_setVarsForTransfer($transfer);
 
-    	// log
-    	$this->logMessage($this->client."-start : ".$transfer."\n", true);
+		// log
+		$this->logMessage($this->client."-start : ".$transfer."\n", true);
 
-        // do mainline special-pre-start-checks
-        // check to see if the path to the python script is valid
-        if (!is_file($this->mainlineBin)) {
-        	$this->state = CLIENTHANDLER_STATE_ERROR;
-        	$msg = "path for tfmainline.py is not valid";
-        	AuditAction($cfg["constants"]["error"], $msg);
-        	$this->logMessage($msg."\n", true);
-        	array_push($this->messages, $msg);
-            array_push($this->messages, "mainlineBin : ".$this->mainlineBin);
-            // write error to stat
+		// do mainline special-pre-start-checks
+		// check to see if the path to the python script is valid
+		if (!is_file($this->mainlineBin)) {
+			$this->state = CLIENTHANDLER_STATE_ERROR;
+			$msg = "path for tfmainline.py is not valid";
+			AuditAction($cfg["constants"]["error"], $msg);
+			$this->logMessage($msg."\n", true);
+			array_push($this->messages, $msg);
+			array_push($this->messages, "mainlineBin : ".$this->mainlineBin);
+			// write error to stat
 			$sf = new StatFile($this->transfer, $this->owner);
 			$sf->time_left = 'Error';
 			$sf->write();
 			// return
-            return false;
-        }
+			return false;
+		}
 
-        // init starting of client
-        $this->_init($interactive, $enqueue, true, ($cfg['enable_sharekill'] == 1));
+		// init starting of client
+		$this->_init($interactive, $enqueue, true, ($cfg['enable_sharekill'] == 1));
 
 		// only continue if init succeeded (skip start / error)
 		if ($this->state != CLIENTHANDLER_STATE_READY) {
@@ -131,94 +131,94 @@ class ClientHandlerMainline extends ClientHandler
 		if (strlen($cfg["btclient_mainline_options"]) > 0)
 			$this->command .= " ".$cfg["btclient_mainline_options"];
 		$this->command .= " ".tfb_shellencode($this->transferFilePath);
-        $this->command .= " 1>> ".tfb_shellencode($this->transferFilePath.".log");
-        $this->command .= " 2>> ".tfb_shellencode($this->transferFilePath.".log");
-        $this->command .= " &";
+		$this->command .= " 1>> ".tfb_shellencode($this->transferFilePath.".log");
+		$this->command .= " 2>> ".tfb_shellencode($this->transferFilePath.".log");
+		$this->command .= " &";
 
 		// start the client
 		$this->_start();
-    }
+	}
 
- 	/**
-     * set upload rate of a transfer
-     *
-     * @param $transfer
-     * @param $uprate
-     * @param $autosend
-     */
-    function setRateUpload($transfer, $uprate, $autosend = false) {
-    	// set rate-field
-    	$this->rate = $uprate;
-    	// add command
-    	$nrate = ($uprate != 0)
-    		? $uprate * 1024
-    		: 125000000; // 1 GBit local net = 125MB/s
+	/**
+	 * set upload rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $uprate
+	 * @param $autosend
+	 */
+	function setRateUpload($transfer, $uprate, $autosend = false) {
+		// set rate-field
+		$this->rate = $uprate;
+		// add command
+		$nrate = ($uprate != 0)
+			? $uprate * 1024
+			: 125000000; // 1 GBit local net = 125MB/s
 		CommandHandler::add($transfer, "u".$nrate);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
-     * set download rate of a transfer
-     *
-     * @param $transfer
-     * @param $downrate
-     * @param $autosend
-     */
-    function setRateDownload($transfer, $downrate, $autosend = false) {
-    	// set rate-field
-    	$this->drate = $downrate;
-    	// add command
-    	$nrate = ($downrate != 0)
-    		? $downrate * 1024
-    		: 125000000; // 1 GBit local net = 125MB/s
+	/**
+	 * set download rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $downrate
+	 * @param $autosend
+	 */
+	function setRateDownload($transfer, $downrate, $autosend = false) {
+		// set rate-field
+		$this->drate = $downrate;
+		// add command
+		$nrate = ($downrate != 0)
+			? $downrate * 1024
+			: 125000000; // 1 GBit local net = 125MB/s
 		CommandHandler::add($transfer, "d".$nrate);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
-     * set runtime of a transfer
-     *
-     * @param $transfer
-     * @param $runtime
-     * @param $autosend
-     * @return boolean
-     */
-    function setRuntime($transfer, $runtime, $autosend = false) {
-    	// set runtime-field
-    	$this->runtime = $runtime;
-    	// add command
+	/**
+	 * set runtime of a transfer
+	 *
+	 * @param $transfer
+	 * @param $runtime
+	 * @param $autosend
+	 * @return boolean
+	 */
+	function setRuntime($transfer, $runtime, $autosend = false) {
+		// set runtime-field
+		$this->runtime = $runtime;
+		// add command
 		CommandHandler::add($transfer, "r".(($this->runtime == "True") ? "1" : "0"));
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    }
+	}
 
-    /**
-     * set sharekill of a transfer
-     *
-     * @param $transfer
-     * @param $sharekill
-     * @param $autosend
-     * @return boolean
-     */
-    function setSharekill($transfer, $sharekill, $autosend = false) {
+	/**
+	 * set sharekill of a transfer
+	 *
+	 * @param $transfer
+	 * @param $sharekill
+	 * @param $autosend
+	 * @return boolean
+	 */
+	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
-        $this->sharekill = intval($sharekill);
-        // recalc sharekill
+		$this->sharekill = intval($sharekill);
+		// recalc sharekill
 		if ($this->_recalcSharekill() === false)
 			return false;
-    	// add command
+		// add command
 		CommandHandler::add($transfer, "s".$this->sharekill_param);
 		// send command to client
-        if ($autosend)
+		if ($autosend)
 			CommandHandler::send($transfer);
-    	// return
-    	return true;
-    }
+		// return
+		return true;
+	}
 
 }
 

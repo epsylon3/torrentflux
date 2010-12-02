@@ -33,73 +33,73 @@ class ClientHandlerWget extends ClientHandler
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function ClientHandlerWget() {
-    	$this->type = "wget";
-        $this->client = "wget";
-        $this->binSystem = "php";
-        $this->binSocket = "wget";
-        $this->binClient = "wget.php";
-    }
+	/**
+	 * ctor
+	 */
+	function ClientHandlerWget() {
+		$this->type = "wget";
+		$this->client = "wget";
+		$this->binSystem = "php";
+		$this->binSocket = "wget";
+		$this->binClient = "wget.php";
+	}
 
 	// =========================================================================
 	// public methods
 	// =========================================================================
 
-    /**
-     * starts a client
-     *
-     * @param $transfer name of the transfer
-     * @param $interactive (boolean) : is this a interactive startup with dialog ?
-     * @param $enqueue (boolean) : enqueue ?
-     */
-    function start($transfer, $interactive = false, $enqueue = false) {
-    	global $cfg;
+	/**
+	 * starts a client
+	 *
+	 * @param $transfer name of the transfer
+	 * @param $interactive (boolean) : is this a interactive startup with dialog ?
+	 * @param $enqueue (boolean) : enqueue ?
+	 */
+	function start($transfer, $interactive = false, $enqueue = false) {
+		global $cfg;
 
-        // set vars from the wget-file
+		// set vars from the wget-file
 		$this->setVarsFromFile($transfer);
 
-    	// log
-    	$this->logMessage($this->client."-start : ".$transfer."\n", true);
+		// log
+		$this->logMessage($this->client."-start : ".$transfer."\n", true);
 
-        // do wget special-pre-start-checks
+		// do wget special-pre-start-checks
 
-        // check to see if the path to the php-bin is valid
-        if (@file_exists($cfg['bin_php']) !== true) {
-        	$this->state = CLIENTHANDLER_STATE_ERROR;
-        	$msg = "php-cli binary does not exist";
-        	AuditAction($cfg["constants"]["error"], $msg);
-        	$this->logMessage($msg."\n", true);
-        	array_push($this->messages, $msg);
-            array_push($this->messages, "bin_php : ".$cfg["bin_php"]);
-            // write error to stat
+		// check to see if the path to the php-bin is valid
+		if (@file_exists($cfg['bin_php']) !== true) {
+			$this->state = CLIENTHANDLER_STATE_ERROR;
+			$msg = "php-cli binary does not exist";
+			AuditAction($cfg["constants"]["error"], $msg);
+			$this->logMessage($msg."\n", true);
+			array_push($this->messages, $msg);
+			array_push($this->messages, "bin_php : ".$cfg["bin_php"]);
+			// write error to stat
 			$sf = new StatFile($this->transfer, $this->owner);
 			$sf->time_left = 'Error';
 			$sf->write();
 			// return
-            return false;
-        }
+			return false;
+		}
 
-        // check to see if the wget-bin is executable
-        if (!is_executable($cfg["bin_wget"])) {
-        	$this->state = CLIENTHANDLER_STATE_ERROR;
-        	$msg = "wget cannot be executed";
-        	AuditAction($cfg["constants"]["error"], $msg);
-        	$this->logMessage($msg."\n", true);
-        	array_push($this->messages, $msg);
-            array_push($this->messages, "bin_wget : ".$cfg["bin_wget"]);
-            // write error to stat
+		// check to see if the wget-bin is executable
+		if (!is_executable($cfg["bin_wget"])) {
+			$this->state = CLIENTHANDLER_STATE_ERROR;
+			$msg = "wget cannot be executed";
+			AuditAction($cfg["constants"]["error"], $msg);
+			$this->logMessage($msg."\n", true);
+			array_push($this->messages, $msg);
+			array_push($this->messages, "bin_wget : ".$cfg["bin_wget"]);
+			// write error to stat
 			$sf = new StatFile($this->transfer, $this->owner);
 			$sf->time_left = 'Error';
 			$sf->write();
 			// return
-            return false;
-        }
+			return false;
+		}
 
 		// init starting of client
-        $this->_init($interactive, $enqueue, false, false);
+		$this->_init($interactive, $enqueue, false, false);
 
 		// only continue if init succeeded (skip start / error)
 		if ($this->state != CLIENTHANDLER_STATE_READY) {
@@ -115,38 +115,38 @@ class ClientHandlerWget extends ClientHandler
 		// build the command-string
 		// note : order of args must not change for ps-parsing-code in
 		// RunningTransferWget
-        $this->command  = "nohup ".$cfg['bin_php']." -f bin/wget.php";
-        $this->command .= " " . tfb_shellencode($this->transferFilePath);
-        $this->command .= " " . tfb_shellencode($this->owner);
-        $this->command .= " " . tfb_shellencode($this->savepath);
-        $this->command .= " " . tfb_shellencode($this->drate * 1024);
-        $this->command .= " " . tfb_shellencode($cfg["wget_limit_retries"]);
-        $this->command .= " " . tfb_shellencode($cfg["wget_ftp_pasv"]);
-        $this->command .= " 1>> ".tfb_shellencode($this->transferFilePath.".log");
-        $this->command .= " 2>> ".tfb_shellencode($this->transferFilePath.".log");
-        $this->command .= " &";
+		$this->command  = "nohup ".$cfg['bin_php']." -f bin/wget.php";
+		$this->command .= " " . tfb_shellencode($this->transferFilePath);
+		$this->command .= " " . tfb_shellencode($this->owner);
+		$this->command .= " " . tfb_shellencode($this->savepath);
+		$this->command .= " " . tfb_shellencode($this->drate * 1024);
+		$this->command .= " " . tfb_shellencode($cfg["wget_limit_retries"]);
+		$this->command .= " " . tfb_shellencode($cfg["wget_ftp_pasv"]);
+		$this->command .= " 1>> ".tfb_shellencode($this->transferFilePath.".log");
+		$this->command .= " 2>> ".tfb_shellencode($this->transferFilePath.".log");
+		$this->command .= " &";
 
 		// state
 		$this->state = CLIENTHANDLER_STATE_READY;
 
 		// start the client
 		$this->_start();
-    }
+	}
 
-    /**
-     * sets fields from default-vals
-     *
-     * @param $transfer
-     */
-    function settingsDefault($transfer = "") {
-    	global $cfg;
+	/**
+	 * sets fields from default-vals
+	 *
+	 * @param $transfer
+	 */
+	function settingsDefault($transfer = "") {
+		global $cfg;
 		// transfer vars
-        if ($transfer != "")
-        	$this->_setVarsForTransfer($transfer);
-        // common vars
+		if ($transfer != "")
+			$this->_setVarsForTransfer($transfer);
+		// common vars
 		$this->hash        = getTransferHash($this->transfer);
-        $this->datapath    = getTransferDatapath($this->transfer);
-    	$this->savepath    = getTransferSavepath($this->transfer);
+		$this->datapath    = getTransferDatapath($this->transfer);
+		$this->savepath    = getTransferSavepath($this->transfer);
 		$this->running     = 0;
 		$this->rate        = 0;
 		$this->drate       = $cfg["wget_limit_rate"];
@@ -158,41 +158,41 @@ class ClientHandlerWget extends ClientHandler
 		$this->maxport     = 65535;
 		$this->maxcons     = 1;
 		$this->rerequest   = 1;
-    }
+	}
 
-    /**
-     * setVarsFromUrl
-     *
-     * @param $transferUrl
-     */
-    function setVarsFromUrl($transferUrl) {
-    	global $cfg;
-    	$this->url = $transferUrl;
-        $transfer = strrchr($transferUrl,'/');
-        if ($transfer{0} == '/')
-        	$transfer = substr($transfer, 1);
-        $transfer = tfb_cleanFileName($transfer.".wget");
+	/**
+	 * setVarsFromUrl
+	 *
+	 * @param $transferUrl
+	 */
+	function setVarsFromUrl($transferUrl) {
+		global $cfg;
+		$this->url = $transferUrl;
+		$transfer = strrchr($transferUrl,'/');
+		if ($transfer{0} == '/')
+			$transfer = substr($transfer, 1);
+		$transfer = tfb_cleanFileName($transfer.".wget");
 		$this->_setVarsForTransfer($transfer);
-        if (empty($this->owner) || (strtolower($this->owner) == "n/a"))
-        	$this->owner = $cfg['user'];
-    }
+		if (empty($this->owner) || (strtolower($this->owner) == "n/a"))
+			$this->owner = $cfg['user'];
+	}
 
-    /**
-     * setVarsFromFile
-     *
-     * @param $transfer
-     */
-    function setVarsFromFile($transfer) {
-    	global $cfg;
+	/**
+	 * setVarsFromFile
+	 *
+	 * @param $transfer
+	 */
+	function setVarsFromFile($transfer) {
+		global $cfg;
 		$this->_setVarsForTransfer($transfer);
-	    $data = "";
-	    if ($fileHandle = @fopen($this->transferFilePath,'r')) {
-	        while (!@feof($fileHandle))
-	            $data .= @fgets($fileHandle, 2048);
-	        @fclose ($fileHandle);
-	        $this->setVarsFromUrl(trim($data));
-	    }
-    }
+		$data = "";
+		if ($fileHandle = @fopen($this->transferFilePath,'r')) {
+			while (!@feof($fileHandle))
+				$data .= @fgets($fileHandle, 2048);
+			@fclose ($fileHandle);
+			$this->setVarsFromUrl(trim($data));
+		}
+	}
 
 	/**
 	 * injects a torrent
@@ -209,7 +209,7 @@ class ClientHandlerWget extends ClientHandler
 		// write meta-file
 		$resultSuccess = false;
 		if ($handle = @fopen($this->transferFilePath, "w")) {
-	        $resultSuccess = (@fwrite($handle, $this->url) !== false);
+			$resultSuccess = (@fwrite($handle, $this->url) !== false);
 			@fclose($handle);
 		}
 		if ($resultSuccess) {
@@ -221,18 +221,18 @@ class ClientHandlerWget extends ClientHandler
 			$sf->size = getTransferSize($this->transfer);
 			if (!$sf->write()) {
 				$this->state = CLIENTHANDLER_STATE_ERROR;
-	            $msg = "wget-inject-error when writing stat-file for transfer : ".$this->transfer;
-	            array_push($this->messages , $msg);
-	            AuditAction($cfg["constants"]["error"], $msg);
-	            $this->logMessage($msg."\n", true);
-	            $resultSuccess = false;
+				$msg = "wget-inject-error when writing stat-file for transfer : ".$this->transfer;
+				array_push($this->messages , $msg);
+				AuditAction($cfg["constants"]["error"], $msg);
+				$this->logMessage($msg."\n", true);
+				$resultSuccess = false;
 			}
 		} else {
 			$this->state = CLIENTHANDLER_STATE_ERROR;
-            $msg = "wget-metafile cannot be written : ".$this->transferFilePath;
-            array_push($this->messages , $msg);
-            AuditAction($cfg["constants"]["error"], $msg);
-            $this->logMessage($msg."\n", true);
+			$msg = "wget-metafile cannot be written : ".$this->transferFilePath;
+			array_push($this->messages , $msg);
+			AuditAction($cfg["constants"]["error"], $msg);
+			$this->logMessage($msg."\n", true);
 		}
 
 		// set transfers-cache

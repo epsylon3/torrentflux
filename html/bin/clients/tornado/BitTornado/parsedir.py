@@ -3,7 +3,7 @@
 from bencode import bencode, bdecode
 from BT1.btformats import check_info
 from os.path import exists, isfile
-from sha import sha
+from hashlib import sha1
 import sys, os
 
 try:
@@ -90,7 +90,7 @@ def parsedir(directory, parsed, files, blocked,
             ff = open(p, 'rb')
             d = bdecode(ff.read())
             check_info(d['info'])
-            h = sha(bencode(d['info'])).digest()
+            h = sha1(bencode(d['info'])).digest()
             new_file[1] = h
             if new_parsed.has_key(h):
                 errfunc('**warning** '+
