@@ -835,23 +835,28 @@ class ClientHandler
 		AuditAction($cfg["constants"]["stop_transfer"], $this->transfer);
 		// send quit-command to client
 		CommandHandler::add($this->transfer, "q");
-	CommandHandler::send($this->transfer);
+		CommandHandler::send($this->transfer);
 		// wait until transfer is down
 		waitForTransfer($this->transfer, false, 20);
-		// one more second
-		usleep(500000);
-		// flag the transfer as stopped (in db)
-		stopTransferSettings($this->transfer);
-		// see if the transfer process is hung.
-		$running = $this->runningProcesses();
-		$isHung = false;
-		foreach ($running as $rng) {
-			$rt = RunningTransfer::getInstance($rng['pinfo'], $this->client);
-			if ($rt->transferFile == $this->transfer) {
-				$isHung = true;
-				AuditAction($cfg["constants"]["error"], "Possible Hung Process for ".$rt->transferFile." (".$rt->processId.")");
-//$kill = true;
+		if (!$this->useRPC) {
+			// one more demi-second
+			usleep(500000);
+			// see if the transfer process is hung.
+			$running = $this->runningProcesses();
+			$isHung = false;
+			foreach ($running as $rng) {
+				$rt = RunningTransfer::getInstance($rng['pinfo'], $this->client);
+				if ($rt->transferFile == $this->transfer) {
+					$isHung = true;
+					AuditAction($cfg["constants"]["error"], "Possible Hung Process for ".$rt->transferFile." (".$rt->processId.")");
+					//$kill = true;
+					break;
+				}
 			}
+		}
+		if (!$isHung) {
+			// flag the transfer as stopped (in db)
+			stopTransferSettings($this->transfer);	
 		}
 		// kill-request
 		if ($kill && $isHung) {
@@ -1090,6 +1095,17 @@ class ClientHandler
 		$portString = netstatPortList();
 		$portAry = explode("\n", $portString);
 		$this->port = intval($this->minport);
+
+		if ($this->minport == 0)
+			$this->minport = (int) $cfg['minport'];
+		if ($this->maxport == 0)
+			$this->maxport = (int) $cfg['maxport'];
+
+		if ($this->minport == 0)
+			$this->minport = 50000;
+		if ($this->maxport == 0)
+			$this->maxport = 60000;
+
 		while (1) {
 			if (in_array($this->port, $portAry))
 				$this->port += 1;

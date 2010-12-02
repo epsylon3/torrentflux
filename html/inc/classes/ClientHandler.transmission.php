@@ -142,7 +142,7 @@ class ClientHandlerTransmission extends ClientHandler
 		// flag the transfer as stopped (in db)
 		stopTransferSettings($transfer);
 
-		//@unlink($this->transferFilePath.".pid");
+		//@ unlink($this->transferFilePath.".pid");
 
 		$stat = new StatFile($this->transfer, $this->owner);
 		return $stat->stop();

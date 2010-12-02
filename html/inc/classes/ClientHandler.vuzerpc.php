@@ -190,27 +190,26 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		if (!VuzeRPC::transferExists($hash)) {
 			$msg = "transfer ".$transfer." does not exist in vuze.";
 			$this->logMessage($msg."\n", true);
-			//$this->cleanStoppedStatFile($transfer);
-			//return false;
 		}
+		else
+		{
+			// log
+			$this->logMessage($this->client."-stop : ".$transfer."\n", true);
 
-		// log
-		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
-
-		if (!$vuze->torrent_stop_tf($hash)) {
-			$msg = "transfer ".$transfer." does not exist in vuze (2).";
-			$this->logMessage($msg."\n", true);
-			//$this->cleanStoppedStatFile();
-			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
+			if (!$vuze->torrent_stop_tf($hash)) {
+				$msg = "transfer ".$transfer." does not exist in vuze (2).";
+				$this->logMessage($msg."\n", true);
+				//$this->cleanStoppedStatFile();
+				AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
+			}
 		}
-
+		
 		// stop the client
 		//$this->_stop($kill, $transferPid);
 
 		// flag the transfer as stopped (in db)
 		stopTransferSettings($transfer);
-
-		@unlink($this->transferFilePath.".pid");
+		$this->cleanStoppedStatFile($transfer);
 
 		$this->updateStatFiles();
 	}
@@ -408,7 +407,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @return boolean
 	 */
 	function cleanStoppedStatFile($transfer) {
-		@unlink($this->transferFilePath.".pid");
+		@ unlink($this->transferFilePath.".pid");
 		$stat = new StatFile($this->transfer, $this->owner);
 		//if ($stat->percent_done > 100)
 		//	$stat->percent_done=100;
