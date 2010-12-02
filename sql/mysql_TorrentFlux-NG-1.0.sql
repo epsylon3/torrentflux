@@ -94,8 +94,8 @@ CREATE TABLE tf_users (
 --
 CREATE TABLE tf_transfers (
   transfer VARCHAR(255) NOT NULL default '',
-  type ENUM('torrent','wget','nzb') NOT NULL default 'torrent',
-  client ENUM('tornado','transmission','mainline','azureus','wget','nzbperl') NOT NULL default 'tornado',
+  type VARCHAR(32) NOT NULL default 'torrent',
+  client VARCHAR(32) NOT NULL default 'tornado',
   hash VARCHAR(40) NOT NULL DEFAULT '',
   datapath VARCHAR(255) NOT NULL default '',
   savepath VARCHAR(255) NOT NULL default '',
@@ -111,7 +111,7 @@ CREATE TABLE tf_transfers (
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (transfer),
-  KEY hash_idx (hash(8))
+  KEY hash_idx (hash)
 ) TYPE=MyISAM;
 
 --
