@@ -19,9 +19,11 @@
 /* And, if you use HTML code, please double check it.
 /**************************************************************************/
 
+// utf-8 (please check this file remains utf-8 encoded)
+define("_CHARSET", "utf-8");
+
 // to be able to exec shell commands with utf8 accents
 define("_LC_CTYPE", "fr_FR.UTF-8");
-define("_CHARSET", "utf-8");  // utf-8 (check this file remains utf-8 encoded)
 
 define("_SELECTFILE", "Uploader un torrent depuis votre poste");
 define("_URLFILE","URL de fichier.torrent depuis un site web externe (https géré !)");
@@ -33,18 +35,18 @@ define("_OFFLINE", "Hors ligne");
 define("_STORAGE", "Disque dur");
 define("_DRIVESPACE", "Espace Disque");
 define("_SERVERSTATS", "Stats du serveur / Qui");
-define("_DIRECTORYLIST", "Listing répertoire");
+define("_DIRECTORYLIST", "Répertoire");
 define("_ALL", "Tous");
-define("_PAGEWILLREFRESH", "La Page se recharge toutes les");
-define("_SECONDS", "secondes");
-define("_TURNONREFRESH", "Activer le Rechargement Auto");
-define("_TURNOFFREFRESH", "Arrêter le Rechargement Auto");
+define("_PAGEWILLREFRESH", "Rechargement dans");
+define("_SECONDS", "sec.");
+define("_TURNONREFRESH", "Activer Rechargement Page");
+define("_TURNOFFREFRESH", "Stopper Rechargement Page");
 define("_WARNING", "AVERTISSEMENT");
 define("_DRIVESPACEUSED", "L'espace disque est saturé!");
 define("_ADMINMESSAGE", "Vous avez un message d'un administrateur dans votre boîte de messages.");
-define("_TORRENTS", "Torrents");
+define("_TORRENTS", "Téléchargements");
 define("_UPLOADHISTORY", "Historique");
-define("_MYPROFILE", "Éditer Mon Profil");
+define("_MYPROFILE", "Modifer mon Profil");
 define("_ADMINISTRATION", "Administration");
 define("_SENDMESSAGETO", "Envoyez un message à");
 define("_TRANSFERFILE", "Fichier Torrent");
@@ -61,18 +63,18 @@ define("_SHARING", "Partage");
 define("_DONE", "FAIT");
 define("_INCOMPLETE", "INACHEVÉ");
 define("_NEW", "NOUVEAU");
-define("_TRANSFERDETAILS", "Details du Transfert");
-define("_STOPTRANSFER", "Stopper le Transfert");
-define("_RUNTRANSFER", "Lancer le Transfert");
-define("_SEEDTRANSFER", "Partager le Transfert");
+define("_TRANSFERDETAILS", "Détails...");
+define("_STOPTRANSFER", "Stopper");
+define("_RUNTRANSFER", "Démarrer");
+define("_SEEDTRANSFER", "Partager (Seeder)");
 define("_DELETE", "Effacer");
 define("_ABOUTTODELETE", "Vous êtes sur le point de supprimer");
-define("_NOTOWNER", "Pas proprietaire du Transfert");
-define("_MESSAGETOALL", "Ce message a ete envoye à TOUS LES UTILISATEURS");
+define("_NOTOWNER", "Pas propriétaire du Transfert");
+define("_MESSAGETOALL", "Ce message a été envoyé à TOUS LES UTILISATEURS");
 define("_TRYDIFFERENTUSERID", "Erreur: Essayez un utilisateur different.");
 define("_HASBEENUSED", "a été utilisé.");
 define("_RETURNTOEDIT", "Retour à l'édition");
-define("_ADMINUSERACTIVITY", "Administration - Activité D'Utilisateurs");
+define("_ADMINUSERACTIVITY", "Administration - Activité des utilisateurs");
 define("_ADMIN_MENU", "admin");
 define("_ACTIVITY_MENU", "activité");
 define("_LINKS_MENU", "liens");
@@ -101,12 +103,12 @@ define("_ADMINISTRATOR", "Administrateur"); // used to describe an administrator
 define("_SUPERADMIN", "Super Admin"); // used to describe Super Admin's account type
 define("_EDIT", "Éditer");
 define("_USERADMIN", "Administration - Utilisateurs"); // title of page for user administration
-define("_EDITUSER", "Éditer L'Utilisateur");
+define("_EDITUSER", "Modifier Utilisateur");
 define("_UPLOADPARTICIPATION", "Participation au Téléchargement");
 define("_UPLOADS", "Uploads"); // Number of uploads a user has contributed
 define("_PERCENTPARTICIPATION", "Pourcentage de Participation");
 define("_PARTICIPATIONSTATEMENT", "La participation et les téléchargements basés sur les derniers"); // ends with 15 Days
-define("_TOTALPAGEVIEWS", "Pages Vues au Total");
+define("_TOTALPAGEVIEWS", "Pages vues au Total");
 define("_THEME", "Thème");
 define("_USERTYPE", "Type d'utilisateur");
 define("_NEWPASSWORD", "Nouveau Mot de passe");
@@ -120,12 +122,12 @@ define("_PLEASECHECKFOLLOWING", "Veuillez vérifier ces informations"); // Displ
 define("_NEWUSER", "Nouvel Utilisateur");
 define("_PASSWORD", "Mot de passe");
 define("_CREATE", "Créer"); // button text to create a new user
-define("_ADMINEDITLINKS", "Administration - Modifier Les Liens");
+define("_ADMINEDITLINKS", "Administration - Modifier les Liens");
 define("_FULLURLLINK", "URL Complete");
 define("_BACKTOPARRENT", "Répertoire Parent");  // indicates going back to parent directory
 define("_DOWNLOADDETAILS", "Détails Du Téléchargement");
-define("_PERCENTDONE", "Pourcentage Terminé");
-define("_RETURNTOTRANSFERS", "Revenir aux Transfers"); // Link at the bottom of each page
+define("_PERCENTDONE", "Progression");
+define("_RETURNTOTRANSFERS", "Revenir aux Téléchargements"); // Link at the bottom of each page
 define("_DATE", "Date");
 define("_WROTE", "a écrit");  // Used in a reply to tag what the user had writen
 define("_SENDMESSAGETITLE", "Envoyer un message");  // Title of page
@@ -133,10 +135,10 @@ define("_TO", "À");
 define("_FROM", "De");
 define("_YOURMESSAGE", "Votre Message");
 define("_SENDTOALLUSERS", "Envoyez à tous les utilisateurs");
-define("_FORCEUSERSTOREAD", "Force Utilisateur(s) à lire"); // Admin option in messaging
+define("_FORCEUSERSTOREAD", "Forcer Utilisateur(s) à lire"); // Admin option in messaging
 define("_SEND", "Envoyer");  // Button to send private message
 define("_PROFILE", "Profil");
-define("_PROFILEUPDATEDFOR", "Profil mis à jour pour");  // Profile updated for 'username'
+define("_PROFILEUPDATEDFOR", "Profil mis à jour ");  // Profile updated for 'username'
 define("_REPLY", "Répondre");  // popup text for reply button
 define("_MESSAGE", "Message");
 define("_MESSAGES", "Messages");  // plural (more than one)
@@ -150,20 +152,20 @@ define("_FREESPACE", "Espace dispo.");
 define("_UPLOADED", "Uploaded");
 define("_QMANAGER_MENU", "queue");
 define("_FLUXD_MENU", "fluxd");
-define("_SETTINGS_MENU", "settings");
-define("_SEARCHSETTINGS_MENU", "search");
+define("_SETTINGS_MENU", "Configuration");
+define("_SEARCHSETTINGS_MENU", "Recherche");
 define("_ERRORSREPORTED", "Erreurs");
 define("_STARTED", "Démarré");
 define("_ENDED", "Fini");
 define("_QUEUED", "Queued");
 define("_DELQUEUE", "Retrait de la file");
 define("_FORCESTOP", "Kill Transfer");
-define("_STOPPING", "Arret...");
+define("_STOPPING", "Arrêt...");
 define("_COOKIE_MENU", "cookies");
-define('_TOTALXFER','Total Transfer');
-define('_MONTHXFER','Month\'s Transfer');
-define('_WEEKXFER','Week\'s Transfer');
-define('_DAYXFER','Today\'s Transfer');
+define('_TOTALXFER','Total');
+define('_MONTHXFER','Mois');
+define('_WEEKXFER','Semaine');
+define('_DAYXFER','Jour');
 define('_XFERTHRU','Transfer thru');
 define('_REMAINING','Restant');
 define('_TOTALSPEED','Total Speed');
@@ -172,22 +174,22 @@ define('_YOURXFERSTATS','Vos Statistiques');
 define('_OTHERSERVERSTATS','Other Server Stats');
 define('_TOTAL','Total');
 define('_DOWNLOAD','Download');
-define('_MONTHSTARTING','Month Starting');
-define('_WEEKSTARTING','Week Starting');
+define('_MONTHSTARTING','Le mois commence le');
+define('_WEEKSTARTING','La semaine commence le');
 define('_DAY','Jour');
 define('_XFER','transfer');
 define('_XFER_USAGE','Transfer Usage');
 define('_QUEUEMANAGER','Queue Manager');
 define('_MULTIPLE_UPLOAD','Multiple Upload');
-define('_TDDU','Taille Dossier:');
+define('_TDDU','Taille Dossier : ');
 define("_FULLSITENAME", "Site Name");
 define('_MOVE_STRING','Move File/Folder to: ');
 define('_DIR_MOVE_LINK', 'Move File/Folder');
 define('_MOVE_FILE', 'Fichier/Dossier: ');
-define('_MOVE_FILE_TITLE', 'Move Data...');
-define('_REN_STRING','Renommer File/Folder : ');
-define('_DIR_REN_LINK', 'Renommer File/Folder');
-define('_REN_FILE', 'File/Folder: ');
+define('_MOVE_FILE_TITLE', 'Déplacer données...');
+define('_REN_STRING','Renommer : ');
+define('_DIR_REN_LINK', 'Renommer ');
+define('_REN_FILE', 'Fichier/Dossier: ');
 define('_REN_DONE', 'Fini!');
 define('_REN_ERROR', 'An error accured, please try again!');
 define('_REN_ERR_ARG', 'Wrong argument supplied!');
@@ -196,7 +198,7 @@ define('_ID_PORT','Port');
 define('_ID_PORTS','Ports');
 define('_ID_CONNECTIONS','Connexions');
 define('_ID_HOST','Host');
-define('_ID_HOSTS','Hosts');
+define('_ID_HOSTS','Connexions');
 define('_ID_IMAGES','Images');
 
 define("_USER", "Utilisateur");
