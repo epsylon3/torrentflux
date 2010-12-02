@@ -41,6 +41,8 @@ function tfb_getRequestVar($varName, $return = '') {
 		}
 		*/
 		$return = htmlentities(trim($_REQUEST[$varName]), ENT_QUOTES);
+		/*
+		disabled, need to fix deadeye's implementation
 		if ($varName == 'transfer' && isHash($return)) {
 			$name = getTransferFromHash($return);
 			if (!empty($name))
@@ -48,6 +50,7 @@ function tfb_getRequestVar($varName, $return = '') {
 			else
 				return $return;
 		}
+		*/
 	}
 	return $return;
 }

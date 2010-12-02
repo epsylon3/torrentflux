@@ -74,7 +74,10 @@ class Image
 		$img = new Image($t, $w, $h);
 		if (!$img)
 			return false;
-		$img->image = @imagecreate($w, $h);
+		if ($t == IMG_GIF)
+			$img->image = @imagecreate($w, $h);
+		else
+			$img->image = @imagecreatetruecolor($w, $h);
 		return (!$img->image)
 			? false
 			: $img;
