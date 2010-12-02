@@ -64,7 +64,7 @@ function updateStatFiles() {
 		$hashes[] = "'".strtolower($hash)."'";
 	}
 
-	$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
+	$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='vuzerpc' AND hash IN (".implode(',',$hashes).")";
 	$recordset = $db->Execute($sql);
 	$hashes=array();
 	$sharekills=array();
@@ -188,6 +188,24 @@ if (isset($argv[1]) && $argv[1] == 'list') {
 	$torrents = $v->torrent_get_tf();
 	//$filter = array('running' => 1);
 	//$torrents = $v->torrent_filter_tf($filter);
+	echo print_r($torrents,true);
+}
+
+// list vuze seeding torrents (via rpc)
+if (isset($argv[1]) && $argv[1] == 'seed') {
+	$v = VuzeRPC::getInstance();
+	$torrents = $v->torrent_get_tf();
+	$filter = array('running' => 1, 'status' => 8);
+	$torrents = $v->torrent_filter_tf($filter);
+	echo print_r($torrents,true);
+}
+
+// list vuze seeding torrents (via rpc)
+if (isset($argv[1]) && $argv[1] == 'down') {
+	$v = VuzeRPC::getInstance();
+	$torrents = $v->torrent_get_tf();
+	$filter = array('running' => 1, 'status' => 4);
+	$torrents = $v->torrent_filter_tf($filter);
 	echo print_r($torrents,true);
 }
 

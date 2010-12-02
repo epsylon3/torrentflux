@@ -443,7 +443,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$hashes[] = "'".strtolower($hash)."'";
 		}
 
-		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='azureus' AND hash IN (".implode(',',$hashes).")";
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='".$vuze->client."' AND hash IN (".implode(',',$hashes).")";
 		$recordset = $db->Execute($sql);
 		$hashes=array();
 		$sharekills=array();
