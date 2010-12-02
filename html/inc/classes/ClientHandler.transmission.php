@@ -129,6 +129,25 @@ class ClientHandlerTransmission extends ClientHandler
 		$this->_start();
 	}
 
+	function stop($transfer, $kill = false, $transferPid = 0) {
+		global $cfg;
+		
+		$this->_setVarsForTransfer($transfer);
+		
+		AuditAction($cfg["constants"]["debug"], $this->client."-stop : $transfer.");
+		
+		// stop the client
+		$this->_stop($kill,$transferPid);
+		
+		// flag the transfer as stopped (in db)
+		stopTransferSettings($transfer);
+
+		//@unlink($this->transferFilePath.".pid");
+
+		$stat = new StatFile($this->transfer, $this->owner);
+		return $stat->stop();
+	}
+
 	/**
 	 * deletes cache of a transfer
 	 *

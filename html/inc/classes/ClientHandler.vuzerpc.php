@@ -250,7 +250,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		} else {
 			$msg = "transfer ".$transfer." does not exist in vuze, deleting pid file (delete).";
 			$this->logMessage($msg."\n", true);
-			unlink($this->transferFilePath.".pid");
+			@ unlink($this->transferFilePath.".pid");
 		}
 
 		// delete
@@ -409,18 +409,11 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 */
 	function cleanStoppedStatFile($transfer) {
 		@unlink($this->transferFilePath.".pid");
-		$sf = new StatFile($this->transfer, $this->owner);
-		$sf->running = "0";
-		if ($sf->percent_done > 100)
-			$sf->percent_done=100;
-		$sf->peers = "";
-		$sf->time_left = "Stopped";
-		$sf->down_speed = "";
-		$sf->up_speed = "";
-		//var_dump($sf);die();
-		return $sf->write();
+		$stat = new StatFile($this->transfer, $this->owner);
+		//if ($stat->percent_done > 100)
+		//	$stat->percent_done=100;
+		return $stat->stop();
 	}
-
 
 	function updateStatFiles() {
 		global $cfg, $db;
@@ -443,7 +436,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$hashes[] = "'".strtolower($hash)."'";
 		}
 
-		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='".$vuze->client."' AND hash IN (".implode(',',$hashes).")";
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='".$this->client."' AND hash IN (".implode(',',$hashes).")";
 		$recordset = $db->Execute($sql);
 		$hashes=array();
 		$sharekills=array();

@@ -151,6 +151,26 @@ class StatFile
 	}
 
 	/**
+	 * to clean a stat file (manualy stopped)
+	 *
+	 * @return boolean
+	 */
+	function stop() {
+		$this->running = "0";
+		if ($this->percent_done == 0)
+			$this->running = "2"; //new
+		elseif ($this->percent_done > 0) {
+			$this->percent_done= 0 - $this->percent_done;
+		}
+		$this->time_left = "Stopped";
+		$this->down_speed = "";
+		$this->up_speed = "";
+		$this->peers = "";
+		// write to file
+		return $this->write();
+	}
+
+	/**
 	 * call this on enqueue
 	 *
 	 * @return boolean
