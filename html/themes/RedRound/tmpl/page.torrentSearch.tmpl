@@ -28,7 +28,6 @@
 		<td id="showLastest"><a href="#" onclick="javascript:getLatest();">Show Latest</a></td>
 	</tr>
 </table>
-</form>
 <div style="line-height:5px;"></div>
 
 <tmpl_if name="sEngine_error">
@@ -73,6 +72,7 @@
 </table>
 	</tmpl_if>
 </tmpl_if>
+</form>
 <div id="extRequest">
 	<a target="_blank" href="<tmpl_var name='ext_request'>" title="<tmpl_var name='ext_method'> <tmpl_var name='ext_request'> <tmpl_var name='ext_postquery'> (<tmpl_var name='res_size'>)">?</a>
 </div>
