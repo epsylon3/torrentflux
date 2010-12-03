@@ -44,3 +44,8 @@ body#RedRoundBody tbody {
 	font-size: 12px;
 	background-color: transparent;
 }
+
+tr[bgcolor="#808080"] td {
+	background-color: #000;
+	color: white;
+}

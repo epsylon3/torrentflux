@@ -38,7 +38,7 @@
 					<tmpl_else>
 						<tmpl_var name="hreflink">
 					</tmpl_if>
-				</a>   
+				</a>
 			</tmpl_loop>
 		</td>
 	</tr>
@@ -69,13 +69,13 @@
 	<table class="torrentSearch">
 		<tr>
 			<td colspan="6">
-					<form method=get id="subLatest" name="subLatest" action=index.php>
+					<form id="subLatest" name="subLatest" action="index.php">
 						<input type=hidden name="iid" value="torrentSearch">
 						<input type=hidden name="searchEngine" value="<tmpl_var name="searchEngine">">
 						Category: <b><tmpl_var name="mainGenreName"></a></b> -&gt;
 						<select name=subGenre>
 							<tmpl_loop name=list_cats">
-								<option value="<tmpl_var name="subId">#"><tmpl_var name="subName"></option>
+								<option value="<tmpl_var name="subId">"><tmpl_var name="subName"></option>
 							</tmpl_loop>
 						</select>
 						<input type=submit value='Show Latest'>
