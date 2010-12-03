@@ -79,13 +79,14 @@ function getFilePrioForm($transfer, $withForm = false) {
 
 	$files = array();
 	if ( $isTransmissionTorrent ) {
+		$allFilesResponse = getTransmissionTransfer($transfer, array('files'));
+		$allFiles = $allFilesResponse['files'];
+		$wantedFilesResponse = getTransmissionTransfer($transfer, array('wanted'));
+		$wantedFiles = $wantedFilesResponse['wanted'];
+		$dirnum = count($allFiles); // make sure this is in here otherwhise you will loose alot of time debugging your code on what is missing (the filetree selection is not displayed)
 
-		$response = $trans->get($theTorrent[id], array("files"));
-		$responseWantedFiles = $trans->get( $theTorrent[id], array('wanted') );
-		$wantedFiles = $responseWantedFiles[arguments][torrents][0][wanted];
-		$dirnum = count($response[arguments][torrents][0][files]); // make sure this is in here otherwhise you will loose alot of time debugging your code on what is missing (the filetree selection is not displayed)
 		$tree = new dir("/",$dirnum, -1);
-		foreach($response[arguments][torrents][0][files] as $file) {
+		foreach($allFiles as $file) {
 			$fileparts = explode("/", $file[name]);
 			$filesize = $file[length];
 			$fileprops = array( 'length' => $filesize, 'path' => $fileparts );
@@ -110,8 +111,8 @@ function getFilePrioForm($transfer, $withForm = false) {
 				}
 			}
 		}
-		$response = $trans->get($theTorrent[id], array("pieceCount", "pieceSize", "totalSize", "dateCreated", "downloadDir", "comment"));
 
+		$response = getTransmissionTransfer($transfer, array("pieceCount", "pieceSize", "totalSize", "dateCreated", "downloadDir", "comment"));
 		$aTorrent = $response[arguments][torrents][0];
 		#$torrent_size = $aTorrent[pieceSize] * $aTorrent[pieceCount];
 		$torrent_size = $aTorrent[totalSize];
