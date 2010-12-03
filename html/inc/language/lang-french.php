@@ -54,7 +54,7 @@ define("_FILESIZE", "Taille Du Fichier");
 define("_STATUS", "Statut");
 define("_ADMIN", "Admin");
 define("_BADFILE", "Mauvais Fichier");
-define("_DATETIMEFORMAT", "d/m/y H:i");
+define("_DATETIMEFORMAT", "d/m/y H:i:s");
 define("_DATEFORMAT", "d/m/y");
 define("_ESTIMATEDTIME", "Temps Estimé");
 define("_DOWNLOADSPEED", "Vitesse Download");

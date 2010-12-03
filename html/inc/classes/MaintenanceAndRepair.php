@@ -369,8 +369,8 @@ class MaintenanceAndRepair
 		// sanity-check for transfers-dir
 		if (!is_dir($cfg["transfer_file_path"])) {
 			$this->state = MAINTENANCEANDREPAIR_STATE_ERROR;
-            $msg = "invalid dir-settings. no dir : ".$cfg["transfer_file_path"];
-            array_push($this->messages , $msg);
+			$msg = "invalid dir-settings. no dir : ".$cfg["transfer_file_path"];
+			array_push($this->messages , $msg);
 			$this->_outputError($msg."\n");
 			return false;
 		}
@@ -390,14 +390,16 @@ class MaintenanceAndRepair
 			return true;
 		}
 		// get process-list
-		$psString = trim(shell_exec("ps x -o pid='' -o ppid='' -o command='' -ww"));
+		$psString = trim(shell_exec("ps x a -o pid -o ppid -o command -ww"));
 		// test if client for pid is still up
 		$this->_bogusTransfers = array();
 		foreach ($pidFiles as $pidFile) {
-			$transfer = (substr($pidFile, 0, -4));
-			if (stristr($psString, $transfer) === false) {
-				if (getTransferClient($transfer) != "azureus")
+			$transfer = substr($pidFile, 0, -4); //remove ".pid"
+			$client = getTransferClient($transfer);
+			if ($client != "azureus" && strpos($client,'rpc') === false) {
+				if (stristr($psString, $transfer) === false) {
 					array_push($this->_bogusTransfers, $transfer);
+				}
 			}
 		}
 		// return if no stale pid-files
@@ -418,13 +420,8 @@ class MaintenanceAndRepair
 			stopTransferSettings($transfer);
 			// rewrite stat-file
 			$sf = new StatFile($transfer, getOwner($transfer));
-			$sf->running = 0;
-			$sf->percent_done = -100.0;
+			$sf->stop();
 			$sf->time_left = 'Transfer Died';
-			$sf->down_speed = 0;
-			$sf->up_speed = 0;
-			$sf->seeds = 0;
-			$sf->peers = 0;
 			$sf->write();
 			// delete pid-file
 			@unlink($cfg["transfer_file_path"].$transfer.".pid");
