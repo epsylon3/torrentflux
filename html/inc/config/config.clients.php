@@ -37,7 +37,8 @@ $cfg["supportMap"] = array(
 		'rerequest'         => 1,
 		'file_priority'     => 1,
 		'skip_hash_check'   => 1,
-		'savepath'          => 1
+		'savepath'          => 1,
+		'encryption'        => 0
 	),
 	'transmission' => array(
 		'max_upload_rate'   => 1,
@@ -84,7 +85,8 @@ $cfg["supportMap"] = array(
 		'rerequest'         => 1,
 		'file_priority'     => 0,
 		'skip_hash_check'   => 1,
-		'savepath'          => 1
+		'savepath'          => 1,
+		'encryption'        => 0
 	),
 	'azureus' => array(
 		'max_upload_rate'   => 1,
@@ -99,11 +101,12 @@ $cfg["supportMap"] = array(
 		'rerequest'         => 0,
 		'file_priority'     => 0,
 		'skip_hash_check'   => 0,
-		'savepath'          => 1
+		'savepath'          => 1,
+		'encryption'        => 0
 	),
 	'vuzerpc' => array(
-		'max_upload_rate'   => 1,
-		'max_download_rate' => 1,
+		'max_upload_rate'   => 1, //0.2.9
+		'max_download_rate' => 1, //0.2.9
 		'max_uploads'       => 0,
 		'superseeder'       => 0,
 		'die_when_done'     => 0,
@@ -130,7 +133,8 @@ $cfg["supportMap"] = array(
 		'rerequest'         => 0,
 		'file_priority'     => 0,
 		'skip_hash_check'   => 0,
-		'savepath'          => 1
+		'savepath'          => 1,
+		'encryption'        => 0
 	),
 	'nzbperl' => array(
 		'max_upload_rate'   => 0,
@@ -145,7 +149,8 @@ $cfg["supportMap"] = array(
 		'rerequest'         => 0,
 		'file_priority'     => 0,
 		'skip_hash_check'   => 0,
-		'savepath'          => 1
+		'savepath'          => 1,
+		'encryption'        => 0
 	)
 );
 

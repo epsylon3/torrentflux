@@ -55,7 +55,10 @@ class ClientHandler
 	var $rerequest = "";
 	var $sharekill = "";
 	var $sharekill_param = "";
-	var $skip_hash_check = "";
+	
+	var $skip_hash_check = true;
+	var $file_priority = false;
+	var $encryption = "";
 
 	// queue
 	var $queue = false;
@@ -259,6 +262,9 @@ class ClientHandler
 		$this->maxport     = $cfg["maxport"];
 		$this->maxcons     = $cfg["maxcons"];
 		$this->rerequest   = $cfg["rerequest_interval"];
+		$this->skip_hash_check = true;
+		$this->encryption      = false;
+		$this->file_priority   = false;
 	}
 
 	/**
@@ -572,15 +578,24 @@ class ClientHandler
 	 * @param $withTS
 	 */
 	function logMessage($message, $withTS = true) {
+		global $cfg;
 		// return if transfer-file-field not set
-		if ($this->transferFilePath == "") return false;
+		if ($this->transferFilePath == "") {
+			AuditAction($cfg["constants"]["debug"], "(no log file set) : $message");
+			return false;
+		}
 		// log
 		if ($handle = @fopen($this->transferFilePath.".log", "a+")) {
-			$content = ($withTS)
-				? @date("[Y/m/d - H:i:s]")." ".$message
-				: $message;
+			if ($withTS) {
+				$dateformat = "[".$cfg['_DATETIMEFORMAT']."]";
+				$content = date($dateformat)." ".$message;
+			} else
+				$content = $message;
 			$resultSuccess = (@fwrite($handle, $content) !== false);
 			@fclose($handle);
+			if (!$resultSuccess) {
+				AuditAction($cfg["constants"]["debug"], "(log not writable) : $content");
+			}
 			return $resultSuccess;
 		}
 		return false;
@@ -618,58 +633,26 @@ class ClientHandler
 		$this->settingsDefault();
 		// only read request-vars if enabled
 		if ($customize_settings == 1) {
-			// rate
-			$reqvar = tfb_getRequestVar('max_upload_rate');
-			if ($reqvar != "")
-				$this->rate = $reqvar;
-			// drate
-			$reqvar = tfb_getRequestVar('max_download_rate');
-			if ($reqvar != "")
-				$this->drate = $reqvar;
-			// maxuploads
-			$reqvar = tfb_getRequestVar('max_uploads');
-			if ($reqvar != "")
-				$this->maxuploads = $reqvar;
-			// superseeder
-			$reqvar = tfb_getRequestVar('superseeder');
-			if ($reqvar != "")
-				$this->superseeder = $reqvar;
-			// runtime
-			$reqvar = tfb_getRequestVar('die_when_done');
-			if ($reqvar != "")
-				$this->runtime = $reqvar;
-			// sharekill
-			$reqvar = tfb_getRequestVar('sharekill');
-			if ($reqvar != "")
-				$this->sharekill = $reqvar;
-			// minport
-			$reqvar = tfb_getRequestVar('minport');
-			if (!empty($reqvar))
-				$this->minport = $reqvar;
-			// maxport
-			$reqvar = tfb_getRequestVar('maxport');
-			if (!empty($reqvar))
-				$this->maxport = $reqvar;
-			// maxcons
-			$reqvar = tfb_getRequestVar('maxcons');
-			if ($reqvar != "")
-				$this->maxcons = $reqvar;
-			// rerequest
-			$reqvar = tfb_getRequestVar('rerequest');
-			if ($reqvar != "")
-				$this->rerequest = $reqvar;
-			// savepath
-			if ($cfg["showdirtree"] == 1) {
-				$reqvar = tfb_getRequestVar('savepath');
-				if ($reqvar != "")
-					$this->savepath = $reqvar;
-			}
+			$this->rate = tfb_getRequestVar('max_upload_rate', $this->rate);
+			$this->drate = tfb_getRequestVar('max_download_rate', $this->drate);
+			$this->maxuploads = tfb_getRequestVar('max_uploads', $this->maxuploads);
+			$this->superseeder = tfb_getRequestVar('superseeder', $this->superseeder);
+			$this->runtime = tfb_getRequestVar('die_when_done', $this->runtime);
+			$this->sharekill = tfb_getRequestVar('sharekill', $this->sharekill);
+			$this->minport = tfb_getRequestVar('minport', $this->minport);
+			$this->maxport = tfb_getRequestVar('maxport', $this->maxport);
+			$this->maxcons = tfb_getRequestVar('maxcons', $this->maxcons);
+			$this->rerequest = tfb_getRequestVar('rerequest', $this->rerequest);
 		}
 		// savepath
-		if ($cfg["showdirtree"] == 1)
-			 $this->savepath = tfb_getRequestVar('savepath');
-		// skip_hash_check
-		$this->skip_hash_check = tfb_getRequestVar('skiphashcheck');
+		if ($cfg["showdirtree"] == 1) {
+			$this->savepath = tfb_getRequestVar('savepath', $this->savepath);
+		}
+		
+		//todo...
+		$this->skip_hash_check = tfb_getRequestVar('skiphashcheck', true);
+		$this->file_priority = tfb_getRequestVar('file_priority', $this->file_priority);
+		$this->encryption = tfb_getRequestVar('skiphashcheck', $this->encryption);
 	}
 
 	/**
@@ -800,6 +783,7 @@ class ClientHandler
 			$this->running = 0;
 		} else { // start
 			// write stat-file
+			if (intval($sf->downtotal) == 0)
 			$sf->start();
 			// log the command
 			$this->logMessage("executing command : \n".$this->command."\n", true);

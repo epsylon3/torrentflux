@@ -84,7 +84,10 @@ if ($isSave) {                                                        /* save */
 		'minport',
 		'maxport',
 		'maxcons',
-		'rerequest'
+		'rerequest',
+		'file_priority',
+		'skip_hash_check',
+		'encryption'
 	);
 
 	// settings-labels
@@ -99,7 +102,10 @@ if ($isSave) {                                                        /* save */
 		'minport' => 'Min-Port',
 		'maxport' => 'Max-Port',
 		'maxcons' => 'Max Cons',
-		'rerequest' => 'Rerequest Interval'
+		'rerequest' => 'Rerequest Interval',
+		'file_priority' => 'File priority support',
+		'skip_hash_check'=> 'Skip hash check',
+		'encryption'=> 'Encryption required'
 	);
 
 	// current settings
@@ -115,6 +121,9 @@ if ($isSave) {                                                        /* save */
 	$settingsCurrent['maxport'] = $ch->maxport;
 	$settingsCurrent['maxcons'] = $ch->maxcons;
 	$settingsCurrent['rerequest'] = $ch->rerequest;
+	$settingsCurrent['file_priority'] = $ch->file_priority;
+	$settingsCurrent['skip_hash_check'] = $ch->skip_hash_check;
+	$settingsCurrent['encryption'] = $ch->encryption;
 
 	// new settings
 	$settingsNew = array();
@@ -232,6 +241,10 @@ if ($isSave) {                                                        /* save */
 		$ch->maxport = $settingsNew['maxport'];
 		$ch->maxcons = $settingsNew['maxcons'];
 		$ch->rerequest = $settingsNew['rerequest'];
+		$ch->file_priority = $settingsNew['file_priority'];
+		$ch->skip_hash_check = $settingsNew['skip_hash_check'];
+		$ch->encryption = $settingsNew['encryption'];
+
 		$ch->settingsSave();
 
 		if ($doSend) { /* send changes */

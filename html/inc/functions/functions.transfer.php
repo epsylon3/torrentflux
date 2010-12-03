@@ -92,6 +92,9 @@ function transfer_setCustomizeVars() {
 		$tmpl->setvar('maxport_enabled', 0);
 		$tmpl->setvar('maxcons_enabled', 0);
 		$tmpl->setvar('rerequest_enabled', 0);
+		$tmpl->setvar('file_priority_enabled', 0);
+		$tmpl->setvar('skip_hash_check_enabled', 0);
+		$tmpl->setvar('encryption_enabled', 0);
 	} else {
 		$tmpl->setvar('upload_support_enabled', $cfg["supportMap"][$ch->client]['max_upload_rate']);
 		$tmpl->setvar('download_support_enabled', $cfg["supportMap"][$ch->client]['max_download_rate']);
@@ -103,6 +106,9 @@ function transfer_setCustomizeVars() {
 		$tmpl->setvar('maxport_enabled', $cfg["supportMap"][$ch->client]['maxport']);
 		$tmpl->setvar('maxcons_enabled', $cfg["supportMap"][$ch->client]['maxcons']);
 		$tmpl->setvar('rerequest_enabled', $cfg["supportMap"][$ch->client]['rerequest']);
+		$tmpl->setvar('file_priority_enabled', $cfg["supportMap"][$ch->client]['file_priority']);
+		$tmpl->setvar('skip_hash_check_enabled', $cfg["supportMap"][$ch->client]['skip_hash_check']);
+		$tmpl->setvar('encryption_enabled', $cfg["supportMap"][$ch->client]['encryption']);
 	}
 }
 
@@ -138,6 +144,9 @@ function transfer_setVarsFromCHSettings() {
 	$tmpl->setvar('maxport', $ch->maxport);
 	$tmpl->setvar('maxcons', $ch->maxcons);
 	$tmpl->setvar('rerequest', $ch->rerequest);
+	$tmpl->setvar('file_priority', $ch->file_priority);
+	$tmpl->setvar('skip_hash_check', $ch->skip_hash_check);
+	$tmpl->setvar('encryption', $ch->encryption);
 }
 
 /**
@@ -162,6 +171,9 @@ function transfer_setVarsFromProfileSettings($profile) {
 	$tmpl->setvar('maxport', $settings["maxport"]);
 	$tmpl->setvar('maxcons', $settings["maxcons"]);
 	$tmpl->setvar('rerequest', $settings["rerequest"]);
+	$tmpl->setvar('encryption', $settings["encryption"]);
+	$tmpl->setvar('file_priority', $settings["file_priority"]);
+	$tmpl->setvar('skip_hash_check', $settings["skip_hash_check"]);
 	$tmpl->setvar('savepath', getTransferSavepath($transfer, $profile));
 }
 
