@@ -381,7 +381,14 @@
 
 			setText(str);
 			if (me.originalSelect.length > 0) {
-				me.originalSelect.find("option[value$='" + val + "']").attr('selected', 'selected');
+				me.originalSelect.find("option:selected").removeAttr('selected');
+				me.originalSelect.find("option[value='" + val + "']").attr('selected', 'selected');
+				if (me.originalSelect.find("option:selected").length == 0) {
+					me.originalSelect.find("option").each(function() {
+						if (this.value==val)
+							jQuery(this).attr('selected', 'selected');
+					});
+				}
 			}
 
 			me.close(1);
