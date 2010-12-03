@@ -23,6 +23,8 @@
 // VuzeRPC
 require_once("inc/classes/VuzeRPC.php");
 
+require_once("inc/functions/functions.rpc.vuze.php");
+
 /**
  * class ClientHandler for vuze xmwebui rpc
  */
@@ -331,24 +333,27 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @param $autosend
 	 */
 	function setRateUpload($transfer, $uprate, $autosend = false) {
+		global $cfg;
 		// set rate-field
-		$this->rate = $uprate;
+		$this->rate = (int) $uprate;
+		AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $uprate $autosend $transfer.");
 		
 		if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
-			
-			$hash = getTransferHash($transfer);
-			$torrents = $rpc->torrent_get_hashids();
-			if ( array_key_exists(strtoupper($hash),$torrents) ) {
-				$tid = $torrents[strtoupper($hash)];
-				
-				$req = $rpc->torrent_set(array($tid),'rateUpload',$this->rate);
+
+			$tid = getVuzeTransferRpcId($transfer);
+			if ($tid > 0) {
+				$req = $rpc->session_set('speed-limit-up', 1024 * $this->rate);
+				$req = $rpc->torrent_set(array($tid),'speedLimitUpload',1024 * $this->rate);
 				if (!isset($req->result) || $req->result != 'success') {
 					return false;
 				}
-				
+				$msg = "setRateUpload: ".$req->result;
 				$this->logMessage($msg."\n", true);
 			}
+			$msg = "setRateUpload: bad tid $transfer ".$req->result;
+			$this->logMessage($msg."\n", true);
+			AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
 		}
 		return true;
 	}
@@ -361,23 +366,21 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * @param $autosend
 	 */
 	function setRateDownload($transfer, $downrate, $autosend = false) {
+		global $cfg;
 		// set rate-field
-		$this->drate = $downrate;
+		$this->drate = (int) $downrate;
 		
 		if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
 			
-			$hash = getTransferHash($transfer);
-			$torrents = $rpc->torrent_get_hashids();
-			if ( array_key_exists(strtoupper($hash),$torrents) ) {
-				$tid = $torrents[strtoupper($hash)];
+			$tid = getVuzeTransferRpcId($transfer);
+			if ($tid > 0) {
 				
-				$req = $rpc->torrent_set(array($tid),'rateUpload',$this->rate);
+				$req = $rpc->torrent_set(array($tid),'speedLimitDownload',1024 * (int) $this->drate);
 				if (!isset($req->result) || $req->result != 'success') {
 					return false;
 				}
-				
-				$msg = "setRateUpload: ".$req->result;
+				$msg = "setRateDownload: ".$req->result;
 				$this->logMessage($msg."\n", true);
 			}
 		}
@@ -469,71 +472,80 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		require_once("inc/functions/functions.core.php");
 
 		foreach ($tfs as $hash => $t) {
-			if (isset($hashes[$hash])) {
+			if (!isset($hashes[$hash]))
+				continue;
 
-				$transfer = $hashes[$hash];
-				$sf = new StatFile($transfer);
-				$sf->running = $t['running'];
+			$transfer = $hashes[$hash];
 
-				if ($t['eta'] < -1) {
-					$t['eta'] = "Finished in ".convertTime(abs($t['eta']));
-				} elseif ($t['eta'] > 0) {
-					$t['eta'] = convertTime($t['eta']);
-				} elseif ($t['eta'] == -1) {
-					$t['eta'] = "";
-				}
-				$sf->time_left = $t['eta'];
+			$sf = new StatFile($transfer);
+			$sf->running = $t['running'];
 
-				if ($sf->running) {
-
-					$sf->percent_done = $t['percentDone'];
-
-					if ($t['status'] != 9 && $t['status'] != 5) {
-						$sf->peers = $t['peers'];
-						$sf->seeds = $t['seeds'];
-					}
-
-					if ((float)$t['speedDown'] > 0.0)
-						$sf->down_speed = formatBytesTokBMBGBTB($t['speedDown'])."/s";
-					if ((float)$t['speedUp'] > 0.0)
-						$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp'])."/s";
-
-					if ($t['status'] == 8) {
-						//seeding
-						//$sf->percent_done = 100 + $t['sharing'];
-						$sf->down_speed = "&nbsp;";
-						if (trim($sf->up_speed) == '')
-							$sf->up_speed = "&nbsp;";
-					}
-					if ($t['status'] == 9) {
-						//seeding queued
-						//$sf->percent_done = 100 + $t['sharing'];
-						$sf->up_speed = "&nbsp;";
-						$sf->down_speed = "&nbsp;";
-					}
-
-				} else {
-					$sf->down_speed = "";
-					$sf->up_speed = "";
-					$sf->peers = "";
-					if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
-						$sf->time_left = "Finished!";
-						$sf->percent_done = 100;
-					}
-					//if ($sf->percent_done < 100 && $sf->percent_done > 0)
-						//$sf->percent_done = 0 - $sf->percent_done;
-				}
-				
-				$sf->downtotal = $t['downTotal'];
-				$sf->uptotal = $t['upTotal'];
-				
-				if (!$sf->size)
-					$sf->size = $t['size'];
-				
-				if ($sf->seeds = -1);
-					$sf->seeds = '';
-				$sf->write();
+			if ($t['eta'] < -1) {
+				$t['eta'] = "Finished in ".convertTime(abs($t['eta']));
+			} elseif ($t['eta'] > 0) {
+				$t['eta'] = convertTime($t['eta']);
+			} elseif ($t['eta'] == -1) {
+				$t['eta'] = "";
 			}
+			$sf->time_left = $t['eta'];
+
+			if ($sf->running) {
+
+				//(temp) force creation of pid file to fix first ones
+				file_put_contents($cfg["transfer_file_path"].'/'.$transfer.".pid","rpc");
+
+				$sf->percent_done = $t['percentDone'];
+
+				if ($t['status'] != 9 && $t['status'] != 5) {
+					$sf->peers = $t['peers'];
+				}
+
+				if ($t['seeds'] >= 0)
+					$sf->seeds = $t['seeds'];
+
+				if ($t['peers'] >= 0)
+					$sf->peers = $t['peers'];
+
+				if ((float)$t['speedDown'] > 0.0)
+					$sf->down_speed = formatBytesTokBMBGBTB($t['speedDown'])."/s";
+				if ((float)$t['speedUp'] > 0.0)
+					$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp'])."/s";
+
+				if ($t['status'] == 8) {
+					//seeding
+					//$sf->percent_done = 100 + $t['sharing'];
+					$sf->down_speed = "&nbsp;";
+					if (trim($sf->up_speed) == '')
+						$sf->up_speed = "&nbsp;";
+				}
+				if ($t['status'] == 9) {
+					//seeding queued
+					//$sf->percent_done = 100 + $t['sharing'];
+					$sf->up_speed = "&nbsp;";
+					$sf->down_speed = "&nbsp;";
+				}
+
+			} else {
+				$sf->down_speed = "";
+				$sf->up_speed = "";
+				$sf->peers = "";
+				if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
+					$sf->time_left = "Finished!";
+					$sf->percent_done = 100;
+				}
+				//if ($sf->percent_done < 100 && $sf->percent_done > 0)
+					//$sf->percent_done = 0 - $sf->percent_done;
+			}
+			
+			$sf->downtotal = $t['downTotal'];
+			$sf->uptotal = $t['upTotal'];
+			
+			if (!$sf->size)
+				$sf->size = $t['size'];
+			
+			if ($sf->seeds = -1);
+				$sf->seeds = '';
+			$sf->write();
 		}
 		
 		//SHAREKILLS

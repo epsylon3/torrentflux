@@ -1,5 +1,22 @@
 <?php
 
+/**
+ * get Vuze RPC torrent id (use it temporary, dont store it)
+ *
+ * @param $transfer
+ * @return int
+ */
+function getVuzeTransferRpcId($transfer) {
+	$hash = getTransferHash($transfer);
+	$torrents = $rpc->torrent_get_hashids();
+	$tid = false;
+	if ( array_key_exists(strtoupper($hash),$torrents) ) {
+		$tid = $torrents[strtoupper($hash)];
+	}
+	return $tid;
+}
+
+//to check...
 function addVuzeMagnetTransfer($userid = 0, $url, $path, $paused=true) {
 	global $cfg;
 	

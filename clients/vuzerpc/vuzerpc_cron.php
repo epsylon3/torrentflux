@@ -1,10 +1,13 @@
 #!/usr/bin/php
 <?php
 /*
-VUZE xmwebui (0.2.8) RPC interface for PHP
-		by Epsylon3 on gmail.com, Nov 2010
+VUZE xmwebui (0.2.8) RPC interface for PHP (CRON)
+		       by Epsylon3 on gmail.com, Nov 2010
 
 Require PHP 5 for public/protected members
+
+Temporary cron script used to update .stat files
+before full integration in fluxcli.php
 
 */
 
@@ -119,6 +122,8 @@ function updateStatFiles() {
 			$sf->time_left = $t['eta'];
 
 			if ($sf->running) {
+
+				file_put_contents($cfg["transfer_file_path"].'/'.$transfer.".pid","rpc");
 
 				$sf->percent_done = $t['percentDone'];
 
