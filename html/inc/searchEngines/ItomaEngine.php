@@ -20,7 +20,7 @@ class SearchEngine extends SearchEngineBase
 		$this->mainTitle = "Itoma";
 		$this->engineName = "Itoma";
 
-		$this->useAuth = true;
+		$this->needAuth = true;
 
 		$this->author = "Epsylon3";
 		$this->version = "1.11";
@@ -41,7 +41,6 @@ class SearchEngine extends SearchEngineBase
 		$this->mainCatalog["19"]="Apps: Mac";
 		$this->mainCatalog["20"]="Apps: Linux";
 		$this->mainCatalog["21"]="Apps: Autres";
-		$this->mainCatalog["9"] ="Documentaries: All";
 		$this->mainCatalog["10"]="Games: PC";
 		$this->mainCatalog["11"]="Games: PS2";
 		$this->mainCatalog["43"]="Games: PS3";
@@ -59,12 +58,13 @@ class SearchEngine extends SearchEngineBase
 		$this->mainCatalog["24"]="Music: DVD";
 		$this->mainCatalog["25"]="Music: Video";
 		$this->mainCatalog["36"]="Other: E-Books";
+		$this->mainCatalog["50"]="Other: Sport";
 		$this->mainCatalog["40"]="Other: Other";
-		$this->mainCatalog["50"]="Others: Sport";
-		$this->mainCatalog["5"] ="TV: DVD";
+		$this->mainCatalog["5"] ="TV: DVD Series";
 		$this->mainCatalog["41"]="TV: HD";
 		$this->mainCatalog["6"] ="TV: Divx/Xvid";
 		$this->mainCatalog["7"] ="TV: SVCD/VCD";
+		$this->mainCatalog["9"] ="TV: Docs";
 		$this->mainCatalog["49"]="TV: Vost-FR";
 
 	}
@@ -82,43 +82,33 @@ class SearchEngine extends SearchEngineBase
 
 		if(!empty($cat))
 		{
-			if(strpos($request,"?"))
-			{
+			if(strpos($request,"?")) {
 				$request .= "&cat=".$cat;
-			}
-			else
-			{
+			} else {
 				$request .= "?cat=".$cat;
 			}
 		}
 
 		if (!empty($this->pg))
 		{
-			if(strpos($request,"?"))
-			{
+			if(strpos($request,"?")) {
 				$request .= "&page=" . $this->pg;
-			}
-			else
-			{
+			} else {
 				$request .= "?page=" . $this->pg;
 			}
 		}
 
 		if ($this->makeRequest($request,true))
 		{
-			if (strlen($this->htmlPage) > 0 )
-			{
-
+			if (strlen($this->htmlPage) > 0 ) {
 			  return $this->parseResponse();
-			}
-			else
-			{
+			} else {
 			  return 'Unable to Browse at this time.';
 			}
 		}
 		else
 		{
-		   return $this->msg;
+			return $this->msg;
 		}
 	}
 
@@ -133,8 +123,7 @@ class SearchEngine extends SearchEngineBase
 		if (!empty($_REQUEST['cat']))
 			$cat = $_REQUEST['cat'];
 
-		if(!empty($cat))
-		{
+		if(!empty($cat)) {
 			$request .= "&cat=".$cat;
 		}
 
@@ -142,18 +131,13 @@ class SearchEngine extends SearchEngineBase
 		if (empty($incldead)) $incldead = "0";
 		$request .= "&incldead=".$incldead;
 
-		if (!empty($this->pg))
-		{
+		if (!empty($this->pg)) {
 			$request .= "&page=" . $this->pg;
 		}
 
-
-		if ($this->makeRequest($request,true))
-		{
+		if ($this->makeRequest($request,true)) {
 			return $this->parseResponse();
-		}
-		else
-		{
+		} else {
 			return $this->msg;
 		}
 	}
@@ -183,34 +167,31 @@ class SearchEngine extends SearchEngineBase
 
 		$output .= "<tr bgcolor=\"".$this->cfg["table_header_bg"]."\">";
 		$output .= "  <td>&nbsp;</td>";
-		$output .= "  <td><strong>Nom</strong> &nbsp;(";
+		$output .= "  <td><strong>Nom</strong> &nbsp;[Seedless: ";
 
-		$tmpURI = str_replace(array("?hideSeedless=yes","&hideSeedless=yes","?hideSeedless=no","&hideSeedless=no"),"",$_SERVER["REQUEST_URI"]);
+		$tmpURI = $_SERVER["REQUEST_URI"];
+		$tmpURI = preg_replace('#[\?\&]+hideSeedless=(yes|no|only)#i', "", $tmpURI);
 
 		// Check to see if Question mark is there.
-		if (strpos($tmpURI,'?'))
-		{
+		if (strpos($tmpURI,'?') !== false) {
 			$tmpURI .= "&";
-		}
-		else
-		{
+		} else {
 			$tmpURI .= "?";
 		}
 
-		if($this->hideSeedless == "yes")
-		{
-			$output .= "<a href=\"". $tmpURI . "hideSeedless=no\">Show Seedless</a>";
-		}
-		else
-		{
-			$output .= "<a href=\"". $tmpURI . "hideSeedless=yes\">Hide Seedless</a>";
+		if($this->hideSeedless == "yes") {
+			$output .= "<a href=\"". $tmpURI . "hideSeedless=no\">show</a>|<a href=\"". $tmpURI . "hideSeedless=only\">only</a>";
+		} elseif($this->hideSeedless == "only") {
+			$output .= "<a href=\"". $tmpURI . "hideSeedless=no\">show</a>";
+		} else {
+			$output .= "<a href=\"". $tmpURI . "hideSeedless=yes\">hide</a>";
 		}
 
-		$output .= ")</td>";
+		$output .= "]</td>";
 		$output .= "  <td><strong>Category</strong></td>";
 		$output .= "  <td align=center><strong>&nbsp;&nbsp;Size</strong></td>";
-		$output .= "  <td><strong>Seeders</strong></td>";
-		$output .= "  <td><strong>Leechers</strong></td>";
+		$output .= "  <td><strong>S.</strong></td>";
+		$output .= "  <td><strong>L.</strong></td>";
 
 		//$output .= "  <td><strong>Santé</strong></td>";
 		//$output .= "  <td><strong>Commentaires</strong></td>";
@@ -269,23 +250,25 @@ class SearchEngine extends SearchEngineBase
 
 				if ($this->hideSeedless == "yes")
 				{
-					if($ts->Seeds == "N/A" || $ts->Seeds == "0")
-					{
+					if(intval($ts->Seeds) == 0) {
 						$buildLine = false;
 					}
 				}
-
+				elseif ($this->hideSeedless == "only")
+				{
+					if(intval($ts->Seeds) > 0) {
+						$buildLine = false;
+					}
+				}
+				
 				if (!empty($ts->torrentFile) && $buildLine) {
 
 					$output .= trim($ts->BuildOutput($bg,$this->searchURL()));
 
 					// ok switch colors.
-					if ($bg == $this->cfg["bgLight"])
-					{
+					if ($bg == $this->cfg["bgLight"]) {
 						$bg = $this->cfg["bgDark"];
-					}
-					else
-					{
+					} else {
 						$bg = $this->cfg["bgLight"];
 					}
 				}
