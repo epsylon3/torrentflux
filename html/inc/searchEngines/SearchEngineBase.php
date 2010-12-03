@@ -44,6 +44,8 @@ class SearchEngineBase
 	var $mainTitle = '';		// The displayed Main Title for the engine.
 	var $mainURL = '';			// The Primary URL used in searching or paging.
 	var $altURL = '';			// The alternate URL used in searching or paging.
+	
+	var $needAuth = false;		// True if the site needs a cookie in profile
 
 	var $author = '';			// the author of this engine
 	var $version = '';

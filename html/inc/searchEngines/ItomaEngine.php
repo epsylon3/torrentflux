@@ -2,11 +2,12 @@
 
 /*************************************************************
 *  TorrentFlux PHP Torrent Manager
-*  www.torrentflux.com
+*  www.torrentflux-ng.org
 **************************************************************/
 /*
-	v 1.10 - Epsylon3 May 19, 2010
-	v 1.00 - PTiRouZ Feb 05, 2007
+	v 1.11 - Epsylon3 Dec, 2010 (paging)
+	v 1.10 - Epsylon3 May, 2010
+	v 1.00 - PTiRouZ  Feb, 2007
 */
 
 class SearchEngine extends SearchEngineBase
@@ -19,13 +20,14 @@ class SearchEngine extends SearchEngineBase
 		$this->mainTitle = "Itoma";
 		$this->engineName = "Itoma";
 
+		$this->useAuth = true;
+
 		$this->author = "Epsylon3";
-		$this->version = "1.10";
-		$this->updateURL = "";
-		//$this->updateURL = "http://www.torrentflux.com/forum/index.php/topic,1967.0.html";
+		$this->version = "1.11";
+		//$this->updateURL = "http://www.torrentflux-ng.org";
 
 		$this->Initialize($cfg);
-		
+
 		error_reporting(E_ALL);
 	}
 
@@ -34,7 +36,7 @@ class SearchEngine extends SearchEngineBase
 	// Function to Get Main Categories
 	function populateMainCategories()
 	{
-		
+
 		$this->mainCatalog["18"]="Apps: PC";
 		$this->mainCatalog["19"]="Apps: Mac";
 		$this->mainCatalog["20"]="Apps: Linux";
@@ -72,7 +74,7 @@ class SearchEngine extends SearchEngineBase
 	function getLatest()
 	{
 		$cat = tfb_getRequestVar('mainGenre');
-		
+
 		if (empty($cat) && !empty($_REQUEST['cat']))
 			$cat = $_REQUEST['cat'];
 
@@ -106,7 +108,7 @@ class SearchEngine extends SearchEngineBase
 		{
 			if (strlen($this->htmlPage) > 0 )
 			{
-			
+
 			  return $this->parseResponse();
 			}
 			else
@@ -127,10 +129,10 @@ class SearchEngine extends SearchEngineBase
 
 		// create the request string.
 		$request = "torrents-search.php?search=".urlencode($searchTerm);
-		
+
 		if (!empty($_REQUEST['cat']))
 			$cat = $_REQUEST['cat'];
-			
+
 		if(!empty($cat))
 		{
 			$request .= "&cat=".$cat;
@@ -173,7 +175,7 @@ class SearchEngine extends SearchEngineBase
 			$tmpStr = substr($tmpStr,0,strpos($tmpStr,"Privacy"));
 		$stats = str_replace('<br>',' | ',$tmpStr);
 		$stats = preg_replace('#[\s\n]+#m',' ',$stats);
-		
+
 		if (strstr($stats,"Enregistrement"))
 			$output .= "<b>Connexion Impossible : Veuillez enregistrer le cookie d'identification Itoma dans votre profil.</b>";
 		else
@@ -240,13 +242,13 @@ class SearchEngine extends SearchEngineBase
 
 		$thing = substr($thing,strpos($thing,"CONTENT START"));
 		$thing = substr($thing,strpos($thing,'Health</td></tr>')+strlen('Health</td></tr>'));
-		$thing = substr($thing,0,strpos($thing,"</table><BR>"))
+		$table = substr($thing,0,strpos($thing,"</table><BR>"))
 		;
 		//var_dump(htmlentities($thing)); exit;
 
 		// ok so now we have the listing.
-		$tmpListArr = explode("<tr>",$thing);
-		
+		$tmpListArr = explode("<tr>",$table);
+
 		//print_r($tmpListArr);
 
 		$bg = $this->cfg["bgLight"];
@@ -292,12 +294,12 @@ class SearchEngine extends SearchEngineBase
 		}
 
 		// set thing to end of this table.
-		$thing = substr($thing,strpos($thing,"</table>"));
+		//$thing = substr($thing,strpos($thing,"</table>"));
 
 		$output .= "</table>";
 
 		// is there paging at the bottom?
-		if (strpos($thing, "page=") != false)
+		if (strpos($thing, "page=") !== false)
 		{
 			// Yes, then lets grab it and display it!  ;)
 
@@ -314,17 +316,23 @@ class SearchEngine extends SearchEngineBase
 			foreach($tmpPageArr as $key => $value)
 			{
 				$value .= "</a> &nbsp;";
-				//$tmpVal = substr($value,strpos($value,"browse.php?"));
-				$tmpVal = substr($value,strpos($value,"browse.php?"),strpos($value,"\">")-2);
-
-				$pgNum = substr($tmpVal,strpos($tmpVal,"page=")+strlen("page="));
-				$pagesout .= str_replace($tmpVal,"XXXURLXXX".$pgNum,$value);
+				if (!preg_match("#((browse|torrents\-search|torrents|search)\.php[^>]+)#",$value,$matches))
+					continue;
+				
+				$url = rtrim($matches[0],'"');
+				$php = $matches[2]; //search,torrents...
+				
+				if (!preg_match("#page=([\d]+)#",$value,$matches))
+					continue;
+				$pgNum = $matches[1];
+				//$pgNum = substr($url,strpos($url,"page=")+strlen("page="));
+				$pagesout .= str_replace($url,"XXXURLXXX".$pgNum,$value);
 			}
 
-			$pagesout = str_replace("se.php?page=","",$pagesout);
+			$pagesout = str_replace($php.".php?page=","",$pagesout);
 
 			$cat = tfb_getRequestVar('mainGenre');
-			
+
 			if (empty($cat) && !empty($_REQUEST['cat']))
 				$cat = $_REQUEST['cat'];
 
@@ -375,7 +383,7 @@ class fileItoma
 	var $fileLife = "";
 	var $Seeds = "";
 	var $Peers = "";
-	
+
 	var $needsWait = false;
 	var $waitTime = "";
 
@@ -424,12 +432,12 @@ class fileItoma
 
 			//torent Name
 			$this->torrentName = substr($this->torrentFile,strpos($this->torrentFile,"&name=")+6);
-			
+
 			//torrent ID
 			$tmpStr = $this->torrentFile;
 			$tmpStr = substr($tmpStr,strpos($this->torrentFile,"?id=")+4);
 			$this->torrentId = substr($tmpStr,0,strpos($tmpStr,"&name="));
-			
+
 			//DisplayName
 			$this->torrentDisplayName = substr($this->torrentName,0,-9);
 			$this->torrentDisplayName = str_replace("%20","&nbsp;",$this->torrentDisplayName);
@@ -476,23 +484,23 @@ class fileItoma
 	function BuildOutput($bg, $searchURL = '')
 	{
 		$output = "<tr>\n";
-		$output .= "    <td width=16 bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".urlencode($this->torrentFile)."\"><img src=\"".getImagesPath()."download_owner.gif\" width=\"16\" height=\"16\" title=\"".$this->torrentName."\" border=0></a></td>\n";
-		$output .= "    <td bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".urlencode($this->torrentFile)."\" title=\"".$this->torrentName."\">".$this->torrentDisplayName."</a></td>\n";
+		$output .= "	<td width=16 bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".urlencode($this->torrentFile)."\"><img src=\"".getImagesPath()."download_owner.gif\" width=\"16\" height=\"16\" title=\"".$this->torrentName."\" border=0></a></td>\n";
+		$output .= "	<td bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".urlencode($this->torrentFile)."\" title=\"".$this->torrentName."\">".$this->torrentDisplayName."</a></td>\n";
 
-		if (strlen($this->MainCategory) > 1){        
+		if (strlen($this->MainCategory) > 1){
 			$genre = $this->MainCategory;
 			//$genre = "<a href=\"".$searchURL."&mainGenre=".$this->MainId."\">".$this->MainCategory."</a>";
 		}else{
 			$genre = "";
 		}
 
-		$output .= "    <td bgcolor=\"".$bg."\">". $genre ."</td>\n";
+		$output .= "	<td bgcolor=\"".$bg."\">". $genre ."</td>\n";
 
-		$output .= "    <td bgcolor=\"".$bg."\" align=right>".$this->torrentSize."</td>\n";
-		$output .= "    <td bgcolor=\"".$bg."\" align=center>".$this->Seeds."</td>\n";
-		$output .= "    <td bgcolor=\"".$bg."\" align=center>".$this->Peers."</td>\n";
+		$output .= "	<td bgcolor=\"".$bg."\" align=right>".$this->torrentSize."</td>\n";
+		$output .= "	<td bgcolor=\"".$bg."\" align=center>".$this->Seeds."</td>\n";
+		$output .= "	<td bgcolor=\"".$bg."\" align=center>".$this->Peers."</td>\n";
 
-		$output .= "    <td bgcolor=\"".$bg."\" align=center>".$this->torrentStatus."</td>\n";
+		$output .= "	<td bgcolor=\"".$bg."\" align=center>".$this->torrentStatus."</td>\n";
 		$output .= "</tr>\n";
 
 		return $output;
