@@ -94,5 +94,17 @@
 </table>
 </div><!--id=torrentSearch-->
 <div id="grey_out" class="hidden"></div>
+<script type="text/javascript">
+	//force row hover for old search engines
+	//onmouseover="this.className='hover';"
+	jQuery('#normalMessage ~ table')
+		.find('tr:gt(1)')
+		.mouseover(function() {
+			jQuery(this).addClass('hover');
+		})
+		.mouseout(function() {
+			jQuery(this).removeClass('hover');
+	});
+</script>
 <!-- inc.LayoutFooter -->
 <tmpl_include name="inc.LayoutFooter.tmpl">

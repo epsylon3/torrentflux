@@ -76,12 +76,12 @@ div#extRequest a {
 	color: silver;
 	font-size: 9px;
 }
-
 /* Header hack for old engines */
 tr[bgcolor="#808080"] td {
 	background-color: #000;
 	color: white;
 }
+
 
 td[bgcolor="#f0f0f0"] {
 	background-color: white;
@@ -89,4 +89,9 @@ td[bgcolor="#f0f0f0"] {
 
 td[bgcolor="#c0c0c0"] {
 	background-color: #ddd;
+}
+
+tr.hover td,
+tr.hover td{
+	background-color: #B22037;
 }
