@@ -285,7 +285,6 @@ class SearchEngine extends SearchEngineBase
 		if (strpos($thing, "page=") !== false)
 		{
 			// Yes, then lets grab it and display it!  ;)
-
 			$pages = substr($thing,strpos($thing,"<p"));
 			$pages = substr($pages,strpos($pages,">"));
 			$pages = substr($pages,0,strpos($pages,"</p>"));
@@ -301,14 +300,15 @@ class SearchEngine extends SearchEngineBase
 				$value .= "</a> &nbsp;";
 				if (!preg_match("#((browse|torrents\-search|torrents|search)\.php[^>]+)#",$value,$matches))
 					continue;
-				
+
 				$url = rtrim($matches[0],'"');
-				$php = $matches[2]; //search,torrents...
+				$php = $matches[2]; //browse,search,torrents...
 				
 				if (!preg_match("#page=([\d]+)#",$value,$matches))
 					continue;
-				$pgNum = $matches[1];
-				//$pgNum = substr($url,strpos($url,"page=")+strlen("page="));
+
+				$pgNum = (int) $matches[1];
+
 				$pagesout .= str_replace($url,"XXXURLXXX".$pgNum,$value);
 			}
 
@@ -319,26 +319,19 @@ class SearchEngine extends SearchEngineBase
 			if (empty($cat) && !empty($_REQUEST['cat']))
 				$cat = $_REQUEST['cat'];
 
-			if(strpos($this->curRequest,"LATEST"))
+			if(stripos($this->curRequest,"LATEST"))
 			{
-				if (!empty($cat))
-				{
+				if (!empty($cat)) {
 					$pages = str_replace("XXXURLXXX",$this->searchURL()."&LATEST=1&cat=".$cat."&pg=",$pagesout);
-				}
-				else
-				{
+				} else {
 					$pages = str_replace("XXXURLXXX",$this->searchURL()."&LATEST=1&pg=",$pagesout);
 				}
-			}
-			else
-			{
-				if(!empty($cat))
-				{
-					$pages = str_replace("XXXURLXXX",$this->searchURL()."&searchterm=".$_REQUEST["searchterm"]."&cat=".$cat."&pg=",$pagesout);
 
-				}
-				else
-				{
+			} else {
+
+				if(!empty($cat)) {
+					$pages = str_replace("XXXURLXXX",$this->searchURL()."&searchterm=".$_REQUEST["searchterm"]."&cat=".$cat."&pg=",$pagesout);
+				} else {
 					$pages = str_replace("XXXURLXXX",$this->searchURL()."&searchterm=".$_REQUEST["searchterm"]."&pg=",$pagesout);
 				}
 			}
@@ -464,8 +457,13 @@ class fileItoma
 
 	//----------------------------------------------------------------
 	// Function to build output for the table.
-	function BuildOutput($bg, $searchURL = '')
+	function BuildOutput($bg, $searchURL = '', $maxDisplayLength=80)
 	{
+		if(strlen($this->torrentDisplayName) > $maxDisplayLength)
+		{
+			$this->torrentDisplayName = substr($this->torrentDisplayName,0,$maxDisplayLength-3)."...";
+		}
+
 		$output = "<tr>\n";
 		$output .= "	<td width=16 bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".urlencode($this->torrentFile)."\"><img src=\"".getImagesPath()."download_owner.gif\" width=\"16\" height=\"16\" title=\"".$this->torrentName."\" border=0></a></td>\n";
 		$output .= "	<td bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".urlencode($this->torrentFile)."\" title=\"".$this->torrentName."\">".$this->torrentDisplayName."</a></td>\n";
