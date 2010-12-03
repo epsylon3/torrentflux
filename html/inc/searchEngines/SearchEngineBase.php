@@ -47,6 +47,8 @@ class SearchEngineBase
 	
 	var $needAuth = false;		// True if the site needs a cookie in profile
 
+	var $altRSS = "";			// Future use
+
 	var $author = '';			// the author of this engine
 	var $version = '';
 	var $updateURL = 'http://github.com/epsylon3/torrentflux/tree/master/html/inc/searchEngines/';
@@ -78,9 +80,16 @@ class SearchEngineBase
 	var $msg = '';				// Message to be displayed
 	var $pg = '';				// Page Variable used in Paging
 
+	var $maxDisplayLength = 80;	// Maximum size of download name
+
+	// internals
+
 	var $fp = '';				// Pointer to a socket connection
 
 	var $initialized = false;	// Boolean to determine if the search engine initialized ok.
+
+	var $method = "GET";		// Some ajax engines need POST
+	var $postquery = "";
 
 	/**
 	 * Constructor
@@ -186,13 +195,15 @@ class SearchEngineBase
 			: "http://".$this->mainURL. $request;
 			
 
-		require_once("inc/classes/SimpleHTTP.php");
-		
 		// get data
-		$http = new SimpleHTTP;
+		require_once("inc/classes/SimpleHTTP.php");
+
+		$http = SimpleHTTP::getInstance();
 
 		//utf-8 prefered
-		$http->charset = "utf-8";
+		$http->charset = $this->cfg['_CHARSET'];
+		$http->method = $this->method;
+		$http->postquery = $this->postquery;
 
 		$this->htmlPage = $http->instance_getData($request, $refererURI);
 		$this->htmlPage = setCharset($this->htmlPage, $http->charset);

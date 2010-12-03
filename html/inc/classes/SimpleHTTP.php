@@ -135,6 +135,10 @@ class SimpleHTTP
 
 	// Charset prefered, then charset of content if set
 	var $charset = "";
+	
+	// HTTP Method
+	var $method = "GET";
+	var $postquery = "";
 
 	// =========================================================================
 	// public static methods
@@ -298,8 +302,8 @@ class SimpleHTTP
 	 * @return string
 	 */
 	function instance_getData($get_url, $get_referer = "") {
-		global $cfg, $db;
 
+		global $cfg, $db;
 		// set fields
 		$this->url = $get_url;
 		$this->referer = $get_referer;
@@ -389,7 +393,7 @@ class SimpleHTTP
 			// Cookie: uid=12345;pass=asdfasdf;
 			//
 			//$this->request  = "GET " . ($this->httpVersion=="1.1" ? $this->getcmd : $this->url ). " HTTP/" . $this->httpVersion ."\r\n";
-			$this->request  = "GET ".$this->_fullURLEncode($this->getcmd)." HTTP/".$this->httpVersion."\r\n";
+			$this->request  = $this->method." ".$this->_fullURLEncode($this->getcmd)." HTTP/".$this->httpVersion."\r\n";
 			$this->request .= (!empty($this->referer)) ? "Referer: " . $this->referer . "\r\n" : "";
 			$this->request .= "Accept: */*\r\n";
 			$this->request .= "Accept-Language: en, en-US, en-GB\r\n";
@@ -397,13 +401,24 @@ class SimpleHTTP
 				$this->request .= "Accept-Charset: ".$this->charset."\r\n";
 			$this->request .= "User-Agent: ".$this->userAgent."\r\n";
 			$this->request .= "Host: " . $domain["host"] . "\r\n";
-			if($this->httpVersion=="1.1"){
+			//if($this->httpVersion=="1.1"){
 				$this->request .= "Connection: Close\r\n";
+			//}
+			if ($this->method == 'POST') {
+				$this->request .= "Content-Length: ".strlen($this->postquery)."\r\n";
+				$this->request .= "Content-Type: application/x-www-form-urlencoded\r\n";
+				$this->request .= "Origin: http://".$domain["host"] . "\r\n";
+				$this->request .= "X-Requested-With: XMLHttpRequest" . "\r\n";
 			}
 			if(!empty($this->cookie)){
 				$this->request .= "Cookie: " . $this->cookie . "\r\n";
 			}
 			$this->request .= "\r\n";
+			if ($this->method == 'POST') {
+				$this->request .= $this->postquery;
+				$this->request .= "\r\n";
+				$this->request .= "\r\n";
+			}
 
 			// Send header packet information to server
 			fputs($this->socket, $this->request);
@@ -438,9 +453,12 @@ class SimpleHTTP
 			}
 
 			if (isset($this->responseHeaders["content-type"])) {
-				$this->charset = $this->responseHeaders["content-type"];
-				$this->charset = substr($this->charset, strpos($this->charset, 'charset=')+8);
-				$this->charset = strtolower($this->charset);
+				$ctype = $this->responseHeaders["content-type"];
+				if (strpos($ctype, 'charset') !== false) {
+					$this->charset = $this->responseHeaders["content-type"];
+					$this->charset = substr($this->charset, strpos($this->charset, 'charset=')+8);
+					$this->charset = strtolower($this->charset);
+				}
 			}
 
 			if(
