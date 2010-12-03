@@ -115,6 +115,11 @@ if (!is_file('inc/searchEngines/'.$searchEngine.'Engine.php')) {
 			}
 			$tmpl->setloop('list_cats', $list_cats);
 		}
+		$tmpl->setvar('ext_request', $sEngine->lastRequest);
+		$tmpl->setvar('ext_method', $sEngine->method);
+		$tmpl->setvar('ext_postquery', $sEngine->postquery);
+		$tmpl->setvar('res_size', formatBytesTokBMBGBTB(strlen($sEngine->htmlPage)));
+		$tmpl->setvar('sEngine_msg', $sEngine->msg);
 	}
 }
 //

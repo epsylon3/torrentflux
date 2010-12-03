@@ -1,19 +1,5 @@
-table#torrentSearch {
-	border-collapse: collapse;
-	background-color: transparent;
-	margin: 0 auto;
-	width: 800px;
-}
-
-table#torrentSearch th {
-	padding: 1px;
-	text-align: left;
-}	
-table#torrentSearch td {
-	padding: 1px;
-	text-align: center;
-	font-size: 12px;
-	background-color: transparent;
+div#torrentSearch {
+	min-height: 250px;
 }
 
 body#RedRoundBody table {
@@ -45,7 +31,62 @@ body#RedRoundBody tbody {
 	background-color: transparent;
 }
 
+table#torrentSearch {
+	background-color: transparent;
+	margin: 0 auto;
+}
+
+table.torrentSearch th {
+	padding: 1px;
+	text-align: left;
+}	
+
+table.torrentSearch {
+	width: 980px;
+}
+
+table.torrentSearch td {
+	font-size: 11px;
+	background-color: transparent;
+}
+
+table#engineList td {
+	padding: 1px;
+	text-align: center;
+	font-size: 11px;
+	background-color: transparent;
+	border-top: 1px solid #f0f0f0;
+}
+
+table#genreList td {
+	padding: 1px;
+	text-align: center;
+	font-size: 11px;
+	background-color: transparent;
+}
+
+div#errorMessage {
+	text-align: center;
+}
+td#showLastest,
+div#extRequest{
+	text-align: right;
+}
+div#extRequest a {
+	color: silver;
+	font-size: 9px;
+}
+
+/* Header hack for old engines */
 tr[bgcolor="#808080"] td {
 	background-color: #000;
 	color: white;
+}
+
+td[bgcolor="#f0f0f0"] {
+	background-color: white;
+}
+
+td[bgcolor="#c0c0c0"] {
+	background-color: #ddd;
 }

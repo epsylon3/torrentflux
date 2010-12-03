@@ -72,17 +72,20 @@ class SearchEngineBase
 	var $catFilterName = '';	// Name of Filter used to retrieve from DB.
 	var $catFilter = array();	// An array of categories to Filter out from DB.
 
-	var $curRequest ='';		// The actual Request sent to the Search Engine
+	var $curRequest ='';		// The actual Request
 	var $hideSeedless = false;	// Boolean to determine if we should hide or show seedless torrents
 	var $searchTerm = '';		// Search term passed into the engine
 
-	var $htmlPage = '';			// HTML created by the engine for displaying
 	var $msg = '';				// Message to be displayed
 	var $pg = '';				// Page Variable used in Paging
 
 	var $maxDisplayLength = 80;	// Maximum size of download name
 
 	// internals
+	
+	var $htmlPage = '';			// HTML created by the engine for displaying
+
+	var $lastRequest ='';		// The Request sent to the external engine
 
 	var $fp = '';				// Pointer to a socket connection
 
@@ -207,6 +210,7 @@ class SearchEngineBase
 
 		$this->htmlPage = $http->instance_getData($request, $refererURI);
 		$this->htmlPage = setCharset($this->htmlPage, $http->charset);
+		$this->lastRequest = $request;
 
 		// return
 		return ($http->state == SIMPLEHTTP_STATE_OK);

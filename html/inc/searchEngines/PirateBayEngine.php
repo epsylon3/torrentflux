@@ -255,11 +255,11 @@ class SearchEngine extends SearchEngineBase
 		}
 
 		$output .= ")</td>";
-		$output .= "  <td><strong>Category</strong></td>";
-		$output .= "  <td align=center><strong>&nbsp;&nbsp;Size</strong></td>";
-		$output .= "  <td><strong>Date Added</strong></td>";
-		$output .= "  <td><strong>Seeds</strong></td>";
-		$output .= "  <td><strong>Peers</strong></td>";
+		$output .= "	<td><strong>Category</strong></td>";
+		$output .= "	<td align=center><strong>&nbsp;&nbsp;Size</strong></td>";
+		$output .= "	<td><strong>Date Added</strong></td>";
+		$output .= "	<td><strong>Seeds</strong></td>";
+		$output .= "	<td><strong>Peers</strong></td>";
 		$output .= "</tr>\n";
 
 		return $output;
@@ -269,7 +269,6 @@ class SearchEngine extends SearchEngineBase
 	// Function to parse the response.
 	function parseResponse()
 	{
-		$output = $this->tableHeader();
 
 		$thing = $this->htmlPage;
 
@@ -281,6 +280,8 @@ class SearchEngine extends SearchEngineBase
 			$this->msg = "Your search did not match any torrents";
 
 		} else {
+			
+			$output = $this->tableHeader();
 
 			if (strpos($thing,"searchResult") !== false)
 			{
@@ -520,10 +521,6 @@ class pBay
 				if ($this->Seeds == '') $this->Seeds = "N/A";
 
 				$this->torrentDisplayName = $this->torrentName;
-				if(strlen($this->torrentDisplayName) > 50)
-				{
-					$this->torrentDisplayName = substr($this->torrentDisplayName,0,50)."...";
-				}
 
 			}
 		}
@@ -540,8 +537,13 @@ class pBay
 
 	//----------------------------------------------------------------
 	// Function to build output for the table.
-	function BuildOutput($bg, $searchURL)
+	function BuildOutput($bg, $searchURL='', $maxDisplayLength=80)
 	{
+		if(strlen($this->torrentDisplayName) > $maxDisplayLength)
+		{
+			$this->torrentDisplayName = substr($this->torrentDisplayName,0,$maxDisplayLength-3)."...";
+		}
+
 		$output = "<tr>\n";
 		$output .= "	<td width=\"16\" bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".$this->torrentFile."\"><img src=\"".getImagesPath()."download_owner.gif\" width=\"16\" height=\"16\" title=\"".$this->torrentName."\" border=0></a></td>\n";
 		$output .= "	<td bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".$this->torrentFile."\" title=\"".$this->torrentName."\">".$this->torrentDisplayName."</a></td>\n";
