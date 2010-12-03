@@ -255,7 +255,6 @@ function setFilePriority($transfer) {
 	$isTransmissionTorrent = false;
 	if ($cfg["transmission_rpc_enable"]) {
 		require_once('inc/functions/functions.rpc.transmission.php');
-		$trans = new Transmission();
 		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
 		$isTransmissionTorrent = is_array($theTorrent);
 	}
@@ -265,15 +264,15 @@ function setFilePriority($transfer) {
 			$selectedFiles[] = (int)$fileid;
 		}
 		# Get files that are wanted or not for download, then we can compare.
-		$responseWantedFiles = $trans->get( $theTorrent[id], array('wanted') );
-		$wantedFiles = $responseWantedFiles[arguments][torrents][0][wanted];
+		$responseWantedFiles = getTransmissionTransfer( $transfer, array('wanted') );
+		$wantedFiles = $responseWantedFiles['wanted'];
 		
 		$thearray = array_fill(0, count($wantedFiles), 0);
 		foreach ( $selectedFiles as $fileid ) {
 			$thearray[$fileid] = 1;
 		}
 		
-$counter = 0;
+		$counter = 0;
 		foreach ( $wantedFiles as $fileid => $wanted ) {
 			if ( $thearray[$counter] == 1 && $wantedFiles[$counter] == 0 ) { // the file is not marked as selected in the gui but it has been saved as "wanted"
 					$includeFiles[]=(int)$counter; // deselect this files
@@ -281,18 +280,18 @@ $counter = 0;
 			if ( $thearray[$counter] == 0 && $wantedFiles[$counter] == 1 ) { // the file is not marked as selected in the gui but it has been saved as "wanted"
 				$excludeFiles[]=(int)$counter; // deselect this files
 			}
-$counter++;
+			$counter++;
 		}
 		
 		if (count($includeFiles)>0) {
 			$includeFiles = array_values($includeFiles);
-			$response = $trans->set( $theTorrent[id], array("files-wanted" => $includeFiles) );
+			setTransmissionTransferProperties( $transfer, array("files-wanted" => $includeFiles) );
 		}
 		if (count($excludeFiles)>0) {
 			$excludeFiles = array_values($excludeFiles);
-			$response = $trans->set( $theTorrent[id], array("files-unwanted" => $excludeFiles) );
+			setTransmissionTransferProperties( $transfer, array("files-unwanted" => $excludeFiles) );
+
 		}
-#print_r($response);
 	} else {
 		// we will use this to determine if we should create a prio file.
 		// if the user passes all 1's then they want the whole thing.
