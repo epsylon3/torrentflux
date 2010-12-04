@@ -7,6 +7,11 @@
  * @return int
  */
 function getVuzeTransferRpcId($transfer) {
+	global $cfg;
+	
+	require_once('inc/classes/VuzeRPC.php');
+	$rpc = VuzeRPC::getInstance();
+	
 	$hash = getTransferHash($transfer);
 	$torrents = $rpc->torrent_get_hashids();
 	$tid = false;

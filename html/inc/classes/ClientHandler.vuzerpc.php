@@ -570,6 +570,31 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		}
 	}
 
+	/**
+	 * gets current status (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorStatus($transfer) {
+		//by default, monitoring not available.
+		$vuze = VuzeRPC::getInstance();
+
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+				
+		//return print_r($vuze->,true);
+		
+		$tid = getVuzeTransferRpcId($transfer);
+
+		if ($tid > 0) {
+			$stat = $vuze->torrent_get_tf_array(array($tid));
+			return $stat;
+		} else {
+			
+			return $vuze->lastError;
+		}
+	}
 
 }
 

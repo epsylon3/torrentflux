@@ -1123,6 +1123,17 @@ class ClientHandler
 		return false;
 	}
 
+	/**
+	 * gets current status (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorStatus($transfer) {
+		//by default, monitoring not available.
+		return "";
+	}
+
 } // end class
 
 ?>

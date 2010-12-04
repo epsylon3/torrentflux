@@ -99,6 +99,16 @@ if ($sf->running == 1) {
 	// sharekill
 	$tmpl->setvar('sharekill', ($ch->sharekill != 0) ? $ch->sharekill.'%' : '&#8734');
 
+	if ($ch->useRPC) {
+		$stat = $ch->monitorStatus($transfer);
+		if (!is_array($stat)) {
+			$monitoring = $stat;
+		} else {
+			$monitoring = "<pre>".print_r($stat,true)."</pre>";
+		}
+		$tmpl->setvar('realtime_monitor', $monitoring);
+	}
+
 } else {
 
 	// running
