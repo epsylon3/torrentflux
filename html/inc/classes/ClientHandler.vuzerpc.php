@@ -157,7 +157,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$sf->write();
 		}
 */
-		$this->updateStatFiles();
+		$this->updateStatFiles($transfer);
 
 	}
 
@@ -210,7 +210,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// delete .pid
 		$this->_stop($kill, $transferPid);
 
-		$this->updateStatFiles();
+		$this->updateStatFiles($transfer);
 	}
 
 	/**
@@ -437,7 +437,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		return $stat->stop();
 	}
 
-	function updateStatFiles() {
+	function updateStatFiles($transfer="") {
 		global $cfg, $db;
 
 		$this->vuze = VuzeRPC::getInstance();
@@ -459,6 +459,11 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		}
 
 		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='".$this->client."' AND hash IN (".implode(',',$hashes).")";
+
+		//only update one $transfer...
+		if ($transfer != "")
+			$sql .= " AND transfer=".$db->qstr($transfer);
+
 		$recordset = $db->Execute($sql);
 		$hashes=array();
 		$sharekills=array();
