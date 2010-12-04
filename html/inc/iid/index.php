@@ -242,8 +242,6 @@ foreach ($arList as $mtimecrc => $transfer) {
 	$owner = IsOwner($cfg["user"], $transferowner);
 	// stat
 	$sf = new StatFile($transfer, $transferowner);
-	// running-flag in local var. we will access that often
-	$transferRunning = (int) $sf->running;
 	// settings
 	if (isset($transfers['settings'][$transfer])) {
 		$settingsAry = $transfers['settings'][$transfer];
@@ -282,33 +280,84 @@ foreach ($arList as $mtimecrc => $transfer) {
 		
 	} else { // in rpc realtime only working torrents
 
-		$nbRpc++;
-
-		if ($settingsAry["client"] == "vuzerpc") {
+		if ($bUseRPC) {
 			
-			$hash = getTransferHash($transfer);
-			
-			$rpcStat = $vuzeResults[$hash];
-			if (is_array($rpcStat)) {
-				//updated often
-				$sf->up_speed    = $rpcStat['speedUp'];
-				$sf->down_speed  = $rpcStat['speedDown'];
-				$sf->uptotal     = $rpcStat['upTotal'];
-				$sf->downtotal   = $rpcStat['downTotal'];
-				$sf->seeds       = $rpcStat['seeds'];
-				$sf->peers       = $rpcStat['peers'];
-				$sf->cons        = $rpcStat['cons'];
-				$sf->sharing     = $rpcStat['sharing'];
-				$sf->percent_done= $rpcStat['percentDone'];
-				$sf->rpc_status  = $rpcStat['status'];
-				$sf->time_left   = $rpcStat['eta'];
+			switch ($settingsAry["client"]) {
 				
-				if ((int)$rpcStat['error'] != 0 && !empty($rpcStat['errorString']))
-					$sf->time_left   = $rpcStat['errorString'];
+			case "vuzerpc":
+				if (!empty($vuzeResults)) {
+	
+					$hash = getTransferHash($transfer);
+					$rpcStat = $vuzeResults[strtoupper($hash)];
+					if (is_array($rpcStat)) {
+						
+						$nbRpc++;
+
+						//updated often
+						$sf->up_speed    = round($rpcStat['speedUp'] / 1024 ,1);
+						$sf->down_speed  = round($rpcStat['speedDown'] / 1024 ,1);
+						$sf->uptotal     = $rpcStat['upTotal'];
+						$sf->downtotal   = $rpcStat['downTotal'];
+						$sf->seeds       = $rpcStat['seeds'];
+						$sf->peers       = $rpcStat['peers'];
+						$sf->cons        = $rpcStat['cons'];
+						$sf->sharing     = $rpcStat['sharing'];
+
+						$sf->rpc_status  = $rpcStat['status'];
+
+						if (!$sf->seedlimit)
+							$sf->seedlimit=$settingsAry["sharekill"];
+							
+						if ($rpcStat['status'] == 8 || $rpcStat['status'] == 9)
+							$sf->running = 1;
+
+						$sf->percent_done= floatval($rpcStat['percentDone']);
+						if ($sf->percent_done >= 100.0)
+							$sf->percent_done += floatval($sf->sharing);
+
+						if ($sf->up_speed > 0)
+							$sf->up_speed .= " kB/s";
+						if ($sf->down_speed > 0)
+							$sf->down_speed .= " kB/s";
+						else
+							$sf->down_speed="0";
+						if ((int)$rpcStat['error'] != 0 && !empty($rpcStat['errorString'])) {
+							$error = $rpcStat['errorString'];
+							if (strpos($error,'Scrape') !== false) {
+								//ignore scrape error
+							} else {
+								$sf->status .= 'Error';
+							}
+						}
+
+						if ($rpcStat['eta'] > 0) {
+							$sf->time_left = convertTime($t['eta']);
+						} elseif ($rpcStat['eta'] == -1) {
+							$sf->time_left = "&#8734;";
+						} else
+							$sf->time_left="";
+
+						if ($rpcStat['status'] == 16) {
+							if ($sf->percent_done > 100) {
+								$sf->percent_done = 100;
+								//$sf->running = 0;
+								$sf->time_left = "Download Succeeded";
+								if ($sf->eta > 0)
+									$sf->time_left = "Finished in ".convertTime($sf->eta);
+								$sf->percent_done = -200;
+							}
+						}
+					}
+				}
+				break;
+			default:
+				//todo transmission compatibility
 			}
 		}
-		
 	}
+
+	// running-flag in local var. we will access that often
+	$transferRunning = (int) $sf->running;
 	// percent-done in local var. ...
 	$percentDone = $sf->percent_done;
 	// hide seeding - we do it asap to keep things as fast as possible
@@ -422,16 +471,20 @@ foreach ($arList as $mtimecrc => $transfer) {
 	// ================================================================ progress
 	if ($settings[5] != 0) {
 		if ($percentDone >= 100 && $sf->size>0  && trim($sf->up_speed) != "") {
+			//seeding
 			$graph_width = -1;
 			$percentage = @number_format((($transferTotals["uptotal"] / $sf->size) * 100), 2) . '%';
 		} else {
 			if ($percentDone >= 1) {
+				//leeching
 				$graph_width = $percentDone;
 				$percentage = $graph_width . '%';
 			} else if ($percentDone < 0) {
+				//stopped
 				$graph_width = round(($percentDone*-1)-100,1);
 				$percentage = $graph_width . '%';
 			} else {
+				//new
 				$graph_width = 0;
 				$percentage = '0%';
 			}
@@ -560,7 +613,10 @@ foreach ($arList as $mtimecrc => $transfer) {
 }
 $tmpl->setloop('arUserTorrent', $arUserTorrent);
 $tmpl->setloop('arListTorrent', $arListTorrent);
-addGrowlMessage("$nbRpc rpc updates");
+
+$nbInVuze = count($vuzeResults);
+addGrowlMessage("$nbRpc/$nbInVuze rpc updates");
+
 //XFER: update 2
 if (($cfg['enable_xfer'] == 1) && ($cfg['xfer_realtime'] == 1))
 	@Xfer::update2();

@@ -480,16 +480,11 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$sf = new StatFile($transfer);
 			$sf->running = $t['running'];
 
-			if ($t['eta'] < -1) {
-				$t['eta'] = "Finished in ".convertTime(abs($t['eta']));
-			} elseif ($t['eta'] > 0) {
-				$t['eta'] = convertTime($t['eta']);
-			} elseif ($t['eta'] == -1) {
-				$t['eta'] = "";
-			}
-			$sf->time_left = $t['eta'];
-
 			if ($sf->running) {
+
+				if ($t['eta'] > 0) {
+					$sf->time_left = convertTime($t['eta']);
+				}
 
 				//(temp) force creation of pid file to fix first ones
 				file_put_contents($cfg["transfer_file_path"].'/'.$transfer.".pid","rpc");
@@ -527,7 +522,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 				$sf->down_speed = "";
 				$sf->up_speed = "";
 				$sf->peers = "";
-				if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
+				
+				if ($t['eta'] < -1) {
+					$sf->time_left = "Finished in ".convertTime(abs($t['eta']));
+				} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
 					$sf->time_left = "Finished!";
 					$sf->percent_done = 100;
 				}

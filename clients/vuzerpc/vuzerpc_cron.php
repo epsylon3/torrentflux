@@ -112,16 +112,11 @@ function updateStatFiles($bShowMissing=false) {
 		$sf = new StatFile($transfer);
 		$sf->running = $t['running'];
 
-		if ($t['eta'] < -1) {
-			$t['eta'] = "Finished in ".convertTime(abs($t['eta']));
-		} elseif ($t['eta'] > 0) {
-			$t['eta'] = convertTime($t['eta']);
-		} elseif ($t['eta'] == -1) {
-			$t['eta'] = "";
-		}
-		$sf->time_left = $t['eta'];
-
 		if ($sf->running) {
+
+			if ($t['eta'] > 0) {
+				$sf->time_left = convertTime($t['eta']);
+			}
 
 			$sf->percent_done = $t['percentDone'];
 
@@ -159,9 +154,11 @@ function updateStatFiles($bShowMissing=false) {
 			$sf->down_speed = "";
 			$sf->up_speed = "";
 			$sf->peers = "";
-			if ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
+			$sf->time_left = "0";
+			if ($t['eta'] < -1) {
+				$sf->time_left = "Finished in ".convertTime(abs($t['eta']));
+			} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
 				$sf->time_left = "Finished!";
-				$sf->percent_done = 100;
 			}
 			//if ($sf->percent_done < 100 && $sf->percent_done > 0)
 			//	$sf->percent_done = 0 - $sf->percent_done;

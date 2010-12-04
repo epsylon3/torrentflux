@@ -104,7 +104,9 @@ if ($sf->running == 1) {
 		if (!is_array($stat)) {
 			$monitoring = $stat;
 		} else {
-			$monitoring = "<pre>".print_r($stat,true)."</pre>";
+			global $transfers;
+			$settings = $transfers['settings'][$transfer];
+			$monitoring = "<pre>".print_r($stat,true)."</pre>"."<pre>".print_r($settings,true)."</pre>";
 		}
 		$tmpl->setvar('realtime_monitor', $monitoring);
 	}
