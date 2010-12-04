@@ -161,7 +161,7 @@ function ajax_processText(content) {
 		aryCount++;
 	
 	if (aryCount > 0) {
-		var tempAry = content.split("¤");
+		var tempAry = content.split("|");
 		
 		// ajax-script (jgrowl)
 		var ajaxScript = "";

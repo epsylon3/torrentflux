@@ -591,7 +591,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "¤";
+			$content .= "|";
 		$xferStats = Xfer::getStatsFormatted();
 		$xferCount = count($xferStats);
 		for ($i = 0; $i < $xferCount; $i++) {
@@ -605,7 +605,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "¤";
+			$content .= "|";
 		$countUsers = count($cfg['users']);
 		$arOnlineUsers = array();
 		$arOfflineUsers = array();
@@ -636,7 +636,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "¤";
+			$content .= "|";
 		$content .= $tmpl->grab();
 	}
 	// javascript
@@ -644,7 +644,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "¤";
+			$content .= "|";
 
 		//Messages jGrowl
 		$jGrowls = "";
