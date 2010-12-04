@@ -102,7 +102,7 @@ class ClientHandler
 
 	// handler-state
 	var $state = CLIENTHANDLER_STATE_NULL;
-
+	
 	// =========================================================================
 	// public static methods
 	// =========================================================================
@@ -114,41 +114,50 @@ class ClientHandler
 	 * @return ClientHandler
 	 */
 	function getInstance($client = "") {
-		global $cfg;
 		
 		// create and return object-instance
 		switch ($client) {
-			case "tornado":
-				require_once('inc/classes/ClientHandler.tornado.php');
-				return new ClientHandlerTornado();
-			case "transmission":
-				//patched transmissioncli
-				require_once('inc/classes/ClientHandler.transmission.php');
-				return new ClientHandlerTransmission();
-			case "transmissionrpc":
-				require_once('inc/classes/ClientHandler.transmissionrpc.php');
-				return new ClientHandlerTransmissionRPC();
-			case "azureus":
-				//fluazu/dopal/xml_http (slow)
-				require_once('inc/classes/ClientHandler.azureus.php');
-				return new ClientHandlerAzureus();
-			case "vuzerpc":
-				//xmwebui (json) (fast)
-				require_once('inc/classes/ClientHandler.vuzerpc.php');
-				return new ClientHandlerVuzeRPC();
-			case "wget":
-				require_once('inc/classes/ClientHandler.wget.php');
-				return new ClientHandlerWget();
-			case "nzbperl":
-				require_once('inc/classes/ClientHandler.nzbperl.php');
-				return new ClientHandlerNzbperl();
-			case "mainline":
-				require_once('inc/classes/ClientHandler.mainline.php');
-				return new ClientHandlerMainline();
-			default:
-				global $cfg;
-				return ClientHandler::getInstance($cfg["btclient"]);
+		case "tornado":
+			require_once('inc/classes/ClientHandler.tornado.php');
+			$ch = new ClientHandlerTornado();
+			break;
+		case "transmission":
+			//patched transmissioncli
+			require_once('inc/classes/ClientHandler.transmission.php');
+			$ch = new ClientHandlerTransmission();
+			break;
+		case "transmissionrpc":
+			require_once('inc/classes/ClientHandler.transmissionrpc.php');
+			$ch = new ClientHandlerTransmissionRPC();
+			break;
+		case "azureus":
+			//fluazu/dopal/xml_http (slow)
+			require_once('inc/classes/ClientHandler.azureus.php');
+			$ch = new ClientHandlerAzureus();
+			break;
+		case "vuzerpc":
+			//xmwebui (json) (fast)
+			require_once('inc/classes/ClientHandler.vuzerpc.php');
+			$ch = new ClientHandlerVuzeRPC();
+			break;
+		case "wget":
+			require_once('inc/classes/ClientHandler.wget.php');
+			$ch = new ClientHandlerWget();
+			break;
+		case "nzbperl":
+			require_once('inc/classes/ClientHandler.nzbperl.php');
+			$ch = new ClientHandlerNzbperl();
+			break;
+		case "mainline":
+			require_once('inc/classes/ClientHandler.mainline.php');
+			$ch = new ClientHandlerMainline();
+			break;
+		default:
+			global $cfg;
+			$ch = ClientHandler::getInstance($cfg["btclient"]);
 		}
+		return $ch;
+		
 	}
 
 	// =========================================================================
@@ -1126,12 +1135,24 @@ class ClientHandler
 	/**
 	 * gets current status (realtime)
 	 * for transferStat popup
-	 *
-	 * @return array (stat) or Error String
+	 * 
+	 * @param string
+	 * @return array (stat) or string Error
 	 */
-	function monitorStatus($transfer) {
-		//by default, monitoring not available.
+	function monitorTransfer($transfer) {
+		//by default, realtime monitoring not available.
 		return "";
+	}
+
+	/**
+	 * gets current status of All RPC Transfers (realtime)
+	 * for index
+	 *
+	 * @return array by hash
+	 */
+	function monitorRunningTransfers() {
+		//by default, realtime monitoring not available.
+		return array();
 	}
 
 } // end class

@@ -90,8 +90,11 @@ $arList = getTransferArray($sortOrder);
 $progress_color = "#22BB22";
 $bar_width = "4";
 
+$bUseRPC = false;
+
 // ---------------------------------------------------------------------
 if ($cfg["transmission_rpc_enable"]) {
+	$bUseRPC = true;
 
 	// add transmission rpc torrent to current user list
 
@@ -195,6 +198,19 @@ if ($cfg["transmission_rpc_enable"]) {
 // end of Transmission RPC bloc
 // ---------------------------------------------------------------------
 
+if ($cfg["vuze_rpc_enable"]) {
+	$bUseRPC = true;
+	require_once("inc/classes/VuzeRPC.php");
+	//one client for all vuzerpc transferts
+	$rpc = VuzeRPC::getInstance($cfg);
+	
+	$vuzeResults = $rpc->torrent_get_tf_array();
+}
+
+// end of Vuze RPC requests
+// ---------------------------------------------------------------------
+
+$nbRpc=0;
 foreach ($arList as $mtimecrc => $transfer) {
 	// displayname
 	$displayname = $transfer;
@@ -226,6 +242,8 @@ foreach ($arList as $mtimecrc => $transfer) {
 	$owner = IsOwner($cfg["user"], $transferowner);
 	// stat
 	$sf = new StatFile($transfer, $transferowner);
+	// running-flag in local var. we will access that often
+	$transferRunning = (int) $sf->running;
 	// settings
 	if (isset($transfers['settings'][$transfer])) {
 		$settingsAry = $transfers['settings'][$transfer];
@@ -251,7 +269,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 		$settingsAry["savepath"] = getTransferSavepath($transfer);
 		$settingsAry['datapath'] = getTransferDatapath($transfer);
 	}
-	// Fix FluAzu progression 100% (client to check, not set to "azureus")
+	// Fix FluAzu progression 100% (client to check, not set to "azureus", solved by mysql column enum to varchar ?)
 	if ($settingsAry["client"] == "") {
 
 		if (!$sf->seedlimit)
@@ -259,12 +277,39 @@ foreach ($arList as $mtimecrc => $transfer) {
 
 		if ((int)$sf->size > 0) {
 			if (!$sf->sharing)
-				$sf->sharing=(0+$sf->uptotal)/(0+$sf->size)*100;
+				$sf->sharing=round( ((int)$sf->uptotal / (int)$sf->size) * 100.0 , 2);
 		}
+		
+	} else { // in rpc realtime only working torrents
+
+		$nbRpc++;
+
+		if ($settingsAry["client"] == "vuzerpc") {
+			
+			$hash = getTransferHash($transfer);
+			
+			$rpcStat = $vuzeResults[$hash];
+			if (is_array($rpcStat)) {
+				//updated often
+				$sf->up_speed    = $rpcStat['speedUp'];
+				$sf->down_speed  = $rpcStat['speedDown'];
+				$sf->uptotal     = $rpcStat['upTotal'];
+				$sf->downtotal   = $rpcStat['downTotal'];
+				$sf->seeds       = $rpcStat['seeds'];
+				$sf->peers       = $rpcStat['peers'];
+				$sf->cons        = $rpcStat['cons'];
+				$sf->sharing     = $rpcStat['sharing'];
+				$sf->percent_done= $rpcStat['percentDone'];
+				$sf->rpc_status  = $rpcStat['status'];
+				$sf->time_left   = $rpcStat['eta'];
+				
+				if ((int)$rpcStat['error'] != 0 && !empty($rpcStat['errorString']))
+					$sf->time_left   = $rpcStat['errorString'];
+			}
+		}
+		
 	}
-	// cache running-flag in local var. we will access that often
-	$transferRunning = $sf->running;
-	// cache percent-done in local var. ...
+	// percent-done in local var. ...
 	$percentDone = $sf->percent_done;
 	// hide seeding - we do it asap to keep things as fast as possible
 	if (($_SESSION['settings']['index_show_seeding'] == 0) && ($percentDone >= 100) && ($transferRunning == 1)) {
@@ -281,7 +326,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 		@Xfer::update1($transfer, $transferowner, $settingsAry['client'], $settingsAry['hash'], $sf->uptotal, $sf->downtotal);
 
 	// ---------------------------------------------------------------------
-	// injects
+	// injects new
 	if (!file_exists($cfg["transfer_file_path"].$transfer.".stat")) {
 		$transferRunning = 2;
 		$sf->running = "2";
@@ -515,7 +560,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 }
 $tmpl->setloop('arUserTorrent', $arUserTorrent);
 $tmpl->setloop('arListTorrent', $arListTorrent);
-
+addGrowlMessage("$nbRpc rpc updates");
 //XFER: update 2
 if (($cfg['enable_xfer'] == 1) && ($cfg['xfer_realtime'] == 1))
 	@Xfer::update2();

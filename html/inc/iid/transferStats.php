@@ -100,7 +100,7 @@ if ($sf->running == 1) {
 	$tmpl->setvar('sharekill', ($ch->sharekill != 0) ? $ch->sharekill.'%' : '&#8734');
 
 	if ($ch->useRPC) {
-		$stat = $ch->monitorStatus($transfer);
+		$stat = $ch->monitorTransfer($transfer);
 		if (!is_array($stat)) {
 			$monitoring = $stat;
 		} else {

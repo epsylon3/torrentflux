@@ -514,15 +514,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 				if ($t['status'] == 8) {
 					//seeding
 					//$sf->percent_done = 100 + $t['sharing'];
-					$sf->down_speed = "&nbsp;";
-					if (trim($sf->up_speed) == '')
-						$sf->up_speed = "&nbsp;";
+					$sf->down_speed = "";
 				}
 				if ($t['status'] == 9) {
 					//seeding queued
 					//$sf->percent_done = 100 + $t['sharing'];
-					$sf->up_speed = "&nbsp;";
-					$sf->down_speed = "&nbsp;";
+					$sf->up_speed = "";
+					$sf->down_speed = "";
 				}
 
 			} else {
@@ -571,12 +569,12 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	}
 
 	/**
-	 * gets current status (realtime)
+	 * gets current status of one Transfer (realtime)
 	 * for transferStat popup
 	 *
 	 * @return array (stat) or Error String
 	 */
-	function monitorStatus($transfer) {
+	function monitorTransfer($transfer) {
 		//by default, monitoring not available.
 		$vuze = VuzeRPC::getInstance();
 
@@ -594,6 +592,20 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			
 			return $vuze->lastError;
 		}
+	}
+
+	/**
+	 * gets current status of one Transfer (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorAllTransfers() {
+		//by default, monitoring not available.
+		$vuze = VuzeRPC::getInstance();
+
+		$stat = $vuze->torrent_get_tf_array();
+		return $stat;
 	}
 
 }
