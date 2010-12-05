@@ -63,7 +63,7 @@ function updateStatFiles($bShowMissing=false) {
 		$hashes[] = "'".strtolower($hash)."'";
 	}
 
-	$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='vuzerpc' AND hash IN (".implode(',',$hashes).")";
+	$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client IN('vuzerpc','azureus') AND hash IN (".implode(',',$hashes).")";
 	$recordset = $db->Execute($sql);
 	$hashes=array();
 	$sharekills=array();

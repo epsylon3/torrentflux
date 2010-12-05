@@ -51,7 +51,9 @@ class VuzeRPC {
 	public $USER = 'vuze';
 	public $PASS = 'mypassword';
 
+	//info about last error
 	public $lastError="";
+	public $errMethod="";
 
 	//vuze general config
 	public $session;
@@ -138,7 +140,7 @@ class VuzeRPC {
 
 		curl_setopt($this->ch, CURLOPT_HTTPHEADER, array (
 			'Accept: application/json',
-			'Content-type: application/json; charset=UTF-8'
+			'Content-type: application/json' //no charset needed in json
 		));
 
 		curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -155,6 +157,7 @@ class VuzeRPC {
 			$this->set_curl_options();
 		}
 
+		//timestamp tag
 		$tag = date('U');
 
 		$postData = '{"method":"'.$method.'", "tag":"'.$tag.'"}';
@@ -181,8 +184,14 @@ class VuzeRPC {
 			//ok
 			$data=json_decode($res);
 
-			if ($data->result != 'success')
+			if ($data->result != 'success') {
+				$this->errMethod = $method;
 				$this->lastError = $data->result;
+				
+				//require_once('inc/functions/functions.core.php');
+				//global $cfg;
+				//AuditAction($cfg["constants"]["debug"],"VuzeRPC.$method :".$this->lastError);
+			}
 
 		}
 		elseif ($this->DEBUG) {
@@ -220,8 +229,22 @@ class VuzeRPC {
 	}
 
 	// Get Vuze data (all torrents)
-	public function torrent_get($ids=array()) {
+	public function torrent_get($ids=array(),$_fields=array()) {
 
+		//dont touch these ones, always required
+		$required = array(
+			"id",
+			"hashString"
+		);
+		
+		if (!empty($_fields)) {
+			if (is_array($_fields))
+				$fields = array_merge($required,$_fields);
+			else
+				//string
+				$fields[] = $_fields;
+		}
+		else
 		//choose wanted torrents fields
 		$fields = array(
 			/*
@@ -438,8 +461,12 @@ class VuzeRPC {
 			'speed-limit-up-enabled' => ($max_ul > 0),
 			'speed-limit-down-enabled' => ($max_dl > 0)
 		);
-		$this->session_set_multi($limits);
 		*/
+		$limits = array(
+			'seedRatioLimit' => ((float)$sharekill / 100.0),
+			'seedRatioMode' => 1
+		);
+		$this->session_set_multi($limits);
 
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req)) {
@@ -668,7 +695,7 @@ class VuzeRPC {
 
 	}
 
-	//STATIC HELPERS
+	//STATIC HELPERS, usefull to reuse the last instance created
 	public function getInstance() {
 		global $VuzeRPC_instance;
 		if (!is_object($VuzeRPC_instance)) {

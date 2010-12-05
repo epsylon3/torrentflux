@@ -624,8 +624,10 @@ foreach ($arList as $mtimecrc => $transfer) {
 $tmpl->setloop('arUserTorrent', $arUserTorrent);
 $tmpl->setloop('arListTorrent', $arListTorrent);
 
-$nbInVuze = count($vuzeResults);
-addGrowlMessage("$nbRpc/$nbInVuze rpc torrents");
+if (!empty($vuzeResults)) {
+	$nbInVuze = count($vuzeResults);
+	addGrowlMessage("Vuze"," Active: $nbRpc - Loaded: $nbInVuze");
+}
 
 //XFER: update 2
 if (($cfg['enable_xfer'] == 1) && ($cfg['xfer_realtime'] == 1))

@@ -336,26 +336,41 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		global $cfg;
 		// set rate-field
 		$this->rate = (int) $uprate;
-		AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $uprate $autosend $transfer.");
+
+		$result = true;
 		
-		if ($autosend) {
+		$msg = "$uprate ".serialize($autosend);
+		//if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
 
 			$tid = getVuzeTransferRpcId($transfer);
 			if ($tid > 0) {
-				$req = $rpc->session_set('speed-limit-up', 1024 * $this->rate);
-				$req = $rpc->torrent_set(array($tid),'speedLimitUpload',1024 * $this->rate);
+				$byterate = 1024 * $this->rate;
+				$req = $rpc->torrent_set(array($tid),'speedLimitUpload',$byterate);
 				if (!isset($req->result) || $req->result != 'success') {
-					return false;
+					$msg = $req->result;
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->torrent_get(array($tid),array('speedLimitUpload'));
+					if (!isset($req->result) || $req->result != 'success') {
+						$msg = $req->result;
+						$result = false;
+					} elseif (!empty($req->arguments->torrents)) {
+						$torrent = array_pop($req->arguments->torrents);
+						if ($torrent->speedLimitUpload != $byterate) {
+							$msg = "byterate not set correctly =".$torrent->speedLimitUpload;
+							//$req = $rpc->session_set('speed-limit-up', $byterate);
+						}
+					}
 				}
-				$msg = "setRateUpload: ".$req->result;
-				$this->logMessage($msg."\n", true);
-			}
-			$msg = "setRateUpload: bad tid $transfer ".$req->result;
-			$this->logMessage($msg."\n", true);
+			} else
+				$msg = "bad tid $transfer ".$req->result;
+			
+			$this->logMessage("setRateUpload : ".$msg."\n", true);
 			AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
-		}
-		return true;
+		//}
+		return $result;
 	}
 
 	/**
@@ -370,21 +385,39 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// set rate-field
 		$this->drate = (int) $downrate;
 		
-		if ($autosend) {
+		$msg = "$downrate ".serialize($autosend);
+		//if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
-			
+
 			$tid = getVuzeTransferRpcId($transfer);
 			if ($tid > 0) {
-				
-				$req = $rpc->torrent_set(array($tid),'speedLimitDownload',1024 * (int) $this->drate);
+				$byterate = 1024 * $this->drate;
+				$req = $rpc->torrent_set(array($tid),'speedLimitDownload',$byterate);
 				if (!isset($req->result) || $req->result != 'success') {
-					return false;
+					$msg = $req->result;
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->torrent_get(array($tid),array('speedLimitDownload'));
+					if (!isset($req->result) || $req->result != 'success') {
+						$msg = $req->result;
+						$result = false;
+					} elseif (!empty($req->arguments->torrents)) {
+						$torrent = array_pop($req->arguments->torrents);
+						if ($torrent->speedLimitDownload != $byterate) {
+							$msg = "byterate not set correctly =".$torrent->speedLimitDownload;
+							//$req = $rpc->session_set('speed-limit-down', $byterate);
+						}
+					}
 				}
-				$msg = "setRateDownload: ".$req->result;
-				$this->logMessage($msg."\n", true);
-			}
-		}
-		return true;
+			} else
+				$msg = "bad tid $transfer ".$req->result;
+			
+			$this->logMessage("setRateUpload : ".$msg."\n", true);
+			AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
+		//}
+		return $result;
+		
 	}
 
 	/**
@@ -458,7 +491,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$hashes[] = "'".strtolower($hash)."'";
 		}
 
-		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client='".$this->client."' AND hash IN (".implode(',',$hashes).")";
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND clientIN('vuzerpc','azureus') AND hash IN (".implode(',',$hashes).")";
 
 		//only update one $transfer...
 		if ($transfer != "")
@@ -592,7 +625,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$stat = $vuze->torrent_get_tf_array(array($tid));
 			return $stat;
 		} else {
-			
 			return $vuze->lastError;
 		}
 	}

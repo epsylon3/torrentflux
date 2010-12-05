@@ -131,9 +131,17 @@ class ClientHandler
 			$ch = new ClientHandlerTransmissionRPC();
 			break;
 		case "azureus":
-			//fluazu/dopal/xml_http (slow)
-			require_once('inc/classes/ClientHandler.azureus.php');
-			$ch = new ClientHandlerAzureus();
+			global $cfg;
+			if ($cfg['vuze_rpc_enable']) {
+				//vuze rpc torrents are compatible with azureus (both in vuze)
+				//so we can ask vuze for old fluazu transfers stats
+				require_once('inc/classes/ClientHandler.vuzerpc.php');
+				$ch = new ClientHandlerAzureus();
+			} else {
+				//fluazu/dopal/xml_http (slow)
+				require_once('inc/classes/ClientHandler.azureus.php');
+				$ch = new ClientHandlerAzureus();
+			}
 			break;
 		case "vuzerpc":
 			//xmwebui (json) (fast)
