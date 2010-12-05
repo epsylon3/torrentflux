@@ -251,19 +251,19 @@ if ($isSave) {                                                        /* save */
 
 			// upload-rate
 			if ($settingsNew['max_upload_rate'] != $settingsCurrent['max_upload_rate'])
-				$ch->setRateUpload($transfer, $settingsNew['max_upload_rate']);
+				$ch->setRateUpload($transfer, $settingsNew['max_upload_rate'], true);
 
 			// upload-rate
 			if ($settingsNew['max_download_rate'] != $settingsCurrent['max_download_rate'])
-				$ch->setRateDownload($transfer, $settingsNew['max_download_rate']);
+				$ch->setRateDownload($transfer, $settingsNew['max_download_rate'], true);
 
 			// runtime
 			if ($settingsNew['die_when_done'] != $settingsCurrent['die_when_done'])
-				$ch->setRuntime($transfer, $settingsNew['die_when_done']);
+				$ch->setRuntime($transfer, $settingsNew['die_when_done'], true);
 
 			// sharekill
 			if ($settingsNew['sharekill'] != $settingsCurrent['sharekill'])
-				$ch->setSharekill($transfer, $settingsNew['sharekill']);
+				$ch->setSharekill($transfer, $settingsNew['sharekill'], true);
 
 			// send command-buffer to client
 			CommandHandler::send($transfer);

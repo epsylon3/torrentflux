@@ -342,8 +342,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		$result = true;
 		
-		$msg = "$uprate ".serialize($autosend);
-		//if ($autosend) {
+		$msg = "$uprate autosend=".serialize($autosend);
+		if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
 
 			$tid = getVuzeTransferRpcId($transfer);
@@ -371,8 +371,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 				$msg = "bad tid $transfer ".$req->result;
 			
 			$this->logMessage("setRateUpload : ".$msg."\n", true);
-			AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
-		//}
+		}
+		AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
 		return $result;
 	}
 
@@ -387,9 +387,11 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		global $cfg;
 		// set rate-field
 		$this->drate = (int) $downrate;
-		
-		$msg = "$downrate ".serialize($autosend);
-		//if ($autosend) {
+
+		$result = true;
+
+		$msg = "$downrate autosend=".serialize($autosend);
+		if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
 
 			$tid = getVuzeTransferRpcId($transfer);
@@ -416,15 +418,15 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			} else
 				$msg = "bad tid $transfer ".$req->result;
 			
-			$this->logMessage("setRateUpload : ".$msg."\n", true);
-			AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
-		//}
+			$this->logMessage("setRateDownload : ".$msg."\n", true);
+		}
+		AuditAction($cfg["constants"]["debug"], $this->client."-setRateDownload : $msg.");
 		return $result;
 		
 	}
 
 	/**
-	 * set runtime of a transfer
+	 * set runtime of a transfer (die when done)
 	 *
 	 * @param $transfer
 	 * @param $runtime bool
@@ -435,10 +437,41 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// set runtime-field
 		$this->runtime = $runtime;
 		
+		$result = true;
+		$msg = "not available, $runtime autosend=".serialize($autosend);
+/* not available now
+		$msg = "$runtime ".serialize($autosend);
 		if ($autosend) {
-		//	CommandHandler::send($transfer);
+			$rpc = VuzeRPC::getInstance();
+
+			$tid = getVuzeTransferRpcId($transfer);
+			if ($tid > 0) {
+				$req = $rpc->torrent_set(array($tid),'seedlimit',$runtime);
+				if (!isset($req->result) || $req->result != 'success') {
+					$msg = $req->result;
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->torrent_get(array($tid),array('seedRatioLimit'));
+					if (!isset($req->result) || $req->result != 'success') {
+						$msg = $req->result;
+						$result = false;
+					} elseif (!empty($req->arguments->torrents)) {
+						$torrent = array_pop($req->arguments->torrents);
+						if ($torrent->seedRatioLimit != $runtime) {
+							$msg = "byterate not set correctly =".serialize($torrent->seedRatioLimit);
+							//$req = $rpc->session_set('speed-limit-down', $byterate);
+						}
+					}
+				}
+			} else
+				$msg = "bad tid $transfer ".$req->result;
+			
+			$this->logMessage("setRuntime : ".$msg."\n", true);
 		}
-		return true;
+*/
+		AuditAction($cfg["constants"]["debug"], $this->client."-setRuntime : $msg.");
+		return $result;
 	}
 
 	/**
@@ -451,13 +484,41 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 */
 	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
-		$this->sharekill = $sharekill;
+		$this->sharekill = (int) $sharekill;
 		
-		// send command to client
+		$result = true;
+		
+		$msg = "$sharekill, autosend=".serialize($autosend);
 		if ($autosend) {
-			// CommandHandler::send($transfer);
+			$rpc = VuzeRPC::getInstance();
+
+			$tid = getVuzeTransferRpcId($transfer);
+			if ($tid > 0) {
+				$req = $rpc->torrent_set(array($tid),'seedlimit',$this->sharekill);
+				if (!isset($req->result) || $req->result != 'success') {
+					$msg = $req->result;
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->torrent_get(array($tid),array('seedRatioLimit'));
+					if (!isset($req->result) || $req->result != 'success') {
+						$msg = $req->result;
+						$result = false;
+					} elseif (!empty($req->arguments->torrents)) {
+						$torrent = array_pop($req->arguments->torrents);
+						if ($torrent->seedRatioLimit != $this->sharekill) {
+							$msg = "sharekill not set correctly =".serialize($torrent->seedRatioLimit);
+							$req = $rpc->session_set('seedRatioLimit', $this->sharekill);
+						}
+					}
+				}
+			} else
+				$msg = "bad tid $transfer ".$req->result;
+			
+			$this->logMessage("setSharekill : ".$msg."\n", true);
 		}
-		return true;
+		AuditAction($cfg["constants"]["debug"], $this->client."-setSharekill : $msg.");
+		return $result;
 	}
 
 	/**
