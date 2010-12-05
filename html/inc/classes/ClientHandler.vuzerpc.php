@@ -104,7 +104,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		}
 		
 		$this->command = "echo ok";
-/*
+
 		// build the command-string
 		$content  = $cfg['user']."\n";
 		$content .= $this->savepath."\n";
@@ -118,7 +118,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$content .= $this->maxport."\n";
 		$content .= $this->maxcons."\n";
 		$content .= $this->rerequest;
-
+/*
 		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.vuzerpc/run/'.$transfer);
 
 		//$this->command .= " && ";
@@ -494,7 +494,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$hashes[] = "'".strtolower($hash)."'";
 		}
 
-		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND clientIN('vuzerpc','azureus') AND hash IN (".implode(',',$hashes).")";
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client IN ('vuzerpc','azureus') AND hash IN (".implode(',',$hashes).")";
 
 		//only update one $transfer...
 		if ($transfer != "")
@@ -503,6 +503,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$recordset = $db->Execute($sql);
 		$hashes=array();
 		$sharekills=array();
+		
 		while (list($hash, $transfer, $sharekill) = $recordset->FetchRow()) {
 			$hash = strtoupper($hash);
 			$hashes[$hash] = $transfer;
