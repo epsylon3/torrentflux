@@ -102,7 +102,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			// return
 			return false;
 		}
-
+		
+		$this->command = "echo ok";
+/*
 		// build the command-string
 		$content  = $cfg['user']."\n";
 		$content .= $this->savepath."\n";
@@ -118,6 +120,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$content .= $this->rerequest;
 
 		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.vuzerpc/run/'.$transfer);
+
 		//$this->command .= " && ";
 		//$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
 
@@ -131,7 +134,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 		if (!is_dir($cfg["path"].'.vuzerpc/run'))
 			mkdir($cfg["path"].'.vuzerpc/run',0775);
-
+*/
 		// no client needed
 		$this->state = CLIENTHANDLER_STATE_READY;
 
