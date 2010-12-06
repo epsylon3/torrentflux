@@ -74,15 +74,15 @@ class VuzeRPC {
 
 	//internal vars, dont touch them
 
-	//torrentflux config array
-	protected $cfg;
+		//torrentflux config array
+		protected $cfg;
+		//xmwebui version (from session vars)
+		protected $xmwebui_ver;
+		//vuze version (not available now)
+		protected $vuze_ver;
+		//curl token
+		protected $ch = NULL;
 
-	//xmwebui version (from session vars)
-	protected $xmwebui_ver;
-	//protected $vuze_ver;
-
-	//curl token
-	protected $ch = NULL;
 
 	/*
 	 * Constructor
@@ -90,7 +90,7 @@ class VuzeRPC {
 	public function __construct($_cfg = array()) {
 
 		if ($this->DEBUG) {
-			error_reporting(E_ALL);
+			error_reporting(E_ALL | E_STRICT);
 		}
 
 		global $cfg;
@@ -472,22 +472,25 @@ class VuzeRPC {
 		$rerequest = (int)$params[11];
 
 		//local file doesnt work before vuze 4.5.1.1-b30, waiting vuze version info
-		//$url = "file://".$this->cfg["transfer_file_path"].$transfer;
-		$url = $this->http_server()."inc/classes/VuzeRPC.php?getUrl=$transfer";
+		if ($this->vuze_ver > '4.5.1.1-B30')
+			$url = "file://".$this->cfg["transfer_file_path"].$transfer;
+		else
+			$url = $this->http_server()."inc/classes/VuzeRPC.php?getUrl=$transfer";
 
 		//set download directory
 		$this->session_set('download-dir',$save_path);
 
-		//speed limits, not the right way but waiting for torrent-set key in xmwebui
-		/*
-		$limits = array(
-			'speed-limit-up' => $max_ul,
-			'speed-limit-down' => $max_dl,
-			'speed-limit-up-enabled' => ($max_ul > 0),
-			'speed-limit-down-enabled' => ($max_dl > 0)
-		);
-		*/
-
+		if ($this->xmwebui_ver <= '0.2.8') {
+			// global speed limit, not the right way
+			$limits = array(
+				'speed-limit-up' => $max_ul,
+				'speed-limit-down' => $max_dl,
+				'speed-limit-up-enabled' => ($max_ul > 0),
+				'speed-limit-down-enabled' => ($max_dl > 0)
+			);
+			$this->session_set_multi($limits);
+		}
+		
 		/*  not supported at this time
 		$limits = array(
 			'seedRatioLimit' => ((float)$sharekill / 100.0),
