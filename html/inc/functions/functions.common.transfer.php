@@ -149,12 +149,12 @@ function resetTransferTotals($transfer, $delete = false) {
  */
 function deleteTransferData($transfer) {
 	global $cfg, $transfers;
-	require_once('inc/classes/Transmission.class.php');
-        $trans = new Transmission();
 	$msgs = array();
 
 	$isTransmissionTorrent = false;
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+		require_once('inc/classes/Transmission.class.php');
+		$trans = new Transmission();
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
 		$isTransmissionTorrent = is_array($theTorrent);
@@ -253,7 +253,7 @@ function setFilePriority($transfer) {
 	global $cfg;
 
 	$isTransmissionTorrent = false;
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$theTorrent = getTransmissionTransfer($transfer, array('hashString', 'id', 'name'));
 		$isTransmissionTorrent = is_array($theTorrent);
