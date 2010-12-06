@@ -42,7 +42,9 @@ if (isset($_REQUEST['getUrl'])) {
 	}
 }
 
-//for static calls like VuzeRPC::getInstance()
+// for static calls, first create will affect this var
+// next calls will reuse it with VuzeRPC::getInstance()
+// usefull for curl, to keep connection (no curl_close)
 $VuzeRPC_instance=NULL;
 
 class VuzeRPC {
@@ -118,8 +120,8 @@ class VuzeRPC {
 			}
 		}
 
-		global $instance;
-		$instance = & $this;
+		global $VuzeRPC_instance;
+		$VuzeRPC_instance = & $this;
 
 	}
 
@@ -177,7 +179,7 @@ class VuzeRPC {
 
 		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $postData);
 
-		curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
+		//curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($this->ch);
 		$this->curl_info = curl_getinfo($this->ch);
@@ -464,7 +466,7 @@ class VuzeRPC {
 
 		//set download directory
 		$this->session_set('download-dir',$save_path);
-		
+
 		//speed limits, not the right way but waiting for torrent-set key in xmwebui
 		/*
 		$limits = array(
@@ -474,11 +476,14 @@ class VuzeRPC {
 			'speed-limit-down-enabled' => ($max_dl > 0)
 		);
 		*/
+
+		/*  not supported at this time
 		$limits = array(
 			'seedRatioLimit' => ((float)$sharekill / 100.0),
 			'seedRatioMode' => 1
 		);
 		$this->session_set_multi($limits);
+		*/
 
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req)) {
