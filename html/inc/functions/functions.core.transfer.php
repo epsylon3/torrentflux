@@ -95,11 +95,8 @@ function getTransferClient($transfer) {
  */
 function getRunningTransferCount() {
 	global $cfg;
-	if ($cfg["transmission_rpc_enable"]) {
-		require_once('inc/functions/functions.rpc.transmission.php');
-		return getRunningTransmissionTransferCount();
-	}
 	
+	$count = 0;
 	// use pid-files-direct-access for now because all clients of currently
 	// available handlers write one. then its faster and correct meanwhile.
 	if ($dirHandle = @opendir($cfg["transfer_file_path"])) {
@@ -109,10 +106,16 @@ function getRunningTransferCount() {
 				$tCount++;
 		}
 		@closedir($dirHandle);
-		return $tCount;
-	} else {
-		return 0;
+		$count = $tCount;
 	}
+	
+	//bad, because there is also pid files for new rpc transfers
+	//if ($cfg["transmission_rpc_enable"]) {
+	//	require_once('inc/functions/functions.rpc.transmission.php');
+	//	$count += getRunningTransmissionTransferCount();
+	//}
+	
+	return $count;
 }
 
 /**

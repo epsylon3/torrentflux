@@ -152,23 +152,23 @@ function getServerStats() {
 	global $cfg;
 	$serverStats = array();
 	// speedDown
-    $speedDown = "n/a";
+	$speedDown = "n/a";
 	$speedDown = @number_format($cfg["total_download"], 2);
 	array_push($serverStats, $speedDown);
 	// speedUp
-    $speedUp = "n/a";
+	$speedUp = "n/a";
 	$speedUp =  @number_format($cfg["total_upload"], 2);
 	array_push($serverStats, $speedUp);
 	// speedTotal
-    $speedTotal = "n/a";
+	$speedTotal = "n/a";
 	$speedTotal = @number_format($cfg["total_download"] + $cfg["total_upload"], 2);
 	array_push($serverStats, $speedTotal);
 	// cons
-    $cons = "n/a";
+	$cons = "n/a";
 	$cons = @netstatConnectionsSum();
 	array_push($serverStats, $cons);
 	// freeSpace
-    $freeSpace = "n/a";
+	$freeSpace = "n/a";
 	$freeSpace = @formatFreeSpace($cfg["free_space"]);
 	array_push($serverStats, $freeSpace);
 	// loadavg
@@ -177,7 +177,7 @@ function getServerStats() {
 	array_push($serverStats, $loadavg);
 	// running
 	$running = "n/a";
-	$running = @getRunningTransferCount() + getRunningTransmissionTransferCount();
+	$running = getRunningTransferCount();
 	array_push($serverStats, $running);
 	// queued
 	$queued = FluxdQmgr::countQueuedTransfers();
@@ -197,7 +197,7 @@ function getServerStats() {
 		: 0;
 	array_push($serverStats, $percentUpload);
 	// driveSpacePercent
-    $driveSpacePercent = 0;
+	$driveSpacePercent = 0;
 	$driveSpacePercent = @getDriveSpace($cfg["path"]);
 	array_push($serverStats, $driveSpacePercent);
 	// return
