@@ -113,7 +113,7 @@ class VuzeRPC {
 		$this->cfg = & $cfg;
 		
 		if (!isset($cfg['vuzerpcinfo_xmwebui_version'])) {
-			$req = $this->session_get();
+			$req = $this->session_get("version");
 			if ($req->result == "success") {
 				$this->xmwebui_ver = $req->arguments->version;
 				$cfg['vuzerpcinfo_xmwebui_version'] = $this->xmwebui_ver;
@@ -203,8 +203,9 @@ class VuzeRPC {
 				$this->lastError = $data->result;
 				
 				//require_once('inc/functions/functions.core.php');
-				//global $cfg;
-				//AuditAction($cfg["constants"]["debug"],"VuzeRPC.$method :".$this->lastError);
+				if (function_exists('AuditAction')) {
+					AuditAction($this->cfg["constants"]["debug"],"VuzeRPC.$method :".$this->lastError);
+				}
 			}
 
 		}
@@ -218,11 +219,21 @@ class VuzeRPC {
 		return $data;
 	}
 
-	// Get Vuze data (general config)
-	public function session_get() {
-		$req = $this->vuze_rpc('session-get');
-		$this->session = $req;
-		return $this->session;
+	// Get xmwebui session variables (general config)
+	public function session_get($fields=array()) {
+		if (!empty($fields)) {
+			$args = new stdclass;
+			if (is_array($fields))
+				$args->fields = $fields;
+			else
+				$args->fields = array($fields);
+			$req = $this->vuze_rpc('session-get',$args);
+		} else {
+			//all sessions variables
+			$req = $this->vuze_rpc('session-get');
+			$this->session = $req;
+		}
+		return $req;
 	}
 
 	// Set Vuze data (general config)
@@ -700,7 +711,7 @@ class VuzeRPC {
 		$request->ts = date('U');
 		$request->status = '';
 
-		$session = $this->session_get();
+		$session = $this->session_get("version");
 		if ($session && $session->result == 'success') {
 
 			$request->torrents = $this->torrent_get_tf_array();
@@ -725,8 +736,8 @@ class VuzeRPC {
 	//VuzeRPC::isRunning()
 	public function isRunning() {
 		$instance = VuzeRPC::getInstance();
-		$session = $instance->session_get();
-		return  ($session && $session->result == 'success');
+		$req = $instance->session_get("version");
+		return  (is_object($req) && $req->result == 'success');
 	}
 
 	//VuzeRPC::transferExists($transfer)
