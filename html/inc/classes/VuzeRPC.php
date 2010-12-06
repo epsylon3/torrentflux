@@ -1,9 +1,11 @@
 <?php
 /*
-VUZE xmwebui (0.2.8) RPC interface for PHP
+VUZE xmwebui (0.2.9) RPC interface for PHP
 		by Epsylon3 on gmail.com, Nov 2010
 
 	Require PHP 5 for public/protected members
+
+	Require PHP curl extension
 
 	Require PHP 5 >= 5.2.0 for json_encode()
 
@@ -17,6 +19,7 @@ VUZE xmwebui (0.2.8) RPC interface for PHP
 
 // xmwebui seems to accept only urls and magnet to add torrents
 // so i've added that to download local torrent file.
+// edit: fixed in vuze core 4.5.1.1-B30
 if (isset($_REQUEST['getUrl'])) {
 
 	header("Content-type: application/octet-stream\n");
@@ -69,12 +72,15 @@ class VuzeRPC {
 
 	//internal vars, dont touch them
 
+	//torrentflux config array
+	protected $cfg;
+
+	//xmwebui version (from session vars)
+	protected $xmwebui_ver;
+	//protected $vuze_ver;
+
 	//curl token
 	protected $ch = NULL;
-
-	protected $torrents_path;
-	
-	protected $cfg;
 
 	/*
 	 * Constructor
@@ -102,10 +108,15 @@ class VuzeRPC {
 		if (isset($cfg['vuze_rpc_password']))
 			$this->PASS = $cfg['vuze_rpc_password'];
 
-		if (isset($cfg["transfer_file_path"]))
-			$this->torrents_path = $cfg["transfer_file_path"];
-
 		$this->cfg = & $cfg;
+		
+		if (!isset($cfg['vuzerpcinfo_xmwebui_version'])) {
+			$req = $this->session_get();
+			if ($req->result == "success") {
+				$this->xmwebui_ver = $req->arguments->version;
+				$cfg['vuzerpcinfo_xmwebui_version'] = $this->xmwebui_ver;
+			}
+		}
 
 		global $instance;
 		$instance = & $this;
@@ -148,7 +159,7 @@ class VuzeRPC {
 	}
 
 	/*
-	 * RPC Call to get Torrent List
+	 * RPC Call to xmwebui
 	 * @return false or object
 	*/
 	public function vuze_rpc($method, $arguments=NULL) {
@@ -166,6 +177,7 @@ class VuzeRPC {
 
 		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $postData);
 
+		curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 		$res = curl_exec($this->ch);
 		$this->curl_info = curl_getinfo($this->ch);
@@ -446,8 +458,8 @@ class VuzeRPC {
 		$maxcons = (int)$params[10];
 		$rerequest = (int)$params[11];
 
-		//$url = $this->http_server()."dispatcher.php?action=metafileDownload&transfer=$transfer";
-		//local file doesnt work "file:///".$this->torrents_path.$transfer;
+		//local file doesnt work before vuze 4.5.1.1-b30, waiting vuze version info
+		//$url = "file://".$this->cfg["transfer_file_path"].$transfer;
 		$url = $this->http_server()."inc/classes/VuzeRPC.php?getUrl=$transfer";
 
 		//set download directory
@@ -475,7 +487,7 @@ class VuzeRPC {
 				"speedLimitUpload" => $max_ul_kb*1024,
 				"speedLimitDownload" => $max_dl_kb*1024,
 				'downloadDir' => $save_path,
-				'seedRatioLimit' => ((float)$sharekill / 100.0), // not available in 0.2.8
+				'seedRatioLimit' => ((float)$sharekill / 100.0), // available in 0.2.9+
 				'seedRatioMode' => 1
 			);
 			$req = $this->torrent_set_multi(array($id),$values);
@@ -551,7 +563,7 @@ class VuzeRPC {
 			"errorString" => $stat->errorString,
 			'downloadDir' => $stat->downloadDir,
 			
-			'drate' => $stat->speedLimitDownload,	// 0.2.9 min (xmwebui)
+			'drate' => $stat->speedLimitDownload,	// xmwebui 0.2.9+
 			'urate' => $stat->speedLimitUpload,		// "
 			
 			'seedRatioLimit' => $stat->seedRatioLimit, // to check implementation
@@ -676,7 +688,7 @@ class VuzeRPC {
 		header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
 		header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 
-		header('Content-type: application/json; charset=UTF-8');
+		header('Content-type: application/json');
 
 		$request = new stdClass;
 		$request->datetime = date('Y-M-d H:i:s');
