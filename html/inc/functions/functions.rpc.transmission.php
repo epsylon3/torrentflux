@@ -55,6 +55,23 @@ function getTransmissionTransfer($transfer, $fields=array() ) {
 }
 
 /**
+ * set a property for a Transmission transfer identified by hash
+ *
+ * @param $transfer hash of the transfer
+ * @param array of properties to set
+ **/
+function setTransmissionTransferProperties($transfer, $fields=array()) {
+	require_once('inc/classes/Transmission.class.php');
+	$trans = new Transmission();
+	$transferId = getTransmissionTransferIdByHash($transfer);
+	
+	$response = $trans->set($transferId, $fields);
+	if ( $response['result'] !== 'success' )
+		rpc_error("Setting transfer properties failed", "", "", $response['result']);
+}
+
+
+/**
  * checks if transfer is running
  *
  * @param $transfer hash of the transfer

@@ -38,12 +38,15 @@ function transfer_init() {
 			$tmpl->setvar('transfer', $theTorrent[hashString]);
 			$tmpl->setvar('transferLabel', $transferLabel);
 			$tmpl->setvar('transfer_exists', 0);
-		//	return;
+			return;
 			
+			// We really don't need this. Only the hash is a unique way of finding transfers. So all transfer operations should use the hash.
+/*
 			//tf compatible... erk
 			$transfer = getTransferFromHash($transfer);
 			if (empty($transfer))
 				$transfer = $theTorrent[name];
+*/
 		}
 	}
 
