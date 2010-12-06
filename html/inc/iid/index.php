@@ -686,6 +686,7 @@ if ($nbMsg > 0) {
 // =============================================================================
 
 if ($isAjaxUpdate) {
+	$ajax_delim = "|#|";
 	$content = "";
 	$isFirst = true;
 	// server stats
@@ -704,7 +705,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= $ajax_delim;
 		$xferStats = Xfer::getStatsFormatted();
 		$xferCount = count($xferStats);
 		for ($i = 0; $i < $xferCount; $i++) {
@@ -718,7 +719,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= $ajax_delim;
 		$countUsers = count($cfg['users']);
 		$arOnlineUsers = array();
 		$arOfflineUsers = array();
@@ -749,7 +750,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= $ajax_delim;
 		$content .= $tmpl->grab();
 	}
 	// javascript
@@ -757,7 +758,7 @@ if ($isAjaxUpdate) {
 		if ($isFirst)
 			$isFirst = false;
 		else
-			$content .= "|";
+			$content .= $ajax_delim;
 
 		//Messages jGrowl
 		$jGrowls = "";

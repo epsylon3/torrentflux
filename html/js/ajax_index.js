@@ -161,7 +161,8 @@ function ajax_processText(content) {
 		aryCount++;
 	
 	if (aryCount > 0) {
-		var tempAry = content.split("|");
+		var ajaxBlocDelim = new RegExp('[\|\#]{3}');
+		var tempAry = content.split(ajaxBlocDelim);
 		
 		// ajax-script (jgrowl)
 		var ajaxScript = "";
