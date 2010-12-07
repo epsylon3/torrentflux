@@ -76,13 +76,13 @@ class VuzeRPC {
 
 		//torrentflux config array
 		protected $cfg;
-		//xmwebui version (from session vars)
-		protected $xmwebui_ver;
-		//vuze version (not available now)
-		protected $vuze_ver;
 		//curl token
 		protected $ch = NULL;
 
+	//xmwebui version (from session vars)
+	public $xmwebui_ver;
+	//vuze version (from session vars)
+	public $vuze_ver;
 
 	/*
 	 * Constructor
@@ -113,10 +113,13 @@ class VuzeRPC {
 		$this->cfg = & $cfg;
 		
 		if (!isset($cfg['vuzerpcinfo_xmwebui_version'])) {
-			$req = $this->session_get("version");
+			$req = $this->session_get(array("version","az-version"));
 			if ($req->result == "success") {
 				$this->xmwebui_ver = $req->arguments->version;
-				$cfg['vuzerpcinfo_xmwebui_version'] = $this->xmwebui_ver;
+				$key = "az-version";
+				$this->vuze_ver    = $req->arguments->$key;
+				$cfg['vuzerpcinfo_xmwebui_version']  = $this->xmwebui_ver;
+				$cfg['vuzerpcinfo_xmwebui_vuze_ver'] = $this->vuze_ver;
 			}
 		}
 
@@ -464,15 +467,15 @@ class VuzeRPC {
 		$max_dl_kb = (int)$params[3]; // ok
 		$max_uc = (int)$params[4];
 		$max_dc = (int)$params[5];
-		$runtime = $params[6];
-		$sharekill = (int)$params[7];
+		$diewhenok = (bool) $params[6];
+		$sharekill = (int)$params[7]; //ok, by session 4.5.1.1-B31
 		$min_port = (int)$params[8];
 		$max_port = (int)$params[9];
 		$maxcons = (int)$params[10];
 		$rerequest = (int)$params[11];
 
 		//local file doesnt work before vuze 4.5.1.1-b30, waiting vuze version info
-		if ($this->vuze_ver > '4.5.1.1-B30')
+		if ($this->vuze_ver > '4.5.1.1_CVS')
 			$url = "file://".$this->cfg["transfer_file_path"].$transfer;
 		else
 			$url = $this->http_server()."inc/classes/VuzeRPC.php?getUrl=$transfer";
@@ -489,15 +492,13 @@ class VuzeRPC {
 				'speed-limit-down-enabled' => ($max_dl > 0)
 			);
 			$this->session_set_multi($limits);
+		} else {
+			//0.2.9+
+			$limits = array(
+				'seedRatioLimit' => ((float)$sharekill / 100.0)
+			);
+			$this->session_set_multi($limits);
 		}
-		
-		/*  not supported at this time
-		$limits = array(
-			'seedRatioLimit' => ((float)$sharekill / 100.0),
-			'seedRatioMode' => 1
-		);
-		$this->session_set_multi($limits);
-		*/
 
 		$req = $this->torrent_add($url,$params);
 		if (is_object($req)) {
@@ -506,7 +507,7 @@ class VuzeRPC {
 				"speedLimitUpload" => $max_ul_kb*1024,
 				"speedLimitDownload" => $max_dl_kb*1024,
 				'downloadDir' => $save_path,
-				'seedRatioLimit' => ((float)$sharekill / 100.0), // available in 0.2.9+
+				'seedRatioLimit' => round((float)$sharekill / 100.0, 2), // need to be set by session but torrent-get value available in 0.2.9+
 				'seedRatioMode' => 1
 			);
 			$req = $this->torrent_set_multi(array($id),$values);
@@ -585,16 +586,15 @@ class VuzeRPC {
 			'drate' => $stat->speedLimitDownload,	// xmwebui 0.2.9+
 			'urate' => $stat->speedLimitUpload,		// "
 			
-			'seedRatioLimit' => $stat->seedRatioLimit, // to check implementation
+			'seedRatioLimit' => round($stat->seedRatioLimit, 2), // xmwebui 0.2.9+
 			'seedRatioMode' => $stat->seedRatioMode // seems = 1
 		);
 
-		//'cons' => $stat->peersGettingFromUs + $stat->peersSendingToUs
 		if ((int)$stat->totalSize > 0) {
-			$tfStat['percentDone'] = round(100.0 * ($stat->downloadedEver / $stat->totalSize) ,1);
+			$tfStat['percentDone'] = round(100.0 * ($stat->downloadedEver / $stat->totalSize) ,2);
 			if ($tfStat['percentDone'] > 100)
 				$tfStat['percentDone'] = 100;
-			$tfStat['sharing'] = round(100.0 * ($stat->uploadedEver / $stat->totalSize) ,1);
+			$tfStat['sharing'] = round(100.0 * ($stat->uploadedEver / $stat->totalSize) ,2);
 		}
 
 		return $tfStat;

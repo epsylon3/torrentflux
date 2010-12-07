@@ -438,8 +438,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$this->runtime = $runtime;
 		
 		$result = true;
-		$msg = "not available, $runtime autosend=".serialize($autosend);
-/* not available now
+		$msg = "ignoring $runtime autosend=".serialize($autosend);
+/* not needed, SeedRatioLimit != 0.0 will do it
 		$msg = "$runtime ".serialize($autosend);
 		if ($autosend) {
 			$rpc = VuzeRPC::getInstance();
@@ -470,6 +470,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$this->logMessage("setRuntime : ".$msg."\n", true);
 		}
 */
+		global $cfg;
 		AuditAction($cfg["constants"]["debug"], $this->client."-setRuntime : $msg.");
 		return $result;
 	}
@@ -478,13 +479,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 * set sharekill of a transfer
 	 *
 	 * @param $transfer
-	 * @param $sharekill int
+	 * @param $sharekill numeric (100 = 100%)
 	 * @param $autosend
 	 * @return boolean
 	 */
 	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
-		$this->sharekill = (int) $sharekill;
+		$this->sharekill = round(floatval($sharekill) / 100, 2);
 		
 		$result = true;
 		
@@ -494,7 +495,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 			$tid = getVuzeTransferRpcId($transfer);
 			if ($tid > 0) {
-				$req = $rpc->torrent_set(array($tid),'seedlimit',$this->sharekill);
+				$req = $rpc->torrent_set(array($tid),'seedRatioLimit',$this->sharekill);
 				if (!isset($req->result) || $req->result != 'success') {
 					$msg = $req->result;
 					$result = false;
@@ -506,8 +507,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						$result = false;
 					} elseif (!empty($req->arguments->torrents)) {
 						$torrent = array_pop($req->arguments->torrents);
-						if ($torrent->seedRatioLimit != $this->sharekill) {
-							$msg = "sharekill not set correctly =".serialize($torrent->seedRatioLimit);
+						if (round($torrent->seedRatioLimit,2) != round($this->sharekill,2)) {
+							// $msg = "sharekill not set correctly ".serialize($torrent->seedRatioLimit);
+							//if fact, we always need to set it globally (vuze limitation)
+							$msg = "sharekill set by session ".round($this->sharekill,2);
 							$req = $rpc->session_set('seedRatioLimit', $this->sharekill);
 						}
 					}
@@ -517,7 +520,55 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			
 			$this->logMessage("setSharekill : ".$msg."\n", true);
 		}
+		global $cfg;
 		AuditAction($cfg["constants"]["debug"], $this->client."-setSharekill : $msg.");
+		//AuditAction($cfg["constants"]["debug"], $rpc->vuze_ver." ".$rpc->xmwebui_ver);
+		return $result;
+	}
+
+	/**
+	 * to reset upload total of a torrent, to seed more because sharekill is global
+	 *
+	 * @param $transfer
+	 * @param $up_total int
+	 * @param $autosend
+	 * @return boolean
+	 */
+	function setUploadedTotal($transfer, $up_total, $autosend = false) {
+
+		$result = true;
+		$up_total = (int) $up_total;
+		
+		$msg = "$sharekill, autosend=".serialize($autosend);
+		if ($autosend) {
+			$rpc = VuzeRPC::getInstance();
+
+			$tid = getVuzeTransferRpcId($transfer);
+			if ($tid > 0) {
+				$req = $rpc->torrent_set(array($tid),'uploadedEver',$up_total);
+				if (!isset($req->result) || $req->result != 'success') {
+					$msg = $req->result;
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->torrent_get(array($tid),array('uploadedEver'));
+					if (!isset($req->result) || $req->result != 'success') {
+						$msg = $req->result;
+						$result = false;
+					} elseif (!empty($req->arguments->torrents)) {
+						$torrent = array_pop($req->arguments->torrents);
+						if ($torrent->uploadedEver != $up_total) {
+							$msg = "uploadedEver not set correctly ".serialize($torrent->uploadedEver);
+						}
+					}
+				}
+			} else
+				$msg = "bad tid $transfer ".$req->result;
+			
+			$this->logMessage("setUploadedTotal : ".$msg."\n", true);
+		}
+		global $cfg;
+		AuditAction($cfg["constants"]["debug"], $this->client."-setUploadedTotal : $msg.");
 		return $result;
 	}
 
