@@ -115,10 +115,10 @@ function updateStatFiles($bShowMissing=false) {
 		if ($sf->running) {
 
 			$sharebase = (int) $sharekills[$hash];
-			$sharekill = (int) round(floatval($t['seedRatioLimit']) * 100);
+			//$sharekill = (int) round(floatval($t['seedRatioLimit']) * 100);
 	
-			if ($sharebase > 0 && (int) $sharekill != (int) $sf->seedlimit) {
-				AuditAction($cfg["constants"]["debug"], $client.": changed .stat sharekill ".$sf->seedlimit." to $sharebase, $transfer.");
+			if ($sharebase > 0 && (int) $sharebase != (int) $sf->seedlimit) {
+				AuditAction($cfg["constants"]["debug"], $client.": changed .stat sharekill ".$sf->seedlimit." to $sharebase (from db), $transfer.");
 				$sf->seedlimit = $sharebase;
 			}
 
