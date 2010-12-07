@@ -39,50 +39,50 @@ class Xfer
 {
 	// public fields
 
-    // stats-arrays
-    var $xfer = array();
-    var $xfer_total = array();
+	// stats-arrays
+	var $xfer = array();
+	var $xfer_total = array();
 
-    // newday-flag
-    var $xfer_newday = 0;
+	// newday-flag
+	var $xfer_newday = 0;
 
 	// =========================================================================
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return Xfer
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return Xfer
+	 */
+	function getInstance() {
 		global $instanceXfer;
 		// initialize if needed
 		if (!isset($instanceXfer))
 			Xfer::initialize();
 		return $instanceXfer;
-    }
+	}
 
-    /**
-     * initialize Xfer.
-     */
-    function initialize() {
-    	global $instanceXfer;
-    	// create instance
-    	if (!isset($instanceXfer))
-    		$instanceXfer = new Xfer();
-    }
+	/**
+	 * initialize Xfer.
+	 */
+	function initialize() {
+		global $instanceXfer;
+		// create instance
+		if (!isset($instanceXfer))
+			$instanceXfer = new Xfer();
+	}
 
-    /**
-     * init Xfer (login-task).
-     */
-    function init() {
-    	global $db;
+	/**
+	 * init Xfer (login-task).
+	 */
+	function init() {
+		global $db;
 		// if xfer is empty, insert a zero record for today
 		$xferRecord = $db->GetRow("SELECT 1 FROM tf_xfer");
 		if (empty($xferRecord))
 			$db->Execute("INSERT INTO tf_xfer (user_id,date) values ('',".$db->DBDate(time()).")");
-    }
+	}
 
 	/**
 	 * gets new-day
@@ -90,18 +90,18 @@ class Xfer
 	 * @return int
 	 */
 	function getNewday() {
-    	global $instanceXfer;
-    	return (isset($instanceXfer))
-    		? $instanceXfer->xfer_newday
-    		: 0;
+		global $instanceXfer;
+		return (isset($instanceXfer))
+			? $instanceXfer->xfer_newday
+			: 0;
 	}
 
 	/**
 	 * sets new-day
 	 */
 	function setNewday() {
-    	global $instanceXfer, $db;
- 		// initialize if needed
+		global $instanceXfer, $db;
+		// initialize if needed
 		if (!isset($instanceXfer))
 			Xfer::initialize();
 		// set new-day
@@ -109,36 +109,36 @@ class Xfer
 		$instanceXfer->xfer_newday = !$db->GetOne('SELECT 1 FROM tf_xfer WHERE date = '.$db->DBDate(time()));
 	}
 
-    /**
-     * get Stats
-     *
-     * @return array
-     */
-    function getStats() {
-    	global $instanceXfer;
-    	return (isset($instanceXfer))
-    		? $instanceXfer->xfer
-    		: array();
-    }
+	/**
+	 * get Stats
+	 *
+	 * @return array
+	 */
+	function getStats() {
+		global $instanceXfer;
+		return (isset($instanceXfer))
+			? $instanceXfer->xfer
+			: array();
+	}
 
-    /**
-     * get Stats Total
-     *
-     * @return array
-     */
-    function getStatsTotal() {
-    	global $instanceXfer;
-    	return (isset($instanceXfer))
-    		? $instanceXfer->xfer_total
-    		: array();
-    }
+	/**
+	 * get Stats Total
+	 *
+	 * @return array
+	 */
+	function getStatsTotal() {
+		global $instanceXfer;
+		return (isset($instanceXfer))
+			? $instanceXfer->xfer_total
+			: array();
+	}
 
-    /**
-     * get Stats Formatted
-     *
-     * @return array
-     */
-    function getStatsFormatted() {
+	/**
+	 * get Stats Formatted
+	 *
+	 * @return array
+	 */
+	function getStatsFormatted() {
 		global $cfg, $instanceXfer;
 		return array(
 			/* global */
@@ -168,7 +168,7 @@ class Xfer
 				? @formatFreeSpace($instanceXfer->xfer[$cfg["user"]]['day']['total'] / 1048576)
 				: 0
 		);
-    }
+	}
 
 	/**
 	 * reset Xfer-Stats
@@ -250,7 +250,7 @@ class Xfer
 	 */
 	function update1($entry, $transferowner, $client, $hash, $uptotal, $downtotal) {
 		global $instanceXfer;
- 		// initialize if needed
+		// initialize if needed
 		if (!isset($instanceXfer))
 			Xfer::initialize();
 		// call instance-method
@@ -262,7 +262,7 @@ class Xfer
 	 */
 	function update2() {
 		global $instanceXfer;
- 		// initialize if needed
+		// initialize if needed
 		if (!isset($instanceXfer))
 			Xfer::initialize();
 		// call instance-method
@@ -291,11 +291,11 @@ class Xfer
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function Xfer() {
-    }
+	/**
+	 * ctor
+	 */
+	function Xfer() {
+	}
 
 	// =========================================================================
 	// public methods
@@ -353,7 +353,7 @@ class Xfer
 		$this->_getUsage($day_start, 'day');
 	}
 
-    // =========================================================================
+	// =========================================================================
 	// private methods
 	// =========================================================================
 
@@ -386,7 +386,7 @@ class Xfer
 		@ $this->xfer[$user][$period]['download'] += $download;
 		@ $this->xfer[$user][$period]['upload'] += $upload;
 		@ $this->xfer[$user][$period]['total'] += ($download + $upload);
-		
+
 		if (!isset($this->xfer_total[$period]))
 			$this->xfer_total[$period] = array();
 		$this->xfer_total[$period]['download'] = $download + (int) @ $this->xfer_total[$period]['download'];
