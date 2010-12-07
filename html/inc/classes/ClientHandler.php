@@ -436,9 +436,14 @@ class ClientHandler
 	 */
 	function getTransferTotal($transfer) {
 		global $db, $transfers;
+		
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+		
 		$retVal = array();
 		// transfer from db
-		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr(getTransferHash($transfer));
+		$uid = (int) GetUID($this->owner);
+		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($transfer)." AND uid IN(0, $uid)";
 		$result = $db->Execute($sql);
 		$row = $result->FetchRow();
 		if (empty($row)) {
@@ -947,11 +952,15 @@ class ClientHandler
 	 */
 	function _updateTotals() {
 		global $db;
+		
+		$this->_setVarsForTransfer($transfer);
+		
 		$tid = getTransferHash($this->transfer);
 		$transferTotals = $this->getTransferTotal($this->transfer);
-		$sql = ($db->GetOne("SELECT 1 FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)))
-			? "UPDATE tf_transfer_totals SET uptotal = ".$db->qstr($transferTotals["uptotal"]).", downtotal = ".$db->qstr($transferTotals["downtotal"])." WHERE tid = ".$db->qstr($tid)
-			: "INSERT INTO tf_transfer_totals (tid,uptotal,downtotal) VALUES (".$db->qstr($tid).",".$db->qstr($transferTotals["uptotal"]).",".$db->qstr($transferTotals["downtotal"]).")";
+		$uid = (int) GetUID($this->owner);
+		$sql = ($db->GetOne("SELECT 1 FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)." AND uid = $uid"))
+			? "UPDATE tf_transfer_totals SET uptotal = ".$db->qstr($transferTotals["uptotal"]).", downtotal = ".$db->qstr($transferTotals["downtotal"])." WHERE tid = ".$db->qstr($tid)." AND uid = $uid"
+			: "INSERT INTO tf_transfer_totals (tid,uid,uptotal,downtotal) VALUES (".$db->qstr($tid).",".$db->qstr($uid).",".$db->qstr($transferTotals["uptotal"]).",".$db->qstr($transferTotals["downtotal"]).")";
 		$db->Execute($sql);
 		// set transfers-cache
 		cacheTransfersSet();

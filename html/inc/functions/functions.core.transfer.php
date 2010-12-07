@@ -109,11 +109,11 @@ function getRunningTransferCount() {
 		$count = $tCount;
 	}
 	
-	//bad, because there is also pid files for new rpc transfers
-	//if ($cfg["transmission_rpc_enable"]) {
-	//	require_once('inc/functions/functions.rpc.transmission.php');
-	//	$count += getRunningTransmissionTransferCount();
-	//}
+	//bad, because there is also pid files for new rpc transfers, but
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$count += getRunningTransmissionTransferCount();
+	}
 	
 	return $count;
 }
@@ -209,10 +209,38 @@ function getTransferHash($transfer) {
 	}
 }
 
+/**
+ * gets name of a torrent as string
+ *
+ * @param $transfer hash of the torrent
+ * @return string $transfer name
+ */
 function getTransferFromHash($hash) {
-	global $cfg, $db, $transfers;
+	global $transfers, $db;
+	foreach ($transfers as $transfer => $t) {
+		if ($t['hash'] == $hash)
+			return $transfer;
+	}
 	$transfer = $db->GetOne("SELECT transfer FROM tf_transfers WHERE hash = ".$db->qstr($hash)."");
 	return $transfer;
+}
+
+/**
+ * gets owner id of a torrent
+ *
+ * @param $transfer name of the torrent
+ * @return int
+ */
+function getTransferOwnerID($transfer, $default=0) {
+	global $transfers, $db;
+	if (isset($transfers['owner'][$transfer])) {
+		$owner = $transfers['owner'][$transfer];
+		$uid = (int) GetUID($owner);
+	} else {
+		$uid = (int) $db->GetOne("SELECT uid FROM tf_transfers_totals WHERE tid = ".$db->qstr($hash)." AND uid > 0");
+	}
+	if ($uid == 0) $tuid = $default;
+	return $tuid;
 }
 
 /**
@@ -921,7 +949,7 @@ function injectTransfer($transfer) {
 }
 
 /**
- * get Owner
+ * get Owner (username)
  *
  * @param $transfer
  * @return string
@@ -931,11 +959,19 @@ function getOwner($transfer) {
 	if (isset($transfers['owner'][$transfer])) {
 		return $transfers['owner'][$transfer];
 	} else {
-		// Check log to see what user has a history with this file
-		$transfers['owner'][$transfer] = $db->GetOne("SELECT user_id FROM tf_log WHERE file=".$db->qstr($transfer)." AND (action=".$db->qstr($cfg["constants"]["file_upload"])." OR action=".$db->qstr($cfg["constants"]["url_upload"])." OR action=".$db->qstr($cfg["constants"]["reset_owner"]).") ORDER BY time DESC");
-		return ($transfers['owner'][$transfer] != "")
-			? $transfers['owner'][$transfer]
-			: resetOwner($transfer); // try and get the owner from the stat file;
+		$uid = (int) getTransferOwnerID($transfer);
+		if ($uid > 0) {
+			//fast method
+			return GetUsername($uid);
+		} else {
+			//slow, needed for old transfers (before TFNG)
+			
+			// Check log to see what user has a history with this file
+			$transfers['owner'][$transfer] = $db->GetOne("SELECT user_id FROM tf_log WHERE file=".$db->qstr($transfer)." AND (action=".$db->qstr($cfg["constants"]["file_upload"])." OR action=".$db->qstr($cfg["constants"]["url_upload"])." OR action=".$db->qstr($cfg["constants"]["reset_owner"]).") ORDER BY time DESC");
+			return ($transfers['owner'][$transfer] != "")
+				? $transfers['owner'][$transfer]
+				: resetOwner($transfer); // try and get the owner from the stat file;
+		}
 	}
 }
 

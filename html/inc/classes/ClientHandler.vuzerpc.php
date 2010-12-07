@@ -264,6 +264,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 */
 	function getTransferCurrent($transfer) {
 		global $db, $transfers;
+		
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+		
 		$retVal = array();
 		// transfer from stat-file
 		$sf = new StatFile($transfer);
@@ -271,7 +275,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$retVal["downtotal"] = $sf->downtotal;
 		// transfer from db
 		$torrentId = getTransferHash($transfer);
-		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId);
+		$uid = (int) GetUID($this->owner);
+		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId)." AND uid=$uid ORDER BY uid DESC";
 		$result = $db->Execute($sql);
 		$row = $result->FetchRow();
 		if (!empty($row)) {

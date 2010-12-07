@@ -110,4 +110,28 @@ function GetUID($user) {
 	return (int) @ $cfg['user_uids'][$user];
 }
 
+/**
+ * Get Username
+ *
+ * @return string
+ */
+function GetUsername($uid) {
+	global $cfg, $db;
+	
+	if (empty($cfg['user_uids'])) {
+		$lst = $db->GetAll("SELECT uid,user_id FROM tf_users");
+		$uids = array();
+		foreach ($lst as $row) {
+			$uids[$row['user_id']] = $row['uid'];
+		}
+		$cfg['user_uids'] = $uids;
+	}
+	
+	foreach ($cfg['user_uids'] as $name => $id) {
+		if ($id == $uid) {
+			return $name;
+		}
+	}
+}
+
 ?>
