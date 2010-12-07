@@ -196,7 +196,7 @@ class Xfer
 	function getUsage($username = "") {
 		global $db;
 		// sql-state
-		$sql = "SELECT SUM(download) AS download, SUM(upload) AS upload FROM tf_xfer";
+		$sql = "SELECT SUM(download / 1048576) AS download, SUM(upload / 1048576) AS upload FROM tf_xfer";
 		if ($username != "")
 			$sql .= " WHERE user_id LIKE ".$db->qstr($username);
 		// exec state
@@ -207,7 +207,7 @@ class Xfer
 		$row = $result->FetchRow();
 		$rtnValue = "0";
 		if (!empty($row))
-			$rtnValue = @formatFreeSpace($row["download"] / 1048576 + $row["upload"] / 1048576);
+			$rtnValue = @formatFreeSpace($row["download"] + $row["upload"]);
 		// return
 		return $rtnValue;
 	}
@@ -325,12 +325,12 @@ class Xfer
 			$this->xfer_newday = 2;
 			$lastDate = $db->GetOne('SELECT date FROM tf_xfer ORDER BY date DESC');
 			$sql = ($db->GetOne("SELECT 1 FROM tf_xfer WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->qstr($lastDate)))
-				? "UPDATE tf_xfer SET download = download+".@((int) $transferTotalsCurrent["downtotal"]).", upload = upload+".@((int) $transferTotalsCurrent["uptotal"])." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->qstr($lastDate)
-				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->qstr($lastDate).",".@((int) $transferTotalsCurrent["downtotal"]).",".@((int) $transferTotalsCurrent["uptotal"]).")";
+				? "UPDATE tf_xfer SET download = download+".@((float) $transferTotalsCurrent["downtotal"]).", upload = upload+".@((float) $transferTotalsCurrent["uptotal"])." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->qstr($lastDate)
+				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->qstr($lastDate).",".@((float) $transferTotalsCurrent["downtotal"]).",".@((float) $transferTotalsCurrent["uptotal"]).")";
 			$db->Execute($sql);
 			$sql = ($db->GetOne("SELECT 1 FROM tf_xfer WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->DBDate(time())))
-				? "UPDATE tf_xfer SET download = download-".@((int) $transferTotalsCurrent["downtotal"]).", upload = upload-".@((int) $transferTotalsCurrent["uptotal"])." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->DBDate(time())
-				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->DBDate(time()).",".@((int) $transferTotalsCurrent["downtotal"]).",".@((int) $transferTotalsCurrent["uptotal"]).")";
+				? "UPDATE tf_xfer SET download = download-".@((float) $transferTotalsCurrent["downtotal"]).", upload = upload-".@((float) $transferTotalsCurrent["uptotal"])." WHERE user_id = ".$db->qstr($transferowner)." AND date = ".$db->DBDate(time())
+				: "INSERT INTO tf_xfer (user_id,date,download,upload) values (".$db->qstr($transferowner).",".$db->DBDate(time()).",".@((float) $transferTotalsCurrent["downtotal"]).",".@((float) $transferTotalsCurrent["uptotal"]).")";
 			$db->Execute($sql);
 		}
 	}
@@ -381,17 +381,20 @@ class Xfer
 	 * @param $period
 	 */
 	function _sumUsage($user, $download, $upload, $period) {
+		
+		//use (float) to handle big values
+		
 		if (!isset($this->xfer[$user][$period]))
 			$this->xfer[$user][$period] = array();
-		@ $this->xfer[$user][$period]['download'] += $download;
-		@ $this->xfer[$user][$period]['upload'] += $upload;
-		@ $this->xfer[$user][$period]['total'] += ($download + $upload);
+		@ $this->xfer[$user][$period]['download'] += (float) $download;
+		@ $this->xfer[$user][$period]['upload'] += (float) $upload;
+		@ $this->xfer[$user][$period]['total'] += (float) ($download + $upload);
 
 		if (!isset($this->xfer_total[$period]))
 			$this->xfer_total[$period] = array();
-		$this->xfer_total[$period]['download'] = $download + (int) @ $this->xfer_total[$period]['download'];
-		$this->xfer_total[$period]['upload'] = $upload + (int) @ $this->xfer_total[$period]['upload'];
-		$this->xfer_total[$period]['total'] = ($download + $upload) + (int) @ $this->xfer_total[$period]['total'];
+		$this->xfer_total[$period]['download'] = $download + (float) @ $this->xfer_total[$period]['download'];
+		$this->xfer_total[$period]['upload'] = $upload + (float) @ $this->xfer_total[$period]['upload'];
+		$this->xfer_total[$period]['total'] = ($download + $upload) + (float) @ $this->xfer_total[$period]['total'];
 	}
 
 }
