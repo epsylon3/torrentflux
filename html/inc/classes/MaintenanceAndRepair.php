@@ -634,15 +634,34 @@ class MaintenanceAndRepair
 					$this->_outputMessage("done.\n");
 				} elseif (!empty($tname)) {
 					// output
-					$this->_outputMessage("cannot get uid for ".$tname." .\n");
+					$this->_outputMessage("cannot get uid for ".$tname.".\n");
 				}
 				/* else {
 					// old transfers (for global stats)
-					$this->_outputMessage("cannot get uid for hash ".$tid." .\n");
+					$this->_outputMessage("cannot get uid for hash ".$tid.".\n");
 				}
 				*/
 			}
 		}
+		
+		//xfer delete TB day values
+		$sql = "SELECT user_id, date FROM tf_xfer WHERE download > '1000000000000' or upload > '1000000000000'";
+		$recordset = $db->Execute($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);
+		$rc = $recordset->RecordCount();
+		if ($rc > 0) {
+			$this->_outputMessage("updating xfer which has TeraBytes day count\n");
+			$this->_countProblems += $rc;
+			while (list($username, $date) = $recordset->FetchRow()) {
+					//if duplicates, delete old uid=0
+					$sql = "DELETE FROM tf_xfer WHERE user_id = ".$db->qstr($username)." AND date=".$db->qstr($date);
+					$db->Execute($sql);
+					
+					$this->_countFixed++;
+			}
+			$this->_outputMessage("done (".$this->_countFixed.").\n");
+		}
+		
 		
 		// prune db
 		$this->_maintenanceDatabasePrune();
