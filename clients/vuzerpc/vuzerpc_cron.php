@@ -45,7 +45,7 @@ function updateStatFiles($bShowMissing=false) {
 	//convertTime
 	require_once("inc/functions/functions.core.php");
 
-	$vuze = VuzeRPC::getInstance();
+	$vuze = VuzeRPC::getInstance($cfg);
 
 	// do special-pre-start-checks
 	if (!VuzeRPC::isRunning()) {
@@ -114,6 +114,16 @@ function updateStatFiles($bShowMissing=false) {
 
 		if ($sf->running) {
 
+			$sharebase = (int) $sharekills[$hash];
+			$sharekill = (int) round(floatval($t['seedRatioLimit']) * 100);
+	
+			if ($sharebase > 0 && $sharekill != (int) $sf->sharekill) {
+				AuditAction($cfg["constants"]["debug"], $client.": changed .stat sharekill to $sharekill $transfer.");
+				$sf->sharekill = $sharebase;
+			}
+
+			$max_share = max($sharebase, $sharekill);
+
 			if ($t['eta'] > 0) {
 				$sf->time_left = convertTime($t['eta']);
 			}
@@ -131,9 +141,9 @@ function updateStatFiles($bShowMissing=false) {
 			if ($t['peers'] >= 0)
 				$sf->peers = $t['peers'];
 
-			if ((float)$t['speedDown'] > 0.0)
+			if ((float)$t['speedDown'] >= 0.0)
 				$sf->down_speed = formatBytesTokBMBGBTB($t['speedDown'])."/s";
-			if ((float)$t['speedUp'] > 0.0)
+			if ((float)$t['speedUp'] >= 0.0)
 				$sf->up_speed = formatBytesTokBMBGBTB($t['speedUp'])."/s";
 
 			if ($t['status'] == 8) {
@@ -176,7 +186,13 @@ function updateStatFiles($bShowMissing=false) {
 	}
 	$nb = count($tfs);
 	echo " updated $nbUpdate/$nb stat files.\n";
-	
+
+	if (isset($max_share) && $max_share != $sharekill) {
+		//set vuze global sharekill to max sharekill value
+		$vuze->session_set('seedRatioLimit', $max_share / 100);
+		AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill to $max_share.");
+	}
+
 	if ($bShowMissing) return $missing;
 //	echo $vuze->lastError."\n";
 }

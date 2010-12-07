@@ -99,18 +99,6 @@ if ($sf->running == 1) {
 	// sharekill
 	$tmpl->setvar('sharekill', ($ch->sharekill != 0) ? $ch->sharekill.'%' : '&#8734');
 
-	if ($ch->useRPC) {
-		$stat = $ch->monitorTransfer($transfer);
-		if (!is_array($stat)) {
-			$monitoring = $stat;
-		} else {
-			global $transfers;
-			$settings = $transfers['settings'][$transfer];
-			$monitoring = "<pre>".print_r($stat,true)."</pre>"."<pre>".print_r($settings,true)."</pre>";
-		}
-		$tmpl->setvar('realtime_monitor', $monitoring);
-	}
-
 } else {
 
 	// running
@@ -136,6 +124,18 @@ if ($sf->running == 1) {
 
 	// sharekill
 	$tmpl->setvar('sharekill', "");
+}
+
+if ($ch->useRPC) {
+	$stat = $ch->monitorTransfer($transfer);
+	if (!is_array($stat)) {
+		$monitoring = $stat;
+	} else {
+		global $transfers;
+		$settings = $transfers['settings'][$transfer];
+		$monitoring = "<pre>".print_r($stat,true)."</pre>"."<pre>".print_r($settings,true)."</pre>";
+	}
+	$tmpl->setvar('realtime_monitor', $monitoring);
 }
 
 // percent and eta
