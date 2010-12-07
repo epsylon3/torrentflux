@@ -133,7 +133,8 @@ function resetTransferTotals($transfer, $delete = false) {
 		$sf->write();
 	}
 	// reset in db
-	$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid);
+	$uid = (int) getTransferOwnerID($transfer);
+	$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)." AND uid=$uid";
 	$db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
 	// set transfers-cache

@@ -170,13 +170,18 @@ class ClientHandlerTransmission extends ClientHandler
 	function getTransferCurrent($transfer) {
 		global $db, $transfers;
 		$retVal = array();
+		
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+		
 		// transfer from stat-file
 		$sf = new StatFile($transfer);
 		$retVal["uptotal"] = $sf->uptotal;
 		$retVal["downtotal"] = $sf->downtotal;
 		// transfer from db
 		$torrentId = getTransferHash($transfer);
-		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId);
+		$uid = (int) GetUID($this->owner);
+		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId)." AND uid IN(0, $uid) ORDER BY uid DESC";
 		$result = $db->Execute($sql);
 		$row = $result->FetchRow();
 		if (!empty($row)) {

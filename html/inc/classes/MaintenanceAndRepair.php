@@ -559,6 +559,7 @@ class MaintenanceAndRepair
 				}
 			}
 		}
+		
 		// output + log
 		if ($this->_countProblems == 0) {
 			// output
@@ -598,6 +599,40 @@ class MaintenanceAndRepair
 			// output
 			$this->_outputMessage("no problems found.\n");
 		}
+		
+		// null uid
+		$sql = "SELECT tid FROM tf_transfer_totals WHERE uid = 0";
+		$recordset = $db->Execute($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);
+		$rc = $recordset->RecordCount();
+		if ($rc > 0) {
+			$this->_countProblems += $rc;
+			while (list($tid) = $recordset->FetchRow()) {
+				// t has no datapath, update
+				$this->_outputMessage("updating tf_transfer_totals which has empty uid : ".$tname."\n");
+				// get datapath
+				$tname = getTransferFromHash($tid);
+				$uid = (int) getTransferOwnerID($tname);
+				// update
+				if ($uid > 0) {
+					$sql = "UPDATE tf_transfer_totals SET uid = $uid WHERE tid = ".$db->qstr($tid)." AND uid=0";
+					$db->Execute($sql);
+					
+					//if duplicates, delete old uid=0
+					$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)." AND uid=0";
+					$db->Execute($sql);
+					
+					$this->_countFixed++;
+					
+					// output
+					$this->_outputMessage("done.\n");
+				} else {
+					// output
+					$this->_outputMessage("cannot get uid for ".$tname.".\n");
+				}
+			}
+		}
+		
 		// prune db
 		$this->_maintenanceDatabasePrune();
 		/* done */

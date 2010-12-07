@@ -217,9 +217,12 @@ function getTransferHash($transfer) {
  */
 function getTransferFromHash($hash) {
 	global $transfers, $db;
-	foreach ($transfers as $transfer => $t) {
-		if ($t['hash'] == $hash)
+	foreach ($transfers['settings'] as $transfer => $t) {
+		if (isset($t['hash']) && $t['hash'] == $hash)
 			return $transfer;
+		if (!isset($t['hash'])) {
+			var_dump($t); die;
+		}
 	}
 	$transfer = $db->GetOne("SELECT transfer FROM tf_transfers WHERE hash = ".$db->qstr($hash)."");
 	return $transfer;
@@ -237,8 +240,10 @@ function getTransferOwnerID($transfer, $default=0) {
 		$owner = $transfers['owner'][$transfer];
 		$uid = (int) GetUID($owner);
 	} else {
+		$hash = getTransferHash($transfer);
 		$uid = (int) $db->GetOne("SELECT uid FROM tf_transfers_totals WHERE tid = ".$db->qstr($hash)." AND uid > 0");
 	}
+	$tuid = $uid;
 	if ($uid == 0) $tuid = $default;
 	return $tuid;
 }
