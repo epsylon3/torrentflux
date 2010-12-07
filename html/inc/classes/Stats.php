@@ -181,7 +181,7 @@ class Stats
 	 */
 	function instance_processRequest() {
 		global $cfg, $db;
-
+		
 		// type-switch
 		switch ($this->_type) {
 			case "all":
@@ -361,6 +361,8 @@ class Stats
 				$this->_content .= '</tfbstats>'."\n";
 				break;
 		}
+		// no nbsp in XML
+		$this->_content = str_replace('&nbsp;',' ',$this->_content);
 		// send content
 		$this->_sendContent("text/xml", "stats.xml", $this->_compressed, $this->_attachment);
 	}
@@ -459,8 +461,11 @@ class Stats
 		// end document
 		$this->_content .= " </channel>\n";
 		$this->_content .= "</rss>";
+		// no nbsp in XML
+		$this->_content = str_replace('&nbsp;',' ',$this->_content);
 		// send content
 		$this->_sendContent("text/xml", "stats.xml", $this->_compressed, $this->_attachment);
+
 	}
 
 	/**
