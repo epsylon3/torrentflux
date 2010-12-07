@@ -381,14 +381,16 @@ class Xfer
 	 * @param $period
 	 */
 	function _sumUsage($user, $download, $upload, $period) {
-		
-		//use (float) to handle big values
-		
+
+		if (!isset($this->xfer[$user]))
+			$this->xfer[$user] = array();
 		if (!isset($this->xfer[$user][$period]))
 			$this->xfer[$user][$period] = array();
-		@ $this->xfer[$user][$period]['download'] += (float) $download;
-		@ $this->xfer[$user][$period]['upload'] += (float) $upload;
-		@ $this->xfer[$user][$period]['total'] += (float) ($download + $upload);
+
+		//use (float) to handle big values
+		$this->xfer[$user][$period]['download'] += (float) $download;
+		$this->xfer[$user][$period]['upload'] += (float) $upload;
+		$this->xfer[$user][$period]['total'] += (float) ($download + $upload);
 
 		if (!isset($this->xfer_total[$period]))
 			$this->xfer_total[$period] = array();

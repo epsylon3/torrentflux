@@ -88,7 +88,7 @@ function updateStatFiles($bShowMissing=false) {
 				AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
 			} else {
 				// log
-				AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill stopped $transfer");
+				AuditAction($cfg["constants"]["stop_transfer"], $client.": sharekill (".$t['sharing'].") stopped $transfer");
 				// flag the transfer as stopped (in db)
 				stopTransferSettings($transfer);
 			}
@@ -117,9 +117,9 @@ function updateStatFiles($bShowMissing=false) {
 			$sharebase = (int) $sharekills[$hash];
 			$sharekill = (int) round(floatval($t['seedRatioLimit']) * 100);
 	
-			if ($sharebase > 0 && $sharekill != (int) $sf->sharekill) {
-				AuditAction($cfg["constants"]["debug"], $client.": changed .stat sharekill to $sharekill $transfer.");
-				$sf->sharekill = $sharebase;
+			if ($sharebase > 0 && (int) $sharekill != (int) $sf->seedlimit) {
+				AuditAction($cfg["constants"]["debug"], $client.": changed .stat sharekill ".$sf->seedlimit." to $sharebase, $transfer.");
+				$sf->seedlimit = $sharebase;
 			}
 
 			$max_share = max($sharebase, $sharekill);
@@ -187,10 +187,15 @@ function updateStatFiles($bShowMissing=false) {
 	$nb = count($tfs);
 	echo " updated $nbUpdate/$nb stat files.\n";
 
-	if (isset($max_share) && $max_share != $sharekill) {
-		//set vuze global sharekill to max sharekill value
-		$vuze->session_set('seedRatioLimit', $max_share / 100);
-		AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill to $max_share.");
+	//fix vuze globall sharekill to maximum of torrents sharekill, other torrent with lower sharekill will be stopped by this cron
+	if (isset($max_share))  {
+		$req = $vuze->session_get('seedRatioLimit');
+		$sharekill = (int) $req->arguments->seedRatioLimit  * 100;
+		if ($max_share != $sharekill) {
+			//set vuze global sharekill to max sharekill value
+			$vuze->session_set('seedRatioLimit', round($max_share / 100, 2));
+			AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill from $sharekill to $max_share.");
+		}
 	}
 
 	if ($bShowMissing) return $missing;
