@@ -183,7 +183,10 @@ function getTransferHash($transfer) {
 						case "btshowmetainfo.py":
 						case "torrentinfo-console.py":
 						default:
-							$hashAry = explode(":", trim($resultAry[3]));
+							if (!isset($resultAry[3]))
+								AuditAction($cfg["constants"]["debug"],"getTransferHash($transfer) : no metainfo");
+							else
+								$hashAry = explode(":", trim($resultAry[3]));
 							break;
 					}
 					$hash = (isset($hashAry[1])) ? trim($hashAry[1]) : "";
