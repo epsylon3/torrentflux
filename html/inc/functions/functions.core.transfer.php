@@ -220,9 +220,6 @@ function getTransferFromHash($hash) {
 	foreach ($transfers['settings'] as $transfer => $t) {
 		if (isset($t['hash']) && $t['hash'] == $hash)
 			return $transfer;
-		if (!isset($t['hash'])) {
-			var_dump($t); die;
-		}
 	}
 	$transfer = $db->GetOne("SELECT transfer FROM tf_transfers WHERE hash = ".$db->qstr($hash)."");
 	return $transfer;

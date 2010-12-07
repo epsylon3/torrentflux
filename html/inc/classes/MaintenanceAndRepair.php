@@ -608,13 +608,19 @@ class MaintenanceAndRepair
 		if ($rc > 0) {
 			$this->_countProblems += $rc;
 			while (list($tid) = $recordset->FetchRow()) {
-				// t has no datapath, update
-				$this->_outputMessage("updating tf_transfer_totals which has empty uid : ".$tname."\n");
-				// get datapath
+				
+				// get uid
 				$tname = getTransferFromHash($tid);
-				$uid = (int) getTransferOwnerID($tname);
-				// update
+				
+				if (!empty($tname))
+					$uid = (int) getTransferOwnerID($tname);
+				else
+					$uid = 0;
+				
+				// t has no uid, update
 				if ($uid > 0) {
+					$this->_outputMessage("updating tf_transfer_totals which has empty uid : ".$tname."\n");
+				
 					$sql = "UPDATE tf_transfer_totals SET uid = $uid WHERE tid = ".$db->qstr($tid)." AND uid=0";
 					$db->Execute($sql);
 					
@@ -626,10 +632,15 @@ class MaintenanceAndRepair
 					
 					// output
 					$this->_outputMessage("done.\n");
-				} else {
+				} elseif (!empty($tname)) {
 					// output
-					$this->_outputMessage("cannot get uid for ".$tname.".\n");
+					$this->_outputMessage("cannot get uid for ".$tname." .\n");
 				}
+				/* else {
+					// old transfers (for global stats)
+					$this->_outputMessage("cannot get uid for hash ".$tid." .\n");
+				}
+				*/
 			}
 		}
 		
