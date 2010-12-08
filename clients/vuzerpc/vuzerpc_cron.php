@@ -194,7 +194,11 @@ function updateStatFiles($bShowMissing=false) {
 		if ($max_share != $sharekill) {
 			//set vuze global sharekill to max sharekill value
 			$vuze->session_set('seedRatioLimit', round($max_share / 100, 2));
-			AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill from $sharekill to $max_share.");
+			if ($cfg['debuglevel'] > 0) {
+				AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill from $sharekill to $max_share.");
+				$sharekill = getVuzeShareKill();
+				AuditAction($cfg["constants"]["debug"], $client.": vuze global sharekill=$sharekill.");
+			}
 		}
 	}
 

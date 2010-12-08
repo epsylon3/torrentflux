@@ -425,7 +425,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			
 			$this->logMessage("setRateDownload : ".$msg."\n", true);
 		}
-		AuditAction($cfg["constants"]["debug"], $this->client."-setRateDownload : $msg.");
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client."-setRateDownload : $msg.");
+		}
 		return $result;
 		
 	}
@@ -444,39 +446,11 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		
 		$result = true;
 		$msg = "ignoring $runtime autosend=".serialize($autosend);
-/* not needed, SeedRatioLimit != 0.0 will do it
-		$msg = "$runtime ".serialize($autosend);
-		if ($autosend) {
-			$rpc = VuzeRPC::getInstance();
-
-			$tid = getVuzeTransferRpcId($transfer);
-			if ($tid > 0) {
-				$req = $rpc->torrent_set(array($tid),'seedlimit',$runtime);
-				if (!isset($req->result) || $req->result != 'success') {
-					$msg = $req->result;
-					$result = false;
-				} else {
-					//Check if setting is applied
-					$req = $rpc->torrent_get(array($tid),array('seedRatioLimit'));
-					if (!isset($req->result) || $req->result != 'success') {
-						$msg = $req->result;
-						$result = false;
-					} elseif (!empty($req->arguments->torrents)) {
-						$torrent = array_pop($req->arguments->torrents);
-						if ($torrent->seedRatioLimit != $runtime) {
-							$msg = "byterate not set correctly =".serialize($torrent->seedRatioLimit);
-							//$req = $rpc->session_set('speed-limit-down', $byterate);
-						}
-					}
-				}
-			} else
-				$msg = "bad tid $transfer ".$req->result;
-			
-			$this->logMessage("setRuntime : ".$msg."\n", true);
-		}
-*/
+		
 		global $cfg;
-		AuditAction($cfg["constants"]["debug"], $this->client."-setRuntime : $msg.");
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client."-setRuntime : $msg.");
+		}
 		return $result;
 	}
 
@@ -515,8 +489,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 						if (round($torrent->seedRatioLimit,2) != round($this->sharekill,2)) {
 							// $msg = "sharekill not set correctly ".serialize($torrent->seedRatioLimit);
 							//if fact, we always need to set it globally (vuze limitation)
-							$msg = "sharekill set by session ".round($this->sharekill,2);
-							$req = $rpc->session_set('seedRatioLimit', $this->sharekill);
+							if (getVuzeShareKill() < (int) $sharekill) {
+								$msg = "sharekill set by session ".round($this->sharekill,2);
+								$req = $rpc->session_set('seedRatioLimit', $this->sharekill);
+							}
 						}
 					}
 				}
@@ -526,7 +502,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$this->logMessage("setSharekill : ".$msg."\n", true);
 		}
 		global $cfg;
-		AuditAction($cfg["constants"]["debug"], $this->client."-setSharekill : $msg.");
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client."-setSharekill : $msg.");
+		}
 		//AuditAction($cfg["constants"]["debug"], $rpc->vuze_ver." ".$rpc->xmwebui_ver);
 		return $result;
 	}

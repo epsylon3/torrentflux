@@ -486,11 +486,27 @@ class VuzeRPC {
 		if ($this->xmwebui_ver <= '0.2.8') {
 			// global speed limit, not the right way
 			$limits = array(
-				'speed-limit-up' => $max_ul,
-				'speed-limit-down' => $max_dl,
+				'speed-limit-up' => $max_ul * 1024,
+				'speed-limit-down' => $max_dl * 1024,
 				'speed-limit-up-enabled' => ($max_ul > 0),
-				'speed-limit-down-enabled' => ($max_dl > 0)
+				'speed-limit-down-enabled' => ($max_dl > 0),
+				'encryption' => 'preferred'
 			);
+			//alt-speed-down
+			//alt-speed-up
+			//alt-speed-time-day
+			//alt-speed-time-begin
+			//alt-speed-time-end
+			//alt-speed-enabled
+			//pex-enabled
+			//peer-port
+			//blocklist-enabled
+			//blocklist-size
+			//rpc-version
+			//rpc-version-minimum
+			//peer-port-random-on-start
+			//port-forwarding-enabled
+			//dht-enabled
 			$this->session_set_multi($limits);
 		} else {
 			//0.2.9+
@@ -504,8 +520,8 @@ class VuzeRPC {
 		if (is_object($req)) {
 			$id = $req->id;
 			$values = array(
-				"speedLimitUpload" => $max_ul_kb*1024,
-				"speedLimitDownload" => $max_dl_kb*1024,
+				"speedLimitUpload" => $max_ul_kb * 1024,
+				"speedLimitDownload" => $max_dl_kb * 1024,
 				'downloadDir' => $save_path,
 				'seedRatioLimit' => round((float)$sharekill / 100.0, 2), // need to be set by session but torrent-get value available in 0.2.9+
 				'seedRatioMode' => 1

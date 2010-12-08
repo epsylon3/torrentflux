@@ -31,10 +31,10 @@ function getVuzeShareKill() {
 	
 	require_once('inc/classes/VuzeRPC.php');
 	$rpc = VuzeRPC::getInstance();
-	
+
 	$req = $rpc->session_get('seedRatioLimit');
 	if (is_object($req) && isset($req->arguments->seedRatioLimit)) {
-		$sharekill = (int) $req->arguments->seedRatioLimit  * 100;
+		$sharekill = round($req->arguments->seedRatioLimit * 100.0);
 	}
 	
 	return $sharekill;
