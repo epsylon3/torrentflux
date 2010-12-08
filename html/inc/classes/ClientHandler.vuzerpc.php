@@ -69,6 +69,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$this->_setVarsForTransfer($transfer);
 
 		// log
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client."-start $transfer");
+		}
 		$this->logMessage($this->client."-start : ".$transfer."\n", true);
 
 		$this->vuze = VuzeRPC::getInstance();
@@ -105,6 +108,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		
 		$this->command = "echo ok";
 
+		/*
 		// build the command-string
 		$content  = $cfg['user']."\n";
 		$content .= $this->savepath."\n";
@@ -118,23 +122,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$content .= $this->maxport."\n";
 		$content .= $this->maxcons."\n";
 		$content .= $this->rerequest;
-/*
-		$this->command  = "echo -e ".tfb_shellencode($content)." > ".tfb_shellencode($cfg["path"].'.vuzerpc/run/'.$transfer);
+		*/
 
-		//$this->command .= " && ";
-		//$this->command .= "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
-
-		//if ($this->isWinOS()) {
-		//	file_put_contents($cfg["path"].'.vuzerpc/run/'.$transfer, $content);
-		//	$this->command = "echo r > ".tfb_shellencode($cfg["path"].'.vuzerpc/vuzerpc.cmd');
-		//}
-
-		if (!is_dir($cfg["path"].'.vuzerpc'))
-			mkdir($cfg["path"].'.vuzerpc',0775);
-
-		if (!is_dir($cfg["path"].'.vuzerpc/run'))
-			mkdir($cfg["path"].'.vuzerpc/run',0775);
-*/
 		// no client needed
 		$this->state = CLIENTHANDLER_STATE_READY;
 
@@ -177,8 +166,12 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// set vars
 		$this->_setVarsForTransfer($transfer);
 
-		addGrowlMessage($this->client."-stop","$transfer");
-
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client."-stop $transfer");
+		}
+		// log
+		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
+		
 		if (!isset($this->vuze))
 			$this->vuze = new VuzeRPC($cfg);
 
@@ -197,9 +190,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		}
 		else
 		{
-			// log
-			$this->logMessage($this->client."-stop : ".$transfer."\n", true);
-
 			if (!$vuze->torrent_stop_tf($hash)) {
 				$msg = "transfer ".$transfer." does not exist in vuze (2).";
 				$this->logMessage($msg."\n", true);

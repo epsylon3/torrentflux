@@ -262,8 +262,7 @@ class ClientHandler
 	function settingsDefault($transfer = "") {
 		global $cfg;
 		// transfer vars
-		if ($transfer != "")
-			$this->_setVarsForTransfer($transfer);
+		$this->_setVarsForTransfer($transfer);
 		// common vars
 		$this->hash        = getTransferHash($this->transfer);
 		$this->datapath    = getTransferDatapath($this->transfer);
@@ -293,8 +292,7 @@ class ClientHandler
 	function settingsLoad($transfer = "") {
 		global $db;
 		// transfer vars
-		if ($transfer != "")
-			$this->_setVarsForTransfer($transfer);
+		$this->_setVarsForTransfer($transfer);
 		// common vars
 		$sql = "SELECT * FROM tf_transfers WHERE transfer = ".$db->qstr($this->transfer);
 		$result = $db->Execute($sql);
@@ -634,9 +632,13 @@ class ClientHandler
 	 */
 	function _setVarsForTransfer($transfer) {
 		global $cfg;
-		$this->transfer = $transfer;
-		$this->transferFilePath = $cfg["transfer_file_path"].$this->transfer;
-		$this->owner = getOwner($transfer);
+		if (empty($transfer))
+			AuditAction($cfg["constants"]["error"], "_setVarsForTransfer empty $transfer");
+		else {
+			$this->transfer = $transfer;
+			$this->transferFilePath = $cfg["transfer_file_path"].$transfer;
+			$this->owner = getOwner($transfer);
+		}
 	}
 
 	/**
@@ -687,6 +689,9 @@ class ClientHandler
 	 */
 	function _init($interactive, $enqueue = false, $setPort = false, $recalcSharekill = false) {
 		global $cfg;
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], "_start $this->transfer");
+		}
 		// request-vars / defaults / database
 		if ($interactive) { // interactive, get vars from request vars
 			$this->settingsInit();
@@ -952,8 +957,6 @@ class ClientHandler
 	 */
 	function _updateTotals() {
 		global $db;
-		
-		$this->_setVarsForTransfer($transfer);
 		
 		$tid = getTransferHash($this->transfer);
 		$transferTotals = $this->getTransferTotal($this->transfer);
