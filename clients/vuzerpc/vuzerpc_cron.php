@@ -171,6 +171,10 @@ function updateStatFiles($bShowMissing=false) {
 			} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
 				$sf->time_left = "Finished!";
 			}
+			
+			if (is_file($cfg["transfer_file_path"].'/'.$transfer.".pid"))
+				unlink($cfg["transfer_file_path"].'/'.$transfer.".pid");
+			
 			//if ($sf->percent_done < 100 && $sf->percent_done > 0)
 			//	$sf->percent_done = 0 - $sf->percent_done;
 		}

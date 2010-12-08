@@ -187,13 +187,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			}
 		}
 
-		// set .stat stopped
-		$this->cleanStoppedStatFile($transfer);
-		
+		$this->updateStatFiles($transfer);
+
 		// delete .pid
 		$this->_stop($kill, $transferPid);
 
-		$this->updateStatFiles($transfer);
+		// set .stat stopped
+		$this->cleanStoppedStatFile($transfer);
 	}
 
 	/**
@@ -603,13 +603,13 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$sf->time_left = convertTime($t['eta']);
 				}
 
-				//(temp) force creation of pid file to fix first ones
-				file_put_contents($cfg["transfer_file_path"].'/'.$transfer.".pid","rpc");
-
 				$sf->percent_done = $t['percentDone'];
 
 				if ($t['status'] != 9 && $t['status'] != 5) {
 					$sf->peers = $t['peers'];
+
+					//(temp) force creation of pid file to fix first ones
+					file_put_contents($cfg["transfer_file_path"].'/'.$transfer.".pid","rpc");
 				}
 
 				if ($t['seeds'] >= 0)
@@ -646,8 +646,10 @@ class ClientHandlerVuzeRPC extends ClientHandler
 					$sf->time_left = "Finished!";
 					$sf->percent_done = 100;
 				}
-				//if ($sf->percent_done < 100 && $sf->percent_done > 0)
+				if ($sf->percent_done < 100 && $sf->percent_done > 0) {
 					//$sf->percent_done = 0 - $sf->percent_done;
+					$sf->stop();
+				}
 			}
 			
 			$sf->downtotal = $t['downTotal'];
