@@ -108,7 +108,6 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		
 		$this->command = "echo ok";
 
-		/*
 		// build the command-string
 		$content  = $cfg['user']."\n";
 		$content .= $this->savepath."\n";
@@ -122,35 +121,26 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$content .= $this->maxport."\n";
 		$content .= $this->maxcons."\n";
 		$content .= $this->rerequest;
-		*/
 
 		// no client needed
 		$this->state = CLIENTHANDLER_STATE_READY;
 
 		// ClientHandler _start()
 		$this->_start();
-
-		$req = $vuze->torrent_add_tf($transfer,$content);
-		//file_put_contents($cfg["path"].'.vuzerpc/'.$transfer.".log",serialize($req));
-/*
-		if (is_int($req)) {
-			$id = $req;
-			$tfs = $vuze->torrent_get_tf(array($id));
-			$tf = array_pop($tfs);
-
-			$sf = new StatFile($transfer);
-			$sf->running = $tf['running'];
-			$sf->percent_done=$tf['percentDone'];
-			$sf->peers = $tf['cons'];
-			$sf->time_left = $tf['eta'];
-			$sf->down_speed = $tf['speedDown'];
-			$sf->up_speed = $tf['speedUp'];
-
-			$sf->write();
+		
+		$hash = getTransferHash($transfer);
+		$torrents = $vuze->torrent_get_hashids();
+		if (!array_key_exists(strtoupper($hash),$torrents)) {
+			$req = $vuze->torrent_add_tf($transfer,$content);
+		} else {
+			//resume
+			$id = $torrents[strtoupper($hash)];
+			$req = $vuze->torrent_start(array($id));
 		}
-*/
+
 		$this->updateStatFiles($transfer);
 
+		return (is_object($req) && $req->result == "success");
 	}
 
 	/**
