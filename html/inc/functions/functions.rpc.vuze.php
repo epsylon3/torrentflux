@@ -21,6 +21,25 @@ function getVuzeTransferRpcId($transfer) {
 	return $tid;
 }
 
+/**
+ * get Vuze ShareKill value
+ *
+ * @return int
+ */
+function getVuzeShareKill() {
+	$sharekill = 0;
+	
+	require_once('inc/classes/VuzeRPC.php');
+	$rpc = VuzeRPC::getInstance();
+	
+	$req = $rpc->session_get('seedRatioLimit');
+	if (is_object($req) && isset($req->arguments->seedRatioLimit)) {
+		$sharekill = (int) $req->arguments->seedRatioLimit  * 100;
+	}
+	
+	return $sharekill;
+}
+
 //to check...
 function addVuzeMagnetTransfer($userid = 0, $url, $path, $paused=true) {
 	global $cfg;

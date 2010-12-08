@@ -27,7 +27,8 @@ global $cfg;
 //set username for logs
 $cfg["user"] = 'cron';
 
-require("inc/classes/VuzeRPC.php");
+require_once("inc/functions/functions.rpc.vuze.php");
+require_once("inc/classes/VuzeRPC.php");
 
 //print_r($cfg);
 
@@ -189,8 +190,7 @@ function updateStatFiles($bShowMissing=false) {
 
 	//fix vuze globall sharekill to maximum of torrents sharekill, other torrent with lower sharekill will be stopped by this cron
 	if (isset($max_share))  {
-		$req = $vuze->session_get('seedRatioLimit');
-		$sharekill = (int) $req->arguments->seedRatioLimit  * 100;
+		$sharekill = getVuzeShareKill();
 		if ($max_share != $sharekill) {
 			//set vuze global sharekill to max sharekill value
 			$vuze->session_set('seedRatioLimit', round($max_share / 100, 2));
