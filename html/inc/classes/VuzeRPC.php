@@ -581,8 +581,8 @@ class VuzeRPC {
 			'speedDown' => (int) $stat->rateDownload,
 			'speedUp' => (int) $stat->rateUpload,
 			
-			'downTotal' => $stat->downloadedEver,
-			'upTotal' => $stat->uploadedEver,
+			'downTotal' => (float) $stat->downloadedEver,
+			'upTotal' => (float) $stat->uploadedEver,
 			'percentDone' => 0.0,
 			'sharing' => 0.0,
 			'eta' => $stat->eta,
@@ -590,7 +590,7 @@ class VuzeRPC {
 			'peers' => max($stat->trackerLeechers,$stat->seeders),
 			'cons' => $stat->peersConnected,
 			
-			'size' => $stat->totalSize,
+			'size' => (float) $stat->totalSize,
 			'status' => $stat->status,
 
 			'rpcid' => $stat->id,
@@ -606,11 +606,11 @@ class VuzeRPC {
 			'seedRatioMode' => $stat->seedRatioMode // seems = 1
 		);
 
-		if ((int)$stat->totalSize > 0) {
-			$tfStat['percentDone'] = round(100.0 * ($stat->downloadedEver / $stat->totalSize) ,2);
+		if ($tfStat['size'] > 0) {
+			$tfStat['percentDone'] = round(100.0 * ($tfStat['downTotal'] / $tfStat['size']) ,2);
 			if ($tfStat['percentDone'] > 100)
 				$tfStat['percentDone'] = 100;
-			$tfStat['sharing'] = round(100.0 * ($stat->uploadedEver / $stat->totalSize) ,2);
+			$tfStat['sharing'] = round(100.0 * ($tfStat['upTotal'] / $tfStat['size']) ,2);
 		}
 
 		return $tfStat;
