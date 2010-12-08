@@ -673,7 +673,7 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 				require_once('inc/functions/functions.rpc.transmission.php');
 				$hash = addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
 			}
-			if ($client == 'azureus' && $cfg["vuze_rpc_enable"]) {
+			if (($client == 'vuzerpc' || $client == 'azureus')  && $cfg["vuze_rpc_enable"]) {
 				require_once('inc/functions/functions.rpc.vuze.php');
 				$hash = addVuzeMagnetTransfer($cfg['uid'], $url, $cfg['transfer_file_path']);
 			}
@@ -727,6 +727,10 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 						? tfb_cleanFileName($filename)
 						: tfb_cleanFileName($filename.$ext);
 				}
+				if (empty($filename) || (transferExists($filename))) {
+					$filename = substr($cfg['user'],0,3).date('ymdHis')."_".sprintf('%x', crc32($filename) ).$ext;
+				}
+				/*
 				if (($filename == "") || ($filename === false) || (transferExists($filename))) {
 					$filename = tfb_cleanFileName($fileNameBackup);
 					if (($filename === false) || (transferExists($filename))) {
@@ -740,6 +744,7 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 						}
 					}
 				}
+				*/
 				if (empty($downloadMessages)) { // no messages
 					// check if content contains html
 					if ($cfg['debuglevel'] > 0) {
@@ -768,7 +773,7 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 				if (count($msgs) > 0)
 					$downloadMessages = array_merge($downloadMessages, $msgs);
 			}
-			if (empty($downloadMessages)) { // no messages
+			if (empty($downloadMessages) && is_file($cfg["transfer_file_path"].$filename)) { // no messages
 				AuditAction($cfg["constants"]["url_upload"], $filename);
 				// inject
 				injectTransfer($filename);
@@ -785,7 +790,7 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 							break;
 					}
 					if (count($ch->messages) > 0)
-				$downloadMessages = array_merge($downloadMessages, $ch->messages);
+						$downloadMessages = array_merge($downloadMessages, $ch->messages);
 				}
 			}
 		}
@@ -848,7 +853,7 @@ function dispatcher_processUpload() {
 					break;
 			}
 			if (count($ch->messages) > 0)
-       			$uploadMessages = array_merge($uploadMessages, $ch->messages);
+				$uploadMessages = array_merge($uploadMessages, $ch->messages);
 		}
 	}
 	// messages

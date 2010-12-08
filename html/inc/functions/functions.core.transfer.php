@@ -474,7 +474,7 @@ function getTransferArray($sortOrder = '') {
 				default:
 					$transferName=str_replace('.imported','',$transfer);
 					if (tfb_isValidTransfer($transferName)) {
-						$datecrc = date('YmdHi', filemtime($cfg['transfer_file_path'].$transfer) ).'_'.sprintf('%u', crc32($transfer) );
+						$datecrc = date('YmdHi', filemtime($cfg['transfer_file_path'].$transfer) ).'_'.sprintf('%x', crc32($transfer) );
 						$retVal[$datecrc] = $transfer;
 					}
 					else
@@ -952,8 +952,8 @@ function injectTransfer($transfer) {
 		cacheTransfersSet();
 		return true;
 	} else {
-        AuditAction($cfg["constants"]["error"], "stat-file cannot be written when injecting : ".$transfer);
-        return false;
+		AuditAction($cfg["constants"]["error"], "stat-file cannot be written when injecting : ".$transfer);
+		return false;
 	}
 }
 
