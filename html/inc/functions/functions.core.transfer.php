@@ -649,6 +649,10 @@ function getTransferListArray() {
 			injectTransfer($transfer);
 		}
 
+		// use default client if client is not set
+		if (!isset($settingsAry['client']))
+			$settingsAry['client'] = $cfg['btclient'];
+
 		// totals-preparation
 		// if downtotal + uptotal + progress > 0
 		if (($settings[2] + $settings[3] + $settings[5]) > 0) {
