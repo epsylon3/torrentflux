@@ -123,6 +123,8 @@ function updateStatFiles($bShowMissing=false) {
 				$sf->seedlimit = $sharebase;
 			}
 
+			$max_ul= max($t['urate'], $max_ul);
+			$max_dl= max($t['drate'], $max_dl);
 			$max_share = max($sharebase, $sharekill);
 
 			if ($t['eta'] > 0) {
@@ -200,12 +202,28 @@ function updateStatFiles($bShowMissing=false) {
 			$vuze->session_set('seedRatioLimit', round($max_share / 100, 2));
 			if ($cfg['debuglevel'] > 0) {
 				AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill from $sharekill to $max_share.");
-				$sharekill = getVuzeShareKill();
-				AuditAction($cfg["constants"]["debug"], $client.": vuze global sharekill=$sharekill.");
 			}
 		}
 	}
-
+	if (isset($max_ul))  {
+		$vuze->session_set('speed-limit-up', $max_ul);
+		$vzmaxul = getVuzeSpeedLimitUpload();
+		if ($vzmaxul != $max_ul) {
+			if ($cfg['debuglevel'] > 0) {
+				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-up=$max_ul.");
+			}
+		}
+	}
+	if (isset($max_dl))  {
+		$vuze->session_set('speed-limit-down', $max_dl);
+		$vzmaxdl = getVuzeSpeedLimitDownload();
+		if ($vzmaxdl != $max_dl) {
+			if ($cfg['debuglevel'] > 0) {
+				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-down=$max_dl.");
+			}
+		}
+	}
+	
 	if ($bShowMissing) return $missing;
 //	echo $vuze->lastError."\n";
 }

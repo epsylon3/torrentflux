@@ -40,6 +40,46 @@ function getVuzeShareKill() {
 	return $sharekill;
 }
 
+/**
+ * get Vuze Global Speed Limit Upload
+ *
+ * @return int
+ */
+function getVuzeSpeedLimitUpload() {
+	$sharekill = 0;
+	
+	require_once('inc/classes/VuzeRPC.php');
+	$rpc = VuzeRPC::getInstance();
+
+	$key = 'speed-limit-up';
+	$req = $rpc->session_get($key);
+	if (is_object($req) && isset($req->arguments->$key)) {
+		return (int) $req->arguments->$key;
+	}
+	
+	return $sharekill;
+}
+
+/**
+ * get Vuze Global Speed Limit Download
+ *
+ * @return int
+ */
+function getVuzeSpeedLimitDownload() {
+	$sharekill = 0;
+	
+	require_once('inc/classes/VuzeRPC.php');
+	$rpc = VuzeRPC::getInstance();
+
+	$key = 'speed-limit-down';
+	$req = $rpc->session_get($key);
+	if (is_object($req) && isset($req->arguments->$key)) {
+		return (int) $req->arguments->$key;
+	}
+	
+	return $sharekill;
+}
+
 //to check...
 function addVuzeMagnetTransfer($userid = 0, $url, $path, $paused=true) {
 	global $cfg;
