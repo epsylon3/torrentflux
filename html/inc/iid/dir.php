@@ -613,11 +613,14 @@ foreach ($entrys as $entry) {
 		}
 		$isdir = 1;
 		$show_nfo = 0;
+		$show_rar = 0;
+		/* disabled here, unzip only for current dir
 		$show_rar = ($cfg["enable_rar"] == 1) && ($aclWrite == 1) && (false !== ($zip = findArchives($dirName.$entry)) );
 		if ($show_rar) {
 			$zip = array_pop($zip);
 			$show_rar = isRar($zip);
 		}
+		*/
 		
 		$image = "";
 		
