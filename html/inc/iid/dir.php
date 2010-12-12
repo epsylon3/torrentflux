@@ -605,7 +605,7 @@ foreach ($entrys as $entry) {
 	if (is_dir($dirName.$entry)) // dir
 	{ 
 		// sfv
-		if (($cfg['enable_sfvcheck'] == 1) && (false !== ($sfv = findSFV($dirName.$entry)))) 
+		if ($cfg['enable_sfvcheck'] == 1 && (false !== ($sfv = findSFV($dirName.$entry))) ) 
 		{
 			$show_sfv = 1;
 			$sfvdir = $sfv['dir'];
@@ -613,7 +613,11 @@ foreach ($entrys as $entry) {
 		}
 		$isdir = 1;
 		$show_nfo = 0;
-		$show_rar = 0;
+		$show_rar = ($cfg["enable_rar"] == 1) && ($aclWrite == 1) && (false !== ($zip = findArchives($dirName.$entry)) );
+		if ($show_rar) {
+			$zip = array_pop($zip);
+			$show_rar = isRar($zip);
+		}
 		
 		$image = "";
 		
@@ -726,6 +730,13 @@ if($dir != "")
 	else
 		$tmpl->setvar('parentURL', "index.php?iid=dir");
 	$tmpl->setvar('showparentURL', TRUE);
+	
+	//unzip all archives of current dir
+	$show_rar = ($cfg["enable_rar"] == 1) && ($aclWrite == 1) && (false !== ($zip = findArchives($dirName)) );
+	if ($show_rar) {
+		$zip = array_pop($zip);
+		$show_rar = isRar($zip);
+	}
 }
 else
 	$tmpl->setvar('showparentURL', FALSE);
@@ -740,6 +751,7 @@ $tmpl->setvar('enable_move', $cfg["enable_move"]);
 $tmpl->setvar('enable_sfvcheck',  $cfg['enable_sfvcheck']);
 $tmpl->setvar('enable_vlc',  $cfg['enable_vlc']);
 $tmpl->setvar('enable_rar', $cfg["enable_rar"]);
+$tmpl->setvar('show_rar', $show_rar);
 $tmpl->setvar('enable_view_nfo', $cfg["enable_view_nfo"]);
 $tmpl->setvar('enable_file_download', $cfg["enable_file_download"]);
 $tmpl->setvar('package_type', $cfg["package_type"]);

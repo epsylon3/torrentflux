@@ -23,6 +23,11 @@
 		<td colspan="2">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
 		</tmpl_if>
 		<td id="dirChmod">
+			<tmpl_if name="show_rar" value="1">
+				<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var name="dir">&amp;dir=<tmpl_var name="dir">&type=rar')"><img src="themes/<tmpl_var name="theme">/images/dir/rar.gif" alt="rar" title="Unrar All" /></a>
+			<tmpl_elseif name="show_rar" value="2">
+				<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var name="dir">&amp;dir=<tmpl_var name="dir">&type=zip')"><img src="themes/<tmpl_var name="theme">/images/dir/zip.png" alt="zip" title="Unzip All" /></a>
+			</tmpl_if>
 			<tmpl_if name="enable_file_download" value="1">
 				<a href="index.php?iid=dir&amp;tar=<tmpl_var name="dir">"><img src="themes/<tmpl_var name="theme">/images/dir/tar.png" title="Download as <tmpl_var name="package_type">" alt="download as <tmpl_var name="package_type">" /></a>
 			</tmpl_if>
@@ -89,7 +94,7 @@
 						<tmpl_else>
 							<tmpl_var name="entry">
 						</tmpl_if>
-					</tmpl_if>					
+					</tmpl_if>
 				</td>
 				<tmpl_if name="enable_dirstats" value="1">
 					<td class="dirPermission"><tmpl_var name="permission"></td>
@@ -123,12 +128,12 @@
 						<img src="themes/<tmpl_var name="theme">/images/dir/sfv.png" alt="sfv check"></a>
 					</tmpl_if>
 				</tmpl_if>
+				<tmpl_if name="show_rar" value="1">
+					<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode1">&type=rar')"><img src="themes/<tmpl_var name="theme">/images/dir/rar.gif" alt="rar" title="Unrar" /></a>
+				<tmpl_elseif name="show_rar" value="2">
+					<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode1">&type=zip')"><img src="themes/<tmpl_var name="theme">/images/dir/zip.png" alt="zip" title="Unzip" /></a>
+				</tmpl_if>
 				<tmpl_if name="is_dir" value="0">
-					<tmpl_if name="show_rar" value="1">
-						<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode2">&type=rar')"><img src="themes/<tmpl_var name="theme">/images/dir/rar.gif" alt="rar" title="Unrar" /></a>
-					<tmpl_elseif name="show_rar" value="2">
-						<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode2">&type=zip')"><img src="themes/<tmpl_var name="theme">/images/dir/zip.png" alt="zip" title="Unzip" /></a>
-					</tmpl_if>
 					<tmpl_if name="enable_vlc" value="1">
 						<a href="JavaScript:StreamMultimedia('index.php?iid=vlc&amp;dir=<tmpl_var name="urlencode2">&amp;file=<tmpl_var name="urlencode3">')"><img src="themes/<tmpl_var name="theme">/images/dir/stream.png" alt="vlc streaming" title="Stream Multimedia (vlc)" /></a>
 					</tmpl_if>

@@ -365,6 +365,26 @@ function isRar($entry) {
 }
 
 /**
+ * Check if there are files to extract in directory
+ *
+ * @param $dirName
+ * @return
+ */
+function findArchives($dirName) {
+	$zip = false;
+	$d = dir($dirName);
+	while (false !== ($entry = $d->read())) {
+		if($entry != '.' && $entry != '..' && !empty($entry)) {
+			if(isFile($dirName.'/'.$entry) && isRar($entry)) {
+				$zip[] = $dirName.'/'.$entry;
+			}
+		}
+	}
+	$d->close();
+	return $zip;
+}
+
+/**
  * SFV Check hack
  *
  * @param $dirName
@@ -375,7 +395,7 @@ function findSFV($dirName) {
 	$d = dir($dirName);
 	while (false !== ($entry = $d->read())) {
 		if($entry != '.' && $entry != '..' && !empty($entry)) {
-			if((isFile($dirName.'/'.$entry)) && (strtolower(substr($entry, -4, 4)) == '.sfv')) {
+			if(isFile($dirName.'/'.$entry) && strtolower(substr($entry, -4, 4)) == '.sfv') {
 				$sfv['dir'] = $dirName;
 				$sfv['sfv'] = $dirName.'/'.$entry;
 			}
