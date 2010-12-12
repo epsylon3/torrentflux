@@ -206,20 +206,20 @@ function updateStatFiles($bShowMissing=false) {
 		}
 	}
 	if (isset($max_ul))  {
-		$vuze->session_set('speed-limit-up', $max_ul);
 		$vzmaxul = getVuzeSpeedLimitUpload();
 		if ($vzmaxul != $max_ul) {
+			$vuze->session_set('speed-limit-up', $max_ul);
 			if ($cfg['debuglevel'] > 0) {
-				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-up=$max_ul.");
+				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-up $vzmaxul to $max_ul.");
 			}
 		}
 	}
 	if (isset($max_dl))  {
-		$vuze->session_set('speed-limit-down', $max_dl);
 		$vzmaxdl = getVuzeSpeedLimitDownload();
 		if ($vzmaxdl != $max_dl) {
+			$vuze->session_set('speed-limit-down', $max_dl);
 			if ($cfg['debuglevel'] > 0) {
-				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-down=$max_dl.");
+				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-down $vzmaxdl to $max_dl.");
 			}
 		}
 	}
