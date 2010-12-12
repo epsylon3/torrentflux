@@ -47,26 +47,32 @@ require_once('inc/functions/functions.core.php');
  * @usage	  ./uncompress.php "pathtofile" "extractdir" "typeofcompression" "uncompressor-bin" "password"
  */
 
-$logfile = 'error.log';
+$subdir = 'extracted';
+$logfile = $subdir.'/error.log';
 
 //convert and set variables
-$arg1 = urldecode($argv[1]);
-$arg2 = urldecode($argv[2]);
-$arg3 = $argv[3];
-$arg4 = $argv[4];
-$arg5 = $argv[5];
+$arg1 = urldecode($argv[1]); //file
+$arg2 = urldecode($argv[2]); //dir
+$arg3 = $argv[3]; //ext
+$arg4 = urldecode($argv[4]); //bin_unxxx
+$arg5 = urldecode($argv[5]); //password
+
+$dir = $arg2;
+$destdir = $dir."/".$subdir;
 
 // unrar file
-if (strcasecmp('rar', $arg3) == 0){
-	if (file_exists($arg2.$logfile))
-		@unlink($arg2.$logfile);
-    $Command = tfb_shellencode($arg4)." x -o+ -p". tfb_shellencode($arg5) ." ". tfb_shellencode($arg1) . " " . tfb_shellencode($arg2);
-	$unrarpid = trim(shell_exec("nohup ".$Command." > " . tfb_shellencode($arg2.$logfile) . " 2>&1 & echo $!"));
+if (strcasecmp('rar', $arg3) == 0) {
+	mkdir($destdir);
+	chmod($destdir,01777);
+	if (file_exists($dir.$logfile))
+		@unlink($dir.$logfile);
+	$Command = tfb_shellencode($arg4)." x -o+ -p". tfb_shellencode($arg5) ." ". tfb_shellencode($arg1) . " " . tfb_shellencode($destdir);
+	$unrarpid = trim(shell_exec("nohup ".$Command." > " . tfb_shellencode($dir.$logfile) . " 2>&1 & echo $!"));
 	echo 'Uncompressing file...<BR>PID is: ' . $unrarpid . '<BR>';
 	usleep(250000); // wait for 0.25 seconds
 	while (is_running($unrarpid)) {
-		if (file_exists($arg2.$logfile)) {
-			$lines = file($arg2.$logfile);
+		if (file_exists($dir.$logfile)) {
+			$lines = file($dir.$logfile);
 			foreach($lines as $chkline) {
 				if (strpos($chkline, 'already exists. Overwrite it ?') !== FALSE){
 					kill($unrarpid);
@@ -92,12 +98,12 @@ if (strcasecmp('rar', $arg3) == 0){
 		}
 		usleep(250000); // wait for 0.25 seconds
 	}
-	if (file_exists($arg2.$logfile)) {
-		$lines = file($arg2.$logfile);
+	if (file_exists($dir.$logfile)) {
+		$lines = file($dir.$logfile);
 		foreach($lines as $chkline) {
 			if (strpos($chkline, 'All OK') !== FALSE){
 				echo 'File has successfully been extracted!';
-				@unlink($arg2.$logfile);
+				@unlink($dir.$logfile);
 				// exit
 				exit();
 			}
@@ -109,10 +115,12 @@ if (strcasecmp('rar', $arg3) == 0){
 
 // unzip
 if (strcasecmp('zip', $arg3) == 0) {
-	if (file_exists($arg2.$logfile))
-		@unlink($arg2.$logfile);
-    $Command = tfb_shellencode($arg4).' -o ' . tfb_shellencode($arg1) . ' -d ' . tfb_shellencode($arg2);
-	$unzippid = trim(shell_exec("nohup ".$Command." > " . tfb_shellencode($arg2.$logfile) . " 2>&1 & echo $!"));
+	mkdir($destdir);
+	chmod($destdir,01777);
+	if (file_exists($dir.$logfile))
+		@unlink($dir.$logfile);
+	$Command = tfb_shellencode($arg4).' -o ' . tfb_shellencode($arg1) . ' -d ' . tfb_shellencode($destdir);
+	$unzippid = trim(shell_exec("nohup ".$Command." > " . tfb_shellencode($dir.$logfile) . " 2>&1 & echo $!"));
 	echo 'Uncompressing file...<BR>PID is: ' . $unzippid . '<BR>';
 	usleep(250000); // wait for 0.25 seconds
 	while (is_running($unzippid)) {
