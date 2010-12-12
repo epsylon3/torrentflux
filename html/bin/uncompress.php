@@ -129,12 +129,16 @@ if (strcasecmp('zip', $arg3) == 0) {
 	if (file_exists($logfile))
 		@unlink($logfile);
 	$Command = tfb_shellencode($arg4).' -o ' . tfb_shellencode($arg1) . ' -d ' . tfb_shellencode($destdir);
-	$unzippid = trim(shell_exec("nohup ".$Command." > " . tfb_shellencode($logfile) . " 2>&1 & echo $!"));
-	echo 'Uncompressing file...<BR>PID is: ' . $unzippid . '<BR>';
+	$unzippid = trim(shell_exec("nohup ".$Command." 2> " . tfb_shellencode($logfile) . " 1>/dev/null & echo $!"));
+	echo 'Uncompressing file...<br/>PID is: ' . $unzippid . '<br/>';
 	usleep(250000); // wait for 0.25 seconds
 	while (is_running($unzippid)) {
 		usleep(250000); // wait for 0.25 seconds
 		/* occupy time to cause popup window load bar to load in conjunction with unzip progress */
+	}
+	if (filesize($logfile) == 0) {
+		echo '<br/><br/>File has successfully been extracted!';
+		@unlink($logfile);
 	}
 	// exit
 	exit();
@@ -147,7 +151,7 @@ if (strcasecmp('zip', $arg3) == 0) {
  * @return
  */
 function is_running($PID){
-	$ProcessState = exec("ps ".tfb_shellencode($PID));
+	$ProcessState = shell_exec("ps ".tfb_shellencode($PID));
 	return (count($ProcessState) >= 2);
 }
 
