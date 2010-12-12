@@ -12,9 +12,11 @@ before full integration in fluxcli.php
 */
 
 # sample cron.d update vuze rpc stat files every minutes
-# */1 * * * *     www-data cd /var/git/torrentflux/clients/vuzerpc ;./vuzerpc_cron.php update
+# */1 * * * *     www-data /var/git/torrentflux/clients/vuzerpc/vuzerpc_cron.php update
 
-chdir('../../html');
+// change to docroot if needed
+if (!is_file(realpath(getcwd().'/inc/main.core.php')))
+	chdir(realpath(dirname(__FILE__)."/../../html"));
 
 // check for home
 if (!is_file('inc/main.core.php'))
@@ -43,13 +45,10 @@ $client = 'vuzerpc';
 function updateStatFiles($bShowMissing=false) {
 	global $cfg, $db, $client;
 
-	//convertTime
-	require_once("inc/functions/functions.core.php");
-
 	$vuze = VuzeRPC::getInstance($cfg);
 
-	// do special-pre-start-checks
-	if (!VuzeRPC::isRunning()) {
+	// check if running and get all session variables in cache
+	if (!$vuze->session_get()) {
 		return;
 	}
 
@@ -197,7 +196,6 @@ function updateStatFiles($bShowMissing=false) {
 	$nb = count($tfs);
 	echo " updated $nbUpdate/$nb stat files.\n";
 
-	initVuzeSessionCache();
 	//fix vuze globall sharekill to maximum of torrents sharekill, other torrent with lower sharekill will be stopped by this cron
 	if (isset($max_share))  {
 		$sharekill = getVuzeShareKill(true);
