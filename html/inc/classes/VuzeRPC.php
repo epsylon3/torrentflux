@@ -234,7 +234,7 @@ class VuzeRPC {
 		} else {
 			//all sessions variables
 			$req = $this->vuze_rpc('session-get');
-			$this->session = $req;
+			$this->session = $req->arguments;
 		}
 		return $req;
 	}
@@ -244,9 +244,7 @@ class VuzeRPC {
 		$args = new stdclass;
 		$args->$key = $value;
 		$req = $this->vuze_rpc('session-set',$args);
-
-		$this->session = $this->vuze_rpc('session-get');
-		return $this->session;
+		return $req;
 	}
 	
 	public function session_set_multi($values) {
@@ -254,6 +252,7 @@ class VuzeRPC {
 		foreach ($values as $key => $value)
 			$args->$key = $value;
 		$req = $this->vuze_rpc('session-set',$args);
+		return $req;
 	}
 
 	// Get Vuze data (all torrents)

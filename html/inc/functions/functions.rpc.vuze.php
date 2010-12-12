@@ -22,22 +22,38 @@ function getVuzeTransferRpcId($transfer) {
 }
 
 /**
+ * get all session variables to prevent multiple calls
+ *
+ * @return bool
+ */
+function initVuzeSessionCache() {
+	require_once('inc/classes/VuzeRPC.php');
+	$rpc = VuzeRPC::getInstance();
+	unset($rpc->session);
+	$req = $rpc->session_get();
+	return (is_object($rpc->session));
+}
+
+/**
  * get Vuze ShareKill value
  *
  * @return int
  */
-function getVuzeShareKill() {
-	$sharekill = 0;
-	
+function getVuzeShareKill($usecache=false) {
 	require_once('inc/classes/VuzeRPC.php');
 	$rpc = VuzeRPC::getInstance();
+	
+	if ($usecache) {
+		if (!isset($rpc->session)) initVuzeSessionCache();
+		return round($rpc->session->seedRatioLimit * 100.0);
+	}
 
 	$req = $rpc->session_get('seedRatioLimit');
 	if (is_object($req) && isset($req->arguments->seedRatioLimit)) {
-		$sharekill = round($req->arguments->seedRatioLimit * 100.0);
+		return round($req->arguments->seedRatioLimit * 100.0);
 	}
 	
-	return $sharekill;
+	return 0;
 }
 
 /**
@@ -45,19 +61,23 @@ function getVuzeShareKill() {
  *
  * @return int
  */
-function getVuzeSpeedLimitUpload() {
-	$sharekill = 0;
-	
+function getVuzeSpeedLimitUpload($usecache=false) {
 	require_once('inc/classes/VuzeRPC.php');
 	$rpc = VuzeRPC::getInstance();
 
 	$key = 'speed-limit-up';
+
+	if ($usecache) {
+		if (!isset($rpc->session)) initVuzeSessionCache();
+		return (int) $rpc->session->$key;
+	}
+
 	$req = $rpc->session_get($key);
 	if (is_object($req) && isset($req->arguments->$key)) {
 		return (int) $req->arguments->$key;
 	}
 	
-	return $sharekill;
+	return 0;
 }
 
 /**
@@ -65,19 +85,23 @@ function getVuzeSpeedLimitUpload() {
  *
  * @return int
  */
-function getVuzeSpeedLimitDownload() {
-	$sharekill = 0;
-	
+function getVuzeSpeedLimitDownload($usecache=false) {
 	require_once('inc/classes/VuzeRPC.php');
 	$rpc = VuzeRPC::getInstance();
 
 	$key = 'speed-limit-down';
+
+	if ($usecache) {
+		if (!isset($rpc->session)) initVuzeSessionCache();
+		return (int) $rpc->session->$key;
+	}
+
 	$req = $rpc->session_get($key);
 	if (is_object($req) && isset($req->arguments->$key)) {
 		return (int) $req->arguments->$key;
 	}
 	
-	return $sharekill;
+	return 0;
 }
 
 //to check...

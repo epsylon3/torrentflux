@@ -74,6 +74,9 @@ function updateStatFiles($bShowMissing=false) {
 		$sharekills[$hash] = $sharekill;
 	}
 
+	$max_ul = 1024.0 * $cfg['max_upload_rate'];
+	$max_dl = 1024.0 * $cfg['max_download_rate'];
+
 	//SHAREKILLS
 	$nbUpdate=0;
 	foreach ($tfs as $hash => $t) {
@@ -194,32 +197,45 @@ function updateStatFiles($bShowMissing=false) {
 	$nb = count($tfs);
 	echo " updated $nbUpdate/$nb stat files.\n";
 
+	initVuzeSessionCache();
 	//fix vuze globall sharekill to maximum of torrents sharekill, other torrent with lower sharekill will be stopped by this cron
 	if (isset($max_share))  {
-		$sharekill = getVuzeShareKill();
+		$sharekill = getVuzeShareKill(true);
 		if ($max_share != $sharekill) {
 			//set vuze global sharekill to max sharekill value
 			$vuze->session_set('seedRatioLimit', round($max_share / 100, 2));
 			if ($cfg['debuglevel'] > 0) {
-				AuditAction($cfg["constants"]["debug"], $client.": changed vuze global sharekill from $sharekill to $max_share.");
+				$msg = $client.": changed vuze global sharekill from $sharekill to $max_share.";
+				AuditAction($cfg["constants"]["debug"], $msg);
+				echo $msg."\n";
 			}
 		}
 	}
-	if (isset($max_ul))  {
-		$vzmaxul = getVuzeSpeedLimitUpload();
+	if ($max_ul > 0) {
+		$vzmaxul = getVuzeSpeedLimitUpload(true);
+		if ($cfg['max_upload_rate'] > 0 && $max_ul > 0) {
+			$max_ul = min($max_ul, 1024.0 * $cfg['max_upload_rate']);
+		}
 		if ($vzmaxul != $max_ul) {
 			$vuze->session_set('speed-limit-up', $max_ul);
 			if ($cfg['debuglevel'] > 0) {
-				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-up $vzmaxul to $max_ul.");
+				$msg = $client.": vuze global speed-limit-up $vzmaxul to $max_ul.";
+				AuditAction($cfg["constants"]["debug"], $msg);
+				echo $msg."\n";
 			}
 		}
 	}
-	if (isset($max_dl))  {
-		$vzmaxdl = getVuzeSpeedLimitDownload();
+	if ($max_dl > 0) {
+		if ($cfg['max_download_rate'] > 0 && $max_dl > 0) {
+			$max_dl = min($max_dl, 1024.0 * $cfg['max_download_rate']);
+		}
+		$vzmaxdl = getVuzeSpeedLimitDownload(true);
 		if ($vzmaxdl != $max_dl) {
 			$vuze->session_set('speed-limit-down', $max_dl);
 			if ($cfg['debuglevel'] > 0) {
-				AuditAction($cfg["constants"]["debug"], $client.": vuze global speed-limit-down $vzmaxdl to $max_dl.");
+				$msg = $client.": vuze global speed-limit-down $vzmaxdl to $max_dl.";
+				AuditAction($cfg["constants"]["debug"], $msg);
+				echo $msg."\n";
 			}
 		}
 	}
