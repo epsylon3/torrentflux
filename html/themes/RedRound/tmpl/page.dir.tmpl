@@ -129,9 +129,9 @@
 					</tmpl_if>
 				</tmpl_if>
 				<tmpl_if name="show_rar" value="1">
-					<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode1">&type=rar')"><img src="themes/<tmpl_var name="theme">/images/dir/rar.gif" alt="rar" title="Unrar" /></a>
+					<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="dir">&type=rar')"><img src="themes/<tmpl_var name="theme">/images/dir/rar.gif" alt="rar" title="Unrar" /></a>
 				<tmpl_elseif name="show_rar" value="2">
-					<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="urlencode1">&type=zip')"><img src="themes/<tmpl_var name="theme">/images/dir/zip.png" alt="zip" title="Unzip" /></a>
+					<a href="javascript:UncompDetails('index.php?iid=uncomp&amp;file=<tmpl_var escape="url" name="urlencode1">&amp;dir=<tmpl_var escape="url" name="dir">&type=zip')"><img src="themes/<tmpl_var name="theme">/images/dir/zip.png" alt="zip" title="Unzip" /></a>
 				</tmpl_if>
 				<tmpl_if name="is_dir" value="0">
 					<tmpl_if name="enable_vlc" value="1">
