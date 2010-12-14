@@ -51,8 +51,8 @@ class Image
 	// content-types
 	var $_contentTypes = array(
 		IMG_GIF => 'image/gif',
-		IMG_JPG => 'image/png',
-		IMG_PNG => 'image/jpeg');
+		IMG_JPG => 'image/jpeg',
+		IMG_PNG => 'image/png');
 
 	// imagetypes
 	var $_imagetypes = 0;
@@ -74,9 +74,9 @@ class Image
 		$img = new Image($t, $w, $h);
 		if (!$img)
 			return false;
-		if ($t == IMG_GIF)
-			$img->image = @imagecreate($w, $h);
-		else
+		//if ($t == IMG_GIF)
+		//	$img->image = @imagecreate($w, $h);
+		//else
 			$img->image = @imagecreatetruecolor($w, $h);
 		return (!$img->image)
 			? false
@@ -200,19 +200,25 @@ class Image
 		// try png
 		$imageObject = Image::getImageFromRessource(IMG_PNG, $bgimage.".png");
 		// try gif if failed
-		if (!$imageObject)
+		if (!$imageObject) {
 			$imageObject = Image::getImageFromRessource(IMG_GIF, $bgimage.".gif");
-		// try jpg if failed
-		if (!$imageObject)
-			$imageObject = Image::getImageFromRessource(IMG_JPG, $bgimage.".jpg");
+			// try jpg if failed
+			if (!$imageObject)
+				$imageObject = Image::getImageFromRessource(IMG_JPG, $bgimage.".jpg");
+			$textcolor = imagecolorallocate($imageObject->image, $r, $g, $b);
+		} else {
+			//png alpha
+			$textcolor = imagecolorallocatealpha($imageObject->image, $r, $g, $b, 0);
+		}
 		// bail if no object
 		if (!$imageObject)
 			Image::paintNotSupported();
-		// paint offscreen-image
-		$textcolor = imagecolorallocate($imageObject->image, $r, $g, $b);
-		imagestring($imageObject->image, $font, $x, $y, $label, $textcolor);
-		// output
-		$imageObject->paint();
+		else {
+			// paint offscreen-image
+			imagestring($imageObject->image, $font, $x, $y, $label, $textcolor);
+			// output
+			$imageObject->paint();
+		}
 	}
 
 	/**
@@ -252,19 +258,29 @@ class Image
 		$legendSpace = 14) {
 		// img
 		$imageObject = false;
-		// gif
-		$imageObject = Image::getImage(IMG_GIF, $w, $h);
-		// try png if failed
-		if (!$imageObject)
-			$imageObject = Image::getImage(IMG_PNG, $w, $h);
-		// try jpg if failed
-		if (!$imageObject)
-			$imageObject = Image::getImage(IMG_JPG, $w, $h);
+		$alpha = false;
+		// png
+		$imageObject = Image::getImage(IMG_PNG, $w, $h);
+		// try gif if failed
+		if (!$imageObject) {
+			$imageObject = Image::getImage(IMG_GIF, $w, $h);
+			// try jpg if failed
+			if (!$imageObject)
+				$imageObject = Image::getImage(IMG_JPG, $w, $h);
+			// background
+			$background = imagecolorallocate($imageObject->image, $bg['r'], $bg['g'], $bg['b']);
+		} else {
+			// png alpha
+			$alpha = true;
+			imagealphablending( $imageObject->image, false);
+			imagesavealpha( $imageObject->image, true);
+			$background = imagecolorallocatealpha($imageObject->image, $bg['r'], $bg['g'], $bg['b'], 127);
+		}
 		// bail if no object
 		if (!$imageObject)
 			Image::paintNotSupported();
-		// background
-		$background = imagecolorallocate($imageObject->image, $bg['r'], $bg['g'], $bg['b']);
+		imagefill($imageObject->image, 1, 1, $background);
+		
 		// convert to angles.
 		$valueCount = count($values);
 		$valueSum = array_sum($values);
@@ -274,8 +290,13 @@ class Image
 		}
 		// colors.
 		for ($i = 0; $i < $valueCount; $i++) {
-			$col_s[$i] = imagecolorallocate($imageObject->image, $colors[$i]['r'], $colors[$i]['g'], $colors[$i]['b']);
-			$col_d[$i] = imagecolorallocate($imageObject->image, ($colors[$i]['r'] >> 1), ($colors[$i]['g'] >> 1), ($colors[$i]['b'] >> 1));
+			if ($alpha) {
+				$col_s[$i] = imagecolorallocatealpha($imageObject->image, $colors[$i]['r'], $colors[$i]['g'], $colors[$i]['b'], 0);
+				$col_d[$i] = imagecolorallocatealpha($imageObject->image, ($colors[$i]['r'] >> 1), ($colors[$i]['g'] >> 1), ($colors[$i]['b'] >> 1), 0);
+			} else {
+				$col_s[$i] = imagecolorallocate($imageObject->image, $colors[$i]['r'], $colors[$i]['g'], $colors[$i]['b']);
+				$col_d[$i] = imagecolorallocate($imageObject->image, ($colors[$i]['r'] >> 1), ($colors[$i]['g'] >> 1), ($colors[$i]['b'] >> 1));
+			}
 		}
 		// 3D effect.
 		for ($z = 1; $z <= $sz; $z++) {
@@ -307,7 +328,10 @@ class Image
 		if ($legend) {
 			$curY = $legendY;
 			for ($i = 0; $i < $valueCount; $i++) {
-				$textcolor = imagecolorallocate($imageObject->image, $colors[$i]['r'], $colors[$i]['g'], $colors[$i]['b']);
+				if ($alpha)
+					$textcolor = imagecolorallocatealpha($imageObject->image, $colors[$i]['r'], $colors[$i]['g'], $colors[$i]['b'], 0);
+				else
+					$textcolor = imagecolorallocate($imageObject->image, $colors[$i]['r'], $colors[$i]['g'], $colors[$i]['b']);
 				imagestring($imageObject->image, $legendFont, $legendX, $curY, $legend[$i], $textcolor);
 				$curY += $legendSpace;
 			}
