@@ -68,6 +68,8 @@ function ts_resortTable(lnk,clid) {
 	var column = clid || td.cellIndex;
 	var table = getParent(td,'TABLE');
 
+	jQuery('tr.gray').removeClass('gray').addClass('white');
+
 	// Work out a type for the column
 	if (table.rows.length <= 1) return;
 	for (var ri=1;ri<table.rows.length;ri++) {

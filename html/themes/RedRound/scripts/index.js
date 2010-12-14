@@ -34,6 +34,22 @@ jQuery(document).ready(function(){
 	//tabs first, because droplisti use ul/li too
 	jQuery("#tabs").tabs({ panelTemplate: '<li></li>' });
 
+	jQuery("tr.gray")
+	.mouseover(function() {
+		this.className='hover';
+	})
+	.mouseout(function() {
+		this.className='gray';
+	});
+
+	jQuery("tr.white")
+	.mouseover(function() {
+		this.className='hover';
+	})
+	.mouseout(function() {
+		this.className='white';
+	});
+
 	//skin buttons
 	jQuery("input:submit").button()
 		.css('padding','2px 8px');
@@ -55,3 +71,23 @@ jQuery(document).ready(function(){
 	jQuery('select[name!="action"]').droplist({autoresize:true,slide:false,height:150});
  
 });
+
+function afterAjaxUpdate() {
+
+	jQuery("tr.gray")
+	.mouseover(function() {
+		this.className='hover';
+	})
+	.mouseout(function() {
+		this.className='gray';
+	});
+
+	jQuery("tr.white")
+	.mouseover(function() {
+		this.className='hover';
+	})
+	.mouseout(function() {
+		this.className='white';
+	});
+
+}

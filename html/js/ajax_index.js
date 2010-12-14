@@ -187,6 +187,11 @@ function ajax_processText(content) {
 		// update
 		ajax_updateContent(tempAry.pop(), statsXfer, users, transferList);
 		
+		// theme specific event
+		if (typeof(afterAjaxUpdate) != 'undefined') {
+			afterAjaxUpdate();
+		}
+		
 		if (ajaxScript != lastAjaxScript) {
 			try {
 				eval(ajaxScript);

@@ -43,9 +43,9 @@ function ajax_getHttpRequest() {
 function ajax_update() {
 	if (ajax_updateState == 1) {
 		try {
-		    if (!ajax_httpRequest)
-		        ajax_httpRequest = ajax_getHttpRequest();
-		    else
+			if (!ajax_httpRequest)
+				ajax_httpRequest = ajax_getHttpRequest();
+			else
 				ajax_httpRequest.abort();
 			if(ajax_httpRequest && (ajax_httpRequest.readyState == 4 || ajax_httpRequest.readyState == 0))
 			{
@@ -57,7 +57,7 @@ function ajax_update() {
 		} catch (ajaxception) {
 			if (ajax_debug)
 				alert('name : ' + ajaxception.name + ' | message:' + ajaxception.message);
-		    ajax_updateState = 0;
+			ajax_updateState = 0;
 		}
 	}
 }

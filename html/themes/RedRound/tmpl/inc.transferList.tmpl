@@ -24,9 +24,9 @@
 <!-- EACH DOWNLOAD GETS IT'S OWN ROW WITH CELLS IN A LOOP -->
 <tmpl_loop name="arUserTorrent">
 	<tmpl_if name="__ODD__">
-	<tr onmouseover="this.className='hover';" onmouseout="this.className='gray';" class="gray">
+	<tr class="gray">
 	<tmpl_else>
-	<tr onmouseover="this.className='hover';" onmouseout="this.className='white';" class="white">
+	<tr class="white">
 	</tmpl_if>
 		<td><!-- STATUS BULLET GREEN/YELLOW/RED/BLACK TO DISPLAY TORRENT STATUS + LINK TO A LIST OF HOSTS -->
 			<a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
@@ -34,10 +34,10 @@
 			</a>
 		</td>
 		<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
-		  <a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-		  <img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
-		  <tmpl_var name="displayname">
-		  </a>
+			<a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
+			<img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
+			<tmpl_var name="displayname">
+			</a>
 		</td>
 		<!--<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if>--><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
 		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
@@ -237,9 +237,9 @@
 		</tr>
 		<tmpl_loop name="arListTorrent">
 			<tmpl_if name="__ODD__">
-				<tr onmouseover="this.className='hover';" onmouseout="this.className='gray';" class="gray">
+				<tr class="gray">
 			<tmpl_else>
-				<tr onmouseover="this.className='hover';" onmouseout="this.className='white';" class="white">
+				<tr class="white">
 			</tmpl_if>
 				<td>
 					<a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
@@ -247,10 +247,10 @@
 					</a>
 				</td>
 				<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
-				  <a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-				  <img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
-				  <tmpl_var name="displayname">
-				  </a>
+					<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
+					<img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
+					<tmpl_var name="displayname">
+					</a>
 				</td>
 		<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
 		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
