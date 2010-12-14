@@ -184,6 +184,11 @@ function ajax_processText(content) {
 		if ((bottomStatsEnabled == 1) && (xferEnabled == 1))
 			statsXfer = tempAry.pop();
 		
+		// theme specific event
+		if (typeof(beforeAjaxUpdate) != 'undefined') {
+			beforeAjaxUpdate();
+		}
+		
 		// update
 		ajax_updateContent(tempAry.pop(), statsXfer, users, transferList);
 		

@@ -35,18 +35,18 @@ jQuery(document).ready(function(){
 	jQuery("#tabs").tabs({ panelTemplate: '<li></li>' });
 
 	jQuery("tr.gray")
-	.mouseover(function() {
+	.mouseenter(function() {
 		this.className='hover';
 	})
-	.mouseout(function() {
+	.mouseleave(function() {
 		this.className='gray';
 	});
 
 	jQuery("tr.white")
-	.mouseover(function() {
+	.mouseenter(function() {
 		this.className='hover';
 	})
-	.mouseout(function() {
+	.mouseleave(function() {
 		this.className='white';
 	});
 
@@ -72,21 +72,27 @@ jQuery(document).ready(function(){
  
 });
 
+function beforeAjaxUpdate() {
+	jQuery("tr.gray, tr.white")
+		.unbind('mouseenter')
+		.unbind('mouseleave');
+}
+
 function afterAjaxUpdate() {
 
 	jQuery("tr.gray")
-	.mouseover(function() {
+	.mouseenter(function() {
 		this.className='hover';
 	})
-	.mouseout(function() {
+	.mouseleave(function() {
 		this.className='gray';
 	});
 
 	jQuery("tr.white")
-	.mouseover(function() {
+	.mouseenter(function() {
 		this.className='hover';
 	})
-	.mouseout(function() {
+	.mouseleave(function() {
 		this.className='white';
 	});
 
