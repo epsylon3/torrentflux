@@ -37,15 +37,16 @@ function tmplInitializeInstance($theme, $template) {
 		? new vlibTemplateCache($path.$template)
 		: new vlibTemplate($path.$template);
 	//  set common template-vars
+	$tmpl->setUnknowns('comment');
 	$tmpl->setvar('theme', $theme);
-    $tmpl->setvar('pagetitle', @ $cfg["pagetitle"]);
-    $tmpl->setvar('main_bgcolor', @ $cfg["main_bgcolor"]);
-    $tmpl->setvar('table_border_dk', @ $cfg["table_border_dk"]);
-    $tmpl->setvar('table_header_bg', @ $cfg["table_header_bg"]);
-    $tmpl->setvar('table_data_bg', @ $cfg["table_data_bg"]);
-    $tmpl->setvar('body_data_bg', @ $cfg["body_data_bg"]);
-    $tmpl->setvar('isAdmin', @ $cfg['isAdmin']);
-    $tmpl->setvar('_CHARSET', @ $cfg['_CHARSET']);
+	$tmpl->setvar('pagetitle', @ $cfg["pagetitle"]);
+	$tmpl->setvar('main_bgcolor', @ $cfg["main_bgcolor"]);
+	$tmpl->setvar('table_border_dk', @ $cfg["table_border_dk"]);
+	$tmpl->setvar('table_header_bg', @ $cfg["table_header_bg"]);
+	$tmpl->setvar('table_data_bg', @ $cfg["table_data_bg"]);
+	$tmpl->setvar('body_data_bg', @ $cfg["body_data_bg"]);
+	$tmpl->setvar('isAdmin', @ $cfg['isAdmin']);
+	$tmpl->setvar('_CHARSET', @ $cfg['_CHARSET']);
 }
 
 /**
@@ -66,17 +67,18 @@ function tmplGetInstance($theme, $template) {
 		? new vlibTemplateCache($path.$template)
 		: new vlibTemplate($path.$template);
 	//  set common template-vars
+	$tmpl->setUnknowns('comment');
 	$_tmpl->setvar('theme', $theme);
-    $_tmpl->setvar('pagetitle', @ $cfg["pagetitle"]);
-    $_tmpl->setvar('main_bgcolor', @ $cfg["main_bgcolor"]);
-    $_tmpl->setvar('table_border_dk', @ $cfg["table_border_dk"]);
-    $_tmpl->setvar('table_header_bg', @ $cfg["table_header_bg"]);
-    $_tmpl->setvar('table_data_bg', @ $cfg["table_data_bg"]);
-    $_tmpl->setvar('body_data_bg', @ $cfg["body_data_bg"]);
-    $_tmpl->setvar('isAdmin', @ $cfg['isAdmin']);
-    $_tmpl->setvar('_CHARSET', @ $cfg['_CHARSET']);
-    // return template-instance
-    return $_tmpl;
+	$_tmpl->setvar('pagetitle', @ $cfg["pagetitle"]);
+	$_tmpl->setvar('main_bgcolor', @ $cfg["main_bgcolor"]);
+	$_tmpl->setvar('table_border_dk', @ $cfg["table_border_dk"]);
+	$_tmpl->setvar('table_header_bg', @ $cfg["table_header_bg"]);
+	$_tmpl->setvar('table_data_bg', @ $cfg["table_data_bg"]);
+	$_tmpl->setvar('body_data_bg', @ $cfg["body_data_bg"]);
+	$_tmpl->setvar('isAdmin', @ $cfg['isAdmin']);
+	$_tmpl->setvar('_CHARSET', @ $cfg['_CHARSET']);
+	// return template-instance
+	return $_tmpl;
 }
 
 /**
