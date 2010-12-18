@@ -67,7 +67,7 @@ function tmplGetInstance($theme, $template) {
 		? new vlibTemplateCache($path.$template)
 		: new vlibTemplate($path.$template);
 	//  set common template-vars
-	$tmpl->setUnknowns('comment');
+	$_tmpl->setUnknowns('comment');
 	$_tmpl->setvar('theme', $theme);
 	$_tmpl->setvar('pagetitle', @ $cfg["pagetitle"]);
 	$_tmpl->setvar('main_bgcolor', @ $cfg["main_bgcolor"]);
