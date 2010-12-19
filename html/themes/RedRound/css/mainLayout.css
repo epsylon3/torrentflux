@@ -14,8 +14,11 @@ body, .ui-widget {
 	font-size: 11px;
 }
 
+
+
 .container { 
-	margin: 0 auto; 
+	margin: 0 auto;
+	margin-top: 5px;
 	min-width: 900px; 
 	display: table;
 }
@@ -39,12 +42,14 @@ a:hover {
 }
 
 img { border: none;}
-
+#center_wrap	{ margin: 0 auto; width:900px;position:relative; height:50px; }
 #header {
 	margin: 0 auto;
+	margin-left: -62px;
 	width: 1024px;
 	height: 100px;
-	background: #B22037 url('../images/mainLayout/Box/header.jpg');
+	position:absolute; 
+	background: transparent url('../images/mainLayout/Box/header.png');
 	background-repeat: no-repeat;
 }
 
