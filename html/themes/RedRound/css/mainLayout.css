@@ -397,6 +397,14 @@ td.progressbar .pbfinished {
 	font-size:90%;
 }
 
+div.pbbackgnd {
+	position:absolute;top:0;left:0;height:10px;
+}
+
+div.pbpercent {
+	padding: 0;
+}
+
 /* PROGRESS INDICATOR WHEN ACTIONS IS BEING DONE */
 .hidden { visibility:hidden; }
 
