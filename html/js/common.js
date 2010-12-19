@@ -1,15 +1,17 @@
 /* $Id$ */
 var actionInProgress = false;
 var varRefresh;
+var refreshTimer;
 function initRefresh(refresh) {
 	varRefresh = refresh;
-	setTimeout("updateRefresh();", 1000);
+	refreshTimer = setTimeout(updateRefresh, 1000);
 }
 function updateRefresh() {
 	varRefresh--;
 	if (varRefresh >= 0) {
-	    document.getElementById("span_refresh").innerHTML = String(varRefresh);
-	    setTimeout("updateRefresh();", 1000);
+		document.getElementById("span_refresh").innerHTML = varRefresh.toString();
+		if (refreshTimer) clearTimeout(refreshTimer);
+		refreshTimer = setTimeout(updateRefresh, 1000);
 	}
 }
 function bulkCheck(thisIn) {

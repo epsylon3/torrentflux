@@ -662,7 +662,7 @@ $.fn.jScrollPane.defaults = {
 	animateToInternalLinks: false,
 	topCapHeight: 0,
 	bottomCapHeight: 0,
-	observeHash: true
+	observeHash: false
 };
 
 // clean up the scrollTo expandos
