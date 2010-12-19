@@ -94,24 +94,24 @@ class Image
 		if (!$img)
 			return false;
 		switch ($t) {
-			case IMG_GIF:
-				$img->image = @imagecreatefromgif($r);
-				return (!$img->image)
-					? false
-					: $img;
 			case IMG_PNG:
 				$img->image = @imagecreatefrompng($r);
-				return (!$img->image)
-					? false
-					: $img;
 				break;
 			case IMG_JPG:
 				$img->image = @imagecreatefromjpeg($r);
-				return (!$img->image)
-					? false
-					: $img;
+				break;
+			case IMG_GIF:
+			default:
+				$img->image = @imagecreatefromgif($r);
 				break;
 		}
+		if ($img->image !== false) {
+			// dim
+			$img->width = imagesx($img->image);
+			$img->height = imagesy($img->image);
+			return $img;
+		}
+		return false;
 	}
 
 	/* generic static helper-meths */
