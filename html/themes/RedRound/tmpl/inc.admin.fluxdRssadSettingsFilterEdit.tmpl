@@ -9,6 +9,50 @@
 			<td><tmpl_var name="filtername"></td>
 		</tr>
 		<tr>
+			<th>Filter Builder</th>
+			<td>
+				<div id="filterEditorBuilder">	
+						<div class="base_name">
+							<label>Item Name</label>
+							<input type="text" name="builderName" id="builderName" placeholder="Enter Item Name"/>
+						</div>
+						<br class="clear" />
+						<div class="filter_block" style="float:left;">
+							<label>Positive Filters</label>
+							<select multiple="multiple" size="6" id="positive_filters">
+							
+							</select>
+							<br class="clear" />
+							<a href="#" class="remove_filter">Remove Selected Filter</a>
+							<input type="text" class="add_filter"/>
+							<input type="button" value="add" class="add_action"/>
+							<br class="clear" />
+						</div>
+						<div class="filter_block" style="float:right;">
+							<label>Negative Filters</label>
+							<select multiple="multiple" size="6" id="negative_filters">
+							
+							</select>
+							<br class="clear" />
+							<a href="#" class="remove_filter">Remove Selected Filter</a>
+							<input type="text" class="add_filter"/>
+							<input type="button" value="add" class="add_action"/>
+							<br class="clear" />
+						</div>
+						<br class="clear" />
+						<label>Generated Filter</label>
+						<div class="filterResults">
+							<textarea></textarea>
+						</div>
+						<div class="filterActions">
+							<a href="#" class="save_filter">Save Filter</a>
+						</div>
+						<br class="clear" />
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
 			<th>Filter-Entries</th>
 			<td>
 				<input type="hidden" name="pageop" value="saveFilter">
@@ -22,6 +66,7 @@
 				</tmpl_loop>
 				</tmpl_if>
 					</select>
+				<input type="button" name="editButton" value="edit" onblur="editRssadFilterEntry()">
 				<input type="button" name="remButton" value="remove" onclick="removeRssadFilterEntry()">
 			</td>
 		<tr>

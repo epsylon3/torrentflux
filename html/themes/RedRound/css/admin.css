@@ -2004,3 +2004,27 @@ div#overDiv {
 	font-size: 75%;
 	opacity: 0.8;
 }
+
+#filterEditorBuilder	{}
+#filterEditorBuilder label	{ text-transform:uppercase; color:#4F6B72; font-size:11px; }
+#filterEditorBuilder > div.base_name	{ text-align:center;}
+#filterEditorBuilder > div.base_name > label	{ display:block; text-align:left; width:100%; margin:0 auto; }
+#filterEditorBuilder > div.base_name > input	{ width: 100%; margin:0 auto; font-size:14px; }
+#filterEditorBuilder > div.filter_block	{ width: 200px; }
+#filterEditorBuilder > div.filter_block > label	{ display:block; }
+#filterEditorBuilder > div.filter_block > a	{ text-transform:uppercase; color:#4F6B72; font-size:11px; width:100%; display:block; margin: 2px 0px; }
+#filterEditorBuilder > div.filter_block > select	{ border: 1px solid #C1DAD7; width:100%; height:120px;}
+#filterEditorBuilder > div.filter_block > select > option	{ padding: 2px 5px; font-size:14px; }
+#filterEditorBuilder > div.filter_block > input.add_filter	{ width:150px; float:left; margin-top:4px; margin-top:2px; }
+#filterEditorBuilder > div.filter_block > input.add_action	{ width: 40px; float:right; height:24px; font-size:13px; }
+#filterEditorBuilder > div.filterResults	{ width:100%; border: 1px solid #C1DAD7;min-height:50px; padding:3px; }
+#filterEditorBuilder > div.filterResults span	{ float:left; margin:0 1px; font-size:11px; }
+#filterEditorBuilder > div.filterResults .negative	{ color:red; }
+#filterEditorBuilder > div.filterResults .positive	{ color:green; }
+#filterEditorBuilder > div.filterResults .search_value	{ color:blue; }
+#filterEditorBuilder > div.filterResults .helper	{ color: orange; }
+#filterEditorBuilder > div.filterResults textarea	{ display:none; width:100%; height:100%; font-size:14px;  }
+#filterEditorBuilder > div.filterActions	{ float:right; color:#4F6B72; font-size:11px; margin-top:2px;}
+#filterEditorBuilder > div.filterActions a	{ text-transform:uppercase; color:#4F6B72; font-size:11px; margin: 2px 0px; }
+
+.clear	{ line-height:0; clear:both; }
