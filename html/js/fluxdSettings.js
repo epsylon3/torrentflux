@@ -31,6 +31,23 @@ function addRssadFilterEntry() {
 	}
 }
 
+function editRssadFilterEntry() {
+	if (document.theForm.rssad_filters.selectedIndex != -1) {
+		var liststr = document.theForm.rssad_filtercontent;
+		
+		var selectstr = document.theForm.rssad_filters.options[document.theForm.rssad_filters.selectedIndex].value;
+		document.theForm.rssad_filters.remove(document.theForm.rssad_filters.selectedIndex);
+		var newValue = "";
+		for (var j = 0; j < document.theForm.rssad_filters.options.length; j++) {
+            if (j > 0)
+                newValue += "\n";
+		    newValue += lrtrim(document.theForm.rssad_filters.options[j].value);
+		}
+		liststr.value = lrtrim(newValue);
+		document.theForm.rssad_filter_entry.value = selectstr;
+	}
+}
+
 /**
  * removeRssadFilterEntry()
  */

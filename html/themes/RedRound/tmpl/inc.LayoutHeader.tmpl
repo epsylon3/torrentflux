@@ -28,7 +28,7 @@
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.jScrollPane.js"></script>
 <script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.droplist.js"></script>
-
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.documentready.user.js"></script>
 <!-- refresh options if enabled -->
 <tmpl_if name="meta_refresh">
 <meta http-equiv="refresh" content="<tmpl_var name="meta_refresh">" />
@@ -87,9 +87,11 @@
 </tmpl_if>
 </head>
 <body <tmpl_if name="onLoad">onload="<tmpl_var name="onLoad">"</tmpl_if>>
-	<div id="header">
-		<div id="UserBar"><tmpl_include name="inc.LayoutUserBar.tmpl"></div>
-		<h1><tmpl_var name="pagetitle"></h1>
+	<div id="center_wrap">
+		<div id="header">
+			<div id="UserBar"><tmpl_include name="inc.LayoutUserBar.tmpl"></div>
+			<h1><tmpl_var name="pagetitle"></h1>
+		</div>
 	</div>
 <div class="container">
 	<div class="angle" id="AngleTopLeft">
