@@ -41,7 +41,7 @@ $packages = array (
 
 if (!empty($_REQUEST['p'])) {
 	
-	$package = str_replace('/','',$_REQUEST['p']);
+	$package = $_REQUEST['p'];
 	
 	//build javascript file list from packages
 	$filelist = array();
@@ -75,6 +75,8 @@ if (!empty($_REQUEST['p'])) {
 	}
 	
 	header('Location: pack/'.$package.'.js');
+	
+	exit(0);
 }
 
 ?>

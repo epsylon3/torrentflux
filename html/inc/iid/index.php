@@ -263,9 +263,19 @@ foreach ($arList as $mtimecrc => $transfer) {
 			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
 			@error("Invalid Transfer", "", "", array($transfer));
 		}
-		$settingsAry['hash'] = "";
+		//$settingsAry['hash'] = "";
+	}
+	if (empty($settingsAry['hash'])) {
+		$settingsAry['hash'] = getTransferHash($transfer);
+		$transfers['settings'][$transfer] = $settingsAry;
+	}
+	if (empty($settingsAry['datapath'])) {
+		$settingsAry["datapath"] = getTransferSavepath($transfer);
+		$transfers['settings'][$transfer] = $settingsAry;
+	}
+	if (empty($settingsAry['savepath'])) {
 		$settingsAry["savepath"] = getTransferSavepath($transfer);
-		$settingsAry['datapath'] = getTransferDatapath($transfer);
+		$transfers['settings'][$transfer] = $settingsAry;
 	}
 	// Fix FluAzu progression 100% (client to check, not set to "azureus", solved by mysql column enum to varchar ?)
 	if ($settingsAry["client"] == "") {
@@ -615,6 +625,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 		'show_run' => $show_run,
 		'entry' => $transfer
 	);
+	
 	// Is this transfer for the user list or the general list?
 	if ($owner)
 		array_push($arUserTorrent, $tArray);
@@ -624,10 +635,12 @@ foreach ($arList as $mtimecrc => $transfer) {
 $tmpl->setloop('arUserTorrent', $arUserTorrent);
 $tmpl->setloop('arListTorrent', $arListTorrent);
 
+/*
 if (!empty($vuzeResults)) {
 	$nbInVuze = count($vuzeResults);
 	addGrowlMessage("Vuze"," Active: $nbRpc - Loaded: $nbInVuze");
 }
+*/
 
 //XFER: update 2
 if (($cfg['enable_xfer'] == 1) && ($cfg['xfer_realtime'] == 1))

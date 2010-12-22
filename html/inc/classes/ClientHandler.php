@@ -262,11 +262,19 @@ class ClientHandler
 	function settingsDefault($transfer = "") {
 		global $cfg;
 		// transfer vars
-		$this->_setVarsForTransfer($transfer);
-		// common vars
-		$this->hash        = getTransferHash($this->transfer);
-		$this->datapath    = getTransferDatapath($this->transfer);
-		$this->savepath    = getTransferSavepath($this->transfer, ""); // default profile
+		if (empty($transfer) && !empty($this->transfer)) {
+			$transfer = $this->transfer;
+		}
+		if (!empty($transfer)) {
+			$this->_setVarsForTransfer($transfer);
+			// common vars
+			$this->hash        = getTransferHash($this->transfer);
+			$this->datapath    = getTransferDatapath($this->transfer);
+			$this->savepath    = getTransferSavepath($this->transfer, ""); // default profile
+		}
+		elseif ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client." settingsDefault with empty transfer");
+		}
 		$this->running     = 0;
 		$this->rate        = $cfg["max_upload_rate"];
 		$this->drate       = $cfg["max_download_rate"];
