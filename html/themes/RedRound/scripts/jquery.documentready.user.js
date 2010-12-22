@@ -1,9 +1,9 @@
 /**
- *
+ * Top Menu show/hide
  */
 
-$(document).ready(function(){
-	$('#header').animate({marginTop: '-40px'},1000);
+jQuery(document).ready(function(){
+	$('#header').css({marginTop: '-40px'});
 	$('#header').bind({
 		mouseenter: function(){
 			$(this).animate({
