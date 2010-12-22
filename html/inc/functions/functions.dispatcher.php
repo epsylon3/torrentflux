@@ -159,7 +159,7 @@ function dispatcher_deleteTransfer($transfer) {
 	if ($cfg["transmission_rpc_enable"] && isHash($transfer) ) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		if ( isValidTransmissionTransfer($cfg['uid'],$transfer) ) {
-			deleteTransmissionTransfer($transfer);
+			deleteTransmissionTransfer($cfg['uid'],$transfer);
 			return;
 		}
 	}
@@ -476,9 +476,19 @@ function dispatcher_multi($action) {
 			require_once('inc/functions/functions.rpc.transmission.php');
 			$theTorrent = getTransmissionTransfer($transfer, array('id'));
 			$isTransmissionTorrent = is_array($theTorrent);
+			//	$torrentId = $theTorrent['id'];
+			
 			if ($isTransmissionTorrent)
-				$torrentId = $theTorrent['id'];
-			// TODO: complete this, not implemented for Transmission atm
+			switch ($action) {
+				case "transferData":
+					deleteTransmissionTransfer($cfg['uid'], $transfer, true);
+					$dispatcherMessages[] = "Torrent deleted with data";
+					break;
+				case "transfer":
+					deleteTransmissionTransfer($cfg['uid'], $transfer, false);
+					$dispatcherMessages[] = "Torrent deleted";
+					break;
+			}
 		}
 
 		if ( !$isTransmissionTorrent ) {
@@ -924,14 +934,15 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 					AuditAction($cfg["constants"]["file_upload"], $filename);
 
 					if ($cfg["transmission_rpc_enable"]) {
+						// need to check if default client is transmission : tfb_getRequestVar('client')
 						require_once('inc/functions/functions.rpc.transmission.php');
 						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
-						//@unlink($cfg['transfer_file_path'].$filename);
-						//if ( $actionId > 1 ) {
-							//startTransmissionTransfer( $hash );
-							//array_push($tStack,$filename);
-						//}
-						//return true;
+						@unlink($cfg['transfer_file_path'].$filename);
+						if ( $actionId > 1 ) {
+							startTransmissionTransfer( $hash );
+							array_push($tStack,$filename);
+						}
+						return true;
 					}
 					// inject
 					injectTransfer($filename);
