@@ -1,6 +1,10 @@
 <form action="dispatcher.php" method="post" onsubmit="return actionSubmit()">
-<div id="transferList"><!-- THIS IS NEEDED FOR AJAX UPDATE OF TRANSFER LIST TO WORK -->
-<h3>Your Transfers</h3>
+<!-- THIS IS NEEDED FOR AJAX UPDATE OF TRANSFER LIST TO WORK -->
+<div id="transferList">
+<h3 id="yours">
+<a class="ui-button" onclick="$('h3#yours').next('table.sortable').clearQueue().fadeToggle(); return false;" title="Show/Hide Your Transfers"><img valign="bottom" height="16px" width="16px" src="themes/RedRound/images/index/TransferList/hidetable.png"/></a>
+Your Transfers
+</h3>
 <table class="table sortable" style="width:100%" cellspacing="0" id="transfer_table">
 <!-- BEGIN TRANSFERS WHICH BELONG TO USER -->
 <tmpl_if name="are_user_transfer">
@@ -217,7 +221,10 @@
 </table>
 <!-- BEGIN TRANSFERS WHICH BELONG TO USERS AND ADMIN CAN SEE -->
 <tmpl_if name="are_transfer">
-<h3>Foreign Transfers</h3>
+<h3 id="foreign">
+<a class="ui-button" onclick="$('h3#foreign').next('table.sortable').fadeToggle(); return false;" title="Show/Hide Your Transfers"><img valign="bottom" height="16px" width="16px" src="themes/RedRound/images/index/TransferList/hidetable.png"/></a>
+Foreign Transfers
+</h3>
 <table class="table sortable" width="100%" cellspacing="0" id="transfer_table">
 		<tr>
 			<th></th>

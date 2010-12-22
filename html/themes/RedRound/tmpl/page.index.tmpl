@@ -28,6 +28,7 @@
 		<tmpl_if name="ui_displayusers"><li><a href="#tabs-7"><tmpl_var name="_USERS"></a></li></tmpl_if>
 		<tmpl_if name="ui_displaylinks" value="1"><li><a href="#tabs-8"><tmpl_var name="_LINKS"></a></li></tmpl_if>
 		<tmpl_if name="index_page_stats"><li><a href="#tabs-9">Stats</a></li></tmpl_if>
+		<a class="ui-button ui-icon ui-icon-refresh" style="float:right; height:16px;" onclick="ajax_update(); return false;" title="Ajax Refresh"></a>
 	</ul>
 	<div id="tabs-1"><tmpl_include name="inc.transferList.tmpl"><tmpl_include name="inc.transferListBulkActions.tmpl"></div>
 	<tmpl_if name="enable_search"><div id="tabs-4"><tmpl_include name="inc.indexTorrentSearch.tmpl"></div></tmpl_if>
