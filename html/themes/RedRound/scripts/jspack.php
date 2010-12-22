@@ -1,4 +1,11 @@
 <?php
+/*
+This is a simple Javascript files combiner to reduce number of http requests
+no need for crc or md5 checks, will be slower to check if files are modified
+
+call it like that in html templates :
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jspack.php?p=layout-header"></script>
+*/
 
 header('Content-Type: text/javascript');
 
@@ -16,6 +23,7 @@ $packages = array (
 "progressbar" => array(
 	"jquery.progressbar.min.js"
 	),
+
 "layout-header" => array(
 	//packages
 	"jquery-ui",
@@ -46,7 +54,12 @@ if (!empty($_REQUEST['p'])) {
 		} else
 			$filelist[$jsfile] = $jsfile;
 	}
-	
+
+	if (count($filelist) == 1) {
+		header('Location: '.array_pop($filelist));
+		exit;
+	}
+
 	//combine js files and save cache
 	$packed = '';
 	foreach($filelist as $jsfile) {
@@ -55,6 +68,8 @@ if (!empty($_REQUEST['p'])) {
 			$packed .= $data."\n";
 		}
 	}
+
+	//write package if changed
 	if (@ file_get_contents('pack/'.$package.'.js') != $packed) {
 		file_put_contents('pack/'.$package.'.js',$packed);
 	}
