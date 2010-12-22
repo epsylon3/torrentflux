@@ -25,10 +25,10 @@ define("_CHARSET", "utf-8");
 // to be able to exec shell commands with utf8 accents
 define("_LC_CTYPE", "fr_FR.UTF-8");
 
-define("_SELECTFILE", "Uploader un torrent depuis votre poste");
-define("_URLFILE","URL de fichier.torrent depuis un site web externe (https géré !)");
+define("_SELECTFILE", "Envoyer un torrent depuis votre poste");
+define("_URLFILE","URL du fichier.torrent depuis un site web");
 define("_UPLOAD", "Envoyer");
-define("_GETFILE", "Ajouter le torrent");
+define("_GETFILE", "Ajouter");
 define("_LINKS", "Liens");
 define("_ONLINE", "En ligne");
 define("_OFFLINE", "Hors ligne");
