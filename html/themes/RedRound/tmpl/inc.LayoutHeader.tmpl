@@ -19,24 +19,37 @@
 <!-- Theme css -->
 <link rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/mainLayout.css" type="text/css" />
 <link rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/<tmpl_var name='iid'>.css" type="text/css" />
-<!-- jQuery core -->
+
+<tmpl_if name="iid" value="index">
+	<style type="text/css">
+	/* .container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;} */
+	/* Fix droplists autoresize in tabs, or not :/ */
+	.ui-tabs .ui-tabs-hide {
+		position: absolute;
+		left: -10000px;
+	}
+	</style>
+</tmpl_if>
+
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jspack.php?p=layout-header"></script>
+<!--
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!-- Theme scripts -->
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui.min.js"></script>
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/linkControl.js"></script>
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/common.js"></script>
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.mousewheel.js"></script>
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.jScrollPane.js"></script>
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.droplist.js"></script>
-<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.documentready.user.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery-ui.min.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.jScrollPane.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.droplist.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/linkControl.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/common.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.documentready.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.documentready.user.js"></script>
+<script type="text/javascript" src="js/jquery.jgrowl.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+-->
+
 <!-- refresh options if enabled -->
 <tmpl_if name="meta_refresh">
 <meta http-equiv="refresh" content="<tmpl_var name="meta_refresh">" />
 </tmpl_if>
-
-<!-- JS files -->
-<script type="text/javascript" src="js/jquery.jgrowl.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
 
 <!-- JS files included depending on page -->
 <tmpl_if name="iid" value="index">
@@ -58,7 +71,7 @@
 		});
 	</script>
 
-	<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/<tmpl_var name="iid">.js"></script>
+	<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/<tmpl_var name='iid'>.js"></script>
 
 	<script type="text/javascript" src="js/ajax.js"></script>
 </tmpl_if>
@@ -75,16 +88,6 @@
 	<script type="text/javascript" src="js/dir.js"></script>
 </tmpl_if>
 
-<tmpl_if name="iid" value="index">
-	<style type="text/css">
-	/* .container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;} */
-	/* Fix droplists autoresize in tabs, or not :/ */
-	.ui-tabs .ui-tabs-hide {
-		position: absolute;
-		left: -10000px;
-	}
-	</style>
-</tmpl_if>
 </head>
 <body <tmpl_if name="onLoad">onload="<tmpl_var name="onLoad">"</tmpl_if>>
 	<div id="center_wrap">
