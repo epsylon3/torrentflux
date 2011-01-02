@@ -3,9 +3,8 @@
  */
 
 jQuery(document).ready(function(){
-	$('#header').css({marginTop: '-40px'});
 	$('#header').bind({
-		mouseenter: function(){
+		mouseover: function(){
 			$(this).animate({
 				marginTop: '0px'
 			},"fast");
