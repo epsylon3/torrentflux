@@ -25,6 +25,7 @@
 */
 
 /*
+    v 1.02 - Jan 01 2011 - Ben McMahon - fix for search result columns and voting links
     v 1.01b - Jul 05 2008 - fix for search results
     v 1.01 - Oct 06, 06 fix to search results.
     v 1.00 - Aug 23, 06
@@ -296,8 +297,8 @@ class btJunk
 
                 $this->torrentSize = $this->cleanLine($tmpListArr["4"]);  // Size of File
 
-                $this->Seeds = $this->cleanLine($tmpListArr["5"]);  // Seeds
-                $this->Peers = $this->cleanLine($tmpListArr["6"]);  // Peers
+                $this->Seeds = $this->cleanLine($tmpListArr["6"]);  // Seeds
+                $this->Peers = $this->cleanLine($tmpListArr["7"]);  // Peers
 
                 if ($this->Seeds == '') $this->Seeds = "N/A";
                 if ($this->Seeds == 'X') $this->Seeds = "N/A";
