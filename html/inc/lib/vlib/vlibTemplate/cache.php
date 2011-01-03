@@ -82,7 +82,7 @@ class vlibTemplateCache extends vlibTemplate {
      * @return boolean
      */
     function setCacheExtension($str = null) {
-        if ($str == null || !ereg('^[a-z0-9]+$', strtolower($str))) return false;
+        if ($str == null || !preg_match('#^[a-z0-9]+$#', strtolower($str))) return false;
         $this->OPTIONS['CACHE_EXTENSION'] = strtolower($str);
         return true;
     }
@@ -139,6 +139,8 @@ class vlibTemplateCache extends vlibTemplate {
      */
     function _createCache($data) {
         $cache_file = $this->_cachefile;
+        if (empty($cache_file)) return false;
+        
         if(!$this->_prepareDirs($cache_file)) return false; // prepare all of the directories
 
         $f = fopen ($cache_file, "w");
@@ -161,9 +163,12 @@ class vlibTemplateCache extends vlibTemplate {
         $filepath = dirname($file);
         if (is_dir($filepath)) return true;
 
-        $dirs = split('[\\/]', $filepath);
+        $dirs = preg_split("#[\\/\\\\]#", $filepath); // "/" ou "\"
         $currpath;
         foreach ($dirs as $dir) {
+            if (empty($dir))
+                continue;
+            
             $currpath .= $dir .'/';
             $type = @filetype($currpath);
 
@@ -175,7 +180,7 @@ class vlibTemplateCache extends vlibTemplate {
                 continue;
             }
             else {
-                $s = @mkdir($currpath, 0775);
+                $s = (@mkdir($currpath, 0775) || @mkdir($currpath) );
                 if (!$s) vlibTemplateError::raiseError('VT_ERROR_CACHE_MKDIR_FAILURE',KILL,'directory: '.$currpath);
             }
         }

@@ -1240,7 +1240,7 @@ if (!defined('vlibTemplateClassLoaded'))
 
 			switch (strtolower($this->OPTIONS['UNKNOWNS'])) {
 				case 'comment':
-					$comment = addcslashes('<!-- unknown variable '.ereg_replace('<!--|-->', '', $wholetag).'//-->', '"');
+					$comment = addcslashes('<!-- unknown variable '.preg_replace('#<!--|-->#', '', $wholetag).'//-->', '"');
 					$retstr .= ' else { print("'.$comment.'"); $this->_setUnknown("'.$varname.'"); }';
 					return $retstr;
 				break;
@@ -1393,10 +1393,10 @@ if (!defined('vlibTemplateClassLoaded'))
 		 * @return boolean true/false
 		 */
 		function _intParse () {
-			$mqrt = get_magic_quotes_runtime();
-			set_magic_quotes_runtime(0);
+//			$mqrt = get_magic_quotes_runtime();
+//			set_magic_quotes_runtime(0);
 			$this->_tmplfilep = '?>'.$this->_getData($this->_tmplfilename).'<?php return true;';
-			set_magic_quotes_runtime($mqrt);
+//			set_magic_quotes_runtime($mqrt);
 			return true;
 		}
 

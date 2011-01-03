@@ -48,7 +48,7 @@ if (!defined('vlibIniClassLoaded')) {
 
             $cache_dir = $cfg["path"].'.templateCache';
             if ( !is_writable($cfg["path"]) )
-		$cache_dir = '/tmp/.templateCache';
+                $cache_dir = '/tmp/.templateCache';
 
             return array(
                 'TEMPLATE_DIR' => '/var/www/themes/default/tmpl',   // Default directory for your template files (full path) leave the '/' or '\' off the end of the directory.
@@ -67,8 +67,8 @@ if (!defined('vlibIniClassLoaded')) {
                 'ENABLE_PHPINCLUDE' => '0', // Will allow template to include a php file using <TMPL_PHPINCLUDE>
                 'ENABLE_SHORTTAGS'  => '0', // Will allow you to use short tags in your script i.e.: <VAR name="my_var">, <LOOP name="my_loop">...</LOOP>
 
-		/* the following are only used by the vlibTemplateCache class. */
-		'CACHE_DIRECTORY' => $cache_dir,
+                /* the following are only used by the vlibTemplateCache class. */
+                'CACHE_DIRECTORY' => $cache_dir,
                     // Directory where the cached filesystem
                     // will be set up (full path, and must be writable)
                     // '/' or '\' off the end of the directory.
@@ -99,7 +99,7 @@ if (!defined('vlibIniClassLoaded')) {
                 'DEFAULT_SEPERATOR'     => 	 'OR', // default clause seperator, can have 'AND' or 'OR'
                 // list of words that are not used in search
                 'STOP_WORDS'			=> 	 'a all an and are as at be but by can for from had have he her his in is it may not of on or that the there this to was where which will with you your'
-			);
+            );
 
         }// << end function vlibSearchToSQL
 
