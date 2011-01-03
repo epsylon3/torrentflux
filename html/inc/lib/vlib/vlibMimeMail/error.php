@@ -30,34 +30,34 @@ class vlibMimeMailError {
 |     DO NOT TOUCH ANYTHING IN THIS CLASS IT MAY NOT WORK OTHERWISE            |
 \-----------------------------------------------------------------------------*/
 
-    function raiseError ($code, $level = null, $extra=null) {
-        if (!($level & error_reporting())) return; // binary AND checks for reporting level
+	function raiseError ($code, $level = null, $extra=null) {
+		if (!($level & error_reporting())) return; // binary AND checks for reporting level
 
-        $error_codes = array(
-                        'VM_ERROR_INVALID_ERROR_CODE'   => 'vlibMimeMail error: Invalid error raised.',
-                        'VM_ERROR_NOFILE'               => 'vlibMimeMail error: Attachment ('.$extra.') file not found.',
-                        'VM_ERROR_BADEMAIL'             => 'vlibMimeMail error: Email address ('.$extra.') not valid.',
-                        'VM_ERROR_NOBODY'               => 'vlibMimeMail error: Tried to send a message with no body.',
-                        'VM_ERROR_CANNOT_SEND'          => 'vlibMimeMail error: Tried to send a message without declaring a body or a recipient.',
-								'VM_ERROR_HOST_IS_EMPTY'        => 'vlibMimeMail error: Tried to construct vlibMimeMail with empty host..'
-                            );
+		$error_codes = array(
+						'VM_ERROR_INVALID_ERROR_CODE'   => 'vlibMimeMail error: Invalid error raised.',
+						'VM_ERROR_NOFILE'               => 'vlibMimeMail error: Attachment ('.$extra.') file not found.',
+						'VM_ERROR_BADEMAIL'             => 'vlibMimeMail error: Email address ('.$extra.') not valid.',
+						'VM_ERROR_NOBODY'               => 'vlibMimeMail error: Tried to send a message with no body.',
+						'VM_ERROR_CANNOT_SEND'          => 'vlibMimeMail error: Tried to send a message without declaring a body or a recipient.',
+						'VM_ERROR_HOST_IS_EMPTY'        => 'vlibMimeMail error: Tried to construct vlibMimeMail with empty host..'
+		);
 
-        $error_levels = array(
-                        'VM_ERROR_INVALID_ERROR_CODE'   => FATAL,
-                        'VM_ERROR_NOFILE'               => FATAL,
-                        'VM_ERROR_BADEMAIL'             => FATAL,
-                        'VM_ERROR_NOBODY'               => FATAL,
-                        'VM_ERROR_CANNOT_SEND'          => FATAL
-                            );
+		$error_levels = array(
+						'VM_ERROR_INVALID_ERROR_CODE'   => FATAL,
+						'VM_ERROR_NOFILE'               => FATAL,
+						'VM_ERROR_BADEMAIL'             => FATAL,
+						'VM_ERROR_NOBODY'               => FATAL,
+						'VM_ERROR_CANNOT_SEND'          => FATAL
+		);
 
-        if ($level === null) $level = $error_levels[$code];
+		if ($level === null) $level = $error_levels[$code];
 
-        if ($msg = $error_codes[$code]) {
-            trigger_error($msg, $level);
-        } else {
-            trigger_error($error_codes['VM_ERROR_INVALID_ERROR_CODE'], $error_levels['VM_ERROR_INVALID_ERROR_CODE']);
-        }
-        return;
-    }
+		if ($msg = $error_codes[$code]) {
+			trigger_error($msg, $level);
+		} else {
+			trigger_error($error_codes['VM_ERROR_INVALID_ERROR_CODE'], $error_levels['VM_ERROR_INVALID_ERROR_CODE']);
+		}
+		return;
+	}
 }
 ?>

@@ -1,3 +1,4 @@
 adodb     : ADOdb V4.98
 recaptcha : reCAPTCHA 1.10
-vlib      : vLIB 4.1.0
+Swift     : Swift 3.3.2 (from vLIB 4.2.1)
+vlib      : vLIB 4.2.1 (+ split/ereg fix by Epsylon3)
