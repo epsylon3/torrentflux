@@ -1,6 +1,6 @@
 <?php
 /* 
-V4.98 13 Feb 2008  (c) 2000-2008 John Lim (jlim#natsoft.com.my). All rights reserved.
+V5.11 5 May 2010   (c) 2000-2010 John Lim (jlim#natsoft.com). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. 
@@ -71,7 +71,7 @@ class  ADODB_ado_mssql extends ADODB_ado {
 		return str_replace("\0", "\\\\000", $s);
 	}
 	
-	function MetaColumns($table)
+	function MetaColumns($table, $normalize=true)
 	{
         $table = strtoupper($table);
         $arr= array();

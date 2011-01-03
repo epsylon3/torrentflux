@@ -21,7 +21,7 @@ font-size: 8pt;
 <body style="background-color: rgb(255, 255, 255);">
 <h1>ADODB Session 2 Management Manual</h1>
 <p>
-V4.98 13 Feb 2008 (c) 2000-2008 John Lim (jlim#natsoft.com.my)
+V5.11 5 May 2010  (c) 2000-2010 John Lim (jlim#natsoft.com)
 </p>
 <p> <font size="1">This software is dual licensed using BSD-Style and
 LGPL. This means you can use it in compiled proprietary and commercial
@@ -131,9 +131,15 @@ including adodb-cryptsession2.php instead of adodb-session2.php. </li>
  <font color="#004040">
 include_once("adodb/session/adodb-session2.php");
 $driver = 'mysql'; $host = 'localhost'; $user = 'auser'; $pwd = 'secret'; $database = 'sessiondb';
-ADOdb_Session::config($driver, $host, $user, $password, $database,$options=false);<b><br>ADOdb_session::Persist($connectMode=false);</b>
-session_start();<br> </font>
-</pre>
+ADOdb_Session::config($driver, $host, $user, $password, $database, $options=false);<b><br>ADOdb_session::Persist($connectMode=false);</b>
+session_start();<br> 
+
+# or, using DSN support so you can set other options such as port (since 5.11)
+include_once("adodb/session/adodb-session2.php");
+$dsn = 'mysql://root:pwd@localhost/mydb?persist=1&port=5654';
+ADOdb_Session::config($dsn, '', '', '');
+session_start();
+</font></pre>
 <p> The parameter to the Persist( ) method sets the connection mode. You can
   pass the following:</p>
 <table width="50%" border="1">
@@ -182,7 +188,7 @@ CREATE TABLE sessions2(
 	  expireref VARCHAR( 250 ) DEFAULT '',
 	  created DATETIME NOT NULL ,
 	  modified DATETIME NOT NULL ,
-	  sessdata LONGTEXT DEFAULT '',
+	  sessdata LONGTEXT,
 	  PRIMARY KEY ( sesskey ) ,
 	  INDEX sess2_expiry( expiry ),
 	  INDEX sess2_expireref( expireref )
@@ -242,7 +248,7 @@ So we define (before session_start() is called): </p>
 	$ADODB_SESSION_EXPIRE_NOTIFY = array('USERID','NotifyFn');
 </font></pre>
 And when the NotifyFn is called (when the session expires), the
-$USERID is passed in as the first parameter, eg. NotifyFn($userid, $sesskey). The
+$EXPIREREF holding the user id is passed in as the first parameter, eg. NotifyFn($userid, $sesskey). The
 session key (which is the primary key of the record in the sessions
 table) is the 2nd parameter.
 <p> Here is an example of a Notification function that deletes some
@@ -267,40 +273,6 @@ $ADODB_SESSION_EXPIRE_NOTIFY = array('USERID','NotifyFn');</font>
 record has been created, you will need to modify any session variable
 to force a database record update.
 </p>
-<h3>Synchronizing Page Frames</h3>
-<p>Sometimes you need to load multiple pages in a frameset and make sure that the session variables are synchronized. 
-For example we have a page frame.php with an iframe child1.php:
-<pre>
-   frame.php
-       child1.php
-</pre>
-<p>Assume frame.php receives some $_GET variables and it updates the $_SESSION variables in memory. However the $_SESSION variables are only
-updated in the database when the page ends. So is possible that child1.php
-will still have the old $_SESSION variables.
-<ul>
-<li>   $_GET variables are posted to frame.php
-<li>   frame.php updates $_SESSION variables, but not the database
-<li>   child1.php is sent to browser, using old $_SESSION variables it loads from database
-<li>    frame.php completes it's processing and saves new $_SESSION variables into database -- too late!
-</ul>
-   <p>We can fix this by using the php function <a href=http://php.net/session_commit>session_commit</a>:
-<pre>
-&lt;?php
-session_start();
-.
-# do any required processing...
-
-session_commit();
-
-# now session variables have been saved to the database, and child1.php will get the latest $_SESSION variables.
-?>
-&lt;html>
-	&lt;body>
-	&lt;iframe src=child1.php>
-	&lt;/iframe>
-	&lt;/body>
-&lt;/html>
-</pre>
 <h3>Neat Notification Tricks</h3>
 <p><i>ExpireRef</i> normally holds the user id of the current session.
 </p>

@@ -1,4 +1,4 @@
->> ADODB Library for PHP4
+>> ADODB Library for PHP5
 
 (c) 2000-2004 John Lim (jlim@natsoft.com.my)
 
