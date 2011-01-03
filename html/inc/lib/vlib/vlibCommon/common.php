@@ -8,7 +8,7 @@
 // | Authors: Kelvin Jones <kelvin@kelvinjones.co.uk>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id$
+// $Id: common.php,v 1.3 2002/12/11 00:14:26 releasedj Exp $
 
 // check to avoid multiple including of class
 if (!defined('vlibCommonClassLoaded')) {

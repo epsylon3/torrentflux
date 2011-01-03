@@ -4,7 +4,7 @@ INSTALLATION INSTRUCTIONS
 The vLIB Library has been built to be installed with minimal changes needed.
 The following steps will guide you through the install proceedure:
 
-1) Download the current version of vLIB from http://vlib.clausvb.de/
+1) Download the current version of vLIB, which you probably did by now :-).
 
 2) Unpack the version of vLIB that you downloaded (eg: vLIB_3-0-6.zip) into a directory of
    your choise accessible to your php scripts.
@@ -16,7 +16,7 @@ The following steps will guide you through the install proceedure:
 
     4a) Rename the file vlibIni.php-dist to vlibIni.php.
         Open vlibIni.php and edit the configuration parameters to suit your needs. If you need any help
-        then please refer to the documentation in the /docs/ directory.
+        then please visit http://vlib.clausvb.de/
 
     4b) As you are upgrading you probably do not want to overwrite the configuration parameters that
         you have already set in vlibIni.php. So what you need to do is copy each configuration parameter
@@ -45,15 +45,5 @@ The following steps will guide you through the install proceedure:
         This is the only naming change I can see in the future. It was made because of conflicts with
         other php classes.
         ****************************************************************************************************
-
-5) Now have a look in the /examples/ directory. You may need to change these files slightly depending on
-    your configuration. For example if you install vLIB directly into a webserver accessible directory,
-    then you should be able to run these files as they are. Otherwise you may need to copy the files to
-    an appropriate directory and change the include paths to vLIB.
-
-    However you do it, you should be able to make them work without to much fuss. If not then visit the
-    vLIB homepage at http://www.activefish.com/vlib/ to see if you can find something to help you out.
-    Alternatively you can look at the vLIB forum at http://www.activefish.com/vlib/forum/.
-
 
 NB: Make sure that you read the LICENCE file (step 3).

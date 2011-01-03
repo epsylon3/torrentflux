@@ -8,7 +8,7 @@
 // | Authors: Kelvin Jones <kelvin@kelvinjones.co.uk>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id$
+// $Id: cache.php,v 1.4 2003/05/15 14:17:41 releasedj Exp $
 
 /**
  * Class uses all of vlibTemplate's functionality but caches the template files.
@@ -82,7 +82,7 @@ class vlibTemplateCache extends vlibTemplate {
      * @return boolean
      */
     function setCacheExtension($str = null) {
-        if ($str == null || !preg_match('#^[a-z0-9]+$#', strtolower($str))) return false;
+        if ($str == null || !ereg('^[a-z0-9]+$', strtolower($str))) return false;
         $this->OPTIONS['CACHE_EXTENSION'] = strtolower($str);
         return true;
     }
@@ -139,10 +139,7 @@ class vlibTemplateCache extends vlibTemplate {
      */
     function _createCache($data) {
         $cache_file = $this->_cachefile;
-	if (empty($cache_file)) return false;
-
         if(!$this->_prepareDirs($cache_file)) return false; // prepare all of the directories
-
 
         $f = fopen ($cache_file, "w");
         flock($f, 2); // set an EXclusive lock
@@ -161,16 +158,15 @@ class vlibTemplateCache extends vlibTemplate {
      */
     function _prepareDirs($file) {
         if (empty($file)) die('no filename'); //do error in future
-        $filepath = dirname($file); 
-
+        $filepath = dirname($file);
         if (is_dir($filepath)) return true;
 
-        $dirs = preg_split("#[\\/\\\\]#", $filepath); // "/" ou "\"
-        $currpath = "";
-        foreach ($dirs as $dir)
-        if (!empty($dir)) {
+        $dirs = split('[\\/]', $filepath);
+        $currpath;
+        foreach ($dirs as $dir) {
             $currpath .= $dir .'/';
             $type = @filetype($currpath);
+
             ($type=='link') and $type = 'dir';
             if ($type != 'dir' && $type != false && !empty($type)) {
                 vlibTemplateError::raiseError('VT_ERROR_WRONG_CACHE_TYPE',KILL,'directory: '.$currpath.', type: '.$type);
@@ -179,7 +175,7 @@ class vlibTemplateCache extends vlibTemplate {
                 continue;
             }
             else {
-                $s = (@mkdir($currpath, 0775) || @mkdir($currpath) );
+                $s = @mkdir($currpath, 0775);
                 if (!$s) vlibTemplateError::raiseError('VT_ERROR_CACHE_MKDIR_FAILURE',KILL,'directory: '.$currpath);
             }
         }

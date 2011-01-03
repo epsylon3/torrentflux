@@ -8,7 +8,7 @@
 // | Authors: Kelvin Jones <kelvin@kelvinjones.co.uk>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id$
+// $Id: error.php,v 1.4 2004/01/07 22:00:20 releasedj Exp $
 
 if (!defined('FATAL')) 		define('FATAL', E_USER_ERROR);
 if (!defined('WARNING')) 	define('WARNING', E_USER_WARNING);
@@ -38,7 +38,8 @@ class vlibMimeMailError {
                         'VM_ERROR_NOFILE'               => 'vlibMimeMail error: Attachment ('.$extra.') file not found.',
                         'VM_ERROR_BADEMAIL'             => 'vlibMimeMail error: Email address ('.$extra.') not valid.',
                         'VM_ERROR_NOBODY'               => 'vlibMimeMail error: Tried to send a message with no body.',
-                        'VM_ERROR_CANNOT_SEND'          => 'vlibMimeMail error: Tried to send a message without declaring a body or a recipient.'
+                        'VM_ERROR_CANNOT_SEND'          => 'vlibMimeMail error: Tried to send a message without declaring a body or a recipient.',
+								'VM_ERROR_HOST_IS_EMPTY'        => 'vlibMimeMail error: Tried to construct vlibMimeMail with empty host..'
                             );
 
         $error_levels = array(

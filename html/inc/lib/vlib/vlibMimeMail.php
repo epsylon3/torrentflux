@@ -1,39 +1,41 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 2002 Active Fish Group                                 |
-// +----------------------------------------------------------------------+
-// | Authors: Kelvin Jones <kelvin@kelvinjones.co.uk>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id$
+
+// +------------------------------------------------------------------------+
+// | PHP version 5.x, tested with 5.1.4, 5.1.6, 5.2.6                       |
+// +------------------------------------------------------------------------+
+// | Copyright (c) 2002-2008 Kelvin Jones, Claus van Beek, Stefan Deussen   |
+// +------------------------------------------------------------------------+
+// | Authors: Kelvin Jones, Claus van Beek, Stefan Deussen                  |
+// +------------------------------------------------------------------------+
 
 // check to avoid multiple including of class
-if (!defined('vlibMimeMailClassLoaded')) {
-    define('vlibMimeMailClassLoaded', 1);
+if (!defined('vlibMimeMailClassLoaded'))
+{
+	define('vlibMimeMailClassLoaded', 1);
 
-    // get the functionality of the vlibCommon class.
-    include_once(dirname(__FILE__).'/vlibCommon/common.php');
+	// get the functionality of the vlibCommon class.
+	include_once(dirname(__FILE__) . '/vlibCommon/common.php');
 
-    // get error reporting functionality.
-    include_once(dirname(__FILE__).'/vlibMimeMail/error.php');
+	// get error reporting functionality.
+	include_once(dirname(__FILE__) . '/vlibMimeMail/error.php');
 
-    /**
-     * vlibMimeMail Class is used send mime encoded mail messages.
-     * For instructions on how to use vlibMimeMail, see the
-     * vlibMimeMail.html file, located in the 'docs' directory.
-     *
-     * @since 22/04/2002
-     * @author Kelvin Jones <kelvin@kelvinjones.co.uk>
-     * @package vLIB
-     * @access public
-     * @see vlibMimeMail.html
-     */
+	// get the Swift functionality
+	include_once(dirname(__FILE__) . '/Swift.php');
+	include_once(dirname(__FILE__) . '/Swift/Connection/SMTP.php');
+
+	/**
+	 * vlibMimeMail Class is used send mime encoded mail messages.
+	 * Has been replaced by Swift Mailer since 2008-10-31.
+	 *
+	 * @since 22/04/2002
+	 * @author Kelvin Jones, Claus van Beek, Stefan Deußen
+	 * @package vLIB
+	 * @access public
+	 */
 
 
-    class vlibMimeMail {
+	class vlibMimeMail
+	{
 
     /*-----------------------------------------------------------------------------\
     |                                 ATTENTION                                    |
@@ -48,6 +50,17 @@ if (!defined('vlibMimeMailClassLoaded')) {
 
         /** lists Bcc addresses */
         var $sendbcc = array();
+
+        /** from address */
+        var $fromEmail = '';
+        var $fromName = '';
+
+        /** reply to address */
+        var $replyToEmail = '';
+        var $replytoName = '';
+
+        /** subject */
+        var $subject = '';
 
         /** paths of attached files */
         var $attachments = array();
@@ -66,6 +79,7 @@ if (!defined('vlibMimeMailClassLoaded')) {
 
         /** message priorities */
         var $priorities = array( '1 (Highest)', '2 (High)', '3 (Normal)', '4 (Low)', '5 (Lowest)' );
+        var $messagePriority = 3; // Normal
 
         /** character set of plain text message */
         var $charset = "us-ascii";
@@ -88,6 +102,14 @@ if (!defined('vlibMimeMailClassLoaded')) {
         /** whether to verify all email addresses (by regex) */
         var $checkAddress = true;
 
+		/** mail body */
+		var $htmlbody = '';
+		var $body = '';
+
+		 /** Swift object */
+        var $swift = null;
+        var $swift_connection = null;
+        var $swift_recipients = null;
     /*-----------------------------------------------------------------------------\
     |                           public functions                                   |
     \-----------------------------------------------------------------------------*/
@@ -105,34 +127,41 @@ if (!defined('vlibMimeMailClassLoaded')) {
             $this->checkAddress = ($bool);
         }
 
-        /**
-         * FUNCTION: to
-         *
-         * Sets the To header for the message.
-         *
-         * @param string $toEmail email address
-         * @param string $toName Name of recipient [optional]
-         * @access public
-         */
-        function to ($toEmail, $toName=null) {
-            if (!$toEmail) return false;
-            if ($this->checkAddress && !$this->validateEmail($toEmail)) vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'To: '.$toEmail);
-            if ($this->apply_windows_bugfix) array_push($this->all_emails, $toEmail);
+		/**
+		 * FUNCTION: to
+		 *
+		 * Sets the To header for the message.
+		 *
+		 * @param string $toEmail email address
+		 * @param string $toName Name of recipient [optional]
+		 * @access public
+		 */
+		function to($toEmail, $toName = null)
+		{
+			if (!$toEmail)
+			{
+				return false;
+			}
 
-            $this->sendto[] = ($toName == null) ? $toEmail : '"'.$toName.'" <'.$toEmail.'>';
-        }
+			if ($this->checkAddress and !$this->validateEmail($toEmail))
+			{
+				vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'To: ' . $toEmail);
+			}
 
-        /**
-         * FUNCTION: clearTo
-         *
-         * Clears all to headers set.
-         *
-         * @access public
-         */
-        function clearTo () {
-            $this->sendto = array();
-            $this->all_emails = array();
-        }
+			$this->swift_recipients->addTo($toEmail, $toName);
+		}
+
+		/**
+		 * FUNCTION: clearTo
+		 *
+		 * Clears all to headers set.
+		 *
+		 * @access public
+		 */
+		function clearTo()
+		{
+				$this->swift_recipients->flushTo();
+		}
 
         /**
          * FUNCTION: cc
@@ -143,12 +172,17 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $ccName Name of recipient [optional]
          * @access public
          */
-        function cc ($ccEmail, $ccName=null) {
-            if (!$ccEmail) return false;
-            if ($this->checkAddress && !$this->validateEmail($ccEmail)) vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'Cc: '.$ccEmail);
-            if ($this->apply_windows_bugfix) array_push($this->all_emails, $ccEmail);
-
-            $this->sendcc[] = ($ccName == null) ? $ccEmail : '"'.$ccName.'" <'.$ccEmail.'>';
+        function cc($ccEmail, $ccName = null)
+		{
+            if (!$ccEmail)
+				{
+					return false;
+				}
+            if ($this->checkAddress and !$this->validateEmail($ccEmail))
+				{
+					vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'Cc: '.$ccEmail);
+				}
+				$this->swift_recipients->addCc($ccEmail, $ccName);
         }
 
         /**
@@ -158,9 +192,9 @@ if (!defined('vlibMimeMailClassLoaded')) {
          *
          * @access public
          */
-        function clearCc () {
-            $this->sendcc = array();
-            $this->all_emails = array();
+        function clearCc()
+		{
+				$this->swift_recipients->flushCc();
         }
 
         /**
@@ -172,12 +206,17 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $bccName Name of recipient [optional]
          * @access public
          */
-        function bcc ($bccEmail, $bccName=null) {
-            if (!$bccEmail) return false;
-            if ($this->checkAddress && !$this->validateEmail($bccEmail)) vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'Bcc: '.$bccEmail);
-            if ($this->apply_windows_bugfix) array_push($this->all_emails, $bccEmail);
-
-            $this->sendbcc[] = ($bccName == null) ? $bccEmail : '"'.$bccName.'" <'.$bccEmail.'>';
+        function bcc($bccEmail, $bccName = null)
+		{
+            if (!$bccEmail)
+				{
+					return false;
+				}
+            if ($this->checkAddress and !$this->validateEmail($bccEmail))
+				{
+					vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'Bcc: '.$bccEmail);
+				}
+				$this->swift_recipients->addBcc($bccEmail, $bccName);
         }
 
         /**
@@ -187,9 +226,9 @@ if (!defined('vlibMimeMailClassLoaded')) {
          *
          * @access public
          */
-        function clearBcc () {
-            $this->sendbcc = array();
-            $this->all_emails = array();
+        function clearBcc()
+		{
+            $this->swift_recipients->flushBcc();
         }
 
         /**
@@ -199,11 +238,11 @@ if (!defined('vlibMimeMailClassLoaded')) {
          *
          * @access public
          */
-        function clearAll () {
-            $this->clearTo();
-            $this->clearCc();
-            $this->clearBcc();
-            $this->all_emails = array();
+        function clearAll()
+		{
+            $this->swift_recipients->flushTo();
+            $this->swift_recipients->flushCc();
+            $this->swift_recipients->flushBcc();
         }
 
         /**
@@ -215,11 +254,18 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $fromName Name of recipient [optional]
          * @access public
          */
-        function from ($fromEmail, $fromName=null) {
-            if (!$fromEmail) return false;
-            if ($this->checkAddress && !$this->validateEmail($fromEmail)) vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'From: '.$fromEmail);
-
-            $this->xheaders['From'] = ($fromName == null) ? $fromEmail : '"'.$fromName.'" <'.$fromEmail.'>';
+        function from($fromEmail, $fromName = null)
+		{
+            if (!$fromEmail)
+				{
+					return false;
+				}
+            if ($this->checkAddress and !$this->validateEmail($fromEmail))
+				{
+					vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'From: '.$fromEmail);
+				}
+				$this->fromEmail = $fromEmail;
+				$this->fromName = $fromName;
         }
 
         /**
@@ -231,11 +277,18 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $replytoName Name of recipient [optional]
          * @access public
          */
-        function replyTo ($replytoEmail, $replytoName=null) {
-            if (!$replytoEmail) return false;
-            if ($this->checkAddress && !$this->validateEmail($replytoEmail)) vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'Reply-To: '.$replytoEmail);
-
-            $this->xheaders['Reply-To'] = ($replytoName == null) ? $replytoEmail : '"'.$replytoName.'" <'.$replytoEmail.'>';
+        function replyTo($replytoEmail, $replytoName = null)
+		{
+            if (!$replytoEmail)
+				{
+					return false;
+				}
+            if ($this->checkAddress and !$this->validateEmail($replytoEmail))
+				{
+					vlibMimeMailError::raiseError('VM_ERROR_BADEMAIL', FATAL, 'ReplyTo: '.$replytoEmail);
+				}
+				$this->replyToEmail = $replytoEmail;
+				$this->replyToName = $replytoName;
         }
 
         /**
@@ -246,8 +299,9 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $subject
          * @access public
          */
-        function subject ($subject) {
-            $this->xheaders['Subject'] = strtr($subject, "\r\n", ' ');
+        function subject($subject)
+		{
+				$this->subject = $subject;
         }
 
         /**
@@ -262,12 +316,12 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $charset
          * @access public
          */
-        function body ($body, $charset='') {
+        function body($body, $charset='')
+		{
             $this->body = $body;
-
-            if($charset != '') {
+            if ($charset != '')
+				{
                 $this->charset = strtolower($charset);
-                if($this->charset != 'us-ascii') $this->ctencoding = '8bit';
             }
         }
 
@@ -286,12 +340,13 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $charset
          * @access public
          */
-        function htmlBody ($htmlbody, $charset='') {
+        function htmlBody($htmlbody, $charset='')
+		{
             $this->htmlbody = $htmlbody;
 
-            if($charset != '') {
+            if ($charset != '')
+				{
                 $this->htmlcharset = strtolower($charset);
-                if($this->htmlcharset != 'us-ascii') $this->htmlctencoding = '8bit';
             }
         }
 
@@ -308,8 +363,8 @@ if (!defined('vlibMimeMailClassLoaded')) {
          * @param string $mimetype MIME-type of the file. defaults to 'application/octet-stream'
          * @access public
          */
-        function attach ($filename, $disposition = 'attachment', $mimetype=null, $cid=null) {
-            if($mimetype == null) $mimetype = vlibCommon::getMimeType($filename);
+        function attach($filename, $disposition = 'attachment', $mimetype=null, $cid=null) {
+            if ($mimetype == null) $mimetype = vlibCommon::getMimeType($filename);
             $this->attachments[] = $filename;
             $this->mimetypes[] = $mimetype;
             $this->dispositions[] = $disposition;
@@ -321,116 +376,200 @@ if (!defined('vlibMimeMailClassLoaded')) {
             return $cid;
         }
 
-        /**
-         * FUNCTION: organization
-         *
-         * Sets the Organization header for the message.
-         *
-         * @param string $org organization name
-         * @access public
-         */
-        function organization ($org) {
-            if(!empty($org)) $this->xheaders['Organization'] = $org;
-        }
+		/**
+		 * FUNCTION: organization
+		 *
+		 * Sets the Organization header for the message.
+		 *
+		 * @param string $org organization name
+		 * @access public
+		 */
+		function organization($org)
+		{
+			if (!empty($org)) $this->xheaders['Organization'] = $org;
+		}
 
-        /**
-         * FUNCTION: receipt
-         *
-         * To request a receipt you must call this function with a true value.
-         * And you must call $this->from() or $this->replyTo() before sending the mail.
-         *
-         * @param bool $bool true/false
-         * @access public
-         */
-        function receipt ($bool=true) {
-            $this->receipt = ($bool);
-        }
+		/**
+		 * FUNCTION: receipt
+		 *
+		 * To request a receipt you must call this function with a true value.
+		 * And you must call $this->from() or $this->replyTo() before sending the mail.
+		 *
+		 * @param bool $bool true/false
+		 * @access public
+		 */
+		function receipt($bool=true)
+		{
+			$this->receipt = ($bool);
+		}
 
-        /**
-         * FUNCTION: priority
-         *
-         * Sets the Priority header for the message.
-         * usage: $mail->priority(1); // highest setting
-         * view documentation for priority levels.
-         *
-         * @param string $priority
-         * @access public
-         */
-        function priority ($priority) {
-            if(!is_int($priority)) $priority = settype($priority, 'integer');
-            if(!isset($this->priorities[$priority-1])) return false;
+		/**
+		 * FUNCTION: priority
+		 *
+		 * Sets the Priority header for the message.
+		 * usage: $mail->priority(1); // highest setting
+		 * view documentation for priority levels.
+		 *
+		 * @param string $priority
+		 * @access public
+		 */
+		function priority($priority)
+		{
+			if (!is_int($priority))
+			{
+				$priority = settype($priority, 'integer');
+			}
 
-            $this->xheaders['X-Priority'] = $this->priorities[$priority-1];
-            return true;
-        }
+			if (!isset($this->priorities[$priority-1]))
+			{
+				return false;
+			}
 
-        /**
-         * FUNCTION: validateEmail
-         *
-         * Validates an email address and return true or false.
-         *
-         * @param string $address email address
-         * @return bool true/false
-         * @access public
-         */
-        function validateEmail ($address) {
-            return preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9_-]+(\.[_a-z0-9-]+)+$/i',$address);
-        }
+			$this->messagePriority = $priority;
 
-        /**
-         * FUNCTION: send
-         *
-         * Sends the mail.
-         *
-         * @return boolean true on success, false on failure
-         * @access public
-         */
-        function send () {
-            $this->_buildMail();
+			return true;
+		}
 
-            $to_str = ($this->apply_windows_bugfix) ? implode(',', $this->all_emails) : $this->xheaders['To'];
-            return mail($to_str, $this->xheaders['Subject'], $this->fullBody, $this->headers);
-        }
+		/**
+		 * FUNCTION: validateEmail
+		 *
+		 * Validates an email address and return true or false.
+		 *
+		 * @param string $address email address
+		 * @return bool true/false
+		 * @access public
+		 */
+		function validateEmail($address)
+		{
+			return preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9_-]+(\.[_a-z0-9-]+)+$/i',$address);
+		}
 
-        /**
-         * FUNCTION: get
-         *
-         * Returns the whole e-mail, headers and message. Can be used to display the
-         * message in pain text or for debugging.
-         *
-         * @return string message
-         * @access public
-         */
-        function get () {
-            $this->_buildMail();
+		/**
+		 * FUNCTION: send
+		 *
+		 * Sends the mail.
+		 *
+		 * @return boolean true on success, false on failure
+		 * @access public
+		 */
+		function send()
+		{
+			return $this->_sendMail();
+		}
 
-            $mail = 'To: '.$this->xheaders['To']."\n";
-            $mail .= 'Subject: '.$this->xheaders['Subject']."\n";
-            $mail .= $this->headers . "\n";
-            $mail .= $this->fullBody;
-            return $mail;
-        }
+		/**
+		 * FUNCTION: get
+		 *
+		 * Returns the whole e-mail, headers and message. Can be used to display the
+		 * message in pain text or for debugging.
+		 *
+		 * @return string message
+		 * @access public
+		 */
+		function get()
+		{
+			$this->_buildMail();
 
+			$mail = 'To: ' . $this->xheaders['To'] . "\n";
+			$mail .= 'Subject: ' . $this->xheaders['Subject']."\n";
+			$mail .= $this->headers . "\n";
+			$mail .= $this->fullBody;
 
-    /*-----------------------------------------------------------------------------\
-    |                           private functions                                  |
-    \-----------------------------------------------------------------------------*/
+			return $mail;
+		}
 
+		/**
+		* FUNCTION: vlibMimeMail [contsructor]
+		*/
+		function __construct($host = '', $username = '', $password = '', $port = 25)
+		{
+			if (empty($host))
+			{
+				vlibMimeMailError::raiseError('VM_ERROR_HOST_IS_EMPTY', FATAL);
+			}
 
-        /**
-         * FUNCTION: vlibMimeMail [contsructor]
-         *
-         * Enables auto checking by default.
-         * Also creates the unique boundary id for this message.
-         *
-         * @param bool $apply_windows_bugfix tells us whether to apply bug fix for windows Cc: and Bcc: headers.
-         * @access private
-         */
-        function vlibMimeMail ($apply_windows_bugfix=false) {
-            $this->apply_windows_bugfix = ($apply_windows_bugfix);
-            $this->boundary = "--" . md5(uniqid('vlibseediganoofahilfaman'));
-            $this->boundary_alt = "--" . md5(uniqid('vlibseedvatefairechier'));
-        }
+			// construct Swift connection
+			$this->swift_connection = new Swift_Connection_SMTP($host, $port);
+
+			// set optional username
+			if (!empty($username))
+			{
+				$this->swift_connection->setUsername($username);
+			}
+
+			// set optional password
+			if (!empty($password))
+			{
+				$this->swift_connection->setpassword($password);
+			}
+
+			// construct Swift object
+			$this->swift = new Swift($this->swift_connection);
+
+			// construct Swift recipients object
+			$this->swift_recipients = new Swift_RecipientList();
+		}
+
+		/**
+		* FUNCTION: _sendMail
+		*
+		* Proccesses all headers and attachments ready for sending.
+		*
+		* @access private
+		*/
+		function _sendMail()
+		{
+			$message = new Swift_Message($this->subject);
+
+			if (empty($this->sendto) and (empty($this->body) and empty($this->htmlbody)))
+			{
+				vlibMimeMailError::raiseError('VM_ERROR_CANNOT_SEND', FATAL);
+			}
+
+			// Attachments
+			for($index = 0;$index < sizeof($this->attachments); $index++)
+			{
+				$message->attach(new Swift_Message_Attachment(
+					new Swift_File($this->attachments[$index]),
+					$this->attachments[$index],
+					$this->mimetypes[$index]));
+			}
+
+			// ReplyTo if exists
+			if (!empty($this->replyToEmail))
+			{
+				$message->setReplyTo(new Swift_Address($this->replyToEmail, $this->replyToName));
+			}
+
+			// attach body if exist
+			if (!empty($this->body))
+			{
+				if (empty($this->htmlbody) and sizeof($this->attachments) == 0)
+				{
+					$message->setData($this->body);
+					Swift_ClassLoader::load('Swift_Message_Encoder');
+
+					if (Swift_Message_Encoder::instance()->isUTF8($this->body))
+					{
+						$message->setCharset('utf-8');
+					}
+					else
+					{
+						$message->setCharset('iso-8859-1');
+					}
+				}
+				else
+				{
+					$message->attach(new Swift_Message_Part($this->body, 'text/plain'));
+				}
+			}
+			// attach HTML body if exist
+			if (!empty($this->htmlbody))
+			{
+				$message->attach(new Swift_Message_Part($this->htmlbody, 'text/html'));
+			}
+			return $this->swift->send($message, $this->swift_recipients, new Swift_Address($this->fromEmail, $this->fromName));
+		}
 
         /**
          * FUNCTION: _buildMail
@@ -439,9 +578,9 @@ if (!defined('vlibMimeMailClassLoaded')) {
          *
          * @access private
          */
-        function _buildMail () {
+        function _buildMail() {
 
-            if (empty($this->sendto) && (empty($this->body) && empty($this->htmlbody))) {
+            if (empty($this->sendto) and (empty($this->body) and empty($this->htmlbody))) {
                 vlibMimeMailError::raiseError('VM_ERROR_CANNOT_SEND', FATAL);
             }
 
@@ -454,8 +593,8 @@ if (!defined('vlibMimeMailClassLoaded')) {
             if (!empty($this->sendcc))  $this->xheaders[$cc_header_name]  = implode(',', $this->sendcc);
             if (!empty($this->sendbcc)) $this->xheaders['Bcc'] = implode(',', $this->sendbcc);
 
-            if($this->receipt) {
-                if(isset($this->xheaders['Reply-To'])) {
+            if ($this->receipt) {
+                if (isset($this->xheaders['Reply-To'])) {
                     $this->xheaders['Disposition-Notification-To'] = $this->xheaders['Reply-To'];
                 }
                 elseif (isset($this->xheaders['From'])) {
@@ -463,7 +602,7 @@ if (!defined('vlibMimeMailClassLoaded')) {
                 }
             }
 
-            if($this->charset != '') {
+            if ($this->charset != '') {
                 $this->xheaders['Mime-Version'] = '1.0';
                 $this->xheaders['Content-Type'] = 'text/plain; charset='.$this->charset;
                 $this->xheaders['Content-Transfer-Encoding'] = $this->ctencoding;
@@ -480,57 +619,13 @@ if (!defined('vlibMimeMailClassLoaded')) {
         }
 
         /**
-         * FUNCTION: _setBody
-         *
-         * sets the body to be used in a mail.
-         *
-         * @access private
-         */
-        function _setBody () {
-            // do we need to encode??
-            $encode = (empty($this->htmlbody) && empty($this->attachments)) ? false : true;
-
-            // if yes...
-            if ($encode) {
-
-				$this->fullBody = "This is a multi-part message in MIME format.\n\n";
-				$this->fullBody .= '--'.$this->boundary."\nContent-Type: multipart/alternative;\n\tboundary=\"".$this->boundary_alt."\"\n\n\n";
-				$body_boundary = $this->boundary_alt;
-				$this->xheaders['Content-Type'] = "multipart/mixed;\n\tboundary=\"".$this->boundary.'"';
-
-                if (!empty($this->body)) {
-                    $this->fullBody .= '--'.$body_boundary."\nContent-Type: text/plain; charset=".$this->charset."\nContent-Transfer-Encoding: ".$this->ctencoding."\n\n".$this->body."\n\n";
-                }
-                if (!empty($this->htmlbody)) {
-                    $this->fullBody .= '--'.$body_boundary."\nContent-Type: text/html; charset=".$this->charset."\nContent-Transfer-Encoding: ".$this->ctencoding."\n\n".$this->htmlbody."\n\n";
-                }
-
-               	$this->fullBody .= '--'.$body_boundary."--\n\n";
-
-                if (!empty($this->attachments)) {
-                    $this->_build_attachments();
-                }
-                $this->fullBody .= '--'.$this->boundary.'--'; // ends the last boundary
-            }
-            // else we just send plain text.
-            else {
-                if (!empty($this->body)) {
-                    $this->fullBody = $this->body;
-                }
-                else {
-                    vlibMimeMailError::raiseError('VM_ERROR_NOBODY', FATAL);
-                }
-            }
-        }
-
-        /**
          * FUNCTION: _build_attachments
          *
          * Checks and encodes all attachments.
          *
          * @access private
          */
-        function _build_attachments () {
+        function _build_attachments() {
             $sep = chr(13).chr(10);
             $ata = array();
             $k=0;
@@ -557,16 +652,16 @@ if (!defined('vlibMimeMailClassLoaded')) {
                 	if (!empty($upart['query'])) $newfilename .= '?'.urlencode($upart['query']);
                 	if (!empty($upart['fragment'])) $newfilename .= ':'.$upart['fragment'];
 
-	                $fp = fopen($newfilename, 'rb');
-	                while(!feof($fp)) $data .= fread($fp,1024);
-	            }
-	            else {
-	                if(!file_exists($filename)) {
-	                    vlibMimeMailError::raiseError('VM_ERROR_NOFILE', FATAL, $filename);
-	                }
-	                $fp = fopen($filename, 'rb');
-	                $data = fread($fp, filesize($filename));
-	            }
+	              $fp = fopen($newfilename, 'rb');
+	              while(!feof($fp)) $data .= fread($fp,1024);
+	          }
+	          else {
+	              if (!file_exists($filename)) {
+	                  vlibMimeMailError::raiseError('VM_ERROR_NOFILE', FATAL, $filename);
+	              }
+	              $fp = fopen($filename, 'rb');
+	              $data = fread($fp, filesize($filename));
+	          }
                 $subhdr = '--'.$this->boundary."\nContent-type: ".$mimetype.";\n\tname=\"".$basename."\"\nContent-Transfer-Encoding: base64\nContent-Disposition: ".$disposition.";\n\tfilename=\"".$basename."\"\n";
                 if ($contentID) $subhdr .= 'Content-ID: <'.$contentID.">\n";
                 $ata[$k++] = $subhdr;
@@ -577,5 +672,6 @@ if (!defined('vlibMimeMailClassLoaded')) {
         }
 
     } // class vlibMimeMail
-} // << end if(!defined())..
+} // << end if (!defined())..
+
 ?>

@@ -8,7 +8,7 @@
 // | Authors: Kelvin Jones <kelvin@kelvinjones.co.uk>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id$
+// $Id: error.php,v 1.5 2004/01/07 22:00:20 releasedj Exp $
 
 if (!defined('FATAL')) 		define('FATAL', E_USER_ERROR);
 if (!defined('WARNING')) 	define('WARNING', E_USER_WARNING);
@@ -50,6 +50,7 @@ class vlibTemplateError {
                         'VT_WARNING_NOT_CACHE_OBJ'      => 'vlibTemplate Warning: called a vlibTemplateCache function ('.$extra.') without instantiating the vlibTemplateCache class.',
                         'VT_WARNING_LOOP_NOT_SET'       => 'vlibTemplate Warning: called vlibTemplate::addRow() or vlibTemplate::addLoop() with an invalid loop name.',
                         'VT_WARNING_INVALID_RESOURCE'   => 'vlibTemplate Warning: Invalid resource type passed to vlibTemplate::setDbLoop() for Db "'.$extra.'".',
+                        'VT_WARNING_INVALID_CLASS'      => 'vlibTemplate Warning: Invalid class passed to vlibTemplate::setDbLoop() for Db "'.$extra.'".',
                         'VT_WARNING_INVALID_LOOP_DB'    => 'vlibTemplate Warning: Invalid Db type passed to vlibTemplate::setDbLoop(), "'.$extra.'" not currently available.',
                         'VT_WARNING_INVALID_IF_OP'      => 'vlibTemplate Warning: The Operator "'.$extra.'" is not supported by vlibTemplate.',
                         'VT_WARNING_NO_LOOP_NAME'       => 'vlibTemplate Warning: You must specify a loop name.'
