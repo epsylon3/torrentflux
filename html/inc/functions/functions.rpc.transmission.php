@@ -46,10 +46,11 @@ function getTransmissionTransfer($transfer, $fields=array() ) {
 	$response = $trans->get(array(), $afields);
 	$torrentlist = $response['arguments']['torrents'];
 	
-	if (!empty($torrentlist))
-	foreach ($torrentlist as $aTorrent) {
-		if ( $aTorrent['hashString'] == $transfer )
-			return $aTorrent;
+	if (!empty($torrentlist)) {
+		foreach ($torrentlist as $aTorrent) {
+			if ( $aTorrent['hashString'] == $transfer )
+				return $aTorrent;
+		}
 	}
 	return false;
 }
@@ -144,6 +145,24 @@ function isValidTransmissionTransfer($uid = 0,$tid) {
 	if ($db->ErrorNo() != 0) dbError($sql);
 	if ( sizeof($recordset)!=0 ) return true;
 	else return false;
+}
+
+/**
+ * This method returns the owner name of a certain transmission transfer
+ * 
+ * @return string with owner of transmission transfer
+ */
+function getTransmissionTransferOwner($transfer) {
+	global $db;
+	$retVal = array();
+	$sql = "SELECT user_id FROM tf_users u join tf_transmission_user t on (t.uid = u.uid) WHERE t.tid = '$transfer';";
+	$recordset = $db->Execute($sql);
+	if ($db->ErrorNo() != 0) dbError($sql);
+	if ( sizeof($recordset)!=0 ) {
+		$row = $recordset->FetchRow();
+		return $row['user_id'];
+	}
+	else return "Unknown";
 }
 
 /**
