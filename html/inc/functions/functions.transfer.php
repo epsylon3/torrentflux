@@ -205,13 +205,11 @@ function transfer_setFileVars() {
 				$isTransmissionTorrent = is_array($theTorrent);
 			}
 			if ( $isTransmissionTorrent ) {
-				foreach ( $theTorrent[files] as $aFile ) {
-				//$response = $trans->get( $theTorrent[id], array('files') );
-				//foreach ( $response[arguments][torrents][0][files] as $aFile ) {
-					$transferSizeSum += $aFile[length];
-					$fileNameParts = explode ( "/", $aFile[name] );
+				foreach ( $theTorrent['files'] as $aFile ) {
+					$transferSizeSum += $aFile['length'];
+					$fileNameParts = explode ( "/", $aFile['name'] );
 					$name = $fileNameParts[ count($fileNameParts) - 1 ];
-					$size = $aFile[length];
+					$size = $aFile['length'];
 					array_push($transferFilesList, array(
 						'name' => $name,
 						'size' => ($size != 0) ? formatBytesTokBMBGBTB($size) : 0

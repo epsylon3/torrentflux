@@ -355,4 +355,14 @@ function getTransmissionStatusImage($running, $seederCount, $uploadRate){
 	return $statusImage;
 }
 
+function getTransmissionSeederCount($transfer) {
+	$options = array('trackerStats');
+	$transfer = getTransmissionTransfer($transfer, $options);
+	foreach ( $transfer['trackerStats'] as $tracker ) {
+		$seeds += ($tracker['seederCount']==-1 ? 0 : $tracker['seederCount']);
+		//$announceResult = $tracker['lastAnnounceResult'];
+	}
+	return $seeds;
+}
+
 ?>

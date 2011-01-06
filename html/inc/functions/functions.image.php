@@ -59,13 +59,32 @@ function image_pieTransferTotals() {
 	if (empty($transfer))
 		Image::paintNoOp();
 	// validate transfer
-	if (tfb_isValidTransfer($transfer) !== true) {
+	$validTransfer = false;
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$options = array('uploadedEver','downloadedEver');
+		$transTransfer = getTransmissionTransfer($transfer, $options); // false if not found; TODO check if transmission enabled
+		if ( is_array($transTransfer) ) {
+			$uptotal = $transTransfer['uploadedEver'];
+			$downtotal = $transTransfer['downloadedEver'];
+			$validTransfer = true;
+		}
+	}
+	if (!$validTransfer) { // If not found in transmission transfer
+		if ( tfb_isValidTransfer($transfer) ) {
+			// client-handler + totals
+			$ch = ClientHandler::getInstance(getTransferClient($transfer));
+			$totals = $ch->getTransferTotal($transfer);
+			$uptotal = $totals["uptotal"];
+			$downtotal = $totals["downtotal"];
+			$validTransfer = true;
+		}
+	}
+
+	if (!$validTransfer) {
 		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
 		Image::paintNoOp();
 	}
-	// client-handler + totals
-	$ch = ClientHandler::getInstance(getTransferClient($transfer));
-	$totals = $ch->getTransferTotal($transfer);
 	// draw image
 	Image::paintPie3D(
 		202,
@@ -76,9 +95,9 @@ function image_pieTransferTotals() {
 		100,
 		20,
 		Image::stringToRGBColor($cfg["body_data_bg"]),
-		array($totals["uptotal"] + 1, $totals["downtotal"] + 1),
+		array($uptotal + 1, $downtotal + 1),
 		image_getColors(),
-		array('Up : '.@formatFreeSpace($totals["uptotal"] / 1048576), 'Down : '.@formatFreeSpace($totals["downtotal"] / 1048576)),
+		array('Up : '.@formatFreeSpace($uptotal / 1048576), 'Down : '.@formatFreeSpace($downtotal / 1048576)),
 		48,
 		130,
 		2,
@@ -96,21 +115,36 @@ function image_pieTransferPeers() {
 	if (empty($transfer))
 		Image::paintNoOp();
 	// validate transfer
-	if (tfb_isValidTransfer($transfer) !== true) {
+	$validTransfer = false;
+	if ($cfg["transmission_rpc_enable"]) {
+		require_once('inc/functions/functions.rpc.transmission.php');
+		$options = array('trackerStats','peers');
+		$transTransfer = getTransmissionTransfer($transfer, $options); // false if not found; TODO check if transmission enabled
+		if ( is_array($transTransfer) ) {
+			$validTransfer = true;
+			$client = "transmissionrpc";
+		}
+	}
+	if (!$validTransfer) { // If not found in transmission transfer
+		if ( tfb_isValidTransfer($transfer) ) {
+			// stat
+			$sf = new StatFile($transfer);
+			$seeds = trim($sf->seeds);
+			$peers = trim($sf->peers);
+			// client-switch + get peer-data
+			$peerData = array();
+			$peerData['seeds'] = 0;
+			$peerData['peers'] = 0;
+			$peerData['seedsLabel'] = ($seeds != "") ? $seeds : 0;
+			$peerData['peersLabel'] = ($peers != "") ? $peers : 0;
+			$client = getTransferClient($transfer);
+		}
+	}
+	if ( !$validTransfer ) {
 		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
 		Image::paintNoOp();
 	}
-	// stat
-	$sf = new StatFile($transfer);
-	$seeds = trim($sf->seeds);
-	$peers = trim($sf->peers);
-	// client-switch + get peer-data
-	$peerData = array();
-	$peerData['seeds'] = 0;
-	$peerData['peers'] = 0;
-	$peerData['seedsLabel'] = ($seeds != "") ? $seeds : 0;
-	$peerData['peersLabel'] = ($peers != "") ? $peers : 0;
-	$client = getTransferClient($transfer);
+
 	switch ($client) {
 		case "tornado":
 			if ($seeds != "") {
@@ -130,6 +164,16 @@ function image_pieTransferPeers() {
 			break;
 		case "transmission":
 		case "transmissionrpc":
+			$peers = sizeof($transTransfer['peers']);
+			$seeds = 0;
+			foreach ( $transTransfer['trackerStats'] as $tracker ) {
+				$seeds += ($tracker['seederCount'] == -1 ? 0:$tracker['seederCount']);
+			}
+			$peerData['seedsLabel'] = $seeds;
+			$peerData['seeds'] = $seeds;
+			$peerData['peersLabel'] = $peers;
+			$peerData['peers'] = $peers;
+			break;
 		case "vuzerpc":
 		case "azureus":
 			if ($seeds != "") {

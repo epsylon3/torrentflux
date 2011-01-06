@@ -25,7 +25,7 @@ function transmissionSetVars ($transfer, $tmpl) {
 
 	//require_once('inc/functions/functions.rpc.transmission.php');
 	require_once('functions.rpc.transmission.php');
-	$options = array("eta","percentDone", "rateDownload", "rateUpload", "downloadedEver", "uploadedEver", "percentDone", "sizeWhenDone");
+	$options = array("eta","percentDone", "rateDownload", "rateUpload", "downloadedEver", "uploadedEver", "percentDone", "sizeWhenDone","peers","trackerStats");
 	$returnArr = getTransmissionTransfer($transfer, $options);
 
 	$tmpl->setvar('transferowner', getTransmissionTransferOwner($transfer));
@@ -42,7 +42,7 @@ function transmissionSetVars ($transfer, $tmpl) {
 	// port + cons
 	//$tmpl->setvar('size', @formatBytesTokBMBGBTB($transferSize));
 
-	$isRunning = true;
+	$isRunning = true; // TODO make this actually detect if torrent is running
 	if ($isRunning) {
 		$tmpl->setvar('running', 1);
 
@@ -51,13 +51,14 @@ function transmissionSetVars ($transfer, $tmpl) {
 		$tmpl->setvar('upTotalCurrent', formatFreeSpace($totalsCurrent["uptotal"] / 1048576));
 
 		// seeds + peers
-		$tmpl->setvar('seeds', $sf->seeds);
-		$tmpl->setvar('peers', $sf->peers);
+		$seeds = getTransmissionSeederCount($transfer);
+		$tmpl->setvar('seeds', ($seeds == "" ? "Could not be retrieved" : $seeds." (might be incorrect)" ));
+		$tmpl->setvar('peers', sizeof($returnArr['peers']) );
 
 		// port + cons
 		$transfer_pid = getTransferPid($transfer);
 		$tmpl->setvar('port', netstatPortByPid($transfer_pid));
-		$tmpl->setvar('cons', netstatConnectionsByPid($transfer_pid));
+		$tmpl->setvar('cons', netstatConnectionsByPid($transfer_pid)); // TODO: this is probably incorrect
 
 		// up speed
 		$tmpl->setvar('up_speed', (trim($returnArr['rateUpload']) != "") ? formatBytesTokBMBGBTB( $returnArr['rateUpload'] ) . '/s' : '0.0 kB/s');

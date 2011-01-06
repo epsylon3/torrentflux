@@ -112,14 +112,13 @@ function getFilePrioForm($transfer, $withForm = false) {
 			}
 		}
 
-		$response = getTransmissionTransfer($transfer, array("pieceCount", "pieceSize", "totalSize", "dateCreated", "downloadDir", "comment"));
-		$aTorrent = $response[arguments][torrents][0];
+		$aTorrent = getTransmissionTransfer($transfer, array("pieceCount", "pieceSize", "totalSize", "dateCreated", "downloadDir", "comment"));
 		#$torrent_size = $aTorrent[pieceSize] * $aTorrent[pieceCount];
-		$torrent_size = $aTorrent[totalSize];
-		$torrent_chunksize = $aTorrent[pieceSize];
-		$torrent_directoryname = $aTorrent[downloadDir];
-		$torrent_announceurl = $aTorrent[comment];
-		$torrent_creationdate = $aTorrent[dateCreated];
+		$torrent_size = $aTorrent['totalSize'];
+		$torrent_chunksize = $aTorrent['pieceSize'];
+		$torrent_directoryname = $aTorrent['downloadDir'];
+		$torrent_announceurl = $aTorrent['comment'];
+		$torrent_creationdate = $aTorrent['dateCreated'];
 		$torrent_filescount = $filescount;
 
 	} else {
@@ -173,7 +172,7 @@ function getFilePrioForm($transfer, $withForm = false) {
 	$retVal .= "<tr><td>Announce URL:</td><td>".$torrent_announceurl."</td></tr>";
 	if (array_key_exists('comment',$btmeta))
 		$retVal .= "<tr><td valign=\"top\">Comment:</td><td>".tfb_htmlencode($btmeta['comment'])."</td></tr>";
-	$retVal .= "<tr><td>Created:</td><td>".date("F j, Y, g:i a",$torrent_creationdate)."</td></tr>";
+	$retVal .= "<tr><td>Created:</td><td>".( $torrent_creationdate == 0 ? 'n/a' : date("F j, Y, g:i a",$torrent_creationdate) )."</td></tr>";
 	$retVal .= "<tr><td>Torrent Size:</td><td>".$torrent_size." (".@formatBytesTokBMBGBTB($torrent_size).")</td></tr>";
 	$retVal .= "<tr><td>Chunk size:</td><td>".$torrent_chunksize." (".@formatBytesTokBMBGBTB($torrent_chunksize).")</td></tr>";
 	if ( array_key_exists('files',$btmeta['info']) || count($files)>0 ) {

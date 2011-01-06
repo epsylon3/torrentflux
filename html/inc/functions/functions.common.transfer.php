@@ -261,7 +261,7 @@ function setFilePriority($transfer) {
 	}
 	
 	if ( $isTransmissionTorrent ) {
-		foreach ($_REQUEST[files] as $fileid ) {
+		foreach ($_REQUEST['files'] as $fileid ) {
 			$selectedFiles[] = (int)$fileid;
 		}
 		# Get files that are wanted or not for download, then we can compare.

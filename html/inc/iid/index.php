@@ -146,17 +146,27 @@ if ($cfg["transmission_rpc_enable"]) {
 			$status = "Seeding";
 			$transferRunning = true;
 			break;
+		case 2:
+			$status = "Checking data...";
+			$transferRunning = true;
+			break;
 		}
+
+		if ($transferRunning) // Only for running torrents otherwhise seriously slows down listing
+			$seeds = getTransmissionSeederCount($aTorrent['hashString']);
+		else
+			$seeds = 0;
 
 		// TODO: transferowner is always admin... probably not what we want
 		$tArray = array(
 			'is_owner' => true,
 			'transferRunning' => ($transferRunning ? 1 : 0),
 			'url_entry' => $aTorrent['hashString'],
-			'hd_image' => getTransmissionStatusImage($transferRunning, $aTorrent['trackerStats']['seederCount'], $aTorrent['rateUpload']),
+			'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
 			'hd_title' => $nothing,
 			'displayname' => $aTorrent['name'],
-			'transferowner' => 'administrator',
+			'transferowner' => getTransmissionTransferOwner($aTorrent['hashString']),
+			//'transferowner' => 'administrator',
 			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
 			'format_downtotal' => $nothing,
 			'format_uptotal' => $nothing,
@@ -169,12 +179,12 @@ if ($cfg["transmission_rpc_enable"]) {
 			'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
 			'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
 			'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
-			'seeds' => $nothing,
+			'seeds' => $seeds,
 			'peers' => $nothing,
 			'estTime' => $eta,
 			'clientType' => 'torrent',
 			'upload_support_enabled' => 1,
-			'client' => $nothing,
+			'client' => 'transmissionrpc',
 			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
 			'datapath' => $aTorrent['name'],
 			'is_no_file' => 1,
