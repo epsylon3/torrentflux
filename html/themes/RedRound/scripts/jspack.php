@@ -70,12 +70,18 @@ if (!empty($_REQUEST['p'])) {
 	}
 
 	//write package if changed
+	$wrote = false;
 	if (@ file_get_contents('pack/'.$package.'.js') != $packed) {
-		file_put_contents('pack/'.$package.'.js',$packed);
+		$wrote = @ file_put_contents('pack/'.$package.'.js',$packed);
 	}
-	
-	header('Location: pack/'.$package.'.js');
-	
+
+	//if write error, echo output directly
+
+	if ($wrote === FALSE)
+		echo $packed;
+	else
+		header('Location: pack/'.$package.'.js');
+
 	exit(0);
 }
 
