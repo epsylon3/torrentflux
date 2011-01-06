@@ -204,6 +204,7 @@ if ($cfg["vuze_rpc_enable"]) {
 	//one client for all vuzerpc transferts
 	$rpc = VuzeRPC::getInstance($cfg);
 	
+	//we can ask vuze data directly (not from .stat files)
 	$vuzeResults = $rpc->torrent_get_tf_array();
 }
 
@@ -285,7 +286,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 
 		if ((int)$sf->size > 0) {
 			if (!$sf->sharing)
-				$sf->sharing=round( ((int)$sf->uptotal / (int)$sf->size) * 100.0 , 2);
+				$sf->sharing=round( ((float)$sf->uptotal / (float)$sf->size) * 100.0 , 2);
 		}
 		
 	} else { // in rpc realtime only working torrents

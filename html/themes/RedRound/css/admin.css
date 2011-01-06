@@ -1,12 +1,17 @@
 * {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 }
 
 body {
 	background: #fff url('../images/admin/mainLayout/header.jpg') repeat-x;
 	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
 	font-size: .9em;
+}
+
+.ui-widget {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
 }
 
 ul {
@@ -26,9 +31,9 @@ a:hover {
 }
 
 #header {
-    height: 55px;
-    margin-bottom: 5px;
-    width: 400px;
+	height: 55px;
+	margin-bottom: 5px;
+	width: 400px;
 }
 
 #header h1 { padding-left: 16px; padding-top: 5px; font-size: 22px; color: #FFF; }
@@ -54,8 +59,8 @@ p.NormalText { text-align: left; padding: 5px 0;}
 }
 
 #wrap {
-    margin: 0 auto;
-    width: 100%;
+	margin: 0 auto;
+	width: 100%;
 }
 
 .middle {
