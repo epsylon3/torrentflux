@@ -104,10 +104,30 @@ function getVuzeSpeedLimitDownload($usecache=false) {
 	return 0;
 }
 
+/**
+ * reset Vuze total uploaded (to seed again)
+ */
+function vuzeResetUpload($hash) {
+	global $cfg;
+
+	require_once('inc/classes/VuzeRPC.php');
+	$rpc = VuzeRPC::getInstance();
+	
+	$torrents = $rpc->torrent_get_hashids();
+	$tid = "";
+	if ( array_key_exists(strtoupper($hash),$torrents) ) {
+		$tid = $torrents[strtoupper($hash)];
+	}
+	if (!empty($tid)) {
+		$key = 'uploadedEver';
+		$rpc->torrent_set(array($tid),'uploadedEver',0);
+	}
+}
+
 //to check...
 function addVuzeMagnetTransfer($userid = 0, $url, $path, $paused=true) {
 	global $cfg;
-	
+
 	require_once('inc/classes/VuzeRPC.php');
 	$rpc = VuzeRPC::getInstance();
 

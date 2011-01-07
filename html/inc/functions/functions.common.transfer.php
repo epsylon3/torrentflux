@@ -119,9 +119,10 @@ function resetTransferTotals($transfer, $delete = false) {
 	global $cfg, $db, $transfers;
 	$msgs = array();
 	$tid = getTransferHash($transfer);
+	$client = getTransferClient($transfer);
 	// delete meta-file
 	if ($delete) {
-		$ch = ClientHandler::getInstance(getTransferClient($transfer));
+		$ch = ClientHandler::getInstance($client);
 		$ch->delete($transfer);
 		if (count($ch->messages) > 0)
 			$msgs = array_merge($msgs, $ch->messages);
@@ -131,10 +132,14 @@ function resetTransferTotals($transfer, $delete = false) {
 		$sf->uptotal = 0;
 		$sf->downtotal = 0;
 		$sf->write();
+		if ($client == "vuzerpc") {
+			require_once("inc/functions/functions.rpc.vuze.php");
+			vuzeResetUpload($tid);
+		}
 	}
 	// reset in db
 	$uid = (int) getTransferOwnerID($transfer);
-	$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)." AND uid=$uid";
+	$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)." AND uid IN (0,$uid)";
 	$db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
 	// set transfers-cache

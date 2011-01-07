@@ -560,7 +560,7 @@ function dispatcher_multi($action) {
 					$ch = ClientHandler::getInstance($client);
 					$ch->stop($transfer);
 					if (count($ch->messages) > 0)
-                		$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+						$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
 				}
 				break;
 
@@ -570,7 +570,7 @@ function dispatcher_multi($action) {
 					$ch = ClientHandler::getInstance($client);
 					$ch->start($transfer, false, true);
 					if (count($ch->messages) > 0)
-                		$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+						$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
 				}
 				break;
 
@@ -584,7 +584,7 @@ function dispatcher_multi($action) {
 			case "transferResetTotals": /* transferResetTotals */
 				$msgs = resetTransferTotals($transfer, false);
 				if (count($msgs) > 0)
-                	$dispatcherMessages = array_merge($dispatcherMessages, $msgs);
+					$dispatcherMessages = array_merge($dispatcherMessages, $msgs);
 				break;
 
 			default:
@@ -593,7 +593,7 @@ function dispatcher_multi($action) {
 					$ch = ClientHandler::getInstance($client);
 					$ch->stop($transfer);
 					if (count($ch->messages) > 0)
-                		$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+						$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
 					// is transfer running ?
 					$tRunningFlag = isTransferRunning($transfer);
 				}
@@ -604,20 +604,20 @@ function dispatcher_multi($action) {
 						case "transferWipe": /* transferWipe */
 							$msgsDelete = deleteTransferData($transfer);
 							if (count($msgsDelete) > 0)
-                				$dispatcherMessages = array_merge($dispatcherMessages, $msgsDelete);
+								$dispatcherMessages = array_merge($dispatcherMessages, $msgsDelete);
 							$msgsReset = resetTransferTotals($transfer, true);
 							if (count($msgsReset) > 0)
-            					$dispatcherMessages = array_merge($dispatcherMessages, $msgsReset);
+								$dispatcherMessages = array_merge($dispatcherMessages, $msgsReset);
 							break;
 						case "transferData": /* transferData */
 							$msgsDelete = deleteTransferData($transfer);
 							if (count($msgsDelete) > 0)
-                				$dispatcherMessages = array_merge($dispatcherMessages, $msgsDelete);
+								$dispatcherMessages = array_merge($dispatcherMessages, $msgsDelete);
 						case "transfer": /* transfer */
 							$ch = ClientHandler::getInstance($client);
 							$ch->delete($transfer);
 							if (count($ch->messages) > 0)
-                				$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+								$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
 					}
 				}
 
