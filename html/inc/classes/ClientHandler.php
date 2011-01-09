@@ -1178,6 +1178,17 @@ class ClientHandler
 	 *
 	 * @return array by hash
 	 */
+	function monitorAllTransfers() {
+		//by default, realtime monitoring not available.
+		return array();
+	}
+
+	/**
+	 * gets current status of All RPC Transfers (realtime)
+	 * for index
+	 *
+	 * @return array by hash
+	 */
 	function monitorRunningTransfers() {
 		//by default, realtime monitoring not available.
 		return array();

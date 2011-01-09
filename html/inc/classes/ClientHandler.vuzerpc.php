@@ -711,7 +711,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	}
 
 	/**
-	 * gets current status of one Transfer (realtime)
+	 * gets current status of all Transfers (realtime)
 	 * for transferStat popup
 	 *
 	 * @return array (stat) or Error String
@@ -721,6 +721,24 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$vuze = VuzeRPC::getInstance();
 
 		$stat = $vuze->torrent_get_tf_array();
+		return $stat;
+	}
+
+	/**
+	 * gets current status of all Running Transfers (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorRunningTransfers() {
+		//by default, monitoring not available.
+		$vuze = VuzeRPC::getInstance();
+
+		$vuze->torrent_get_tf();
+		$filter = array(
+			'running' => 1
+		);
+		$stat = $vuze->torrent_filter_tf($filter);
 		return $stat;
 	}
 

@@ -85,6 +85,7 @@ function image_pieTransferTotals() {
 		AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
 		Image::paintNoOp();
 	}
+
 	// draw image
 	Image::paintPie3D(
 		202,
@@ -138,6 +139,7 @@ function image_pieTransferPeers() {
 			$peerData['seedsLabel'] = ($seeds != "") ? $seeds : 0;
 			$peerData['peersLabel'] = ($peers != "") ? $peers : 0;
 			$client = getTransferClient($transfer);
+			$validTransfer = true;
 		}
 	}
 	if ( !$validTransfer ) {
@@ -175,6 +177,19 @@ function image_pieTransferPeers() {
 			$peerData['peers'] = $peers;
 			break;
 		case "vuzerpc":
+			if (empty($seeds) || empty($peers)) {
+				$ch = ClientHandler::getInstance($client);
+				$running = $ch->monitorRunningTransfers();
+				$hash = strtoupper(getTransferHash($transfer));
+				if (!empty($running[$hash]) ) {
+					$t = $running[$hash];
+					$peerData['seeds'] = $t['seeds'];
+					$peerData['seedsLabel'] = $t['seeds'];
+					$peerData['peers'] = $t['peers'];
+					$peerData['peersLabel'] = $t['peers'];
+				}
+			}
+			break;
 		case "azureus":
 			if ($seeds != "") {
 				if (strpos($seeds, "(") !== false)
