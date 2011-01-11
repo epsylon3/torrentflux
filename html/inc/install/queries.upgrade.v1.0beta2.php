@@ -44,13 +44,11 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_enab
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_host','127.0.0.1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_port','19091')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_user','vuze')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','mypassword')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('vuze_rpc_password','')");
 
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_torrent','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('nzbperl_ssl','0')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('nzbperl_port','119')");
-
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
 
 // updates + deletes
 array_push($queries[$cqt][$cdb], "UPDATE tf_settings SET tf_value = 'TorrentFlux-NG' WHERE tf_key = 'auth_basic_realm'");
@@ -195,14 +193,14 @@ array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 $cqt = 'create';
 $queries[$cqt][$cdb] = array();
 array_push($queries[$cqt][$cdb], "
-CREATE TABLE IF NOT EXISTS tf_transmission_user (
+CREATE TABLE tf_transmission_user (
   tid VARCHAR(40) NOT NULL DEFAULT '',
-  uid INTEGER(10) NOT NULL DEFAULT 0,
+  uid INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (tid,uid) )");
 
 // ALTER TABLE 
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD uid INTEGER NOT NULL DEFAULT 0");
-array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP CONSTRAINT tf_transmission_user_pkey");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");
 
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD email_address VARCHAR(100) NOT NULL default ''");
