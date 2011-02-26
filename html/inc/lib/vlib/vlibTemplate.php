@@ -835,9 +835,9 @@ if (!defined('vlibTemplateClassLoaded'))
 		 * @return boolean true/false
 		 * @access private
 		 */
-		function __construct($tmplfile=null, $options=null)
+		public function __construct($tmplfile=null, $options=null)
 		{
-			if (is_array($tmplfile) && $options == null)
+			if (is_array($tmplfile) && is_null($options))
 			{
 				$options = $tmplfile;
 				unset($tmplfile);
@@ -1293,8 +1293,7 @@ if (!defined('vlibTemplateClassLoaded'))
 			$tag = strtolower($args[2]);
 
 			if ($tag == 'else') return '<?php } else { ?>';
-
-			if (preg_match("/^<\/|{\/|<!--\/$/s", $openclose) || preg_match("/^end[if|loop|unless|comment]$/", $tag)) {
+			if (preg_match("/^<\/|{\/|<\!\-\-\/$/s", $openclose) || preg_match("/^end[if|loop|unless|comment]$/", $tag)) {
 				if ($tag == 'loop' || $tag == 'endloop') array_pop($this->_namespace);
 				if ($tag == 'comment' || $tag == 'endcomment') {
 					return '<?php */ ?>';

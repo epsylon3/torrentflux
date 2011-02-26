@@ -127,13 +127,14 @@ function getRunningTransferCount() {
 function getTransferSize($transfer) {
 	global $cfg;
 	// client-switch
+
 	if (substr($transfer, -8) == ".torrent") {
 		// this is a t-client
 		$file = $cfg["transfer_file_path"].$transfer;
 		if ($fd = @fopen($file, "rd")) {
 			require_once("inc/classes/BDecode.php");
 			$alltorrent = @fread($fd, @filesize($file));
-			$array = @BDecode($alltorrent);
+			$array = BDecode($alltorrent);
 			@fclose($fd);
 		}
 		return ((isset($array["info"]["piece length"])) && (isset($array["info"]["pieces"])))

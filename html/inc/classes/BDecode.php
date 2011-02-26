@@ -43,6 +43,8 @@
 class BDecode
 {
 
+	var $decoded=array();
+
 	function numberdecode($wholefile, $start)
 	{
 		$ret[0] = 0;
@@ -59,9 +61,8 @@ class BDecode
 		{
 			$offset++;
 			if ($negative)
-			{
 				return array(false);
-			}
+
 			if ($wholefile[$offset] == ':' || $wholefile[$offset] == 'e')
 			{
 				$offset++;
@@ -90,9 +91,8 @@ class BDecode
 				if ($negative)
 				{
 					if ($ret[0] == 0)
-					{
 						return array(false);
-					}
+
 					$ret[0] = - $ret[0];
 				}
 				return $ret;
@@ -108,25 +108,22 @@ class BDecode
 	function decodeEntry($wholefile, $offset=0)
 	{
 		if ($wholefile[$offset] == 'd')
-		{
 			return $this->decodeDict($wholefile, $offset);
-		}
+
 		if ($wholefile[$offset] == 'l')
-		{
 			return $this->decodelist($wholefile, $offset);
-		}
+
 		if ($wholefile[$offset] == "i")
 		{
 			$offset++;
 			return $this->numberdecode($wholefile, $offset);
 		}
+
 		// String value: decode number, then grab substring
 		$info = $this->numberdecode($wholefile, $offset);
 
 		if ($info[0] === false)
-		{
 			return array(false);
-		}
 
 		$ret[0] = substr($wholefile, $info[1], $info[0]);
 		$ret[1] = $info[1]+strlen($ret[0]);
@@ -139,25 +136,19 @@ class BDecode
 		$offset = $start+1;
 		$i = 0;
 		if ($wholefile[$start] != 'l')
-		{
 			return array(false);
-		}
 
 		$ret = array();
 
 		while (true)
 		{
 			if ($wholefile[$offset] == 'e')
-			{
 				break;
-			}
 
 			$value = $this->decodeEntry($wholefile, $offset);
 
 			if ($value[0] === false)
-			{
-				return array(false);
-			}
+				return $value;
 
 			$ret[$i] = $value[0];
 			$offset = $value[1];
@@ -171,22 +162,24 @@ class BDecode
 		return $final;
 	}
 
-// Tries to construct an array
+	// Try to construct an array
 	function decodeDict($wholefile, $start=0)
 	{
 		$offset = $start;
+		
+		//prevent loops
+		if (!empty($decoded[$offset]))
+			return array(false);
 
 		if ($wholefile[$offset] == 'l')
-		{
 			return $this->decodeList($wholefile, $start);
-		}
+
 		if ($wholefile[$offset] != 'd')
-		{
-			return false;
-		}
+			return array(false);
 
 		$ret = array();
 		$offset++;
+		$decoded[$offset]=1;
 
 		while (true)
 		{
@@ -197,20 +190,16 @@ class BDecode
 			}
 			$left = $this->decodeEntry($wholefile, $offset);
 			if (!$left[0])
-			{
-				return false;
-			}
+				return array(false);
+			
 			$offset = $left[1];
 			if ($wholefile[$offset] == 'd')
 			{
 				// Recurse
+				$value = $this->decodeDict($wholefile, $offset);
 
-				$value = $this->decodedict($wholefile, $offset);
-
-				if (!$value[0])
-				{
-					return false;
-				}
+				if ($value[0] === false)
+					return $value;
 
 				$ret[addslashes($left[0])] = $value[0];
 				$offset= $value[1];
@@ -221,10 +210,8 @@ class BDecode
 			{
 				$value = $this->decodeList($wholefile, $offset);
 
-				if (!$value[0] && is_bool($value[0]))
-				{
-					return false;
-				}
+				if ($value[0] === false)
+					return $value;
 
 				$ret[addslashes($left[0])] = $value[0];
 				$offset = $value[1];
@@ -234,22 +221,17 @@ class BDecode
 				$value = $this->decodeEntry($wholefile, $offset);
 
 				if ($value[0] === false)
-				{
-					return false;
-				}
+					return $value;
 
 				$ret[addslashes($left[0])] = $value[0];
 				$offset = $value[1];
 			}
 		}
+
 		if (empty($ret))
-		{
 			$final[0] = true;
-		}
 		else
-		{
 			$final[0] = $ret;
-		}
 
 		$final[1] = $offset;
 
@@ -261,9 +243,8 @@ class BDecode
 // Use this function. eg:  BDecode("d8:announce44:http://www. ... e");
 function BDecode($wholefile)
 {
-	$decoder = new BDecode;
-	$return = $decoder->decodeEntry($wholefile);
-
+	$decoder = new BDecode();
+	$return = $decoder->decodeEntry($wholefile, 0);
 	return $return[0];
 }
 

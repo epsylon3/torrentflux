@@ -32,10 +32,12 @@ function tmplInitializeInstance($theme, $template) {
 	$path = ((strpos($theme, '/')) === false)
 		? "themes/".$theme."/tmpl/"
 		: "themes/tf_standard_themes/tmpl/";
+
 	// template-cache-switch
 	$tmpl = ($cfg['enable_tmpl_cache'] != 0)
 		? new vlibTemplateCache($path.$template)
 		: new vlibTemplate($path.$template);
+
 	//  set common template-vars
 	$tmpl->setUnknowns('comment');
 	$tmpl->setvar('theme', $theme);
