@@ -139,7 +139,7 @@ function resetTransferTotals($transfer, $delete = false) {
 	}
 	// reset in db
 	$uid = (int) getTransferOwnerID($transfer);
-	$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($tid)." AND uid IN (0,$uid)";
+	$sql = "UPDATE tf_transfer_totals SET uptotal=0 WHERE tid = ".$db->qstr($tid)." AND uid IN (0,$uid)";
 	$db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
 	// set transfers-cache

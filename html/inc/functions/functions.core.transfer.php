@@ -21,6 +21,13 @@
 *******************************************************************************/
 
 /**
+ * isHash return true if its a valid transfer hash
+ */
+function isHash($transfer) {
+        return (strlen($transfer) == 40 && preg_match('#^[a-f0-9]{40}#i',$transfer));
+}
+
+/**
  * getTransferPid
  *
  * @param $transfer
@@ -236,13 +243,36 @@ function getTransferFromHash($hash) {
  * @return int
  */
 function getTransferOwnerID($transfer, $default=0) {
-	global $transfers, $db;
+	global $transfers, $db, $cfg;
 	if (isset($transfers['owner'][$transfer])) {
 		$owner = $transfers['owner'][$transfer];
 		$uid = (int) GetUID($owner);
 	} else {
-		$hash = getTransferHash($transfer);
-		$uid = (int) $db->GetOne("SELECT uid FROM tf_transfers_totals WHERE tid = ".$db->qstr($hash)." AND uid > 0");
+		$hash = $transfer;
+		if (!isHash($hash))
+			$hash = getTransferHash($transfer);
+		$hash = strtolower($hash);
+
+		$uid = (int) $db->GetOne("SELECT uid FROM tf_transfer_totals WHERE tid = ".$db->qstr($hash)." AND uid > 0");
+		if ($uid == 0) {
+			$savepath = $db->GetOne("SELECT savepath FROM tf_transfers WHERE hash = ".$db->qstr($hash));
+			$savepath = str_replace($cfg["path"],'',$savepath);
+			$username = explode('/',$savepath);
+			$uid = GetUID($username[0]);
+			if ($uid != 0) {
+				$sql = "DELETE FROM tf_transfer_totals WHERE tid=".$db->qstr($hash);
+				$db->Execute($sql);
+
+				$sql = "INSERT INTO tf_transfer_totals (tid, uid, uptotal, downtotal)"
+				." VALUES ("
+				. $db->qstr($hash).","
+				. $uid.","
+				. "0,0"
+				.")";
+				$result = $db->Execute($sql);
+				if ($db->ErrorNo() != 0) dbError($sql);
+			}
+		}
 	}
 	$tuid = $uid;
 	if ($uid == 0) $tuid = $default;
@@ -997,9 +1027,12 @@ function resetOwner($transfer) {
 	$rtnValue = "n/a";
 	if (file_exists($cfg["transfer_file_path"].$transfer.".stat")) {
 		$sf = new StatFile($transfer);
-		$rtnValue = (IsUser($sf->transferowner))
-			? $sf->transferowner /* We have an owner */
-			: GetSuperAdmin(); /* no owner found, so the super admin will now own it */
+
+		if (IsUser($sf->transferowner))
+			$rtnValue = $sf->transferowner;
+		else
+			$rtnValue = GetSuperAdmin(); /* no owner found, so the super admin will now own it */
+
 	    // add entry to the log
 	    $sql = "INSERT INTO tf_log (user_id,file,action,ip,ip_resolved,user_agent,time)"
 	    	." VALUES ("

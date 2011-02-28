@@ -49,14 +49,17 @@ function updateStatFiles($bShowMissing=false) {
 
 	// check if running and get all session variables in cache
 	if (!$vuze->session_get()) {
+		echo "unable to connect to vuze rpc\n";
 		return;
 	}
 
 	$tfs = $vuze->torrent_get_tf();
 	//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles.log",serialize($tfs));
 
-	if (empty($tfs))
+	if (empty($tfs)) {
+		echo "no loaded torrents\n";
 		return;
+	}
 
 	$hashes = array("''");
 	foreach ($tfs as $hash => $t) {
@@ -102,6 +105,7 @@ function updateStatFiles($bShowMissing=false) {
 	$nbUpdate=0;
 	$missing=array();
 	foreach ($tfs as $hash => $t) {
+
 		if (!isset($hashes[$hash])) {
 			if ($bShowMissing) $missing[$t['rpcid']] = $t['name'];
 			continue;
@@ -114,6 +118,15 @@ function updateStatFiles($bShowMissing=false) {
 		//file_put_contents($cfg["path"].'.vuzerpc/'."updateStatFiles4.log",serialize($t));
 		$sf = new StatFile($transfer);
 		$sf->running = $t['running'];
+
+		if (empty($sf->transferowner)) {
+			$uid = getTransferOwnerID($hash);
+			if ($uid > 0) {
+				$sf->transferowner = GetUsername($uid);
+				echo "transfer '$transfer' owner fixed to ".$sf->transferowner." \n";
+				$sf->write();
+			}
+		}
 
 		if ($sf->running) {
 
@@ -256,6 +269,7 @@ function updateStatFiles($bShowMissing=false) {
 			echo $msg."\n";
 		}
 	}
+
 	
 	if ($bShowMissing) return $missing;
 //	echo $vuze->lastError."\n";

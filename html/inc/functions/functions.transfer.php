@@ -366,11 +366,4 @@ function transfer_setProfiledVars() {
 	$tmpl->setvar('with_profiles', $with_profiles);
 }
 
-/**
- * isHash return true if its a valid transfer hash
- */
-function isHash($transfer) {
-	return (strlen($transfer) == 40 && preg_match('#^[a-f0-9]{40}#i',$transfer));
-}
-
 ?>
