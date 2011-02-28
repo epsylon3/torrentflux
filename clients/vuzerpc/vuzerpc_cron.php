@@ -1,8 +1,8 @@
 #!/usr/bin/php
 <?php
 /*
-VUZE xmwebui (0.2.8) RPC interface for PHP (CRON)
-		       by Epsylon3 on gmail.com, Nov 2010
+VUZE xmwebui (0.2.9) RPC interface for PHP (CRON)
+			  by Epsylon3 on gmail.com, Nov 2010
 
 Require PHP 5 for public/protected members
 
@@ -223,6 +223,10 @@ function updateStatFiles($bShowMissing=false) {
 			}
 		}
 	}
+
+	//dont touch download speed limits for the moment... buggy
+	//Problem with 'AutoSpeed Forced Min KBs' i think
+	/*
 	if ($max_dl > 0) {
 		if ($cfg['max_download_rate'] > 0 && $max_dl > 0) {
 			$max_dl = min($max_dl, 1024.0 * $cfg['max_download_rate']);
@@ -237,6 +241,7 @@ function updateStatFiles($bShowMissing=false) {
 			}
 		}
 	}
+	*/
 	
 	if ($bShowMissing) return $missing;
 //	echo $vuze->lastError."\n";

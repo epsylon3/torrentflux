@@ -225,7 +225,7 @@ class VuzeRPC {
 	// Get xmwebui session variables (general config)
 	public function session_get($fields=array()) {
 		if (!empty($fields)) {
-			$args = new stdclass;
+			$args = new stdClass;
 			if (is_array($fields))
 				$args->fields = $fields;
 			else
@@ -241,14 +241,14 @@ class VuzeRPC {
 
 	// Set Vuze data (general config)
 	public function session_set($key, $value) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->$key = $value;
 		$req = $this->vuze_rpc('session-set',$args);
 		return $req;
 	}
 	
 	public function session_set_multi($values) {
-		$args = new stdclass;
+		$args = new stdClass;
 		foreach ($values as $key => $value)
 			$args->$key = $value;
 		$req = $this->vuze_rpc('session-set',$args);
@@ -342,7 +342,7 @@ class VuzeRPC {
 			"seedRatioLimit"
 		);
 
-		$args = new stdclass;
+		$args = new stdClass;
 		if (!empty($ids))
 			$args->ids = $ids;
 		$args->fields = $fields;
@@ -355,7 +355,7 @@ class VuzeRPC {
 			"id",
 			"hashString"
 		);
-		$args = new stdclass;
+		$args = new stdClass;
 		if (!empty($ids))
 			$args->ids = $ids;
 		$args->fields = $fields;
@@ -374,7 +374,7 @@ class VuzeRPC {
 	 * @return error string or object
 	*/
 	public function torrent_add($filename,$params=array()) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->filename = $filename;
 		$args->paused = "false";
 		$req = $this->vuze_rpc('torrent-add',$args);
@@ -394,7 +394,7 @@ class VuzeRPC {
 		JSONArray priority_low		= (JSONArray)args.get( "priority-low" );
 	*/
 	public function torrent_set($ids,$key,$value) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->ids = $ids;
 		$args->$key = $value;
 		$req = $this->vuze_rpc('torrent-set',$args);
@@ -402,7 +402,7 @@ class VuzeRPC {
 	}
 
 	public function torrent_set_multi($ids,$values) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->ids = $ids;
 		foreach ($values as $key => $value)
 			$args->$key = $value;
@@ -411,28 +411,28 @@ class VuzeRPC {
 	}
 
 	public function torrent_stop($ids) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->ids = $ids;
 		$req = $this->vuze_rpc('torrent-stop',$args);
 		return $req;
 	}
 
 	public function torrent_start($ids) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->ids = $ids;
 		$req = $this->vuze_rpc('torrent-start',$args);
 		return $req;
 	}
 	
 	public function torrent_verify($ids) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->ids = $ids;
 		$req = $this->vuze_rpc('torrent-verify',$args);
 		return $req;
 	}
 	
 	public function torrent_remove($ids,$bDeleteData=false) {
-		$args = new stdclass;
+		$args = new stdClass;
 		$args->ids = $ids;
 
 		$member = "delete-local-data";
@@ -463,7 +463,7 @@ class VuzeRPC {
 
 		$save_path = $params[1]; //ok, by session
 		$max_ul_kb = (int)$params[2]; // ok
-		$max_dl_kb = (int)$params[3]; // ok
+		//$max_dl_kb = (int)$params[3]; // ok
 		$max_uc = (int)$params[4];
 		$max_dc = (int)$params[5];
 		$diewhenok = (bool) $params[6];
@@ -486,9 +486,9 @@ class VuzeRPC {
 			// global speed limit, not the right way
 			$limits = array(
 				'speed-limit-up' => $max_ul * 1024,
-				'speed-limit-down' => $max_dl * 1024,
+				//'speed-limit-down' => $max_dl * 1024,
 				'speed-limit-up-enabled' => ($max_ul > 0),
-				'speed-limit-down-enabled' => ($max_dl > 0),
+				//'speed-limit-down-enabled' => ($max_dl > 0),
 				'encryption' => 'preferred'
 			);
 			//alt-speed-down
@@ -520,7 +520,7 @@ class VuzeRPC {
 			$id = $req->id;
 			$values = array(
 				"speedLimitUpload" => $max_ul_kb * 1024,
-				"speedLimitDownload" => $max_dl_kb * 1024,
+				//"speedLimitDownload" => $max_dl_kb * 1024,
 				'downloadDir' => $save_path,
 				'seedRatioLimit' => round((float)$sharekill / 100.0, 2), // need to be set by session but torrent-get value available in 0.2.9+
 				'seedRatioMode' => 1
