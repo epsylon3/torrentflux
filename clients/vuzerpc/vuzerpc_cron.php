@@ -215,9 +215,10 @@ function updateStatFiles($bShowMissing=false) {
 			$max_ul = min($max_ul, 1024.0 * $cfg['max_upload_rate']);
 		}
 		if ($vzmaxul != $max_ul) {
+			$max_ul = $max_ul / 1024;
 			$vuze->session_set('speed-limit-up', $max_ul);
 			if ($cfg['debuglevel'] > 0) {
-				$msg = $client.": vuze global speed-limit-up $vzmaxul to $max_ul.";
+				$msg = $client.": vuze global speed-limit-up from $vzmaxul to $max_ul.";
 				AuditAction($cfg["constants"]["debug"], $msg);
 				echo $msg."\n";
 			}
@@ -233,15 +234,28 @@ function updateStatFiles($bShowMissing=false) {
 		}
 		$vzmaxdl = getVuzeSpeedLimitDownload(true);
 		if ($vzmaxdl != $max_dl) {
+			$max_dl = $max_dl / 1024;
 			$vuze->session_set('speed-limit-down', $max_dl);
 			if ($cfg['debuglevel'] > 0) {
-				$msg = $client.": vuze global speed-limit-down $vzmaxdl to $max_dl.";
+				$msg = $client.": vuze global speed-limit-down from $vzmaxdl to $max_dl.";
 				AuditAction($cfg["constants"]["debug"], $msg);
 				echo $msg."\n";
 			}
 		}
 	}
 	*/
+
+	//so set no limit, to fix the download limit problem
+	$vzmaxdl = getVuzeSpeedLimitDownload(true);
+	if ((int)$vzmaxdl > 0) {
+		$max_dl = 0;
+		$vuze->session_set('speed-limit-down', $max_dl);
+		if ($cfg['debuglevel'] > 0) {
+			$msg = $client.": vuze global speed-limit-down from $vzmaxdl to $max_dl.";
+			AuditAction($cfg["constants"]["debug"], $msg);
+			echo $msg."\n";
+		}
+	}
 	
 	if ($bShowMissing) return $missing;
 //	echo $vuze->lastError."\n";
