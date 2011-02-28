@@ -24,10 +24,11 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 /*
-	v 1.07 - May 22. 10 - some tabs/space cleanup
-	v 1.06 - Dec 12. 06 - Change path on main pages.
-	v 1.05 - May 20. 06 - Change to paging URL, addtion of user stats as per Qromes Request (should now appear above column headers)
-	v 1.04 - Apr 26. 06 - Fixed filtering lists - Possible bug in admin.php (line 1997 - option value [NO FILTER] needs setting to -1 instead of "")
+	v 1.08 - Feb 28, 11 - domain name changed to demonoid.me
+	v 1.07 - May 22, 10 - some tabs/space cleanup
+	v 1.06 - Dec 12, 06 - Change path on main pages.
+	v 1.05 - May 20, 06 - Change to paging URL, addtion of user stats as per Qromes Request (should now appear above column headers)
+	v 1.04 - Apr 26, 06 - Fixed filtering lists - Possible bug in admin.php (line 1997 - option value [NO FILTER] needs setting to -1 instead of "")
 	v 1.03 - Apr 21, 06 - Modified first row on table to reflect correct date
 	v 1.02 - Apr 18, 06 - Added Update URL
 	v 1.01 - Apr 17, 06 - bug in filtering.
@@ -38,13 +39,13 @@ class SearchEngine extends SearchEngineBase
 
 	function SearchEngine($cfg)
 	{
-		$this->mainURL = "www.demonoid.com";
-		$this->altURL = "www.demonoid.com";
+		$this->mainURL = "www.demonoid.me";
+		$this->altURL = "www.demonoid.me";
 		$this->mainTitle = "Demonoid";
 		$this->engineName = "Demonoid";
 
-		$this->author = "moldavite";
-		$this->version = "1.07-tfb";
+		$this->author = "Epsylon3";
+		$this->version = "1.08-tfb";
 		$this->updateURL = "http://www.torrentflux.com/forum/index.php/topic,1210.0.html";
 
 		$this->Initialize($cfg);
@@ -484,8 +485,8 @@ class SearchEngine extends SearchEngineBase
 		}
 
 		$thing = $this->htmlPage;
-		$thing = str_replace("<a href=\"","<a href=\"http://www.demonoid.com",$thing);
-		$thing = str_replace("<img src=\"","<img src=\"http://www.demonoid.com",$thing);
+		$thing = str_replace("<a href=\"","<a href=\"http://www.demonoid.me",$thing);
+		$thing = str_replace("<img src=\"","<img src=\"http://www.demonoid.me",$thing);
 		// We got a response so display it.
 		// Chop the front end off.
 
@@ -506,7 +507,7 @@ class SearchEngine extends SearchEngineBase
 			{
 
 			$buildLine = true;
-				if (strpos($value,"www.demonoid.com"))
+				if (strpos($value,"www.demonoid.me"))
 				{
 
 					$ts = new dmnd($value);
@@ -558,13 +559,13 @@ class SearchEngine extends SearchEngineBase
 			if(strpos($this->curRequest,"LATEST"))
 			{
 
-				$pages = str_replace("http://www.demonoid.com/files/?",$this->searchURL()."&LATEST=1&",$pages);
+				$pages = str_replace("http://www.demonoid.me/files/?",$this->searchURL()."&LATEST=1&",$pages);
 
 			}
 			else
 			{
 
-				$pages = str_replace("http://www.demonoid.com/files/?",$this->searchURL()."&",$pages);
+				$pages = str_replace("http://www.demonoid.me/files/?",$this->searchURL()."&",$pages);
 			}
 
 			$pages = str_replace("page=","pg=",$pages);
