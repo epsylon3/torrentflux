@@ -1,6 +1,6 @@
 <tmpl_include name="inc.LayoutHeader.tmpl">
 <h1>Download Directory</h1>
-<h3>Location: <span id="dirfullpath">/<tmpl_var name="dir"></span></h3>
+<h3>Location: <span id="dirfullpath">/<tmpl_var name="dir_raw"></span></h3>
 <form action="index.php?iid=dir&amp;dir=<tmpl_var name="dir">&amp;multidel=1" method="post" id="multidir">
 <table id="dir">
 	<tr>
@@ -16,7 +16,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td style="width:18px;"><img src="themes/<tmpl_var name="theme">/images/dtree/folder.png" title="<tmpl_var name="dir">" alt="" /></td>
+		<td style="width:18px;"><img src="themes/<tmpl_var name="theme">/images/dtree/folder.png" title="<tmpl_var name="dir_raw">" alt="" /></td>
 		<tmpl_if name="enable_dirstats" value="1">
 		<td colspan="6">&nbsp;<tmpl_var name="parentdir"> (<span id="dirsize"><tmpl_var name="duTotal"></span>)</td>
 		<tmpl_else>

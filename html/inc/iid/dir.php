@@ -720,7 +720,6 @@ $tmpl->setloop('list', $list);
 // define some things
 
 // dir
-$tmpl->setvar('dir', $dir);
 if($dirName != "/")
 	$tmpl->setvar('parentdir', preg_replace("/.*\/(.+?)\//",'$1',$dirName));
 else
@@ -743,12 +742,13 @@ if($dir != "")
 }
 else
 	$tmpl->setvar('showparentURL', FALSE);
+
 // chmod, parent-dir cannot be chmodded
 if ($dir == "")
 	$tmpl->setvar('show_chmod', 0);
 else
 	$tmpl->setvar('show_chmod', (($cfg["dir_enable_chmod"] == 1) && (hasPermission($dir, $cfg['user'], 'w'))) ? 1 : 0);
-//
+
 $tmpl->setvar('enable_rename', $cfg["enable_rename"]);
 $tmpl->setvar('enable_move', $cfg["enable_move"]);
 $tmpl->setvar('enable_sfvcheck',  $cfg['enable_sfvcheck']);
@@ -761,16 +761,21 @@ $tmpl->setvar('package_type', $cfg["package_type"]);
 $tmpl->setvar('enable_maketorrent', $cfg["enable_maketorrent"]);
 $tmpl->setvar('bgDark', $cfg['bgDark']);
 $tmpl->setvar('bgLight', $cfg['bgLight']);
-//
+
+//lang
 $tmpl->setvar('_DELETE', $cfg['_DELETE']);
 $tmpl->setvar('_DIR_REN_LINK', $cfg['_DIR_REN_LINK']);
 $tmpl->setvar('_DIR_MOVE_LINK', $cfg['_DIR_MOVE_LINK']);
 $tmpl->setvar('_ABOUTTODELETE', $cfg['_ABOUTTODELETE']);
 $tmpl->setvar('_BACKTOPARRENT', $cfg['_BACKTOPARRENT']);
 $tmpl->setvar('_ID_IMAGES', $cfg['_ID_IMAGES']);
-//
 $tmpl->setvar('_WGET', $wget_url);
-//
+
+//directory to display
+$tmpl->setvar('dir_raw', $dir);
+//directory for links
+$tmpl->setvar('dir', str_replace('%2F','/',UrlHTMLSlashesEncode($dir)) );
+
 tmplSetTitleBar($cfg["pagetitle"].' - '.$cfg['_DIRECTORYLIST']);
 tmplSetDriveSpaceBar();
 tmplSetFoot();

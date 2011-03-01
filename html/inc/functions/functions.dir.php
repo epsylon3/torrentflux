@@ -240,18 +240,21 @@ function downloadArchive($download) {
 		// of the REAL path.
 		if (is_dir($down)) {
 			$sendname = basename($down);
+
+			$dir_param = addcslashes($sendname,"\x00..\x2E!@\@\x7B..\xFF"); 
 			switch ($cfg["package_type"]) {
 				Case "tar":
-					$command = "tar cf - \"".addslashes($sendname)."\"";
+					$command = "tar cf - ".$dir_param;
 					break;
 				Case "zip":
-					$command = "zip -0r - \"".addslashes($sendname)."\"";
+					$command = "zip -0r - ".$dir_param;
 					break;
 				default:
 					$cfg["package_type"] = "tar";
-					$command = "tar cf - \"".addslashes($sendname)."\"";
+					$command = "tar cf - ".$dir_param;
 					break;
 			}
+
 			// filenames in IE containing dots will screw up the filename
 			$headerName = (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE"))
 				? preg_replace('/\./', '%2e', $sendname, substr_count($sendname, '.') - 1)
