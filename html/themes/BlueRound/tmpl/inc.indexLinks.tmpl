@@ -1,0 +1,13 @@
+<div id="indexLinks">
+<tmpl_if name="ui_displaylinks" value="1">
+	<ul>
+		<tmpl_loop name="linklist">
+			<tmpl_if name="enable_dereferrer">
+				<li><a href="index.php?iid=dereferrer&amp;u=<tmpl_var escape="url" name="link_url">" target="_blank"><tmpl_var escape="html" name="link_sitename"></a></li>
+			<tmpl_else>
+				<li><a href="<tmpl_var escape="html" name="link_url">" target="_blank"><tmpl_var escape="html" name="link_sitename"></a></li>
+			</tmpl_if>
+		</tmpl_loop>
+	</ul>
+</tmpl_if>
+</div>

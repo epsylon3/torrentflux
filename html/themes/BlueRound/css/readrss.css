@@ -1,0 +1,50 @@
+img {vertical-align:middle;}
+
+table#readrss {
+	margin: 0 auto;
+	width: 100%;
+	border-collapse: collapse;
+	white-space: nowrap;
+}
+table#readrss th {
+	text-align: left;
+	background-color: black;
+	color: #ededed;
+	padding: 3px;
+}
+
+table#readrss th#readrssDateHead {
+	text-align: right;
+	padding-right: 10px;
+}
+
+table#readrss th.rssTitle {
+	text-align: left;
+	background-color: transparent;
+	padding: 3px;
+}
+
+table#readrss td.readrssFile {
+	text-align: left;
+	width: 75%;
+}
+
+table#readrss td.readrssDate {
+	text-align: right;
+	padding: 1px 3px 1px 1px;
+}
+
+ul#rssJumpList li {
+list-style-image: url('../images/readrss/bullet.png');
+list-style-position: inside;
+list-style-type: disc;
+}
+
+tr.alt {
+background-color: #ccc;
+}
+
+table#readrss .hover, table#readrss .hover a {
+background-color: #4161c4;
+color: #ededed;
+}

@@ -1,0 +1,23 @@
+<table>
+	<tr>
+		<td valign="top" align="left"><label for="categorylist">Target-Dirs:</label> </td>
+		<td valign="top" align="left">
+			<select name="categorylist" id="categorylist" size="3">
+				<tmpl_if name="moveSettings_move_list">
+					<tmpl_loop name="moveSettings_move_list">
+						<option value="<tmpl_var name="target">"><tmpl_var name="target"></option>
+						</tmpl_loop>
+				</tmpl_if>
+			</select>
+			<input type="button" name="remCatButton" value="remove" onclick="removeMoveEntry()">
+		</td>
+	</tr>
+	<tr>
+		<td valign="top" align="left"><label for="category">New Target-Dir:</label> </td>
+		<td valign="top" align="left">
+			<input type="text" name="category" id="category" size="30">
+			<input type="button" name="addCatButton" value="add" onclick="addMoveEntry()" size="30">
+			<input type="hidden" name="move_paths" value="<tmpl_var name="moveSettings_move_paths">">
+		</td>
+	</tr>
+</table>

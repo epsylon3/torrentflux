@@ -1,0 +1,84 @@
+<h1>edit filter</h1>
+<p class="NormalText"><a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a></p>
+<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_filter_edit')">
+<table id="adminfluxdSettingsRSSadFilteredit">
+	<tmpl_if name="filtername">
+		<p><input type="Submit" value="Edit Filter"></p>
+		<tr>
+			<th>Filter name</th>
+			<td><tmpl_var name="filtername"></td>
+		</tr>
+		<tr>
+			<th>Filter Builder</th>
+			<td>
+				<div id="filtereditorBuilder">	
+						<div class="base_name">
+							<label>Item Name</label>
+							<input type="text" name="builderName" id="builderName" placeholder="Enter Item Name"/>
+						</div>
+						<br class="clear" />
+						<div class="filter_block" style="float:left;">
+							<label>Positive Filters</label>
+							<select multiple="multiple" size="6" id="positive_filters">
+							
+							</select>
+							<br class="clear" />
+							<a href="#" class="remove_filter">Remove Selected Filter</a>
+							<input type="text" class="add_filter"/>
+							<input type="button" value="add" class="add_action"/>
+							<br class="clear" />
+						</div>
+						<div class="filter_block" style="float:right;">
+							<label>Negative Filters</label>
+							<select multiple="multiple" size="6" id="negative_filters">
+							
+							</select>
+							<br class="clear" />
+							<a href="#" class="remove_filter">Remove Selected Filter</a>
+							<input type="text" class="add_filter"/>
+							<input type="button" value="add" class="add_action"/>
+							<br class="clear" />
+						</div>
+						<br class="clear" />
+						<label>Generated Filter</label>
+						<div class="filterResults">
+							<textarea></textarea>
+						</div>
+						<div class="filterActions">
+							<a href="#" class="save_filter">Save Filter</a>
+						</div>
+						<br class="clear" />
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<th>Filter-Entries</th>
+			<td>
+				<input type="hidden" name="pageop" value="saveFilter">
+				<input type="hidden" name="new" value="false">
+				<input type="hidden" name="rssad_filtercontent" value="<tmpl_var name="rssad_filtercontent">">
+				<input type="hidden" name="filtername" value="<tmpl_var name="filtername">">
+				<select name="rssad_filters" id="rssad_filters" size="10" style="width:350px;">
+				<tmpl_if name="rssad_filter_list">
+				<tmpl_loop name="rssad_filter_list">
+					<option value="<tmpl_var name="filter">"><tmpl_var name="filter"></option>
+				</tmpl_loop>
+				</tmpl_if>
+					</select>
+				<input type="button" name="editButton" value="edit" onblur="editRssadFilterEntry()">
+				<input type="button" name="remButton" value="remove" onclick="removeRssadFilterEntry()">
+			</td>
+		<tr>
+			<th>Add Filter-Entry</th>
+			<td>
+				<input type="text" name="rssad_filter_entry" id="rssad_filter_entry" size="50">
+				<input type="button" name="addButton" value="add" onclick="addRssadFilterEntry()" size="30">
+			</td>
+		</tr>		
+</table>
+</form>
+
+<tmpl_else> <!-- ERROR MESSAGE -->
+	<p class="NormalText">There was an error.</p>
+</tmpl_if>

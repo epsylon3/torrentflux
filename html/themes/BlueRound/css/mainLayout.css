@@ -1,0 +1,485 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	background: #000064 url('../images/mainLayout/page_bg.png') repeat-x top left;
+/*	background-repeat: repeat-x; */
+	color: black;
+}
+
+body, .ui-widget {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+
+
+
+.container { 
+	margin: 0 auto;
+	margin-top: 5px;
+	min-width: 900px; 
+	display: table;
+}
+#Content { background: #ededed }
+#AngleTopLeft { background:url('../images/mainLayout/Box/left_top.png') no-repeat top left; height:28px; }
+#AngleTopRight { background: url('../images/mainLayout/Box/right_top.png') no-repeat top right; height:28px; }
+#AngleTopBorder { background:url('../images/mainLayout/Box/top.png') repeat-x top; height:28px; margin:-28px 28px; }
+#ContentBorderLeft { background:url('../images/mainLayout/Box/left.png') repeat-y left; }
+#ContentBorderRight { background:url('../images/mainLayout/Box/right.png') repeat-y right; padding: 0 28px;}
+#AngleBottomLeft { background:url('../images/mainLayout/Box/left_bottom.png') no-repeat bottom left; height:28px; }
+#AngleBottomRight { background:url('../images/mainLayout/Box/right_bottom.png') no-repeat bottom right;height:28px; }
+#AngleBottomBorder { background:url('../images/mainLayout/Box/bottom.png') repeat-x bottom; height:28px; margin:-28px 28px;}
+
+a {
+	color: #4161c4;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+img { border: none;}
+#center_wrap	{ margin: 0 auto; width:900px;position:relative; height:50px; }
+#header {
+	margin: 0 auto;
+	margin-left: -62px;
+	width: 1024px;
+	height: 100px;
+	position:absolute; 
+	background: transparent url('../images/mainLayout/Box/header.png');
+	background-repeat: no-repeat;
+}
+
+#UserBar {
+	text-align: center;
+	padding-top: 15px;
+	margin: 0 auto;
+}
+
+#UserBar img {
+	vertical-align: middle;
+}
+
+#UserBar ul {
+	margin: 0;
+	white-space: nowrap;
+	padding: 0;
+}
+
+#UserBar ul li {
+	display: inline;
+	list-style-type: none;
+	padding: 0 10px;
+}
+
+#UserBar a:link, #UserBar a:visited {
+	color: #ededed;
+	text-decoration: none;
+}
+
+#UserBar .overlay a {
+	color: black;
+}
+
+#UserBar .overlay a:hover {
+	text-decoration: underline;
+}
+
+#UserBar a:hover {
+/*	color: #333; */
+	text-decoration: underline;
+}
+
+#header h1 { padding-left: 30px; padding-top: 25px; font-size: 1.2em; color: #ededed;}
+.right h1{ font-size: 1.6em; }
+.right h2{ color: #4161c4; font-size: 14px; margin-bottom: 10px;}
+
+
+#footer {
+	margin: 0px auto 0 auto;
+	text-align: center;
+	padding: 10px 0 10px 0;
+	color: #eee;
+/*	background: #000064; */
+}
+
+fieldset {
+	border: none;
+}
+
+tr.gray {
+	background-color: #ddd;
+}
+
+tr.white {
+	background-color: #ededed;
+}
+
+table#indexStatsBarWarning {
+	width: 1024px;
+	background-color: #ededed;
+	margin: 0 auto;
+}
+
+table#indexStatsBarWarning td {
+	background-color: #ededed;
+	font-size: 24px;
+	color: blue;
+	width: 100%;
+	text-align: center;
+}
+
+table#indexStatsBarWarning img {vertical-align: middle;}
+
+table#indexStatsBar {
+	margin: 0 auto;
+	width: 100%;
+}
+
+table#indexStatsBar td {
+	font-size: 12px;
+	font-family: verdana;
+	width: 33%;
+	padding: 0 5px;
+	text-align: center;
+}
+
+table#indexRefreshOptions  {
+	background-color: #ededed;
+	margin: 0 auto;
+	width: auto;
+}
+
+table#indexRefreshOptions td {
+	width: 33%;
+	text-align: center;
+	background-color: transparent;
+}
+
+table#indexStatsGoodLooking {
+	width: auto;
+	margin: 0 auto;
+	background-color: transparent;
+}
+
+table#indexStatsGoodLooking td {
+	text-align: center;
+	font-size: 12px;
+	background-color: #ededed;
+}
+
+h3 { /* YOUR/FOREIGN TRANSFERS */
+	padding: 3px 0 3px 0;
+	margin: 7px 0 0 0;
+}
+
+/* Transfer List Header */
+
+.container div#tabs {
+	min-width: 900px;
+}
+
+table#transfer_table th, table#transfer_table th a {
+	padding: 2px 0;
+	background-color: #000064;
+	color: #ededed;
+	font-weight: bold;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 1.1em;
+}
+
+table#transfer_table {
+	border-collapse: collapse;
+	background-color: transparent;
+	font-size: 1.0em;
+	border:1px solid black;
+}
+
+table#transfer_table td {
+	background-color: transparent;
+	padding: 0 1px;
+	vertical-align: middle;
+	border-left: 0px;
+	border: 1px solid black;
+	white-space: nowrap;
+}
+
+table#transfer_table td a:hover {
+	text-decoration: none;
+}	
+ 
+table#transfer_table tr.gray {
+	background-color: #ddd;
+}
+
+table#transfer_table tr.white {
+	background-color: #ededed;
+}
+
+.hover, .hover a {
+	background-color: #4161c4;
+	color: #ededed;
+}
+
+table#transfer_table a{
+	color: #222;
+}
+
+table#transfer_table tr.hover a{
+	color: #ededed;
+}
+
+table.sortable a.sortheader { color: #ededed; text-decoration: none; }
+table.sortable span.sortarrow { color: #ededed; text-decoration: none; }
+
+table#TransferListBulkActions {
+	width: 100%;
+	background-color: #ededed;
+	padding-top:10px;
+}
+
+table#TransferListBulkActions td a, table#TransferListBulkActions td a:visited {
+	color: #4161c4;
+}
+
+table#TransferListBulkActions td a:hover {
+/*	color: #333; */
+}
+
+table#indexUsers {
+	height: 128px;
+	background-color: transparent;
+}
+
+table#indexUsers td { background-color: transparent; }
+
+table#UsersOnline {
+	background: #ededed url('../images/index/Users/online.png') no-repeat top left;
+	vertical-align: top;
+	width: 400px;
+	height: 128px;
+	padding-left: 100px;
+}
+
+table#UsersOnline td, table#UsersOffline td { background-color: transparent; }
+
+table#UsersOffline {
+	background: #ededed url('../images/index/Users/offline.png') no-repeat top left;
+	vertical-align: top;
+	width: 400px;
+	min-height: 128px;
+	height: 128px; /* IE6 */
+	padding-left: 100px;
+}
+
+#indexTorrentSearch {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 25px;
+	padding-left: 100px;
+	background: #ededed url('../images/index/TorrentSearch/bg.png') no-repeat top left;
+}
+
+#indexWget {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 25px;
+	padding-left: 140px;
+	background: #ededed url('../images/index/Wget/bg.png') no-repeat top left;
+}
+
+#indexNZBPerl {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 25px;
+	padding-left: 100px;
+	background: #ededed url('../images/index/NZBPerl/bg.png') no-repeat top left;
+}
+
+#indexLinks {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 10px;
+	padding-bottom: 15px;
+	padding-left: 140px;
+	background: #ededed url('../images/index/Links/bg.png') no-repeat top left;
+}
+
+#indexLinks ul {
+	list-style-image: url('../images/index/Links/link.png');
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
+#indexTorrentUpload {
+	margin: 0 auto;
+	min-height: 50px; height: 50px; /* IE6 */
+	padding-top: 5px;
+	padding-left: 100px;
+	margin-left: 100px;
+	background: #ededed url('../images/index/TorrentUpload/bg.png') no-repeat 30px 7px;
+}
+
+#indexTorrentGet {
+	margin: 0 auto;
+	min-height: 50px; height: 50px; /* IE6 */
+	padding-top: 5px;
+	padding-left: 100px;
+	margin-left: 100px;
+	background: #ededed url('../images/index/TorrentGet/bg.png') no-repeat 20px 5px;
+}
+
+div#indexStats {
+	margin: 0 auto;
+	min-height: 128px; height: 128px; /* IE6 */
+	padding-top: 5px;
+	padding-bottom: 15px;
+	padding-left: 130px;
+	background: #ededed url('../images/index/Stats/bg.png') no-repeat top left;
+}
+
+div#indexStats table {
+	background-color: transparent;
+	width: 100%;
+}
+
+#indexStats td {
+	background-color: transparent;
+	color: black;
+}
+
+.progress {
+	width:100px;
+	height:12px;
+	border:1px solid black;
+	background-color: #ededed;
+	padding:0;
+	margin:0;
+	color:#ededed;
+}
+
+.progress img {
+	margin:0;
+	width:100%;
+	height:10px;
+}
+
+.progressLeft {
+float:left;
+padding:0px;
+height:10px;
+background-color:#fd8b05;
+line-height:10px;
+}
+
+.progressRight {
+line-height:10px;
+float:right;
+height:10px;
+background-color:black;
+}
+
+.clear {
+	height:0px;
+	font-size:0px;
+	line-height:0px;
+	clear:both;
+	overflow:hidden;
+}
+
+td.progressbar {
+	white-space:nowrap;
+	overflow:hidden;
+	text-align:center;
+	padding:0;
+	width:100px;
+	vertical-align:top;
+}
+
+td.progressbar .pbfinished {
+	position:relative;
+	top:0px;
+	width:100px;
+	font-size:90%;
+}
+
+td.progressbar .pbstopped,
+td.progressbar .pbleeching,
+td.progressbar .pbseeding,
+td.progressbar .pbfinished {
+	position:relative;
+	top:0px;
+	width:100px;
+	font-size:90%;
+}
+
+div.pbbackgnd {
+	position:absolute;top:0;left:0;height:12px;
+}
+
+div.pbpercent {
+	padding: 0;
+}
+
+/* PROGRESS INDICATOR WHEN ACTIONS IS BEING DONE */
+.hidden { visibility:hidden; }
+
+#action_in_progress { 
+	background: #eee;
+	border: 1px dashed black;
+	color: #564b47;
+	text-align: center;
+	font-weight: bold;
+	font-size: 100%;
+	padding: 0px;
+	position: fixed;
+	top:0px;
+	left:0px;
+	z-index:10102 !important;
+}
+
+#grey_out {
+	position: fixed;
+	height:100%;
+	width:100%;
+	z-index:10100 !important;
+	top: 0px;
+	left: 0px;
+	background-color:#000000;
+	filter:alpha(opacity=50);
+	-moz-opacity: 0.5;
+	opacity: 0.5;
+}
+
+/*********************************************
+credit dialog styles
+**********************************************/
+
+#credit_tabs {
+	font-size: 10px;
+}
+
+#credit_tabs-1 ul, #credit_tabs-2 ul, #credit_tabs-3 ul {
+	list-style-position: inside;
+	list-style-type: square;
+}
+
+#credit_tabs-1 li a, #credit_tabs-2 li a, #credit_tabs-3 li a {
+	color: #4161c4;
+}
+
+#credit_tabs-1 a {
+	color: #4161c4;
+}
+
+#credit_tabs-1 a:hover {
+	text-decoration: underline;
+}
+
+#credit_tabs-1 li a:hover, #credit_tabs-2 li a:hover, #credit_tabs-3 li a:hover {
+	text-decoration: underline;
+}

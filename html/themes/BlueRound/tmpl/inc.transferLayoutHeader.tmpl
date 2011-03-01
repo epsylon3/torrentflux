@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<tmpl_if name="iid" value="transferStats">
+	<tmpl_if name="transferStatsType" value="ajax">
+<head>
+	<!-- IF TRANSFER WINDOW AJAX UPDATE IS ENABLED, THIS HEADER IS USED FOR STATS-->
+	<title><tmpl_var name="_DOWNLOADDETAILS"></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
+	<meta http-equiv="expires" content="Mon, 10 Dec 2000 00:00:00 GMT" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script src="js/ajax.js" type="text/javascript"></script>
+	<script src="js/ajax_transferStats.js" type="text/javascript"></script>
+</head>
+<body onLoad="<tmpl_var name="onLoad">">
+	<tmpl_else>
+<head>
+	<!-- IF TRANSFER WINDOW STANDARD UPDATE IS ENABLED, THIS HEADER IS USED FOR ALL PAGES -->
+	<title><tmpl_var name="_DOWNLOADDETAILS"></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
+	<meta http-equiv="expires" content="Mon, 10 Dec 2000 00:00:00 GMT" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+	</tmpl_if>
+<tmpl_else>
+<head>
+<!-- THIS IS SHOWN FOR ALL OTHERS -->
+	<title><tmpl_var name="_DOWNLOADDETAILS"></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=<tmpl_var name="_CHARSET">" />
+	<meta http-equiv="expires" content="Mon, 10 Dec 2000 00:00:00 GMT" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transfer.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/<tmpl_var name="iid">.css" type="text/css" />
+<tmpl_if name="iid" value="transferControl">
+	<link rel="stylesheet" href="themes/<tmpl_var name="theme">/css/transferSettings.css" type="text/css" media="screen">
+</tmpl_if>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+</tmpl_if>
+<!-- THIS IS THE TRANSFER SETTINGS WINDOWS MENU -->
+<div id="menu">
+	<ul>
+		<li><a href="index.php?iid=transferStats&transfer=<tmpl_var name="transfer">">Stats</a></li>
+		<li><a href="index.php?iid=transferHosts&transfer=<tmpl_var name="transfer">">Hosts</a></li>
+		<li><a href="index.php?iid=transferScrape&transfer=<tmpl_var name="transfer">">Scrape</a></li>
+		<li><a href="index.php?iid=transferImages&transfer=<tmpl_var name="transfer">">Images</a></li>
+		<li><a href="index.php?iid=transferLog&transfer=<tmpl_var name="transfer">">Log</a></li>
+		<li><a href="index.php?iid=transferDetails&transfer=<tmpl_var name="transfer">">Details</a></li>
+		<li><a href="index.php?iid=transferFiles&transfer=<tmpl_var name="transfer">">Files</a></li>
+		<li><a href="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">">Settings</a></li>
+		<li><a href="index.php?iid=transferControl&transfer=<tmpl_var name="transfer">">Control</a></li>
+	</ul>
+</div>
+<div id="inhalt">

@@ -1,0 +1,20 @@
+<div id="indexTorrentGet">
+<form id="form_url_torrent" action="dispatcher.php?action=urlUpload" method="post" onsubmit="return actionSubmit('<tmpl_var name="_GETFILE">')">
+	<fieldset>
+	<label for="url_torrent"><tmpl_var name="_URLFILE">:</label><br />
+	<input type="hidden" name="type" value="torrent" />
+	<input type="text" name="url" id="url_torrent" size="60" />
+	<select name="aid">
+	<option value="1"><tmpl_var name="_GETFILE"></option>
+	<tmpl_if name="queueActive" value="1">
+	<tmpl_if name="isAdmin"><option value="2" selected="selected"><tmpl_var name="_GETFILE">+Start</option>
+	</tmpl_if>
+	<option value="3"><tmpl_var name="_GETFILE">+Queue</option>
+	<tmpl_else>
+	<option value="2" selected="selected"><tmpl_var name="_GETFILE">+Start</option>
+	</tmpl_if>
+	</select>
+	<input type="submit" value="Go" />
+	</fieldset>
+</form>
+</div>

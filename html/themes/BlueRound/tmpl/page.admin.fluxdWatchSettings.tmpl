@@ -1,0 +1,177 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+
+<tmpl_if name="new_msg">
+	<p class="NormalText"><tmpl_var escape="html" name="message"></p>
+</tmpl_if>
+<h1>Watch Jobs</h1>
+<p class="NormalText"><a href="admin.php?op=fluxdSettings">Return to fluxd Settings</a></p>
+<a name="fluxd" id="fluxd"></a>
+<tmpl_if name="pageop" value="default">
+<table id="adminfluxdWatchList">
+	<tmpl_if name="watch_jobs">
+		<tr>
+			<th>Watchdir</th>
+			<th>User</th>
+		<tmpl_if name="with_profiles">
+			<th>Transfer Profile</th>
+		</tmpl_if>
+		</tr>
+		
+	<tmpl_loop name="watch_jobs">
+		<tr>
+			<td>
+				<a href="admin.php?op=fluxdWatchSettings&pageop=deleteJob&job=<tmpl_var name="__ROWNUM__">"  onclick="return confirm('Delete Job ?')"><img src="themes/<tmpl_var name="theme">/images/admin/fluxdWatch/delete.png" width="16px" height="16px" title="Delete Job" align="absmiddle"></a>&nbsp;
+				<a href="admin.php?op=fluxdWatchSettings&pageop=editJob&job=<tmpl_var name="__ROWNUM__">"><img src="themes/<tmpl_var name="theme">/images/admin/fluxdWatch/edit.png" width="16px" height="16px" border=0 title="Edit Job" align="absmiddle"></a>&nbsp;
+				<tmpl_var escape="htmlkeepspaces" name="D"></td> <!-- DIRECTORY -->
+			</td>
+			<td><tmpl_var escape="htmlkeepspaces" name="U"></td> <!-- USER -->
+			<td>
+		<tmpl_if name="with_profiles">
+			<tmpl_if name="P" value="">&nbsp;
+		<tmpl_else>
+			<tmpl_var escape="htmlkeepspaces" name="P">
+		</tmpl_if>
+			</td>
+		</tmpl_if>
+		</tr>
+	</tmpl_loop>
+<tmpl_else>
+	<p class="NormalText">No jobs defined</p>
+</tmpl_if>
+	<table id="adminfluxdWatchListAdd">
+		<tr>
+			<th>
+				<form action="admin.php?op=fluxdWatchSettings" method="post">
+					<input type="hidden" name="pageop" value="addJob">
+					<input type="submit" value="Add Job">
+				</form>
+			</th>
+		</tr>
+	</table>
+
+<tmpl_elseif name="pageop2" value="addJobOreditJob">
+
+<form name="theForm" action="admin.php?op=fluxdWatchSettings" method="post" onsubmit="return validateSettings('fluxd_Watch_job')">
+<h2><tmpl_if name="pageop" value="addJob">Add<tmpl_else>Edit</tmpl_if> Job</h2>
+<tmpl_if name="with_profiles">
+<p class="NormalText">
+	Specify the watch directory you want to watch for new torrents, the user you want the torrent to be owned by in 
+	TorrentFlux-NG and the transfer profile to use for the torrent.  Click 'Add Job' to add the watch job.
+</p>
+<p class="NormalText">
+	When fluxd finds a new torrent in the watch directory it will automatically inject the torrent into TorrentFlux-NG 
+	using the transfer profile you specify from the 'Transfer Profile' dropdown list and set the owner of the transfer to the user you chose.
+</p>
+
+<tmpl_else>
+<p class="NormalText">
+	Specify the watch directory you want to watch for new torrents and the user you want the torrent to be owned 
+	by in TorrentFlux-NG.  Click 'Add Job' to add the watch job.
+</p>
+<p class="NormalText">
+	When fluxd finds a new torrent in the watch directory it will 
+	automatically inject the torrent into TorrentFlux-NG and set the owner of the transfer to the user you chose.
+</p>
+</tmpl_if>
+
+<p>
+	<input type="hidden" name="pageop" value="<tmpl_var escape="html" name="pageop">">
+	<input type="hidden" name="job" value="<tmpl_var escape="html" name="jobnumber">">
+	<input type="hidden" name="postback" value="1">
+	<input type="hidden" name="refresh" value="0">
+	<input type="Submit" value="<tmpl_if name="pageop" value="addJob">Add<tmpl_else>Edit</tmpl_if> Job">
+</p>
+
+<table id="adminfluxdAddJob">
+	<tmpl_if name="watch_job_loaded">
+		<tr>
+			<th>Watchdir</th>
+			<td><input type="text" size="55" maxlength="255" name="watchdir" id="watchdir" value="<tmpl_var escape="html" name="watchdir">"></td>
+		</tr>
+		<tr>
+			<th class="alt">User</th>
+			<td class="alt">
+				<select name="user" id="user"<tmpl_if name="with_profiles"> onchange="performRefresh();"</tmpl_if>>
+				<tmpl_loop name="watch_users">
+					<option value="<tmpl_var escape="html" name="name">"<tmpl_if name="is_selected"> selected</tmpl_if>><tmpl_var escape="htmlkeepspaces" name="name"></option>
+				</tmpl_loop>
+				</select>
+			</td>
+		</tr>
+			<tmpl_if name="with_profiles">
+		<th>Transfer Profile</th>
+		<td>
+			<select name="profile" id="profile">
+				<option value="">default</option>
+			<tmpl_if name="profiles">
+				<tmpl_loop name="profiles">
+					<option value="<tmpl_var escape="html" name="name">"<tmpl_if name="is_selected"> selected</tmpl_if>><tmpl_var escape="htmlkeepspaces" name="name"></option>
+				</tmpl_loop>
+				</tmpl_if>
+			<tmpl_if name="public_profiles">
+				<optgroup label="Public" style="background-color: #00EC00">
+			<tmpl_loop name="public_profiles">
+				<option style="background-color: #ededed" value="<tmpl_var escape="html" name="name">"<tmpl_if name="is_selected"> selected</tmpl_if>><tmpl_var escape="htmlkeepspaces" name="name"></option>
+			</tmpl_loop>
+				</optgroup>
+			</tmpl_if>
+				</select>
+			</td>
+			</tmpl_if>
+		</tr>
+		<tr>
+			<th class="alt">Check/Create dir</th>
+			<td class="alt"><input type="checkbox" name="checkdir" id="checkdir"<tmpl_if name="checkdir"> checked</tmpl_if>></td>
+		</tr>
+</table>
+<tmpl_else>
+<p class="NormalText">
+	Error loading Job
+	<tmpl_if name="messages">			
+		<ul>
+			<tmpl_loop name="messages">
+				<li><tmpl_var escape="html" name="msg"></li>
+			</tmpl_loop>
+		</ul>
+	</tmpl_if>
+</p>
+
+</tmpl_if>
+</form>
+
+<p class="NormalText"><a href="admin.php?op=fluxdWatchSettings">Return to fluxd-Watch-Settings</a></p>
+	
+<tmpl_elseif name="pageop2" value="saveJob">
+	<tmpl_if name="watch_job_saved" value="1">
+		<p class="NormalText"><tmpl_var escape="html" name="watch_job_message"></p>
+	<tmpl_else>
+		<p class="NormalText">Error saving Job</p>
+			<tmpl_if name="messages">
+				<ul>
+					<tmpl_loop name="messages">
+						<li><tmpl_var escape="html" name="msg"></li>
+					</tmpl_loop>
+				</ul>
+					</tmpl_if>
+			</tmpl_if>
+
+<p class="NormalText"><a href="admin.php?op=fluxdWatchSettings">Return to fluxd-Watch-Settings</a></p>
+	
+<tmpl_elseif name="pageop" value="deleteJob">
+	<tmpl_if name="watch_job_deleted" value="1">
+			<p class="NormalText">Job deleted.</p>
+	<tmpl_else>
+			<p class="NormalText">Error deleting Job</p>
+		<tmpl_if name="messages">
+			<ul>
+				<tmpl_loop name="messages">
+				<li><tmpl_var escape="html" name="msg"></li>
+				</tmpl_loop>
+			</ul>
+				</tmpl_if>
+	</tmpl_if>
+</tmpl_if>
+	
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

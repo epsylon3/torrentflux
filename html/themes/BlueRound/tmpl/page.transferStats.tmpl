@@ -1,0 +1,100 @@
+<tmpl_include name="inc.transferLayoutHeader.tmpl">
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.progressbar.js"></script>
+<style rel="stylesheet" type="text/css">
+	ximg#barImage1_pbImage {
+		background-repeat : no-repeat;
+	}
+</style>
+<h1>Stats</h1>
+<div style="display:none;"><span id="barImage2"></span></div>
+	<table id="transferStats">
+	<tr>
+		<td><span class="progressBar" id="barImage1"><tmpl_var name="percent_done"></span></td>
+	</tr>
+	</table>
+<table id="transferStats">
+<tr>
+	<th><tmpl_var name="_ESTIMATEDTIME">:</th>
+	<td><label id="eta"><tmpl_if name="time_left" value="-">&#8734<tmpl_else><tmpl_var name="time_left"></tmpl_if></label></td>
+	<th>Total Size: </th>
+	<td><tmpl_var name="size"></td>
+</tr>
+<tr>
+	<th><tmpl_var name="_PERCENTDONE">:</th>
+	<td><label id="percentDone"><tmpl_var name="percent_done"></label>%</td>
+	<th><tmpl_var name="_USER">:</th>
+	<td><label id="transferowner"><tmpl_var name="transferowner"></label></td>
+</tr>
+<tr>
+	<th><tmpl_var name="_DOWNLOADSPEED">:</th>
+	<td><label id="speedDown"><tmpl_var name="down_speed"></label></td>
+	<th><tmpl_var name="_UPLOADSPEED">:</th>
+	<td><label id="speedUp"><tmpl_var name="up_speed"></label></td>
+</tr>
+<tr>
+	<th>Down:</th>
+	<td><label id="downCurrent"><tmpl_var name="downTotalCurrent"></label></td>
+	<th>Up:</th>
+	<td><label id="upCurrent"><tmpl_var name="upTotalCurrent"></label></td>
+</tr>
+<tr>
+	<th>Down-Total:</th>
+	<td><label id="downTotal"><tmpl_var name="downTotal"></label></td>
+	<th>Up-Total:</th>
+	<td><label id="upTotal"><tmpl_var name="upTotal"></label></td>
+</tr>
+<tr>
+	<th>Seeds:</th>
+	<td><label id="seeds"><tmpl_var name="seeds"></label></td>
+	<th>Peers:</th>
+	<td><label id="peers"><tmpl_var name="peers"></label></td>
+</tr>
+<tr>
+	<th><tmpl_var name="_ID_PORT">:</th>
+	<td><label id="port"><tmpl_var name="port"></label></td>
+	<th><tmpl_var name="_ID_CONNECTIONS">:</th>
+	<td><label id="cons"><tmpl_var name="cons"></label></td>
+</tr>
+<tr>
+	<th><tmpl_var name="_SHARING">:</th>
+	<td><label id="sharing"><tmpl_var name="sharing"></label>%</td>
+	<th>Seed Until:</th>
+	<td><label id="sharekill"><tmpl_var name="sharekill"></label></td>
+</tr>
+</table>
+<script type="text/javascript">
+	
+	jQuery(document).ready(function() {
+		//$(".pb5").progressBar({ max: 2000, textFormat: 'fraction', callback: function(data) { if (data.running_value == data.value) { alert("Callback example: Target reached!"); } }} );
+		var box = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbar.png';
+		var rbar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_blue.png';
+		var gbar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_green.png';
+		var bbar = 'themes/<tmpl_var name="theme">/images/transferSettings/progressbg_blue.png';
+		
+		var bar = bbar;
+		var maxval = 100;
+		var percent = parseFloat('<tmpl_var name="percent_done">')
+		var sharing = parseFloat('<tmpl_var name="sharing">');
+		var sharekill = parseFloat('<tmpl_var name="sharekill">');
+		if (percent === NaN) percent = 0.0;
+		if (sharing === NaN) sharing = 0.0;
+		if (sharekill === NaN) sharekill = 0.0;
+		else sharekill = sharekill - 1;
+		
+		if (percent < 100.0) {
+			bar = rbar;
+		} else if (sharing >= sharekill) {
+			bar = gbar;
+			maxval = sharing;
+		} else if (sharekill > 0.0) {
+			maxval = sharekill;
+		}
+		
+		jQuery("#barImage1").progressBar({ max: maxval, boxImage: box, barImage: {0:bar,100:bbar,maxval:gbar} });
+	});
+	
+</script>
+<div id="realtime_monitor">
+	<tmpl_var name="realtime_monitor">
+</div>
+<tmpl_include name="inc.transferLayoutFooter.tmpl">

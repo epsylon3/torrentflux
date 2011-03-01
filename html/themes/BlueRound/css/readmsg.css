@@ -1,0 +1,126 @@
+img {vertical-align:middle;}
+tr.alt { background-color: #eeeeee;}
+
+table#readmsgCompose {
+	width: 800px;
+	margin: 0 auto;
+	background: transparent;
+	white-space: nowrap;
+}
+
+table#readmsgCompose th {
+	font: normal 10px "Verdana", Arial, sans-serif;
+	color: black;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 3px 3px 3px 6px;
+	background: #ededed;
+}
+
+table#readmsgCompose td {
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: black;
+	width: 60%;
+}
+
+
+/**************** MESSAGE LIST ******************/
+table#readmsgList {
+	border-width: 2px;
+	border-spacing: 5px;
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 100%;
+	white-space: nowrap;
+}
+
+table#readmsgList td {
+	padding: 5px;
+}
+
+table#readmsgList th {
+	text-align: left;
+	border-spacing: 5px;
+	padding: 1px 5px 1px 5px;
+	background-color: black;
+	color: #ededed;
+}
+
+table#readmsgList td.readmsgListUser {
+	text-align: left;
+	width: 100px;
+}
+
+table#readmsgList td.readmsgListMSG {
+	width: 570px;
+}
+
+table#readmsgList td.readmsgListDate {
+	text-align: left;
+	width: 130px;
+	font-size: 80%;
+}
+
+table#readmsgList td.readmsgListActions {
+	text-align: right;
+}
+
+table#readmsgList .hover, table#readmsgList .hover a {
+	background-color: #4161c4;
+	color: #ededed;
+}
+
+/**************** MESSAGE READ ******************/
+
+table#readmsgRead {
+	border-width: 2px;
+	border-spacing: 2px;
+	border-collapse: collapse;
+	background-color: #ededed;
+	margin: 15px auto;
+	width: 800px;
+	white-space: nowrap;
+}
+
+table#readmsgRead td {
+	border-width: 1px;
+	padding: 1px;
+	text-align: left;
+}
+
+table#readmsgRead td.User {
+	text-align: left;
+	border-width: 1px;
+	padding: 1px;
+	width: 70%;
+}
+
+table#readmsgRead td.Date {
+	text-align: left;
+	border-width: 1px;
+	padding: 1px;
+	font-size: 80%;
+}
+
+table#readmsgRead td.MSG {
+	text-align: left;
+	border-width: 1px;
+	background-color: transparent;
+	padding: 10px 10px 10px 40px;
+}
+
+table#readmsgReadMessage {
+	width: 70%;
+	background: transparent;
+}
+
+table#readmsgReadMessage td.messsage {
+	background: #eee;
+	padding: 10px 0 10px 10px;
+}
+
+table#readmsgReadMessage td.reply {
+	background: #ededed;
+	padding: 5px;
+}

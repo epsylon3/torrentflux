@@ -1,0 +1,9 @@
+<tmpl_if name="image_list">
+	<table id="imagesServer">
+		<tr>
+			<tmpl_loop name="image_list">	
+				<td><tmpl_var name="title"><br /><img src="<tmpl_var name="src">&c1=cccccc&c2=BC0400" title="<tmpl_var name="title">"></td>
+			</tmpl_loop>
+		</tr>
+	</table>
+</tmpl_if>

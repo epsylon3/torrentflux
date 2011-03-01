@@ -1,0 +1,51 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<h1>RSS settings</h1>
+<p class="NormalText">
+	Configure the RSS feeds you want to be included in the 'RSS Torrents' page for TorrentFlux-NG users to browse through.<br />
+	Note: RSS feed URLs added here must contain 'direct download' torrent links otherwise users will not be able to download the torrent files directly into TorrentFlux-NG.
+</p>
+<form action="admin.php?op=addRSS" method="post">
+<table id="adminEditRSSForm">
+	<tr>
+		<th colspan="2">Add RSS Link</th>
+	</tr>
+	<tr>
+		<td>
+			<tmpl_var name="_FULLURLLINK">
+			<input type="Text" size="50" maxlength="255" name="newRSS" id="newRSS">
+		</td>
+	</tr>
+	<tr>
+		<th colspan="2" class="button">
+			<input type="submit" value="<tmpl_var name="_UPDATE">">
+		</th>
+	</tr>
+</table>
+</form>
+<div style="height:25px;"></div>
+
+<table id="adminEditRSSList">
+	<tr>
+		<th colspan="2" class="nobg">RSS list</th>
+	</tr>
+	<tr>
+		<tmpl_loop name="link_rss">
+			<tmpl_if name="true">
+				<tmpl_if name="__ODD__">
+					<th class="row">
+				<tmpl_else>
+					<th class="rowalt">
+				</tmpl_if>
+						<a href="admin.php?op=deleteRSS&rid=<tmpl_var name="rid">"><img src="themes/<tmpl_var name="theme">/images/admin/editRSS/delete.png" title="<tmpl_var name="_DELETE"> <tmpl_var name="rid">"></a>
+					<tmpl_if name="enable_dereferrer">
+						<a href="index.php?iid=dereferrer&u=<tmpl_var escape="url" name="link">" target="_blank"><img src="themes/<tmpl_var name="theme">/images/admin/editRSS/visit.png"></a>
+					<tmpl_else>
+						<a href="<tmpl_var escape="html" name="link">" target="_blank"><tmpl_var escape="htmlkeepspaces" name="link"></a>
+					</tmpl_if>
+						<tmpl_var escape="htmlkeepspaces" name="link">
+					</th>
+	</tr>
+</tmpl_if>
+</tmpl_loop>
+</table>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

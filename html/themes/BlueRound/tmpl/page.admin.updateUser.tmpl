@@ -1,0 +1,15 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+	<tmpl_if name="errUsername" value="1">
+	<div class="error">
+		<p><tmpl_var name="_TRYDIFFERENTUSERID"> <a href="admin.php?op=editUser&amp;user_id=<tmpl_var name="org_user_id">"><tmpl_var name="_RETURNTOEDIT"></a></p>
+		<tmpl_var name="errMsgUsername">
+	</div>
+	</tmpl_if>
+	
+	<tmpl_if name="errPassword" value="1">
+	<div class="error">
+		<tmpl_var name="errMsgPassword"> <a href="admin.php?op=editUser&amp;user_id=<tmpl_var name="org_user_id">"><tmpl_var name="_RETURNTOEDIT"></a>
+	</div>
+	</tmpl_if>
+	<p class="NormalText"><a href="admin.php?op=editUser&amp;user_id=<tmpl_var name="org_user_id">"><tmpl_var name="_RETURNTOEDIT"></a> <tmpl_var name="org_user_id"></p>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

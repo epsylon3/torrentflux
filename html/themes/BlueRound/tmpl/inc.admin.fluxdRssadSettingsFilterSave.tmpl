@@ -1,0 +1,15 @@
+<h1>Save Filter</h1>
+	<tmpl_if name="filter_saved" value="1">
+		<p class="NormalText"><tmpl_var name="rssad_filter_message"></p>
+		<pre><tmpl_var name="filtercontent"></pre>
+	<tmpl_else>
+		<h3>Error saving Filter <tmpl_var name="filtername"></h3>
+		<tmpl_if name="messages">
+			<ul>
+				<tmpl_loop name="messages">
+					<li><tmpl_var name="msg"></li>
+				</tmpl_loop>
+			</ul>
+		</tmpl_if>
+	</tmpl_if>
+<p class="NormalText"><a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a></p>

@@ -1,0 +1,42 @@
+<table id="TransferListBulkActions" cellspacing="0">
+	<tr>
+		<tmpl_if name="enable_bulkops">
+		<td>
+			Bulk Actions: 
+				<a href="dispatcher.php?action=bulkStart" onclick="return actionConfirm('Start All Transfers ?','Starting all Transfers')">Start</a> | 
+				<a href="dispatcher.php?action=bulkResume" onclick="return actionConfirm('Resume All Transfers ?','Resuming all Transfers')">Resume</a> | 
+				<a href="dispatcher.php?action=bulkStop" onclick="return actionConfirm('Stop All Transfers ?','Stopping all Transfers')">Stop</a> | 	
+		</tmpl_if>
+		<td>
+		<tmpl_if name="index_show_seeding">
+		<!--	<a href="dispatcher.php?action=set&amp;key=index_show_seeding&amp;val=0" onclick="return actionClick(true,'Hiding Seeds')">Hide Seeding Torrents</a>-->
+		<tmpl_else>
+			<a href="dispatcher.php?action=set&amp;key=index_show_seeding&amp;val=1" onclick="return actionClick(true,'Showing Seeds')">Show Seeding Torrents</a>
+		</tmpl_if>
+		</td>
+		<td>
+			<div style="text-align:right;">
+			<a href="dispatcher.php?action=cacheFlush" onclick="return actionClick(true)"><img style="margin-bottom:-4px" src="themes/<tmpl_var name="theme">/images/index/clean.png" width="16" height="16" border="0" title="Flush Cache"></a>
+			<a href="dispatcher.php?action=maintenance" onclick="return actionClick(true)"><img style="margin-bottom:-4px" src="themes/<tmpl_var name="theme">/images/index/maintenance.gif" width="16" height="16" border="0" title="Maintenance"></a>
+			<tmpl_if name="enable_multiops">
+				<select name="action">
+					<option value="---" selected="selected">---</option>
+					<option value="transferStart" style="background-color:#00EC00;">Start</option>
+					<option value="transferStop" style="background-color:#94ABC0;">Stop</option>
+				<tmpl_if name="queueActive" value="1">
+					<option value="transferEnQueue" style="background-color:#edededC00;">Enqueue</option>
+					<option value="transferDeQueue" style="background-color:#edededC00;">Dequeue</option>
+				</tmpl_if>
+					<option value="transfer" style="background-color:#DDAAAA;">Delete</option>
+					<option value="transferData" style="background-color:#DDAAAA;">Delete with Data</option>
+					<option value="transferResetTotals" style="background-color:#DDAAAA;">Reset Totals</option>
+					<option value="transferWipe" style="background-color:#DDAAAA;">Wipe</option>
+				</select>
+				<input style="width:35px" type="submit" value="Go" id="BulkActionButton"/>
+				<input type="checkbox" name="bulkBox" onclick="bulkCheck(this);" />
+			</tmpl_if>
+			</div>
+		</td>
+	</tr>
+</table>
+</form>

@@ -1,0 +1,108 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/userSettings.js" type="text/javascript"></script>
+<tmpl_if name="showIndex">
+<h1><tmpl_var name="user">'s <tmpl_var name="_PROFILE"></h1>
+<table id="profileTop">
+	<tr>
+		<td id="profileTopLeft">
+			<h2>Account Settings</h2>
+				<form id="theForm" action="index.php?iid=profile&amp;op=updateProfile" method="post" onsubmit="return validateProfile(0, '<tmpl_var name="_USERIDREQUIRED">', '<tmpl_var name="_PASSWORDLENGTH">', '<tmpl_var name="_PASSWORDNOTMATCH">', '<tmpl_var name="_PLEASECHECKFOLLOWING">')">
+				<table id="profileUserSettings">
+					<tr>
+						<th><tmpl_var name="_USER"></th>
+						<td><tmpl_var name="user"></td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_EMAIL"></th>
+						<td><input readonly="true" name="email_address" id="emailAddress" type="text" size="20" value="<tmpl_var name="email_address">" /></td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_NEWPASSWORD"></th>
+						<td><input name="pass1" id="pass1" type="password" value="" size="15" /></td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_CONFIRMPASSWORD"></th>
+						<td><input name="pass2" id="pass2" type="password" value="" size="15" /></td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_THEME"></th>
+						<td>
+							<select name="theme" id="theme">
+							<tmpl_loop name="theme_list">
+								<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected">><tmpl_var name="arThemes"></option>
+							</tmpl_loop>
+								<optgroup label="Standard TF Themes" style="background-color: #00EC00">
+							<tmpl_loop name="tfstandard_theme_list">
+								<option value="<tmpl_var name="arThemes2">" <tmpl_var name="selected"> style="background-color: #ededed"><tmpl_var name="arThemes"></option>
+							</tmpl_loop>
+								</optgroup>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_LANGUAGE"></th>
+						<td>
+							<select name="language" id="language">
+							<tmpl_loop name="language_list">
+								<option value="<tmpl_var name="arLanguage">" <tmpl_var name="selected">><tmpl_var name="language_file"></option>
+							</tmpl_loop>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_HIDEOFFLINEUSERS"></th>
+						<td><input name="hideOffline" id="hideOffline" type="checkbox" value="1" <tmpl_var name="hideChecked"> /></td>
+					</tr>
+					<tr>
+						<th colspan="2" class="button"><input style="width:120px;" type="submit" value="<tmpl_var name="_UPDATE">" /></th>
+					</tr>
+			</table>
+			</form>
+		</td>
+		<td id="profileTopRight">
+			<h2>Summary</h2>
+				<table id="profileSummary">
+					<tr>
+						<th><tmpl_var name="_JOINED"></th>
+						<td><tmpl_var name="time_created1"></td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_UPLOADS"></th>
+						<td><tmpl_var name="user_activity"></td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_PERCENTPARTICIPATION"></th>
+						<td><tmpl_var name="user_percent"> %</td>
+					</tr>
+					<tr>
+						<th><tmpl_var name="_TOTALPAGEVIEWS"></th>
+						<td><tmpl_var name="hits"></td>
+					</tr>										
+					<tr>
+						<th><tmpl_var name="_USERTYPE"></th>
+						<td><tmpl_var name="user_type"></td>
+					</tr>
+					<tr>
+						<td colspan="2"><h2>Advanced Settings</h2></td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<a href="index.php?iid=profile&amp;op=showCookies">Cookie Management</a> | 
+							<tmpl_if name="with_profiles" value="1"><a href="index.php?iid=profile&amp;op=showProfiles">Transfer Profiles Management</a></tmpl_if><br />
+							<a href="dispatcher.php?action=cookieFlush&amp;riid=profile" onclick="return confirm('Delete Auto-Login-Cookie ?')">Delete "Auto-Login" Cookie</a> | 
+							<tmpl_if name="enable_personal_settings" value="1">
+							<a href="index.php?iid=profile&amp;op=resetSettingsUser" onclick="return confirm('Reset Personal Settings ?')">Reset Personal Settings</a></tmpl_if>
+						</td>
+					</tr>
+				</table>
+		</td>
+	</tr>
+</table>
+
+<tmpl_if name="enable_personal_settings" value="1"><tmpl_include name="inc.personalSettingsForm.tmpl"></tmpl_if> <!-- PERSONAL SETTINGS FORM -->
+</tmpl_if>
+<tmpl_if name="updateProfile"><tmpl_include name="inc.profileUpdateMessage.tmpl"></tmpl_if> <!-- MESSAGE FOR UPDATING PROFILE -->
+<tmpl_if name="ShowCookies"><tmpl_include name="inc.profileShowCookies.tmpl"></tmpl_if> <!-- COOKIE SETTINGS -->
+<tmpl_if name="ShowProfiles"><tmpl_include name="inc.profileShowTransferProfile.tmpl"></tmpl_if> <!-- TRANSFER PROFILE SETTINGS -->
+<tmpl_include name="inc.LayoutFooter.tmpl">

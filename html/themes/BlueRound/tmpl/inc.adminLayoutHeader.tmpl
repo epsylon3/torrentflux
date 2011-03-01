@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>TorrentFlux-NG dashboard</title>
+<meta http-equiv="content-type" content="text/html; charset=<tmpl_var name='_CHARSET'>" />
+
+<!-- prevent caching and search engine indexing -->
+<meta http-equiv="expires" content="Mon, 10 Dec 2000 00:00:00 GMT" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="robots" content="noindex,nofollow,noarchive" />
+
+<link type="text/css" rel="stylesheet" href="js/jquery.jgrowl.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/blue/jquery-ui.custom.css"  />
+<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/adminMenu.css" />
+<link type="text/css" rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/admin.css" media="screen" />
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/userSettings.js"></script>
+<script type="text/javascript" src="js/adminSettings.js"></script>
+<script type="text/javascript" src="js/moveSettings.js"></script>
+<script type="text/javascript" src="js/resdirSettings.js"></script>
+<script type="text/javascript" src="js/fluxdSettings.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery-ui.min.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/adminMenu.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name="theme">/scripts/jquery.documentready.js"></script>
+<script type="text/javascript" src="js/jquery.jgrowl.js"></script>
+
+<script type="text/javascript">
+//jkoutlinemenu.definemenu("anchorid", "menuid", "mouseover|click", optional_width, optional_height)
+jkoutlinemenu.definemenu("designanchor", "mymenu1", "mouseover", 200)
+</script>
+</head>
+<body>
+<div id="wrap">
+		<div id="menu">
+			<tmpl_include name="inc.adminLayoutMenu.tmpl">
+			<tmpl_if name="is_superadmin"><span id="superadmin"><tmpl_var name="adminmenu_superAdminLink"></span> | </tmpl_if>
+			<a href="admin.php" id="designanchor">dashboard home</a>
+		</div>
+	<div id="header">
+		<a href="index.php"><h1>TorrentFlux-NG Dashboard <span>&larr; back to site</span></h1></a>
+	</div>
+</div>
+<div class="middle">

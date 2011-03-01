@@ -1,0 +1,97 @@
+div#torrentSearch {
+	min-height: 250px;
+}
+
+body#BlueRoundBody table {
+/*	border-collapse: collapse; */
+	background: transparent;
+	margin: 0 auto;
+	width: 800px;
+}
+
+body#BlueRoundBody th {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: left;
+	background-color: transparent;
+}
+
+body#BlueRoundBody td {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	font-size: 12px;
+	background-color: #ededed;
+}
+
+body#BlueRoundBody tbody {
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: left;
+	font-size: 12px;
+	background-color: transparent;
+}
+
+table#torrentSearch {
+	background-color: transparent;
+	margin: 0 auto;
+}
+
+table.torrentSearch th {
+	padding: 1px;
+	text-align: left;
+}	
+
+table.torrentSearch {
+	width: 980px;
+}
+
+table.torrentSearch td {
+	font-size: 11px;
+	background-color: transparent;
+}
+
+table#engineList td {
+	padding: 1px;
+	text-align: center;
+	font-size: 11px;
+	background-color: transparent;
+	border-top: 1px solid #f0f0f0;
+}
+
+table#genreList td {
+	padding: 1px;
+	text-align: center;
+	font-size: 11px;
+	background-color: transparent;
+}
+
+div#errorMessage {
+	text-align: center;
+}
+td#showLastest,
+div#extRequest{
+	text-align: right;
+}
+div#extRequest a {
+	color: silver;
+	font-size: 9px;
+}
+/* Header hack for old engines */
+tr[bgcolor="#808080"] td {
+	background-color: #000;
+	color: #ededed;
+}
+
+
+td[bgcolor="#f0f0f0"] {
+	background-color: #ededed;
+}
+
+td[bgcolor="#c0c0c0"] {
+	background-color: #ddd;
+}
+
+tr.hover td,
+tr.hover td{
+	background-color: #4161c4;
+}

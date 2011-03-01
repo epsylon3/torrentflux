@@ -1,0 +1,25 @@
+<tmpl_if name="titleBar_showButtons">
+	<ul>
+		<li><a href="index.php?iid=index" accesskey="h"><img src="themes/<tmpl_var name="theme">/images/UserBar/home.png" title="<tmpl_var name="_TORRENTS">" alt="home" /> <tmpl_var name="_TORRENTS"></a></li>
+		<li><a href="index.php?iid=dir" accesskey="d"><img src="themes/<tmpl_var name="theme">/images/UserBar/downloads.png" title="<tmpl_var name="_DIRECTORYLIST">" alt="directory" /> <tmpl_var name="_DIRECTORYLIST"></a></li>
+		<li><a href="index.php?iid=history"><img src="themes/<tmpl_var name="theme">/images/UserBar/history.png" title="<tmpl_var name="_UPLOADHISTORY">" alt="history" /> <tmpl_var name="_UPLOADHISTORY"></a></li>
+		<li><a href="index.php?iid=profile"><img src="themes/<tmpl_var name="theme">/images/UserBar/profile.png" title="<tmpl_var name="_MYPROFILE">" alt="profile" /> <tmpl_var name="_MYPROFILE"></a></li>
+		<li>
+			<a href="index.php?iid=readmsg"  accesskey="m">
+			<tmpl_if name="titleBar_number_messages">
+				<img src="themes/<tmpl_var name="theme">/images/UserBar/msg_new.gif" title="New Messages" alt="messages" /> New Messages
+			<tmpl_else>
+				<img src="themes/<tmpl_var name="theme">/images/UserBar/msg.png" title="Messages" alt="messages" /> Messages
+			</tmpl_if>
+			</a>
+		</li>
+		<li><a href="index.php?iid=readrss" accesskey="r"><img src="themes/<tmpl_var name="theme">/images/UserBar/rss.png" alt="RSS Torrents" title="RSS Torrents" /> RSS Torrents</a></li>
+				<tmpl_if name="isAdmin">
+		<li>
+			<img src="themes/<tmpl_var name="theme">/images/UserBar/admin.png" title="<tmpl_var name="_ADMINISTRATION">" alt="admin" /> <a href="admin.php" class="overlay" accesskey="a"><tmpl_var name="_ADMINISTRATION"></a>
+		</li>
+		</tmpl_if>
+		<li><a href="index.php?iid=logout" class="titlebarbutton"><img src="themes/<tmpl_var name="theme">/images/UserBar/logout.png" title="Logout" alt="Logout" /> Log out</a></li>
+
+	</ul>
+</tmpl_if>

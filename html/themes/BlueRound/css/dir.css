@@ -1,0 +1,70 @@
+table#dir {
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 100%;
+	white-space: nowrap;
+}
+
+table a#symbolic {
+	color: green;
+}
+
+td#dirChmod {
+	text-align: right;
+}
+
+td.dirName {
+	font-size: 11px;
+	padding: 0 5px;
+}
+
+td.dirPermission {
+	font-size: 9px;
+	text-align: right;
+	padding: 0 5px;
+}
+
+td.dirSize {
+	font-size: 9px;
+	text-align: right;
+	padding: 0 5px;
+}
+
+td.dirDate {
+	font-size: 9px;
+	text-align: center;
+	padding: 0 5px;
+}
+
+td.dirActions {
+	text-align: right;
+	padding: 0 3px;
+}
+
+td.dirActions img {
+	vertical-align: middle;
+}
+
+td#dirMultiAction {
+	text-align: right;
+	padding: 3px 3px;
+}
+
+tr.alt {
+	background-color: #ccc;
+}
+
+table#dir .hover, table#dir .hover a {
+	background-color: #4161c4;
+	color: #ededed;
+}
+
+#dirsize {
+	color: #FF3399;
+}
+
+#dirfullpath {
+	color: #660033;
+	font-size: 80%;
+	font-weight: normal;
+}

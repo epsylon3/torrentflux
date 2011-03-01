@@ -1,0 +1,53 @@
+This files contains info about hard coded images of tf-b4rt.
+
+/*************************
+Transfer List
+*************************/
+black.gif
+green.gif
+blue.gif
+yellow.gif
+
+/*************************
+USED IN inc.userSection.tmpl
+(registeblue users (see dashboard/users)
+shows online/offline/user types
+*************************/
+user.gif
+admin_user.gif
+superadmin.gif
+user_off.gif
+
+/*************************
+page.searchTorrents.tmpl
+*************************/
+download_owner.gif
+
+/*************************
+Super Admin and Various dashboard pages
+*************************/
+arrow.gif
+
+/*************************
+USED IN dashboard/server
+indicates ok/error of various paths to software
+*************************/
+green.gif
+blue.gif
+
+/*************************
+page.login.tmpl
+login page when using FormAuth + Image
+*************************/
+code_bg.gif
+code_bg.png
+code_bg.jpg
+
+/*************************
+page.dir.tmpl
+*************************/
+
+time.gif for file types which don't have an icon
+
+
+

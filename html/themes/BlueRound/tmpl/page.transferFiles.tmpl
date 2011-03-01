@@ -1,0 +1,28 @@
+<tmpl_include name="inc.transferLayoutHeader.tmpl">
+<h1>Files</h1>
+<h2><tmpl_var name="transferFileCount"> Files (<tmpl_var name="transferSizeSum">)</h2>
+<table id="transferFiles">
+		<tr>
+			<th>Name</th>
+			<th>Size</th>
+		</tr>
+		<tmpl_loop name="transferFilesList">
+			<tr onmouseover="this.className='hover';" 
+			<tmpl_if name="__EVEN__">
+				onmouseout="this.className='alt';" class="alt"  
+			<tmpl_else>
+				onmouseout="this.className='';" class=""  
+			</tmpl_if>
+			>
+				<td id="transferFilesName"><tmpl_var name="name"></td>
+				<td id="transferFilesSize"><tmpl_var name="size"></td>
+			</tr>
+		</tmpl_loop>
+</table>
+<!-- THIS SECTIONS SHOULD ACTUALLY BE REMOVED, SINCE YOU CAN DO THIS IN DETAILS OR CONTROL -->
+<tmpl_if name="file_priority_enabled" value="1">
+	<table class="transferFiles">
+		<tr><td><tmpl_var name="filePrio"></td></tr>
+	</table>
+</tmpl_if>
+<tmpl_include name="inc.transferLayoutFooter.tmpl">

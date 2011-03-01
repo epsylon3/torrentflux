@@ -1,0 +1,40 @@
+body {
+	background: #000064 url('../images/mainLayout/page_bg.png') repeat-x top left;
+  font-size: 13px;
+  color:#564b47;  
+  padding:20px;
+  margin:0px;
+  text-align: center;
+}
+
+#inhalt { 	
+  text-align: left;
+  vertical-align: middle;	
+  margin: 0px auto;
+  padding: 0px;
+  width: 550px;
+  background-color: #ededed;
+  border: 1px dashed #564b47;
+  min-height: 320px !important; 
+  height: 320px; /* IE6 */
+}
+
+p, h1 {
+margin: 0px; 
+padding: 10px; 
+}
+
+h1 {
+font-size: 14px;
+text-transform: uppercase;
+text-align: right;
+color: #ededed;
+background-color: #150c5a;
+}
+
+a { 
+color: #150c5a;
+font-size: 13px;
+background-color:transparent;
+text-decoration: none; 
+}

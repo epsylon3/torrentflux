@@ -1,0 +1,34 @@
+<tmpl_if name="rssad_filters">
+	<table id="adminfluxdSettingsRSSadFilterList">
+		<tr>
+			<th>Name</th>
+			<th>Action</th>
+		</tr>
+		<tmpl_loop name="rssad_filters">
+		<tr>
+			<th class="row"><tmpl_var name="filtername"></th>
+			<td>
+				<a href="admin.php?op=fluxdRssadSettings&pageop=deleteFilter&filtername=<tmpl_var name="filtername">"  onclick="return confirm('Delete Filter <tmpl_var name="filtername"> ?')">
+					<img src="themes/<tmpl_var name="theme">/images/admin/fluxdRSSad/filter_delete.png" width="16px" height="16px" title="Delete <tmpl_var name="filtername">">
+				</a>
+				<a href="admin.php?op=fluxdRssadSettings&pageop=editFilter&filtername=<tmpl_var name="filtername">">
+					<img src="themes/<tmpl_var name="theme">/images/admin/fluxdRSSad/filter_edit.png" width="16px" height="16px" title="Edit <tmpl_var name="filtername">">
+				</a>
+			</td>
+		</tr>
+		</tmpl_loop>
+	</table>
+	
+<tmpl_else><p class="NormalText">No Filters defined.</p></tmpl_if>
+
+<table id="adminfluxdSettingsRSSadFilterListAdd">
+	<tr>
+		<th>
+			<form name="theForm" action="admin.php?op=fluxdRssadSettings" method="post" onsubmit="return validateSettings('fluxd_Rssad_filter_new')">
+				<input type="hidden" name="pageop" value="addFilter">
+				<input type="Text" size="30" maxlength="255" name="filtername" id="filtername">
+				<input type="Submit" value="Add Filter">
+			</form>
+		</th>
+	</tr>
+</table>

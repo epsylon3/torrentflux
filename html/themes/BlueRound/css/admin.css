@@ -1,0 +1,2035 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	background: #ededed url('../images/admin/mainLayout/header.jpg') repeat-x;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-size: .9em;
+}
+
+.ui-widget {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 11px;
+}
+
+ul {
+	font-size: 1em;
+	margin:0;
+	padding:0;
+	color: #3B6EBF;
+}
+
+a {
+	color: #3B6EBF;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#header {
+	height: 55px;
+	margin-bottom: 5px;
+	width: 400px;
+}
+
+#header h1 { padding-left: 16px; padding-top: 5px; font-size: 22px; color: #ededed; }
+#header h1 a { font-size: 22px; color: #ededed; text-decoration: none;}
+#header h1 span {font-size: 50%;}
+#header h2 { padding-left: 17px; padding-top: 0px; font-size: 17px; color: #ededed; }
+
+
+.middle h1 { 
+	margin-bottom: 10px; 
+	margin-top: 10px;
+	font-family: Monaco,"Bitstream Vera Sans Mono","Lucida Console",Terminal,monospace;
+	letter-spacing:10px;
+}
+.middle h1:first-letter { text-transform: uppercase;}
+.middle h2 { color: #3B6EBF; font-size: 16px; margin-bottom: 10px; margin-top: 10px;}
+.middle h3 { color: black;font-size: 14px;;margin: 10px 0;font-family: 'Trebuchet MS', Helvetica, sans-serif;} 
+.middle p { text-align: right; margin: 15px 0;}
+p.NormalText { text-align: left; padding: 5px 0;}
+
+.middle ul {
+	margin: 10px;
+}
+
+#wrap {
+	margin: 0 auto;
+	width: 100%;
+}
+
+.middle {
+	width: 900px;
+	margin: 0 auto;
+	text-align: left;
+}
+
+#clear {
+	display: block;
+	clear: both;
+	width: 100%;
+	height:1px;
+	overflow:hidden;
+}
+
+#footer {
+   margin: 20px auto 0 auto;
+	text-align: center;
+	border-top: dotted 1px #ccc;
+	padding: 10px 0 10px 0;
+	color: #666;
+	background: #eee;
+}
+
+img { border: none; }
+
+/*********************************************
+credit dialog styles
+**********************************************/
+
+#credit_tabs {
+	font-size: 10px;
+}
+
+#credit_tabs p, #credit_tabs li {
+	color: black;
+}
+
+#credit_tabs-1 ul, #credit_tabs-2 ul, #credit_tabs-3 ul {
+	list-style-position: inside;
+	list-style-type: square;
+}
+
+#credit_tabs-1 li a, #credit_tabs-2 li a, #credit_tabs-3 li a {
+	color: #4161c4;
+}
+
+#credit_tabs-1 a {
+	color: #4161c4;
+}
+
+#credit_tabs-1 a:hover {
+	text-decoration: underline;
+}
+
+#credit_tabs-1 li a:hover, #credit_tabs-2 li a:hover, #credit_tabs-3 li a:hover {
+	text-decoration: underline;
+}
+
+/****************************************************
+MESSAGES ERROR/CONFIRM ETC..
+*****************************************************/
+
+.error {
+	width: 600px;
+	margin: 0 auto;
+	padding: 10px 10px 10px 80px;
+	border: 1px dashed black;
+	background: #ed6a6a url('../images/admin/SystemMessages/error.png') no-repeat 5px 10px;
+	color: black;
+	min-height: 60px;
+	height: 60px; /*IE6*/
+}
+
+.error p, .error h2 {
+	text-align: left;
+	color: black;
+}
+
+
+/****************************************************
+MAIN DASHBOARD
+*****************************************************/
+#adminMain {
+	width: 800px;
+}
+
+#adminMain th {
+	text-align: center;
+}
+
+#adminMain td {
+	text-align: center;
+}
+
+/* STATS TABLE */
+#adminMainStats {
+	width: 800px;
+}
+
+#adminMainStats th.head {
+	width: 33%;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 5px;
+	color: #3B6EBF;
+}
+
+#adminMainStats th {
+	width: 33%;
+	text-align: center;
+}
+
+#adminMainStats td {
+	width: 33%;
+}
+
+/* TF STATS TABLE */
+#adminMainStatsTF {
+	width: 95%;
+	background: url('../images/admin/main/statstfb4rt-bg.png') no-repeat top left;
+}
+
+#adminMainStatsTF th {
+	width: 60%;
+	text-align: right;
+	padding-right: 5px;
+}
+
+#adminMainStatsTF td {
+	width: 40%;
+}
+
+/* DATABASE STATS TABLE */
+#adminMainStatsDatabase {
+	width: 100%;
+	background: url('../images/admin/main/statsdatabase-bg.png') no-repeat top left;
+}
+
+#adminMainStatsDatabase th {
+	width: 55%;
+	text-align: right;
+	font-size: 11px;
+	padding-right: 5px;
+}
+
+#adminMainStatsDatabase td {
+	width: 45%;
+}
+
+/* SUPERADMIN TABLE */
+#adminMainSuperAdmin {
+	width: 100%;
+	background: url('../images/admin/main/statssuperadmin-bg.png') no-repeat bottom center;
+	margin-top: 25px;
+}
+
+#adminMainSuperAdmin th {
+	width: 100%;
+}
+
+#adminMainSuperAdmin th.head {
+	width: 33%;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 5px;
+	color: #3B6EBF;
+}
+
+
+#adminMainSuperAdmin td {
+	width: 50%;
+	font-size: 12px;	
+}
+
+#adminMainSuperAdmin a {
+	color: #000;
+	text-decoration: none;
+}
+
+#adminMainSuperAdmin a:hover {
+	text-decoration: underline;
+}
+
+/* SYSTEM STATS TABLE */
+#adminMainStatsSystem {
+	width: 100%;
+	background: url('../images/admin/main/statssystem-bg.png') no-repeat top left;
+}
+
+#adminMainStatsSystem th {
+	width: 50%;
+	text-align: right;
+	padding-right: 5px;
+}
+
+#adminMainStatsSystem td {
+	width: 50%;
+}
+
+/****************************************************
+SERVER SETTINGS
+*****************************************************/
+#adminServerSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminServerSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminServerSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminServerSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminServerSettings td {
+	width: 50%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminServerSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+#adminServerSettings input {
+	width: 300px;
+}
+
+/****************************************************
+TRANSFER SETTINGS
+*****************************************************/
+#adminTransferSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminTransferSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminTransferSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: auto;
+}
+
+#adminTransferSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminTransferSettings td {
+	width: 45%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminTransferSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUAZU SETTINGS
+*****************************************************/
+#adminfluazuSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluazuSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluazuSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminfluazuSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluazuSettings td {
+	width: 10%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminfluazuSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+CONTROL SETTINGS
+*****************************************************/
+#adminControlSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminControlSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminControlSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminControlSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminControlSettings td {
+	width: 40%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminControlSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+WebAPP SETTINGS
+*****************************************************/
+#adminWebAppSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminWebAppSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminWebAppSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminWebAppSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminWebAppSettings td {
+	width: 40%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminWebAppSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+INDEX SETTINGS
+*****************************************************/
+#adminIndexSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminIndexSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminIndexSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+
+#adminIndexSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminIndexSettings td {
+	width: 20%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminIndexSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+#adminIndexSettingsChecks {
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#adminIndexSettingsChecks th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminIndexSettingsChecks td {
+	background: #ededed;
+	padding: 6px 6px 6px 12px; 
+	color: #4f6b72;
+	border: none;
+}
+
+/****************************************************
+DIR SETTINGS
+*****************************************************/
+#adminDirSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminDirSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminDirSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminDirSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminDirSettings td {
+	width: 20%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminDirSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+#adminDirSettingsMove {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminDirSettingsMove th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	width: 50%
+}
+
+#adminDirSettingsMove td {
+	width: 20%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#adminDirSettingsMove th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+#adminDirSettingsMove td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+STATS SETTINGS
+*****************************************************/
+#adminStatsSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminStatsSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminStatsSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+
+#adminStatsSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminStatsSettings td {
+	width: 10%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminStatsSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUXD SETTINGS
+*****************************************************/
+#adminfluxdSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluxdSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+
+#adminfluxdSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluxdSettings td {
+	width: 20%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminfluxdSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUXD WATCH SETTINGS
+*****************************************************/
+#adminfluxdWatchList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdWatchList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+#adminfluxdWatchList th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminfluxdWatchList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminfluxdWatchList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminfluxdWatchList td {
+	border: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+}
+
+
+#adminfluxdWatchList td.alt {
+	background: #F5FAFA;
+	color: #B4AA9D;
+}
+
+#adminfluxdWatchListAdd {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdWatchListAdd th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+/****************************************************
+FLUXD WATCH ADD JOBS
+*****************************************************/
+#adminfluxdAddJob {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdAddJob th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluxdAddJob th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminfluxdAddJob th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluxdAddJob td {
+	width: 55%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#adminfluxdAddJob td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUXD RSSAD FILTER LIST
+*****************************************************/
+#adminfluxdSettingsRSSadFilterList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadFilterList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+#adminfluxdSettingsRSSadFilterList th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminfluxdSettingsRSSadFilterList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminfluxdSettingsRSSadFilterList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminfluxdSettingsRSSadFilterList td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+	width: 10%;
+}
+
+#adminfluxdSettingsRSSadFilterListAdd {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadFilterListAdd th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+/****************************************************
+FLUXD RSSAD FILTER ADD
+*****************************************************/
+#adminfluxdSettingsRSSadFilterAdd {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadFilterAdd th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadFilterAdd th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+
+#adminfluxdSettingsRSSadFilterAdd th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadFilterAdd td {
+	width: 60%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminfluxdSettingsRSSadFilterAdd td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUXD RSSAD FILTER EDIT
+*****************************************************/
+#adminfluxdSettingsRSSadFilteredit {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadFilteredit th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadFilteredit th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminfluxdSettingsRSSadFilteredit th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadFilteredit td {
+	width: 60%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminfluxdSettingsRSSadFilteredit td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUXD RSSAD JOB LIST
+*****************************************************/
+
+#adminfluxdSettingsRSSadJobList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadJobList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+#adminfluxdSettingsRSSadJobList th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminfluxdSettingsRSSadJobList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminfluxdSettingsRSSadJobList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminfluxdSettingsRSSadJobList td {
+	border: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+}
+
+#adminfluxdSettingsRSSadJobListSaveDir td {
+	border: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+	width: 45%;
+}
+
+#adminfluxdSettingsRSSadJobListAction td {
+	border: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+	width: 5%;
+}
+
+#adminfluxdSettingsRSSadJobListAdd {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadJobListAdd th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+/****************************************************
+FLUXD RSSAD FILTER LIST
+*****************************************************/
+#adminfluxdSettingsRSSadFilterList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadFilterList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+#adminfluxdSettingsRSSadFilterList th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminfluxdSettingsRSSadFilterList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminfluxdSettingsRSSadFilterList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminfluxdSettingsRSSadFilterList td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+	width: 10%;
+}
+
+#adminfluxdSettingsRSSadFilterListAdd {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadFilterListAdd th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') no-repeat;
+}
+
+/****************************************************
+FLUXD RSSAD JOB ADD
+*****************************************************/
+#adminfluxdSettingsRSSadJobAdd {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadJobAdd th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadJobAdd th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+
+#adminfluxdSettingsRSSadJobAdd th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadJobAdd td {
+	width: 60%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminfluxdSettingsRSSadJobAdd td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+FLUXD RSSAD JOB EDIT
+*****************************************************/
+#adminfluxdSettingsRSSadJobEdit {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminfluxdSettingsRSSadJobEdit th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadJobEdit th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminfluxdSettingsRSSadJobEdit th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminfluxdSettingsRSSadJobEdit td {
+	width: 60%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#adminfluxdSettingsRSSadJobEdit td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+XFER SETTINGS
+*****************************************************/
+#adminXferSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminXferSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminXferSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#adminXferSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminXferSettings td {
+	width: 20%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#adminXferSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+SEARCH SETTINGS
+*****************************************************/
+#adminSearchSettings {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminSearchSettings th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminSearchSettings th span {
+	font-size: 80%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+
+#adminSearchSettings th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminSearchSettings td {
+	width: 20%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#adminSearchSettings td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+EDIT LINKS
+*****************************************************/
+#adminEditLinksForm {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+#adminEditLinksForm th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA;
+}
+
+#adminEditLinksForm th.button {
+	text-align: right;
+}
+
+#adminEditLinksForm td {	
+	border: 1px solid #C1DAD7;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 12px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	padding: 6px 6px 6px 12px;
+}
+
+#adminEditLinksForm td.alt {
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+	color: #B4AA9D;
+}
+
+#adminEditLinksList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+#adminEditLinksList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #6D929B;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url(../images/admin/mainLayout/tables/bg_header.jpg) no-repeat;
+}
+
+#adminEditLinksList th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminEditLinksList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url(../images/admin/mainLayout/tables/td-bg.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminEditLinksList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url(../images/admin/mainLayout/tables/td-bg-alt.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminEditLinksList td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+}
+
+#adminEditLinksList td.edit {
+	border: 1px solid #C1DAD7;
+}
+
+
+#adminEditLinksList td.alt {
+	background: #F5FAFA;
+	color: #B4AA9D;
+}
+
+/****************************************************
+EDIT RSS
+*****************************************************/
+#adminEditRSSList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+#adminEditRSSList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #6D929B;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url(../images/admin/mainLayout/tables/bg_header.jpg) no-repeat;
+}
+
+#adminEditRSSList th.nobg {
+	border: none;
+	background: none;
+}
+
+#adminEditRSSList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed url(../images/admin/mainLayout/tables/td-bg.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminEditRSSList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url(../images/admin/mainLayout/tables/td-bg-alt.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminEditRSSForm {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+#adminEditRSSForm th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #6D929B;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA;
+}
+
+#adminEditRSSForm th.button {
+	text-align: right;
+}
+
+#adminEditRSSForm td {	
+	border: 1px solid #C1DAD7;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 12px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	padding: 6px 6px 6px 12px;
+}
+
+/****************************************************
+ShowUsers List (inc.userSection.tmpl)
+*****************************************************/
+#adminShowUsersList {
+	width: 900px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminShowUsersList th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #6D929B;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 12px;
+	background: #CAE8EA url(../images/admin/mainLayout/tables/bg_header.jpg) no-repeat;
+}
+
+#adminShowUsersList th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminShowUsersList th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url(../images/admin/mainLayout/tables/td-bg.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+}
+
+#adminShowUsersList th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url(../images/admin/mainLayout/tables/td-bg-alt.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	color: #B4AA9D;
+}
+
+#adminShowUsersList td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+}
+
+#adminShowUsersList td.alt {
+	background: #F5FAFA;
+	color: #B4AA9D;
+}
+
+#adminShowUsersList td.lastvisit {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #6D929B;
+	font-size: 9px;
+}
+
+#adminShowUsersList td.lastvisitalt {
+	background: #F5FAFA;
+	color: #B4AA9D;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	padding: 6px 6px 6px 12px;
+	font-size: 9px;
+}
+
+#adminShowUsersList th.button {
+	background: #CAE8EA;
+	text-align: right;
+	border: 1px solid #C1DAD7;
+}
+
+#adminShowUsersForm {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+#adminShowUsersForm th.head {
+	text-align: left;
+	background: #CAE8EA; 
+}
+
+
+#adminShowUsersForm th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminShowUsersForm th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#adminShowUsersForm th.button {
+	background: #CAE8EA;
+	text-align: right;
+	border: 1px solid #C1DAD7;
+}
+
+#adminShowUsersForm td {
+	width: 45%;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+
+#adminShowUsersForm td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+/***************************************************
+EDIT USER
+***************************************************/
+
+#admineditUser {
+	width: 900px;
+	margin: 0 auto;
+}
+
+#admineditUser td {
+	width: 50%;
+	vertical-align: top;
+}
+
+#admineditUserInfo {
+	width: 100%;
+}
+
+#admineditUserInfo th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	width: 60%;
+	text-align: right;
+	padding-right: 5px;
+}
+
+#admineditUserInfo th span {
+	font-size: 65%;
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: normal;
+}
+
+#admineditUserInfo td {
+	font: bold 12px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+}
+
+#admineditUserForm {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#admineditUserForm th.head {
+	text-align: left;
+	background: #CAE8EA; 
+}
+
+#admineditUserForm th {
+	width: 100%;
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#admineditUserForm th.alt {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 6px 6px 6px 12px;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+}
+
+#admineditUserForm th.button {
+	background: #CAE8EA;
+	text-align: right;
+	border: 1px solid #C1DAD7;
+}
+
+#admineditUserForm td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+}
+
+#admineditUserForm td.alt {
+	background: #F5FAFA;
+	color: #797268;
+}
+
+/****************************************************
+SHOW ACTIVITY
+*****************************************************/
+#adminShowUserActivity {
+	width: 900px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminShowUserActivitySearch {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+#adminShowUserActivitySearch th {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #4f6b72;
+	border: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 3px 3px 3px 6px;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+}
+
+#adminShowUserActivity th {
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica,sans-serif;
+	color: #6D929B;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 6px 6px 4px;
+	background: #CAE8EA url('../images/admin/mainLayout/tables/bg_header.jpg') repeat-x;
+}
+
+#adminShowUserActivity th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #C1DAD7;
+	background: none;
+}
+
+#adminShowUserActivity th.noRecords {
+	border: 1px solid #C1DAD7;
+	text-align: center;
+	background: none;
+}
+
+#adminShowUserActivity th.row {	
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #ededed url('../images/admin/mainLayout/tables/td-bg.gif') no-repeat;
+	font: bold 9px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+#adminShowUserActivity th.rowalt {
+	border-left: 1px solid #C1DAD7;
+	border-top: 0;
+	background: #f5fafa url('../images/admin/mainLayout/tables/td-bg-alt.gif') no-repeat;
+	font: bold 9px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #B4AA9D;
+}
+
+#adminShowUserActivity td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	background: #ededed;
+	padding: 3px 3px 3px 4px;
+	color: #6D929B;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+
+#adminShowUserActivity td.alt {
+	background: #F5FAFA;
+	color: #B4AA9D;
+}
+
+div#overDiv {
+	background: #F5FAFA;
+	border: 1px solid silver;
+	padding: 2px;
+	font-size: 75%;
+	opacity: 0.8;
+}
+
+#filtereditorBuilder	{}
+#filtereditorBuilder label	{ text-transform:uppercase; color:#4F6B72; font-size:11px; }
+#filtereditorBuilder > div.base_name	{ text-align:center;}
+#filtereditorBuilder > div.base_name > label	{ display:block; text-align:left; width:100%; margin:0 auto; }
+#filtereditorBuilder > div.base_name > input	{ width: 100%; margin:0 auto; font-size:14px; }
+#filtereditorBuilder > div.filter_block	{ width: 200px; }
+#filtereditorBuilder > div.filter_block > label	{ display:block; }
+#filtereditorBuilder > div.filter_block > a	{ text-transform:uppercase; color:#4F6B72; font-size:11px; width:100%; display:block; margin: 2px 0px; }
+#filtereditorBuilder > div.filter_block > select	{ border: 1px solid #C1DAD7; width:100%; height:120px;}
+#filtereditorBuilder > div.filter_block > select > option	{ padding: 2px 5px; font-size:14px; }
+#filtereditorBuilder > div.filter_block > input.add_filter	{ width:150px; float:left; margin-top:4px; margin-top:2px; }
+#filtereditorBuilder > div.filter_block > input.add_action	{ width: 40px; float:right; height:24px; font-size:13px; }
+#filtereditorBuilder > div.filterResults	{ width:100%; border: 1px solid #C1DAD7;min-height:50px; padding:3px; }
+#filtereditorBuilder > div.filterResults span	{ float:left; margin:0 1px; font-size:11px; }
+#filtereditorBuilder > div.filterResults .negative	{ color:blue; }
+#filtereditorBuilder > div.filterResults .positive	{ color:green; }
+#filtereditorBuilder > div.filterResults .search_value	{ color:blue; }
+#filtereditorBuilder > div.filterResults .helper	{ color: orange; }
+#filtereditorBuilder > div.filterResults textarea	{ display:none; width:100%; height:100%; font-size:14px;  }
+#filtereditorBuilder > div.filterActions	{ float:right; color:#4F6B72; font-size:11px; margin-top:2px;}
+#filtereditorBuilder > div.filterActions a	{ text-transform:uppercase; color:#4F6B72; font-size:11px; margin: 2px 0px; }
+
+.clear	{ line-height:0; clear:both; }

@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title><tmpl_var name="pagetitle"></title>
+<meta http-equiv="content-type" content="text/html;charset=<tmpl_var name="_CHARSET">" />
+<!-- prevent caching and search engine indexing -->
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="Mon, 10 Dec 2000 00:00:00 GMT" />
+<meta name="robots" content="noindex,nofollow,noarchive" />
+<tmpl_if name="stats_enable_public">
+<link rel="alternate" title="Transfer-Stats" href="stats.php?f=rss" type="application/rss+xml" />
+</tmpl_if>
+<link rel="icon" href="themes/<tmpl_var name='theme'>/images/mainLayout/faviconBlueRound.ico" type="image/x-icon" />
+<!-- jQuery css -->
+<link rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/blue/jquery-ui.custom.css" type="text/css" />
+<link rel="stylesheet" href="themes/<tmpl_var name='theme'>/scripts/jquery.droplist.css" type="text/css" />
+<link rel="stylesheet" href="js/jquery.jgrowl.css" type="text/css" media="screen" />
+<!-- Theme css -->
+<link rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/mainLayout.css" type="text/css" />
+<link rel="stylesheet" href="themes/<tmpl_var name='theme'>/css/<tmpl_var name='iid'>.css" type="text/css" />
+
+<tmpl_if name="iid" value="index">
+	<style type="text/css">
+		.container { margin: 0 auto; width:<tmpl_var name="ui_dim_main_w">px;}
+	/* Fix droplists autoresize in tabs, or not :/ */
+	.ui-tabs .ui-tabs-hide {
+		position: absolute;
+		left: -10000px;
+	}
+	</style>
+</tmpl_if>
+
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jspack.php?p=layout-header"></script>
+<!--
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery-ui.min.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.jScrollPane.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.droplist.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/linkControl.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/common.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.documentready.js"></script>
+<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/jquery.documentready.user.js"></script>
+<script type="text/javascript" src="js/jquery.jgrowl.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+-->
+
+<!-- refresh options if enabled -->
+<tmpl_if name="meta_refresh">
+<meta http-equiv="refresh" content="<tmpl_var name="meta_refresh">" />
+</tmpl_if>
+
+<!-- JS files included depending on page -->
+<tmpl_if name="iid" value="index">
+<!-- INDEX -->
+	<!--<script type="text/javascript" src="js/multiup.js"></script>-->
+	<script type="text/javascript">
+		jQuery(function(){
+			jQuery('#drivespacebar').progressbar({
+			value : <tmpl_var name="drivespacebar_space2">
+			});
+			
+			jQuery('#uploadbar').progressbar({
+			value : <tmpl_var name="bandwidthbars_upload_percent">
+			});
+				
+			jQuery('#downloadbar').progressbar({
+			value : <tmpl_var name="bandwidthbars_download_percent">
+			});
+		});
+	</script>
+
+	<script type="text/javascript" src="themes/<tmpl_var name='theme'>/scripts/<tmpl_var name='iid'>.js"></script>
+
+	<script type="text/javascript" src="js/ajax.js"></script>
+</tmpl_if>
+
+<tmpl_if name="enable_sorttable">
+	<script type="text/javascript" src="js/sorttable.js"></script>
+</tmpl_if>
+<tmpl_if name="index_ajax_update">
+	<script type="text/javascript" src="js/ajax_index.js"></script>
+</tmpl_if>
+
+<tmpl_if name="iid" value="dir">
+<!-- DIR -->
+	<script type="text/javascript" src="js/dir.js"></script>
+</tmpl_if>
+
+</head>
+<body <tmpl_if name="onLoad">onload="<tmpl_var name="onLoad">"</tmpl_if>>
+	<div id="center_wrap">
+		<div id="header" style="margin-top: -40px;">
+			<div id="UserBar"><tmpl_include name="inc.LayoutUserBar.tmpl"></div>
+			<h1><tmpl_var name="pagetitle"></h1>
+		</div>
+	</div>
+<div class="container">
+	<div class="angle" id="AngleTopLeft">
+		<div class="angle" id="AngleTopRight"></div>
+		<div id="AngleTopBorder"></div>
+	</div>
+	<div id="ContentBorderLeft">
+		<div id="ContentBorderRight">
+			<div id="Content">

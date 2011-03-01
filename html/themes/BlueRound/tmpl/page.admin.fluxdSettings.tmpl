@@ -1,0 +1,354 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<tmpl_if name="message"><p class="NormalText"><tmpl_var name="message"></p></tmpl_if>
+<h1>fluxd settings</h1>
+<a name="fluxd" id="fluxd"></a>
+<h3>fluxd is
+<tmpl_if name="fluxdRunning">
+	running (pid: <tmpl_var name="fluxdPid">) <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png">
+<tmpl_else>
+	off <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png">
+</tmpl_if>
+</h3>
+<form name="controlForm" action="admin.php?op=controlFluxd" method="post">
+	<tmpl_if name="fluxdSupported" value="1">
+		<tmpl_if name="fluxdRunning">
+			<input type="Hidden" name="a" value="stop">
+			<input type="Submit" value="Stop fluxd">
+		<tmpl_else>
+			<input type="Hidden" name="a" value="start">
+			<input type="Submit" value="Start fluxd">
+			</tmpl_if>	
+		<tmpl_else>
+			<h2>fluxd not supported</h2>
+			<p class="NormalText"><ul>
+				<tmpl_if name="perlMissing">
+					<li>Perl is missing or Path is incorrect, check <a href="admin.php?op=serverSettings">Server-Settings</a> Page</li>
+				</tmpl_if>
+				<tmpl_if name="phpMissing">
+					<li>PHP is missing or Path is incorrect, check <a href="admin.php?op=serverSettings">Server-Settings</a> Page</li>
+				</tmpl_if>
+				<tmpl_if name="socketsMissing">
+					<li>PHP does not have support for <em>sockets</em></li>
+				</tmpl_if>
+			</tmpl_if>
+		</p>
+<p class="NormalText">
+Fluxd is a service that runs in the background on the webserver to perform scheduled tasks related to TorrentFlux-NG.  
+The tasks performed depend on the modules that fluxd has enabled and the way that those modules are configublue.
+</p>
+<p class="NormalText">
+Details of each module and how they are configublue can be found in the respective module's configuration section.
+</p>
+<p class="NormalText">
+		<tmpl_var name="SuperAdminLink1">
+		|<tmpl_var name="SuperAdminLink2">
+		|<tmpl_var name="SuperAdminLink3">
+	<tmpl_if name="fluxdRunning">
+		|<tmpl_var name="SuperAdminLink4">
+	<tmpl_else>
+		|<tmpl_var name="SuperAdminLink5">
+		|<tmpl_var name="SuperAdminLink6">
+		|<tmpl_var name="SuperAdminLink9">
+	</tmpl_if>
+</p>
+</form>
+<form name="theForm" action="admin.php?op=updateFluxdSettings" method="post" onsubmit="return validateSettings('fluxd')">
+<table id="adminfluxdSettings">
+<h2>Core</h2>
+	<tr>
+		<th>Database Mode<br /><span>Specify the mode used to get data from the database</span></th>
+		<td>
+			<select name="fluxd_dbmode" id="fluxd_dbmode">
+				<option value="php"
+			<tmpl_if name="fluxd_dbmode" value="php">
+				selected
+			</tmpl_if>
+				>PHP + fluxcli.php</option>
+				<option value="dbi"
+			<tmpl_if name="fluxd_dbmode" value="dbi">
+				selected
+			</tmpl_if>
+				>Perl + DBI/DBD</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Loglevel<br /><span>Specify the level of logging</span></th>
+		<td class="alt"><input name="fluxd_loglevel" id="fluxd_loglevel" type="Text" maxlength="2" value="<tmpl_var name="fluxd_loglevel">" size="5"> default is 0</td>
+	</tr>
+</table>
+<h2>Modules</h2>
+<table id="adminfluxdSettings"></table>
+
+<h2>Qmgr</h2>
+<h3>Qmgr 
+	<tmpl_if name="fluxd_Qmgr_state" value="0">
+	is not loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png" title="Qmgr not loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Qmgr_state" value="1">
+	is loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png" title="Qmgr loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Qmgr_state" value="-1">
+		 error <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/error.png" title="Qmgr error.">
+	</tmpl_if>
+</h3>
+<p class="NormalText">Qmgr handles a queue of transfers waiting to be started and starts transfers one after another to ease load on the server.</p>
+<table id="adminfluxdSettings">
+	<tr>
+		<th>Enable/disable the Qmgr module.</th>
+		<td>
+			<select name="fluxd_Qmgr_enabled" id="fluxd_Qmgr_enabled">
+				<option value="1"
+			<tmpl_if name="fluxd_Qmgr_enabled" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+				<option value="0"
+			<tmpl_if name="fluxd_Qmgr_enabled" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Qmgr Polling Interval<br /><span>Interval in seconds between Qmgr poll runs - Qmgr will check the transfer queue every 'interval' seconds.</span></th>
+		<td class="alt"><input name="fluxd_Qmgr_interval" id="fluxd_Qmgr_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Qmgr_interval">" size="5"></td>
+	</tr>
+	<tr>
+		<th>
+			Global Max Concurrent Running Transfers Limit<br /><span>Specify the maximum combined number of transfers 
+			(ie for all users combined) that are allowed to run at the same time - this setting can be overridden for admin users.
+		</th>
+		<td><input name="fluxd_Qmgr_maxTotalTransfers" id="fluxd_Qmgr_maxTotalTransfers" type="Text" maxlength="5" value="<tmpl_var name="fluxd_Qmgr_maxTotalTransfers">" size="5"></td>
+	</tr>
+	<tr>
+		<th class="alt">Per User Max Concurrent Running Transfers Limit<span>Specify the maximum number of transfers a single user may run at one time.</span></th>
+		<td class="alt"><input name="fluxd_Qmgr_maxUserTransfers" id="fluxd_Qmgr_maxUserTransfers" type="Text" maxlength="5" value="<tmpl_var name="fluxd_Qmgr_maxUserTransfers">" size="5"></td>
+	</tr>
+</table>
+<h2>Watch</h2>
+<h3>Watch  
+	<tmpl_if name="fluxd_Watch_state" value="0">
+	 	is not loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png" title="Watch not loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Watch_state" value="1">
+	 	is loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png" title="Watch loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Watch_state" value="-1">
+	 	has error <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/error.png" title="Watch error.">
+	</tmpl_if>
+</h3>
+<p class="NormalText">
+	Watch watches a specified directory for new transfer files (.torrent etc) and when found, starts the transfers automatically.  
+	Watch 'jobs' are configublue specifying which directory to watch, which user to start the transfer as when a new transfer 
+	file is found and what transfer profile to use to start the transfer.
+</p>
+<table id="adminfluxdSettings">
+	<tr>
+		<th>Enable/disable the Watch module</th>
+		<td>
+			<select name="fluxd_Watch_enabled" id="fluxd_Watch_enabled">
+				<option value="1"
+			<tmpl_if name="fluxd_Watch_enabled" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+			<option value="0"
+			<tmpl_if name="fluxd_Watch_enabled" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Watch Polling Interval<br /><span>Interval in seconds between watch module polling runs - watch module will run it's jobs every 'interval' seconds.</span></th>
+		<td class="alt"><input name="fluxd_Watch_interval" id="fluxd_Watch_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Watch_interval">" size="5"></td>
+	</tr>
+	<tr>
+		<th>Watch Jobs<br /><span>Configure the watch jobs</span></th>
+		<td><a href="admin.php?op=fluxdWatchSettings">Configure Watch Jobs</a></td>
+	</tr>
+</table>
+<h2>Rssad</h2>
+<h3>Rssad 
+	<tmpl_if name="fluxd_Rssad_state" value="0">
+		is not loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png" title="Rssad not loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Rssad_state" value="1">
+		is loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png" title="Rssad loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Rssad_state" value="-1">
+		has error <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/error.png" title="Rssad error.">
+	</tmpl_if>
+</h3>
+<p class="NormalText">
+	Rssad runs scheduled checks for new torrents matching a specified pattern against a list of RSS direct download torrent feeds.  
+	Filters are created containing patterns (regular expressions) to search for.  An Rssad 'job' is then configublue to specify which filter 
+	to use, what RSS URL to use the filter on and what directory to save any found torrents to.
+</p>
+<table id="adminfluxdSettings">
+	<tr>
+		<th>Enable/disable the Rssad module</th>
+		<td>
+			<select name="fluxd_Rssad_enabled" id="fluxd_Rssad_enabled">
+				<option value="1"
+			<tmpl_if name="fluxd_Rssad_enabled" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+				<option value="0"
+			<tmpl_if name="fluxd_Rssad_enabled" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Rssad Polling Interval<br /><span>Interval in seconds between Rssad polling runs - Rssad will run it's jobs 
+			to check for new torrents matching configublue filters every 'interval' seconds.</span>
+		</th>
+		<td class="alt"><input name="fluxd_Rssad_interval" id="fluxd_Rssad_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Rssad_interval">" size="5"></td>
+	</tr>
+		<tr>
+			<th>Rssad Filters And Jobs<br /><span>Configure the rssad filters and jobs.</th>
+			<td><a href="admin.php?op=fluxdRssadSettings">Configure Rssad Filters And Jobs</a></td>
+		</tr>
+</table>
+<h2>Fluxinet</h2>
+<h3>Fluxinet 
+	<tmpl_if name="fluxd_Fluxinet_state" value="0">
+		is not loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png" title="Fluxinet not loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Fluxinet_state" value="1">
+		is loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png" title="Fluxinet loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Fluxinet_state" value="-1">
+		has error <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/error.png" title="Fluxinet error.">
+	</tmpl_if>
+</h3>
+<p class="NormalText">Fluxinet allows network access directly to the fluxd daemon</p>
+<table id="adminfluxdSettings">
+	<tr>
+		<th>Enable/disable the Fluxinet module</th>
+		<td>
+			<select name="fluxd_Fluxinet_enabled" id="fluxd_Fluxinet_enabled">
+				<option value="1"
+			<tmpl_if name="fluxd_Fluxinet_enabled" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+				<option value="0"
+			<tmpl_if name="fluxd_Fluxinet_enabled" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Fluxinet Port<br /><span>The port number to run the Fluxinet socket on.</span></th>
+		<td class="alt"><input name="fluxd_Fluxinet_port" id="fluxd_Fluxinet_port" type="Text" maxlength="5" value="<tmpl_var name="fluxd_Fluxinet_port">" size="5"></td>
+	</tr>
+</table>
+<h2>Maintenance</h2>
+<h3>Maintenance 
+	<tmpl_if name="fluxd_Maintenance_state" value="0">
+	 is loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png" title="Maintenance not loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Maintenance_state" value="1">
+	 is not loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png" title="Maintenance loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Maintenance_state" value="-1">
+		has error <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/error.png" title="Maintenance error.">
+	</tmpl_if>
+</h3>
+<p class="NormalText">
+	The maintenance module performs regular maintenance checks on TorrentFlux-NG and can be configublue to restart any transfers that have died unexpectedly.
+</p>
+<table id="adminfluxdSettings">
+	<tr>
+		<th>Enable/disable the Maintenance module</th>
+		<td>
+			<select name="fluxd_Maintenance_enabled" id="fluxd_Maintenance_enabled">
+				<option value="1"
+			<tmpl_if name="fluxd_Maintenance_enabled" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+				<option value="0"
+			<tmpl_if name="fluxd_Maintenance_enabled" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Maintenance Polling Interval<br /><span>Interval in seconds between Maintenance polling runs - Maintenance runs will be performed every 'interval' seconds.</span></th>
+		<td class="alt"><input name="fluxd_Maintenance_interval" id="fluxd_Maintenance_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Maintenance_interval">" size="5"></td>
+	</tr>
+	<tr>
+		<th>Restart Dead Transfers<br /><span>Enable/disable automatic restarting of transfers that have died abnormally.</span></th>
+		<td>
+			<select name="fluxd_Maintenance_trestart" id="fluxd_Maintenance_trestart">
+				<option value="1"
+			<tmpl_if name="fluxd_Maintenance_trestart" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+				<option value="0"
+			<tmpl_if name="fluxd_Maintenance_trestart" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+</table>
+
+<h2>Trigger</h2>
+<h3>Trigger 
+	<tmpl_if name="fluxd_Trigger_state" value="0">
+		is not loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/stopped.png" title="Trigger not loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Trigger_state" value="1">
+		is loaded <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/running.png" title="Trigger loaded.">
+	</tmpl_if>
+	<tmpl_if name="fluxd_Trigger_state" value="-1">
+		has error <img src="themes/<tmpl_var name="theme">/images/admin/fluxdSettings/error.png" title="Trigger error.">
+	</tmpl_if>
+</h3>
+<p class="NormalText">
+	<strong>Note: The trigger module does not work at present.</strong><br />
+	Trigger performs an action on a transfer item when a specified event occurs. 
+</p>
+<table id="adminfluxdSettings">
+	<tr>
+		<th>Enable/disable the Trigger module</th>
+		<td>
+			<select name="fluxd_Trigger_enabled" id="fluxd_Trigger_enabled">
+				<option value="1"
+			<tmpl_if name="fluxd_Trigger_enabled" value="1">
+				selected
+			</tmpl_if>
+				>True</option>
+				<option value="0"
+			<tmpl_if name="fluxd_Trigger_enabled" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Trigger Polling Interval<br /><span>Interval in seconds between Trigger polling runs - Trigger will check for actions to perform every 'interval' seconds.</span></th>
+		<td class="alt"><input name="fluxd_Trigger_interval" id="fluxd_Trigger_interval" type="Text" maxlength="10" value="<tmpl_var name="fluxd_Trigger_interval">" size="5"></td>
+	</tr>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+</form>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

@@ -1,0 +1,61 @@
+<tmpl_include name="inc.LayoutHeader.tmpl">
+
+<tmpl_if name="enable_bigboldwarning" value="1">
+<table id="indexStatsBarWarning">
+	<tr>
+		<td>
+			<img src="themes/<tmpl_var name="theme">/images/index/SpaceWarning/emblem.png">
+			Warning! <tmpl_var name="drivespace">% drivespace is used! You have <tmpl_var name="freeSpaceFormatted"> left!
+		</td>
+	</tr>
+</table>
+</tmpl_if>
+<!-- Meta Page Refresh -->
+<!-- This table CANNOT be moved to the content it's showing inc.indexRefreshOptions.tmpl because Opera 9 breaks layout -->
+
+<tmpl_include name="inc.indexStatsBar.tmpl">
+<div style="height:5px;"></div>
+
+<div id="tabs">
+	<div id="tabs-2"><tmpl_include name="inc.indexTorrentUpload.tmpl"></div>
+	<div id="tabs-3"><tmpl_include name="inc.indexTorrentGet.tmpl"></div>
+
+	<ul style="margin:0 15px;" class="maintabs">
+		<li><a href="#tabs-1">Torrents</a></li>
+		<tmpl_if name="enable_search"><li><a href="#tabs-4"><tmpl_var name="_SEARCH"></a></li></tmpl_if>
+		<tmpl_if name="enable_wget"><li><a href="#tabs-5">wget</a></li></tmpl_if>
+		<tmpl_if name="enable_nzbperl"><li><a href="#tabs-6">NZB Perl</a></li></tmpl_if>
+		<tmpl_if name="ui_displayusers"><li><a href="#tabs-7"><tmpl_var name="_USERS"></a></li></tmpl_if>
+		<tmpl_if name="ui_displaylinks" value="1"><li><a href="#tabs-8"><tmpl_var name="_LINKS"></a></li></tmpl_if>
+		<tmpl_if name="index_page_stats"><li><a href="#tabs-9">Stats</a></li></tmpl_if>
+		<a class="ui-button ui-icon ui-icon-refresh" style="float:right; height:16px;" onclick="ajax_update(); return false;" title="Ajax Refresh"></a>
+	</ul>
+	<div id="tabs-1"><tmpl_include name="inc.transferList.tmpl"><tmpl_include name="inc.transferListBulkActions.tmpl"></div>
+	<tmpl_if name="enable_search"><div id="tabs-4"><tmpl_include name="inc.indexTorrentSearch.tmpl"></div></tmpl_if>
+	<tmpl_if name="enable_wget"><div id="tabs-5"><tmpl_include name="inc.indexWget.tmpl"></div></tmpl_if>
+	<tmpl_if name="enable_nzbperl"><div id="tabs-6"><tmpl_include name="inc.indexNZB.tmpl"></div></tmpl_if>
+	<tmpl_if name="ui_displayusers"><div id="tabs-7"><tmpl_include name="inc.indexUsers.tmpl"></div></tmpl_if>
+	<tmpl_if name="ui_displaylinks" value="1"><div id="tabs-8"><tmpl_include name="inc.indexLinks.tmpl"></div></tmpl_if>
+	<tmpl_if name="index_page_stats"><div id="tabs-9"><tmpl_include name="inc.indexStats.tmpl"></div></tmpl_if>
+</div>
+<table id="indexRefreshOptions">
+	<tmpl_include name="inc.indexRefreshOptions.tmpl">
+</table>
+
+<table id="indexStatsGoodLooking">
+	<tmpl_if name="enable_goodlookstats">
+	<tr>
+		<td>
+			<tmpl_include name="inc.indexStatsGoodLooking.tmpl">
+		</td>
+	</tr>
+	</tmpl_if>
+</table>
+<div style="height:5px;"></div>
+
+<div id="action_in_progress" class="hidden">
+<span id="progress_label">Processing Request</span><br />
+<img src="themes/<tmpl_var name="theme">/images/index/ajax-loader.gif" alt="" style="vertical-align:middle;" />
+</div>
+<div id="grey_out" class="hidden"></div>
+<tmpl_include name="inc.LayoutFooter.tmpl">

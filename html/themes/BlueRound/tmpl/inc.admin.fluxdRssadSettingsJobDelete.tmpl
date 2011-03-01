@@ -1,0 +1,15 @@
+<h1>delete job</h1>
+<!-- JOB DELETE MESSAGE -->
+<tmpl_if name="rssad_job_deleted" value="1">
+	<p class="NormalText">Job deleted.</p>
+<tmpl_else>
+	<p class="NormalText">Error deleting Job</p>
+	<tmpl_if name="messages">
+	<ul>
+		<tmpl_loop name="messages">
+			<li><tmpl_var name="msg"></li>
+		</tmpl_loop>
+	</ul>
+	</tmpl_if>
+</tmpl_if>
+<p class="NormalText"><a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a></p>

@@ -1,0 +1,101 @@
+<table id="adminMainStatsSystem">
+	<tr>
+		<th>OS:</th>
+		<td><tmpl_var name="server_os"></td>
+	</tr>
+	<tr>
+		<th>PHP-Version:</th>
+		<td>
+			<tmpl_if name="server_php_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+		<tmpl_var name="server_php">
+			</font>
+		</td>
+	<tr>
+		<th>sessions:</th>
+		<td>
+			<tmpl_if name="server_extension_session_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+				<tmpl_var name="server_extension_session">
+				</font>
+		</td>
+	</tr>
+	<tr>
+		<th>pcre:</th>
+		<td>
+			<tmpl_if name="server_extension_pcre_state" value="1">
+				<font color="green">
+					<tmpl_else>
+				<font color="blue">
+					</tmpl_if>
+			<tmpl_var name="server_extension_pcre">
+				</font>
+		</td>
+	</tr>
+	<tr>
+		<th>sockets:</th>
+		<td>
+			<tmpl_if name="server_extension_sockets_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+			<tmpl_var name="server_extension_sockets">
+			</font>
+		</td>
+	</tr>
+	<tr>
+		<th>safe_mode:</th>
+		<td>
+			<tmpl_if name="server_ini_safe_mode_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+			<tmpl_var name="server_ini_safe_mode">
+				</font>
+		</td>
+	</tr>
+	<tr>
+		<th>allow_url_fopen:</th>
+		<td>
+			<tmpl_if name="server_ini_allow_url_fopen_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+			<tmpl_var name="server_ini_allow_url_fopen">
+				</font>
+		</td>
+	</tr>
+	<tr>
+		<th>register_globals:</th>
+		<td>
+			<tmpl_if name="server_ini_register_globals_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+			<tmpl_var name="server_ini_register_globals">
+				</font>
+		</td>
+	</tr>
+	<tr>
+		<th>imagetypes:</th>
+		<td>
+			<tmpl_if name="server_image_state" value="1">
+				<font color="green">
+			<tmpl_else>
+				<font color="blue">
+			</tmpl_if>
+			<tmpl_var name="server_image">
+				</font>
+		</td>
+	</tr>
+</table>

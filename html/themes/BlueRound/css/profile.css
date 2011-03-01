@@ -1,0 +1,332 @@
+/************** THIS IS USED ON ALL PROFILE PAGES ****************/
+img {vertical-align:middle;}
+tr.alt { background-color: #ccc; }
+p.button { text-align: right; padding: 10px 0;}
+/*********************************************************/
+
+table#profileTop {
+	border-width: 2px 2px 2px 2px;
+	border-spacing: 2px;
+	border-collapse: separate;
+	margin: 0 auto;
+	width: 800px;
+	background-color: transparent;
+}
+
+td#profileTopLeft {
+	width: 400px;
+	vertical-align: top;
+	background: transparent url('../images/profile/settings-bg.png') no-repeat left;
+	text-align: left;
+	border-width: 1px;
+	padding: 1px;
+}
+
+table#profileUserSettings {
+	width: 100%;
+	background-color: transparent;
+	margin: 0 auto;
+}
+
+table#profileUserSettings th {
+	background-color: transparent;
+	text-align: right;
+	padding: 3px 5px 3px 0px;
+	font: normal 10px "Verdana", Arial, sans-serif;
+}
+
+table#profileUserSettings th.button {
+	background-color: transparent;
+	text-align: center;
+	padding: 3px 5px 3px 0px;
+	font: normal 10px "Verdana", Arial, sans-serif;
+}
+
+table#profileUserSettings td {
+	background-color: transparent;
+	width: 50%;
+}
+
+td#profileTopRight {
+	width: 400px;
+	vertical-align: top;
+	background: transparent url('../images/profile/summary-bg.png') no-repeat top right;
+	border-width: 1px 1px 1px 1px;
+	padding: 1px;
+}
+
+table#profileSummary {
+	width: 100%;
+	background-color: transparent;
+	margin: 0 auto;
+}
+
+table#profileSummary th {
+	background-color: transparent;
+	text-align: right;
+	padding: 3px 5px 3px 0px;
+	font: normal 10px "Verdana", Arial, sans-serif;
+}
+
+table#profileSummary td {
+	background-color: transparent;
+	width: 60%;
+}	
+
+/***** REFRESH SETTINGS *****/
+table#profileRefreshSettings {
+	margin: 0 auto;
+	width: 800px;
+	background: url('../images/profile/refresh-bg.png') no-repeat top right;
+	padding-top: 10px;
+}
+
+table#profileRefreshSettings td { background-color: transparent;}
+
+table#profileRefreshSettings label {
+	display:block;
+	margin-bottom: 2px;
+	color:#555555;
+}
+
+table#profileRefreshSettings label span {
+	display:block;
+	float:left;
+	padding-right: 5px;
+	width:300px;
+	text-align:right;
+	font: bold 12px "Verdana", Arial, sans-serif;
+}
+
+/***** TRANSFER LIST SETTINGS *****/
+table#profileTransferList {
+	margin: 0 auto;
+	width: 800px;
+	background: url('../images/profile/transferlist-bg.png') no-repeat top right;
+	padding-top: 10px;
+}
+
+table#profileTransferList td { background-color: transparent;}
+
+table#profileTransferList label {
+	display:block;
+	margin-bottom:2px;
+	color:#555555;
+}
+
+table#profileTransferList label span {
+	display:block;
+	float:left;
+	padding-right: 5px;
+	width:300px;
+	text-align:right;
+	font-weight:bold;
+}
+
+/**************FORM CHECKS*******************/
+
+table.profileChecks {
+	border-width: 2px;
+	border-spacing: 2px;
+	border-collapse: separate;
+	margin: 0 auto;
+	width: 800px;
+	background-color: transparent;
+}
+
+table.profileChecks th {
+	width: 16%;
+	text-align: right;
+	padding-right: 2px;
+}
+
+/***** TRANSFER SERVER STATS SETTINGS *****/
+table#profileServerStats {
+	margin: 0 auto;
+	width: 800px;
+	background: url('../images/profile/stats-bg.png') no-repeat top right;
+	padding-top: 10px;
+}
+
+table#profileServerStats td { background-color: transparent;}
+
+table#profileServerStats label {
+	display:block;
+	margin-bottom:2px;
+	color:#555555;
+}
+
+table#profileServerStats label span {
+	display:block;
+	float:left;
+	padding-right: 5px;
+	width:300px;
+	text-align:right;
+	font-weight:bold;
+}
+
+/***** HOMEPAGE SETTINGS *****/
+table#profileHomeSettings {
+	margin: 0 auto;
+	width: 800px;
+	background: url('../images/profile/home-bg.png') no-repeat top right;
+	padding-top: 10px;
+}
+
+table#profileHomeSettings td { background-color: transparent;}
+
+table#profileHomeSettings label {
+	display:block;
+	margin-bottom:2px;
+	color:#555555;
+}
+
+table#profileHomeSettings label span {
+	display:block;
+	float:left;
+	padding-right: 5px;
+	width: 300px;
+	text-align:right;
+	font-weight:bold;
+}
+
+/***** TRANSFER SETTINGS WINDOW *****/
+table#profileTransferSettingsWindow {
+	margin: 0 auto;
+	width: 800px;
+	padding-top: 10px;
+	background-color: transparent;
+}
+
+table#profileTransferSettingsWindow td { background-color: transparent;}
+
+table#profileTransferSettingsWindow label {
+	display:block;
+	margin-bottom:2px;
+	color:#555555;
+}
+
+table#profileTransferSettingsWindow label span {
+	display:block;
+	float:left;
+	padding-right: 5px;
+	width:300px;
+	text-align:right;
+	font-weight:bold;
+}
+
+/******* COOKIE MANAGAMENT ***************/
+table#profileCookieList {
+	border-width: 2px 2px 2px 2px;
+	border-spacing: 2px;
+	border-collapse: collapse;
+	margin: 0 auto;
+	width: 800px;
+	background-color: transparent;
+}
+
+table#profileCookieList td {
+	background-color: transparent;
+	width:33%;
+	padding: 3px;
+}
+
+table#profileCookieList th{ 
+	background-color: black;
+	color: #ededed;
+	width:33%;
+	text-align: left;
+	padding-left: 5px;
+	font: normal 10px "Verdana", Arial, sans-serif;
+}
+
+table#profileCookieList .hover, table#profileCookieList .hover a {
+	background-color: #4161c4;
+	color: #ededed;
+}
+/****************************************/
+table#profileCookieForm {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+table#profileCookieForm th {
+	font: normal 10px "Verdana", Arial, sans-serif;
+	color: black;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 3px 3px 3px 6px;
+	background: #ededed;
+}
+
+table#profileCookieForm td {
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: black;
+	width: 60%;
+}
+
+/******* TRANSFER SETTINGS MANAGAMENT ***************/
+table#profileTransferProfileList th {
+	font: normal 10px "Verdana", Arial, sans-serif;
+	color: black;
+	letter-spacing: 2px;
+	text-align: left;
+	padding: 3px 3px 3px 6px;
+	background: #ededed;
+}
+
+table#profileTransferProfileList {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+}
+
+table#profileTransferProfileList td {
+	background: transparent;
+	padding: 3px;
+	color: black;
+	font: normal 10px "Verdana", Arial, sans-serif;
+}
+
+table#profileTransferProfileList .hover, table#profileTransferProfileList .hover a {
+	background-color: #4161c4;
+	color: #ededed;
+}
+
+/********************************************/
+
+table#profileTransferProfileForm td { background-color: transparent;}
+
+
+table#profileTransferProfileForm {
+	width: 800px;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0 auto;
+}
+
+table#profileTransferProfileForm th {
+	font: normal 10px "Verdana", Arial, sans-serif;
+	color: black;
+	letter-spacing: 2px;
+	text-align: right;
+	padding: 3px 3px 3px 6px;
+	background: #ededed;
+}
+
+table#profileTransferProfileForm th span {
+	font-size: 80%;
+	font-weight: bold;
+}
+
+table#profileTransferProfileForm td {
+	background: #ededed;
+	padding: 6px 6px 6px 12px;
+	color: black;
+	width: 50%;
+}

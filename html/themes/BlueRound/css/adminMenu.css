@@ -1,0 +1,43 @@
+#menu { float: right; color: #ededed; padding: 10px 15px; 	width: 200px;}
+#menu a#designanchor, #menu span#superadmin a { color: #ededed; }
+
+.outlinemenu{
+position: absolute; /*leave this alone*/
+display: none; /*leave this alone*/
+width: auto; /*default width of menu*/
+border: 2px solid black;
+overflow-x: hidden;
+text-align: right;
+}
+
+.outlinemenu ul{
+list-style-type: none;
+margin: 0;
+padding: 0;
+background: #3B6EBF;
+}
+
+.outlinemenu ul li a{
+font: bold 14px Monaco,"Bitstream Vera Sans Mono","Lucida Console",Terminal,monospace;
+letter-spacing: 5px; 
+color: #ededed;
+display: block;
+width: auto;
+padding: 3px 0;
+padding-left: 5px;
+text-decoration: none;
+}
+
+.outlinemenu ul li a:visited, .outlinemenu ul li a:active{
+color: #ededed;
+}
+
+.outlinemenu ul li a:hover{
+	color: #ededed;
+	text-decoration: underline;
+}
+
+/* Holly Hack for IE \*/
+* html .outlinemenu li {height: 1%; }
+* html .outlinemenu li a { height: 1%; }
+/* End */

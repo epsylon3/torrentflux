@@ -1,0 +1,122 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<div id="overDiv" style="position:absolute;visibility:hidden;z-index:1000;"></div>
+<script language="JavaScript">
+	var ol_closeclick = "1";
+	var ol_close = "<font color=#ededed><b>X</b></font>";
+	var ol_fgclass = "fg";
+	var ol_bgclass = "bg";
+	var ol_captionfontclass = "overCaption";
+	var ol_closefontclass = "overClose";
+	var ol_textfontclass = "overBody";
+	var ol_cap = "&nbsp;IP Info";
+</script>
+<script src="js/overlib.js" type="text/javascript"></script>
+<form action="admin.php?op=showUserActivity" name="searchForm" method="post">
+<h1>activity</h1>
+<table id="adminShowUserActivitySearch">
+	<tr>
+		<th>
+			<tmpl_var name="_ACTIVITYSEARCH">
+			<tmpl_var name="_FILE">
+				<input type="Text" name="srchFile" id="srchFile" value="<tmpl_var name="activity_srchFile">" width="30">&nbsp;&nbsp;
+			<tmpl_var name="_ACTION">
+				<select name="srchAction" id="srchAction">
+					<option value="">-- <tmpl_var name="_ALL"> --</option>
+				<tmpl_loop name="activity_action_list">
+					<option value="<tmpl_var name="action">" <tmpl_var name="selected">><tmpl_var name="action"></option>
+				</tmpl_loop>
+				</select>
+				<tmpl_var name="_USER">
+					<select name="user_id" id="user_id">
+						<option value="">-- <tmpl_var name="_ALL"> --</option>
+						<tmpl_loop name="activity_user_list">
+							<option value="<tmpl_var name="user">" <tmpl_var name="selected">><tmpl_var name="user"></option>
+						</tmpl_loop>
+					</select>
+					<input type="Submit" value="<tmpl_var name="_SEARCH">">
+				</th>
+			</tr>
+		</table>
+	</form>
+<h2><tmpl_var name="_ACTIVITYLOG"> <tmpl_var name="activity_days_to_keep"> <tmpl_var name="_DAYS"> (<tmpl_var name="activity_userdisplay">)</h2>
+<p><tmpl_if name="activity_is_prev">
+	<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_prev">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">">&lt;&lt;<tmpl_var name="activity_min"> <tmpl_var name="_SHOWPREVIOUS">]</font></a> &nbsp;
+</tmpl_if>
+<tmpl_if name="activity_is_more">
+	<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_max">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">">[<tmpl_var name="_SHOWMORE">&gt;&gt;</a>
+</tmpl_if></p>
+
+<table id="adminShowUserActivity">
+	<tr>
+		<th class="nobg"><tmpl_var name="_USER"></th>
+		<th><tmpl_var name="_ACTION"></th>
+		<th><tmpl_var name="_FILE"></th>
+		<th><tmpl_var name="_IP"></th>
+		<th><tmpl_var name="_TIMESTAMP"></th>
+	</tr>
+<tmpl_loop name="activity_act_list">
+<tmpl_if name="activity_act_list">
+	<tr>
+		<tmpl_if name="is_superuser">
+			<tmpl_if name="__EVEN__">
+				<th class="row">
+			<tmpl_else>
+				<th class="rowalt">
+			</tmpl_if>
+				<a href="index.php?iid=message&to_user=<tmpl_var name="user_id">">
+				<img src="<tmpl_var name="user_icon">" width="16px" height="16px" title="<tmpl_var name="_SENDMESSAGETO"> <tmpl_var name="user_id">"><tmpl_var name="user_id">
+				</a>
+			</th>
+				<tmpl_else>
+					<tmpl_if name="__EVEN__">
+				<th class="row">
+			<tmpl_else>
+				<th class="rowalt">
+			</tmpl_if><img src="<tmpl_var name="user_icon">" width="16px" height="16px" title="n/a"><tmpl_var name="user_id"></th>
+				</tmpl_if>
+<!-- ACTION -->
+<tmpl_if name="__EVEN__">
+				<td>
+			<tmpl_else>
+				<td class="alt">
+			</tmpl_if>
+				<tmpl_var name="action">
+			</td>
+			
+			<tmpl_if name="__EVEN__">
+				<td>
+			<tmpl_else>
+				<td class="alt">
+			</tmpl_if>
+				<tmpl_var name="file">
+			</td>
+			<tmpl_if name="__EVEN__">
+				<td>
+			<tmpl_else>
+				<td class="alt">
+			</tmpl_if>
+			<a href="javascript:void(0)" onclick="return overlib('<tmpl_var name="ip_resolved"><br><tmpl_var name="user_agent"><br>', STICKY, CSSCLASS);" onmouseover="return overlib('<tmpl_var name="ip_resolved"><br><tmpl_var name="user_agent"><br>', CSSCLASS);" onmouseout="return nd();"> <tmpl_var name="ip"></a>
+			</td>
+			<tmpl_if name="__EVEN__">
+				<td>
+			<tmpl_else>
+				<td class="alt">
+			</tmpl_if>
+			<tmpl_var name="date">
+			</td>
+			</tr>
+				<tmpl_else>
+			<tr><th colspan="6" class="noRecords"><tmpl_var name="_NORECORDSFOUND"></th></tr>
+		</tmpl_if>
+	</tmpl_loop>
+</table>
+<p><tmpl_if name="activity_both_set">
+				<tmpl_if name="activity_is_prev">
+					<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_prev">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">"><tmpl_var name="activity_min"> <tmpl_var name="_SHOWPREVIOUS">]</font></a> &nbsp;
+				</tmpl_if>
+				<tmpl_if name="activity_is_more">
+					<a href="admin.php?op=showUserActivity&min=<tmpl_var name="activity_max">&user_id=<tmpl_var name="activity_user">&srchFile=<tmpl_var name="activity_srchFile">&srchAction=<tmpl_var name="activity_srchAction">">[<tmpl_var name="_SHOWMORE">&gt;&gt;</a>
+				</tmpl_if>
+	</tmpl_if>
+</p>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

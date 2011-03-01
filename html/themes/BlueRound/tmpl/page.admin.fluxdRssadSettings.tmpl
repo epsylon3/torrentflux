@@ -1,0 +1,65 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<tmpl_if name="new_msg">
+	<p class="NormalText"><tmpl_var name="message"></p>
+</tmpl_if>
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/adminSettings.js" type="text/javascript"></script>
+<script src="themes/BlueRound/scripts/filterBuilder.js" type="text/javascript"></script>
+<a name="fluxd" id="fluxd"></a>
+<tmpl_if name="pageop" value="default">
+	<h1>filters</h1>
+	<p class="NormalText"><a href="admin.php?op=fluxdSettings">Return to fluxd Settings</a></p>
+	<p class="NormalText">
+		A filter is a perl compatible regular expression (pcre) that rssad searches for in the RSS torrent feeds that you specify in the rssad job(s).
+	</p>
+	<p class="NormalText">
+		Filters can be as simple as a string of characters - 'foobar' - or can use the more advanced features of pcre to search for metacharacters - 
+		'foo.*bar' (which would match 'foobar', 'foololbar', etc).
+	</p>
+	<p class="NormalText">
+		Filters are case insensitive - 'foobar' will match both 'foobar' lowercase and 'FOOBAR' uppercase or even 'fOObAR' mixed case.
+	</p>
+	<h3>Filter Examples</h3>
+		<ul>
+			<li>foobar.*s01e.* - will match 'foobar S01E01', 'Foobar Stories s01e21', etc</li>
+			<li>foobar.*s10e0[1-7] - will match 'Foobar S10E01', 'Foobar S10E02, etc - ie episodes 1 - 7 of season 10.</li>
+			<li>foobar.*s0[1-2].* - will match 'Foobar S01 [other characters after]', 'Foobar S02 etc' - ie seasons 1 and 2.</li>
+		</ul>
+
+	<h2>Current filters</h2>
+		<tmpl_include name="inc.admin.fluxdRssadSettingsFilterList.tmpl">
+	
+	<h2>Jobs</h2>
+		<tmpl_include name="inc.admin.fluxdRssadSettingsJobList.tmpl"> 
+
+
+<!-- FILTER PAGES -->
+	<tmpl_elseif name="pageop" value="addFilter"> <!-- ADD FILTER PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsFilterAdd.tmpl">
+
+	<tmpl_elseif name="pageop" value="editFilter"> <!-- EDIT FILTER PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsFilteredit.tmpl">
+		
+	<tmpl_elseif name="pageop" value="saveFilter"> <!-- SAVE FILTER PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsFilterSave.tmpl">
+
+	<tmpl_elseif name="pageop" value="deleteFilter"> <!-- DELETE FILTER PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsFilterDelete.tmpl">
+
+
+
+<!-- JOB PAGES -->
+	<tmpl_elseif name="pageop" value="addJob"> <!-- ADD JOB PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsJobAdd.tmpl">
+	
+	<tmpl_elseif name="pageop" value="editJob"> <!-- EDIT JOB PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsJobEdit.tmpl">
+	
+	<tmpl_elseif name="pageop" value="saveJob"> <!-- SAVE JOB PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsJobSave.tmpl">
+		
+	<tmpl_elseif name="pageop" value="deleteJob"> <!-- DELETE JOB PAGE -->
+		<tmpl_include name="inc.admin.fluxdRssadSettingsJobDelete.tmpl">
+
+</tmpl_if>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

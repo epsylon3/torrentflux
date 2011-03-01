@@ -1,0 +1,19 @@
+table.transferImages {
+	border-width: 2px 2px 2px 2px;
+	border-spacing: 2px;
+	border-collapse: separate;
+	background-color: #ededed;
+	margin: 0 auto;
+	width: 500px;
+}
+table.transferImages th {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+}
+table.transferImages td {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	-moz-border-radius: 0px 0px 0px 0px;
+	text-align: center;
+}

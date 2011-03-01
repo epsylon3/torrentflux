@@ -1,0 +1,15 @@
+<h1>delete filter</h1>
+<!-- FILTER DELETE MESSAGE -->
+<tmpl_if name="filter_deleted" value="1">
+	<p class="NormalText">Filter <em><tmpl_var name="filtername"></em> deleted.</p>
+<tmpl_else>
+	<p class="NormalText">Error deleting Filter <tmpl_var name="filtername">: </p>
+	<tmpl_if name="messages">
+	<ul>
+		<tmpl_loop name="messages">
+			<li><tmpl_var name="msg"></li>
+		</tmpl_loop>
+	</ul>
+	</tmpl_if>
+</tmpl_if>
+<p class="NormalText"><a href="admin.php?op=fluxdRssadSettings">Return to fluxd-Rssad-Settings</a></p>

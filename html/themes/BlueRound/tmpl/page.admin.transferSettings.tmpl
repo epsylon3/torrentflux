@@ -1,0 +1,463 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<form name="theForm" action="admin.php?op=updateTransferSettings" method="post" onsubmit="return validateSettings('transfer')">
+<h1>transfer settings</h1>
+<p><input type="Submit" value="Update Settings"></p>
+<h2>Legend</h2>
+B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent Mainline, A = Azureus(fluazu), V = Vuze RPC, W = Wget, N = Nzbperl
+<h2>BitTorrent</h2>
+<table id="adminTransferSettings">
+	<tr>
+		<th class="alt">Enable Torrent<br/><span>Set who can use torrents.</span></th>
+		<td class="alt">
+			<select name="enable_torrent" id="enable_torrent">
+				<option value="0" <tmpl_if name="enable_torrent" value="0"> selected</tmpl_if>>Torrent Disabled</option>
+				<option value="1" <tmpl_if name="enable_torrent" value="1"> selected</tmpl_if>>Only Admins</option>
+				<option value="2" <tmpl_if name="enable_torrent" value="2"> selected</tmpl_if>>All Users</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Default BitTorrent Client<br /><span>Set the client to use by default to start torrent transfers</span></th>
+		<td>
+			<select name="btclient" id="btclient">
+				<option value="tornado"			<tmpl_if name="btclient" value="tornado">selected</tmpl_if> >BitTornado</option>
+				<option value="transmission"	<tmpl_if name="btclient" value="transmission">selected</tmpl_if> >Transmission Client</option>
+				<option value="transmissionrpc"	<tmpl_if name="btclient" value="transmissionrpc">selected</tmpl_if> >Transmission Daemon</option>
+				<option value="azureus"			<tmpl_if name="btclient" value="azureus">selected</tmpl_if> >Azureus (fluazu)</option>
+				<option value="vuzerpc"			<tmpl_if name="btclient" value="vuzerpc">selected</tmpl_if> >Vuze RPC</option>
+				<option value="mainline"		<tmpl_if name="btclient" value="mainline">selected</tmpl_if> >BitTorrent Mainline</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Torrent Metainfo Client<br /><span>Set the client to use to decode torrent meta data</span></th>
+		<td class="alt">
+			<select name="metainfoclient" id="metainfoclient">
+				<option value="btshowmetainfo.py"
+			<tmpl_if name="metainfoclient" value="btshowmetainfo.py">
+				selected
+			</tmpl_if>
+				>btshowmetainfo.py</option>
+				<option value="transmissioncli"
+			<tmpl_if name="metainfoclient" value="transmissioncli">
+				selected
+			</tmpl_if>
+				>transmissioncli</option>
+				<option value="torrentinfo-console.py"
+			<tmpl_if name="metainfoclient" value="torrentinfo-console.py">
+				selected
+			</tmpl_if>
+				>torrentinfo-console.py</option>
+			<option value="ttools.pl"
+			<tmpl_if name="metainfoclient" value="ttools.pl">
+					selected
+			</tmpl_if>
+					>ttools.pl</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>BitTornado <br /><span>Extra Commandline Options</span></th>
+		<td>
+			<input name="btclient_tornado_options" id="btclient_tornado_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_tornado_options">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Transmission (cli)<br /><span>Extra Commandline Options</span></th>
+		<td class="alt">
+			<input name="btclient_transmission_options" id="btclient_transmission_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_transmission_options">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>BitTorrent Mainline <br /><span>Extra Commandline Options</span></th>
+		<td>
+			<input name="btclient_mainline_options" id="btclient_mainline_options" type="Text" maxlength="254" value="<tmpl_var name="btclient_mainline_options">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Max Upload Rate (B T M A)<br /><span>Set the default value for the max upload rate per transfer</span></th>
+		<td class="alt">
+			<input name="max_upload_rate" id="max_upload_rate" type="Text" maxlength="5" value="<tmpl_var name="max_upload_rate">" size="5"> kB/second (0 for no limit)
+		</td>
+	</tr>
+	<tr>
+		<th>Max Download Rate (B T M A)<br /><span>Set the default value for the max download rate per transfer</span></th>
+			<td>
+				<input name="max_download_rate" id="max_download_rate" type="Text" maxlength="5" value="<tmpl_var name="max_download_rate">" size="5"> kB/second (0 for no limit)
+			</td>
+	</tr>
+	<tr>
+		<th class="alt">Max Upload Connections (B M)<br /><span>Set the default value for the max number of upload connections per transfer</span></th>
+		<td class="alt">
+			<input name="max_uploads" id="max_uploads" type="Text" maxlength="5" value="<tmpl_var name="max_uploads">" size="5"> (0 for no limit)
+		</td>
+	</tr>
+	<tr>
+		<th>Max Connections (B M V)<br /><span>Set the maximum number of concurrent connections allowed</span></th>
+		<td>
+			<input name="maxcons" id="maxcons" type="Text" maxlength="5" value="<tmpl_var name="maxcons">" size="5">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Port Range (B T M)<br /><span>Set the default values for the for port range. Note: One port is required per torrent; ensure the port range is large enough for the maximum number of torrents you will be running</span></th>
+		<td class="alt">
+			<input name="minport" id="minport" type="Text" maxlength="5" value="<tmpl_var name="minport">" size="5"> -
+			<input name="maxport" id="maxport" type="Text" maxlength="5" value="<tmpl_var name="maxport">" size="5"> (min - max)
+		</td>
+	</tr>
+	<tr>
+		<th>Rerequest Interval (B M)<br /><span>Set the default value for the rerequest interval to the tracker</span></th>
+		<td>
+			<input name="rerequest_interval" id="rerequest_interval" type="Text" maxlength="5" value="<tmpl_var name="rerequest_interval">" size="5"> (default 1800 seconds)
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Default Torrent Completion Activity (B T M A)<br /><span>Select whether or not a torrent should keep seeding when download is complete</span></th>
+		<td class="alt">
+			<select name="die_when_done" id="die_when_done">
+				<option value="True">Die When Done</option>
+					<option value="False"
+				<tmpl_if name="die_when_done" value="False">
+					selected
+				</tmpl_if>
+					>Keep Seeding</option>
+			</select> (please seed your torrents)
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Default Percentage When Seeding Should Stop (B T M A V)<br /><span>Set the default share percentage at which torrents will die if 'Keep Seeding' is 
+			selected as completion activity above</span>
+		</th>
+		<td>
+			<input name="sharekill" id="sharekill" type="Text" maxlength="4" value="<tmpl_var name="sharekill">" size="4">% ('0' will seed forever)
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Enable Cumulative Sharekill (B T M A)<br /><span>Recalculate the sharekill value passed to clients on restart based on the total amount uploaded - 
+			ie including previous sessions transfer totals</span></th>
+		<td class="alt">
+			<select name="enable_sharekill" id="enable_sharekill">
+				<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="enable_sharekill" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Enable File Priority (B)<br /><span>Allow users to select which files from a torrent to download</span></th>
+		<td>
+			<select name="enable_file_priority" id="enable_file_priority">
+				<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="enable_file_priority" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+				</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Superseeder (B)<br /><span>Set superseeder setting on torrent start by default</span></th>
+		<td class="alt">
+			<select name="superseeder" id="superseeder">
+				<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="superseeder" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+			</select>
+		</td>
+		</tr>
+		<tr>
+			<th>Skip HashCheck (B M)<br /><span>Skip hash checking by default when starting torrents</span></th>
+			<td>
+				<select name="skiphashcheck" id="skiphashcheck">
+					<option value="1">True</option>
+						<option value="0"
+					<tmpl_if name="skiphashcheck" value="0">
+						selected
+					</tmpl_if>
+						>False</option>
+				</select>
+			</td>
+		</tr>
+</table>
+
+<h2>Vuze RPC - Beta</h2>
+<p class="NormalText">New TorrentFlux-NG method to use with xmwebui Vuze plugin</p>
+<table id="adminTransferSettings">
+	<tr>
+		<th>Use Vuze Daemon (RPC)<br /><span>Enable/Disable Vuze RPC</span></th>
+		<td>
+			<select name="vuze_rpc_enable" id="vuze_rpc_enable">
+				<option value="0" <tmpl_if name="vuze_rpc_enable" value="0"> selected</tmpl_if>>Disabled</option>
+				<option value="1" <tmpl_if name="vuze_rpc_enable" value="1"> selected</tmpl_if>>Enabled</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Vuze RPC Host<br /><span>IP of vuze-daemon (def. 127.0.0.1)</span></th>
+		<td class="alt">
+			<input name="vuze_rpc_host" id="vuze_rpc_host" type="Text" maxlength="254" value="<tmpl_var name="vuze_rpc_host">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>Vuze RPC Port<br /><span>Port of vuze-daemon (def. 9091)</span></th>
+		<td>
+			<input name="vuze_rpc_port" id="vuze_rpc_port" type="Text" maxlength="5" value="<tmpl_var name="vuze_rpc_port">" size="5">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Vuze RPC User<br /><span>Http User Auth for vuze-daemon (def. "vuze")</span></th>
+		<td class="alt">
+			<input name="vuze_rpc_user" id="vuze_rpc_user" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_user">" size="10">
+		</td>
+	</tr>
+	<tr>
+		<th>Vuze RPC Password<br /><span>Http password for vuze-daemon </span></th>
+		<td>
+			<input name="vuze_rpc_password" id="vuze_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_password">" size="10">
+		</td>
+	</tr>
+</table>
+
+<h2>Fluazu Daemon</h2>
+<p class="NormalText">Fluazu is a proxy to use an Azureus backend as client for torrents.
+<a href="admin.php?op=fluazuSettings">Edit Fluazu Settings</a></p>
+
+<h2>Transmission Daemon (RPC) - Under development</h2>
+<p class="NormalText">New method to use with official Transmission daemon (will disable other clients support)</p>
+<table id="adminTransferSettings">
+	<tr>
+		<th>Use Transmission Daemon (RPC)<br /><span>Enable/Disable Transmission RPC</span></th>
+		<td>
+			<select name="transmission_rpc_enable" id="transmission_rpc_enable">
+				<option value="0" <tmpl_if name="transmission_rpc_enable" value="0"> selected</tmpl_if>>Disabled</option>
+				<option value="1" <tmpl_if name="transmission_rpc_enable" value="1"> selected</tmpl_if>>Enabled</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Transmission RPC Host<br /><span>IP of transmission-daemon (def. 127.0.0.1)</span></th>
+		<td class="alt">
+			<input name="transmission_rpc_host" id="transmission_rpc_host" type="Text" maxlength="254" value="<tmpl_var name="transmission_rpc_host">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>Transmission RPC Port<br /><span>Port of transmission-daemon (def. 9091)</span></th>
+		<td>
+			<input name="transmission_rpc_port" id="transmission_rpc_port" type="Text" maxlength="5" value="<tmpl_var name="transmission_rpc_port">" size="5">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Transmission RPC User<br /><span>Http User Auth for transmission-daemon (def. "transmission")</span></th>
+		<td class="alt">
+			<input name="transmission_rpc_user" id="transmission_rpc_user" type="Text" maxlength="20" value="<tmpl_var name="transmission_rpc_user">" size="10">
+		</td>
+	</tr>
+	<tr>
+		<th>Transmission RPC Password<br /><span>Http password for transmission-daemon </span></th>
+		<td>
+			<input name="transmission_rpc_password" id="transmission_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="transmission_rpc_password">" size="10">
+		</td>
+	</tr>
+</table>
+
+<div class="ui-state-highlight ui-corner-all" style="margin-top: 4px; padding: 0 .7em; width: 778px;">
+	<p style="font-size: 75%; text-align: left;"><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+	<strong>Note : </strong>To install Transmission RPC (not cli) on Debian/Ubuntu, execute this command :<br/>
+	<span style="margin-left: 62px;"><span style="font-family:courier;">sudo apt-get install transmission-daemon</span><br/>
+	<span style="margin-left: 54px;">To set password and edit settings, stop transmission-daemon first, then edit /etc/transmission-daemon/settings.json</span><br/>
+	<span style="margin-left: 54px;">It is <b>highly recommended</b> to change rpc-bind-address to localhost (127.0.0.1)</span>, so you can set an empty password<br/>
+	<span style="margin-left: 54px;">You also need to run transmission-daemon with same user or same group as your webserver, on debian/ubuntu you can do : </span><br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">adduser debian-transmission www-data</span>
+	</p>
+</div>
+
+<h2>WGET</h2>
+<table id="adminTransferSettings">
+	<tr>
+		<th>Enable Wget<br /><span>Set who can use wget</span></th>
+		<td>
+			<select name="enable_wget" id="enable_wget">
+				<option value="0" <tmpl_if name="enable_wget" value="0"> selected</tmpl_if>>Wget Disabled</option>
+				<option value="1" <tmpl_if name="enable_wget" value="1"> selected</tmpl_if>>Only Admins</option>
+				<option value="2" <tmpl_if name="enable_wget" value="2"> selected</tmpl_if>>All Users</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Limit Download Rate<br /><span>Set the default value for the max download rate per transfer</span></th>
+		<td class="alt">
+			<input name="wget_limit_rate" id="wget_limit_rate" type="Text" maxlength="5" value="<tmpl_var name="wget_limit_rate">" size="5"> kB/second (0 for no limit)
+		</td>
+	</tr>
+	<tr>
+		<th>Limit Number of Retries<br /><span>Set the max number of retries to attempt</span></th>
+		<td>
+			<input name="wget_limit_retries" id="wget_limit_retries" type="Text" maxlength="5" value="<tmpl_var name="wget_limit_retries">" size="5"> (0 for no limit)
+		</td>
+	</tr>						
+	<tr>
+		<th class="alt">Enable Passive FTP<br /><span>Enable/disable "passive" transfer mode for FTP</span></th>
+		<td class="alt">
+			<select name="wget_ftp_pasv" id="wget_ftp_pasv">
+				<option value="1">True</option>
+					<option value="0"
+				<tmpl_if name="wget_ftp_pasv" value="0">
+					selected
+				</tmpl_if>
+					>False</option>
+			</select>
+		</td>
+	</tr>
+</table>
+
+<h2>Nzbperl</h2>
+<p class="NormalText"><tmpl_var name="SuperAdminLink_nzbperl_check"></p> <!-- an arrow is shown which cannot be removed -->
+<table id="adminTransferSettings">
+	<tr>
+		<th>Enable Nzbperl<br /><span>Set who can use nzbperl</span></th>
+		<td>
+			<select name="enable_nzbperl" id="enable_nzbperl">
+				<option value="0" <tmpl_if name="enable_nzbperl" value="0"> selected</tmpl_if>>Nzbperl Disabled</option>
+				<option value="1" <tmpl_if name="enable_nzbperl" value="1"> selected</tmpl_if>>Only Admins</option>
+				<option value="2" <tmpl_if name="enable_nzbperl" value="2"> selected</tmpl_if>>All Users</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Use Subdirectories<br /><span>Download nzbperl content into separate subdirectories</span></th>
+		<td class="alt">
+			<select name="nzbperl_create" id="nzbperl_create">
+				<option value="0" <tmpl_if name="nzbperl_create" value="0"> selected</tmpl_if>>No Extra Dir</option>
+				<option value="1" <tmpl_if name="nzbperl_create" value="1"> selected</tmpl_if>>Use Nzb Filename</option>
+				<option value="2" <tmpl_if name="nzbperl_create" value="2"> selected</tmpl_if>>Use Usenet Group Name</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Bad File Action<br /><span>Set the action to perform on finding a bad entry in the nzb</span></th>
+		<td>
+			<select name="nzbperl_badAction" id="nzbperl_badAction">
+				<option value="0" <tmpl_if name="nzbperl_badAction" value="0"> selected</tmpl_if>>Drop Bad Files</option>
+				<option value="1" <tmpl_if name="nzbperl_badAction" value="1"> selected</tmpl_if>>Download Anyway</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Download Rate<br /><span>Set the default value for the max download rate per transfer</span></th>
+		<td class="alt">
+			<input name="nzbperl_rate" id="nzbperl_rate" type="Text" maxlength="5" value="<tmpl_var name="nzbperl_rate">" size="5"> kB/second (0 for no limit)
+		</td>
+	</tr>
+	<tr>
+		<th>Server<br /><span>Set the NNTP server nzbperl should connect to</span></th>
+		<td>
+			<input name="nzbperl_server" id="nzbperl_server" type="Text" maxlength="254" value="<tmpl_var name="nzbperl_server">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Username<br /><span>Set the username to use when connecting to your NNTP server</span></th>
+		<td class="alt">
+			<input name="nzbperl_user" id="nzbperl_user" type="Text" maxlength="254" value="<tmpl_var name="nzbperl_user">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>Password<br /><span>Set the password to use when connecting to your NNTP server</span></th>
+		<td>
+			<input name="nzbperl_pw" id="nzbperl_pw" type="password" maxlength="254" value="<tmpl_var name="nzbperl_pw">" size="35">
+		</td>
+	</tr>
+	<tr>
+		<th>Use SSL<br /><span>Use SSL.</span></th>
+		</td>
+		<td class="alt">
+			<select name="nzbperl_ssl" id="nzbperl_ssl">
+				<option value="0" <tmpl_if name="nzbperl_ssl" value="0"> selected</tmpl_if>>No</option>
+				<option value="1" <tmpl_if name="nzbperl_ssl" value="1"> selected</tmpl_if>>Yes</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>Port<br /><span>The port number used by nzbperl.</span></th>
+		<td>
+			<input name="nzbperl_port" id="nzbperl_port" type="text" maxlength="5" value="<tmpl_var name="nzbperl_port">" size="5">
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Connections<br /><span>The number of simultaneous connections to the NNTP server nzbperl will create. Note: You can only run conn/server_max nzb downloads at once</span></th>
+		<td class="alt">
+			<input name="nzbperl_conn" id="nzbperl_conn" type="text" maxlength="5" value="<tmpl_var name="nzbperl_conn">" size="5">
+		</td>
+	</tr>
+	<tr>
+		<th>Threads<br /><span>Use threading. Note: Enable only if your Perl installation supports threads</span></th>
+		<td>
+			<select name="nzbperl_threads" id="nzbperl_threads">
+				<tmpl_loop name="nzbperl_threadList">
+					<option value="<tmpl_var name="value">"<tmpl_if name="is_selected" value="1"> selected</tmpl_if>>
+				<tmpl_var name="name">
+					</option>
+				</tmpl_loop>
+					</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Nzbperl <br /><span>Extra Commandline Options</span></th>
+		<td class="alt">
+			<input name="nzbperl_options" id="nzbperl_options" type="Text" maxlength="254" value="<tmpl_var name="nzbperl_options">" size="35">
+		</td>
+	</tr>
+</table>
+
+<h2>Common</h2>
+<table id="adminTransferSettings">
+	<tr>
+		<th>
+			Enable 0000 Umask (B T M W N)<br /><span>Enable/disable setting umask to 0000 when starting a client. Note: Resulting permissions 
+			of created files will be 666 - readable and writable by everyone - and directories will be 777 - readable/writable/executable 
+			by everyone</span></th>
+		<td>
+			<select name="enable_umask" id="enable_umask">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_umask" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<th class="alt">
+			Use Nice (B T M W N)<br /><span>Set the nice level to use for transfer processes. Note: The highest nice level - 19 - gives processes the lowest possible 
+			priority over other processes on the server</span></th>
+		<td class="alt">
+			<select name="nice_adjust" id="nice_adjust">
+			<tmpl_loop name="nice_list">
+				<option value="<tmpl_var name="i">"
+			<tmpl_if name="nice_adjust_true" value="1">
+				selected
+			</tmpl_if>
+				>
+			<tmpl_if name="i" value="0">
+				Don't Use Nice
+			<tmpl_else name="i">
+			<tmpl_var name="i">
+			</tmpl_if>
+				</option>
+			</tmpl_loop>
+				</select>
+		</td>
+	</tr>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+</form>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">

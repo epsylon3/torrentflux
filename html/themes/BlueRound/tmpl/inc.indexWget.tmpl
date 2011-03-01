@@ -1,0 +1,17 @@
+<div id="indexWget">
+<form id="form_wget" action="dispatcher.php?action=wget" method="post" onsubmit="return actionSubmit('Injecting File')">
+<fieldset>
+	<label for="url_wget">URL of the File to wget:</label><br />
+		<input type="text" name="url" id="url_wget" size="70" />
+		<select name="aid" style="width:100px">
+			<option value="1" selected="selected">Inject</option>
+			<option value="2">Inject+Start</option>
+		<tmpl_if name="queueActive" value="1">
+			<tmpl_if name="isAdmin"><option value="2">Inject+Start</option></tmpl_if>
+			<option value="3">Inject+Queue</option>
+		</tmpl_if>
+		</select>
+		<input type="submit" value="Go" />
+</fieldset>
+</form>
+</div>

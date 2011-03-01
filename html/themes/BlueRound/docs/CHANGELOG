@@ -1,0 +1,141 @@
+v1.0git 11/2010
+* updated jQuery
+* fixed admin fonts
+* enhanced index header width
+* some icons changed
+* search results background fixed
+* removed prototype for transfer stats
+* and more...
+
+v0.9.9 16/5/2009
+* fixed various tables grow in height when using small screen or 79+ characters name
+* fixed sfv icon not showing up correctly
+* profile page preferences is now an accordion
+* valid xhtml 1.1
+* valid css 2.0 and 3.0
+
+v0.9.8 12/5/2009
+* changed scroll visible on viewnfo to auto
+* added full path to folders in dir (zzattack)
+* made link to admin clickable and overlay for opening in new window (zzattack)
+
+v0.9.7 11/5/2009
+* fixed dashboard menu moving everthing to bottom when using 1024x768 resolution
+* added link back to messages when composing a message
+* fixed empty space between read message table and footer links (firefox/safari/opera/chrome/IE8)
+* fixed min-width not working on safari/chrome
+* fixed time stamp too narrow in RSS Torrents
+* new dashboard menu working in all tested browsers (firefox/safari/opera/chrome/IE8/IE7)
+* corrected status message for hiding/showing seeds from hidding to hiding (lotus22)
+* fixed symbolic links not working in directory (wonslung)
+
+v0.9.6.1 7/5/2009
+* fixed tabs on index not showing up (lotus22)
+
+v0.9.6 7/5/2009
+* fixed not being able to download folder as zip/tar
+
+v0.9.5 6/5/2009
+* added dtree to dir (zzattack)
+* overlay popup for opening admin in current or new window (bb-tje)
+* UserBar is now centeblue horizontal list (staticanime) 
+* bulk action links are blue again (zzattack)
+* page title is now shown correctly and doesn't display page names
+
+v0.9 5/5/2009
+* added 120 file type icons (staticanime)
+* fixed missing icon for generic file types (staticanime)
+* fixed super admin table showing when logged in as admin (staticanime)
+* removed labels "xfer" and "tf" progress-bar (b4rt)
+* changed link-text on Fluxd watch settings (zzattack)
+* added link back to Fluxd Rssadd settings (zzattack)
+* set font-size smaller for Transfer List (wonslung)
+* fixed menu in admin (zzattack)
+* fixed dir link going to user home directory (zzattack)
+* fixed extra cell in Watch settings table (MoB)
+* fixed "profile" not lining up in transfer window control (zzattack)
+* added breadcrumb to dir for knowing which directory you're in (zzattack)
+* dir is now liquid, it expands to fit files/folders with long names (zzattack)
+* added titles to UserBar icons (zzattack)
+
+v0.8.5 29/4/2009
+* fixed missing header dashboard (blake)
+* works in opera 9 (blake)
+* replaced progress-bars on index with jQuery
+* replaced tabs on index with jQuery
+* fixed bulk actions not working in Opera (MoB)
+* various little fixes and cosmetic changes (MoB)
+* fixed not being able to add RSS links in admin (blake)
+* added FluxFTPD form to page.admin.editUser.tmpl. Remove line 94 & line 129. (wonslung)
+
+v0.8 25/4/2009
+* fixed big bold warning on index (BlueRound)
+* cleaned up users, create user and edit user (dashboard)
+* cleaned up RSS settings (dashboard)
+* cleaned up Link settings (dashboard)
+* fixed Update Message Profile (BlueRound)
+* fixed search torrents page (BlueRound)
+* fixed transfer list nit having queued icon (BlueRound)
+* fixed sending message (bb-tje)
+
+v0.7.5 25/4/2009
+* fixed ajax update not refreshing it's own status
+* fixed pie images on images using default colors when using svn (b4rt)
+* removed styles that cannot be changed in profile page (b4rt)
+* fixed not being able to select first name in compose bar of messages (wonslung)
+
+v0.7 24/4/2009
+* fixed IE6 not showing the right height for login/dereferrer/locked
+* cleaned up all profile pages (profile/cookie management/transfer profile management/cookie help)
+* cleaned up all message pages (read msg/msg)
+* cleaned up read RSS page (rss torrents)
+* super admin pages are themed :)
+
+v0.6 23/4/2009
+* fix all "outside" pages (login/dereferrer/locked) (zzattack)
+* fixed transferlist your/foreign transfers not aligned (wonslung)
+* all tabs on main page have some fixed height and icons for each.
+* put back link to images/serverStats (now named Chart and Stats)
+* fixed liquid main page/transfer list not caring about setting width (wonslung)
+
+v0.5 21/4/2009
+* fixed all admin sub pages dashboard
+* fixed search page BlueRound (SpmP)
+* added favicon (wonslung)
+* Updated prototype.js to 1.6.0.3
+* added space between progressbar and percentage BlueRound
+* main page is liquid to satisfy user who use 11 transfer list options (wonslung)
+* fixed page.locked.tmpl
+
+v0.4.5 19/4/2009
+* fixed viewNFO page, which broke the layout. Set in div with overflow:auto (wonslung)
+* added a link to admin main page (blake)
+* more space between administrator links and statitics (blake)
+* put back any missing inline help (b4rt)
+* fixed missing user icon for on/offline status user (b4rt)
+
+v0.4 18/4/2009
+* fixed auto-refresh after uncompressing a file in dir (wonslung)
+* fixed viewNFO page, which broke the layout. Set in table with overflow:auto (wonslung)
+* fixed tables not sortable sever/client (b4rt)
+* fixed IE6/7 not showing tabs and page as one (b4rt)
+
+v0.3 16/4/2009
+* cleaned up transfer settings window pages (fixed tables/font-size) (wonslug & b4rt)
+* cleaned up dir action pages (vlc/uncompress/rename/move/maketorrent) (b4rt)
+
+v0.2.5 15/4/2009
+* fixed broken AJAX Update Transfer Windows Settings Stats (labels which ajax_transferStats.js looks for were missing) (wonslung & b4rt)
+* fixed image for button used on dir action forms (uncompress/rename/move/maketorrent etc..) (b4rt)
+* fixed broken AJAX Update index caused by on/offline userlist (rewrite inc.indexUsers.tmpl which had labels in wrong places and also wrong syntax) (b4rt)
+* page.vlc.tmpl is cleaned up, cannot test. hope someone can show me a screenshot. (b4rt)
+* font for transfer settings window are now bigger (from 8 to 10px) (wonslung)
+* made clear seperation between foreign and your transfers by adding styles to header (wonslung)
+
+v0.2 14/4/2009
+* removed version number from folder name e.g BlueRound-v0.1 is now BlueRound. This caused a small issue with js scripts which contain hardcoded paths to images. (b4rt)
+* added separation of foreign transfers to be seen seperated when admin (wonslung)
+
+v0.1 14/4/2009
+* initial release
+* without admin pages (defaultX admin pages are provided)

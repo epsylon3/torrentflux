@@ -1,0 +1,93 @@
+body {
+	background: #000064 url('../images/mainLayout/page_bg.png') repeat-x top left;
+  font-size: 13px;
+  color:#564b47;  
+  padding:20px;
+  margin:0px;
+  text-align: center;
+}
+
+#inhalt { 	
+  text-align: left;
+  vertical-align: middle;	
+  margin: 0px auto;
+  padding: 0px;
+  width: 550px;
+  background-color: #ededed;
+  border: 1px dashed #564b47;
+  min-height: 320px !important; 
+  height: 320px; /* IE6 */
+}
+
+p, h1 {
+margin: 0px; 
+padding: 10px; 
+}
+
+h1 {
+font-size: 14px;
+text-transform:uppercase;
+text-align: right;
+color: #ededed;
+background-color: #150c5a;
+}
+
+a { 
+color: #150c5a;
+font-size: 11px;
+background-color:transparent;
+text-decoration: none; 
+}
+
+#loginCookie {
+	width: 350px;
+}
+
+#loginCookie th {
+	text-align: right;
+}
+
+#loginCookie td {
+	font-size: 90%;
+	padding:1px;
+}
+
+#loginImage {
+	width: 350px;
+}
+
+#loginImage th {
+	text-align: right;
+}
+
+#loginImage td {
+	font-size: 90%
+	padding:1px;
+}
+
+#loginForm {
+	width: 350px;
+}
+
+#loginForm th {
+	text-align: right;
+}
+
+#loginForm td {
+	font-size: 90%
+	padding:1px;
+}
+
+#login_in_progress { 
+	text-align: center; 
+	width: 100%;
+	margin: 0 auto;
+	display: none;
+}
+
+#login_in_progress p {
+	letter-spacing: 5px;
+	font-weight: bold;
+	font-size:130%;
+	color: #564b47; 
+}

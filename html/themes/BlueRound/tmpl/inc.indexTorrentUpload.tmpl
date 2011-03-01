@@ -1,0 +1,31 @@
+<div id="indexTorrentUpload">
+<p><tmpl_var name="_SELECTFILE"> (<tmpl_var name="file_types_label">):</p>
+<form id="form_file" action="dispatcher.php?action=fileUpload" method="post" enctype="multipart/form-data" onsubmit="return actionSubmit('Uploading File(s)')">
+<fieldset>
+	<div class="upload_files">
+	<div class="upload_file"><input type="file" name="upload_files[]" id="upload_files_first" size="40" width="250px"/></div>
+	
+	<a href="JavaScript:addUploadField()" class="small">
+		<img src="themes/<tmpl_var name="theme">/images/index/TorrentUpload/more.png" title="<tmpl_var name="_MULTIPLE_UPLOAD">" alt="more" />
+	</a>
+	<tmpl_if name="enable_multiupload">
+	<a href="index.php?iid=multiup" class="small">
+		<img src="themes/<tmpl_var name="theme">/images/index/TorrentUpload/multi.png" title="<tmpl_var name="_MULTIPLE_UPLOAD">" alt="multi upload" />
+	</a>
+	<select name="aid">
+		<option value="1"><tmpl_var name="_UPLOAD"></option>
+			<tmpl_if name="queueActive" value="1">
+				<tmpl_if name="isAdmin">
+						<option value="2" selected="selected"><tmpl_var name="_UPLOAD">+Start</option>
+				</tmpl_if>
+			<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
+				<tmpl_else>
+			<option value="2" selected="selected"><tmpl_var name="_UPLOAD">+Start</option>
+				</tmpl_if>
+		</select>
+		<input class="button" type="submit" value="Go" />
+	</tmpl_if>
+	</div>
+</fieldset>
+</form>
+</div>

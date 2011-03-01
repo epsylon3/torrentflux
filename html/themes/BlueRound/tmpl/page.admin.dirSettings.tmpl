@@ -1,0 +1,294 @@
+<tmpl_include name="inc.adminLayoutHeader.tmpl">
+<form name="theForm" action="admin.php?op=updateDirSettings" method="post" onsubmit="return validateSettings('dir')">
+<h1>directory settings</h1>
+<p><input type="Submit" value="Update Settings"></p>
+<table id="adminDirSettings">
+	<tr>
+		<th>
+			Public Read<br /><span>Enable/disable public read permission for all files/folders in TorrentFlux-NG - 
+			when enabled, all files and folders within TorrentFlux-NG will be readable by all TorrentFlux-NG users.</span>
+		</th>
+		<td>
+			<select name="dir_public_read" id="dir_public_read">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="dir_public_read" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Public Write<br /><span>Enable/disable public write permission for all files/folders in TorrentFlux-NG - 
+			when enabled, all files and folders within TorrentFlux-NG will be writable by all TorrentFlux-NG users.</span>
+		</th>
+		<td class="alt">
+			<select name="dir_public_write" id="dir_public_write">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="dir_public_write" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Chmod<br /><span>Enable/disable the use of the chmod functionality for regular TorrentFlux-NG users - 
+			when enabled, users will be able to change the permissions on files and folders in TorrentFlux-NG to read/write/execute for everyone (777)
+		</th>
+		<td>
+			<select name="dir_enable_chmod" id="dir_enable_chmod">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="dir_enable_chmod" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Full Directory Listings<br /><span>Enable/disable complete directory listings - when enabled, full directory listings will be used 
+			including size and last modified time similar to Unix 'ls -al' output.</span>
+		</th>
+		<td class="alt">
+			<select name="enable_dirstats" id="enable_dirstats">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_dirstats" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			File Downloads<br /><span>Enable/disable file downloading from the directory manager - when enabled, 
+			users will be able to download files directly from the TorrentFlux-NG file manager.<span>
+		</th>
+		<td>
+			<select name="enable_file_download" id="enable_file_download">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_file_download" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			X-SendFile<br /><span>Enable/disable optimized Webserver File Transfert, 
+			You need to enable X-SendFile header support in your webserver configuration to use that.<span>
+		</th>
+		<td>
+			<select name="enable_xsendfile" id="enable_xsendfile">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_xsendfile" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">
+			Download Archive Type<br /><span>Choose the type of archive to use when performing file downloads - files downloaded will be archived using this 
+			archive type prior to sending.<br />Note:<br />Ensure your operating system supports the archive type you select here.</span>
+		</th>
+		<td class="alt">
+			<select name="package_type" id="package_type">
+				<option value="tar" selected>Tar</option>
+				<option value="zip"
+			<tmpl_if name="package_type" value="zip">
+				selected
+			</tmpl_if>
+				>Zip</option>
+			</select>
+		</td>
+	</tr>
+</table>
+
+<h2>Torrent Maker</h2>
+<p class="NormalText">Enable/disable make torrent functionality for users - when enabled, 
+users will be allowed to create torrent files from the contents in the directory manager. 
+Also set which client to use to create torrent files with</p>
+<table id="adminDirSettings">
+	<tr>
+		<th>Enable Disable Make Torrent</th>
+	<td>
+		<select name="enable_maketorrent" id="enable_maketorrent">
+			<option value="1">True</option>
+			<option value="0"
+		<tmpl_if name="enable_maketorrent" value="0">
+			selected
+		</tmpl_if>
+			>False</option>
+		</select>
+	</td>
+	</tr>
+	<tr>
+		<th class="alt">Default Make Torrent Client</th>
+		<td class="alt">
+			<select name="dir_maketorrent_default" id="dir_maketorrent_default">
+				<option value="tornado">tornado</option>
+				<option value="mainline"
+			<tmpl_if name="dir_maketorrent_default" value="mainline">
+				selected
+			</tmpl_if>
+				>mainline</option>
+			</select>
+		</td>
+	</tr>
+</table>
+<h2>Various Functions</h2>
+<table id="adminDirSettings">
+	<tr>
+		<th>Text/NFO Viewer<br /><span>Enable/disable access to the built in NFO viewer - when enabled, users will be able to view nfo/txt/log file types directly within TorrentFlux-NG.</span></th>
+		<td>
+			<select name="enable_view_nfo" id="enable_view_nfo">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_view_nfo" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">Unrar<br /><span>Enable/disable access to unrar functionality - when enabled, users will be able to use unrar to unpack rar archives directly within TorrentFlux-NG.</span></th>
+		<td class="alt">
+			<select name="enable_rar" id="enable_rar">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_rar" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			SFV File Checking<br /><span>Enable/disable access to sfv file checking functionality - when enabled, if an sfv 
+			file is present users will be able to verify the integrity of the files coveblue by the sfv file directly within TorrentFlux-NG</span>
+		</th>
+		<td>
+			<select name="enable_sfvcheck" id="enable_sfvcheck">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_sfvcheck" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">File And Folder Renaming<br /><span>Enable/disable access for users to rename files and folders</span></th>
+		<td class="alt">
+			<select name="enable_rename" id="enable_rename">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_rename" value="0">
+				selected
+			</tmpl_if>
+				>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+</table>
+<h2>VLC Streaming</h2>
+<p class="NormalText">Enable/disable access to VLC file streaming functionality - when enabled, users will be able to stream media directly from the webserver using VLC</p>
+<table id="adminDirSettings">
+	<tr>
+		<th>Enable/disable VLC Streaming</th>
+		<td>
+			<select name="enable_vlc" id="enable_vlc">
+				<option value="1">True</option>
+				<option value="0"
+			<tmpl_if name="enable_vlc" value="0">
+					selected
+			</tmpl_if>
+					>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th class="alt">VLC Port<br /><span>Specify the port to use for VLC streaming.</span></th>
+		<td class="alt"><input name="vlc_port" id="vlc_port" type="Text" maxlength="5" value="<tmpl_var name="vlc_port">" size="5"></td>
+	</tr>
+</table>
+<h2>File And Folder Moving</h2>
+<p class="NormalText">
+	When enabled, users will be allowed to move files and 
+	folders out of the TorrentFlux-NG directory hierarchy into a 
+	choice of folders elsewhere on the server.
+</p>
+<h3>Valid File And Folder Moving Paths</h3>
+<p class="NormalText">
+	Specify the paths to which users are allowed to move files and folders outside of the TorrentFlux-NG directory 
+	hierarchy.<br /><br />
+	Note: Paths must be absolute - ie '/path/to/somefolder' instead of just 'somefolder'.<br/>Any newly 
+	created directories will not be deleted after removing a transfer from the transfer list.
+</p>
+<h3>Restricted Files And Folders</h3>
+<p class="NormalText">
+	Specify a list of patterns which, when found in a file or folder name, 
+	will not be allowed access to by users.<br/>Note:<br/>Access to dot files/folders - files/folders starting with a dot - are always restricted.
+</p>
+<table id="adminDirSettingsMove">
+	<th class="alt">Enable/Disable File And Folder Moving</th>
+	<td class="alt">
+		<select name="enable_move" id="enable_move">
+			<option value="1">True</option>
+			<option value="0"
+		<tmpl_if name="enable_move" value="0">
+			selected
+		</tmpl_if>
+			>False</option>
+		</select>
+	</td>
+	</tr>
+	<tr>
+		<th>Target-Dirs<br />
+			<select name="categorylist" id="categorylist" size="3">
+				<tmpl_if name="moveSettings_move_list">
+					<tmpl_loop name="moveSettings_move_list">
+						<option value="<tmpl_var name="target">"><tmpl_var name="target"></option>
+						</tmpl_loop>
+				</tmpl_if>
+			</select>
+			<input type="button" name="remCatButton" value="remove" onclick="removeMoveEntry()">
+			<br />New Target-Dir: <input type="text" name="category" id="category" size="30">
+			<input type="button" name="addCatButton" value="add" onclick="addMoveEntry()" size="30">
+			<input type="hidden" name="move_paths" value="<tmpl_var name="moveSettings_move_paths">">
+		</th>
+		<th>Restricted Files And Folders<br />
+			<select name="resdirlist" id="resdirlist" size="3">
+			<tmpl_if name="dir_restricted_list">
+			<tmpl_loop name="dir_restricted_list">
+				<option value="<tmpl_var name="target">"><tmpl_var name="target"></option>
+			</tmpl_loop>
+			</tmpl_if>
+			</select>
+			<input type="button" name="remButton" value="remove" onclick="removeDirEntry()">
+			<br />New Entry <input type="text" name="resdirentry" id="resdirentry" size="30">
+				<input type="button" name="addButton" value="add" onclick="addDirEntry()" size="30">
+				<input type="hidden" name="dir_restricted" value="<tmpl_var name="dir_restricted">">
+		</th>
+		</tr>
+</table>
+<p><input type="Submit" value="Update Settings"></p>
+</form>
+<tmpl_include name="inc.adminLayoutFooter.tmpl">
