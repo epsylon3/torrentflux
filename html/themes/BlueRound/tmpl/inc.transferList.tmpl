@@ -146,7 +146,7 @@ Your Transfers
 								<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" alt="" style="vertical-align:sub;" />
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" style="vertical-align:sub;" />
 						</a></tmpl_if>
 								<tmpl_if name="enable_multiops">
 									<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;" />
@@ -204,7 +204,7 @@ Your Transfers
 								</tmpl_if>								
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" style="vertical-align:sub;" />
 						</a></tmpl_if>
 								<tmpl_if name="enable_multiops">
 									<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;" />
@@ -361,7 +361,7 @@ Foreign Transfers
 								<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" alt="" style="vertical-align:sub;" />
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" style="vertical-align:sub;" />
 						</a></tmpl_if>
 								<tmpl_if name="enable_multiops">
 									<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;" />
@@ -419,10 +419,11 @@ Foreign Transfers
 								</tmpl_if>
 								<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" style="vertical-align:sub;" />
 						</a></tmpl_if>
 								<tmpl_if name="enable_multiops">
 									<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;" />
+
 								</tmpl_if>
 							</tmpl_if>
 						<tmpl_else>
