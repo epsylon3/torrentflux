@@ -111,7 +111,7 @@ if ($cfg["transmission_rpc_enable"]) {
 		if ( $aTorrent['eta'] == '-1' && $aTorrent['percentDone'] != 1 ) {
 			$eta = 'n/a';
 		} elseif ( $aTorrent['percentDone'] == 1 ) {
-			$eta = 'Download Succeeded!';
+			$eta = 'Done';
 		} elseif ( $aTorrent['eta'] == '-2' ) {
 			$eta = 'Unknown';
 		} else {
@@ -366,7 +366,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 								if ($sf->eta > 0)
 									$sf->time_left = "Finished in ".convertTime($sf->eta);
 								else
-									$sf->time_left = "Download Succeeded";
+									$sf->time_left = "Done";
 								
 								if ((int) $sf->sharing < (int) $sf->seedlimit - 1) {
 									$sf->percent_done = -200; //stopped 100%
