@@ -40,7 +40,7 @@ class lastRSS {
 	// Public properties
 	// -------------------------------------------------------------------------
 	var $default_cp = 'UTF-8';
-	var $CDATA = 'nochange';
+	var $CDATA = 'content';
 	var $cp = '';
 	var $items_limit = 0;
 	var $stripHTML = False;
@@ -59,7 +59,7 @@ class lastRSS {
 	// -------------------------------------------------------------------
 	function Get($rss_url) {
 		// If CACHE ENABLED
-		if ($this->cache_dir != '') {
+		if (0 && $this->cache_dir != '') {
 			$cache_file = $this->cache_dir . '/rsscache_' . md5($rss_url);
 			$timedif = @(time() - filemtime($cache_file));
 			if ($timedif < $this->cache_time) {
