@@ -585,7 +585,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			$sharekills[$hash] = $sharekill;
 		}
 
-		//convertTime
+		//convertTimeText
 		require_once("inc/functions/functions.core.php");
 
 		foreach ($tfs as $hash => $t) {
@@ -599,8 +599,8 @@ class ClientHandlerVuzeRPC extends ClientHandler
 
 			if ($sf->running) {
 
-				if ($t['eta'] > 0) {
-					$sf->time_left = convertTime($t['eta']);
+				if ($t['eta'] > 0 || $t['eta'] < -1) {
+					$sf->time_left = convertTimeText($t['eta']);
 				}
 
 				$sf->percent_done = $t['percentDone'];
@@ -641,9 +641,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 				$sf->peers = "";
 				
 				if ($t['eta'] < -1) {
-					$sf->time_left = "Finished in ".convertTime(abs($t['eta']));
-				} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
-					$sf->time_left = "Finished!";
+					$sf->time_left = 'Done in '.convertTimeText($t['eta']);
+				} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Done') === false && strpos($sf->time_left, 'Finished') === false) {
+					$sf->time_left = "Done!";
 					$sf->percent_done = 100;
 				}
 				if ($sf->percent_done < 100 && $sf->percent_done > 0) {

@@ -353,9 +353,11 @@ foreach ($arList as $mtimecrc => $transfer) {
 						}
 
 						if ($rpcStat['eta'] > 0) {
-							$sf->time_left = convertTime($t['eta']);
+							$sf->time_left = convertTimeText($rpcStat['eta']);
 						} elseif ($rpcStat['eta'] == -1) {
 							$sf->time_left = "&#8734;";
+						} elseif ($rpcStat['eta'] < -1) {
+							$sf->time_left = convertTimeText(0 - $rpcStat['eta']);
 						} else
 							$sf->time_left="";
 
@@ -364,7 +366,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 								//$sf->percent_done = 100;
 								//$sf->running = 0;
 								if ($sf->eta > 0)
-									$sf->time_left = "Finished in ".convertTime($sf->eta);
+									$sf->time_left = "Done in ".convertTimeText($sf->eta);
 								else
 									$sf->time_left = "Done";
 								

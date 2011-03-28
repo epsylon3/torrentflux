@@ -526,7 +526,7 @@ function convertIntegerToArray($dataInt) {
  */
 function convertTime($seconds) {
 	// sanity-check
-	if ($seconds < 0) return '?';
+	if ($seconds < -1) $seconds=0-$seconds;
 	// one week is enough
 	if ($seconds >= 604800) return '-';
 	// format time-delta
@@ -545,6 +545,25 @@ function convertTime($seconds) {
 		$seconds = $seconds % $period;
 	}
 	return (empty($values)) ? "?" : implode(':', $values);
+}
+
+/**
+ * convertTimeText
+ *
+ * @param $seconds
+ * @return textual remaining time
+ */
+function convertTimeText($seconds) {
+	$hour_fmt = convertTime($seconds);
+	$parts = explode(':',$hour_fmt);
+	if (count($parts) >= 4)
+		return $parts[0]."d.";
+	elseif (count($parts) == 3)
+		return $parts[0]."h".$parts[1];
+	elseif (count($parts) == 2)
+		return $parts[0].":".$parts[1];
+	else
+		return $parts[0]." sec.";
 }
 
 /**

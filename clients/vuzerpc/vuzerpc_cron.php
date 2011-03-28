@@ -142,8 +142,8 @@ function updateStatFiles($bShowMissing=false) {
 			$max_dl= max($t['drate'], $max_dl);
 			$max_share = max($sharebase, $sharekill);
 
-			if ($t['eta'] > 0) {
-				$sf->time_left = convertTime($t['eta']);
+			if ($t['eta'] > 0 || $t['eta'] < -1) {
+				$sf->time_left = convertTimeText($t['eta']);
 			}
 
 			$sf->percent_done = $t['percentDone'];
@@ -184,9 +184,9 @@ function updateStatFiles($bShowMissing=false) {
 			$sf->peers = "";
 			$sf->time_left = "0";
 			if ($t['eta'] < -1) {
-				$sf->time_left = "Finished in ".convertTime(abs($t['eta']));
-			} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Finished') === false) {
-				$sf->time_left = "Finished!";
+				$sf->time_left = "Done in ".convertTimeText($t['eta']);
+			} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Done') === false && strpos($sf->time_left, 'Finished') === false) {
+				$sf->time_left = "Done!";
 			}
 			
 			if (is_file($cfg["transfer_file_path"].'/'.$transfer.".pid"))
