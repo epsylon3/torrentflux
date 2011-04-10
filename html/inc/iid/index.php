@@ -299,7 +299,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 				$sf->sharing=round( ((float)$sf->uptotal / (float)$sf->size) * 100.0 , 2);
 		}
 		
-	} else { // in rpc realtime only working torrents
+	} else { // in rpc : realtime for running torrents (downloading & seeding)
 
 		if ($bUseRPC) {
 			
@@ -311,7 +311,6 @@ foreach ($arList as $mtimecrc => $transfer) {
 					$hash = getTransferHash($transfer);
 					$rpcStat = $vuzeResults[strtoupper($hash)];
 					if (is_array($rpcStat)) {
-						
 
 						//updated often
 						$sf->up_speed    = round($rpcStat['speedUp'] / 1024 ,1);
@@ -352,12 +351,10 @@ foreach ($arList as $mtimecrc => $transfer) {
 							}
 						}
 
-						if ($rpcStat['eta'] > 0) {
+						if ($rpcStat['eta'] > 0 || $rpcStat['eta'] < -1) {
 							$sf->time_left = convertTimeText($rpcStat['eta']);
 						} elseif ($rpcStat['eta'] == -1) {
-							$sf->time_left = "&#8734;";
-						} elseif ($rpcStat['eta'] < -1) {
-							$sf->time_left = convertTimeText(0 - $rpcStat['eta']);
+							$sf->time_left = "&#8734;"; //infinite
 						} else
 							$sf->time_left="";
 

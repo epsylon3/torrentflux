@@ -555,15 +555,17 @@ function convertTime($seconds) {
  */
 function convertTimeText($seconds) {
 	$hour_fmt = convertTime($seconds);
+	if ($hour_fmt == '-')
+		return '-';
 	$parts = explode(':',$hour_fmt);
 	if (count($parts) >= 4)
 		return $parts[0]."d.";
 	elseif (count($parts) == 3)
-		return $parts[0]."h".$parts[1];
+		return $parts[0]."h.";
 	elseif (count($parts) == 2)
-		return $parts[0].":".$parts[1];
+		return $parts[0]."m.";
 	else
-		return $parts[0]." sec.";
+		return $parts[0]."s.";
 }
 
 /**
