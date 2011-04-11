@@ -115,7 +115,7 @@ if ($cfg["transmission_rpc_enable"]) {
 		} elseif ( $aTorrent['eta'] == '-2' ) {
 			$eta = 'Unknown';
 		} else {
-			$eta = convertTime( $aTorrent['eta'] );
+			$eta = convertTimeText( $aTorrent['eta'] );
 		}
 
 		$status = $aTorrent['status'];
@@ -448,7 +448,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 				if ($sf->time_left != "" && $sf->time_left != "0") {
 					if (($cfg["display_seeding_time"] == 1) && ($sf->percent_done >= 100) ) {
 						$estTime = (($sf->seedlimit > 0) && (!empty($sf->up_speed)) && (intval(($sf->up_speed{0})) > 0))
-							? convertTime(((($sf->seedlimit) / 100 * $sf->size) - $sf->uptotal) / GetSpeedInBytes($sf->up_speed))
+							? convertTimeText(((($sf->seedlimit) / 100 * $sf->size) - $sf->uptotal) / GetSpeedInBytes($sf->up_speed))
 							: '-';
 					} else {
 						$estTime = $sf->time_left;
