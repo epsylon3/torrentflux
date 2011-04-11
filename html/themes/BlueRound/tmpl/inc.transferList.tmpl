@@ -71,24 +71,26 @@ Your Transfers
 				<!-- PROGRESS BAR WHEN DOWNLOADING -->
 				<div class="progress pbleeching">
 					<div class="pbbackgnd" style="width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png);">
-					<tmpl_if name="graph_width" op=">=" value="50">
+				<tmpl_if name="graph_width" op=">=" value="50">
 						<div class="pbpercent" style="display:inline-block; left:2;"><tmpl_var name="percentage"></div>
-					<tmpl_else>
-						<div class="pbpercent" style="display:inline-block; right:2; color:black;"><tmpl_var name="percentage"></div>
-					</tmpl_if>
 					</div>
+				<tmpl_else>
+					</div>
+					<div class="pbpercent" style="display:inline-block; right:2; color:black;"><tmpl_var name="percentage"></div>
+				</tmpl_if>
 					<div class="clear"></div>
 				</div>
 			<tmpl_else>
 				<!-- PROGRESS BAR WHEN STOPPED -->
 				<div class="progress pbstopped">
 					<div class="pbbackgnd" style="width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="background">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_stop.png);">
-						<tmpl_if name="graph_width" op=">=" value="50">
-							<div class="pbpercent" style="text-align:left; margin:0 2px 0 0;color:black;"><tmpl_var name="percentage"></div>
-						<tmpl_else>
-							<div class="pbpercent" style="text-align:right; margin:0 0 0 2px;color:black;"><tmpl_var name="percentage"></div>
-						</tmpl_if>
+				<tmpl_if name="graph_width" op=">=" value="50">
+						<div class="pbpercent" style="text-align:left; margin:0 2px 0 0;color:black;"><tmpl_var name="percentage"></div>
 					</div>
+				<tmpl_else>
+					</div>
+					<div class="pbpercent" style="color:black;"><tmpl_var name="percentage"></div>
+				</tmpl_if>
 					<div class="clear"></div>
 				</div>
 			</tmpl_if>
@@ -289,22 +291,24 @@ Foreign Transfers
 					<div class="pbbackgnd" style="text-align:right;width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="progress_color">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_download.png);">
 					<tmpl_if name="graph_width" op=">=" value="50">
 						<div class="pbpercent" style="margin:0 2px 0 0;"><tmpl_var name="percentage"></div>
-					<tmpl_else>
-						<div class="pbpercent" style="margin:0 0 0 2px;color:black;"><tmpl_var name="percentage"></div>
-					</tmpl_if>
 					</div>
+					<tmpl_else>
+					</div>
+					<div class="pbpercent" style="margin:0 0 0 2px;color:black;"><tmpl_var name="percentage"></div>
+					</tmpl_if>
 					<div class="clear"></div>
 				</div>
 			<tmpl_else>
 				<!-- PROGRESS BAR WHEN STOPPED -->
 				<div class="progress pbstopped">
 					<div class="pbbackgnd" style="text-align:right;width:<tmpl_var name="graph_width">px;background-color:<tmpl_var name="background">;background-image:url(themes/<tmpl_var name="theme">/images/index/TransferList/progressbar_stop.png);">
-					<tmpl_if name="graph_width" op=">=" value="50">
+				<tmpl_if name="graph_width" op=">=" value="50">
 						<div class="pbpercent" style="margin:0 2px 0 0;color:black;"><tmpl_var name="percentage"></div>
-					<tmpl_else>
-						<div class="pbpercent" style="margin:0 0 0 2px;color:black;"><tmpl_var name="percentage"></div>
-					</tmpl_if>
 					</div>
+				<tmpl_else>
+					</div>
+					<div class="pbpercent" style="color:black;"><tmpl_var name="percentage"></div>
+				</tmpl_if>
 					<div class="clear"></div>
 				</div>
 			</tmpl_if>
