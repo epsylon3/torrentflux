@@ -27,11 +27,13 @@ Your Transfers
 	</tr>
 <!-- EACH DOWNLOAD GETS IT'S OWN ROW WITH CELLS IN A LOOP -->
 <tmpl_loop name="arUserTorrent">
+
 	<tmpl_if name="__ODD__">
 	<tr class="gray">
 	<tmpl_else>
 	<tr class="white">
 	</tmpl_if>
+
 		<td><!-- STATUS BULLET GREEN/YELLOW/RED/BLACK TO DISPLAY TORRENT STATUS + LINK TO A LIST OF HOSTS -->
 			<a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
 				<img src="themes/<tmpl_var name='theme'>/images/<tmpl_var name='hd_image'>" alt="" title="<tmpl_var name='hd_title'><tmpl_var name='entry'>" />
@@ -233,40 +235,41 @@ Your Transfers
 Foreign Transfers
 </h3>
 <table class="table sortable" width="100%" cellspacing="0" id="transfer_table">
-		<tr>
-			<th></th>
-			<th><tmpl_var name="_TRANSFERFILE"></th>
-			<tmpl_if name="settings_0"><th>User</th></tmpl_if>
-			<tmpl_if name="settings_1"><th>Size</th></tmpl_if>
-			<tmpl_if name="settings_2"><th>T. Down</th></tmpl_if>
-			<tmpl_if name="settings_3"><th>T. Up</th></tmpl_if>
-			<tmpl_if name="settings_4"><th><tmpl_var name="_STATUS"></th></tmpl_if>
-			<tmpl_if name="settings_5"><th>Progress</th></tmpl_if>
-			<tmpl_if name="settings_6"><th width="60">Down</th></tmpl_if>
-			<tmpl_if name="settings_7"><th width="60">Up</th></tmpl_if>
-			<tmpl_if name="settings_8"><th width="45">Seeds</th></tmpl_if>
-			<tmpl_if name="settings_9"><th>Peers</th></tmpl_if>
-			<tmpl_if name="settings_10"><th><tmpl_var name="_ESTIMATEDTIME"></th></tmpl_if>
-			<tmpl_if name="settings_11"><th>C</th></tmpl_if>
-			<th><tmpl_var name="_ADMIN"></th>
-		</tr>
-		<tmpl_loop name="arListTorrent">
-			<tmpl_if name="__ODD__">
-				<tr class="gray">
-			<tmpl_else>
-				<tr class="white">
-			</tmpl_if>
-				<td>
-					<a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
-						<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
-					</a>
-				</td>
-				<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
-					<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-					<img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
-					<tmpl_var name="displayname">
-					</a>
-				</td>
+	<tr>
+		<th></th>
+		<th><tmpl_var name="_TRANSFERFILE"></th>
+		<tmpl_if name="settings_0"><th>User</th></tmpl_if>
+		<tmpl_if name="settings_1"><th>Size</th></tmpl_if>
+		<tmpl_if name="settings_2"><th>T. Down</th></tmpl_if>
+		<tmpl_if name="settings_3"><th>T. Up</th></tmpl_if>
+		<tmpl_if name="settings_4"><th><tmpl_var name="_STATUS"></th></tmpl_if>
+		<tmpl_if name="settings_5"><th>Progress</th></tmpl_if>
+		<tmpl_if name="settings_6"><th width="60">Down</th></tmpl_if>
+		<tmpl_if name="settings_7"><th width="60">Up</th></tmpl_if>
+		<tmpl_if name="settings_8"><th width="45">Seeds</th></tmpl_if>
+		<tmpl_if name="settings_9"><th>Peers</th></tmpl_if>
+		<tmpl_if name="settings_10"><th><tmpl_var name="_ESTIMATEDTIME"></th></tmpl_if>
+		<tmpl_if name="settings_11"><th>C</th></tmpl_if>
+		<th><tmpl_var name="_ADMIN"></th>
+	</tr>
+<tmpl_loop name="arListTorrent">
+
+	<tmpl_if name="__ODD__">
+	<tr class="gray">
+	<tmpl_else>
+	<tr class="white">
+	</tmpl_if>
+
+		<td><a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
+				<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
+			</a>
+		</td>
+		<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+			<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
+			<img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
+			<tmpl_var name="displayname">
+			</a>
+		</td>
 		<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
 		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
 		<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
@@ -363,7 +366,9 @@ Foreign Transfers
 				<a onclick="showTransfer('index.php?iid=transferSettings&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/edit.png" title="Transfer Settings" alt="" />
 				</a>
+
 			<tmpl_if name="transferRunning" value="1">
+
 				<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
 				<a href="dispatcher.php?action=stop&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Stopping Transfer')">
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_stop.png" title="<tmpl_var name="_STOPTRANSFER">" alt="" />
@@ -377,50 +382,54 @@ Foreign Transfers
 				<tmpl_if name="enable_multiops">
 					<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;" />
 				</tmpl_if>
+
 			<tmpl_else>
+
 				<tmpl_if name="transferowner" value="n/a">
+
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/run_off.gif" alt="" title="<tmpl_var name="_NOTOWNER">" />
-				<tmpl_else>
-					<tmpl_if name="transferRunning" value="3">
-						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
-						<a href="dispatcher.php?action=deQueue&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Removing Transfer from Queue')">
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/queued.png" alt="" title="<tmpl_var name="_DELQUEUE">" />
+				
+				<tmpl_elseif name="transferRunning" value="3">
+
+					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
+					<a href="dispatcher.php?action=deQueue&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Removing Transfer from Queue')">
+						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/queued.png" alt="" title="<tmpl_var name="_DELQUEUE">" />
+					</a>
+
+				<tmpl_elseif name="is_no_file">
+
+					<tmpl_if name="show_run" value="1">
+						<a onclick="showTransfer('index.php?iid=transferControl&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_start.png" title="<tmpl_var name="_RUNTRANSFER">" alt="" />
+						</a>
+					<tmpl_elseif name="upload_support_enabled" value="1">
+						<a onclick="showTransfer('index.php?iid=transferControl&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/seed_start.png"title="<tmpl_var name="_SEEDTRANSFER">" alt="" />
 						</a>
 					<tmpl_else>
-						<tmpl_if name="is_no_file">
-							<tmpl_if name="show_run" value="1">
-								<a onclick="showTransfer('index.php?iid=transferControl&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
-									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_start.png" title="<tmpl_var name="_RUNTRANSFER">" alt="" />
-								</a>
-							<tmpl_else>
-								<tmpl_if name="upload_support_enabled" value="1">
-									<a onclick="showTransfer('index.php?iid=transferControl&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
-										<img src="themes/<tmpl_var name="theme">/images/index/TransferList/seed_start.png"title="<tmpl_var name="_SEEDTRANSFER">" alt="" />
-									</a>
-								<tmpl_else>
-									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
-								</tmpl_if>
-							</tmpl_if>
-							<tmpl_if name="show_run" value="1">
-								<a href="dispatcher.php?action=start&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Starting Transfer')">
-									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_fast.png"title="<tmpl_var name="_RUNTRANSFER">" alt="" />
-								</a>
-							<tmpl_else>
-								<tmpl_if name="upload_support_enabled" value="1">
-									<a href="dispatcher.php?action=start&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Starting Transfer')">
-										<img src="themes/<tmpl_var name="theme">/images/index/TransferList/seed_fast.png" title="<tmpl_var name="_SEEDTRANSFER">" alt="" />
-									</a>
-								<tmpl_else>
-									<img src="themes/<tmpl_var name="theme">/images/index/TransferList/run_off.gif" title="Done" alt="" />
-								</tmpl_if>
-							</tmpl_if>
-						<tmpl_else>
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
-							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/run_off.gif" title="<tmpl_var name="_STOPPING">" alt="" />
-						</tmpl_if>
+						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
 					</tmpl_if>
+
+					<tmpl_if name="show_run" value="1">
+						<a href="dispatcher.php?action=start&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Starting Transfer')">
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_fast.png"title="<tmpl_var name="_RUNTRANSFER">" alt="" />
+						</a>
+					<tmpl_elseif name="upload_support_enabled" value="1">
+						<a href="dispatcher.php?action=start&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Starting Transfer')">
+							<img src="themes/<tmpl_var name="theme">/images/index/TransferList/seed_fast.png" title="<tmpl_var name="_SEEDTRANSFER">" alt="" />
+						</a>
+					<tmpl_else>
+						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/run_off.gif" title="Done" alt="" />
+					</tmpl_if>
+
+				<tmpl_else>
+
+						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/blank.png" style="width:16px;height:16px;" alt="" />
+						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/run_off.gif" title="<tmpl_var name="_STOPPING">" alt="" />
+
 				</tmpl_if>
+
 				<tmpl_if name="is_no_file">
 					<a href="dispatcher.php?action=deleteWithData&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> (and data) ?','Deleting Transfer')">
 						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_on.png" title="<tmpl_var name="_DELETE">" alt="" />
@@ -436,14 +445,15 @@ Foreign Transfers
 				<tmpl_if name="enable_multiops">
 				<input type="checkbox" name="transfer[]" value="<tmpl_var name="url_entry">" onclick="ajax_updateState = 0;" />
 				</tmpl_if>
+
 			</tmpl_if>
 		<tmpl_else>
 				<input type="checkbox" disabled="disabled" />
 		</tmpl_if>
-			</td>
-			</tr>
-		</tmpl_loop>
-	</table>
-	</tmpl_if>
+		</td>
+	</tr>
+</tmpl_loop>
+</table>
+</tmpl_if>
 <!-- END TRANSFERS WHICH BELONG TO USER AND ADMIN CAN SEE -->
 </div>
