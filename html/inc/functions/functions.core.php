@@ -258,6 +258,7 @@ function getGrowlMessages() {
 	$jGrowls="";
 	foreach($cfg['growl'] as $msg) {
 		if ($msg['msg']!='H') // !!?!
+		$msg['msg'] = rtrim($msg['msg']);
 		$jGrowls .= "jQuery.jGrowl('".addslashes($msg['title'].'<br/><br/>'.$msg['msg'])."',".
 		"{".
 		" sticky:".($msg['sticky'] ? 'true':'false').",".
