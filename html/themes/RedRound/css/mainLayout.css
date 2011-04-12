@@ -304,20 +304,22 @@ table#UsersOffline {
 
 #indexTorrentUpload {
 	margin: 0 auto;
-	min-height: 96px; height: 96px; /* IE6 */
+	min-height: 50px; height: 50px; /* IE6 */
 	padding-top: 5px;
-	padding-left: 100px;
+	padding-left: 60px;
 	margin-left: 10px;
-	background: #fff url('../images/index/TorrentUpload/bg.png') no-repeat top left;
+	margin-right: 10px;
+	background: #fff url('../images/index/TorrentUpload/bg.png') no-repeat 10px 7px;
 }
 
 #indexTorrentGet {
 	margin: 0 auto;
-	min-height: 96px; height: 96px; /* IE6 */
+	min-height: 50px; height: 50px; /* IE6 */
 	padding-top: 5px;
-	padding-left: 100px;
+	padding-left: 60px;
 	margin-left: 10px;
-	background: #fff url('../images/index/TorrentGet/bg.png') no-repeat top left;
+	margin-right: 10px;
+	background: #fff url('../images/index/TorrentGet/bg.png') no-repeat 0px 5px;
 }
 
 div#indexStats {

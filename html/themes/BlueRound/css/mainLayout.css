@@ -319,18 +319,20 @@ table#UsersOffline {
 	margin: 0 auto;
 	min-height: 50px; height: 50px; /* IE6 */
 	padding-top: 5px;
-	padding-left: 100px;
-	margin-left: 100px;
-	background: #ededed url('../images/index/TorrentUpload/bg.png') no-repeat 30px 7px;
+	padding-left: 60px;
+	margin-left: 10px;
+	margin-right: 15px;
+	background: #ededed url('../images/index/TorrentUpload/bg.png') no-repeat 10px 7px;
 }
 
 #indexTorrentGet {
 	margin: 0 auto;
 	min-height: 50px; height: 50px; /* IE6 */
 	padding-top: 5px;
-	padding-left: 100px;
-	margin-left: 100px;
-	background: #ededed url('../images/index/TorrentGet/bg.png') no-repeat 20px 5px;
+	padding-left: 60px;
+	margin-left: 10px;
+	margin-right: 15px;
+	background: #ededed url('../images/index/TorrentGet/bg.png') no-repeat 0px 5px;
 }
 
 div#indexStats {
