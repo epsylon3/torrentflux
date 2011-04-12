@@ -19,10 +19,10 @@ Your Transfers
 		<tmpl_if name="settings_5"><th>Progress</th></tmpl_if>
 		<tmpl_if name="settings_6"><th width="60">Down</th></tmpl_if>
 		<tmpl_if name="settings_7"><th width="60">Up</th></tmpl_if>
-		<tmpl_if name="settings_8"><th width="45">Seeds</th></tmpl_if>
-		<tmpl_if name="settings_9"><th>Peers</th></tmpl_if>
-		<tmpl_if name="settings_10"><th><tmpl_var name="_ESTIMATEDTIME"></th></tmpl_if>
-		<tmpl_if name="settings_11"><th>C</th></tmpl_if>
+		<tmpl_if name="settings_8"><th width="45" align="center">Seeds</th></tmpl_if>
+		<tmpl_if name="settings_9"><th align="center">Peers</th></tmpl_if>
+		<tmpl_if name="settings_10"><th align="center"><tmpl_var name="_ESTIMATEDTIME"></th></tmpl_if>
+		<tmpl_if name="settings_11"><th align="center">C</th></tmpl_if>
 		<th><tmpl_var name="_ADMIN"></th>
 	</tr>
 <!-- EACH DOWNLOAD GETS IT'S OWN ROW WITH CELLS IN A LOOP -->
@@ -34,14 +34,18 @@ Your Transfers
 	<tr class="white">
 	</tmpl_if>
 
-		<td><!-- STATUS BULLET GREEN/YELLOW/RED/BLACK TO DISPLAY TORRENT STATUS + LINK TO A LIST OF HOSTS -->
+		<td>
+			<!-- STATUS BULLET GREEN/YELLOW/RED/BLACK TO DISPLAY TORRENT STATUS + LINK TO A LIST OF HOSTS -->
 			<a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
-				<img src="themes/<tmpl_var name='theme'>/images/<tmpl_var name='hd_image'>" alt="" title="<tmpl_var name='hd_title'><tmpl_var name='entry'>" />
+			<img src="themes/<tmpl_var name='theme'>/images/<tmpl_var name='hd_image'>" alt="" title="<tmpl_var name='hd_title'><tmpl_var name='entry'>" />
+			</a>
+			<a class="folderIcon" style="margin-left: -4px;" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
+			<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name='datapath'>" />
 			</a>
 		</td>
-		<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
-			<a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-			<img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name='datapath'>" />
+		<td style="overflow: hidden;">
+			<!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+			<a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
 			<tmpl_var name="displayname">
 			</a>
 		</td>
@@ -51,6 +55,7 @@ Your Transfers
 		<tmpl_if name="settings_3"><td><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
 		<tmpl_if name="settings_4"><td><tmpl_var name="statusStr"></td></tmpl_if>
 		<tmpl_if name="settings_5">
+
 		<!-- PROGRESS BAR -->
 		<td class="progressbar">
 			<tmpl_if name="graph_width" value="100">
@@ -99,7 +104,8 @@ Your Transfers
 		</td>
 		</tmpl_if>
 		<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
-		<tmpl_if name="settings_7"><!-- UPLOAD SPEED -->
+		<tmpl_if name="settings_7">
+		<!-- UPLOAD SPEED -->
 		<td>
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_var name="up_speed">
@@ -108,8 +114,9 @@ Your Transfers
 			</tmpl_if>
 		</td>
 		</tmpl_if>
-		<tmpl_if name="settings_8"><!-- SEEDS -->
-		<td>
+		<tmpl_if name="settings_8">
+		<!-- SEEDS -->
+		<td align="center">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="seeds" op="!=" value="">
 					<tmpl_var name="seeds">
@@ -121,8 +128,9 @@ Your Transfers
 			</tmpl_if>
 		</td>
 		</tmpl_if>
-		<tmpl_if name="settings_9"><!-- PEERS -->
-		<td>
+		<tmpl_if name="settings_9">
+		<!-- PEERS -->
+		<td align="center">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="peers" op="!=" value="">
 					<tmpl_var name="peers">
@@ -134,8 +142,8 @@ Your Transfers
 			</tmpl_if>
 		</td>
 		</tmpl_if>
-		<tmpl_if name="settings_10"><td><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td><!-- ESTIMATED TIME --></tmpl_if>
-		<tmpl_if name="settings_11"><td><tmpl_var name="client"></a></td><!-- USED CLIENT --></tmpl_if>
+		<tmpl_if name="settings_10"><td align="center"><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td><!-- ESTIMATED TIME --></tmpl_if>
+		<tmpl_if name="settings_11"><td align="center"><tmpl_var name="client"></a></td><!-- USED CLIENT --></tmpl_if>
 
 		<td style="text-align:right;">
 <!-- ACTIONS CELL E.G STOP/START/SEED/EDIT -->
@@ -261,12 +269,15 @@ Foreign Transfers
 	</tmpl_if>
 
 		<td><a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
-				<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
+			<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
+			</a>
+			<a class="folderIcon" style="margin-left: -4px;" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
+			<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name="datapath">" />
 			</a>
 		</td>
-		<td style="padding-top:3px"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
-			<a href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory')">
-			<img style="margin-top:-3px" src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" valign="top" alt="" title="<tmpl_var name="datapath">" />
+		<td style="overflow: hidden;">
+			<!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+			<a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
 			<tmpl_var name="displayname">
 			</a>
 		</td>
@@ -333,8 +344,9 @@ Foreign Transfers
 			</tmpl_if>
 			</td>
 		</tmpl_if>
-		<tmpl_if name="settings_8"><!-- SEEDS -->
-			<td>
+		<tmpl_if name="settings_8">
+			<!-- SEEDS -->
+			<td align="center">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="seeds" op="!=" value="">
 					<tmpl_var name="seeds">
@@ -346,8 +358,9 @@ Foreign Transfers
 			</tmpl_if>
 			</td>
 		</tmpl_if>
-		<tmpl_if name="settings_9"><!-- PEERS -->
-			<td>
+		<tmpl_if name="settings_9">
+			<!-- PEERS -->
+			<td align="center">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="peers" op="!=" value="">
 					<tmpl_var name="peers">
@@ -359,8 +372,8 @@ Foreign Transfers
 			</tmpl_if>
 			</td>
 		</tmpl_if>
-		<tmpl_if name="settings_10"><td><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td><!-- ESTIMATED TIME --></tmpl_if>
-		<tmpl_if name="settings_11"><td><tmpl_var name="client"></a></td><!-- USED CLIENT --></tmpl_if>
+		<tmpl_if name="settings_10"><td align="center"><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td><!-- ESTIMATED TIME --></tmpl_if>
+		<tmpl_if name="settings_11"><td align="center"><tmpl_var name="client"></a></td><!-- USED CLIENT --></tmpl_if>
 			<td style="text-align:right;">
 		<tmpl_if name="is_owner">
 				<a onclick="showTransfer('index.php?iid=transferSettings&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
@@ -437,7 +450,8 @@ Foreign Transfers
 				<tmpl_else>
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" title="<tmpl_var name="_STOPPING">" alt="" />
 				</tmpl_if>
-				<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
+				<tmpl_if name="enable_metafile_download">
+				<!-- DOWNLOAD META FILE IF ENABLED -->
 				<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
 				</a>
