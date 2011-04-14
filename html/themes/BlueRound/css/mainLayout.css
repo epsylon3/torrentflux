@@ -203,8 +203,7 @@ table#transfer_table td {
 	background-color: transparent;
 	padding: 0 1px;
 	vertical-align: middle;
-	border-left: 0px;
-	border: 1px solid black;
+	border: 1px solid silver;
 	white-space: nowrap;
 }
 
@@ -485,3 +484,14 @@ credit dialog styles
 #credit_tabs-1 li a:hover, #credit_tabs-2 li a:hover, #credit_tabs-3 li a:hover {
 	text-decoration: underline;
 }
+
+/* fix up */
+
+table#transfer_table td.tIcon {
+  border-right: 0;
+}
+
+table#transfer_table td.tName {
+  border-left: 0;
+}
+
