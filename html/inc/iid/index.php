@@ -74,6 +74,8 @@ $tmpl->setvar('enable_metafile_download', $cfg["enable_metafile_download"]);
 $tmpl->setvar('enable_multiops', $cfg["enable_multiops"]);
 $tmpl->setvar('twd', $cfg["transfer_window_default"]);
 
+$tmpl->setvar('transfer_delete_data', $cfg["transfer_delete_data"]);
+
 // =============================================================================
 // transfer-list
 // =============================================================================
