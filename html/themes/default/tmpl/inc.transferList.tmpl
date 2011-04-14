@@ -201,7 +201,11 @@
 									</tmpl_if>
 								</tmpl_if>
 							<tmpl_if name="is_no_file">
-								<a href="dispatcher.php?action=delete&transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> ?')"><img src="themes/default/images/delete_on.gif" width=16 height=16 title="<tmpl_var name="_DELETE">" border=0></a>
+								<tmpl_if name="transfer_delete_data">
+								<a href="dispatcher.php?action=deleteWithData&transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> (with data) ?')"><img src="themes/default/images/delete_on.gif" width=16 height=16 title="<tmpl_var name="_DELETE">" border=0></a>
+								<tmpl_else>
+								<a href="dispatcher.php?action=delete&transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Remove <tmpl_var name="entry"> (keep data) ?')"><img src="themes/default/images/delete_on.gif" width=16 height=16 title="<tmpl_var name="_DELETE">" border=0></a>
+								</tmpl_if>
 							<tmpl_else>
 								<img src="themes/default/images/delete_off.gif" width="16" height="16" title="<tmpl_var name="_STOPPING">" border=0>
 							</tmpl_if>
