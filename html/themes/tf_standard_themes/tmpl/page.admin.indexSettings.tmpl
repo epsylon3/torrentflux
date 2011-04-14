@@ -489,9 +489,7 @@
 									<select name="index_page_connections" id="index_page_connections">
 										<option value="1">True</option>
 										<option value="0"
-										<tmpl_if name="index_page_connections" value="0">
-											 selected
-										</tmpl_if>
+										<tmpl_if name="index_page_connections" value="0"> selected</tmpl_if>
 										>False</option>
 									</select>
 								</td>
@@ -505,10 +503,22 @@
 									<select name="show_server_load" id="show_server_load">
 										<option value="1">True</option>
 										<option value="0"
-										<tmpl_if name="show_server_load" value="0">
-											 selected
-										</tmpl_if>
+										<tmpl_if name="show_server_load" value="0"> selected</tmpl_if>
 										>False</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="transfer_delete_data"><strong>Delete Torrent Method:</strong></label><br/>
+									Default action for delete icon : Delete with data or only remove torrent.
+								</td>
+								<td valign="top">
+									<select name="transfer_delete_data" id="transfer_delete_data">
+										<option value="1">Delete with data</option>
+										<option value="0"
+										<tmpl_if name="transfer_delete_data" value="0"> selected</tmpl_if>
+										>Remove torrent</option>
 									</select>
 								</td>
 							</tr>
