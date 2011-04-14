@@ -34,8 +34,7 @@ Your Transfers
 	<tr class="white">
 	</tmpl_if>
 
-		<td>
-			<!-- STATUS BULLET GREEN/YELLOW/RED/BLACK TO DISPLAY TORRENT STATUS + LINK TO A LIST OF HOSTS -->
+		<td class="tIcon"><!-- STATUS BULLET GREEN/YELLOW/RED/BLACK TO DISPLAY TORRENT STATUS + LINK TO A LIST OF HOSTS -->
 			<a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
 			<img src="themes/<tmpl_var name='theme'>/images/<tmpl_var name='hd_image'>" alt="" title="<tmpl_var name='hd_title'><tmpl_var name='entry'>" />
 			</a>
@@ -43,21 +42,20 @@ Your Transfers
 			<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name='datapath'>" />
 			</a>
 		</td>
-		<td style="overflow: hidden;">
-			<!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+		<td class="tName"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
 			<a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
 			<tmpl_var name="displayname">
 			</a>
 		</td>
 		<!--<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if>--><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
-		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
-		<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
-		<tmpl_if name="settings_3"><td><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
-		<tmpl_if name="settings_4"><td><tmpl_var name="statusStr"></td></tmpl_if>
+		<tmpl_if name="settings_1"><td class="tSize"><tmpl_var name="format_af_size"></td></tmpl_if>
+		<tmpl_if name="settings_2"><td class="tDown"><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
+		<tmpl_if name="settings_3"><td class="tUp"><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
+		<tmpl_if name="settings_4"><td class="tStat"><tmpl_var name="statusStr"></td></tmpl_if>
 		<tmpl_if name="settings_5">
 
 		<!-- PROGRESS BAR -->
-		<td class="progressbar">
+		<td class="progressbar tProgress">
 			<tmpl_if name="graph_width" value="100">
 				<!-- PROGRESS BAR WHEN FINISHED -->
 				<div class="progress pbfinished">
@@ -103,10 +101,10 @@ Your Transfers
 			</tmpl_if>
 		</td>
 		</tmpl_if>
-		<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
+		<tmpl_if name="settings_6"><td class="tDLSpeed"><tmpl_var name="down_speed"></td></tmpl_if><!-- DOWNLOAD SPEED -->
 		<tmpl_if name="settings_7">
 		<!-- UPLOAD SPEED -->
-		<td>
+		<td class="tULSpeed">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_var name="up_speed">
 			<tmpl_else>
@@ -116,7 +114,7 @@ Your Transfers
 		</tmpl_if>
 		<tmpl_if name="settings_8">
 		<!-- SEEDS -->
-		<td align="center">
+		<td align="center" class="tSeeds">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="seeds" op="!=" value="">
 					<tmpl_var name="seeds">
@@ -130,7 +128,7 @@ Your Transfers
 		</tmpl_if>
 		<tmpl_if name="settings_9">
 		<!-- PEERS -->
-		<td align="center">
+		<td align="center" class="tPeers">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="peers" op="!=" value="">
 					<tmpl_var name="peers">
@@ -145,7 +143,7 @@ Your Transfers
 		<tmpl_if name="settings_10"><td align="center"><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td><!-- ESTIMATED TIME --></tmpl_if>
 		<tmpl_if name="settings_11"><td align="center"><tmpl_var name="client"></a></td><!-- USED CLIENT --></tmpl_if>
 
-		<td style="text-align:right;">
+		<td style="text-align:right;" class="tButtons"> 
 <!-- ACTIONS CELL E.G STOP/START/SEED/EDIT -->
 		<tmpl_if name="is_owner">
 			<a onclick="showTransfer('index.php?iid=transferSettings&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
@@ -268,26 +266,25 @@ Foreign Transfers
 	<tr class="white">
 	</tmpl_if>
 
-		<td><a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
+		<td class="tIcon"><a href="JavaScript:showTransfer('index.php?iid=transferHosts&amp;transfer=<tmpl_var name="url_entry">')">
 			<img src="themes/<tmpl_var name="theme">/images/<tmpl_var name="hd_image">" alt="" title="<tmpl_var name="hd_title"><tmpl_var name="entry">" />
 			</a>
 			<a class="folderIcon" style="margin-left: -4px;" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
 			<img src="themes/<tmpl_var name="theme">/images/index/TransferList/open_folder.png" alt="" title="<tmpl_var name="datapath">" />
 			</a>
 		</td>
-		<td style="overflow: hidden;">
-			<!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
+		<td class="tName"><!-- NAME OF META FILE E.G NAME OF DOWNLOADING TORRENT/FILE -->
 			<a class="transferName" href="index.php?iid=dir&amp;dir=<tmpl_var name="url_path">" onclick="return actionClick(true,'Opening Directory');">
 			<tmpl_var name="displayname">
 			</a>
 		</td>
-		<tmpl_if name="settings_0"><td><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
-		<tmpl_if name="settings_1"><td><tmpl_var name="format_af_size"></td></tmpl_if>
-		<tmpl_if name="settings_2"><td><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
-		<tmpl_if name="settings_3"><td><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
-		<tmpl_if name="settings_4"><td><tmpl_var name="statusStr"></td></tmpl_if>
+		<tmpl_if name="settings_0"><td class="tOwner"><tmpl_var name="transferowner"></td></tmpl_if><!-- USERNAME OF WHOM THE DOWNLOAD BELONGS TO IF ENABLED OTHERWISE HIDDEN -->
+		<tmpl_if name="settings_1"><td class="tSize"><tmpl_var name="format_af_size"></td></tmpl_if>
+		<tmpl_if name="settings_2"><td class="tDown"><tmpl_var name="format_downtotal"></td></tmpl_if><!-- CELL AND TOTAL DOWNLOADED FILE SIZE -->
+		<tmpl_if name="settings_3"><td class="tUp"><tmpl_var name="format_uptotal"></td></tmpl_if><!-- TOTAL UPLOADED FILE SIZE -->
+		<tmpl_if name="settings_4"><td class="tStat"><tmpl_var name="statusStr"></td></tmpl_if>
 		<tmpl_if name="settings_5"> <!-- PROGRESS BAR -->
-		<td class="progressbar">
+		<td class="progressbar tProgress">
 			<tmpl_if name="graph_width" value="100">
 				<!-- PROGRESS BAR WHEN FINISHED -->
 				<div class="progress pbfinished">
@@ -334,9 +331,9 @@ Foreign Transfers
 			</tmpl_if>
 			</td>
 		</tmpl_if>
-		<tmpl_if name="settings_6"><td><tmpl_var name="down_speed"></td><!-- DOWNLOAD SPEED --></tmpl_if>
+		<tmpl_if name="settings_6"><td class="tDLSpeed"><tmpl_var name="down_speed"></td><!-- DOWNLOAD SPEED --></tmpl_if>
 		<tmpl_if name="settings_7"><!-- UPLOAD SPEED -->
-			<td>
+			<td class="tULSpeed">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_var name="up_speed">
 			<tmpl_else>
@@ -346,7 +343,7 @@ Foreign Transfers
 		</tmpl_if>
 		<tmpl_if name="settings_8">
 			<!-- SEEDS -->
-			<td align="center">
+			<td align="center" class="tSeeds">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="seeds" op="!=" value="">
 					<tmpl_var name="seeds">
@@ -360,7 +357,7 @@ Foreign Transfers
 		</tmpl_if>
 		<tmpl_if name="settings_9">
 			<!-- PEERS -->
-			<td align="center">
+			<td align="center" class="tPeers">
 			<tmpl_if name="transferRunning" value="1">
 				<tmpl_if name="peers" op="!=" value="">
 					<tmpl_var name="peers">
@@ -374,7 +371,7 @@ Foreign Transfers
 		</tmpl_if>
 		<tmpl_if name="settings_10"><td align="center"><tmpl_if name="estTime" value="-">&#8734;<tmpl_else><tmpl_var name="estTime"></tmpl_if></td><!-- ESTIMATED TIME --></tmpl_if>
 		<tmpl_if name="settings_11"><td align="center"><tmpl_var name="client"></a></td><!-- USED CLIENT --></tmpl_if>
-			<td style="text-align:right;">
+			<td style="text-align:right;" class="tButtons">
 		<tmpl_if name="is_owner">
 				<a onclick="showTransfer('index.php?iid=transferSettings&amp;transfer=<tmpl_var name="url_entry">')" style="cursor:pointer;">
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/edit.png" title="Transfer Settings" alt="" />
