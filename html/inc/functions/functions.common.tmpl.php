@@ -56,6 +56,7 @@ function tmplSetIndexPageFormVars() {
 	$tmpl->setvar('enable_bulkops', $cfg["enable_bulkops"]);
 	$tmpl->setvar('display_seeding_time', $cfg["display_seeding_time"]);
 	$tmpl->setvar('index_page_sortorder', $cfg["index_page_sortorder"]);
+	$tmpl->setvar('transfer_delete_data', $cfg["transfer_delete_data"]);
 	$tmpl->setloop('Engine_List', tmplSetSearchEngineDDL($cfg["searchEngine"]));
 	$transferWindowDefaultList = array();
 	array_push($transferWindowDefaultList, array(

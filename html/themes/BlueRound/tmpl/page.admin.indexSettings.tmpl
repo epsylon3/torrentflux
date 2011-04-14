@@ -391,9 +391,7 @@
 			<select name="enable_multiops" id="enable_multiops">
 				<option value="1">True</option>
 				<option value="0"
-			<tmpl_if name="enable_multiops" value="0">
-				selected
-			</tmpl_if>
+				<tmpl_if name="enable_multiops" value="0"> selected</tmpl_if>
 				>False</option>
 			</select>
 		</td>
@@ -407,9 +405,7 @@
 			<select name="enable_bulkops" id="enable_bulkops">
 				<option value="1">True</option>
 				<option value="0"
-			<tmpl_if name="enable_bulkops" value="0">
-				selected
-			</tmpl_if>
+				<tmpl_if name="enable_bulkops" value="0"> selected</tmpl_if>
 				>False</option>
 			</select>
 		</td>
@@ -423,9 +419,7 @@
 			<select name="index_page_stats" id="index_page_stats">
 				<option value="1">True</option>
 				<option value="0"
-			<tmpl_if name="index_page_stats" value="0">
-				selected
-			</tmpl_if>
+				<tmpl_if name="index_page_stats" value="0"> selected</tmpl_if>
 				>False</option>
 			</select>
 		</td>
@@ -436,9 +430,7 @@
 			<select name="index_page_connections" id="index_page_connections">
 				<option value="1">True</option>
 				<option value="0"
-			<tmpl_if name="index_page_connections" value="0">
-				selected
-			</tmpl_if>
+				<tmpl_if name="index_page_connections" value="0"> selected</tmpl_if>
 				>False</option>
 			</select>
 		</td>
@@ -449,13 +441,22 @@
 			<select name="show_server_load" id="show_server_load">
 				<option value="1">True</option>
 				<option value="0"
-			<tmpl_if name="show_server_load" value="0">
-				selected
-			</tmpl_if>
+				<tmpl_if name="show_server_load" value="0"> selected</tmpl_if>
 				>False</option>
 			</select>
 		</td>
-	</tr>	
+	</tr>
+	<tr>
+		<th class="alt">Delete Torrent Method<br /><span>Delete with data or torrent only.</th>
+		<td class="alt">
+			<select name="transfer_delete_data" id="transfer_delete_data">
+				<option value="1">Delete with data</option>
+				<option value="0"
+				<tmpl_if name="transfer_delete_data" value="0"> selected</tmpl_if>
+				>Remove torrent</option>
+			</select>
+		</td>
+	</tr>
 </table>
 <p><input type="Submit" value="Update Settings"></p>
 </form>

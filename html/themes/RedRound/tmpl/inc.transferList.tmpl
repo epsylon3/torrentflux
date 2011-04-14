@@ -208,7 +208,11 @@ Your Transfers
 				</tmpl_if>
 
 				<tmpl_if name="is_no_file">
+					<tmpl_if name="transfer_delete_data">
 					<a href="dispatcher.php?action=deleteWithData&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> (and data) ?','Deleting Transfer')">
+					<tmpl_else>
+					<a href="dispatcher.php?action=delete&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Remove <tmpl_var name="entry"> (keep data) ?','Removing Transfer')">
+					</tmpl_if>
 						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_on.png" title="<tmpl_var name="_DELETE">" alt="" />
 					</a>
 				<tmpl_else>

@@ -206,6 +206,8 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_user','transmission')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transmission_rpc_password','')");
 
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_delete_data','1')");
+
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_read','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings_dir VALUES ('dir_public_write','0')");

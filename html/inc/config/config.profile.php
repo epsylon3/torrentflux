@@ -50,6 +50,7 @@ $cfg['validUserSettingsKeys'] = array(
 	'transferStatsType',
 	'transferStatsUpdate',
 	'transferHosts',
+	'transfer_delete_data',
 	'servermon_update'
 );
 
