@@ -133,8 +133,8 @@ function updateStatFiles($bShowMissing=false) {
 			$sharebase = (int) $sharekills[$hash];
 			//$sharekill = (int) round(floatval($t['seedRatioLimit']) * 100);
 	
-			if ($sharebase > 0 && (int) $sharebase != (int) $sf->seedlimit) {
-				AuditAction($cfg["constants"]["debug"], $client.": changed .stat sharekill ".$sf->seedlimit." to $sharebase (from db), $transfer.");
+			if ($sharebase > 0 && (int) $sf->seedlimit == 0) {
+				AuditAction($cfg["constants"]["debug"], $client.": changed empty .stat sharekill ".$sf->seedlimit." to $sharebase (from db), $transfer.");
 				$sf->seedlimit = $sharebase;
 			}
 
@@ -212,7 +212,7 @@ function updateStatFiles($bShowMissing=false) {
 	//fix vuze globall sharekill to maximum of torrents sharekill, other torrent with lower sharekill will be stopped by this cron
 	if (isset($max_share))  {
 		$sharekill = getVuzeShareKill(true);
-		if ($max_share != $sharekill) {
+		if ($max_share > $sharekill) {
 			//set vuze global sharekill to max sharekill value
 			$vuze->session_set('seedRatioLimit', round($max_share / 100, 2));
 			if ($cfg['debuglevel'] > 0) {
