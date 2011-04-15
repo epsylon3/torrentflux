@@ -552,9 +552,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	}
 
 	/**
-	 * clean stat file
+	 * clean and set as stopped .stat file
 	 *
-	 * @param $transfer
+	 * @param $transfer string torrent name
 	 * @return boolean
 	 */
 	function cleanStoppedStatFile($transfer) {
@@ -564,6 +564,12 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		return $stat->stop();
 	}
 
+	/**
+	 * updateStatFiles
+	 *
+	 * @param $transfer string torrent name
+	 * @return boolean
+	 */
 	function updateStatFiles($transfer="") {
 		global $cfg, $db;
 

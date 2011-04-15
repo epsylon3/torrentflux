@@ -787,7 +787,7 @@ class ClientHandler
 			// return
 			return;
 		}
-		// Save transfer settings
+		// Save transfer settings to DB
 		$this->settingsSave();
 		// flush session-cache (trigger transfers-cache-set on next page-load)
 		cacheFlush($cfg['user']);
