@@ -26,7 +26,7 @@ require_once("inc/classes/Transmission.class.php");
 require_once("inc/functions/functions.rpc.transmission.php");
 
 /**
- * class ClientHandler for future transmission-daemon RPC - for superadmin stats...
+ * class ClientHandler for future compatible transmission-daemon RPC interface...
  */
 class ClientHandlerTransmissionRPC extends ClientHandler
 {
@@ -40,9 +40,10 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 
 		$this->type = "torrent";
 		$this->client = "transmissionrpc";
-		$this->binSystem = "transmission-daemon";
-		$this->binSocket = "transmission-daemon";
-		$this->binClient = "transmission-daemon";
+
+		$this->binSocket = "transmission-daemon"; //for ps grep
+		$this->binSystem = "transmission-daemon"; //script lang, not used in rpc
+		$this->binClient = "transmission-daemon"; //for ps grep (ClientHandler.php)
 
 		$this->useRPC = true;
 	}
@@ -59,7 +60,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	 * @param $enqueue (boolean) : enqueue ?
 	 */
 	function start($transfer, $interactive = false, $enqueue = false) {
-		global $cfg;
+		global $cfg, $db;
 
 		// set vars
 		$this->_setVarsForTransfer($transfer);
@@ -81,6 +82,9 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			return false;
 		}
 
+		// init properties
+		$this->_init($interactive, $enqueue, true, false);
+
 		/*
 		if (!is_dir($cfg["path"].'.config/transmissionrpc/torrents')) {
 			if (!is_dir($cfg["path"].'.config'))
@@ -92,26 +96,66 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			mkdir($cfg["path"].'.config/transmissionrpc/torrents',0775);
 		}
 		*/
-
-		$hash = getTransferHash($transfer);
-
-		if (!empty($hash) && !isTransmissionTransfer($hash)) {
-			$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$transfer, $cfg['path'].$cfg['user'] );
-			$this->command = 'torrent-add'; //log purpose
-		} else {
-			$this->command = 'torrent-start'; //log purpose
+		if (!is_dir($cfg['path'].$cfg['user'])) {
+			mkdir($cfg['path'].$cfg['user'],0777);
 		}
-
-		$res = (int) startTransmissionTransfer($hash, $enqueue);
 		
-		// log
-		$this->logMessage($this->client."-start : hash=".$hash.": $res \n", true);
+		$this->command = "";
+		if (getOwner($transfer) != $cfg['user']) {
+			//directory must be changed for different users ?
+			changeOwner($transfer,$cfg['user']);
+			$this->owner = $cfg['user'];
+			
+			// change savepath
+			$this->savepath = ($cfg["enable_home_dirs"] != 0)
+				? $cfg['path'].$this->owner."/"
+				: $cfg['path'].$cfg["path_incoming"]."/";
+			
+			$this->command = "re-downloading to ".$this->savepath;
+			
+		} else {
+			$this->command = "downloading to ".$this->savepath;
+		}
 
 		// no client needed
 		$this->state = CLIENTHANDLER_STATE_READY;
 
-		// ClientHandler start
+		// ClientHandler _start()
 		$this->_start();
+
+		$hash = getTransferHash($transfer);
+		
+		if (empty($hash) || !isTransmissionTransfer($hash)) {
+			$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$transfer, $cfg['path'].$cfg['user'] );
+			if (is_array($hash) && $hash["result"] == "duplicate torrent") {
+				$this->command = 'torrent-add skipped, already exists '.$transfer; //log purpose
+				$hash="";
+				$sql = "SELECT hash FROM tf_transfers WHERE transfer = ".$db->qstr($transfer);
+				$result = $db->Execute($sql);
+				$row = $result->FetchRow();
+				if (!empty($row)) {
+					$hash=$row['hash'];
+				}
+			} else {
+				$this->command .= "\n".'torrent-add '.$transfer.' '.$hash; //log purpose
+			}
+		} else {
+			$this->command .= "\n". 'torrent-start '.$transfer.' '.$hash; //log purpose
+		}
+		if (!empty($hash)) {
+/* to check...
+			$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($hash)." AND uid=$uid";
+			$result = $db->Execute($sql);
+			$sql = "INSERT INTO tf_transfer_totals (tid,uid) VALUES (".$db->qstr($hash).", $uid)";
+			$result = $db->Execute($sql);
+*/
+			$res = (int) startTransmissionTransfer($hash, $enqueue);
+		}
+
+		$this->updateStatFiles($transfer);
+
+		// log
+		$this->logMessage($this->client."-start : hash=".$hash." : $res \n", true);
 	}
 
 	/**
@@ -146,18 +190,19 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		}
 
 		if (!stopTransmissionTransfer($hash)) {
-			$msg = "transfer ".$transfer." does not exist in Transmission.";
+			$rpc = Transmission::getInstance();
+			$msg = $transfer." :". $rpc->lastError;
 			$this->logMessage($msg."\n", true);
-			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $hash $transfer.");
+			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $msg.");
 		}
 
-		// stop the client
-		//$this->_stop($kill, $transferPid);
+		$this->updateStatFiles($transfer);
 
-		// flag the transfer as stopped (in db)
-		stopTransferSettings($transfer);
+		// delete .pid
+		$this->_stop($kill, $transferPid);
 
-		@unlink($this->transferFilePath.".pid");
+		// set .stat stopped
+		$this->cleanStoppedStatFile($transfer);
 	}
 
 	/**
@@ -321,6 +366,30 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	}
 
 	/**
+	 * clean stat file
+	 *
+	 * @param $transfer
+	 * @return boolean
+	 */
+	function cleanStoppedStatFile($transfer) {
+		$stat = new StatFile($this->transfer, $this->owner);
+		//if ($stat->percent_done > 100)
+		//	$stat->percent_done=100;
+		return $stat->stop();
+	}
+
+	/**
+	 * updateStatFiles
+	 *
+	 * @param $transfer string torrent name
+	 * @return boolean
+	 */
+	function updateStatFiles($transfer="") {
+		global $cfg, $db;
+		
+	}
+
+	/**
 	 * gets current status of one Transfer (realtime)
 	 * for transferStat popup
 	 *
@@ -339,7 +408,10 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			return "Hash for $transfer was not found";
 		}
 
-		$stat = getTransmissionTransfer($hash);
+		$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
+						"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
+
+		$stat = getTransmissionTransfer($hash, $fields);
 		if (is_array($stat)) {
 			return $stat;
 		} else {
@@ -350,20 +422,18 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 
 	/**
 	 * gets current status of all Transfers (realtime)
-	 * for transferStat popup
 	 *
 	 * @return array (stat) or Error String
 	 */
 	function monitorAllTransfers() {
 		//by default, monitoring not available.
-		$rpc = Transmission::getInstance();
+		//$rpc = Transmission::getInstance();
 
 		return getUserTransmissionTransfers();
 	}
 
 	/**
 	 * gets current status of all Running Transfers (realtime)
-	 * for transferStat popup
 	 *
 	 * @return array (stat) or Error String
 	 */

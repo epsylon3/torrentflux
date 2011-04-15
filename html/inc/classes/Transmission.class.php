@@ -154,12 +154,7 @@ class Transmission
 			"ids" => $ids
 		);
 
-		$data = $this->request( "torrent-get", $request );
-		if ($data->result != 'success') {
-			$this->lastError = serialize($data);
-		}
-
-		return $data;
+		return $this->request( "torrent-get", $request );
 	}
 
 	/**
@@ -380,7 +375,11 @@ class Transmission
 		}
 
 		//return $this->cleanResultData( json_decode( $body ) );
-		return json_decode( $body, true );
+		$response = json_decode( $body, true );
+		if (is_array($response) && $response['result'] != "success") {
+			$this->lastError = serialize($response);
+		}
+		return $response; 
 	}
 	
 	public function session_get() {

@@ -170,7 +170,7 @@ function getTransferSize($transfer) {
  */
 function getTransferHash($transfer) {
 	global $cfg, $db, $transfers;
-	if (isset($transfers['settings'][$transfer]['hash'])) {
+	if (!empty($transfers['settings'][$transfer]['hash'])) {
 		return $transfers['settings'][$transfer]['hash'];
 	} else {
 		$hash = $db->GetOne("SELECT hash FROM tf_transfers WHERE transfer = ".$db->qstr($transfer));

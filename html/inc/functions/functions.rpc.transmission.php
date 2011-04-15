@@ -23,7 +23,7 @@
 function rpc_error($errorstr,$dummy="",$dummy="",$response="") {
 	global $cfg;
 	AuditAction($cfg["constants"]["error"], "Transmission RPC : $errorstr - $response");
-	@error($errorstr, "", "", $response);
+	@error($errorstr."\n".$response, "", "", $response, $response);
 	addGrowlMessage('transmission-rpc',$errorstr.$response);
 	//dbError($errorstr);
 }
@@ -140,7 +140,10 @@ function getUserTransmissionTransferArrayFromDB($uid = 0) {
 function isValidTransmissionTransfer($uid = 0,$tid) {
 	global $db;
 	$retVal = array();
-	$sql = "SELECT tid FROM tf_transmission_user WHERE tid='$tid' AND uid='$uid'";
+	$sql = "SELECT tid FROM tf_transmission_user WHERE tid='$tid' AND uid='$uid' "
+	//." UNION "
+	//." SELECT tid FROM tf_transfer_totals WHERE tid=".$db->qstr($tid)." AND uid=".$db->qstr($uid)
+	;
 	$recordset = $db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
 	if ( sizeof($recordset)!=0 ) return true;
@@ -192,7 +195,7 @@ function startTransmissionTransfer($hash,$startPaused=false) {
 /**
  * This method stops the Transmission transfer with the matching hash
  *
- * @return void
+ * @return boolean
  */
 function stopTransmissionTransfer($hash) {
 	global $cfg;
@@ -203,7 +206,9 @@ function stopTransmissionTransfer($hash) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
 		$response = $trans->stop($transmissionId);
 		if ( $response['result'] != "success" ) rpc_error("Stop failed", "", "", $response['result']);
+		return true;
 	}
+	return false;
 }
 
 /**
@@ -281,7 +286,10 @@ function deleteTransmissionTransferFromDB($uid = 0,$tid) {
 function addTransmissionTransferToDB($uid = 0,$tid) {
 	global $db;
 	$retVal = array();
-	$sql = "INSERT INTO tf_transmission_user (uid,tid) VALUES ('$uid','$tid')";
+	$uid = (int) $uid;
+	$sql = "DELETE FROM tf_transmission_user WHERE uid=$uid AND tid='$tid'";
+	$recordset = $db->Execute($sql);
+	$sql = "INSERT INTO tf_transmission_user (uid,tid) VALUES ($uid,'$tid')";
 	$recordset = $db->Execute($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
 	/*return $retVal;*/
@@ -300,7 +308,10 @@ function addTransmissionTransfer($uid = 0, $url, $path, $paused=true) {
 	$rpc = new Transmission();
 
 	$result = $rpc->add( $url, $path, array ('paused' => $paused)  );
-	if($result["result"]!=="success") rpc_error("addTransmissionTransfer","","",$result["result"]. " url=$url");
+	if($result["result"]!=="success") {
+		//rpc_error("addTransmissionTransfer","","",$result['result']. " url=$url");
+		return $result;
+	}
 
 	$hash = $result['arguments']['torrent-added']['hashString'];
 	//rpc_error("The hash is: $hash. The uid is $uid"); exit();
