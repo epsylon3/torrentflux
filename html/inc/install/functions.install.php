@@ -1,10 +1,11 @@
 <?php
-
-/* $Id$ */
-
 /*******************************************************************************
+ Set tabs to 4.
 
- LICENSE
+ $Id: functions.install.php $
+
+ @package torrentflux_Setup
+ @license LICENSE http://www.gnu.org/copyleft/gpl.html
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License (GPL)
@@ -16,8 +17,6 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
 
- To read the license please visit http://www.gnu.org/copyleft/gpl.html
-
 *******************************************************************************/
 
 /**
@@ -27,25 +26,25 @@
  * @return array
  */
 function loadSettings($dbTable) {
-    global $dbCon;
-    // pull the config params out of the db
-    $sql = "SELECT tf_key, tf_value FROM ".$dbTable;
-    $recordset = $dbCon->Execute($sql);
+	global $dbCon;
+	// pull the config params out of the db
+	$sql = "SELECT tf_key, tf_value FROM ".$dbTable;
+	$recordset = $dbCon->Execute($sql);
 	if ($dbCon->ErrorNo() != 0)
 		return false;
-    $retVal = array();
-    while (list($key, $value) = $recordset->FetchRow()) {
-        $tmpValue = '';
+	$retVal = array();
+	while (list($key, $value) = $recordset->FetchRow()) {
+		$tmpValue = '';
 		if (strpos($key,"Filter") > 0) {
 		  $tmpValue = unserialize($value);
 		} elseif ($key == 'searchEngineLinks') {
-            $tmpValue = unserialize($value);
-    	}
-    	if(is_array($tmpValue))
-            $value = $tmpValue;
-        $retVal[$key] = $value;
-    }
-    return $retVal;
+			$tmpValue = unserialize($value);
+		}
+		if(is_array($tmpValue))
+			$value = $tmpValue;
+		$retVal[$key] = $value;
+	}
+	return $retVal;
 }
 
 /**
@@ -57,14 +56,14 @@ function loadSettings($dbTable) {
  * @return boolean
  */
 function updateSetting($dbTable, $key, $value) {
-    global $dbCon;
+	global $dbCon;
 	if (is_array($value))
-        $update_value = serialize($value);
-    else
-    	$update_value = $value;
-    $sql = "UPDATE ".$dbTable." SET tf_value = '".$update_value."' WHERE tf_key = '".$key."'";
-    $dbCon->Execute($sql);
-    if ($dbCon->ErrorNo() != 0)
+		$update_value = serialize($value);
+	else
+		$update_value = $value;
+	$sql = "UPDATE ".$dbTable." SET tf_value = '".$update_value."' WHERE tf_key = '".$key."'";
+	$dbCon->Execute($sql);
+	if ($dbCon->ErrorNo() != 0)
 		return false;
 	return true;
 }
@@ -145,13 +144,13 @@ $cfg["db_pcon"] = '.$pcon.'; // Persistent Connection enabled : true/false
 function getAdoConnection($type, $host, $user, $pass, $name = "") {
 	require_once('inc/lib/adodb/adodb.inc.php');
 	// create ado-object
-    $db = &ADONewConnection($type);
-    // connect
-    $result = @ $db->Connect($host, $user, $pass, $name);
-    // check for error
-    if ($db->ErrorNo() != 0 || !$result)
-    	return false;
-    // return db-connection
+	$db = &ADONewConnection($type);
+	// connect
+	$result = @ $db->Connect($host, $user, $pass, $name);
+	// check for error
+	if ($db->ErrorNo() != 0 || !$result)
+		return false;
+	// return db-connection
 	return $db;
 }
 
@@ -220,7 +219,7 @@ function displaySetupMessage($msg="A problem occurred.", $status=false){
 			- create - creation of tables used by tb
  */
  function initQueries($type, $version = "") {
- 	global $queries;
+	global $queries;
 	$queries = array();
 	$queryFile = 'inc/install/';
 	switch ($type) {

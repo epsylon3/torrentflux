@@ -1,6 +1,8 @@
 <?php
-
-/* $Id: index.php 98 2006-07-29 18:23:28Z b4rt $ */
+/*
+ $Id: index.php 
+ @package Themes
+*/
 
 $cfg["main_bgcolor"] = "#606060";
 $cfg["table_data_bg"] = "#EEEEEE";

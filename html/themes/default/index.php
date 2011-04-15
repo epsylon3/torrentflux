@@ -1,6 +1,8 @@
 <?php
-
-/* $Id$ */
+/*
+ $Id: index.php
+ @package Themes
+*/
 
 # just used because not every function is using the new templates system
 # this functions should be reworked really shortly
