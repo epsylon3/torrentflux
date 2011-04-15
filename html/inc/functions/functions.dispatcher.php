@@ -400,47 +400,47 @@ function dispatcher_bulk($op) {
 	$dispatcherMessages = array();
 	// op-switch
 	switch ($op) {
-	    case "stop":
-	    	$transferList = getTransferArray();
-	    	foreach ($transferList as $transfer) {
-	            if (isTransferRunning($transfer)) {
-	                if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
-	                    $ch = ClientHandler::getInstance(getTransferClient($transfer));
-	                    $ch->stop($transfer);
-	                    if (count($ch->messages) > 0)
-	                    	$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
-	                }
-	            }
-	    	}
-	    	break;
-	    case "resume":
-	    	$transferList = getTransferArray();
-	    	$sf = new StatFile("");
-	    	foreach ($transferList as $transfer) {
+		case "stop":
+			$transferList = getTransferArray();
+			foreach ($transferList as $transfer) {
+				if (isTransferRunning($transfer)) {
+					if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
+						$ch = ClientHandler::getInstance(getTransferClient($transfer));
+						$ch->stop($transfer);
+						if (count($ch->messages) > 0)
+							$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+					}
+				}
+			}
+			break;
+		case "resume":
+			$transferList = getTransferArray();
+			$sf = new StatFile("");
+			foreach ($transferList as $transfer) {
 				$sf->init($transfer);
-		        if (((trim($sf->running)) == 0) && (!isTransferRunning($transfer))) {
-	                if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
-	                    $ch = ClientHandler::getInstance(getTransferClient($transfer));
-	                    $ch->start($transfer, false, false);
-	                    if (count($ch->messages) > 0)
-	                    	$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
-	                }
-	            }
-	    	}
-	    	break;
-	    case "start":
-	    	$transferList = getTransferArray();
-	    	foreach ($transferList as $transfer) {
-	            if (!isTransferRunning($transfer)) {
-	                if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
-	                    $ch = ClientHandler::getInstance(getTransferClient($transfer));
-	                    $ch->start($transfer, false, false);
-	                    if (count($ch->messages) > 0)
-	                    	$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
-	                }
-	            }
-	    	}
-	    	break;
+				if (((trim($sf->running)) == 0) && (!isTransferRunning($transfer))) {
+					if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
+						$ch = ClientHandler::getInstance(getTransferClient($transfer));
+						$ch->start($transfer, false, false);
+						if (count($ch->messages) > 0)
+							$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+					}
+				}
+			}
+			break;
+		case "start":
+			$transferList = getTransferArray();
+			foreach ($transferList as $transfer) {
+				if (!isTransferRunning($transfer)) {
+					if (($cfg['isAdmin']) || (IsOwner($cfg["user"], getOwner($transfer)))) {
+						$ch = ClientHandler::getInstance(getTransferClient($transfer));
+						$ch->start($transfer, false, false);
+						if (count($ch->messages) > 0)
+							$dispatcherMessages = array_merge($dispatcherMessages, $ch->messages);
+					}
+				}
+			}
+			break;
 	}
 	// error if messages
 	if (count($dispatcherMessages) > 0)
@@ -738,7 +738,7 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 						: tfb_cleanFileName($filename.$ext);
 				}
 				if (empty($filename) || (transferExists($filename))) {
-					$filename = substr($cfg['user'],0,3).date('ymdHis')."_".sprintf('%x', crc32($filename) ).$ext;
+					$filename = substr($cfg['user'],0,3)."_".date('ymdHis')."_".sprintf('%x', crc32($filename) ).$ext;
 				}
 				/*
 				if (($filename == "") || ($filename === false) || (transferExists($filename))) {
