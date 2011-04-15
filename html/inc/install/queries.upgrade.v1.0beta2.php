@@ -87,9 +87,11 @@ array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX hash_idx ( 
 //only needed in mysql, remove enums
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers CHANGE `type` `type` VARCHAR(32) NOT NULL DEFAULT  'torrent'");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers CHANGE `client` `client` VARCHAR(32) NOT NULL DEFAULT  'tornado'");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD `created` TIMESTAMP NULL default CURRENT_TIMESTAMP");
 
 //add user id
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD `uid` INT(10) NOT NULL default '0' AFTER `tid`");
+array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD `created` TIMESTAMP NULL default CURRENT_TIMESTAMP");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (`tid`,`uid`)");
 
@@ -130,6 +132,7 @@ CREATE TABLE tf_transmission_user (
 
 // ALTER
 //array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD COLUMN uid INTEGER(10) NOT NULL DEFAULT 0");
+//array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD COLUMN created CHAR(19) NULL default CURRENT_TIMESTAMP");
 array_push($queries[$cqt][$cdb], "CREATE TEMPORARY TABLE bk_transfer_totals AS SELECT * FROM tf_transfer_totals");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_transfer_totals");
 array_push($queries[$cqt][$cdb], "
@@ -138,10 +141,41 @@ CREATE TABLE tf_transfer_totals (
   uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
+  created CHAR(19) NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY (tid,uid)
 )");
+//CURRENT_TIMESTAMP sqlite: "YYYY-MM-DD HH:MM:SS"
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_transfer_totals(tid,uid,uptotal,downtotal) SELECT tid,0,uptotal,downtotal FROM bk_transfer_totals");
 array_push($queries[$cqt][$cdb], "DROP TABLE bk_transfer_totals");
+
+//array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD COLUMN created CHAR(19) NULL default CURRENT_TIMESTAMP");
+array_push($queries[$cqt][$cdb], "CREATE TEMPORARY TABLE bk_transfers AS SELECT * FROM tf_transfers");
+array_push($queries[$cqt][$cdb], "DROP TABLE tf_transfers");
+array_push($queries[$cqt][$cdb], "
+CREATE TABLE tf_transfers (
+  transfer VARCHAR(255) NOT NULL default '',
+  type VARCHAR(32) NOT NULL default 'torrent',
+  client VARCHAR(32) NOT NULL default 'tornado',
+  hash VARCHAR(40) DEFAULT '' NOT NULL,
+  datapath VARCHAR(255) NOT NULL default '',
+  savepath VARCHAR(255) NOT NULL default '',
+  running INTEGER(1) NOT NULL default '0',
+  rate INTEGER(4) NOT NULL default '0',
+  drate INTEGER(4) NOT NULL default '0',
+  maxuploads INTEGER(3) NOT NULL default '0',
+  superseeder INTEGER(1) NOT NULL default '0',
+  runtime VARCHAR(5) NOT NULL default 'False',
+  sharekill INTEGER(4) NOT NULL default '0',
+  minport INTEGER(5) NOT NULL default '0',
+  maxport INTEGER(5) NOT NULL default '0',
+  maxcons INTEGER(4) NOT NULL default '0',
+  rerequest INTEGER(8) NOT NULL default '1800',
+  created CHAR(19) NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (transfer)
+)");
+//CURRENT_TIMESTAMP sqlite: "YYYY-MM-DD HH:MM:SS"
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_transfers(transfer,type,client,hash,datapath,savepath,running,rate,drate,maxuploads,superseeder,runtime,sharekill,minport,maxport,maxcons,rerequest) SELECT transfer,type,client,hash,datapath,savepath,running,rate,drate,maxuploads,superseeder,runtime,sharekill,minport,maxport,maxcons,rerequest FROM bk_transfers");
+array_push($queries[$cqt][$cdb], "DROP TABLE bk_transfers");
 
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals DROP PRIMARY KEY");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfer_totals ADD PRIMARY KEY (tid,uid)");

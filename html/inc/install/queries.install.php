@@ -343,7 +343,8 @@ CREATE TABLE tf_transfers (
   minport SMALLINT(5) unsigned NOT NULL default '0',
   maxport SMALLINT(5) unsigned NOT NULL default '0',
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
-  rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
+  rerequest MEDIUMINT(8) unsigned NOT NULL default '1800',
+  created TIMESTAMP NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (transfer),
   KEY hash_idx (`hash`(8))
 ) TYPE=MyISAM");
@@ -354,6 +355,7 @@ CREATE TABLE tf_transfer_totals (
   uid INT(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
+  created TIMESTAMP NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY (`tid`,`uid`)
 ) TYPE=MyISAM");
 // tf_trprofiles
@@ -372,7 +374,7 @@ CREATE TABLE tf_trprofiles (
   minport SMALLINT(5) unsigned NOT NULL default '0',
   maxport SMALLINT(5) unsigned NOT NULL default '0',
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
-  rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
+  rerequest MEDIUMINT(8) unsigned NOT NULL default '1800',
   savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY  (id)
 ) TYPE=MyISAM");
@@ -527,7 +529,8 @@ CREATE TABLE tf_transfers (
   minport INTEGER(5) NOT NULL default '0',
   maxport INTEGER(5) NOT NULL default '0',
   maxcons INTEGER(4) NOT NULL default '0',
-  rerequest INTEGER(8) NOT NULL default '0',
+  rerequest INTEGER(8) NOT NULL default '1800',
+  created CHAR(19) NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (transfer)
 )");
 // tf_transfer_totals
@@ -537,6 +540,7 @@ CREATE TABLE tf_transfer_totals (
   uid INTEGER(10) NOT NULL default '0',
   uptotal BIGINT(80) NOT NULL default '0',
   downtotal BIGINT(80) NOT NULL default '0',
+  created CHAR(19) NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY (tid,uid)
 )");
 // tf_trprofiles
@@ -555,7 +559,7 @@ CREATE TABLE tf_trprofiles (
   minport INTEGER(5) NOT NULL default '0',
   maxport INTEGER(5) NOT NULL default '0',
   maxcons INTEGER(4) NOT NULL default '0',
-  rerequest INTEGER(8) NOT NULL default '0',
+  rerequest INTEGER(8) NOT NULL default '1800',
   savepath VARCHAR(255) NOT NULL default ''
 )");
 // tf_xfer
@@ -721,7 +725,7 @@ CREATE TABLE tf_transfers (
   minport INTEGER NOT NULL DEFAULT '0',
   maxport INTEGER NOT NULL DEFAULT '0',
   maxcons INTEGER NOT NULL DEFAULT '0',
-  rerequest INTEGER NOT NULL DEFAULT '0',
+  rerequest INTEGER NOT NULL DEFAULT '1800',
   PRIMARY KEY (transfer),
   CHECK (running>=0),
   CHECK (maxuploads>=0),
@@ -756,7 +760,7 @@ CREATE TABLE tf_trprofiles (
   minport INTEGER NOT NULL DEFAULT '0',
   maxport INTEGER NOT NULL DEFAULT '0',
   maxcons INTEGER NOT NULL DEFAULT '0',
-  rerequest INTEGER NOT NULL DEFAULT '0',
+  rerequest INTEGER NOT NULL DEFAULT '1800',
   savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY (id),
   CHECK (public>=0),
