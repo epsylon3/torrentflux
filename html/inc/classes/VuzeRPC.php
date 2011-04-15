@@ -1,7 +1,7 @@
 <?php
 /*
 VUZE xmwebui (0.2.9) RPC interface for PHP
-		by Epsylon3 on gmail.com, Nov 2010
+		by tanguy.pruvot on gmail.com, Nov 2010-Apr 2011
 
 	Require PHP 5 for public/protected members
 
@@ -474,7 +474,7 @@ class VuzeRPC {
 		$rerequest = (int)$params[11];
 
 		//local file doesnt work before vuze 4.5.1.1-b30, waiting vuze version info
-		if ($this->vuze_ver > '4.5.1.1_CVS')
+		if ($this->vuze_ver >= '4.5.1.2')
 			$url = "file://".$this->cfg["transfer_file_path"].$transfer;
 		else
 			$url = $this->http_server()."inc/classes/VuzeRPC.php?getUrl=$transfer";

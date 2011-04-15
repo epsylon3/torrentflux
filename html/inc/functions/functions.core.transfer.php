@@ -1015,6 +1015,36 @@ function getOwner($transfer) {
 	}
 }
 
+
+/**
+ * change torrent Owner (download same torrent again from another user)
+ *
+ * @param $transfer, $user
+ * @return none
+ */
+function changeOwner($transfer, $user) {
+	global $cfg, $db, $transfers;
+	$oldowner = getOwner($transfer);
+	if ($oldowner != $user) {
+		if (file_exists($cfg["transfer_file_path"].$transfer.".stat")) {
+			$sf = new StatFile($transferi, $user);
+			$sf->transferowner = $user;
+			$sf->write();
+		}
+		$hash = getTransferHash($transfer);
+		$uid = (int) GetUID($user);
+		$sql = "INSERT INTO tf_transfer_totals(tid, uid, uptotal,downtotal) values ("
+		. $db->qstr($hash).","
+		. $uid.","
+		. "0,0"
+		.")";
+                $result = $db->Execute($sql);
+                if ($db->ErrorNo() != 0) dbError($sql);
+
+		resetOwner($transfer);
+	}
+}
+
 /**
  * reset Owner
  *

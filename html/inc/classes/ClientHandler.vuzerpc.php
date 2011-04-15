@@ -105,8 +105,23 @@ class ClientHandlerVuzeRPC extends ClientHandler
 			// return
 			return false;
 		}
-		
-		$this->command = "echo ok";
+
+		if (getOwner($transfer) != $cfg['user']) {
+			
+			//directory must be changed for different users ?
+			changeOwner($transfer,$cfg['user']);
+			$this->owner = $cfg['user'];
+			
+			// change savepath
+			$this->savepath = ($cfg["enable_home_dirs"] != 0)
+				? $cfg['path'].$this->owner."/"
+				: $cfg['path'].$cfg["path_incoming"]."/";
+			
+			$this->command = "re-downloading to ".$this->savepath;
+			
+		} else {
+			$this->command = "downloading to ".$this->savepath;
+		}
 
 		// build the command-string
 		$content  = $cfg['user']."\n";
@@ -260,8 +275,9 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$result = $db->Execute($sql);
 		$row = $result->FetchRow();
 		if (!empty($row)) {
-			$retVal["uptotal"] -= $row["uptotal"];
-			$retVal["downtotal"] -= $row["downtotal"];
+			// to check
+			//$retVal["uptotal"] -= $row["uptotal"];
+			//$retVal["downtotal"] -= $row["downtotal"];
 		}
 		return $retVal;
 	}
