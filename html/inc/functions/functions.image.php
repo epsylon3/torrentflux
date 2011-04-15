@@ -60,10 +60,16 @@ function image_pieTransferTotals() {
 		Image::paintNoOp();
 	// validate transfer
 	$validTransfer = false;
-	if ($cfg["transmission_rpc_enable"]) && isHash($transfer) {
+
+	if (isHash($transfer)) 
+		$hash = $transfer;
+	else
+		$hash = getTransferHash($transfer);
+
+	if ($cfg["transmission_rpc_enable"]) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$options = array('uploadedEver','downloadedEver');
-		$transTransfer = getTransmissionTransfer($transfer, $options); // false if not found; TODO check if transmission enabled
+		$transTransfer = getTransmissionTransfer($hash, $options); // false if not found; TODO check if transmission enabled
 		if ( is_array($transTransfer) ) {
 			$uptotal = $transTransfer['uploadedEver'];
 			$downtotal = $transTransfer['downloadedEver'];
@@ -117,10 +123,16 @@ function image_pieTransferPeers() {
 		Image::paintNoOp();
 	// validate transfer
 	$validTransfer = false;
+
+	if (isHash($transfer))
+                $hash = $transfer;
+	else
+		$hash = getTransferHash($transfer);
+
 	if ($cfg["transmission_rpc_enable"]) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$options = array('trackerStats','peers');
-		$transTransfer = getTransmissionTransfer($transfer, $options); // false if not found; TODO check if transmission enabled
+		$transTransfer = getTransmissionTransfer($hash, $options); // false if not found; TODO check if transmission enabled
 		if ( is_array($transTransfer) ) {
 			$validTransfer = true;
 			$client = "transmissionrpc";

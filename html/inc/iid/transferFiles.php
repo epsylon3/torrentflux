@@ -44,12 +44,25 @@ $ch = ClientHandler::getInstance(getTransferClient($transfer));
 // set file vars
 transfer_setFileVars();
 
-if ($cfg["transmission_rpc_enable"] && isTransmissionTransfer($transfer)) {
+$isTransmissionTransfer = false;
+if ($cfg["transmission_rpc_enable"] > 0) {
+        if (isHash($transfer))
+                $hash = $transfer;
+        else
+                $hash = getTransferHash($transfer);
+        require_once('inc/functions/functions.rpc.transmission.php');
+        $isTransmissionTransfer = isTransmissionTransfer($hash);
+        if (!$isTransmissionTransfer && $cfg["transmission_rpc_enable"]==1) {
+                $isTransmissionTransfer = (getTransferClient($transfer) == 'transmissionrpc');
+        }
+}
+
+if ($isTransmissionTransfer) {
 	require_once("inc/functions/functions.fileprio.php");
-	$tmpl->setvar('filePrio', getFilePrioForm($transfer, true));
+	$tmpl->setvar('filePrio', getFilePrioForm($hash, true));
 	$tmpl->setvar('file_priority_enabled', 1);
 } else {
-	// file-prio
+	// std file-prio
 	if (($cfg["enable_file_priority"] == 1) && ($cfg["supportMap"][$ch->client]['file_priority'] == 1) && (!isTransferRunning($transfer))) {
 		require_once("inc/functions/functions.fileprio.php");
 		$tmpl->setvar('filePrio', getFilePrioForm($transfer, true));

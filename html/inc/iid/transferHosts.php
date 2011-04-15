@@ -39,15 +39,22 @@ tmplInitializeInstance($cfg["theme"], "page.transferHosts.tmpl");
 transfer_init();
 
 $isTransmissionTransfer = false;
-if ($cfg["transmission_rpc_enable"]) {
+if ($cfg["transmission_rpc_enable"] > 0) {
+	if (isHash($transfer)) 
+		$hash = $transfer;
+	else
+		$hash = getTransferHash($transfer);
 	require_once('inc/functions/functions.rpc.transmission.php');
-	$isTransmissionTransfer = isTransmissionTransfer($transfer);
+	$isTransmissionTransfer = isTransmissionTransfer($hash);
+	if (!$isTransmissionTransfer && $cfg["transmission_rpc_enable"]==1) {
+		$isTransmissionTransfer = (getTransferClient($transfer) == 'transmissionrpc');
+	}
 }
 
 $list_host = array();
 if ($isTransmissionTransfer) {
 	$options = array('peers');
-	$transfer = getTransmissionTransfer($transfer, $options);
+	$transfer = getTransmissionTransfer($hash, $options);
 	
 	$isRunning = true; //TODO make this actually determine if the torrent is running
 	if ($isRunning) {
