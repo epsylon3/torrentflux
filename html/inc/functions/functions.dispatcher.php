@@ -933,8 +933,8 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 					@chmod($cfg["transfer_file_path"].$filename, 0644);
 					AuditAction($cfg["constants"]["file_upload"], $filename);
 
-					if ($cfg["transmission_rpc_enable"]) {
-						// need to check if default client is transmission : tfb_getRequestVar('client')
+					if ($cfg["transmission_rpc_enable"]==2 && $cfg['btclient'] == 'transmissionrpc') {
+						// only if default client is transmissionrpc with deadeyes method (may be deleted later)
 						require_once('inc/functions/functions.rpc.transmission.php');
 						$hash = addTransmissionTransfer( $cfg['uid'], $cfg['transfer_file_path'].$filename, $cfg['path'].$cfg['user'] );
 						@unlink($cfg['transfer_file_path'].$filename);
@@ -944,6 +944,7 @@ function _dispatcher_processUpload($name, $tmp_name, $size, $actionId, &$uploadM
 						}
 						return true;
 					}
+
 					// inject
 					injectTransfer($filename);
 					// instant action ?

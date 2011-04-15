@@ -158,7 +158,7 @@ function deleteTransferData($transfer) {
 	$msgs = array();
 
 	$isTransmissionTorrent = false;
-	if ($cfg["transmission_rpc_enable"] && isHash($transfer)) {
+	if ($cfg["transmission_rpc_enable"]==2 && isHash($transfer)) {
 		require_once('inc/classes/Transmission.class.php');
 		$trans = new Transmission();
 		require_once('inc/functions/functions.rpc.transmission.php');

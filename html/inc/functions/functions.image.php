@@ -60,7 +60,7 @@ function image_pieTransferTotals() {
 		Image::paintNoOp();
 	// validate transfer
 	$validTransfer = false;
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"]) && isHash($transfer) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$options = array('uploadedEver','downloadedEver');
 		$transTransfer = getTransmissionTransfer($transfer, $options); // false if not found; TODO check if transmission enabled

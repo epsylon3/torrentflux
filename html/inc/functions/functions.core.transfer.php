@@ -117,7 +117,7 @@ function getRunningTransferCount() {
 	}
 	
 	//bad, because there is also pid files for new rpc transfers, but
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"] == 2) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		$count += getRunningTransmissionTransferCount();
 	}
@@ -610,7 +610,7 @@ function getTransferListArray() {
 	if ($sortOrder == "")
 		$sortOrder = $cfg["index_page_sortorder"];
 
-	if ($cfg["transmission_rpc_enable"]) {
+	if ($cfg["transmission_rpc_enable"]==2) {
 		require_once('inc/functions/functions.rpc.transmission.php');
 		
 		// New method for transmission-daemon transfers

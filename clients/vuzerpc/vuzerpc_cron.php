@@ -302,7 +302,6 @@ switch ($cmd) {
 		echo print_r($torrents,true);
 	break;
 
-
 	// list vuze downloading torrents (via rpc)
 	case 'down':
 		$v = VuzeRPC::getInstance();
@@ -332,6 +331,9 @@ switch ($cmd) {
 		print_r($session);
 	break;
 
+	case 'config':
+		print_r($cfg);
+	break;
 
 	case 'update':
 		if ($cfg['vuze_rpc_enable']==0) {
@@ -340,6 +342,8 @@ switch ($cmd) {
 		}
 		echo $client.": updateStatFiles()\n";
 		updateStatFiles();
+	break;
+
 	default:
 		echo "usage : ./vuzerpc_cron.php [update,session,list,down]";
 }
