@@ -56,6 +56,12 @@ class Transmission
 	 */
 	protected $session_id = '';
 	
+	/**
+	 * Transmission last error
+	 * @var string
+	 */
+	public $lastError = '';
+	
 	/*
 	 * Constructor
 	*/
@@ -136,6 +142,7 @@ class Transmission
 	 *
 	 * @param array fields An array of return fields
 	 * @param int|array ids A list of transmission torrent ids
+	 * @return object
 	 */
 	public function get( $ids = array(), $fields = array() )
 	{
@@ -147,7 +154,12 @@ class Transmission
 			"ids" => $ids
 		);
 
-		return $this->request( "torrent-get", $request );
+		$data = $this->request( "torrent-get", $request );
+		if ($data->result != 'success') {
+			$this->lastError = serialize($data);
+		}
+
+		return $data;
 	}
 
 	/**
