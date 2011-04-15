@@ -73,6 +73,15 @@
 				</table>
 			</form>
 		</tmpl_if>
+	</tmpl_else>
+			<table id="transferSettings">
+				<tr class="alt">
+					<th>BitTorrent-Client:</th>
+					<td>
+						<tmpl_var name="client">
+					</td>
+				</tr>
+			</table>
 	</tmpl_if>
 <tmpl_if name="with_profiles" value="1">
 	<form name="profileForm" action="index.php?iid=transferSettings&transfer=<tmpl_var name="transfer">" method="post">

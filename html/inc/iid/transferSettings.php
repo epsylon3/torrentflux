@@ -286,7 +286,7 @@ if ($isSave) {                                                        /* save */
 	$tmpl->setvar('isSave', 0);
 
 	// client-chooser
-	if ($ch->type == "torrent") {
+	if ($ch->type == "torrent" && !$ch->running) {
 		$tmpl->setvar('enableClientChooser', 1);
 		$tmpl->setvar('enableBtclientChooser', $cfg["enable_btclient_chooser"]);
 		if ($cfg["enable_btclient_chooser"] != 0)
@@ -295,6 +295,8 @@ if ($isSave) {                                                        /* save */
 			$tmpl->setvar('btclientDefault', $ch->client);
 	} else {
 		$tmpl->setvar('enableClientChooser', 0);
+		$tmpl->setvar('enableBtclientChooser', 0);
+		$tmpl->setvar('btclientDefault', $ch->client);
 	}
 
 	// set vars
