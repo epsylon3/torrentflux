@@ -74,8 +74,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		}
 		$this->logMessage($this->client."-start : ".$transfer."\n", true);
 
-		$this->vuze = VuzeRPC::getInstance();
-		$vuze = & $this->vuze;
+		$vuze = VuzeRPC::getInstance();
 
 		// do special-pre-start-checks
 		if (!VuzeRPC::isRunning()) {
@@ -177,10 +176,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// log
 		$this->logMessage($this->client."-stop : ".$transfer."\n", true);
 		
-		if (!isset($this->vuze))
-			$this->vuze = new VuzeRPC($cfg);
-
-		$vuze = & $this->vuze;
+		$vuze = VuzeRPC::getInstance($cfg);
 
 		// only if vuze running and transfer exists in fluazu
 		if (!VuzeRPC::isRunning()) {
@@ -573,8 +569,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	function updateStatFiles($transfer="") {
 		global $cfg, $db;
 
-		$this->vuze = VuzeRPC::getInstance();
-		$vuze = & $this->vuze;
+		$vuze = VuzeRPC::getInstance();
 
 		// do special-pre-start-checks
 		if (!VuzeRPC::isRunning()) {
@@ -586,16 +581,19 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		if (empty($tfs))
 			return;
 
-		$hashes = array("''");
-		foreach ($tfs as $hash => $t) {
-			$hashes[] = "'".strtolower($hash)."'";
-		}
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client IN ('vuzerpc','azureus')";
 
-		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client IN ('vuzerpc','azureus') AND hash IN (".implode(',',$hashes).")";
-
-		//only update one $transfer...
-		if ($transfer != "")
+		if ($transfer != "") {
+			//only update one transfer...
 			$sql .= " AND transfer=".$db->qstr($transfer);
+		} else {
+			//or a set of hashes
+			$hashes = array("''");
+			foreach ($tfs as $hash => $t) {
+				$hashes[] = "'".strtolower($hash)."'";
+			}
+			$sql .= " AND hash IN (".implode(',',$hashes).")";
+		}
 
 		$recordset = $db->Execute($sql);
 		$hashes=array();

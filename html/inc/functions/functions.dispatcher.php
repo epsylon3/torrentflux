@@ -116,7 +116,7 @@ function dispatcher_restartTransfer($transfer) {
 	global $cfg;
 	// stop if running
 	$isRunning = isTransferRunning($transfer);
-	if ($tRunningFlag) {
+	if ($isRunning) {
 		dispatcher_stopTransfer($transfer);
 		$isRunning = isTransferRunning($transfer);
 	}
