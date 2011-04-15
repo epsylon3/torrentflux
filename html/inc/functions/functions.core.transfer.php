@@ -372,9 +372,11 @@ function getTransferDetails($transfer, $full) {
 	// totals
 	$afu = $sf->uptotal;
 	$afd = $sf->downtotal;
-	$ch = ClientHandler::getInstance($settingsAry['client']);
-	$totalsCurrent = $ch->getTransferCurrentOP($transfer, $settingsAry['hash'], $afu, $afd);
-	$totals = $ch->getTransferTotalOP($transfer, $settingsAry['hash'], $afu, $afd);
+	if (isset($settingsAry['client']) ){
+		$ch = ClientHandler::getInstance($settingsAry['client']);
+		$totalsCurrent = $ch->getTransferCurrentOP($transfer, $settingsAry['hash'], $afu, $afd);
+		$totals = $ch->getTransferTotalOP($transfer, $settingsAry['hash'], $afu, $afd);
+	}
 	// running
 	$running = $sf->running;
 	$details['running'] = $running;
@@ -428,6 +430,7 @@ function getTransferDetails($transfer, $full) {
 	// eta
 	$details['eta'] = $sf->time_left;
 	// sharing
+	if (is_array($totals))
 	$details['sharing'] = ($totals["downtotal"] > 0) ? @number_format((($totals["uptotal"] / $totals["downtotal"]) * 100), 2) : 0;
 	// full (including static) details
 	if ($full) {
