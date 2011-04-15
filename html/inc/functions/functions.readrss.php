@@ -25,7 +25,7 @@
  *
  * @param $string
  * @param $opt
- * @return
+ * @return string
  */
 if (!function_exists('html_entity_decode')) {
 	function html_entity_decode($string, $opt = ENT_COMPAT) {
@@ -51,7 +51,7 @@ if (!function_exists('html_entity_decode')) {
  *
  * @param $desc
  * @param $title
- * @return
+ * @return string
  */
 function ScrubDescription($desc, $title) {
 	$rtnValue = "";

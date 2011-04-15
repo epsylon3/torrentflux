@@ -10,7 +10,11 @@
  * @license GNU Lesser General Public License
  */
 
+/**
+ * Load Swift classes
+ */
 require_once dirname(__FILE__) . "/Swift/ClassLoader.php";
+
 Swift_ClassLoader::load("Swift_LogContainer");
 Swift_ClassLoader::load("Swift_ConnectionBase");
 Swift_ClassLoader::load("Swift_BadResponseException");

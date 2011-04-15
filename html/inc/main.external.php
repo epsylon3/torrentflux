@@ -1,10 +1,11 @@
 <?php
-
-/* $Id$ */
-
 /*******************************************************************************
+ Set tabs to 4.
 
- LICENSE
+ $Id: main.external.php $
+
+ @package torrentflux
+ @license LICENSE http://www.gnu.org/copyleft/gpl.html
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License (GPL)
@@ -15,8 +16,6 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
-
- To read the license please visit http://www.gnu.org/copyleft/gpl.html
 
 *******************************************************************************/
 

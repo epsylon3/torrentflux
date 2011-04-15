@@ -139,7 +139,7 @@ function AddProfileInfo( $newProfile ) {
  * getProfile
  *
  * @param $pid
- * @return
+ * @return object
  */
 function getProfile($pid) {
 	global $cfg, $db;

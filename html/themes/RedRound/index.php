@@ -1,6 +1,9 @@
 <?php
-
-/* $Id: index.php 1626 2006-11-17 18:28:06Z b4rt $ */
+/*
+ $Id: index.php $ 
+ @package Themes_RedRound
+ @author Kanesodi
+*/
 
 # just used because not every function is using the new templates system
 # this functions should be reworked really shortly

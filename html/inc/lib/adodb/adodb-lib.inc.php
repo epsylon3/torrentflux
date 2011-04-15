@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 // security - hide paths
 if (!defined('ADODB_DIR')) die();
 
@@ -10,6 +7,7 @@ global $ADODB_INCLUDED_LIB;
 $ADODB_INCLUDED_LIB = 1;
 
 /* 
+ @package ADOdb
  @version V5.06 16 Oct 2008  (c) 2000-2010 John Lim (jlim\@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
