@@ -8,10 +8,14 @@
 </tmpl_if>
 <br>
 <form action="index.php?iid=dir&dir=<tmpl_var name="dir">&multidel=1" method="post" name="multidir">
-<table cellpadding="2"" width="740">
+<table cellpadding="2" width="740">
 	<tr>
 		<td align="left">
+		<tmpl_if name="showparentURL" value="1">
 			<a href="<tmpl_var name="parentURL">"><img src="themes/tf_standard_themes/images/up_dir.gif" width="16" height="16" title="<tmpl_var name="_BACKTOPARRENT">" border="0">[<tmpl_var name="_BACKTOPARRENT">]</a>
+		<tmpl_else>
+			&nbsp;
+		</tmpl_if>
 		</td>
 		<tmpl_if name="enable_dirstats" value="1">
 			<td colspan="3">&nbsp;</td>

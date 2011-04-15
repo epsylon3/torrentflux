@@ -132,7 +132,11 @@
 </div>
 <div id="stats">
 	<div id="bandwidthTitle">
+		<tmpl_if name="showparentURL" value="1">
 		<a class="mainMenu" href="<tmpl_var name='parentURL'>"><tmpl_var name="_BACKTOPARRENT"></a>
+		<tmpl_else>
+		&nbsp;
+		</tmpl_if>
 	</div>
 	<tmpl_if name="show_chmod" value="1">
 		<div id="drivespaceTitle">

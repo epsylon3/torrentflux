@@ -239,15 +239,52 @@
 								</td>
 								<td valign="top">
 									<select name="transmission_rpc_enable" id="transmission_rpc_enable">
-										<option value="1">Enabled</option>
-										<option value="0"
-											<tmpl_if name="transmission_rpc_enable" value="False">
-												 selected="selected"
-											</tmpl_if>
-										>Disabled</option>
+										<option value="0">Disabled</option>
+										<option value="1"
+										<tmpl_if name="transmission_rpc_enable" value="1"> selected</tmpl_if>
+										>Enabled</option>
 									</select>
 								</td>
 							</tr>
+							<tmpl_if name="transmission_rpc_enable" value="1">
+							<tr>
+								<td class="alt" align="left" width="350" valign="top">
+									<label for="transmission_rpc_host"><strong>Transmission RPC Host</strong></label><br/>
+									IP of transmission-daemon (def. 127.0.0.1)
+								</td>
+								<td class="alt">
+									<input name="transmission_rpc_host" id="transmission_rpc_host" type="Text" maxlength="254" value="<tmpl_var name="transmission_rpc_host">" size="35">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="transmission_rpc_port"><strong>Transmission RPC Port</strong></label><br/>
+									Port of transmission-daemon (def. 9091)
+								</td>
+								<td>
+									<input name="transmission_rpc_port" id="transmission_rpc_port" type="Text" maxlength="5" value="<tmpl_var name="transmission_rpc_port">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td class="alt" align="left" width="350" valign="top">
+									<label for="transmission_rpc_user"><strong>Transmission RPC User</strong></label><br/>
+									Http User Auth for transmission-daemon (def. "transmission")
+								</td>
+								<td class="alt">
+									<input name="transmission_rpc_user" id="transmission_rpc_user" type="Text" maxlength="20" value="<tmpl_var name="transmission_rpc_user">" size="10">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="transmission_rpc_password"><strong>Transmission RPC Port</strong></label><br/>
+									Http password for transmission-daemon communication
+								</td>
+								<td>
+									<input name="transmission_rpc_password" id="transmission_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="transmission_rpc_password">" size="10">
+								</td>
+							</tr>
+							</tmpl_if>
+
 							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Vuze RPC</strong></td></tr>
 							<tr>
 								<td align="left" width="350" valign="top">
@@ -255,15 +292,52 @@
 								</td>
 								<td valign="top">
 									<select name="vuze_rpc_enable" id="vuze_rpc_enable">
-										<option value="1">Enabled</option>
-										<option value="0"
-											<tmpl_if name="vuze_rpc_enable" value="False">
-												 selected="selected"
-											</tmpl_if>
-										>Disabled</option>
+										<option value="0">Disabled</option>
+										<option value="1"
+										<tmpl_if name="vuze_rpc_enable" value="1"> selected</tmpl_if>
+										>Enabled</option>
 									</select>
 								</td>
 							</tr>
+							<tmpl_if name="vuze_rpc_enable" value="1">
+							<tr>
+								<td class="alt" align="left" width="350" valign="top">
+									<label for="vuze_rpc_host"><strong>Vuze RPC Host</strong></label><br/>
+									IP of vuze-daemon (def. 127.0.0.1)
+								</td>
+								<td class="alt">
+									<input name="vuze_rpc_host" id="vuze_rpc_host" type="Text" maxlength="254" value="<tmpl_var name="vuze_rpc_host">" size="35">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="vuze_rpc_port"><strong>Vuze RPC Port</strong></label><br/>
+									Port of vuze-daemon (def. 9091)
+								</td>
+								<td>
+									<input name="vuze_rpc_port" id="vuze_rpc_port" type="Text" maxlength="5" value="<tmpl_var name="vuze_rpc_port">" size="5">
+								</td>
+							</tr>
+							<tr>
+								<td class="alt" align="left" width="350" valign="top">
+									<label for="vuze_rpc_user"><strong>Vuze RPC User</strong></label><br/>
+									Http User Auth for vuze-daemon (def. "vuze")
+								</td>
+								<td class="alt">
+									<input name="vuze_rpc_user" id="vuze_rpc_user" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_user">" size="10">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" width="350" valign="top">
+									<label for="vuze_rpc_password"><strong>Vuze RPC Password</strong></label><br/>
+									Http password for vuze-daemon
+								</td>
+								<td>
+									<input name="vuze_rpc_password" id="vuze_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="vuze_rpc_password">" size="10">
+								</td>
+							</tr>
+							</tmpl_if>
+
 							<tr><td colspan="2" align="center" bgcolor="<tmpl_var name="table_header_bg">"><strong>Fluazu</strong></td></tr>
 							<tr>
 								<td align="left" width="350" valign="top"><strong>Fluazu Daemon:</strong><br>
@@ -463,9 +537,7 @@
 									<select name="nice_adjust" id="nice_adjust">
 										<tmpl_loop name="nice_list">
 											<option value="<tmpl_var name="i">"
-												<tmpl_if name="nice_adjust_true" value="1">
-													 selected
-												</tmpl_if>
+											<tmpl_if name="nice_adjust_true" value="1"> selected</tmpl_if>
 											>
 											<tmpl_if name="i" value="0">
 												Don't Use Nice
