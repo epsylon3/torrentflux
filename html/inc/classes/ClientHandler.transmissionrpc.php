@@ -409,7 +409,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		}
 
 		$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
-						"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
+						"metadataPercentComplete", "peersConnected", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadLimit", "uploadRatio"  );
 
 		$stat = getTransmissionTransfer($hash, $fields);
 		if (is_array($stat)) {

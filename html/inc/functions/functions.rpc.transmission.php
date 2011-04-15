@@ -334,13 +334,15 @@ function getUserTransmissionTransfers($uid = 0) {
 
 	require_once('inc/classes/Transmission.class.php');
 	$rpc = new Transmission ();
-	$fields = array ( "id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" );
+	// https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt
+	$fields = array ( "name", "id", "hashString", "eta", "downloadedEver", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "peersConnected", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadLimit", "uploadRatio");
 	$result = $rpc->get ( array(), $fields );
 
 	if ($result['result']!=="success") rpc_error("Transmission RPC could not get transfers : ".$result['result']);
 	foreach ( $result['arguments']['torrents'] as $transfer ) {
 		if ( $uid==0 || in_array ( $transfer['hashString'], $userTransferHashes ) ) {
-			array_push($retVal, $transfer);
+			//set array keys as hashes
+			$retVal[$transfer['hashString']] = $transfer;
 		}
 	}
 	return $retVal;
@@ -376,4 +378,12 @@ function getTransmissionSeederCount($transfer) {
 	return $seeds;
 }
 
+function getTransmissionTrackerStats($transfer) {
+	$options = array('trackerStats');
+	$transfer = getTransmissionTransfer($transfer, $options);
+	if (is_array($transfer))
+		return $transfer['trackerStats'][0];
+	else
+		return array();
+}
 ?>

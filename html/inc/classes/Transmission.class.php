@@ -26,7 +26,10 @@
  *   $result = $rpc->add( $url_or_path_to_torrent, $target_folder );
  * ?>
  *
+ * RPC Specs :
+ * https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt
  */
+
 $Transmission_inst=NULL;
  
 class Transmission

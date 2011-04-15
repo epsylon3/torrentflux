@@ -98,17 +98,21 @@ $bUseRPC = false;
 if ($cfg["transmission_rpc_enable"]) {
 	$bUseRPC = true;
 
-	// add transmission rpc torrent to current user list
-
 	require_once('inc/functions/functions.rpc.transmission.php');
-	$result = getUserTransmissionTransfers($cfg['uid']);
+	$aTrTorrents = getUserTransmissionTransfers($cfg['uid']);//,array("trackerStats"));
+
+	//for later use
+	//$rpc = Transmission::getInstance($cfg);
 
 	// eta
 	//  -1 : Done
 	//  -2 : Unknown
 
-	foreach($result as $aTorrent)
+	// add transmission-daemon torrents to current user list
+	foreach($aTrTorrents as $aTorrent)
 	{
+		$hash = $aTorrent['hashString'];
+		
 		// fill in eta
 		if ( $aTorrent['eta'] == '-1' && $aTorrent['percentDone'] != 1 ) {
 			$eta = 'n/a';
@@ -154,27 +158,35 @@ if ($cfg["transmission_rpc_enable"]) {
 			break;
 		}
 
-		if ($transferRunning) // Only for running torrents otherwhise seriously slows down listing
-			$seeds = getTransmissionSeederCount($aTorrent['hashString']);
-		else
-			$seeds = 0;
+		$peers = $nothing;
+		$seeds = $nothing;
+		if ($transferRunning) {
+			//$seeds = getTransmissionSeederCount($hash);
+			$trackerStats = getTransmissionTrackerStats($hash);
+			if (!empty($trackerStats)) {
+				$seeds = $trackerStats['seederCount'];
+				//$peers = $trackerStats['lastAnnouncePeerCount'];
+				if ($seeds == -1) $seeds=$nothing;
+			}
+			$peers = $aTorrent['peersConnected'];
+		}
 
 		// TODO: transferowner is always admin... probably not what we want
 		$tArray = array(
 			'is_owner' => true,
 			'transferRunning' => ($transferRunning ? 1 : 0),
-			'url_entry' => $aTorrent['hashString'],
+			'url_entry' => $hash,
 			'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
 			'hd_title' => $nothing,
 			'displayname' => $aTorrent['name'],
-			'transferowner' => getTransmissionTransferOwner($aTorrent['hashString']),
+			'transferowner' => getTransmissionTransferOwner($hash),
 			//'transferowner' => 'administrator',
 			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
 			'format_downtotal' => $nothing,
 			'format_uptotal' => $nothing,
 			'statusStr' => $status,
-			'graph_width' => ( $status==='New' ? -1 : floor($aTorrent['percentDone']*100) ),
-			'percentage' => ( $status==='New' ? '' : floor($aTorrent['percentDone']*100) . '%' ),
+			'graph_width' => ( $status==='New' ? -1 : round($aTorrent['percentDone']*100) ),
+			'percentage' => ( $status==='New' ? '' : round($aTorrent['percentDone']*100,1) . '%' ),
 			'progress_color' => '#22BB22',
 			'bar_width' => 4,
 			'background' => '#000000',
@@ -182,11 +194,12 @@ if ($cfg["transmission_rpc_enable"]) {
 			'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
 			'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
 			'seeds' => $seeds,
-			'peers' => $nothing,
+			'peers' => $peers,
 			'estTime' => $eta,
 			'clientType' => 'torrent',
 			'upload_support_enabled' => 1,
-			'client' => 'transmissionrpc',
+			'sharing' => round($aTorrent['uploadRatio']*100.0,1),
+			'client' => 'RPC',
 			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
 			'datapath' => $aTorrent['name'],
 			'is_no_file' => 1,
@@ -194,7 +207,11 @@ if ($cfg["transmission_rpc_enable"]) {
 			'entry' => $aTorrent['name']
 		);
 
-		array_push($arUserTorrent, $tArray);
+		// Method 1 ClientHandler compatible - Method 2 direct by hash (deadeyes)
+		if ($cfg["transmission_rpc_enable"]==1)
+			$arTrUserTorrent[$tArray['url_entry']] = $tArray;
+		elseif ($cfg["transmission_rpc_enable"]==2)
+			$arUserTorrent[$tArray['url_entry']] = $tArray;
 
 		// Adds the transfer rate for this torrent to the total transfer rate
 		if ($transferRunning) {
@@ -202,7 +219,7 @@ if ($cfg["transmission_rpc_enable"]) {
 				$cfg["total_upload"] = 0;
 			if (!isset($cfg["total_download"]))
 				$cfg["total_download"] = 0;
-			$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($aTorrent[rateUpload]/1000);
+			$cfg["total_upload"]   = $cfg["total_upload"] + GetSpeedValue($aTorrent[rateUpload]/1000);
 			$cfg["total_download"] = $cfg["total_download"] + GetSpeedValue($aTorrent[rateDownload]/1000);
 		}
 	}
@@ -290,9 +307,9 @@ foreach ($arList as $mtimecrc => $transfer) {
 		$settingsAry["savepath"] = getTransferSavepath($transfer);
 		$transfers['settings'][$transfer] = $settingsAry;
 	}
-	// Fix FluAzu progression 100% (client to check, not set to "azureus", solved by mysql column enum to varchar ?)
 	if ($settingsAry["client"] == "") {
 
+		// Fix FluAzu progression 100% (client to check, not set to "azureus", solved by mysql column enum to varchar ?)
 		if (!$sf->seedlimit)
 			$sf->seedlimit=$settingsAry["sharekill"];
 
@@ -304,13 +321,19 @@ foreach ($arList as $mtimecrc => $transfer) {
 	} else { // in rpc : realtime for running torrents (downloading & seeding)
 
 		if ($bUseRPC) {
-			
+
+			if ($cfg['transmission_rpc_enable'] == 2 && $settingsAry["client"] == "transmissionrpc") {
+				//skip standard items with deadeyes method
+				continue;
+			}
+
 			switch ($settingsAry["client"]) {
 				
 			case "vuzerpc":
 				if (!empty($vuzeResults)) {
 	
-					$hash = getTransferHash($transfer);
+					//$hash = getTransferHash($transfer);
+					$hash = $settingsAry['hash'];
 					$rpcStat = $vuzeResults[strtoupper($hash)];
 					if (is_array($rpcStat)) {
 
@@ -382,16 +405,41 @@ foreach ($arList as $mtimecrc => $transfer) {
 					}
 				}
 				break;
-			default:
-				//todo transmission compatibility
-			}
-		}
-	}
+
+			case "transmissionrpc":
+			
+				if (!empty($arTrUserTorrent)) {
+					$rpcStat = $arTrUserTorrent[$settingsAry['hash']];
+					$nbRpc++;
+					if (is_array($rpcStat)) {
+						$sf->running      = $rpcStat['transferRunning'];
+						//if ($rpcStat['status'] == 8 || $rpcStat['status'] == 9)
+						//	$sf->running = 1;
+						$sf->rpc_status   = $rpcStat['status'];
+						$sf->seeds        = $rpcStat['seeds'];
+						$sf->peers        = $rpcStat['peers'];
+						$sf->sharing      = $rpcStat['sharing'];
+						$sf->percent_done = $rpcStat['percentage'];
+						if (abs($sf->percent_done) >= 100) {
+							$sf->percent_done = floatval($sf->percent_done) + $sf->sharing;
+						}
+						$sf->up_speed     = $rpcStat['up_speed'];
+						$sf->graph_width  = $rpcStat['graph_width'];
+						$sf->up_speed     = $rpcStat['up_speed'];
+						$sf->time_left    = $rpcStat['estTime'];
+					}
+				}
+				break;
+			} //switch client
+
+		} //bUseRPC
+	} //if client
 
 	// running-flag in local var. we will access that often
 	$transferRunning = (int) $sf->running;
 	// percent-done in local var. ...
 	$percentDone = $sf->percent_done;
+
 	// hide seeding - we do it asap to keep things as fast as possible
 	if (($_SESSION['settings']['index_show_seeding'] == 0) && ($percentDone >= 100) && ($transferRunning == 1)) {
 		$cfg["total_upload"] = $cfg["total_upload"] + GetSpeedValue($sf->up_speed);
@@ -637,13 +685,15 @@ foreach ($arList as $mtimecrc => $transfer) {
 		'show_run' => $show_run,
 		'entry' => $transfer
 	);
-	
-	// Is this transfer for the user list or the general list?
+
+	// Is this transfer for the current user or the general list?
 	if ($owner)
 		array_push($arUserTorrent, $tArray);
 	else
 		array_push($arListTorrent, $tArray);
-}
+
+} //foreach $arList...
+
 $tmpl->setloop('arUserTorrent', $arUserTorrent);
 $tmpl->setloop('arListTorrent', $arListTorrent);
 

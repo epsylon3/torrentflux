@@ -764,7 +764,7 @@ class ClientHandler
 		// get current transfer
 		$transferTotals = $this->getTransferCurrent($this->transfer);
 		//XFER: before a transfer start/restart save upload/download xfer to SQL
-		if ($cfg['enable_xfer'] == 1)
+		if ($cfg['enable_xfer'] == 1 && !empty($transferTotals))
 			Xfer::save($this->owner,($transferTotals["downtotal"]),($transferTotals["uptotal"]));
 		// update totals for this transfer
 		$this->_updateTotals();

@@ -334,8 +334,13 @@ switch ($cmd) {
 
 
 	case 'update':
-	default:
+		if ($cfg['vuze_rpc_enable']==0) {
+			//cron disabled
+			return;
+		}
 		echo $client.": updateStatFiles()\n";
 		updateStatFiles();
+	default:
+		echo "usage : ./vuzerpc_cron.php [update,session,list,down]";
 }
 ?>

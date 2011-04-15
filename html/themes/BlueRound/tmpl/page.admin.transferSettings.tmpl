@@ -234,18 +234,18 @@ B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent M
 <a href="admin.php?op=fluazuSettings">Edit Fluazu Settings</a></p>
 
 <h2>Transmission Daemon (RPC) - Under development</h2>
-<p class="NormalText">New method to use with official Transmission daemon (will disable other clients support)</p>
+<p class="NormalText">New method to use with official Transmission-daemon (will disable other clients support)</p>
 <table id="adminTransferSettings">
 	<tr>
-		<th>Use Transmission Daemon (RPC)<br /><span>Enable/Disable Transmission RPC</span></th>
+		<th>Transmission RPC Method<br /><span>RPC implementation method. This setting will be deleted later.</span></th>
 		<td>
 			<select name="transmission_rpc_enable" id="transmission_rpc_enable">
 				<option value="0" <tmpl_if name="transmission_rpc_enable" value="0"> selected</tmpl_if>>Disabled</option>
-				<option value="1" <tmpl_if name="transmission_rpc_enable" value="1"> selected</tmpl_if>>Enabled</option>
+				<option value="1" <tmpl_if name="transmission_rpc_enable" value="1"> selected</tmpl_if>>Default (like vuze rpc)</option>
+				<option value="2" <tmpl_if name="transmission_rpc_enable" value="2"> selected</tmpl_if>>Mono-Client (deadeyes)</option>
 			</select>
 		</td>
 	</tr>
-	<tmpl_if name="transmission_rpc_enable" value="1">
 	<tr>
 		<th class="alt">Transmission RPC Host<br /><span>IP of transmission-daemon (def. 127.0.0.1)</span></th>
 		<td class="alt">
@@ -270,7 +270,6 @@ B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent M
 			<input name="transmission_rpc_password" id="transmission_rpc_password" type="Text" maxlength="20" value="<tmpl_var name="transmission_rpc_password">" size="10">
 		</td>
 	</tr>
-	</tmpl_if>
 </table>
 
 <div class="ui-state-highlight ui-corner-all" style="margin-top: 4px; padding: 0 .7em; width: 778px;">
