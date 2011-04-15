@@ -319,6 +319,64 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		print_r($retAry);
 		return $retAry;
 	}
+
+	/**
+	 * gets current status of one Transfer (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorTransfer($transfer) {
+		//by default, monitoring not available.
+
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+
+		if (!isHash($transfer))
+			$hash = getTransferHash($transfer);
+
+		if (empty($hash)) {
+			return "Hash for $transfer was not found";
+		}
+
+		$stat = getTransmissionTransfer($hash);
+		if (is_array($stat)) {
+			return $stat;
+		} else {
+			$rpc = Transmission::getInstance();
+			return $rpc->lastError;
+		}
+	}
+
+	/**
+	 * gets current status of all Transfers (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorAllTransfers() {
+		//by default, monitoring not available.
+		$rpc = Transmission::getInstance();
+
+		return getUserTransmissionTransfers();
+	}
+
+	/**
+	 * gets current status of all Running Transfers (realtime)
+	 * for transferStat popup
+	 *
+	 * @return array (stat) or Error String
+	 */
+	function monitorRunningTransfers() {
+		//by default, monitoring not available.
+		$aTorrent = getUserTransmissionTransfers();
+
+		$stat=array();
+		foreach ($result as $aTorrent) {
+			if ( $aTorrent['status']==4 || $aTorrent['status']==8 ) $stat[]=$aTorrent;
+		}
+		return $stat;
+	}
 }
 
 ?>
