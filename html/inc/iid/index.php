@@ -217,6 +217,7 @@ if ($cfg["transmission_rpc_enable"]) {
 			
 			// Method 2 direct by hash (to be deleted) - not multiuser
 			$tArray = array_merge($tArray, array(
+				'is_rpc' => 1,
 				'hd_title' => $nothing,
 				'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
 	//			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : '' ),
@@ -697,6 +698,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 	// create temp-array
 	$tArray = array(
 		'is_owner' => ($cfg['isAdmin']) ? true : $owner,
+		'is_rpc' => (int) $bUseRPC,
 		'transferRunning' => $transferRunning,
 		'url_entry' => urlencode($transfer),
 		'hd_image' => $hd->image,

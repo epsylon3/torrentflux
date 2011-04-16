@@ -156,7 +156,16 @@ Your Transfers
 				<a href="dispatcher.php?action=stop&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionClick(true,'Stopping Transfer')">
 					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/trans_stop.png" title="<tmpl_var name="_STOPTRANSFER">" alt="" />
 				</a>
-				<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" alt="" />
+				<tmpl_if name="is_rpc" value="1">
+					<tmpl_if name="transfer_delete_data">
+					<a href="dispatcher.php?action=deleteWithData&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Delete <tmpl_var name="entry"> (and data) ?','Deleting Transfer')">
+					<tmpl_else>
+					<a href="dispatcher.php?action=delete&amp;transfer=<tmpl_var name="url_entry">" onclick="return actionConfirm('Remove <tmpl_var name="entry"> (keep data) ?','Removing Transfer')">
+					</tmpl_if>
+					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_on.png" title="<tmpl_var name="_DELETE">" alt="" /></a>
+				<tmpl_else>
+					<img src="themes/<tmpl_var name="theme">/images/index/TransferList/delete_off.png" alt="" />
+				</tmpl_if>
 				<tmpl_if name="enable_metafile_download"><!-- DOWNLOAD META FILE IF ENABLED -->
 					<a href="dispatcher.php?action=metafileDownload&amp;transfer=<tmpl_var name="url_entry">">
 						<img src="themes/<tmpl_var name="theme">/images/index/TransferList/download_meta.png" alt="" title="Download Metafile" />
