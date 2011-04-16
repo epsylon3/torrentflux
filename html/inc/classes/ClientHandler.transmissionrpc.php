@@ -624,10 +624,10 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 
 		$rpc = Transmission::getInstance();
 		if (is_array($stat_rpc)) {
-			$stat_tf = $rpc->rpc_to_tf($stat_rpc);
+			//$stat_tf = $rpc->rpc_to_tf($stat_rpc);
 			//merge array with tf compatible format
-			$stat_tf = array_merge($stat_rpc, $stat_tf);
-			return $stat_tf; 
+			//$stat_tf = array_merge($stat_tf, $stat_rpc);
+			return $stat_rpc; 
 		} else {
 			return $rpc->lastError;
 		}

@@ -74,7 +74,7 @@ function updateStatFiles($bShowMissing=false) {
 	$hashes=array();
 	$sharekills=array();
 	while (list($hash, $transfer, $sharekill) = $recordset->FetchRow()) {
-		$hash = strtoupper($hash);
+		$hash = strtolower($hash);
 		$hashes[$hash] = $transfer;
 		$sharekills[$hash] = $sharekill;
 	}
@@ -90,7 +90,7 @@ function updateStatFiles($bShowMissing=false) {
 		if (($t['status']==8 || $t['status']==9) && ($t['sharing']*100) > $sharekills[$hash]) {
 			$transfer = $hashes[$hash];
 			$nbUpdate++;
-			if (stopTransmissionTransfer($hash)) {
+			if (stopTransmissionTransferCron($hash)) {
 				AuditAction($cfg["constants"]["debug"], $client.": stop error $transfer.");
 			} else {
 				AuditAction($cfg["constants"]["stop_transfer"], $this->client."-stat. : sharekill stopped $transfer");
@@ -300,9 +300,13 @@ switch ($cmd) {
 
 	// torrent missing in torrentflux
 	case 'missing':
-		echo "Not in TorrentFlux:\n ";
 		$missing = updateStatFiles($bShowMissing=true);
-		print_r($missing);
+		if (!empty(missing)) {
+			echo "Not in TorrentFlux:\n ";
+			print_r($missing);
+		} else {
+			echo "No missing Torrents\n ";
+		}
 		if (!empty($rpc->lastError)) {
 			echo $rpc->lastError."\n";
 		}

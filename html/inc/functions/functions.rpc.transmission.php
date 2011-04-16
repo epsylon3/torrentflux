@@ -225,6 +225,24 @@ function stopTransmissionTransfer($hash) {
 }
 
 /**
+ * This method stops the Transmission transfer with the matching hash
+ *
+ * @return boolean
+ */
+function stopTransmissionTransferCron($hash) {
+	require_once('inc/classes/Transmission.class.php');
+	$rpc = Transmission::getInstance();
+
+	$transmissionId = getTransmissionTransferIdByHash($hash);
+	$response = $rpc->stop($transmissionId);
+	if ( $response['result'] != "success" ) {
+		echo("Stop failed :". $response['result']);
+		return false;
+	}
+	return true;
+}
+
+/**
  * This method deletes the Transmission transfer with the matching hash, without removing the data
  *
  * @return void
