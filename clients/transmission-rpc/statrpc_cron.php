@@ -301,11 +301,11 @@ switch ($cmd) {
 	// torrent missing in torrentflux
 	case 'missing':
 		$missing = updateStatFiles($bShowMissing=true);
-		if (!empty(missing)) {
-			echo "Not in TorrentFlux:\n ";
+		if (!empty($missing)) {
+			echo "Not in TorrentFlux:\n";
 			print_r($missing);
 		} else {
-			echo "No missing Torrents\n ";
+			echo "No missing Torrents\n";
 		}
 		if (!empty($rpc->lastError)) {
 			echo $rpc->lastError."\n";
