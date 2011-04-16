@@ -1,10 +1,8 @@
 <?php
-
-/* $Id$ */
-
 /*******************************************************************************
-
- LICENSE
+ $Id$
+ @package Transmission
+ @licence http://www.gnu.org/copyleft/gpl.html
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License (GPL)
@@ -15,8 +13,6 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
-
- To read the license please visit http://www.gnu.org/copyleft/gpl.html
 
 *******************************************************************************/
 
@@ -36,16 +32,16 @@ function rpc_error($errorstr,$dummy="",$dummy="",$response="") {
  * @return array or false
  */
 function getTransmissionTransfer($transfer, $fields=array() ) {
-	//$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
-	//			"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats" )
+	//$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone",
+	//			"metadataPercentComplete", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadedEver" )
 	$required = array('hashString');
 	$afields = array_merge($required, $fields);
-	
+
 	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
-	$response = $trans->get(array(), $afields);
+	$rpc = Transmission::getInstance();
+	$response = $rpc->get(array(), $afields);
 	$torrentlist = $response['arguments']['torrents'];
-	
+
 	if (!empty($torrentlist)) {
 		foreach ($torrentlist as $aTorrent) {
 			if ( $aTorrent['hashString'] == $transfer )
@@ -63,10 +59,10 @@ function getTransmissionTransfer($transfer, $fields=array() ) {
  **/
 function setTransmissionTransferProperties($transfer, $fields=array()) {
 	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
+	$rpc = Transmission::getInstance();
 	$transferId = getTransmissionTransferIdByHash($transfer);
-	
-	$response = $trans->set($transferId, $fields);
+
+	$response = $rpc->set($transferId, $fields);
 	if ( $response['result'] !== 'success' )
 		rpc_error("Setting transfer properties failed", "", "", $response['result']);
 }
@@ -120,13 +116,29 @@ function getRunningTransmissionTransferCount() {
  * @return array with uid and transmission transfer hash
  */
 function getUserTransmissionTransferArrayFromDB($uid = 0) {
-	global $db;
+	global $cfg,$db;
+
 	$retVal = array();
-	$sql = "SELECT tid FROM tf_transmission_user" . ($uid!=0 ? ' WHERE uid=' . $uid : '' );
-	$recordset = $db->Execute($sql);
-	if ($db->ErrorNo() != 0) dbError($sql);
-	while(list($transfer) = $recordset->FetchRow())
-		array_push($retVal, $transfer);
+
+	if ($cfg["transmission_rpc_enable"] == 2) {
+		$sql = "SELECT tid FROM tf_transmission_user" . ($uid!=0 ? ' WHERE uid=' . $uid : '' );
+		$recordset = $db->Execute($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);
+		while(list($transfer) = $recordset->FetchRow())
+			$retVal[$transfer]=$transfer;
+	}
+
+	if ($cfg["transmission_rpc_enable"] == 1) {
+		$sql = "SELECT T.hash, T.transfer FROM tf_transfers T"
+		      ." LEFT JOIN tf_transfer_totals TT ON (TT.tid = T.hash)"
+		      ." WHERE T.type='torrent' AND T.client='transmissionrpc'"
+		      . ($uid!=0 ? ' AND TT.uid=' . $uid : '' );
+		$recordset = $db->Execute($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);
+		while(list($hash, $transfer) = $recordset->FetchRow())
+			$retVal[$hash]=$transfer;
+	}
+
 	return $retVal;
 }
 
@@ -152,7 +164,7 @@ function isValidTransmissionTransfer($uid = 0,$tid) {
 
 /**
  * This method returns the owner name of a certain transmission transfer
- * 
+ *
  * @return string with owner of transmission transfer
  */
 function getTransmissionTransferOwner($transfer) {
@@ -173,14 +185,15 @@ function getTransmissionTransferOwner($transfer) {
  *
  * @return void
  */
-function startTransmissionTransfer($hash,$startPaused=false) {
+function startTransmissionTransfer($hash,$startPaused=false,$params=array()) {
 	global $cfg;
 	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
+	$rpc = Transmission::getInstance();
 
 	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
-		$response = $trans->start($transmissionId);
+		$response = $rpc->set($transmissionId, array_merge(array("seedRatioMode" => 1), $params) );
+		$response = $rpc->start($transmissionId);
 		if ( $response['result'] != "success" ) {
 			rpc_error("Start failed", "", "", $response['result']);
 			return false;
@@ -200,11 +213,11 @@ function startTransmissionTransfer($hash,$startPaused=false) {
 function stopTransmissionTransfer($hash) {
 	global $cfg;
 	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
+	$rpc = Transmission::getInstance();
 
 	if ( isValidTransmissionTransfer($cfg['uid'],$hash) ) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
-		$response = $trans->stop($transmissionId);
+		$response = $rpc->stop($transmissionId);
 		if ( $response['result'] != "success" ) rpc_error("Stop failed", "", "", $response['result']);
 		return true;
 	}
@@ -219,11 +232,11 @@ function stopTransmissionTransfer($hash) {
  */
 function deleteTransmissionTransfer($uid, $hash, $deleteData = false) {
 	require_once('inc/classes/Transmission.class.php');
-	$trans = new Transmission();
+	$rpc = Transmission::getInstance();
 
 	if ( isValidTransmissionTransfer($uid, $hash) ) {
 		$transmissionId = getTransmissionTransferIdByHash($hash);
-		$response = $trans->remove($transmissionId,$deleteData);
+		$response = $rpc->remove($transmissionId,$deleteData);
 		if ( $response['result'] != "success" )
 			rpc_error("Delete failed", "", "", $response['result']);
 	}
@@ -249,8 +262,8 @@ function deleteTransmissionTransferWithData($uid, $hash) {
 function getTransmissionTransferIdByHash($hash) {
 	require_once('inc/classes/Transmission.class.php');
 	$transmissionTransferId = false;
-	$trans = new Transmission();
-	$response = $trans->get(array(), array('id','hashString'));
+	$rpc = Transmission::getInstance();
+	$response = $rpc->get(array(), array('id','hashString'));
 	if ( $response['result'] != "success" ) rpc_error("Getting ID for Hash failed: ".$response['result']);
 	$torrentlist = $response['arguments']['torrents'];
 	foreach ($torrentlist as $aTorrent) {
@@ -305,7 +318,7 @@ function addTransmissionTransfer($uid = 0, $url, $path, $paused=true) {
 	// $path holds the download path
 
 	require_once('inc/classes/Transmission.class.php');
-	$rpc = new Transmission();
+	$rpc = Transmission::getInstance();
 
 	$result = $rpc->add( $url, $path, array ('paused' => $paused)  );
 	if($result["result"]!=="success") {
@@ -316,7 +329,9 @@ function addTransmissionTransfer($uid = 0, $url, $path, $paused=true) {
 	$hash = $result['arguments']['torrent-added']['hashString'];
 	//rpc_error("The hash is: $hash. The uid is $uid"); exit();
 
-	addTransmissionTransferToDB($uid, $hash);
+	if (isHash($hash))
+		addTransmissionTransferToDB($uid, $hash);
+
 	return $hash;
 }
 
@@ -333,10 +348,16 @@ function getUserTransmissionTransfers($uid = 0) {
 	}
 
 	require_once('inc/classes/Transmission.class.php');
-	$rpc = new Transmission ();
+	$rpc = Transmission::getInstance();
+
 	// https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt
-	$fields = array ( "name", "id", "hashString", "eta", "downloadedEver", "fileStats", "totalSize", "percentDone", "metadataPercentComplete", "peersConnected", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadLimit", "uploadRatio");
-	$result = $rpc->get ( array(), $fields );
+	$fields = array (
+	"name", "id", "hashString", "eta", "fileStats", "totalSize", "percentDone", "metadataPercentComplete",
+	"peersConnected", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadLimit", "uploadRatio",
+	"downloadedEver", "uploadedEver"
+	);
+
+	$result = $rpc->get( array(), $fields );
 
 	if ($result['result']!=="success") rpc_error("Transmission RPC could not get transfers : ".$result['result']);
 	foreach ( $result['arguments']['torrents'] as $transfer ) {
@@ -353,12 +374,12 @@ function getTransmissionStatusImage($running, $seederCount, $uploadRate){
 	$statusImage = "black.gif";
 	if ($running) {
 		// running
-				if ($seederCount < 2)
-						$statusImage = "yellow.gif";
-				if ($seederCount == 0)
-						$statusImage = "red.gif";
-				if ($seederCount >= 2)
-						$statusImage = "green.gif";
+		if ($seederCount < 2)
+				$statusImage = "yellow.gif";
+		if ($seederCount == 0)
+				$statusImage = "red.gif";
+		if ($seederCount >= 2)
+				$statusImage = "green.gif";
 	}
 	if ( floor($aTorrent[percentDone]*100) >= 100 ) {
 		$statusImage = ( $uploadRate != 0 && $running )
@@ -386,4 +407,60 @@ function getTransmissionTrackerStats($transfer) {
 	else
 		return array();
 }
+
+/**
+ * get Default ShareKill value
+ *
+ * @return int
+ */
+function getTransmissionShareKill($usecache=false) {
+	require_once('inc/classes/Transmission.class.php');
+	$rpc = Transmission::getInstance();
+
+	$req = $rpc->session_get('seedRatioLimit');
+	if (is_array($req) && isset($req['arguments']['seedRatioLimit'])) {
+		return round($req['arguments']['seedRatioLimit'] * 100.0);
+	}
+
+	return 0;
+}
+
+/**
+ * get Global Speed Limit Upload
+ *
+ * @return int
+ */
+function getTransmissionSpeedLimitUpload($usecache=false) {
+	require_once('inc/classes/Transmission.class.php');
+	$rpc = Transmission::getInstance();
+
+	$key = 'speed-limit-up'; //"speed-limit-up-enabled"
+
+	$req = $rpc->session_get($key);
+	if (is_array($req) && isset($req['arguments'][$key])) {
+		return (int) $req['arguments'][$key];
+	}
+
+	return 0;
+}
+
+/**
+ * get Vuze Global Speed Limit Download
+ *
+ * @return int
+ */
+function getTransmissionSpeedLimitDownload($usecache=false) {
+	require_once('inc/classes/Transmission.class.php');
+	$rpc = Transmission::getInstance();
+
+	$key = 'speed-limit-down'; //"speed-limit-down-enabled"
+
+	$req = $rpc->session_get($key);
+	if (is_array($req) && isset($req['arguments'][$key])) {
+		return (int) $req['arguments'][$key];
+	}
+
+	return 0;
+}
+
 ?>

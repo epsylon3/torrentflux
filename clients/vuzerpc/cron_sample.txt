@@ -1,0 +1,10 @@
+# sample cron script to put in /etc/cron.d/
+
+# sample cron to fix downloads group (if needed for ftp access) every 3 hours
+# 9 */3 * * *     root /bin/chmod -R g+rw /home/data/torrentflux >/dev/null
+# 19 */3 * * *     root /bin/chgrp -R epsylon3 /home/data/torrentflux/epsylon3 >/dev/null
+
+# update vuze rpc (sharekill and update stats) every minute
+*/1 * * * *     www-data cd /var/git/torrentflux/clients/vuzerpc ;./vuzerpc_cron.php update
+
+

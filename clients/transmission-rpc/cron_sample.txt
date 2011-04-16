@@ -4,7 +4,7 @@
 # 9 */3 * * *     root /bin/chmod -R g+rw /home/data/torrentflux >/dev/null
 # 19 */3 * * *     root /bin/chgrp -R epsylon3 /home/data/torrentflux/epsylon3 >/dev/null
 
-# update vuze rpc (sharekill and update stats) every minite
-*/1 * * * *     www-data cd /var/git/torrentflux/clients/vuzerpc ;./vuzerpc_cron.php update
+# update transmission-rpc rpc (sharekill and update stats) every minute
+*/1 * * * *     www-data cd /var/git/torrentflux/clients/transmission-rpc ;./statrpc_cron.php update
 
 

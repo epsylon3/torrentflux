@@ -1,7 +1,8 @@
 <?php
 /**
  * Transmission bittorrent client communication class
- * Copyright (C) 2010 Johan Adriaans <johan.adriaans@gmail.com>
+ * @copyright Copyright (C) 2010 Johan Adriaans <johan.adriaans@gmail.com>
+ * @package Transmission
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +21,12 @@
 /**
  * Transmission RPC class for transmission-deamon (not patched one)
  *
+ * @author <johan.adriaans@gmail.com>
+ * @author <tanguy.pruvot@gmail.com>
+ *
  * Usage example:
  * <?php
- *   $rpc = new Transmission();
+ *   $rpc = Transmission::getInstance();
  *   $result = $rpc->add( $url_or_path_to_torrent, $target_folder );
  * ?>
  *
@@ -64,6 +68,12 @@ class Transmission
 	 * @var string
 	 */
 	public $lastError = '';
+	
+	/**
+	 * Torrents cache
+	 * @var array
+	 */
+	public $torrents = array();
 	
 	/*
 	 * Constructor
@@ -180,8 +190,8 @@ class Transmission
 	 *   "uploadLimited"       | boolean    true if "uploadLimit" is honored
 	 * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for more information
 	 *
-	 * @param array arguments An associative array of arguments to set
-	 * @param int|array ids A list of transmission torrent ids
+	 * @param ids int|array ids A list of transmission torrent ids
+	 * @param arguments array arguments An associative array of arguments to set
 	 */
 	public function set( $ids = array(), $arguments = array() )
 	{
@@ -384,14 +394,30 @@ class Transmission
 		}
 		return $response; 
 	}
-	
+
+	/*
+	 * get session variable
+	 */
 	public function session_get() {
 		$req = $this->request('session-get');
 		$this->session = $req;
 		return $this->session;
 	}
-	
-	//Transmission::getInstance()
+
+	/*
+	 * set session variables
+	 * @param arguments array associative
+	 */
+	public function session_set($arguments) {
+		if( !is_array($arguments) ) $arguments = array();
+		$response = $this->request('session-set',$arguments);
+		return $response;
+	}
+
+	/*
+	 * Static return Transmission Instance
+	 * @return object
+	 */
 	public function getInstance() {
 		global $Transmission_inst;
 		if (!is_object($Transmission_inst)) {
@@ -401,12 +427,184 @@ class Transmission
 		return $Transmission_inst;
 	}
 	
-	//Transmission::isRunning()
+	/*
+	 * Static Transmission::isRunning()
+	 * @return boolean
+	 */
 	public function isRunning() {
 		$instance = Transmission::getInstance();
 		$session = $instance->session_get();
-		//var_dump($session); die();
 		return  (isset($session['result']) && $session['result'] == 'success');
+	}
+
+	/*
+	 * Convert RPC Status to TorrentFlux running
+	 */
+	public function status_to_tf($status) {
+		// 1 - waiting to verify
+		// 2 - verifying
+		// 4 - downloading
+		// 5 - queued (incomplete)
+		// 8 - seeding
+		// 9 - queued (complete)
+		// 16 - paused
+		switch ((int) $status) {
+			case 1:
+			case 2:
+			case 4:
+			case 5:
+				$tfstatus=1;
+				break;
+			case 8:
+			case 9:
+				$tfstatus=1;
+				break;
+			case 0:
+			case 16:
+			default:
+				$tfstatus=0;
+		};
+		//0: Stopped
+		//1: Running
+		//2: New
+		//3: Queued (Qmgr)
+		return $tfstatus;
+	}
+
+	/*
+	 * RPC Struct to TorrentFlux Names
+	 * @param array : stat single torrent rpc data array
+	 * @return array
+	*/
+	public function rpc_to_tf($stat) {
+		
+		if ($stat['uploadRatio'] == -1)
+			$stat['uploadRatio'] = 0;
+
+		$tfStat = array(
+			'rpcid' => $stat['id'],
+			'name' => $stat['name'],
+			
+			'running' => $this->status_to_tf($stat['status']), 
+			'speedDown' => (int) $stat['rateDownload'],
+			'speedUp' => (int) $stat['rateUpload'],
+			
+			'percentDone' => (float) $stat['percentDone']*100.0, 
+			'sharing' => (float) $stat['uploadRatio']*100.0, 
+			
+			'downTotal' => (float) $stat['downloadedEver'], 
+			'upTotal' => (float) $stat['uploadedEver'], 
+			
+			'eta' => $stat['eta'], 
+			
+			'seeds' => $stat['peersSendingToUs'], 
+			'peers' => $stat['peersGettingFromUs'], 
+			'cons' => $stat['peersConnected'], 
+			
+			'size' => (float) $stat['totalSize'], 
+			'status' => $stat['status'], 
+			
+			"error" => $stat['error'],
+			"errorString" => $stat['errorString'],
+			'downloadDir' => $stat['downloadDir'],
+			
+			'drate' => $stat['downloadLimit'],
+			'urate' => $stat['uploadLimit'],  
+			
+			'seedRatioLimit' => round($stat['seedRatioLimit']*100, 2),
+			'seedRatioMode' => $stat['seedRatioMode']
+		);
+
+		return $tfStat;
+	}
+
+	/*
+	 * Get all torrents in torrentflux compatible format
+	 * @param array ids
+	 * @return array
+	*/
+	public function torrent_get_tf_array($ids=array()) {
+
+		$this->torrents = array();
+		
+		// available fields :
+		// https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt
+		$fields = array(
+			'id',
+			'name',
+			'status',
+			'hashString',
+			'totalSize',
+			'downloadedEver','uploadedEver',
+			'downloadLimit','uploadLimit',
+			'downloadLimited','uploadLimited',
+			"rateDownload", "rateUpload",
+			'peersConnected', 'peersGettingFromUs', 'peersSendingToUs',
+			'percentDone','uploadRatio',
+			'seedRatioLimit','seedRatioMode',
+			'downloadDir',
+			'eta',
+			'error', 'errorString'
+		);
+
+		$req = $this->get($ids, $fields);
+		if ($req && $req['result'] == 'success') {
+			$torrents = (array) $req['arguments']['torrents'];
+
+			foreach($torrents as $t) {
+				$this->torrents[$t['hashString']] = $this->rpc_to_tf($t);
+			}
+		}
+
+		return $this->torrents;
+	}
+
+	/*
+	 * Get all torrents in torrentflux compatible format (shell)
+	 * @param array ids
+	 * @return array
+	*/
+	public function torrent_get_tf($ids=array()) {
+		return $this->torrent_get_tf_array($ids);
+	}
+
+	/*
+	 * Filter torrents (torrentflux compatible format)
+	 * @param array filter
+	 * @return array
+	*/
+	public function torrent_filter_tf($filter = NULL) {
+		if (is_null($filter))
+			$filter = $this->filter;
+		if (empty($filter))
+			return;
+
+		$torrents = array();
+		foreach ($this->torrents as $name => $tfstat) {
+
+			$bDrop = false;
+			if (isset($filter['running'])) {
+				$bDrop = ($tfstat['running'] != $filter['running']);
+			}
+			if (isset($filter['status'])) {
+				$bDrop = ($tfstat['status'] != $filter['status']);
+			}
+			if (isset($filter['speedUp'])) {
+				$bDrop = ($tfstat['speedUp'] == 0);
+			}
+			if (isset($filter['speedDown'])) {
+				$bDrop = ($tfstat['speedDown'] == 0);
+			}
+			if (isset($filter['speed'])) {
+				$bDrop = ($tfstat['speedUp'] == 0 && $tfstat['speedDown'] == 0);
+			}
+
+			if (!$bDrop) {
+				$torrents[$name] = $tfstat;
+			}
+		}
+
+		return $torrents;
 	}
 }
 

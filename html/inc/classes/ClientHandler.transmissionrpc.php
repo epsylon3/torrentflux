@@ -149,7 +149,18 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			$sql = "INSERT INTO tf_transfer_totals (tid,uid) VALUES (".$db->qstr($hash).", $uid)";
 			$result = $db->Execute($sql);
 */
-			$res = (int) startTransmissionTransfer($hash, $enqueue);
+			//Sharekill 2.5 = 250%
+			if ($this->sharekill > 100) 
+				$this->sharekill = $this->sharekill / 100;
+
+			$params = array(
+			'seedRatioLimit' => $this->sharekill,
+			'seedRatioMode' => intval($this->sharekill != 0)
+			);
+			$res = (int) startTransmissionTransfer($hash, $enqueue, $params);
+		}
+		if ($res) {
+			//...
 		}
 
 		$this->updateStatFiles($transfer);
@@ -189,14 +200,14 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			return true;
 		}
 
+		$this->updateStatFiles($transfer); //update before stopping
+
 		if (!stopTransmissionTransfer($hash)) {
 			$rpc = Transmission::getInstance();
 			$msg = $transfer." :". $rpc->lastError;
 			$this->logMessage($msg."\n", true);
 			AuditAction($cfg["constants"]["debug"], $this->client."-stop : error $msg.");
 		}
-
-		$this->updateStatFiles($transfer);
 
 		// delete .pid
 		$this->_stop($kill, $transferPid);
@@ -293,30 +304,6 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	}
 
 	/**
-	 * set upload rate of a transfer
-	 *
-	 * @param $transfer
-	 * @param $uprate
-	 * @param $autosend
-	 */
-	function setRateUpload($transfer, $uprate, $autosend = false) {
-		// set rate-field
-		$this->rate = $uprate;
-	}
-
-	/**
-	 * set download rate of a transfer
-	 *
-	 * @param $transfer
-	 * @param $downrate
-	 * @param $autosend
-	 */
-	function setRateDownload($transfer, $downrate, $autosend = false) {
-		// set rate-field
-		$this->drate = $downrate;
-	}
-
-	/**
 	 * set runtime of a transfer
 	 *
 	 * @param $transfer
@@ -332,18 +319,129 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	}
 
 	/**
+	 * set upload rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $uprate int
+	 * @param $autosend
+	 */
+	function setRateUpload($transfer, $uprate, $autosend = false) {
+		global $cfg;
+		// set rate-field
+		$this->rate = (int) $uprate;
+
+		$result = true;
+		
+		$msg = "$uprate autosend=".serialize($autosend);
+		if ($autosend) {
+			$rpc = Transmission::getInstance();
+
+			if (isHash($transfer))
+				$hash = $transfer;
+			else
+				$hash = getTransferHash($transfer);
+				
+			$tid = getTransmissionTransferIdByHash($hash);
+			if ($tid > 0) {
+				$byterate = 1024 * $this->rate;
+				$req = $rpc->set($tid, array('uploadLimit' => $this->rate, 'uploadLimited' => 1) );
+				if (!isset($req['result']) || $req['result'] != 'success') {
+					$msg = $req['result'];
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->get(array($tid),array('uploadLimit'));
+					if (!isset($req['result']) || $req['result'] != 'success') {
+						$msg = $req['result'];
+						$result = false;
+					} elseif (!empty($req['arguments']['torrents'])) {
+						$torrent = array_pop($req['arguments']['torrents']);
+						if ($torrent['speedLimitUpload'] != $byterate) {
+							$msg = "byterate not set correctly =".$torrent['speedLimitUpload'];
+							//$req = $rpc->session_set('speed-limit-up', $byterate);
+						}
+					}
+				}
+			} else
+				$msg = "bad tid $hash $transfer ".$req['result'];
+			
+			$this->logMessage("setRateUpload : ".$msg."\n", true);
+		}
+		AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
+		return $result;
+	}
+
+	/**
+	 * set download rate of a transfer
+	 *
+	 * @param $transfer
+	 * @param $downrate
+	 * @param $autosend
+	 */
+	function setRateDownload($transfer, $downrate, $autosend = false) {
+		// set rate-field
+		$this->drate = $downrate;
+		
+		// todo..
+	}
+
+	/**
 	 * set sharekill of a transfer
 	 *
 	 * @param $transfer
-	 * @param $sharekill
+	 * @param $sharekill numeric (100 = 100%)
 	 * @param $autosend
 	 * @return boolean
 	 */
 	function setSharekill($transfer, $sharekill, $autosend = false) {
 		// set sharekill
-		$this->sharekill = $sharekill;
-		// return
-		return true;
+		$this->sharekill = round(floatval($sharekill) / 100, 2);
+		
+		$result = true;
+		
+		$msg = "$sharekill, autosend=".serialize($autosend);
+		if ($autosend) {
+			$rpc = Transmission::getInstance();
+
+			if (isHash($transfer))
+				$hash = $transfer;
+			else
+				$hash = getTransferHash($transfer);
+
+			$tid = getTransmissionTransferIdByHash($hash);
+			if ($tid > 0) {
+				$req = $rpc->set($tid, array('seedRatioLimit' => $this->sharekill, 'seedRatioMode' => 1) );
+				if (!isset($req['result']) || $req['result'] != 'success') {
+					$msg = $req['result'];
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->get($tid,array('seedRatioLimit'));
+					if (!isset($req['result']) || $req['result'] != 'success') {
+						$msg = $req['result'];
+						$result = false;
+					} elseif (!empty($req['arguments']['torrents'])) {
+						$torrent = array_pop($req['arguments']['torrents']);
+						if (round($torrent['seedRatioLimit'],2) != round($this->sharekill,2)) {
+							// $msg = "sharekill not set correctly ".serialize($torrent->seedRatioLimit);
+							//if fact, we always need to set it globally (vuze limitation)
+							if (getTransmissionShareKill() < (int) $sharekill) {
+								$msg = "sharekill set by session ".round($this->sharekill,2);
+								$req = $rpc->session_set(array('seedRatioLimit' => $this->sharekill));
+							}
+						}
+					}
+				}
+			} else
+				$msg = "bad tid $hash $transfer ".$req['result'];
+			
+			$this->logMessage("setSharekill : ".$msg."\n", true);
+		}
+		global $cfg;
+		if ($cfg['debuglevel'] > 0) {
+			AuditAction($cfg["constants"]["debug"], $this->client."-setSharekill : $msg.");
+		}
+		return $result;
 	}
 
 	/**
@@ -387,6 +485,68 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	function updateStatFiles($transfer="") {
 		global $cfg, $db;
 		
+		//$rpc = Transmission::getInstance();
+		$tfs = $this->monitorRunningTransfers();
+		if (!is_array($tfs)) {
+			return false;
+		}
+
+		$sql = "SELECT hash, transfer, sharekill FROM tf_transfers WHERE type='torrent' AND client = 'transmissionrpc'";
+
+		if ($transfer != "") {
+			//only update one transfer...
+			$sql .= " AND transfer=".$db->qstr($transfer);
+		} else {
+			$hashes = array("''");
+			foreach ($tfs as $hash => $t) {
+				$hashes[] = "'".strtolower($hash)."'";
+			}
+			$sql .= " AND hash IN (".implode(',',$hashes).")";
+		}
+
+		$recordset = $db->Execute($sql);
+
+		while (list($hash, $transfer, $sharekill) = $recordset->FetchRow()) {
+			$hash = strtolower($hash);
+			$hashes[$hash] = $transfer;
+			$sharekills[$hash] = $sharekill;
+		}
+
+		//convertTimeText
+		require_once("inc/functions/functions.core.php");
+		foreach ($tfs as $hash => $t) {
+			if (!isset($hashes[$hash]))
+				continue;
+			
+			$transfer = $hashes[$hash];
+			$sf = new StatFile($transfer);
+			
+			$sf->running = Transmission::status_to_tf($t['status']);
+			$sf->percent_done = round($t['percentDone']*100,2);
+			if ($t['status']==8 || $t['status']==9) {
+				$sf->sharing = round($t['uploadRatio']*100,2);
+			}
+			
+			$sf->downtotal = $t['downloadedEver'];
+			$sf->uptotal = $t['uploadedEver'];
+			
+			$sf->write();
+		}
+
+		//SHAREKILLS Checks
+
+		foreach ($tfs as $hash => $t) {
+			if (!isset($sharekills[$hash]))
+				continue;
+			if (($t['status']==8 || $t['status']==9) && ($t['uploadRatio']*100) > $sharekills[$hash]) {
+				$transfer = $hashes[$hash];
+				if (stopTransmissionTransfer($hash)) {
+					AuditAction($cfg["constants"]["stop_transfer"], $this->client."-stat. : sharekill stopped $transfer");
+					stopTransferSettings($transfer);
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -408,8 +568,17 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			return "Hash for $transfer was not found";
 		}
 
-		$fields = array("id", "name", "eta", "downloadedEver", "hashString", "fileStats", "totalSize", "percentDone", 
-						"metadataPercentComplete", "peersConnected", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadLimit", "uploadRatio"  );
+		$fields = array(
+			"id", "name", "status", "hashString", "totalSize", "downloadedEver", "uploadedEver", 
+			"percentDone", "uploadRatio", 
+			"metadataPercentComplete", "peersConnected", 'peersGettingFromUs', 'peersSendingToUs',
+			"rateDownload", "rateUpload", 
+			"uploadLimit", 
+			'seedRatioLimit','seedRatioMode',
+			"files", "fileStats", "trackerStats",
+			'downloadDir',"eta",
+			'error', 'errorString'
+		);
 
 		$stat = getTransmissionTransfer($hash, $fields);
 		if (is_array($stat)) {
@@ -442,8 +611,8 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		$aTorrent = getUserTransmissionTransfers();
 
 		$stat=array();
-		foreach ($result as $aTorrent) {
-			if ( $aTorrent['status']==4 || $aTorrent['status']==8 ) $stat[]=$aTorrent;
+		foreach ($aTorrent as $t) {
+			if ( $t['status']==4 || $t['status']==8 ) $stat[$t['hashString']]=$t;
 		}
 		return $stat;
 	}
