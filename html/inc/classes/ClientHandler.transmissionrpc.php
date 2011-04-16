@@ -252,7 +252,25 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	 */
 	function getTransferCurrent($transfer) {
 		global $db, $transfers;
+		// set vars
+		$this->_setVarsForTransfer($transfer);
+		
 		$retVal = array();
+		// transfer from stat-file
+		$sf = new StatFile($transfer);
+		$retVal["uptotal"] = $sf->uptotal;
+		$retVal["downtotal"] = $sf->downtotal;
+		// transfer from db
+		$torrentId = getTransferHash($transfer);
+		$uid = (int) GetUID($this->owner);
+		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId)." AND uid=$uid";
+		$result = $db->Execute($sql);
+		$row = $result->FetchRow();
+		if (!empty($row)) {
+			// to check
+			//$retVal["uptotal"] -= $row["uptotal"];
+			//$retVal["downtotal"] -= $row["downtotal"];
+		}
 		return $retVal;
 	}
 

@@ -267,7 +267,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		// transfer from db
 		$torrentId = getTransferHash($transfer);
 		$uid = (int) GetUID($this->owner);
-		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId)." AND uid=$uid ORDER BY uid DESC";
+		$sql = "SELECT uptotal,downtotal FROM tf_transfer_totals WHERE tid = ".$db->qstr($torrentId)." AND uid=$uid";
 		$result = $db->Execute($sql);
 		$row = $result->FetchRow();
 		if (!empty($row)) {

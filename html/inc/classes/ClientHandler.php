@@ -923,7 +923,9 @@ class ClientHandler
 			// XFER: before deletion save upload/download xfer data to SQL
 			if ($cfg['enable_xfer'] == 1) {
 				$transferTotals = $this->getTransferCurrent($this->transfer);
-				Xfer::save($this->owner, $transferTotals["downtotal"], $transferTotals["uptotal"]);
+				if (!empty($transferTotals)) {
+					Xfer::save($this->owner, $transferTotals["downtotal"], $transferTotals["uptotal"]);
+				}
 			}
 			// update totals
 			$this->_updateTotals();
