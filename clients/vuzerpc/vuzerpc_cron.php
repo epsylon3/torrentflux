@@ -325,10 +325,10 @@ switch ($cmd) {
 		print_r($missing);
 	break;
 
-	case 'delete':
-		$v = VuzeRPC::getInstance();
-		$session = $v->session_get();
-		print_r($session);
+	case 'version':
+		$v = VuzeRPC::getInstance($cfg);
+		echo "Vuze :".$v->vuze_ver."\n";
+		echo "xmwebui :".$v->xmwebui_ver."\n";
 	break;
 
 	case 'config':
@@ -345,6 +345,6 @@ switch ($cmd) {
 	break;
 
 	default:
-		echo "usage : ./vuzerpc_cron.php [update,session,config,list,down,seed]\n";
+		echo "usage : ./vuzerpc_cron.php [update,session,config,list,down,seed,missing,version]\n";
 }
 ?>

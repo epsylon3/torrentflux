@@ -295,7 +295,7 @@ switch ($cmd) {
 
 	// get session settings (via rpc)
 	case 'session':
-		$rpc = Transmission::getInstance();
+		$rpc = Transmission::getInstance($cfg);
 		$session = $rpc->session_get();
 		print_r($session);
 		if (!empty($rpc->lastError)) {
@@ -324,6 +324,11 @@ switch ($cmd) {
 		}
 	break;
 
+	case 'version':
+		$rpc = Transmission::getInstance($cfg);
+		echo "Transmission :".$rpc->version."\n";
+	break;
+
 	case 'update':
 		if ($cfg['transmission_rpc_enable']==0) {
 			//cron disabled
@@ -334,7 +339,7 @@ switch ($cmd) {
 	break;
 
 	default:
-		echo "usage : ./statrpc_cron.php [update,config,session,list,down,seed,missing]\n";
+		echo "usage : ./statrpc_cron.php [update,config,session,list,down,seed,missing,version]\n";
 }
 
 ?>
