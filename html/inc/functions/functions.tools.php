@@ -1,11 +1,10 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
-
- LICENSE
-
+ $Id functions.tools.php $
+ @license http://www.gnu.org/copyleft/gpl.html
+ @package Admin
+ 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License (GPL)
  as published by the Free Software Foundation; either version 2
@@ -15,9 +14,6 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
-
- To read the license please visit http://www.gnu.org/copyleft/gpl.html
-
 *******************************************************************************/
 
 /**
@@ -81,10 +77,17 @@ function printFileList($basedir, $type = 1, $mode = 2) {
 	$dir = substr($basedir, 0 , -1);
 	if (!is_dir($dir))
 		return false;
-	define('_URL_SVNLOG','http://svn.berlios.de/wsvn/tf-b4rt/trunk/?rev=');
-	define('_URL_SVNLOG_SUFFIX','&sc=1');
-	define('_URL_SVNFILE','http://svn.berlios.de/wsvn/tf-b4rt/trunk/html/');
-	define('_URL_SVNFILE_SUFFIX','?op=log&rev=0&sc=0&isdir=0');
+
+	define('_URL_SVNLOG','https://github.com/epsylon3/torrentflux/commits/master/html/');
+	define('_URL_SVNLOG_SUFFIX','');
+	define('_URL_SVNFILE','https://github.com/epsylon3/torrentflux/blob/master/html/');
+	define('_URL_SVNFILE_SUFFIX','');
+
+	//define('_URL_SVNLOG','http://svn.berlios.de/wsvn/tf-b4rt/trunk/?rev=');
+	//define('_URL_SVNLOG_SUFFIX','&sc=1');
+	//define('_URL_SVNFILE','http://svn.berlios.de/wsvn/tf-b4rt/trunk/html/');
+	//define('_URL_SVNFILE_SUFFIX','?op=log&rev=0&sc=0&isdir=0');
+
 	$fileList = array();
 	$fileList['files'] = array();
 	$fileList['types'] = array(".php", ".dist", ".pl", ".pm", ".tmpl", ".html", ".js", ".css", ".xml", ".xsd", ".py", ".sh");
