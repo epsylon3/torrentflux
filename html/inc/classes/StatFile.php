@@ -209,13 +209,16 @@ class StatFile
 		$content .= $this->uptotal."\n";
 		$content .= $this->downtotal."\n";
 		$content .= $this->size;
-		// write file
-		if ($handle = @fopen($this->theFile, "w")) {
-			$resultSuccess = (@fwrite($handle, $content) !== false);
-			@fclose($handle);
-			return $resultSuccess;
+		if ($content != file_get_contents($this->theFile)) {
+			// write file
+			if ($handle = @fopen($this->theFile, "w")) {
+				$resultSuccess = (@fwrite($handle, $content) !== false);
+				@fclose($handle);
+				return $resultSuccess;
+			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 }
