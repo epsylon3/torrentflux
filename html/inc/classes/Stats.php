@@ -547,7 +547,10 @@ class Stats
 				$this->_content .= implode($delim,$this->_transferIds)."\n";
 			}
 			for ($i = 0; $i < $this->_transferIdCount; $i++) {
-				$this->_content .= $this->_transferDetails[$this->_transferIds[$i]];
+				if ( !array_key_exists($this->_transferIds[$i], $this->_transferDetails) )
+					$this->_content .= $this->_transferDetails[$this->_transferIds[$i]];
+				else
+					$this->_content .= "ERROR";
 				$this->_content .= $delim;
 			}
 			$this->_content = rtrim($this->_content,$delim)."\n";
