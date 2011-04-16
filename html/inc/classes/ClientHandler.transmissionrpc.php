@@ -344,21 +344,20 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			$tid = getTransmissionTransferIdByHash($hash);
 			if ($tid > 0) {
 				$byterate = 1024 * $this->rate;
-				$req = $rpc->set($tid, array('uploadLimit' => $this->rate, 'uploadLimited' => 1) );
+				$req = $rpc->set($tid, array('uploadLimit' => $this->rate, 'uploadLimited' => ($this->rate > 0)) );
 				if (!isset($req['result']) || $req['result'] != 'success') {
 					$msg = $req['result'];
 					$result = false;
 				} else {
 					//Check if setting is applied
-					$req = $rpc->get(array($tid),array('uploadLimit'));
+					$req = $rpc->get($tid,array('uploadLimit'));
 					if (!isset($req['result']) || $req['result'] != 'success') {
 						$msg = $req['result'];
 						$result = false;
 					} elseif (!empty($req['arguments']['torrents'])) {
 						$torrent = array_pop($req['arguments']['torrents']);
-						if ($torrent['speedLimitUpload'] != $byterate) {
-							$msg = "byterate not set correctly =".$torrent['speedLimitUpload'];
-							//$req = $rpc->session_set('speed-limit-up', $byterate);
+						if ($torrent['uploadLimit'] != $this->rate) {
+							$msg = "byterate not set correctly =".$torrent['uploadLimit'];
 						}
 					}
 				}
@@ -381,8 +380,45 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	function setRateDownload($transfer, $downrate, $autosend = false) {
 		// set rate-field
 		$this->drate = $downrate;
+
+		$result = true;
 		
-		// todo..
+		$msg = "$uprate autosend=".serialize($autosend);
+		if ($autosend) {
+			$rpc = Transmission::getInstance();
+
+			if (isHash($transfer))
+				$hash = $transfer;
+			else
+				$hash = getTransferHash($transfer);
+				
+			$tid = getTransmissionTransferIdByHash($hash);
+			if ($tid > 0) {
+				$byterate = 1024 * $this->drate;
+				$req = $rpc->set($tid, array('downloadLimit' => $this->drate, 'downloadLimited' => ($this->drate > 0)) );
+				if (!isset($req['result']) || $req['result'] != 'success') {
+					$msg = $req['result'];
+					$result = false;
+				} else {
+					//Check if setting is applied
+					$req = $rpc->get($tid,array('downloadLimit'));
+					if (!isset($req['result']) || $req['result'] != 'success') {
+						$msg = $req['result'];
+						$result = false;
+					} elseif (!empty($req['arguments']['torrents'])) {
+						$torrent = array_pop($req['arguments']['torrents']);
+						if ($torrent['downloadLimit'] != $this->drate) {
+							$msg = "byterate not set correctly =".$torrent['downloadLimit'];
+						}
+					}
+				}
+			} else
+				$msg = "bad tid $hash $transfer ".$req['result'];
+			
+			$this->logMessage("setRateDownload : ".$msg."\n", true);
+		}
+		AuditAction($cfg["constants"]["debug"], $this->client."-setRateDownload : $msg.");
+		return $result;
 	}
 
 	/**
