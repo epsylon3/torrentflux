@@ -486,30 +486,31 @@ class Transmission
 			'name' => $stat['name'],
 			
 			'running' => $this->status_to_tf($stat['status']), 
-			'speedDown' => (int) $stat['rateDownload'],
-			'speedUp' => (int) $stat['rateUpload'],
+			'status' => $stat['status'], 
+			
+			'size' => (float) $stat['totalSize'], 
 			
 			'percentDone' => (float) $stat['percentDone']*100.0, 
 			'sharing' => (float) $stat['uploadRatio']*100.0, 
+			
+			'seeds' => $stat['peersSendingToUs'], 
+			'peers' => $stat['peersGettingFromUs'], 
+			'cons' => $stat['peersConnected'], 
+			
+			"error" => $stat['error'],
+			"errorString" => $stat['errorString'],
+			'downloadDir' => $stat['downloadDir'],
 			
 			'downTotal' => (float) $stat['downloadedEver'], 
 			'upTotal' => (float) $stat['uploadedEver'], 
 			
 			'eta' => $stat['eta'], 
 			
-			'seeds' => $stat['peersSendingToUs'], 
-			'peers' => $stat['peersGettingFromUs'], 
-			'cons' => $stat['peersConnected'], 
-			
-			'size' => (float) $stat['totalSize'], 
-			'status' => $stat['status'], 
-			
-			"error" => $stat['error'],
-			"errorString" => $stat['errorString'],
-			'downloadDir' => $stat['downloadDir'],
+			'speedDown' => (int) $stat['rateDownload'],
+			'speedUp' => (int) $stat['rateUpload'],
 			
 			'drate' => $stat['downloadLimit'],
-			'urate' => $stat['uploadLimit'],  
+			'urate' => $stat['uploadLimit'],
 			
 			'seedRatioLimit' => round($stat['seedRatioLimit']*100, 2),
 			'seedRatioMode' => $stat['seedRatioMode']
@@ -537,7 +538,7 @@ class Transmission
 			'totalSize',
 			'downloadedEver','uploadedEver',
 			'downloadLimit','uploadLimit',
-			'downloadLimited','uploadLimited',
+//			'downloadLimited','uploadLimited',
 			"rateDownload", "rateUpload",
 			'peersConnected', 'peersGettingFromUs', 'peersSendingToUs',
 			'percentDone','uploadRatio',

@@ -352,9 +352,11 @@ function getUserTransmissionTransfers($uid = 0) {
 
 	// https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt
 	$fields = array (
-	"name", "id", "hashString", "eta", "fileStats", "totalSize", "percentDone", "metadataPercentComplete",
-	"peersConnected", "rateDownload", "rateUpload", "status", "files", "trackerStats", "uploadLimit", "uploadRatio",
-	"downloadedEver", "uploadedEver"
+	"name", "id", "hashString", "eta", "totalSize", "percentDone", "metadataPercentComplete",
+	"peersConnected", 'peersGettingFromUs', 'peersSendingToUs', "rateDownload", "rateUpload", "status", 
+	"uploadLimit", "uploadRatio", "seedRatioLimit", "seedRatioMode", 
+	"downloadedEver", "uploadedEver",
+//	"trackerStats", "files", "fileStats" slow down
 	);
 
 	$result = $rpc->get( array(), $fields );

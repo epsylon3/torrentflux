@@ -338,17 +338,18 @@ function getTransferDetails($transfer, $full) {
 	// common functions
 	require_once('inc/functions/functions.common.php');
 	$transferowner = getOwner($transfer);
-	// stat
-	$sf = new StatFile($transfer, $transferowner);
+
 	// settings
 	if (isset($transfers['settings'][$transfer])) {
 		$settingsAry = $transfers['settings'][$transfer];
 	} else {
 		$settingsAry = array();
-		if (substr(str_replace('.imported','',$transfer), -8) == ".torrent") {
+		$ftransfer = str_replace('.imported','',$transfer);
+		if (substr($ftransfer, -8) == ".torrent") {
 			// this is a t-client
 			$settingsAry['type'] = "torrent";
-			$settingsAry['client'] = $cfg["btclient"];
+			$settingsAry['client'] = getTransferClient($transfer);
+			if (empty($settingsAry['client'])) $settingsAry['client'] = $cfg["btclient"];
 		} else if (substr($transfer, -5) == ".wget") {
 			// this is wget.
 			$settingsAry['type'] = "wget";
@@ -358,7 +359,7 @@ function getTransferDetails($transfer, $full) {
 			$settingsAry['type'] = "nzb";
 			$settingsAry['client'] = "nzbperl";
 		} else {
-			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$transfer);
+			AuditAction($cfg["constants"]["error"], "INVALID TRANSFER: ".$ftransfer);
 			@error("Invalid Transfer", "", "", array($transfer));
 		}
 		$settingsAry['hash'] = "";
@@ -367,37 +368,87 @@ function getTransferDetails($transfer, $full) {
 			: $cfg["path"].$cfg["path_incoming"].'/';
 		$settingsAry['datapath'] = "";
 	}
-	// size
-	$size = floatval($sf->size);
+	
+	$totalsCurrent = array("downtotal" => 0, "uptotal" => 0);
+	$totals = array("downtotal" => 0, "uptotal" => 0);
+	
+	// stat
+	$sf = new StatFile($transfer, $transferowner);
 	// totals
 	$afu = $sf->uptotal;
 	$afd = $sf->downtotal;
+	
 	if (isset($settingsAry['client']) ){
 		$ch = ClientHandler::getInstance($settingsAry['client']);
 		$totalsCurrent = $ch->getTransferCurrentOP($transfer, $settingsAry['hash'], $afu, $afd);
 		$totals = $ch->getTransferTotalOP($transfer, $settingsAry['hash'], $afu, $afd);
+		$ch->updateStatFiles($transfer);
+		$sf = new StatFile($transfer, $transferowner);
+		$bIsRPC = (int) $ch->useRPC;
 	}
+	// size
+	$size = floatval($sf->size);
+	
 	// running
 	$running = $sf->running;
 	$details['running'] = $running;
+	
+	$details['cons'] = "";
+	$details['port'] = "";
+	
 	// speed_down + speed_up + seeds + peers + cons
-	if ($running == 1) {
+	if ($bIsRPC) {
+		
+		$stat = $ch->monitorTransfer($transfer);
+		
+		$totals["downtotal"] = $stat['downTotal'];
+		$totals["uptotal"] = $stat['upTotal'];
+	
+		$details['running'] = $stat['running'];
+		// speed_down
+		$details['speedDown'] = ($stat['speedDown'] != "") ? $stat['speedDown'] : '';
+		// speed_up
+		$details['speedUp'] = ($stat['speedUp'] != "") ? $stat['speedUp'] : '';
+		// down_current
+		$details['downCurrent'] = formatFreeSpace($totals["downtotal"] / 1048576);
+		// up_current
+		$details['upCurrent'] = formatFreeSpace($totals["uptotal"] / 1048576);
+		// seeds
+		$details['seeds'] = $stat['seeds'];
+		// peers
+		$details['peers'] = $stat['peers'];
+		// connections
+		$details['cons']  = $stat['cons'];
+		// percentage
+		$percentage = $stat['percentDone'];
+		// size
+		$size = $stat['size'];
+		// eta
+		$details['eta'] = $stat['eta'];
+		
+	} elseif ($running == 1) {
 		// pid
-		$pid = getTransferPid($transfer);
+		$pid = (int) getTransferPid($transfer);
 		// speed_down
 		$details['speedDown'] = (trim($sf->down_speed) != "") ? $sf->down_speed : '0.0 kB/s';
 		// speed_up
 		$details['speedUp'] = (trim($sf->up_speed) != "") ? $sf->up_speed : '0.0 kB/s';
 		// down_current
-		$details['downCurrent'] = @formatFreeSpace($totalsCurrent["downtotal"] / 1048576);
+		$details['downCurrent'] = formatFreeSpace($totalsCurrent["downtotal"] / 1048576);
 		// up_current
-		$details['upCurrent'] = @formatFreeSpace($totalsCurrent["uptotal"] / 1048576);
+		$details['upCurrent'] = formatFreeSpace($totalsCurrent["uptotal"] / 1048576);
 		// seeds
 		$details['seeds'] = $sf->seeds;
 		// peers
 		$details['peers'] = $sf->peers;
+		// percentage
+		$percentage = $sf->percent_done;
+		// eta
+		$details['eta'] = $sf->time_left;
 		// cons
-		$details['cons'] = netstatConnectionsByPid($pid);
+		if ($pid > 0) {
+			$details['cons'] = netstatConnectionsByPid($pid);
+		}
 	} else {
 		// speed_down
 		$details['speedDown'] = "";
@@ -411,15 +462,15 @@ function getTransferDetails($transfer, $full) {
 		$details['seeds'] = "";
 		// peers
 		$details['peers'] = "";
-		// cons
-		$details['cons'] = "";
+		// eta
+		$details['eta'] = "";
+		// percentage
+		$percentage = $sf->percent_done;
 	}
 	// down_total
-	$details['downTotal'] = @formatFreeSpace($totals["downtotal"] / 1048576);
+	$details['downTotal'] = formatFreeSpace($totals["downtotal"] / 1048576);
 	// up_total
-	$details['upTotal'] = @formatFreeSpace($totals["uptotal"] / 1048576);
-	// percentage
-	$percentage = $sf->percent_done;
+	$details['upTotal'] = formatFreeSpace($totals["uptotal"] / 1048576);
 	if ($percentage < 0) {
 		$percentage = round(($percentage * -1) - 100, 1);
 		$sf->time_left = $cfg['_INCOMPLETE'];
@@ -427,8 +478,6 @@ function getTransferDetails($transfer, $full) {
 		$percentage = 100;
 	}
 	$details['percentDone'] = $percentage;
-	// eta
-	$details['eta'] = $sf->time_left;
 	// sharing
 	if (is_array($totals))
 	$details['sharing'] = ($totals["downtotal"] > 0) ? @number_format((($totals["uptotal"] / $totals["downtotal"]) * 100), 2) : 0;
@@ -448,7 +497,9 @@ function getTransferDetails($transfer, $full) {
 			// sharekill
 			$details['sharekill'] = $cfg["sharekill"];
 			// port
-			$details['port'] = netstatPortByPid($pid);
+			if ($pid > 0) {
+				$details['port'] = netstatPortByPid($pid);
+			}
 		} else {
 			// max_download_rate
 			$details['maxSpeedDown'] = "";
@@ -458,8 +509,6 @@ function getTransferDetails($transfer, $full) {
 			$details['maxcons'] = "";
 			// sharekill
 			$details['sharekill'] = "";
-			// port
-			$details['port'] = "";
 		}
 	}
 	// return

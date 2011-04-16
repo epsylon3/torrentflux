@@ -269,10 +269,10 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		global $transfers;
 		$retVal = array();
 		$retVal["uptotal"] = (isset($transfers['totals'][$tid]['uptotal']))
-			? $sfu - $transfers['totals'][$tid]['uptotal']
+			? abs($sfu - $transfers['totals'][$tid]['uptotal'])
 			: $sfu;
 		$retVal["downtotal"] = (isset($transfers['totals'][$tid]['downtotal']))
-			? $sfd - $transfers['totals'][$tid]['downtotal']
+			? abs($sfd - $transfers['totals'][$tid]['downtotal'])
 			: $sfd;
 		return $retVal;
 	}
@@ -570,7 +570,6 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		}
 
 		//SHAREKILLS Checks
-
 		foreach ($tfs as $hash => $t) {
 			if (!isset($sharekills[$hash]))
 				continue;
@@ -597,30 +596,39 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		// set vars
 		$this->_setVarsForTransfer($transfer);
 
-		if (!isHash($transfer))
+		if (isHash($transfer))
+			$hash = $transfer;
+		else
 			$hash = getTransferHash($transfer);
 
 		if (empty($hash)) {
 			return "Hash for $transfer was not found";
 		}
 
+		//original rpc format, you can add fields here
 		$fields = array(
-			"id", "name", "status", "hashString", "totalSize", "downloadedEver", "uploadedEver", 
-			"percentDone", "uploadRatio", 
-			"metadataPercentComplete", "peersConnected", 'peersGettingFromUs', 'peersSendingToUs',
-			"rateDownload", "rateUpload", 
-			"uploadLimit", 
+			'id', 'name', 'status', 'hashString', 'totalSize',
+			'downloadedEver', 'uploadedEver',
+			'percentDone', 'uploadRatio',
+			'peersConnected', 'peersGettingFromUs', 'peersSendingToUs',
+			'rateDownload', 'rateUpload',
+			'downloadLimit', 'uploadLimit',
+			'downloadLimited', 'uploadLimited',
 			'seedRatioLimit','seedRatioMode',
-			"files", "fileStats", "trackerStats",
-			'downloadDir',"eta",
-			'error', 'errorString'
+			'downloadDir','eta',
+			'error', 'errorString',
+			
+			//'files', 'fileStats', 'trackerStats'
 		);
+		$stat_rpc = getTransmissionTransfer($hash, $fields);
 
-		$stat = getTransmissionTransfer($hash, $fields);
-		if (is_array($stat)) {
-			return $stat;
+		$rpc = Transmission::getInstance();
+		if (is_array($stat_rpc)) {
+			$stat_tf = $rpc->rpc_to_tf($stat_rpc);
+			//merge array with tf compatible format
+			$stat_tf = array_merge($stat_rpc, $stat_tf);
+			return $stat_tf; 
 		} else {
-			$rpc = Transmission::getInstance();
 			return $rpc->lastError;
 		}
 	}

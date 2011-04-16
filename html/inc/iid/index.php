@@ -158,58 +158,62 @@ if ($cfg["transmission_rpc_enable"]) {
 			break;
 		}
 
+		/*
 		$peers = $nothing;
 		$seeds = $nothing;
 		if ($transferRunning) {
-			//$seeds = getTransmissionSeederCount($hash);
+			$seeds = getTransmissionSeederCount($hash);
 			$trackerStats = getTransmissionTrackerStats($hash);
 			if (!empty($trackerStats)) {
 				$seeds = $trackerStats['seederCount'];
 				//$peers = $trackerStats['lastAnnouncePeerCount'];
 				if ($seeds == -1) $seeds=$nothing;
 			}
-			$peers = $aTorrent['peersConnected'];
 		}
+		*/
 
-		// TODO: transferowner is always admin... probably not what we want
 		$tArray = array(
 			'is_owner' => true,
 			'transferRunning' => ($transferRunning ? 1 : 0),
-			'url_entry' => $hash,
-			'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
-			'hd_title' => $nothing,
+			'rpc_status' => $aTorrent['status'],
+			'clientType' => 'torrent',
+			'client' => 'Tr*',
+			'url_entry'   => $hash,
 			'displayname' => $aTorrent['name'],
-			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : '' ),
-			//'transferowner' => 'administrator',
+			'statusStr'   => $status,
+			'estTime'     => $eta,
+			'percentage'  => ( $status=='New' ? '' : round($aTorrent['percentDone']*100,1) ),
+			'graph_width' => ( $status=='New' ? -1 : round($aTorrent['percentDone']*100) ),
+			'100_graph_width' => 100 - round($aTorrent['percentDone']*100),
+			'sharing' => round($aTorrent['uploadRatio']*100.0,1),
+			'seeds' => $aTorrent['peersSendingToUs'],
+			'peers' => $aTorrent['peersGettingFromUs'],
+			'cons'  => $aTorrent['peersConnected'],
+			'seedlimit' => round($aTorrent['seedRatioLimit']*100.0,1),
+			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
+			'datapath' => $aTorrent['name'],
+			'entry' => $aTorrent['name'],
+			'size' => $aTorrent['totalSize'],
 			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
+			'uptotal'   => $aTorrent['uploadedEver'],
+			'downtotal' => $aTorrent['downloadedEver'],
+			'down_speed' => ($aTorrent['rateDownload'] != 0 ? formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s' : '&nbsp;'),
+			'up_speed' =>   ($aTorrent['rateUpload']   != 0 ? formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s' : '&nbsp;')
+/*
+			'hd_title' => $nothing,
+			'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
+			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : '' ),
+			'is_no_file' => 1,
+			'show_run' => 1,
 			'format_downtotal' => $nothing,
 			'format_uptotal' => $nothing,
-			'statusStr' => $status,
-			'graph_width' => ( $status==='New' ? -1 : round($aTorrent['percentDone']*100) ),
-			'percentage' => ( $status==='New' ? '' : round($aTorrent['percentDone']*100,1) . '%' ),
 			'progress_color' => ($transferRunning ? '#22BB22' : '#A0A0A0'),
 			'bar_width' => 4,
 			'background' => '#000000',
-			'100_graph_width' => 100 - floor($aTorrent['percentDone']*100),
-			'down_speed' => formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s',
-			'up_speed' => formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s',
-			'seeds' => $seeds,
-			'peers' => $peers,
-			'estTime' => $eta,
-			'clientType' => 'torrent',
 			'upload_support_enabled' => 1,
-			'sharing' => round($aTorrent['uploadRatio']*100.0,1),
-			'client' => 'RPC',
-			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
-			'datapath' => $aTorrent['name'],
-			'is_no_file' => 1,
-			'show_run' => 1,
-			'entry' => $aTorrent['name'],
-			'uptotal'   => $aTorrent['uploadedEver'],
-			'downtotal' => $aTorrent['downloadedEver'],
-			'size' => $aTorrent['totalSize'],
-			'rpc_status' => $aTorrent['status']
+*/
 		);
+		//var_dump($aTorrent);
 
 		// Method 1 ClientHandler compatible - Method 2 direct by hash (deadeyes)
 		if ($cfg["transmission_rpc_enable"]==1)
@@ -422,17 +426,23 @@ foreach ($arList as $mtimecrc => $transfer) {
 						$sf->peers        = $trStat['peers'];
 						$sf->sharing      = floatval($trStat['sharing']);
 						$sf->percent_done = floatval($trStat['percentage']);
-						$sf->down_speed     = $trStat['down_speed'];
+						$sf->down_speed   = $trStat['down_speed'];
+						$sf->graph_width  = (int) $trStat['graph_width'];
 						$sf->graph_width  = (int) $trStat['graph_width'];
 						$sf->up_speed     = $trStat['up_speed'];
 						$sf->time_left    = $trStat['estTime'];
 						
-						$sf->uptotal     = floatval($rpcStat['upTotal']);
-						$sf->downtotal   = floatval($rpcStat['downTotal']);
+						$sf->seedlimit    = $trStat['seedlimit'];
 						
-						$sf->size        = floatval($sf->size);
+						$sf->uptotal      = floatval($rpcStat['uptotal']);
+						$sf->downtotal    = floatval($rpcStat['downtotal']);
+						
+						$sf->size         = floatval($rpcStat['size']);
 						//sf->write();
 						//var_dump($sf);
+						
+						if ($sf->down_speed == '0 B/s')
+							$sf->down_speed ='';
 						
 						if ($sf->rpc_status == 16) {
 							//stopped
