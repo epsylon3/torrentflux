@@ -176,9 +176,11 @@ if ($cfg["transmission_rpc_enable"]) {
 		}
 		*/
 
+		$transferowner = getOwner($hash);
+		
 		$tArray = array(
-			'is_owner' => true,
-			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : getOwner($hash) ),
+			'is_owner' => ($cfg['isAdmin']) ? true : IsOwner($cfg["user"], $transferowner),
+			'transferowner' => getOwner($hash),
 			'transferRunning' => (int) $transferRunning,
 			'rpc_status' => $aTorrent['status'],
 			'clientType' => 'torrent',
@@ -204,27 +206,34 @@ if ($cfg["transmission_rpc_enable"]) {
 			'downtotal' => $aTorrent['downloadedEver'],
 			'down_speed' => ($aTorrent['rateDownload'] != 0 ? formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s' : '&nbsp;'),
 			'up_speed' =>   ($aTorrent['rateUpload']   != 0 ? formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s' : '&nbsp;')
-/*
-			'hd_title' => $nothing,
-			'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
-			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : '' ),
-			'is_no_file' => 1,
-			'show_run' => 1,
-			'format_downtotal' => $nothing,
-			'format_uptotal' => $nothing,
-			'progress_color' => ($transferRunning ? '#22BB22' : '#A0A0A0'),
-			'bar_width' => 4,
-			'background' => '#000000',
-			'upload_support_enabled' => 1,
-*/
 		);
-		//var_dump($aTorrent);
 
-		// Method 1 ClientHandler compatible - Method 2 direct by hash (deadeyes)
-		if ($cfg["transmission_rpc_enable"]==1)
+		if ($cfg["transmission_rpc_enable"] == 1) {
+			
+			// Method 1 ClientHandler compatible
 			$arTrUserTorrent[$hash] = $tArray;
-		elseif ($cfg["transmission_rpc_enable"]==2)
-			$arUserTorrent[$tArray['url_entry']] = $tArray;
+			
+		} else {
+			
+			// Method 2 direct by hash (to be deleted) - not multiuser
+			$tArray = array_merge($tArray, array(
+				'hd_title' => $nothing,
+				'hd_image' => getTransmissionStatusImage($transferRunning, $seeds, $aTorrent['rateUpload']),
+	//			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : '' ),
+				'is_no_file' => 1,
+				'show_run' => 1,
+				'format_downtotal' => $nothing,
+				'format_uptotal' => $nothing,
+				'progress_color' => ($transferRunning ? '#22BB22' : '#A0A0A0'),
+				'bar_width' => 4,
+				'background' => '#000000',
+				'upload_support_enabled' => 1,
+			));
+			$tArray['percentage'] = $tArray['percentage']."%";
+			
+			$arUserTorrent[$hash] = $tArray;
+		}
+		//var_dump($aTorrent);
 
 		// Adds the transfer rate for this torrent to the total transfer rate
 		if ($transferRunning) {
