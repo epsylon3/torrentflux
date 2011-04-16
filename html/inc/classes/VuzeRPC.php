@@ -119,9 +119,11 @@ class VuzeRPC {
 				$key = "az-version";
 				$this->vuze_ver    = $req->arguments->$key;
 				$cfg['vuzerpcinfo_xmwebui_version']  = $this->xmwebui_ver;
-				$cfg['vuzerpcinfo_xmwebui_vuze_ver'] = $this->vuze_ver;
+				$cfg['vuzerpcinfo_version'] = $this->vuze_ver;
 			}
 		}
+		$this->xmwebui_ver = $cfg['vuzerpcinfo_xmwebui_version'];
+		$this->vuze_ver = $cfg['vuzerpcinfo_version'];
 
 		global $VuzeRPC_instance;
 		$VuzeRPC_instance = & $this;

@@ -75,6 +75,12 @@ class Transmission
 	 */
 	public $torrents = array();
 	
+	
+	/**
+	 * Tranmission version (from session vars)
+	 */
+	public $version;
+	
 	/*
 	 * Constructor
 	*/
@@ -97,6 +103,14 @@ class Transmission
 		if (isset($cfg['transmission_rpc_password']))
 			$this->password = $cfg['transmission_rpc_password'];
 
+		if (!isset($cfg['transmissionrpc_version'])) {
+			$req = $this->session_get(array("version","rpc-version"));
+			$cfg['transmissionrpc_version'] = $req['arguments']['version'];
+		}
+		$this->version = $cfg['transmissionrpc_version'];
+
+		global $Transmission_inst;
+		$Transmission_inst = & $this;
 	}
 
 	/**
