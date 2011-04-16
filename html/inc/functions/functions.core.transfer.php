@@ -399,16 +399,16 @@ function getTransferDetails($transfer, $full) {
 	// speed_down + speed_up + seeds + peers + cons
 	if ($bIsRPC) {
 		
-		$stat = $ch->monitorTransfer($transfer);
+		$stat = $ch->monitorTransfer($transfer,$format="tf");
 		
 		$totals["downtotal"] = $stat['downTotal'];
-		$totals["uptotal"] = $stat['upTotal'];
+		$totals["uptotal"]   = $stat['upTotal'];
 	
 		$details['running'] = $stat['running'];
 		// speed_down
-		$details['speedDown'] = ($stat['speedDown'] != "") ? $stat['speedDown'] : '';
+		$details['speedDown'] = @ ($stat['speedDown'] != "") ? $stat['speedDown'] : '';
 		// speed_up
-		$details['speedUp'] = ($stat['speedUp'] != "") ? $stat['speedUp'] : '';
+		$details['speedUp']   = ($stat['speedUp'] != "") ? $stat['speedUp'] : '';
 		// down_current
 		$details['downCurrent'] = formatFreeSpace($totals["downtotal"] / 1048576);
 		// up_current

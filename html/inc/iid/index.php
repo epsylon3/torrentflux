@@ -140,16 +140,20 @@ if ($cfg["transmission_rpc_enable"]) {
 				}
 			}
 			break;
+		case 9:
+			$status = "Seeding";
+			$transferRunning = true;
+			break;
+		case 8:
+			$status = "Seeding";
+			$transferRunning = true;
+			break;
 		case 4:
 			if ( $aTorrent['rateDownload'] == 0 ) {
 				$status = "Idle";
 			} else {
 				$status = "Downloading";
 			}
-			$transferRunning = true;
-			break;
-		case 8:
-			$status = "Seeding";
 			$transferRunning = true;
 			break;
 		case 2:
@@ -174,7 +178,7 @@ if ($cfg["transmission_rpc_enable"]) {
 
 		$tArray = array(
 			'is_owner' => true,
-			'transferRunning' => ($transferRunning ? 1 : 0),
+			'transferRunning' => (int) $transferRunning,
 			'rpc_status' => $aTorrent['status'],
 			'clientType' => 'torrent',
 			'client' => 'Tr*',
@@ -193,7 +197,7 @@ if ($cfg["transmission_rpc_enable"]) {
 			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
 			'datapath' => $aTorrent['name'],
 			'entry' => $aTorrent['name'],
-			'size' => $aTorrent['totalSize'],
+			'size' => (float) $aTorrent['totalSize'],
 			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
 			'uptotal'   => $aTorrent['uploadedEver'],
 			'downtotal' => $aTorrent['downloadedEver'],
@@ -363,17 +367,10 @@ foreach ($arList as $mtimecrc => $transfer) {
 							$sf->running = 1;
 
 						$sf->percent_done= floatval($rpcStat['percentDone']);
-						//if ($sf->percent_done >= 100.0)
-						//	$sf->percent_done += floatval($sf->sharing);
 
-						if ($sf->up_speed > 0)
-							$sf->up_speed .= " kB/s";
-						else
-							$sf->up_speed="&nbsp;";
-						if ($sf->down_speed > 0)
-							$sf->down_speed .= " kB/s";
-						else
-							$sf->down_speed="&nbsp;";
+						$sf->up_speed = ($sf->up_speed > 0 ? $sf->up_speed .= " kB/s" : "&nbsp;");
+						$sf->down_speed = ($sf->down_speed > 0 ? $sf->down_speed .= " kB/s" : "&nbsp;");
+
 						if ((int)$rpcStat['error'] != 0 && !empty($rpcStat['errorString'])) {
 							$error = $rpcStat['errorString'];
 							if (strpos($error,'Scrape') !== false) {
@@ -419,9 +416,11 @@ foreach ($arList as $mtimecrc => $transfer) {
 					$trStat = $arTrUserTorrent[$settingsAry['hash']];
 					if (is_array($trStat)) {
 						$sf->running      = $trStat['transferRunning'];
-						//if ($rpcStat['status'] == 8 || $rpcStat['status'] == 9)
-						//	$sf->running = 1;
+						if ($trStat['status'] == 8 || $trStat['status'] == 9)
+							$sf->running = 2;
+						
 						$sf->rpc_status   = $trStat['rpc_status'];
+						$sf->status       = $trStat['statusStr'];
 						$sf->seeds        = $trStat['seeds'];
 						$sf->peers        = $trStat['peers'];
 						$sf->sharing      = floatval($trStat['sharing']);
@@ -432,14 +431,25 @@ foreach ($arList as $mtimecrc => $transfer) {
 						$sf->up_speed     = $trStat['up_speed'];
 						$sf->time_left    = $trStat['estTime'];
 						
+						
 						$sf->seedlimit    = $trStat['seedlimit'];
 						
-						$sf->uptotal      = floatval($rpcStat['uptotal']);
-						$sf->downtotal    = floatval($rpcStat['downtotal']);
+						$sf->uptotal      = (float) $trStat['uptotal'];
+						$sf->downtotal    = (float) $trStat['downtotal'];
 						
-						$sf->size         = floatval($rpcStat['size']);
+						$sf->size         = (float) $trStat['size'];
+						
 						//sf->write();
 						//var_dump($sf);
+						
+						if ((int)$trStat['error'] != 0 && !empty($trStat['errorString'])) {
+							$error = $trStat['errorString'];
+							if (strpos($error,'Scrape') !== false) {
+								//ignore scrape error
+							} else {
+								$sf->status .= 'Error';
+							}
+						}
 						
 						if ($sf->down_speed == '0 B/s')
 							$sf->down_speed ='';

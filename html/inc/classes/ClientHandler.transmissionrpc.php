@@ -590,7 +590,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	 *
 	 * @return array (stat) or Error String
 	 */
-	function monitorTransfer($transfer) {
+	function monitorTransfer($transfer, $format="rpc") {
 		//by default, monitoring not available.
 
 		// set vars
@@ -624,13 +624,13 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 
 		$rpc = Transmission::getInstance();
 		if (is_array($stat_rpc)) {
-			//$stat_tf = $rpc->rpc_to_tf($stat_rpc);
-			//merge array with tf compatible format
-			//$stat_tf = array_merge($stat_tf, $stat_rpc);
-			return $stat_rpc; 
-		} else {
-			return $rpc->lastError;
+			if ($format=="rpc") 
+				return $stat_rpc; 
+			else {
+				return $rpc->rpc_to_tf($stat_rpc);
+			}
 		}
+		return $rpc->lastError;
 	}
 
 	/**

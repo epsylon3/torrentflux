@@ -711,7 +711,7 @@ class ClientHandlerVuzeRPC extends ClientHandler
 	 *
 	 * @return array (stat) or Error String
 	 */
-	function monitorTransfer($transfer) {
+	function monitorTransfer($transfer, $format="tf") {
 		//by default, monitoring not available.
 		$vuze = VuzeRPC::getInstance();
 
@@ -723,11 +723,18 @@ class ClientHandlerVuzeRPC extends ClientHandler
 		$tid = getVuzeTransferRpcId($transfer);
 
 		if ($tid > 0) {
-			$stat = $vuze->torrent_get_tf_array(array($tid));
-			return $stat;
-		} else {
-			return $vuze->lastError;
+			if ($format == "tf") {
+				$stat = $vuze->torrent_get_tf_array(array($tid));
+				return $stat;
+			} else {
+				$req = $vuze->torrent_get(array($tid));
+				if (is_object($req) && $req->result == 'success') {
+					$stat = (array) $req->arguments->torrents;
+					return $stat;
+				}
+			}
 		}
+		return $vuze->lastError;
 	}
 
 	/**

@@ -512,7 +512,8 @@ class Transmission
 			'drate' => $stat['downloadLimit'],
 			'urate' => $stat['uploadLimit'],
 			
-			'seedRatioLimit' => round($stat['seedRatioLimit']*100, 2),
+			'seedlimit' => round($stat['seedRatioLimit']*100),
+			'seedRatioLimit' => round($stat['seedRatioLimit']*100),
 			'seedRatioMode' => $stat['seedRatioMode']
 		);
 

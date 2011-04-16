@@ -87,7 +87,7 @@ function updateStatFiles($bShowMissing=false) {
 	foreach ($tfs as $hash => $t) {
 		if (!isset($sharekills[$hash]))
 			continue;
-		if (($t['status']==8 || $t['status']==9) && ($t['sharing']*100) > $sharekills[$hash]) {
+		if (($t['status']==8 || $t['status']==9) && ($t['sharing']) > $sharekills[$hash]) {
 			$transfer = $hashes[$hash];
 			$nbUpdate++;
 			if (stopTransmissionTransferCron($hash)) {
@@ -109,8 +109,6 @@ function updateStatFiles($bShowMissing=false) {
 			if ($bShowMissing) $missing[$t['rpcid']] = $t['name'];
 			continue;
 		}
-
-		$nbUpdate++;
 		
 		$transfer = $hashes[$hash];
 		
@@ -146,6 +144,7 @@ function updateStatFiles($bShowMissing=false) {
 			}
 
 			$sf->percent_done = $t['percentDone'];
+			$sf->sharing = round($t['sharing'],1);
 
 			if ($t['status'] != 9 && $t['status'] != 5) {
 				$sf->peers = $t['peers'];
@@ -185,8 +184,12 @@ function updateStatFiles($bShowMissing=false) {
 			if ($t['eta'] < -1) {
 				$sf->time_left = "Done in ".convertTimeText($t['eta']);
 			} elseif ($sf->percent_done >= 100 && strpos($sf->time_left, 'Done') === false && strpos($sf->time_left, 'Finished') === false) {
+				$sf->percent_done = 100;
 				$sf->time_left = "Done!";
 			}
+			
+			if ($sf->sharing == 0)
+				$sf->sharing = round($t['sharing'],1);
 			
 			if (is_file($cfg["transfer_file_path"].'/'.$transfer.".pid"))
 				unlink($cfg["transfer_file_path"].'/'.$transfer.".pid");
@@ -198,13 +201,15 @@ function updateStatFiles($bShowMissing=false) {
 		$sf->downtotal = $t['downTotal'];
 		$sf->uptotal = $t['upTotal'];
 		
-		if (!$sf->size)
+		if ($sf->size == 0)
 			$sf->size = $t['size'];
 		
 		if ($sf->seeds = -1);
 			$sf->seeds = '';
 
-		$sf->write();
+		if ($sf->write()) {
+			$nbUpdate++;
+		}
 	}
 	$nb = count($tfs);
 	echo " updated $nbUpdate/$nb stat files.\n";

@@ -1167,7 +1167,7 @@ class ClientHandler
 	 * @param string
 	 * @return array (stat) or string Error
 	 */
-	function monitorTransfer($transfer) {
+	function monitorTransfer($transfer, $format="rpc") {
 		//by default, realtime monitoring not available.
 		return "";
 	}
