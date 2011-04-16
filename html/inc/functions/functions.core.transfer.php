@@ -421,6 +421,8 @@ function getTransferDetails($transfer, $full) {
 		$details['cons']  = $stat['cons'];
 		// percentage
 		$percentage = $stat['percentDone'];
+		// sharing
+		$details['sharing'] = $stat['sharing'];
 		// size
 		$size = $stat['size'];
 		// eta
@@ -479,8 +481,9 @@ function getTransferDetails($transfer, $full) {
 	}
 	$details['percentDone'] = $percentage;
 	// sharing
-	if (is_array($totals))
-	$details['sharing'] = ($totals["downtotal"] > 0) ? @number_format((($totals["uptotal"] / $totals["downtotal"]) * 100), 2) : 0;
+	if (is_array($totals)) {
+		$details['sharing'] = ($totals["downtotal"] > 0) ? @number_format((($totals["uptotal"] / $totals["downtotal"]) * 100), 2) : 0;
+	}
 	// full (including static) details
 	if ($full) {
 		// owner
@@ -1048,6 +1051,7 @@ function injectTransfer($transfer) {
  */
 function getOwner($transfer) {
 	global $cfg, $db, $transfers;
+	
 	if (isset($transfers['owner'][$transfer])) {
 		return $transfers['owner'][$transfer];
 	} else {
@@ -1055,9 +1059,12 @@ function getOwner($transfer) {
 		if ($uid > 0) {
 			//fast method
 			return GetUsername($uid);
+		} elseif (isHash($transfer)) {
+			$uid = $db->GetOne("SELECT uid FROM tf_transfer_totals WHERE tid=".$db->qstr($transfer)." ORDER BY created DESC");
+			if ($db->ErrorNo() != 0) dbError($sql);
+			$transfers['owner'][$transfer] = GetUsername($uid);
 		} else {
-			//slow, needed for old transfers (before TFNG)
-			
+			//slower, needed for old transfers (before TFNG)
 			// Check log to see what user has a history with this file
 			$transfers['owner'][$transfer] = $db->GetOne("SELECT user_id FROM tf_log WHERE file=".$db->qstr($transfer)." AND (action=".$db->qstr($cfg["constants"]["file_upload"])." OR action=".$db->qstr($cfg["constants"]["url_upload"])." OR action=".$db->qstr($cfg["constants"]["reset_owner"]).") ORDER BY time DESC");
 			return ($transfers['owner'][$transfer] != "")
@@ -1090,8 +1097,8 @@ function changeOwner($transfer, $user) {
 		. $uid.","
 		. "0,0"
 		.")";
-                $result = $db->Execute($sql);
-                if ($db->ErrorNo() != 0) dbError($sql);
+		$result = $db->Execute($sql);
+		if ($db->ErrorNo() != 0) dbError($sql);
 
 		resetOwner($transfer);
 	}

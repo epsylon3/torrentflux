@@ -178,6 +178,7 @@ if ($cfg["transmission_rpc_enable"]) {
 
 		$tArray = array(
 			'is_owner' => true,
+			'transferowner' => ($cfg["transmission_rpc_enable"]==2 ? getTransmissionTransferOwner($hash) : getOwner($hash) ),
 			'transferRunning' => (int) $transferRunning,
 			'rpc_status' => $aTorrent['status'],
 			'clientType' => 'torrent',
