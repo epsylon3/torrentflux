@@ -38,6 +38,9 @@ require_once('inc/functions/functions.transfer.php');
 // init template-instance
 tmplInitializeInstance($cfg["theme"], "page.transferSettings.tmpl");
 
+$tmpl->setvar('table_admin_border', $cfg['table_admin_border']);
+$tmpl->setvar('subfoot_torrentFluxLink', '');
+
 // init transfer
 transfer_init();
 
