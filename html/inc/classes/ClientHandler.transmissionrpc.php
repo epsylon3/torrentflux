@@ -143,23 +143,24 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			$this->command .= "\n". 'torrent-start '.$transfer.' '.$hash; //log purpose
 		}
 		if (!empty($hash)) {
-/* to check...
-			$sql = "DELETE FROM tf_transfer_totals WHERE tid = ".$db->qstr($hash)." AND uid=$uid";
-			$result = $db->Execute($sql);
-			$sql = "INSERT INTO tf_transfer_totals (tid,uid) VALUES (".$db->qstr($hash).", $uid)";
-			$result = $db->Execute($sql);
-*/
-			//Sharekill 2.5 = 250%
-			if ($this->sharekill > 100) 
-				$this->sharekill = $this->sharekill / 100;
+			
+			if ($this->sharekill > 100) {
+				//bad sharekill
+				$this->sharekill = round((float) $this->sharekill / 100.0,2);
+			}
 
 			$params = array(
+			'downloadLimit'  => $this->drate,
+			'downloadLimited'=> ($this->drate != 0),
+			'uploadLimit'    => $this->rate,
+			'uploadLimited'  => ($this->rate != 0),
 			'seedRatioLimit' => $this->sharekill,
 			'seedRatioMode' => intval($this->sharekill != 0)
 			);
 			$res = (int) startTransmissionTransfer($hash, $enqueue, $params);
 		}
-		if ($res) {
+		if (!$res) {
+			$this->command .= "\n".$rpc->LastError;
 			//...
 		}
 
@@ -353,6 +354,13 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		$msg = "$uprate autosend=".serialize($autosend);
 		if ($autosend) {
 			$rpc = Transmission::getInstance();
+			
+			$sess = $rpc->session_get(array("speed-limit-up"));
+			if ($sess["arguments"]["speed-limit-up"] < $this->rate) {
+				$msg = "session_set speed-limit-up ".$this->rate;
+				AuditAction($cfg["constants"]["debug"], $this->client."-setRateUpload : $msg.");
+				$rpc->session_set(array("speed-limit-up" => $this->rate));
+			}
 
 			if (isHash($transfer))
 				$hash = $transfer;
@@ -361,7 +369,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 				
 			$tid = getTransmissionTransferIdByHash($hash);
 			if ($tid > 0) {
-				$byterate = 1024 * $this->rate;
+				//$byterate = 1024 * $this->rate;
 				$req = $rpc->set($tid, array('uploadLimit' => $this->rate, 'uploadLimited' => ($this->rate > 0)) );
 				if (!isset($req['result']) || $req['result'] != 'success') {
 					$msg = $req['result'];
@@ -375,7 +383,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 					} elseif (!empty($req['arguments']['torrents'])) {
 						$torrent = array_pop($req['arguments']['torrents']);
 						if ($torrent['uploadLimit'] != $this->rate) {
-							$msg = "byterate not set correctly =".$torrent['uploadLimit'];
+							$msg = "byterate not set correctly=".$torrent['uploadLimit'];
 						}
 					}
 				}
@@ -400,10 +408,20 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		$this->drate = $downrate;
 
 		$result = true;
-		
+
 		$msg = "$uprate autosend=".serialize($autosend);
 		if ($autosend) {
 			$rpc = Transmission::getInstance();
+
+			$sess = $rpc->session_get(array("speed-limit-down"));
+			if ($sess["arguments"]["speed-limit-down"] < $this->drate) {
+				//in kB
+				$msg = "session_set speed-limit-down ".$this->drate;
+				$rpc->session_set(array("speed-limit-down" => $this->drate));// ??? doesnt works so... disable limit
+				$rpc->session_set(array("speed-limit-down" => 0, "speed-limit-down-enabled" => 0));
+				
+				AuditAction($cfg["constants"]["debug"], $this->client."->setRateDownload : $msg.".$rpc->lastError);
+			}
 
 			if (isHash($transfer))
 				$hash = $transfer;
@@ -412,7 +430,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 				
 			$tid = getTransmissionTransferIdByHash($hash);
 			if ($tid > 0) {
-				$byterate = 1024 * $this->drate;
+				//$byterate = 1024 * $this->drate;
 				$req = $rpc->set($tid, array('downloadLimit' => $this->drate, 'downloadLimited' => ($this->drate > 0)) );
 				if (!isset($req['result']) || $req['result'] != 'success') {
 					$msg = $req['result'];
@@ -426,7 +444,8 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 					} elseif (!empty($req['arguments']['torrents'])) {
 						$torrent = array_pop($req['arguments']['torrents']);
 						if ($torrent['downloadLimit'] != $this->drate) {
-							$msg = "byterate not set correctly =".$torrent['downloadLimit'];
+							$msg = "byterate not set correctly=".$torrent['downloadLimit'];
+							$rpc->set($tid, array('downloadLimit' => 0, 'downloadLimited' => 0));
 						}
 					}
 				}
@@ -435,7 +454,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			
 			$this->logMessage("setRateDownload : ".$msg."\n", true);
 		}
-		AuditAction($cfg["constants"]["debug"], $this->client."-setRateDownload : $msg.");
+		AuditAction($cfg["constants"]["debug"], $this->client."->setRateDownload : $msg.");
 		return $result;
 	}
 
