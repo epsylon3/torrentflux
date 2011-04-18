@@ -442,7 +442,7 @@ foreach ($arList as $mtimecrc => $transfer) {
 						$sf->up_speed     = $trStat['up_speed'];
 						$sf->time_left    = $trStat['estTime'];
 						
-						
+						$sf->sharing      = $trStat['sharing'];	
 						$sf->seedlimit    = $trStat['seedlimit'];
 						
 						$sf->uptotal      = (float) $trStat['uptotal'];
@@ -467,6 +467,10 @@ foreach ($arList as $mtimecrc => $transfer) {
 						
 						if ($sf->rpc_status == 16) {
 							//stopped
+							if (abs($sf->percent_done) >= 100 && (int) $sf->sharing > (int) $sf->seedlimit - 5) {
+								$sf->up_speed = "";
+								$sf->graph_width  = 100;
+							}
 						} else {
 							$nbRpc++;
 						}
