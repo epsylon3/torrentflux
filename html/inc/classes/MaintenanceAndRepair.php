@@ -762,8 +762,8 @@ class MaintenanceAndRepair
 		// in cli-mode
 		if ($this->_mode == MAINTENANCEANDREPAIR_MODE_CLI)
 			printMessage($this->name, $message);
-		else
-			addGrowlMessage($this->name, $message);
+		//else
+		//	addGrowlMessage($this->name, $message);
 	}
 
 	/**
