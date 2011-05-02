@@ -99,15 +99,21 @@
 				<tmpl_if name="enable_dirstats" value="1">
 					<td class="dirPermission"><tmpl_var name="permission"></td>
 					<td class="dirSize"><tmpl_var name="size"></td>
+					<tmpl_if name="dlinfo">
 					<td class="dirDown"><tmpl_var name="dlinfo"></td>
+					<tmpl_elseif name="is_recent" value="1">
+					<td class="dirRecent"><img src="themes/<tmpl_var name='theme'>/images/dir/new.png" title="New"/></td>
+					<tmpl_else>
+					<td class="dirDown"></td>
+					</tmpl_if>
 					<td class="dirDate"><tmpl_var name="date"></td>
 				</tmpl_if>
 			<tmpl_else>
 				<td style="width:18px;">
 					<tmpl_if name="is_dir">
-						<img src="themes/<tmpl_var name="theme">/images/dtree/folder.png" title="<tmpl_var name="entry">" alt="folder name:" />
+						<img src="themes/<tmpl_var name='theme'>/images/dtree/folder.png" title="<tmpl_var name='entry'>" alt="folder name:" />
 					<tmpl_else>
-						<img src="<tmpl_var name="image">" title="<tmpl_var name="entry">" alt="" />
+						<img src="<tmpl_var name='image'>" title="<tmpl_var name='entry'>" alt="" />
 					</tmpl_if>
 				</td>	
 				<tmpl_if name="enable_dirstats" value="1">
@@ -115,7 +121,7 @@
 				<tmpl_else>
 					<td>
 				</tmpl_if>
-					<a id="symbolic" href="index.php?iid=dir&amp;dir=<tmpl_var name="urlencode1">"><tmpl_var name="entry"></a> (symbolic link to <tmpl_var name="real_entry">)
+					<a id="symbolic" href="index.php?iid=dir&amp;dir=<tmpl_var name='urlencode1'>"><tmpl_var name="entry"></a> (symbolic link to <tmpl_var name="real_entry">)
 				</td>
 			</tmpl_if>
 			<td class="dirActions">
