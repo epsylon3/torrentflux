@@ -570,6 +570,7 @@ foreach ($entrys as $entry) {
 	// dirstats
 	$date = "";
 	$size = 0.0;
+	$isrecent = 0;
 	$show_sfv = 0;
 	$sfvdir = "";
 	$sfvsfv = "";
@@ -596,11 +597,15 @@ foreach ($entrys as $entry) {
 			$date = "";
 		}
 		$size = formatBytesTokBMBGBTB( sprintf("%.0f", $ssz) );
+		if (strstr($size,"G")) {
+			$size="<b>$size</b>";
+		}
 		
-		if (strstr($size,"G")) $size="<b>$size</b>";
-
 		$timeStamp = $stat['mtime'];
 		$date = date($cfg['_DATETIMEFORMAT'],$timeStamp);
+		if ($timeStamp + (86400*2) > time()) {
+			$isrecent = 1;
+		}
 	}
 	if (is_dir($dirName.$entry)) // dir
 	{ 
@@ -693,6 +698,7 @@ foreach ($entrys as $entry) {
 	array_push($list, array(
 		'is_dir'      => $isdir,
 		'is_link'     => $islink,
+		'is_recent'   => $isrecent,
 		'aclWrite'    => $aclWrite,
 		'permission'  => $permission,
 		'entry'       => $entry,
