@@ -1,7 +1,5 @@
 <?php
 /*******************************************************************************
- Set tabs to 4.
-
  $Id: queries.install.php $
 
  @package torrentflux_Setup
@@ -16,6 +14,8 @@
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
+
+ Set tabs to 4.
 
 *******************************************************************************/
 
@@ -250,7 +250,7 @@ CREATE TABLE tf_test (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // sql-queries : Create
@@ -264,7 +264,7 @@ CREATE TABLE tf_cookies (
   host VARCHAR(255) default NULL,
   data VARCHAR(255) default NULL,
   PRIMARY KEY  (cid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_links
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_links (
@@ -273,7 +273,7 @@ CREATE TABLE tf_links (
   sitename VARCHAR(255) NOT NULL default 'Old Link',
   sort_order TINYINT(3) UNSIGNED default '0',
   PRIMARY KEY  (lid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_log
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_log (
@@ -286,7 +286,7 @@ CREATE TABLE tf_log (
   user_agent VARCHAR(200) NOT NULL default '',
   time VARCHAR(14) NOT NULL default '0',
   PRIMARY KEY  (cid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_messages
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_messages (
@@ -299,14 +299,14 @@ CREATE TABLE tf_messages (
   time VARCHAR(14) NOT NULL default '0',
   force_read TINYINT(1) default '0',
   PRIMARY KEY  (mid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_rss
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_rss (
   rid int(10) NOT NULL auto_increment,
   url VARCHAR(255) NOT NULL default '',
   PRIMARY KEY  (rid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_users
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_users (
@@ -323,7 +323,7 @@ CREATE TABLE tf_users (
   language_file VARCHAR(60) default 'lang-english.php',
   state TINYINT(1) NOT NULL default '1',
   PRIMARY KEY  (uid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_transfers
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfers (
@@ -347,7 +347,7 @@ CREATE TABLE tf_transfers (
   created TIMESTAMP NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (transfer),
   KEY hash_idx (`hash`(8))
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_transfer_totals
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transfer_totals (
@@ -357,7 +357,7 @@ CREATE TABLE tf_transfer_totals (
   downtotal BIGINT(80) NOT NULL default '0',
   created TIMESTAMP NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY (`tid`,`uid`)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_trprofiles
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_trprofiles (
@@ -377,7 +377,7 @@ CREATE TABLE tf_trprofiles (
   rerequest MEDIUMINT(8) unsigned NOT NULL default '1800',
   savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_xfer
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_xfer (
@@ -386,42 +386,42 @@ CREATE TABLE tf_xfer (
   download BIGINT(80) NOT NULL default '0',
   upload BIGINT(80) NOT NULL default '0',
   PRIMARY KEY  (user_id,date)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_settings_user
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_settings_user (
   uid INT(10) NOT NULL,
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_settings
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_settings (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_settings_dir (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_settings_stats
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_settings_stats (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_transmission_user
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
   uid INT(10) NOT NULL default '0',
   PRIMARY KEY  (tid,uid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // sql-queries : Data
 $cqt = 'data';
 $queries[$cqt][$cdb] = array();

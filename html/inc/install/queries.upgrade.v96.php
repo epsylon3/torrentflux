@@ -1,10 +1,9 @@
 <?php
-
-/* $Id$ */
-
 /*******************************************************************************
+ $Id: queries.upgrade.v96.php $
 
- LICENSE
+ @package torrentflux_Setup
+ @license LICENSE http://www.gnu.org/copyleft/gpl.html
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License (GPL)
@@ -16,7 +15,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
 
- To read the license please visit http://www.gnu.org/copyleft/gpl.html
+ Set tabs to 4.
 
 *******************************************************************************/
 
@@ -236,7 +235,7 @@ CREATE TABLE tf_test (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 // sql-queries : Create
@@ -264,7 +263,7 @@ CREATE TABLE tf_transfers (
   maxcons SMALLINT(4) unsigned NOT NULL default '0',
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (transfer)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_transfer_totals
 array_push($queries[$cqt][$cdb], "RENAME TABLE tf_torrent_totals TO tf_transfer_totals");
 // tf_trprofiles
@@ -286,21 +285,21 @@ CREATE TABLE tf_trprofiles (
   rerequest MEDIUMINT(8) unsigned NOT NULL default '0',
   savepath VARCHAR(255) NOT NULL default '',
   PRIMARY KEY  (id)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_settings_dir
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_settings_dir (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // tf_settings_stats
 array_push($queries[$cqt][$cdb], "
 CREATE TABLE tf_settings_stats (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY  (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 // ALTER
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users CHANGE user_id user_id VARCHAR(32) BINARY NOT NULL");
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_users ADD state TINYINT(1) DEFAULT '1' NOT NULL");

@@ -1,10 +1,9 @@
 <?php
-
-/* $Id$ */
-
 /*******************************************************************************
+ $Id: queries.upgrade.v1.0beta2.php $
 
- LICENSE
+ @package torrentflux_Setup
+ @license LICENSE http://www.gnu.org/copyleft/gpl.html
 
  This program is free software; you can redistribute it and/or
  modify it under the terms of the GNU General Public License (GPL)
@@ -16,7 +15,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  GNU General Public License for more details.
 
- To read the license please visit http://www.gnu.org/copyleft/gpl.html
+ Set tabs to 4.
 
 *******************************************************************************/
 
@@ -69,7 +68,7 @@ CREATE TABLE IF NOT EXISTS tf_test (
   tf_key VARCHAR(255) NOT NULL default '',
   tf_value TEXT NOT NULL,
   PRIMARY KEY (tf_key)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 array_push($queries[$cqt][$cdb], "DROP TABLE tf_test");
 
 $cqt = 'create';
@@ -79,7 +78,7 @@ CREATE TABLE IF NOT EXISTS tf_transmission_user (
   tid VARCHAR(40) NOT NULL default '',
   uid INT(10) NOT NULL default '0',
   PRIMARY KEY  (tid,uid)
-) TYPE=MyISAM");
+) ENGINE=MYISAM");
 
 // ALTER TABLE (need to check for sqlite and postgre)
 array_push($queries[$cqt][$cdb], "ALTER TABLE tf_transfers ADD INDEX hash_idx ( `hash`(8))");
