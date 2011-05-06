@@ -544,8 +544,6 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	 */
 	function cleanStoppedStatFile($transfer) {
 		$stat = new StatFile($this->transfer, $this->owner);
-		//if ($stat->percent_done > 100)
-		//	$stat->percent_done=100;
 		return $stat->stop();
 	}
 
