@@ -24,7 +24,8 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 /*
-	v 1.00 - Dec 2010.
+	v1.01 - May 2011 update URL
+	v1.00 - Dec 2010 initial version by Epsylon3.
 */
 
 class SearchEngine extends SearchEngineBase
@@ -32,18 +33,18 @@ class SearchEngine extends SearchEngineBase
 
 	function SearchEngine($cfg)
 	{
-		$this->mainURL = "www.torrentday.com";
-		$this->altURL = "www.torrentday.com";
+		$this->mainURL = "www.torrentday.me";
+		$this->altURL = "www.torrentday.me";
 		$this->mainTitle = "TorrentDay";
 		$this->engineName = "TorrentDay";
 
 		$this->author = "Epsylon3";
-		$this->version = "1.00-tfng";
+		$this->version = "1.01-tfng";
 		//$this->updateURL = "http://www.torrentflux-ng.org/forum/viewtopic.php?f=13&t=40";
 
 		$this->needAuth = true;
 
-		$this->altRSS = "http://www.torrentday.com/get_rss.php?feed=direct&cat=12&user=[USER]&passkey=[MD5HASH]";
+		$this->altRSS = "http://www.torrentday.me/get_rss.php?feed=direct&cat=12&user=[USER]&passkey=[MD5HASH]";
 
 		$this->Initialize($cfg);
 	}
@@ -108,14 +109,14 @@ class SearchEngine extends SearchEngineBase
 			$this->postquery = "sec=jax&cata=yes&".$url['query'].$url['fragment'];
 			$request = "/".$url['path'];
 			//referer
-			$_SESSION['lastOutBoundURI'] = "http://www.torrentday.com/browse.php?cata=no";
+			$_SESSION['lastOutBoundURI'] = "http://www.torrentday.me/browse.php?cata=no";
 		}
 		elseif (strpos('0day_API.php') !== false) {
 			$this->method = "POST";
 			$this->postquery = "sec=jax&c12&".$url['query'].$url['fragment'];
 			$request = "/".$url['path'];
 			//referer
-			$_SESSION['lastOutBoundURI'] = "http://www.torrentday.com/0day.php";
+			$_SESSION['lastOutBoundURI'] = "http://www.torrentday.me/0day.php";
 		}
 		return parent::makeRequest($request, false);
 	}
@@ -498,8 +499,8 @@ class fileTorrentDay
 		{
 			$this->torrentDisplayName = substr($this->torrentDisplayName,0,$maxDisplayLength-3)."...";
 		}
-		if (strpos($this->torrentFile, "www.torrentday.com") === false) {
-			$this->torrentFile = "http://www.torrentday.com/".$this->torrentFile;
+		if (strpos($this->torrentFile, "www.torrentday.me") === false) {
+			$this->torrentFile = "http://www.torrentday.me/".$this->torrentFile;
 		}
 		$output = "<tr>\n";
 		$output .= "	<td width=\"16\" bgcolor=\"".$bg."\"><a href=\"dispatcher.php?action=urlUpload&type=torrent&url=".$this->torrentFile."\"><img src=\"".getImagesPath()."download_owner.gif\" width=\"16\" height=\"16\" title=\"".$this->torrentName."\" bsort=0></a></td>\n";
