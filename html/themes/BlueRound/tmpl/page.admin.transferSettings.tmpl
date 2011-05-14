@@ -278,8 +278,10 @@ B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent M
 	<span style="margin-left: 62px;"><span style="font-family:courier;">sudo apt-get install transmission-daemon</span><br/>
 	<span style="margin-left: 54px;">To set password and edit settings, stop transmission-daemon first, then edit /etc/transmission-daemon/settings.json</span><br/>
 	<span style="margin-left: 54px;">It is <b>highly recommended</b> to change rpc-bind-address to localhost (127.0.0.1)</span>, so you can set an empty password<br/>
-	<span style="margin-left: 54px;">You also need to run transmission-daemon with same user or same group as your webserver, on debian/ubuntu you can do : </span><br/>
-	<span style="margin-left: 62px;"></span><span style="font-family:courier;">adduser debian-transmission www-data</span>
+	<span style="margin-left: 54px;">You also need to run transmission-daemon with same user or same group as your webserver, on debian/ubuntu : </span><br/>
+	<span style="margin-left: 54px;"></span>in /etc/init.d/transmission-daemon set <span style="font-family:courier;">USER=www-data</span> and type :<br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chown -R www-data /etc/transmission-daemon</span><br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chown -R www-data /var/lib/transmission-daemon</span>
 	</p>
 </div>
 
