@@ -2,7 +2,11 @@
 <?php
 /*
  SQL update file generator - Command line tool
- usage: ./sqlscript.php.sh mysql
+
+ usage: ./sqlscript.php.sh mysql install
+
+ upgrade (from v1.0beta2):
+	./sqlscript.php.sh mysql
         ./sqlscript.php.sh sqlite
         ./sqlscript.php.sh postgres
 */
@@ -32,6 +36,9 @@ global $queries;
 
 $res = "";
 foreach ($queries['create'][$type] as $databaseTypeName => $databaseQuery) {
+	if ($databaseTypeName == "mysql") {
+		$databaseQuery = str_replace('TYPE=MyISAM','ENGINE=MyISAM DEFAULT CHARSET=utf8;',$databaseQuery);
+	}
 	echo $databaseQuery.";\n";
 	$res .= $databaseQuery.";\n";
 }

@@ -4,4 +4,6 @@ to get lastest SQL update script,  use SQL update file generator command line to
         ./sqlscript.php.sh sqlite
         ./sqlscript.php.sh postgres
 
-to get the full install script : ./sqlscript.php.sh mysql install
+to get the full install script : 
+
+        ./sqlscript.php.sh mysql install
