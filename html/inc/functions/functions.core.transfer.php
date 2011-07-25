@@ -1086,7 +1086,7 @@ function changeOwner($transfer, $user) {
 	$oldowner = getOwner($transfer);
 	if ($oldowner != $user) {
 		if (file_exists($cfg["transfer_file_path"].$transfer.".stat")) {
-			$sf = new StatFile($transferi, $user);
+			$sf = new StatFile($transfer, $user);
 			$sf->transferowner = $user;
 			$sf->write();
 		}
