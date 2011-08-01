@@ -49,7 +49,7 @@ function addNewUser($newUser, $pass1, $userType, $userEmail="") {
 	if ($db->ErrorNo() != 0) 
 		dbError($sql);
 	elseif (!empty($userEmail)) {
-		UpdateUserEmail($user_id, $userEmail);
+		UpdateUserEmail(strtolower($user_id), $userEmail);
 	}
 	// flush session-cache
 	cacheFlush();
