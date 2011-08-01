@@ -57,6 +57,16 @@ if ($hide_offline == 1)
 	$hide_checked = "checked";
 $user_activity = GetActivityCount($user_id);
 $user_percent = ($user_activity != 0) ? number_format(($user_activity / $total_activity) * 100) : 0;
+// to do FluxFTPD Settings
+$tmpl->setvar('ftpEnabled',false);
+$tmpl->setvar('Dir','');
+$tmpl->setvar('ftpUid','');
+$tmpl->setvar('ftpGid','');
+$tmpl->setvar('ftpUploadBand','');
+$tmpl->setvar('ftpDownloadBand','');
+$tmpl->setvar('ftpQuotaSize','');
+$tmpl->setvar('ftpQuotaFiles','');
+//
 $tmpl->setvar('editUserImage', $editUserImage);
 $tmpl->setvar('user_id', $user_id);
 $tmpl->setvar('email_address', $email_address);
