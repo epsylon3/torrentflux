@@ -143,13 +143,18 @@ class vlibTemplateCache extends vlibTemplate {
         
         if(!$this->_prepareDirs($cache_file)) return false; // prepare all of the directories
 
-        $f = fopen ($cache_file, "w");
+        $f = fopen($cache_file, "w");
+        if (!$f) {
+            if(!is_dir($this->OPTIONS['CACHE_DIRECTORY']) && !empty($this->OPTIONS['CACHE_DIRECTORY']) )
+                mkdir($this->OPTIONS['CACHE_DIRECTORY'], 0775);
+            $f = fopen($cache_file, "w");
+            if (!$f) vlibTemplateError::raiseError('VT_ERROR_NO_CACHE_WRITE',KILL,$cache_file);
+        }
         flock($f, 2); // set an EXclusive lock
-        if (!$f) vlibTemplateError::raiseError('VT_ERROR_NO_CACHE_WRITE',KILL,$cache_file);
-        fputs ($f, $data); // write the parsed string from vlibTemplate
+        fputs($f, $data); // write the parsed string from vlibTemplate
         flock($f, 3); // UNlock file
-        fclose ($f);
-        touch ($cache_file);
+        fclose($f);
+        touch($cache_file);
         return true;
     }
 
