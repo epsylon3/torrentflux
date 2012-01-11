@@ -70,7 +70,6 @@ define("_DELETE","Wissen");
 define("_ABOUTTODELETE","U staat op het punt om te wissen");
 define("_NOTOWNER","Niet de eigenaar van deze Transfer");
 define("_MESSAGETOALL","Dit bericht is verzonden naar ALLE GEBRUIKERS");
-define("_TRYDIFFERENTUSERID","Fout: Probeer een andere gebruikersnaam.");
 define("_HASBEENUSED","is gebruikt.");
 define("_RETURNTOEDIT","Terug naar Bewerken");
 define("_ADMINUSERACTIVITY","Administratie - Gebruikersactiviteit");

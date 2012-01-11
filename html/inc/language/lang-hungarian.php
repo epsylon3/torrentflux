@@ -70,7 +70,6 @@ define("_DELETE","Töröl");
 define("_ABOUTTODELETE","Törölni készül");
 define("_NOTOWNER","Nem a Transfer Tulajdonosa");
 define("_MESSAGETOALL","Ez az üzenet MINDEN FELHASZNÁLÓNAK el lett küldve");
-define("_TRYDIFFERENTUSERID","Hiba: Próbáljon másik Felhasználói Azonosítót.");
 define("_HASBEENUSED","már használt.");
 define("_RETURNTOEDIT","Vissza a Szerkesztéshez");
 define("_ADMINUSERACTIVITY","Adminisztráció - Felhasználói Aktivitás");

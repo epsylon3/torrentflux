@@ -67,7 +67,6 @@ define("_DELETE","Poista");
 define("_ABOUTTODELETE","Olet poistamassa");
 define("_NOTOWNER","Et omista tätä Transfer");
 define("_MESSAGETOALL","Tämä viesti lähetettiin kaikille käyttäjille");
-define("_TRYDIFFERENTUSERID","Virhe, yritä eri USER ID:llä");
 define("_HASBEENUSED","on käytetty.");
 define("_RETURNTOEDIT","Palaa editoimaan");
 define("_ADMINUSERACTIVITY","Administration - Käyttäjän aktiivisuus");

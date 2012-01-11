@@ -61,9 +61,7 @@ $tmpl->setvar('newUser', $newUser);
 
 // error
 	
-// backward-compat-vars
-$tmpl->setvar('_TRYDIFFERENTUSERID', $cfg['_TRYDIFFERENTUSERID']);
-$tmpl->setvar('_HASBEENUSED', $cfg['_HASBEENUSED']);
+$tmpl->setvar('_ERROR', $cfg['_ERROR']);
 
 // error-vars
 $tmpl->setvar('errUsername', ($usernameCheck !== true) ? 1 : 0);

@@ -25,6 +25,7 @@ define("_CHARSET", "utf-8");
 // to be able to exec shell commands with utf8 accents
 define("_LC_CTYPE", "fr_FR.UTF-8");
 
+define("_ERROR", "ERREUR !");
 define("_SELECTFILE", "Envoyer un torrent depuis votre poste");
 define("_URLFILE","URL du fichier.torrent depuis un site web");
 define("_UPLOAD", "Envoyer");
@@ -71,7 +72,6 @@ define("_DELETE", "Effacer");
 define("_ABOUTTODELETE", "Vous êtes sur le point de supprimer");
 define("_NOTOWNER", "Pas propriétaire du Transfert");
 define("_MESSAGETOALL", "Ce message a été envoyé à TOUS LES UTILISATEURS");
-define("_TRYDIFFERENTUSERID", "Erreur: Essayez un utilisateur different.");
 define("_HASBEENUSED", "a été utilisé.");
 define("_RETURNTOEDIT", "Retour à l'édition");
 define("_ADMINUSERACTIVITY", "Administration - Activité des utilisateurs");

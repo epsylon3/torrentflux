@@ -70,7 +70,6 @@ define("_DELETE","IzbriÅ¡i");
 define("_ABOUTTODELETE","Izbrisali boste");
 define("_NOTOWNER","Niste lastnik Transfer");
 define("_MESSAGETOALL","To sporoÄ?ilo je bilo poslano vsem uporabnikom");
-define("_TRYDIFFERENTUSERID","Napaka: Poskusite z drugim uporabnikom.");
 define("_HASBEENUSED","uporabljeno.");
 define("_RETURNTOEDIT","Vrnitev na urejanje");
 define("_ADMINUSERACTIVITY","Administracija - Dejavnosti uporabnikov");

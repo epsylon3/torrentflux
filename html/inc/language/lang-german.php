@@ -71,7 +71,6 @@ define("_ABOUTTODELETE","Möchten Sie löschen");
 define("_NOTOWNER","Sie sind nicht der Besitzer des Transfers");
 define("_AUTHORIZATIONFAILED","Authorization FAILED.   Action has been logged.");
 define("_MESSAGETOALL","Diese Nachricht wurde an ALLE Benutzer geschickt");
-define("_TRYDIFFERENTUSERID","Fehler: Versuchen Sie eine andere Benutzer ID.");
 define("_HASBEENUSED","wurde benutzt.");
 define("_RETURNTOEDIT","Zurück zum Bearbeiten");
 define("_ADMINUSERACTIVITY","Administration - Benutzer Aktivität");

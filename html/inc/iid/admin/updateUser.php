@@ -70,9 +70,7 @@ $tmpl->setvar('email_address', $email_address);
 	
 // error
 	
-// backward-compat-vars
-$tmpl->setvar('_TRYDIFFERENTUSERID', $cfg['_TRYDIFFERENTUSERID']);
-$tmpl->setvar('_HASBEENUSED', $cfg['_HASBEENUSED']);
+$tmpl->setvar('_ERROR', $cfg['_ERROR']);
 
 // error-vars
 $tmpl->setvar('errUsername', ($user_id == '') ? 1 : 0);

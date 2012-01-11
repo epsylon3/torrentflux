@@ -93,7 +93,6 @@ define("_DELETE","删除");
 define("_ABOUTTODELETE","你将要删除");
 define("_NOTOWNER","你不是这个 Transfer 档的上传者");
 define("_MESSAGETOALL","这个讯息将传送给每一位用户");
-define("_TRYDIFFERENTUSERID","发生错误: 请试试另一个用户帐号.");
 define("_HASBEENUSED","已经被使用了.");
 define("_RETURNTOEDIT","回到编辑");
 define("_ADMINUSERACTIVITY","管理 - 用户活动记录");

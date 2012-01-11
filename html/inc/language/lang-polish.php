@@ -70,7 +70,6 @@ define("_DELETE","Usuñ");
 define("_ABOUTTODELETE","Usuwasz plik");
 define("_NOTOWNER","Nie jeste¶ w³a¶cicielem tego Transfer");
 define("_MESSAGETOALL","Ta wiadomo¶æ zosta³a wys³ana do WSZYSTKICH");
-define("_TRYDIFFERENTUSERID","B³±d: Spróbuj inne ID U¿ytkownika.");
 define("_HASBEENUSED","ju¿ instnieje.");
 define("_RETURNTOEDIT","Powrót do Edycji");
 define("_ADMINUSERACTIVITY","Administracja - Aktywno¶æ U¿ytkowników");

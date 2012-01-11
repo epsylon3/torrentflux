@@ -69,7 +69,6 @@ define("_DELETE","Sil");
 define("_ABOUTTODELETE","Silme islemi");
 define("_NOTOWNER","Transfer sahibi baskasidir");
 define("_MESSAGETOALL","Bu mesaj Tüm Kullanicilara gönderilmistir");
-define("_TRYDIFFERENTUSERID","Hata: Lütfen baska bir kullanici ID'si deneyin.");
 define("_HASBEENUSED","kullanimda.");
 define("_RETURNTOEDIT","Düzenlemeye Geri Dön");
 define("_ADMINUSERACTIVITY","Yönetim - Kullanici Etkinlikleri");

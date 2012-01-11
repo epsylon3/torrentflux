@@ -67,7 +67,6 @@ define("_DELETE","Elimina");
 define("_ABOUTTODELETE","Stai per cancellare");
 define("_NOTOWNER","Non proprietario del Transfer");
 define("_MESSAGETOALL","Questo messaggio è stato spedito a TUTTI GLI UTENTI");
-define("_TRYDIFFERENTUSERID","Errore: Prova un altro User ID.");
 define("_HASBEENUSED","è stato usato.");
 define("_RETURNTOEDIT","Ritorna a Modifica");
 define("_ADMINUSERACTIVITY","Amministrazione - Attività utente");

@@ -64,6 +64,7 @@ function loadLanguageFile($language) {
 	$cfg['_CHARSET'] = _CHARSET;   //output
 	$cfg['_LC_CTYPE'] = _LC_CTYPE; //shell
 
+	$cfg['_ERROR'] = _ERROR;
 	$cfg['_SELECTFILE'] = _SELECTFILE;
 	$cfg['_URLFILE'] = _URLFILE;
 	$cfg['_UPLOAD'] = _UPLOAD;
@@ -112,7 +113,6 @@ function loadLanguageFile($language) {
 	$cfg['_ABOUTTODELETE'] = _ABOUTTODELETE;
 	$cfg['_NOTOWNER'] = _NOTOWNER;
 	$cfg['_MESSAGETOALL'] = _MESSAGETOALL;
-	$cfg['_TRYDIFFERENTUSERID'] = _TRYDIFFERENTUSERID;
 	$cfg['_HASBEENUSED'] = _HASBEENUSED;
 	$cfg['_RETURNTOEDIT'] = _RETURNTOEDIT;
 	$cfg['_ADMINUSERACTIVITY'] = _ADMINUSERACTIVITY;

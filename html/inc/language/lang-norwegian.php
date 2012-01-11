@@ -67,7 +67,6 @@ define("_ABOUTTODELETE","Du skal til å slette");
 define("_NOTOWNER","Ikke eier av Transfer");
 define("_AUTHORIZATIONFAILED","Godkjenning feileit.   Hendelsen har blitt logget.");
 define("_MESSAGETOALL","Denne meldingen ble sendt til ALLE BRUKERE");
-define("_TRYDIFFERENTUSERID","Feil: Prøv en annen bruker ID.");
 define("_HASBEENUSED","has blitt brukt");
 define("_RETURNTOEDIT","Tilbake til rediger");
 define("_ADMINUSERACTIVITY","Administrasjon - Bruker aktivitet");

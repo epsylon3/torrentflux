@@ -68,7 +68,6 @@ define("_ABOUTTODELETE","Yer about t'delete");
 define("_NOTOWNER","Not Owny of Transfer");
 define("_AUTHORIZATIONFAILED","Autho'izashun FAILED. Ackshun has been logged, cuss it all t' tarnation.");
 define("_MESSAGETOALL","This hyar message was sent t''ALL USERS");
-define("_TRYDIFFERENTUSERID","Erro': Try a diffrunt User ID.");
 define("_HASBEENUSED","has been used, cuss it all t' tarnation.");
 define("_RETURNTOEDIT","Return t'Edit");
 define("_ADMINUSERACTIVITY","Administrashun - User Ackivity");

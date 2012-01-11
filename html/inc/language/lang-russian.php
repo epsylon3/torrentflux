@@ -67,7 +67,6 @@ define("_DELETE","Удалить");
 define("_ABOUTTODELETE","Удалить торрент?");
 define("_NOTOWNER","Не ваш торрент");
 define("_MESSAGETOALL","Это сообщение будет отправлено всем пользователям");
-define("_TRYDIFFERENTUSERID","Ошибка: Попробуйте другое имя пользователя.");
 define("_HASBEENUSED","было использовано.");
 define("_RETURNTOEDIT","Вернуться к редактированию");
 define("_ADMINUSERACTIVITY","Администрация - Активность пользователей");

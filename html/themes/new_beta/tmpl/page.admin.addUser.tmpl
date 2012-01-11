@@ -5,13 +5,16 @@
 		<div id="uploadLast"></div>
 		<div id="uploadFirst">
 			<span class="upload">
-				<tmpl_var name="_TRYDIFFERENTUSERID">
+				<tmpl_var name="_ERROR">
 			</span>
 		</div>
 	</div>
 	<div class="uploadClass">
-		<span id="newUser"><tmpl_var name="newUser"></span>
-		<tmpl_var name="_HASBEENUSED">
+		<span id="newUser"><tmpl_var name="newUser">
+                <tmpl_var name="errMsgUsername">
+                <tmpl_var name="errMsgPassword">
+                <tmpl_var name="errMsgEmail">
+		</span>
 	</div>
 	<div id="uploadBottom"></div>
 	<div id="uploadBottomEnd"></div>

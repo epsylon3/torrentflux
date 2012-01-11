@@ -1,6 +1,6 @@
 <tmpl_include name="inc.adminLayoutHeader.tmpl">
 	<div class="error">
-		<h2>Error !</h2>
+		<h2><tmpl_var name="_ERROR"></h2>
 		<p><b><tmpl_var name="errMsgUsername"><tmpl_var name="errMsgPassword"><tmpl_var name="errMsgEmail"></b></p>
 		<p><a href="admin.php?op=CreateUser"><tmpl_var name="_RETURNTOEDIT"></a></p>
 	</div>

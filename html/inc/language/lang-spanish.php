@@ -93,7 +93,6 @@ define("_DELETE","Borrar");
 define("_ABOUTTODELETE","Estás a punto de borrar");
 define("_NOTOWNER","Ese Transfer no es tuyo");
 define("_MESSAGETOALL","Este mensaje es para TODOS LOS USUARIOS");
-define("_TRYDIFFERENTUSERID","Error: Intenta otra ID de Usuario");
 define("_HASBEENUSED","ha sido usado.");
 define("_RETURNTOEDIT","Regresar a hacer cambios");
 define("_ADMINUSERACTIVITY","Administración - Actividades de Usuarios");

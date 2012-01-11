@@ -75,7 +75,6 @@ define("_DELETE","Delete");
 define("_ABOUTTODELETE","Você está prestes a apagar");
 define("_NOTOWNER","Transfer não é de sua propriedade");
 define("_MESSAGETOALL","Esta mensagem foi enviada para TODOS OS USUÁRIOS");
-define("_TRYDIFFERENTUSERID","Erro: Tente um User ID diferente.");
 define("_HASBEENUSED","foi usado.");
 define("_RETURNTOEDIT","Retornar para Edição");
 define("_ADMINUSERACTIVITY","Administração - Atividade do Usuário");
