@@ -72,7 +72,7 @@ define("_DELETE", "Effacer");
 define("_ABOUTTODELETE", "Vous êtes sur le point de supprimer");
 define("_NOTOWNER", "Pas propriétaire du Transfert");
 define("_MESSAGETOALL", "Ce message a été envoyé à TOUS LES UTILISATEURS");
-define("_HASBEENUSED", "a été utilisé.");
+define("_HASBEENUSED", "est déjà utilisé.");
 define("_RETURNTOEDIT", "Retour à l'édition");
 define("_ADMINUSERACTIVITY", "Administration - Activité des utilisateurs");
 define("_ADMIN_MENU", "admin");
