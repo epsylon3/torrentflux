@@ -1111,7 +1111,7 @@ function DeleteThisUser($user_id) {
  * @param $userType
  * @param $hideOffline
  */
-function updateThisUser($user_id, $org_user_id, $pass1, $userType, $hideOffline) {
+function updateThisUser($user_id, $org_user_id, $pass1, $userType, $hideOffline, $email_address) {
 	global $db;
 	$user_id = strtolower($user_id);
 	if ($hideOffline == "")
@@ -1123,8 +1123,10 @@ function updateThisUser($user_id, $org_user_id, $pass1, $userType, $hideOffline)
 	$rec['user_id'] = $user_id;
 	$rec['user_level'] = $userType;
 	$rec['hide_offline'] = $hideOffline;
-	if ($pass1 != "")
+	$rec['email_address'] = $email_address;
+	if ($pass1 != "") {
 		$rec['password'] = md5($pass1);
+	}
 	$sql = $db->GetUpdateSQL($rs, $rec);
 	if ($sql != "") {
 		$result = $db->Execute($sql);
