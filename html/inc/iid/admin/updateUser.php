@@ -45,7 +45,7 @@ $passwordCheck = (($pass1 != '') && ($pass2 != ''))
 	: true;
 	
 // update user
-if ((IsUser($org_user_id)) && (!IsUser($user_id)) && ($user_id != '') && ($user_id != $org_user_id) && ($passwordCheck === true)) {
+if (((IsUser($org_user_id)) && (!IsUser($user_id)) && ($user_id != '')  && ($passwordCheck === true)) || (($user_id == $org_user_id) && ($passwordCheck === true)) ) {
 	// Admin is changing id or password through edit screen
 	if (($user_id == $cfg["user"] || $cfg["user"] == $org_user_id) && $pass1 != "") {
 		// this will expire the user
@@ -53,13 +53,13 @@ if ((IsUser($org_user_id)) && (!IsUser($user_id)) && ($user_id != '') && ($user_
 	}
 	updateThisUser($user_id, $org_user_id, $pass1, $userType, $hideOffline, $email_address);
 	AuditAction($cfg["constants"]["admin"], $cfg['_EDITUSER'].": ".$user_id);
-	@header("location: admin.php");
+	@header("location: admin.php?op=editUser&user_id=".urlencode($user_id));
 	exit();
-} elseif($email_address != "") {
+} /*elseif($email_address != "") {
 	UpdateUserEmail($user_id, $email_address);
 	@header("location: admin.php?op=editUser&user_id=".urlencode($user_id));
 	exit();
-}
+}*/
 
 // init template-instance
 tmplInitializeInstance($cfg["theme"], "page.admin.updateUser.tmpl");
