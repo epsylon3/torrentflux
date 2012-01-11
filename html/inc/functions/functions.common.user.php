@@ -31,8 +31,9 @@
 function addNewUser($newUser, $pass1, $userType, $userEmail="") {
 	global $cfg, $db;
 	$create_time = time();
+	$user_id = strtolower($newUser);
 	$record = array(
-					'user_id'=>strtolower($newUser),
+					'user_id'=>$user_id,
 					'password'=>md5($pass1),
 					'hits'=>0,
 					'last_visit'=>$create_time,
@@ -49,7 +50,7 @@ function addNewUser($newUser, $pass1, $userType, $userEmail="") {
 	if ($db->ErrorNo() != 0) 
 		dbError($sql);
 	elseif (!empty($userEmail)) {
-		UpdateUserEmail(strtolower($user_id), $userEmail);
+		UpdateUserEmail($user_id, $userEmail);
 	}
 	// flush session-cache
 	cacheFlush();
