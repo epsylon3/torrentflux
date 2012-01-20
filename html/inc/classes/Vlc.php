@@ -254,10 +254,10 @@ class Vlc
 	 * stop a (/all) stream(s)
 	 */
     function instance_stop($port = 0) {
-    	global $cfg;
-		if ($port == 0) { /* all */
-			@shell_exec("killall -9 vlc > /dev/null");
-
+	global $cfg;
+	if ($port == 0) { /* all */
+		@shell_exec("killall -9 vlc > /dev/null");
+	} else {
 		$errno=0; $errstr="";
 		$usenet = fsockopen('127.0.0.1',44412, $errno, $errstr);
 		
@@ -276,7 +276,8 @@ class Vlc
 			// this skip non essential text
 			stream_set_timeout($usenet, 2); // set the timeout for the fgets
 			fgets($usenet, 16);
-    	}
+		}
+	}
     }
 
 	/**
