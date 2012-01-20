@@ -686,8 +686,11 @@ foreach ($entrys as $entry) {
 	
 	$dlFullInfo = implode(', ',array_keys($userlist));
 	if ($dlFullInfo) {
-		if (file_exists('./themes/'.$cfg['theme'].'/images/dir/dlinfo.png'))
-			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/dir/dlinfo.png" title="Downloaded by '.$dlFullInfo.'">';
+		$dlImg = 'dlinfog.png';
+		if (array_key_exists($cfg["user"], $userlist))
+			$dlImg = 'dlinfo.png';
+		if (file_exists('./themes/'.$cfg['theme'].'/images/dir/'.$dlImg))
+			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/dir/'.$dlImg.'" title="Downloaded by '.$dlFullInfo.'">';
 		else
 			$dlFullInfo = '<img src="themes/'.$cfg['theme'].'/images/download_owner.gif" title="Downloaded by '.$dlFullInfo.'">';
 	}
