@@ -373,9 +373,9 @@ class Transmission
 		// Execute request
 		$raw_response = curl_exec( $handle );
 		if( $raw_response === false ) {
-			die( "\nThe Transmission server at {$this->url} did not respond. Please make sure Transmission is running and the web client is enabled..\n" );
+			throw new Exception("\nThe Transmission server at {$this->url} did not respond. Please make sure Transmission is running and the web client is enabled..\n");
 		} elseif (strpos($raw_response,'Unauthorized') !== false) {
-			die( "\nBad Transmission RPC authentification informations (session_id ?) !\n $raw_response" );
+			throw new Exception("\nBad Transmission RPC authentification informations (session_id ?) !\n $raw_response");
 		}
 		// Get response headers and body
 		list( $header, $body ) = explode( "\r\n\r\n", $raw_response, 2 );
@@ -391,14 +391,16 @@ class Transmission
 			$matches = array();
 			$session_id = preg_match( "/X-Transmission-Session-Id: ([A-z0-9]*)/", $header, $matches );
 			if( isset( $matches[1] ) ) $this->session_id = $matches[1];
-			if( !$this->session_id ) die( "Needed a session id but could not find one..\n" );
+			if( !$this->session_id ) {
+				throw new Exception("Needed a session id but could not find one..\n");
+			}
 			return $this->request( $method, $arguments ); // Recursion, loop should be blocked by elseif below this line
 		} elseif( $http_code == 409 && $this->session_id ) {
-			die( "Session id '{$this->session_id}' was found and set but not accepted by transmission..\n" );
+			throw new Exception("Session id '{$this->session_id}' was found and set but not accepted by transmission..\n");
 		} elseif( $http_code == 401 && !$this->username ) {
-			die( "\nThe Transmission web client at {$this->url} needs authentication..\n" );
+			throw new Exception("\nThe Transmission web client at {$this->url} needs authentication..\n");
 		} elseif( $http_code == 401 && $this->username ) {
-			die( "\nThe Transmission web client at {$this->url} needs authentication, the username and password you provided seem to be incorrect.\n" );
+			throw new Exception("\nThe Transmission web client at {$this->url} needs authentication, the username and password you provided seem to be incorrect.\n");
 		}
 
 		//return $this->cleanResultData( json_decode( $body ) );
