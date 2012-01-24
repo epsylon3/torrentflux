@@ -99,10 +99,18 @@ if ($cfg["transmission_rpc_enable"]) {
 	$bUseRPC = true;
 
 	require_once('inc/functions/functions.rpc.transmission.php');
-	if ($cfg["transmission_rpc_enable"] == 2)
-		$aTrTorrents = getUserTransmissionTransfers((int)$cfg['uid']);
-	else
-		$aTrTorrents = getUserTransmissionTransfers();
+
+	try {
+
+		if ($cfg["transmission_rpc_enable"] == 2)
+			$aTrTorrents = getUserTransmissionTransfers((int)$cfg['uid']);
+		else
+			$aTrTorrents = getUserTransmissionTransfers();
+
+	} catch (Exception $e) {
+		$rpc_exception = $e->getMessage();
+		$aTrTorrents = array();
+	}
 
 	// eta
 	//  -1 : Done
