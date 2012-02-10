@@ -145,29 +145,28 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		if (!empty($hash)) {
 			
 			if ($this->sharekill > 100) {
-				//bad sharekill
+				// bad sharekill, must be 2.5 for 250%
 				$this->sharekill = round((float) $this->sharekill / 100.0,2);
 			}
 
 			$params = array(
-			'downloadLimit'  => $this->drate,
-			'downloadLimited'=> ($this->drate != 0),
-			'uploadLimit'    => $this->rate,
-			'uploadLimited'  => ($this->rate != 0),
-			'seedRatioLimit' => $this->sharekill,
-			'seedRatioMode' => intval($this->sharekill != 0)
+			'downloadLimit'  => intval($this->drate),
+			'downloadLimited'=> intval($this->drate > 0),
+			'uploadLimit'    => intval($this->rate),
+			'uploadLimited'  => intval($this->rate > 0),
+			'seedRatioLimit' => (float) $this->sharekill,
+			'seedRatioMode' => intval($this->sharekill > 0.1)
 			);
 			$res = (int) startTransmissionTransfer($hash, $enqueue, $params);
 		}
 		if (!$res) {
 			$this->command .= "\n".$rpc->LastError;
-			//...
 		}
 
 		$this->updateStatFiles($transfer);
 
-		// log
-		$this->logMessage($this->client."-start : hash=".$hash." : $res \n", true);
+		// log (for the torrent stats window)
+		$this->logMessage($this->client."-start : hash=$hash\ndownload rate=".$this->drate.", res=$res\n", true);
 	}
 
 	/**
@@ -347,7 +346,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	function setRateUpload($transfer, $uprate, $autosend = false) {
 		global $cfg;
 		// set rate-field
-		$this->rate = (int) $uprate;
+		$this->rate = intval($uprate);
 
 		$result = true;
 		
@@ -405,11 +404,11 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 	 */
 	function setRateDownload($transfer, $downrate, $autosend = false) {
 		// set rate-field
-		$this->drate = $downrate;
+		$this->drate = intval($downrate);
 
 		$result = true;
 
-		$msg = "$uprate autosend=".serialize($autosend);
+		$msg = "$downrate autosend=".serialize($autosend);
 		if ($autosend) {
 			$rpc = Transmission::getInstance();
 
