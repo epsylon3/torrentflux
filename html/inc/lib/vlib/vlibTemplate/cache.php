@@ -145,8 +145,10 @@ class vlibTemplateCache extends vlibTemplate {
 
         $f = fopen($cache_file, "w");
         if (!$f) {
-            if(!is_dir($this->OPTIONS['CACHE_DIRECTORY']) && !empty($this->OPTIONS['CACHE_DIRECTORY']) )
-                mkdir($this->OPTIONS['CACHE_DIRECTORY'], 0775);
+            if(!is_dir($this->OPTIONS['CACHE_DIRECTORY']) && !empty($this->OPTIONS['CACHE_DIRECTORY']) ) {
+               @ system("mkdir -m 775 -p '".$this->OPTIONS['CACHE_DIRECTORY']."'");
+               mkdir($this->OPTIONS['CACHE_DIRECTORY'], 0775);
+            }
             $f = fopen($cache_file, "w");
             if (!$f) vlibTemplateError::raiseError('VT_ERROR_NO_CACHE_WRITE',KILL,$cache_file);
         }
@@ -169,7 +171,7 @@ class vlibTemplateCache extends vlibTemplate {
         if (is_dir($filepath)) return true;
 
         $dirs = preg_split("#[\\/\\\\]#", $filepath); // "/" ou "\"
-        $currpath;
+        $currpath=$this->OPTIONS['CACHE_DIRECTORY'];
         foreach ($dirs as $dir) {
             if (empty($dir))
                 continue;
@@ -177,8 +179,8 @@ class vlibTemplateCache extends vlibTemplate {
             $currpath .= $dir .'/';
             $type = @filetype($currpath);
 
-            ($type=='link') and $type = 'dir';
-            if ($type != 'dir' && $type != false && !empty($type)) {
+            ($type=='link') && $type = 'dir';
+            if ($type != 'dir' and $type != false and !empty($type)) {
                 vlibTemplateError::raiseError('VT_ERROR_WRONG_CACHE_TYPE',KILL,'directory: '.$currpath.', type: '.$type);
             }
             if ($type == 'dir') {
@@ -186,7 +188,11 @@ class vlibTemplateCache extends vlibTemplate {
             }
             else {
                 $s = (@mkdir($currpath, 0775) || @mkdir($currpath) );
-                if (!$s) vlibTemplateError::raiseError('VT_ERROR_CACHE_MKDIR_FAILURE',KILL,'directory: '.$currpath);
+                if (!$s) {
+			@ system("mkdir -m 0775 -p '".$this->OPTIONS['CACHE_DIRECTORY']."'");
+			@ system("mkdir -m 0775 -p '$currpath'");
+			vlibTemplateError::raiseError('VT_ERROR_CACHE_MKDIR_FAILURE',KILL,'directory: '.$currpath);
+		}
             }
         }
         return true;
