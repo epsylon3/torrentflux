@@ -679,9 +679,10 @@ function _dispatcher_processDownload($url, $type = 'torrent', $ext = '.torrent')
 
 			$client = getTransferClient('magnet.torrent');
 			// We have a magnet link :D
-			if ($client == 'transmission' && $cfg["transmission_rpc_enable"]) {
+			if ($client == 'transmissionrpc' && $cfg["transmission_rpc_enable"]) {
 				require_once('inc/functions/functions.rpc.transmission.php');
 				$hash = addTransmissionTransfer($cfg['uid'], $url, $cfg['path'].$cfg['user']);
+				if (isHash($hash)) startTransmissionTransfer($hash);
 			}
 			if (($client == 'vuzerpc' || $client == 'azureus')  && $cfg["vuze_rpc_enable"]) {
 				require_once('inc/functions/functions.rpc.vuze.php');
