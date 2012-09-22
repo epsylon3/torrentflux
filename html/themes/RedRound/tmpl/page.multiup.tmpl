@@ -1,6 +1,8 @@
 <tmpl_include name="inc.LayoutHeader.tmpl">
 <h1>Multi Upload</h1>
+<br/>
 <p><tmpl_var name="_SELECTFILE">. valid Metafile-types: <tmpl_var name="file_types_label"></p>
+<br/>
 <form name="form_file" action="dispatcher.php?action=fileUpload" method="post" enctype="multipart/form-data">
 <table id="indexMultiUp">
 	<tmpl_loop name="row_list">
@@ -15,19 +17,31 @@
 	</tmpl_loop>
 		<tr>
 			<td>
-				<select name="aid" size="1">
+				<br/>
+				<select id="multiupmode" name="aid" size="1">
 					<option value="1" selected><tmpl_var name="_UPLOAD"></option>
 				<tmpl_if name="queueActive" value="1">
-				<tmpl_if name="isAdmin">
+				 <tmpl_if name="isAdmin">
 					<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
-				</tmpl_if>
+				 </tmpl_if>
 					<option value="3"><tmpl_var name="_UPLOAD">+Queue</option>
 				<tmpl_else>
 					<option value="2"><tmpl_var name="_UPLOAD">+Start</option>
 				</tmpl_if>
-				</select><input type="Submit" value="Go">
+				</select>
+				<input type="submit" id="btmultiup" value="Go">
 			</td>
 		</tr>
 </table>
 </form>
+<script type="text/javascript">
+	//button skin
+	jQuery("input:submit").button()
+		.css('padding','2px 8px');
+
+	//combobox
+	jQuery('select#multiupmode').droplist(
+		{autoresize:true,slide:false,height:150}
+	);
+</script>
 <tmpl_include name="inc.LayoutFooter.tmpl">
