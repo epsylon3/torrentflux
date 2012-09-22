@@ -1,6 +1,7 @@
 <div id="indexLinks">
 <tmpl_if name="ui_displaylinks" value="1">
-	<ul>
+	<!-- 3 columns of links list items -->
+	<ul style="-moz-column-width: 240px; -webkit-column-width: 240px; -moz-column-gap: 1em; -webkit-column-gap: 1em;">
 		<tmpl_loop name="linklist">
 			<tmpl_if name="enable_dereferrer">
 				<li><a href="index.php?iid=dereferrer&amp;u=<tmpl_var escape="url" name="link_url">" target="_blank"><tmpl_var escape="html" name="link_sitename"></a></li>

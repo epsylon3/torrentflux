@@ -70,6 +70,16 @@ jQuery(document).ready(function(){
 	jQuery('#indexWget select').droplist({width:120});
 	jQuery('select[name!="action"]').droplist({autoresize:true,slide:false,height:150});
  
+
+	//multicolumn links
+	if (jQuery.browser.msie) {
+		jQuery("#indexLinks ul li")
+			.css('display', 'inline-block')
+			.css('min-width', '240px')
+			.css('margin-left', '1em');
+		jQuery("#indexLinks ul")
+			.css('max-width', '800px');
+	}
 });
 
 function beforeAjaxUpdate() {

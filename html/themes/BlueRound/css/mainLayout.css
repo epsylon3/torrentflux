@@ -261,7 +261,7 @@ table#UsersOnline {
 	vertical-align: top;
 	width: 400px;
 	height: 128px;
-	padding-left: 100px;
+	padding-left: 130px;
 }
 
 table#UsersOnline td, table#UsersOffline td { background-color: transparent; }
@@ -272,7 +272,7 @@ table#UsersOffline {
 	width: 400px;
 	min-height: 128px;
 	height: 128px; /* IE6 */
-	padding-left: 100px;
+	padding-left: 130px;
 }
 
 #indexTorrentSearch {
@@ -295,7 +295,7 @@ table#UsersOffline {
 	margin: 0 auto;
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 25px;
-	padding-left: 100px;
+	padding-left: 120px;
 	background: #ededed url('../images/index/NZBPerl/bg.png') no-repeat top left;
 }
 
@@ -304,7 +304,7 @@ table#UsersOffline {
 	min-height: 128px; height: 128px; /* IE6 */
 	padding-top: 10px;
 	padding-bottom: 15px;
-	padding-left: 140px;
+	padding-left: 125px;
 	background: #ededed url('../images/index/Links/bg.png') no-repeat top left;
 }
 
