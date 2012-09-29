@@ -68,7 +68,7 @@ jQuery(document).ready(function(){
 	//comboboxes
 	jQuery('select#searchEngine').droplist({width:120});
 	jQuery('#indexWget select').droplist({width:120});
-	jQuery('select[name!="action"]').droplist({autoresize:true,slide:false,height:150});
+	jQuery('select[name!="action"]').not('#searchEngine').droplist({autoresize:true,slide:false,height:150});
  
 
 	//multicolumn links

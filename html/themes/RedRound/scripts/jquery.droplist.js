@@ -1,6 +1,6 @@
-/*	jquery.droplist v1.3git by Tanguy Pruvot Rev: $Rev$ $Id$
+/*	jquery.droplist v1.7git by Tanguy Pruvot Rev: $Rev$ $Id$
 
-	30 November 2010 - http://github.com/tpruvot/jquery.droplist
+	29 September 2012 - http://github.com/tpruvot/jquery.droplist
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -86,6 +86,8 @@
 			wx_lst = me.dropdown.outerWidth() - me.dropdown.innerWidth();
 			wx_opt = me.option.outerWidth() - me.option.width();
 			wx_drp = me.dropbtn.outerWidth() - me.dropbtn.innerWidth();
+			//wx_drp = me.dropbtn.outerWidth() - me.dropbtn.width();
+			//wx_lst = me.dropdown.outerWidth() - me.dropdown.width();
 			wx_border = parseInt(me.wrapper.css('borderRightWidth')) * 2;
 			me.dropdown.width(settings.width - wx_lst);
 
@@ -152,9 +154,9 @@
 				var selected = jQuery(this).attr('selected') ? 'selected' : '';
 				selected += ' ' + (jQuery(this).attr('class') || '');
 				if (!!jQuery(this).attr('disabled'))
-					output += '<li class="'+selected+'"><span class="disabled">' + text2html(jQuery(this).text()) + '<span></li>\t';
+					output += '<li class="'+selected.trim()+'"><span class="disabled">' + text2html(jQuery(this).text()) + '<span></li>\t';
 				else
-					output += '<li class="'+selected+'"><a href="' + jQuery(this).val() +'">' + text2html(jQuery(this).text()) + '</a></li>\t';
+					output += '<li class="'+selected.trim()+'"><a href="' + jQuery(this).val() +'">' + text2html(jQuery(this).text()) + '</a></li>\t';
 			});
 			output += '</ul>';
 			return output;
@@ -389,6 +391,7 @@
 							jQuery(this).attr('selected', 'selected');
 					});
 				}
+				//me.originalSelect.find("option[value$='" + val + "']").attr('selected', 'selected');
 			}
 
 			me.close(1);
@@ -414,10 +417,11 @@
 			} else {
 				me.option.width(settings.width - me.dropbtn.width() - wx_opt - wx_drp);
 			}
-			
-			//set list minwidth to object width
+
+			// set list minwidth to object width
 			if (me.dropdown.width() - wx_border < me.wrapper.width()) {
-				me.dropdown.width(me.wrapper.width() - wx_border);
+				// fixme: check with different styles
+				me.dropdown.width(me.wrapper.width() - wx_opt + wx_lst - 1);
 			}
 
 			if (me.callTriggers) {
@@ -459,10 +463,10 @@
 		me.obj = jQuery(element);
 		me.obj.css('border','none');
 		me.obj.id = me.obj.attr('id');
-		me.obj.classname = me.obj.attr('class');
+		me.obj.classname = me.obj.attr('class') || '';
 		me.obj.name = me.obj.attr('name');
 		me.obj.title = me.obj.attr('title') || '';
-		me.obj.width = me.obj.outerWidth();
+		me.obj.width = me.obj.attr('width') ? (0 + me.obj.attr('width')) : me.obj.outerWidth();
 		settings.width = settings.width || me.obj.width;
 		me.onchange = me.obj[0].getAttribute('onchange');
 
@@ -483,24 +487,25 @@
 		// case it's a SELECT tag, not a UL
 		if (me.list.length === 0) {
 			isInsideForm = true;
-			var html = '',
+			var htmOpts = '',
 				select = me.dropdown.find('select:first'),
 				optgroups = select.find('optgroup'),
 				options;
 
 			if (optgroups.length > 0) {
-				html += '<ul>';
+				htmOpts += '<ul>';
 				optgroups.each(function () {
 					options = jQuery(this).find('option');
-					html += '<li><strong>' + jQuery(this).attr('label') + '</strong>' + options2list(options) + '</li>';
+					htmOpts += '<li><strong>' + jQuery(this).attr('label') + '</strong>' + options2list(options) + '</li>';
 				});
-				html += '</ul>';
+				htmOpts += '</ul>';
 			} else {
 				options = me.dropdown.find('select:first option');
-				html += options2list(options);
+				htmOpts += options2list(options);
 			}
 
-			me.dropdown.append(html);
+			// like append() bug in IE8
+			me.dropdown.get(0).innerHTML += htmOpts;
 
 			// override list
 			me.list = me.dropdown.find('ul:first');

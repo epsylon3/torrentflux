@@ -1,7 +1,7 @@
 <tmpl_include name="inc.LayoutHeader.tmpl">
 <!-- page.torrentSearch -->
 <style>.tinyRow {font-size:2px;height:2px;}</style>
-<script language="JavaScript">
+<script type="text/javascript">
 	function getLatest() {
 		var selectedItem = document.searchForm.searchEngine.selectedIndex;
 		document.searchForm.searchterm.value = '';
@@ -48,7 +48,7 @@
 	</tr>
 </table>
 <div id="normalMessage">
-	<tmpl_var name="sEngine_msg">
+	<!-- <tmpl_var name="sEngine_msg"> -->
 </div>
 	<tmpl_if name="no_genre">
 		<tmpl_var name="performSearch">
@@ -105,6 +105,9 @@
 		.mouseout(function() {
 			jQuery(this).removeClass('hover');
 	});
+
+	jQuery('select#searchEngine').droplist({autoresize:true});
+	jQuery('input:submit').button();
 </script>
 <!-- inc.LayoutFooter -->
 <tmpl_include name="inc.LayoutFooter.tmpl">
