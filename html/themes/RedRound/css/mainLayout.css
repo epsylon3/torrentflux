@@ -153,8 +153,7 @@ table#indexRefreshOptions  {
 }
 
 table#indexRefreshOptions td {
-	width: 33%;
-	text-align: center;
+	padding: 0px 4px;
 	background-color: transparent;
 }
 
@@ -165,9 +164,13 @@ table#indexStatsGoodLooking {
 }
 
 table#indexStatsGoodLooking td {
-	text-align: center;
-	font-size: 12px;
-	background-color: white;
+	padding: 0px 4px;
+	vertical-align: middle;
+}
+
+table#indexStatsGoodLooking td img {
+	display: inline;
+	margin-bottom: -3px;
 }
 
 h3 { /* YOUR/FOREIGN TRANSFERS */
@@ -218,6 +221,10 @@ table#transfer_table a{
 
 table#transfer_table tr.hover a{
 	color: white;
+}
+
+table#transfer_table td.tIcon {
+	width: 37px;
 }
 
 table.sortable a.sortheader { color: white; text-decoration: none; }
