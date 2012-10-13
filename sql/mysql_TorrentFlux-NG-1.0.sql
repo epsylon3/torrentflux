@@ -30,7 +30,7 @@ CREATE TABLE tf_links (
   PRIMARY KEY  (lid)
 ) TYPE=MyISAM;
 
-INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0');
+INSERT INTO tf_links VALUES (NULL,'http://epsylon3.github.com/torrentflux','TorrentFlux-NG','0');
 
 --
 -- tf_log

@@ -37,7 +37,7 @@ define('_TITLE', _NAME.' '._VERSION.' - Setup');
 define('_DIR', dirname($_SERVER["SCRIPT_FILENAME"])."/");
 define('_FILE_DBCONF', 'inc/config/config.db.php');
 define('_FILE_THIS', $_SERVER['SCRIPT_NAME']);
-define('_FORUM_URL', "http://www.torrentflux-ng.org/forum/");
+define('_FORUM_URL', "http://tf-b4rt.berlios.de/forum/");
 
 // Database-Types
 $databaseTypes = array();

@@ -137,7 +137,7 @@ array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_btclie
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_profiles','3')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_customize_settings','2')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transferHosts','0')");
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('pagetitle','TorrentFlux-NG')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('pagetitle','TorrentFlux')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('enable_sharekill','1')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('transfer_window_default','transferStats')");
 array_push($queries[$cqt][$cdb], "INSERT INTO tf_settings VALUES ('index_show_seeding','1')");
@@ -428,7 +428,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://github.com/epsylon3/torrentflux/','TorrentFlux on Github','0')");
 
 // -----------------------------------------------------------------------------
 // SQL : sqlite
@@ -613,7 +613,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES (NULL,'http://github.com/epsylon3/torrentflux/','TorrentFlux on Github','0')");
 
 // -----------------------------------------------------------------------------
 // SQL : postgres
@@ -820,7 +820,7 @@ $queries[$cqt][$cdb] = array();
 foreach ($queries['data']['common'] as $dataQuery)
 	array_push($queries[$cqt][$cdb], $dataQuery);
 // tf_links
-array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES ('0','http://www.torrentflux-ng.org/','TorrentFlux-NG','0')");
+array_push($queries[$cqt][$cdb], "INSERT INTO tf_links VALUES ('0','http://github.com/epsylon3/torrentflux/','TorrentFlux on Github','0')");
 // sequences
 array_push($queries[$cqt][$cdb], "SELECT SETVAL('tf_users_uid_seq',(select case when max(uid)>0 then max(uid)+1 else 1 end from tf_users))");
 array_push($queries[$cqt][$cdb], "SELECT SETVAL('tf_messages_mid_seq',(select case when max(mid)>0 then max(mid)+1 else 1 end from tf_messages))");
