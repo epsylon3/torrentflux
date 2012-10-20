@@ -182,7 +182,7 @@
 			<tmpl_else>
 				<td colspan="7">
 			</tmpl_if>
-				<a href="javascript:document.multidir.submit()" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : Multiple Files')"><img src="themes/<tmpl_var name="theme">/images/dir/delete_on.png" title="Delete" alt="delete" /></a>
+				<a href="#" onclick="return confirm('<tmpl_var name="_ABOUTTODELETE"> : Multiple Files') && jQuery('form#multidir').submit()"><img src="themes/<tmpl_var name="theme">/images/dir/delete_on.png" title="Delete" alt="delete" /></a>
 			</td>
 			<td>
 				<input type="checkbox" onclick="checkCheck(this);" />
