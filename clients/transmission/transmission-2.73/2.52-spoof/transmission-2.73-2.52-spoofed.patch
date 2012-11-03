@@ -1,0 +1,48 @@
+diff -crB transmission-2.73-patched/cli/cli.c transmission-2.73/cli/cli.c
+*** transmission-2.73-patched/cli/cli.c	2012-11-03 05:40:20.731402999 +0100
+--- transmission-2.73/cli/cli.c	2012-11-03 05:35:15.667403001 +0100
+***************
+*** 350,356 ****
+      char cwd[1024];
+  
+      //printf( "%s %s\n", MY_READABLE_NAME, LONG_VERSION_STRING );
+!     printf( "%s %s - patched for TorrentFlux-NG\n", MY_READABLE_NAME, LONG_VERSION_STRING );
+  
+      /* user needs to pass in at least one argument */
+      if( argc < 2 ) {
+--- 350,356 ----
+      char cwd[1024];
+  
+      //printf( "%s %s\n", MY_READABLE_NAME, LONG_VERSION_STRING );
+!     printf( "%s %s - patched for TorrentFlux-NG (spoofed from %s)\n", MY_READABLE_NAME, LONG_VERSION_STRING, SPOOF_VERSION_STRING );
+  
+      /* user needs to pass in at least one argument */
+      if( argc < 2 ) {
+Only in transmission-2.73/cli: cli.c-2.73-2.53-spoofed
+diff -crB transmission-2.73-patched/libtransmission/version.h transmission-2.73/libtransmission/version.h
+*** transmission-2.73-patched/libtransmission/version.h	2012-11-03 05:33:09.783403001 +0100
+--- transmission-2.73/libtransmission/version.h	2012-11-03 05:34:01.463403001 +0100
+***************
+*** 1,10 ****
+! #define PEERID_PREFIX             "-TR2730-"
+! #define USERAGENT_PREFIX          "2.73"
+! #define SVN_REVISION              "13592"
+! #define SVN_REVISION_NUM          13592
+! #define SHORT_VERSION_STRING      "2.73"
+! #define LONG_VERSION_STRING       "2.73 (13592)"
+! #define VERSION_STRING_INFOPLIST  2.73
+  #define MAJOR_VERSION             2
+! #define MINOR_VERSION             73
+  #define TR_STABLE_RELEASE         1
+--- 1,11 ----
+! #define PEERID_PREFIX             "-TR2520-"
+! #define USERAGENT_PREFIX          "2.52"
+! #define SVN_REVISION              "13304"
+! #define SVN_REVISION_NUM          13304
+! #define SHORT_VERSION_STRING      "2.52"
+! #define LONG_VERSION_STRING       "2.52 (13304)"
+! #define SPOOF_VERSION_STRING      "2.73 (13589)"
+! #define VERSION_STRING_INFOPLIST  2.52
+  #define MAJOR_VERSION             2
+! #define MINOR_VERSION             52
+  #define TR_STABLE_RELEASE         1
