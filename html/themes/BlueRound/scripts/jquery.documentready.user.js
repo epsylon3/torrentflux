@@ -5,12 +5,12 @@
 jQuery(document).ready(function(){
 	$('#header').bind({
 		mouseover: function(){
-			$(this).animate({
+			$(this).stop(true, true).animate({
 				marginTop: '0px'
 			},"fast");
 		},
 		mouseleave: function(){
-			$(this).animate({
+			$(this).stop(true, true).animate({
 				marginTop: '-40px'
 			},"fast");
 		}
