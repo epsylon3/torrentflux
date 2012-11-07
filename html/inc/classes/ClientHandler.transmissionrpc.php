@@ -587,19 +587,19 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		foreach ($tfs as $hash => $t) {
 			if (!isset($hashes[$hash]))
 				continue;
-			
+
 			$transfer = $hashes[$hash];
 			$sf = new StatFile($transfer);
-			
-			$sf->running = Transmission::status_to_tf($t['status']);
-			$sf->percent_done = round($t['percentDone']*100,2);
-			if ($t['status']==8 || $t['status']==9) {
-				$sf->sharing = round($t['uploadRatio']*100,2);
+
+			$sf->running      = $t['running'];
+			$sf->percent_done = round($t['percentDone'] * 100, 2);
+			if ($t['status'] == 8 || $t['status'] == 9) {
+				$sf->sharing = round($t['uploadRatio'] * 100, 2);
 			}
-			
+
 			$sf->downtotal = $t['downloadedEver'];
 			$sf->uptotal = $t['uploadedEver'];
-			
+
 			$sf->write();
 		}
 
@@ -607,7 +607,9 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		foreach ($tfs as $hash => $t) {
 			if (!isset($sharekills[$hash]))
 				continue;
-			if (($t['status']==8 || $t['status']==9) && ($t['uploadRatio']*100) > $sharekills[$hash]) {
+			if (($t['status'] == 8 || $t['status'] == 9)
+			    && ($t['uploadRatio'] * 100) > $sharekills[$hash])
+			{
 				$transfer = $hashes[$hash];
 				if (stopTransmissionTransfer($hash)) {
 					AuditAction($cfg["constants"]["stop_transfer"], $this->client."-stat. : sharekill stopped $transfer");
@@ -651,7 +653,6 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			'seedRatioLimit','seedRatioMode',
 			'downloadDir','eta',
 			'error', 'errorString',
-			
 			//'files', 'fileStats', 'trackerStats'
 		);
 		$stat_rpc = getTransmissionTransfer($hash, $fields);
@@ -688,9 +689,9 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		//by default, monitoring not available.
 		$aTorrent = getUserTransmissionTransfers();
 
-		$stat=array();
+		$stat = array();
 		foreach ($aTorrent as $t) {
-			if ( $t['status']==4 || $t['status']==8 ) $stat[$t['hashString']]=$t;
+			if ($t['status'] == 4 || $t['status'] == 8) $stat[$t['hashString']] = $t;
 		}
 		return $stat;
 	}

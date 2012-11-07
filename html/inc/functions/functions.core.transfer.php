@@ -406,9 +406,9 @@ function getTransferDetails($transfer, $full) {
 	
 		$details['running'] = $stat['running'];
 		// speed_down
-		$details['speedDown'] = @ ($stat['speedDown'] != "") ? $stat['speedDown'] : '';
+		$details['speedDown'] = empty($stat['speedDown']) ? '' : $stat['speedDown'];
 		// speed_up
-		$details['speedUp']   = ($stat['speedUp'] != "") ? $stat['speedUp'] : '';
+		$details['speedUp']   = empty($stat['speedUp']) ? '' : $stat['speedUp'];
 		// down_current
 		$details['downCurrent'] = formatFreeSpace($totals["downtotal"] / 1048576);
 		// up_current

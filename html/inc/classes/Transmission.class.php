@@ -39,6 +39,11 @@ $Transmission_inst=NULL;
 class Transmission
 {
 	/**
+	 * Transmission-daemon >= 2.40 support
+	 */
+	const USE_RECENT = true;
+
+	/**
 	 * The URL to the bittorent client you want to communicate with
 	 * the port (default: 9091) can be set in you Tranmission preferences
 	 * @var string
@@ -165,7 +170,6 @@ class Transmission
 	 * Get information on torrents in transmission, if the ids parameter is
 	 * empty all torrents will be returned. The fields array can be used to return certain
 	 * fields. Default fields are: "id", "name", "status", "doneDate", "haveValid", "totalSize".
-	 * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
 	 *
 	 * @param array fields An array of return fields
 	 * @param int|array ids A list of transmission torrent ids
@@ -202,14 +206,21 @@ class Transmission
 	 *   "seedRatioMode"       | number     which ratio to use.  See tr_ratiolimit
 	 *   "uploadLimit"         | number     maximum upload speed (in K/s)
 	 *   "uploadLimited"       | boolean    true if "uploadLimit" is honored
-	 * See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for more information
+	 *
+	 *   "queuePosition"       | number     position of this torrent in its queue [0...n)
+	 *   "seedIdleLimit"       | number     torrent-level number of minutes of seeding inactivity
+	 *   "seedIdleMode"        | number     which seeding inactivity to use.  See tr_inactvelimit
+	 *   "trackerAdd"          | array      strings of announce URLs to add
+	 *   "trackerRemove"       | array      ids of trackers to remove
+	 *   "trackerReplace"      | array      pairs of <trackerId/new announce URLs>
+	 *
+	 * See https://trac.transmissionbt.com/browser/trunk/extras/rpc-spec.txt for more information
 	 *
 	 * @param ids int|array ids A list of transmission torrent ids
 	 * @param arguments array arguments An associative array of arguments to set
 	 */
 	public function set( $ids = array(), $arguments = array() )
 	{
-		// See https://trac.transmissionbt.com/browser/trunk/doc/rpc-spec.txt for available fields
 		if( !is_array( $ids ) ) $ids = array( $ids );
 		if( !isset( $arguments['ids'] ) ) $arguments['ids'] = $ids;
 
@@ -487,6 +498,39 @@ class Transmission
 		return $tfstatus;
 	}
 
+	/**
+	 * Allow to handle new like older Transmission daemon status
+	 */
+	public static function status_compat($rpcStatus) {
+		$oldStatus = $rpcStatus;
+		if (self::USE_RECENT) {
+			/**
+			 * previous versions :
+			 * TR_STATUS_CHECK_WAIT     = ( 1 << 0 ), // 1  Waiting in queue to check files
+			 * TR_STATUS_CHECK          = ( 1 << 1 ), // 2  Checking files
+			 * TR_STATUS_DOWNLOAD       = ( 1 << 2 ), // 4  Downloading
+			 * TR_STATUS_SEED           = ( 1 << 3 ), // 8  Seeding
+			 * TR_STATUS_STOPPED        = ( 1 << 4 )  // 16 Torrent is stopped
+			 *
+			 * recent versions (> 2.40) :
+			 * TR_STATUS_STOPPED        = 0, // Torrent is stopped
+			 * TR_STATUS_CHECK_WAIT     = 1, // Queued to check files
+			 * TR_STATUS_CHECK          = 2, // Checking files
+			 * TR_STATUS_DOWNLOAD_WAIT  = 3, // Queued to download
+			 * TR_STATUS_DOWNLOAD       = 4, // Downloading 
+			 * TR_STATUS_SEED_WAIT      = 5, // Queued to seed
+			 * TR_STATUS_SEED           = 6  // Seeding
+			 */
+			if ($rpcStatus == 3) $oldStatus = 5;
+			// seeding
+			if ($rpcStatus == 6) $oldStatus = 8;
+			if ($rpcStatus == 5) $oldStatus = 9;
+			// stopped
+			if ($rpcStatus == 0) $oldStatus = 16;
+		}
+		return $oldStatus;
+	}
+
 	/*
 	 * RPC Struct to TorrentFlux Names
 	 * @param array : stat single torrent rpc data array
@@ -497,15 +541,17 @@ class Transmission
 		if ($stat['uploadRatio'] == -1)
 			$stat['uploadRatio'] = 0;
 
+		$status = self::status_compat($stat['status']);
+
 		$tfStat = array(
 			'rpcid' => $stat['id'],
 			'name' => $stat['name'],
-			
-			'running' => $this->status_to_tf($stat['status']), 
-			'status' => $stat['status'], 
-			
+
+			'status' => $status,
+			'running' => self::status_to_tf($status),
+
 			'size' => (float) $stat['totalSize'], 
-			
+
 			'percentDone' => (float) $stat['percentDone']*100.0, 
 			'sharing' => (float) $stat['uploadRatio']*100.0, 
 			
@@ -517,8 +563,8 @@ class Transmission
 			"errorString" => $stat['errorString'],
 			'downloadDir' => $stat['downloadDir'],
 			
-			'downTotal' => (float) $stat['downloadedEver'], 
-			'upTotal' => (float) $stat['uploadedEver'], 
+			'downTotal' => $stat['downloadedEver'],
+			'upTotal' => $stat['uploadedEver'],
 			
 			'eta' => $stat['eta'], 
 			
@@ -532,6 +578,12 @@ class Transmission
 			'seedRatioLimit' => round($stat['seedRatioLimit']*100),
 			'seedRatioMode' => $stat['seedRatioMode']
 		);
+
+		if (self::USE_RECENT &&
+		    $tfStat['percentDone'] == 100.0 && $tfStat['downTotal'] < $tfStat['size']) {
+			// bug in v2.51 ??
+			$tfStat['downTotal'] = $tfStat['size'];
+		}
 
 		return $tfStat;
 	}

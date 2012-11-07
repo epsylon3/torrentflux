@@ -382,6 +382,8 @@ function getUserTransmissionTransfers($uid = 0) {
 	if ($result['result']!=="success") rpc_error("Transmission RPC could not get transfers : ".$result['result']);
 	foreach ( $result['arguments']['torrents'] as $transfer ) {
 		if ( $uid==0 || in_array($transfer['hashString'], $userTransferHashes) ) {
+			$rpcStatus = $transfer['status'];
+			$transfer['status'] = Transmission::status_compat($rpcStatus);
 			//set array keys as hashes
 			$retVal[$transfer['hashString']] = $transfer;
 		}
