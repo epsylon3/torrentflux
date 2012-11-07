@@ -44,6 +44,8 @@ class StatFile
 	var $uptotal = "";
 	var $downtotal = "";
 	var $size = "";
+	var $error = 0;
+	var $errorString = "";
 
 	// =========================================================================
 	// public static methods

@@ -191,33 +191,35 @@ if ($cfg["transmission_rpc_enable"]) {
 		$transferowner = getOwner($hash);
 		
 		$tArray = array(
-			'is_owner' => ($cfg['isAdmin']) ? true : IsOwner($cfg["user"], $transferowner),
-			'transferowner' => getOwner($hash),
+			'is_owner'        => $cfg['isAdmin'] ? true : IsOwner($cfg["user"], $transferowner),
+			'transferowner'   => $transferowner,
 			'transferRunning' => (int) $transferRunning,
-			'rpc_status' => $aTorrent['status'],
-			'clientType' => 'torrent',
-			'client' => 'Tr*',
-			'url_entry'   => $hash,
-			'displayname' => $aTorrent['name'],
-			'statusStr'   => $status,
-			'estTime'     => $eta,
-			'percentage'  => ( $status=='New' ? '' : round($aTorrent['percentDone']*100,1) ),
-			'graph_width' => ( $status=='New' ? -1 : round($aTorrent['percentDone']*100) ),
+			'rpc_status'      => $aTorrent['status'],
+			'clientType'      => 'torrent',
+			'client'          => 'Tr*',
+			'url_entry'       => $hash,
+			'displayname'     => $aTorrent['name'],
+			'statusStr'       => $status,
+			'estTime'         => $eta,
+			'percentage'      => ( $status=='New' ? '' : round($aTorrent['percentDone']*100,1) ),
+			'graph_width'     => ( $status=='New' ? -1 : round($aTorrent['percentDone']*100) ),
 			'100_graph_width' => 100 - round($aTorrent['percentDone']*100),
-			'sharing' => round($aTorrent['uploadRatio']*100.0,1),
-			'seeds' => $aTorrent['peersSendingToUs'],
-			'peers' => $aTorrent['peersGettingFromUs'],
-			'cons'  => $aTorrent['peersConnected'],
-			'seedlimit' => round($aTorrent['seedRatioLimit']*100.0,1),
-			'url_path' => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
-			'datapath' => $aTorrent['name'],
-			'entry' => $aTorrent['name'],
-			'size' => (float) $aTorrent['totalSize'],
-			'format_af_size' => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
-			'uptotal'   => $aTorrent['uploadedEver'],
-			'downtotal' => $aTorrent['downloadedEver'],
-			'down_speed' => ($aTorrent['rateDownload'] != 0 ? formatBytesTokBMBGBTB( $aTorrent['rateDownload'] ) . '/s' : '&nbsp;'),
-			'up_speed' =>   ($aTorrent['rateUpload']   != 0 ? formatBytesTokBMBGBTB( $aTorrent['rateUpload'] ) . '/s' : '&nbsp;')
+			'sharing'         => round($aTorrent['uploadRatio']*100.0,1),
+			'seeds'           => $aTorrent['peersSendingToUs'],
+			'peers'           => $aTorrent['peersGettingFromUs'],
+			'cons'            => $aTorrent['peersConnected'],
+			'seedlimit'       => round($aTorrent['seedRatioLimit']*100.0,1),
+			'url_path'        => urlencode( $cfg['user'] . '/' . $aTorrent['name'] ),
+			'datapath'        => $aTorrent['name'],
+			'entry'           => $aTorrent['name'],
+			'size'            => (float) $aTorrent['totalSize'],
+			'format_af_size'  => formatBytesTokBMBGBTB( $aTorrent['totalSize'] ),
+			'uptotal'         => $aTorrent['uploadedEver'],
+			'downtotal'       => $aTorrent['downloadedEver'],
+			'down_speed'      => ($aTorrent['rateDownload'] > 0 ? formatBytesTokBMBGBTB($aTorrent['rateDownload']).'/s' : '&nbsp;'),
+			'up_speed'        => ($aTorrent['rateUpload'] > 0 ? formatBytesTokBMBGBTB($aTorrent['rateUpload']).'/s' : '&nbsp;'),
+			'error'           => (int) $aTorrent['error'],
+			'errorString'     => $aTorrent['errorString'],
 		);
 
 		if ($cfg["transmission_rpc_enable"] == 1) {
@@ -453,24 +455,27 @@ foreach ($arList as $mtimecrc => $transfer) {
 						$sf->graph_width  = (int) $trStat['graph_width'];
 						$sf->up_speed     = $trStat['up_speed'];
 						$sf->time_left    = $trStat['estTime'];
-						
+
 						$sf->sharing      = $trStat['sharing'];
 						$sf->seedlimit    = $trStat['seedlimit'];
-						
+
 						$sf->uptotal      = (float) $trStat['uptotal'];
 						$sf->downtotal    = (float) $trStat['downtotal'];
-						
+
 						$sf->size         = (float) $trStat['size'];
-						
+
+						$sf->error        = $trStat['error'];
+						$sf->errorString  = $trStat['errorString'];
+
 						//sf->write();
 						//var_dump($sf);
-						
+
 						if ((int)$trStat['error'] != 0 && !empty($trStat['errorString'])) {
 							$error = $trStat['errorString'];
 							if (strpos($error,'Scrape') !== false) {
 								//ignore scrape error
 							} else {
-								$sf->status .= 'Error';
+								$sf->status = 'Error';
 							}
 						}
 						

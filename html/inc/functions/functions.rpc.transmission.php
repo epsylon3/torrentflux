@@ -373,7 +373,7 @@ function getUserTransmissionTransfers($uid = 0) {
 	"name", "id", "hashString", "eta", "totalSize", "percentDone", "metadataPercentComplete",
 	"peersConnected", 'peersGettingFromUs', 'peersSendingToUs', "rateDownload", "rateUpload", "status", 
 	"uploadLimit", "uploadRatio", "seedRatioLimit", "seedRatioMode", 
-	"downloadedEver", "uploadedEver",
+	"downloadedEver", "uploadedEver", "error", "errorString",
 //	"trackerStats", "files", "fileStats" slow down
 	);
 
@@ -381,7 +381,7 @@ function getUserTransmissionTransfers($uid = 0) {
 
 	if ($result['result']!=="success") rpc_error("Transmission RPC could not get transfers : ".$result['result']);
 	foreach ( $result['arguments']['torrents'] as $transfer ) {
-		if ( $uid==0 || in_array ( $transfer['hashString'], $userTransferHashes ) ) {
+		if ( $uid==0 || in_array($transfer['hashString'], $userTransferHashes) ) {
 			//set array keys as hashes
 			$retVal[$transfer['hashString']] = $transfer;
 		}
