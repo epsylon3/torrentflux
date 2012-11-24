@@ -353,6 +353,7 @@ function setFilePriority($transfer) {
 function getTorrentScrapeInfo($transfer) {
 	global $cfg;
 	$hasClient = false;
+
 	// transmissioncli
 	if (!$cfg["transmission_rpc_enable"]) {
 		$hasClient = true;
@@ -360,6 +361,65 @@ function getTorrentScrapeInfo($transfer) {
 		$retVal = @shell_exec("HOME=".tfb_shellencode($cfg["path"])."; export HOME; ".$cfg["btclient_transmission_bin"] . " -s ".tfb_shellencode($cfg["transfer_file_path"].$transfer));
 		if ((isset($retVal)) && ($retVal != "") && (!preg_match('/.*failed.*/i', $retVal)))
 			return trim($retVal);
+	}
+	else {
+		// rpc
+		require_once('inc/functions/functions.transfer.php');
+		require_once('inc/functions/functions.rpc.transmission.php');
+		if (isHash($transfer))
+			$hash = $transfer;
+		else
+			$hash = getTransferHash($transfer);
+
+		$a = getTransmissionTransfer($hash, array("trackerStats",));
+		function dump($value,$level=0)
+		{
+			if ($level==-1)
+			{
+				$trans[' ']='&there4;';
+				$trans["\t"]='&rArr;';
+				$trans["\n"]='&para;;';
+				$trans["\r"]='&lArr;';
+				$trans["\0"]='&oplus;';
+				return strtr(htmlspecialchars($value),$trans);
+			}
+			if ($level==0) echo '<pre>';
+			$type= gettype($value);
+			echo $type;
+			if ($type=='string')
+			{
+				echo '('.strlen($value).')';
+				$value= dump($value,-1);
+			}
+			elseif ($type=='boolean') $value= ($value?'true':'false');
+			elseif ($type=='object')
+			{
+				$props= get_class_vars(get_class($value));
+				echo '('.count($props).') <u>'.get_class($value).'</u>';
+				foreach($props as $key=>$val)
+				{
+					echo "\n".str_repeat("\t",$level+1).$key.' => ';
+					dump($value->$key,$level+1);
+				}
+				$value= '';
+			}
+			elseif ($type=='array')
+			{
+				echo '('.count($value).')';
+				foreach($value as $key=>$val)
+				{
+					echo "\n".str_repeat("\t",$level+1).dump($key,-1).' => ';
+					dump($val,$level+1);
+				}
+				$value= '';
+			}
+			echo " <b>$value</b>";
+			if ($level==0) echo '</pre>';
+		}
+		ob_start();
+		dump($a);
+		$d = ob_get_clean();
+		return $d;
 	}
 	// ttools.pl
 	if (is_executable($cfg["perlCmd"])) {
