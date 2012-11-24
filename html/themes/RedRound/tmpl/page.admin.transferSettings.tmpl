@@ -233,8 +233,8 @@ B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent M
 <p class="NormalText">Fluazu is a proxy to use an Azureus backend as client for torrents.
 <a href="admin.php?op=fluazuSettings">Edit Fluazu Settings</a></p>
 
-<h2>Transmission Daemon (RPC) - Under development</h2>
-<p class="NormalText">New method to use with official Transmission-daemon (will disable other clients support)</p>
+<h2>Transmission Daemon (RPC)</h2>
+<p class="NormalText">New method to use with official Transmission-daemon</p>
 <table id="adminTransferSettings">
 	<tr>
 		<th>Transmission RPC Method<br /><span>RPC implementation method. This setting will be deleted later.</span></th>
@@ -278,10 +278,11 @@ B = BitTornado, T = Transmission-cli, Tr = Transmission Daemon, M = BitTorrent M
 	<span style="margin-left: 62px;"><span style="font-family:courier;">sudo apt-get install transmission-daemon</span><br/>
 	<span style="margin-left: 54px;">To set password and edit settings, stop transmission-daemon first, then edit /etc/transmission-daemon/settings.json</span><br/>
 	<span style="margin-left: 54px;">It is <b>highly recommended</b> to change rpc-bind-address to localhost (127.0.0.1)</span>, so you can set an empty password<br/>
-	<span style="margin-left: 54px;">You also need to run transmission-daemon with same user or same group as your webserver, on debian/ubuntu : </span><br/>
-	<span style="margin-left: 54px;"></span>in /etc/init.d/transmission-daemon set <span style="font-family:courier;">USER=www-data</span> and type :<br/>
-	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chown -R www-data /etc/transmission-daemon</span><br/>
-	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chown -R www-data /var/lib/transmission-daemon</span>
+	<span style="margin-left: 54px;">You also need to run transmission-daemon with the same group as your webserver, on debian/ubuntu : </span><br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">usermod -g www-data debian-transmission</span> and type :<br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chown -R debian-transmission:www-data /etc/transmission-daemon</span><br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chown -R debian-transmission:www-data /var/lib/transmission-daemon</span><br/>
+	<span style="margin-left: 62px;"></span><span style="font-family:courier;">chmod -R g+w /var/lib/transmission-daemon</span>
 	</p>
 </div>
 
