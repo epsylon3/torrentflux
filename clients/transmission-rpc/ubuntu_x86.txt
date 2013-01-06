@@ -1,4 +1,5 @@
-# Transmission v2.51 is currently recommended to run the RPC (daemon) version.
+# Transmission v2.51 is currently recommanded to run the RPC (daemon) version.
+# in fact, you need a version >= 2.40, because some RPC constants were modified.
 
 # check the latest versions here :
 # http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/
@@ -10,4 +11,8 @@ wget http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/transmission-common_
 wget http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/transmission-daemon_2.51-0ubuntu1.1_i386.deb
 
 dpkg -i transmission-common_2.51-0ubuntu1.1_all.deb transmission-daemon_2.51-0ubuntu1.1_i386.deb transmission-cli_2.51-0ubuntu1_i386.deb
+
+Note:
+To install the 2.61 (tested ok too), a newer libnatpmp1 is required :
+ http://mirror.pnl.gov/ubuntu//pool/main/libn/libnatpmp/libnatpmp1_20110808-3ubuntu2_i386.deb
 
