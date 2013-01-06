@@ -1,13 +1,13 @@
-# Transmission v2.13 from Ubuntu Natty (11.04) is compatible with Ubuntu 10.10 (v2.05) :
+# Transmission v2.51 is currently recommended to run the RPC (daemon) version.
 
-# check lastest version here :
-# http://packages.ubuntu.com/natty/i386/transmission-daemon/download
+# check the latest versions here :
+# http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/
 
-# execute :
+# sample for a manual installation on x86 :
 
-wget http://mirror.pnl.gov/ubuntu//pool/universe/t/transmission/transmission-cli_2.13-0ubuntu8_i386.deb
-wget http://mirror.pnl.gov/ubuntu//pool/universe/t/transmission/transmission-common_2.13-0ubuntu8_all.deb
-wget http://mirror.pnl.gov/ubuntu//pool/universe/t/transmission/transmission-daemon_2.13-0ubuntu8_i386.deb
+wget http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/transmission-cli_2.51-0ubuntu1_i386.deb
+wget http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/transmission-common_2.51-0ubuntu1.1_all.deb
+wget http://mirror.pnl.gov/ubuntu//pool/main/t/transmission/transmission-daemon_2.51-0ubuntu1.1_i386.deb
 
-dpkg -i transmission-common_2.13-0ubuntu8_all.deb transmission-daemon_2.13-0ubuntu8_i386.deb transmission-cli_2.13-0ubuntu8_i386.deb
+dpkg -i transmission-common_2.51-0ubuntu1.1_all.deb transmission-daemon_2.51-0ubuntu1.1_i386.deb transmission-cli_2.51-0ubuntu1_i386.deb
 
