@@ -966,12 +966,12 @@ Introduction
                     This view provides information about:
 
                     o   Current drivespace used on the filesystem where
-                        torrentflux-b4rt downloads transfers to.  The
+                        torrentflux downloads transfers to.  The
                         output is taken from the Unix command 'df'.
 
                     o   Currently logged in users on the server - ie
                         'real' shell users on the server that
-                        torrentflux-b4rt is installed on.  The output is
+                        torrentflux is installed on.  The output is
                         taken from the Unix command 'w' or 'who'.
 
 

@@ -226,11 +226,15 @@ else
 if (empty($_SESSION['next_int_maintenance']))
 	$_SESSION['next_int_maintenance'] = time() + 2 * 3600 + mt_rand(-1200, 1200);	// 2h (+/- 20m)
 
-// free space in MB var
-$cfg["free_space"] = @disk_free_space($cfg["path"]) / 1048576;
+if (is_dir($cfg["path"].'/'.$currentUser)) {
+	$user_dir = $cfg["path"].'/'.$currentUser;
+} else {
+	$user_dir = $cfg["path"];
+}
 
-// drive space var
-$cfg['driveSpace'] = getDriveSpace($cfg["path"]);
+// free space in MB and drive space vars
+$cfg["free_space"] = @disk_free_space($user_dir) / 1048576;
+$cfg['driveSpace'] = getDriveSpace($user_dir);
 
 // free space formatted var
 $cfg['freeSpaceFormatted'] = formatFreeSpace($cfg["free_space"]);
