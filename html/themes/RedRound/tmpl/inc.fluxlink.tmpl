@@ -1,6 +1,10 @@
 <tmpl_if name="fluxlink_display">
-Powered by <a href="<tmpl_var name="fluxlink_url">"> <tmpl_var name="fluxlink_name"></a>
-<!-- REMOVE LINE 5 TO DISABLE CREDITS -->
+ Powered by 
+ <tmpl_if name="enable_dereferrer">
+  <a href="index.php?iid=dereferrer&amp;u=<tmpl_var name='fluxlink_url'>" target="_blank"><tmpl_var name="fluxlink_name"></a>
+ <tmpl_else>
+  <a href="<tmpl_var name='fluxlink_url'>"> <tmpl_var name="fluxlink_name"></a>
+ </tmpl_if>
  | TF-NG theme by <a href="#" id="credit_link">Kanesodi and Epsylon3</a>
 </tmpl_if>
 <div id="credits" title="credits" style="display:none;">
@@ -39,7 +43,7 @@ Powered by <a href="<tmpl_var name="fluxlink_url">"> <tmpl_var name="fluxlink_na
 				<li><a href="http://www.ajaxload.info/">Ajax Loader</a></li>
 				<li>small icons: <a href="http://www.famfamfam.com/">FAMFAMFAM</a></li>
 				<li>big icons: <a href="http://tango.freedesktop.org/">Tango</a></li>
-				<li>favicon/login/dereferer logo: <a href="http://gnome-look.org/usermanager/search.php?username=jaanos">jaanos</a></li>
+				<li>favicon/login/dereferrer logo: <a href="http://gnome-look.org/usermanager/search.php?username=jaanos">jaanos</a></li>
 
 				<li><a href="http://jquery.com/">jQuery</a></li>
 				<li><a href="http://jqueryui.com/">jQuery UI</a></li>
