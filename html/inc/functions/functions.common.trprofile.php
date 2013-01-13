@@ -79,7 +79,7 @@ function GetProfilesByUserName($user, $profile) {
 function GetPublicProfiles($profile) {
 	global $cfg, $db;
 	$profiles_array = array();
-	$sql = "SELECT name FROM tf_trprofiles WHERE public= '1'";
+	$sql = "SELECT name FROM tf_trprofiles WHERE public='1'";
 	$rs = $db->GetCol($sql);
 	if ($rs) {
 		foreach($rs as $arr) {
@@ -102,7 +102,8 @@ function GetPublicProfiles($profile) {
  */
 function GetProfileSettings($profile) {
 	global $cfg, $db;
-	$sql = "SELECT minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder, savepath from tf_trprofiles where name=".$db->qstr($profile);
+	$sql = 'SELECT minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder, public, savepath'
+		.' FROM tf_trprofiles WHERE name='.$db->qstr($profile);
 	$settings = $db->GetRow($sql);
 	if ($db->ErrorNo() != 0) dbError($sql);
 	return $settings;
@@ -115,7 +116,7 @@ function GetProfileSettings($profile) {
  */
 function AddProfileInfo( $newProfile ) {
 	global $db, $cfg;
-	$sql = 'INSERT INTO tf_trprofiles ( name , owner , minport , maxport , maxcons , rerequest , rate , maxuploads , drate , runtime , sharekill , superseeder , savepath, public )'
+	$sql = 'INSERT INTO tf_trprofiles(name, owner, minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder, public, savepath) '
 		." VALUES ("
 		.     $db->qstr($newProfile["name"])
 		.", ".$db->qstr($cfg['uid'])
@@ -144,7 +145,8 @@ function AddProfileInfo( $newProfile ) {
 function getProfile($pid) {
 	global $cfg, $db;
 	$rtnValue = "";
-	$sql = "SELECT id , name , minport , maxport , maxcons , rerequest , rate , maxuploads , drate , runtime , sharekill , superseeder , public, savepath FROM tf_trprofiles WHERE id=".$db->qstr($pid);
+	$sql = 'SELECT id, name, minport, maxport, maxcons, rerequest, rate, maxuploads, drate, runtime, sharekill, superseeder, public, savepath'
+		.' FROM tf_trprofiles WHERE id='.$db->qstr($pid);
 	$rtnValue = $db->GetAll($sql);
 	return $rtnValue[0];
 }
