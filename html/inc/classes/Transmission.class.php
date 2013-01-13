@@ -41,7 +41,7 @@ class Transmission
 	/**
 	 * Transmission-daemon >= 2.40 support
 	 */
-	const USE_RECENT = true;
+	public static $recent_status = true;
 
 	/**
 	 * The URL to the bittorent client you want to communicate with
@@ -80,15 +80,20 @@ class Transmission
 	 */
 	public $torrents = array();
 	
-	
 	/**
-	 * Tranmission version (from session vars)
+	 * Unit info 1000 or 1024 bytes
+	 * integer
+	 */
+	public $kbytes;
+
+	/**
+	 * Transmission version (from session vars)
 	 */
 	public $version;
-	
-	/*
+
+	/**
 	 * Constructor
-	*/
+	 */
 	public function __construct($_cfg = array()) {
 
 		global $cfg;
@@ -109,10 +114,14 @@ class Transmission
 			$this->password = $cfg['transmission_rpc_password'];
 
 		if (!isset($cfg['transmissionrpc_version'])) {
-			$req = $this->session_get(array("version","rpc-version"));
+			$req = $this->session_get(array("version","rpc-version","units"));
 			$cfg['transmissionrpc_version'] = $req['arguments']['version'];
+			$cfg['transmissionrpc_kbytes'] = $req['arguments']['units']['size-bytes'];
 		}
 		$this->version = $cfg['transmissionrpc_version'];
+		$this->kbytes  = $cfg['transmissionrpc_kbytes'];
+
+		self::$recent_status = ($this->version >= "2.40");
 
 		global $Transmission_inst;
 		$Transmission_inst = & $this;
@@ -503,7 +512,7 @@ class Transmission
 	 */
 	public static function status_compat($rpcStatus) {
 		$oldStatus = $rpcStatus;
-		if (self::USE_RECENT) {
+		if (self::$recent_status) {
 			/**
 			 * previous versions :
 			 * TR_STATUS_CHECK_WAIT     = ( 1 << 0 ), // 1  Waiting in queue to check files
@@ -579,7 +588,7 @@ class Transmission
 			'seedRatioMode' => $stat['seedRatioMode']
 		);
 
-		if (self::USE_RECENT &&
+		if (self::$recent_status &&
 		    $tfStat['percentDone'] == 100.0 && $tfStat['downTotal'] < $tfStat['size']) {
 			// bug in v2.51 ??
 			$tfStat['downTotal'] = $tfStat['size'];
