@@ -93,11 +93,41 @@ function netstatPortList() {
 			}
 			break;
 		case 2: // bsd
-			$processUser = posix_getpwuid(posix_geteuid());
-			$webserverUser = $processUser['name'];
 			$retStr .= shell_exec($cfg['bin_sockstat']." -4 -l | ".$cfg['bin_awk']." '/(python|transmissi|wget|nzbperl|java).+\*:[0-9]/ {split(\$6, a, \":\");print a[2]}'");
 			break;
+		case 3: // win + gnu
+			$cmd = $cfg['bin_netstat']." -a -e -f -n -p tcp | ".$cfg['bin_awk']." 'BEGIN{FS=\":\"}{print \$2}' | ".$cfg['bin_awk']." '\$1>=1 {print \$1}'"; // | sort -n
+			$retStr = shell_exec($cmd);
+			break;
 	}
+	return $retStr;
+}
+
+/**
+ * netstatPortListBetween
+ *
+ * @param int min port
+ * @param int max port
+ * @return string
+ */
+function netstatPortListBetween($min=1, $max=65535) {
+	global $cfg;
+	$retStr = "";
+
+	switch ($cfg["_OS"]) {
+	case 1: // Linux
+		$cmd = $cfg['bin_netstat']." -a -e -l -p --tcp --numeric-hosts --numeric-ports 2> /dev/null | ".$cfg['bin_awk']." '{print \$4}' | ".$cfg['bin_awk']." 'BEGIN{FS=\":\"}{print \$4}' | ".$cfg['bin_awk']."  '\$1<=".intval($max)." && \$1>=".intval($min)."'";
+		$retStr = shell_exec($cmd);
+		break;
+	case 2: // MacOSX Lion: netstat -a -n -p tcp | awk '/\.([0-9]+) / {n=split($4,a,"."); print a[n]}'
+		$cmd = $cfg['bin_netstat']." -a -n -p tcp 2>/dev/null | ".$cfg['bin_awk']." '/\.([0-9]+) / {n=split(\$4,a,\".\"); print a[n]}'| ".$cfg['bin_awk']." '\$1<=".intval($max)." && \$1>=".intval($min)."'";
+		break;
+	case 3: // win (with gnu)
+		$cmd = $cfg['bin_netstat']." -a -e -f -n -p tcp | ".$cfg['bin_awk']." 'BEGIN{FS=\":\"}{print \$2}' | ".$cfg['bin_awk']." '\$1<=".intval($max)." && \$1>=".intval($min)." {print \$1}'"; // | sort -n
+		$retStr = shell_exec($cmd);
+		break;
+	}
+
 	return $retStr;
 }
 
