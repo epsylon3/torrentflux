@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -28,91 +26,97 @@ class FluxdMaintenance extends FluxdServiceMod
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return FluxdMaintenance
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return FluxdMaintenance
+	 */
+	public static function getInstance()
+	{
 		global $instanceFluxdMaintenance;
 		// initialize if needed
 		if (!isset($instanceFluxdMaintenance))
 			FluxdMaintenance::initialize();
 		return $instanceFluxdMaintenance;
-    }
+	}
 
-    /**
-     * initialize FluxdMaintenance.
-     */
-    function initialize() {
-    	global $instanceFluxdMaintenance;
-    	// create instance
-    	if (!isset($instanceFluxdMaintenance))
-    		$instanceFluxdMaintenance = new FluxdMaintenance();
-    }
+	/**
+	 * initialize FluxdMaintenance.
+	 */
+	public static function initialize()
+	{
+		global $instanceFluxdMaintenance;
+		// create instance
+		if (!isset($instanceFluxdMaintenance))
+			$instanceFluxdMaintenance = new FluxdMaintenance();
+	}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-    function getState() {
+	public static function getState()
+	{
 		global $instanceFluxdMaintenance;
 		return (isset($instanceFluxdMaintenance))
 			? $instanceFluxdMaintenance->state
 			: FLUXDMOD_STATE_NULL;
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	public static function getMessages()
+	{
 		global $instanceFluxdMaintenance;
 		return (isset($instanceFluxdMaintenance))
 			? $instanceFluxdMaintenance->messages
 			: array();
-    }
+	}
 
 	/**
 	 * getModState
 	 *
 	 * @return state
 	 */
-	function getModState() {
+	public static function getModState()
+	{
 		global $instanceFluxdMaintenance;
 		return (isset($instanceFluxdMaintenance))
 			? $instanceFluxdMaintenance->modstate
 			: FLUXDMOD_STATE_NULL;
 	}
 
-    /**
-     * isRunning
-     *
-     * @return boolean
-     */
-    function isRunning() {
+	/**
+	 * isRunning
+	 *
+	 * @return boolean
+	 */
+	public static function isRunning()
+	{
 		global $instanceFluxdMaintenance;
 		return (isset($instanceFluxdMaintenance))
 			? ($instanceFluxdMaintenance->modstate == FLUXDMOD_STATE_RUNNING)
 			: false;
-    }
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function FluxdMaintenance() {
-    	// name
-        $this->moduleName = "Maintenance";
+	/**
+	 * ctor
+	 */
+	public function __construct()
+	{
+		// name
+		$this->moduleName = "Maintenance";
 		// initialize
-        $this->instance_initialize();
-    }
+		$this->instance_initialize();
+	}
 
 }
 
-?>

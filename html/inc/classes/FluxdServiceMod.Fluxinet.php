@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -28,91 +26,97 @@ class FluxdFluxinet extends FluxdServiceMod
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return FluxdFluxinet
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return FluxdFluxinet
+	 */
+	public static function getInstance()
+	{
 		global $instanceFluxdFluxinet;
 		// initialize if needed
 		if (!isset($instanceFluxdFluxinet))
 			FluxdFluxinet::initialize();
 		return $instanceFluxdFluxinet;
-    }
+	}
 
-    /**
-     * initialize FluxdFluxinet.
-     */
-    function initialize() {
-    	global $instanceFluxdFluxinet;
-    	// create instance
-    	if (!isset($instanceFluxdFluxinet))
-    		$instanceFluxdFluxinet = new FluxdFluxinet();
-    }
+	/**
+	 * initialize FluxdFluxinet.
+	 */
+	public static function initialize()
+	{
+		global $instanceFluxdFluxinet;
+		// create instance
+		if (!isset($instanceFluxdFluxinet))
+			$instanceFluxdFluxinet = new FluxdFluxinet();
+	}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-    function getState() {
+	public static function getState()
+	{
 		global $instanceFluxdFluxinet;
 		return (isset($instanceFluxdFluxinet))
 			? $instanceFluxdFluxinet->state
 			: FLUXDMOD_STATE_NULL;
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	public static function getMessages()
+	{
 		global $instanceFluxdFluxinet;
 		return (isset($instanceFluxdFluxinet))
 			? $instanceFluxdFluxinet->messages
 			: array();
-    }
+	}
 
 	/**
 	 * getModState
 	 *
 	 * @return state
 	 */
-	function getModState() {
+	public static function getModState()
+	{
 		global $instanceFluxdFluxinet;
 		return (isset($instanceFluxdFluxinet))
 			? $instanceFluxdFluxinet->modstate
 			: FLUXDMOD_STATE_NULL;
 	}
 
-    /**
-     * isRunning
-     *
-     * @return boolean
-     */
-    function isRunning() {
+	/**
+	 * isRunning
+	 *
+	 * @return boolean
+	 */
+	public static function isRunning()
+	{
 		global $instanceFluxdFluxinet;
 		return (isset($instanceFluxdFluxinet))
 			? ($instanceFluxdFluxinet->modstate == FLUXDMOD_STATE_RUNNING)
 			: false;
-    }
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function FluxdFluxinet() {
-    	// name
-        $this->moduleName = "Fluxinet";
+	/**
+	 * ctor
+	 */
+	public function __construct()
+	{
+		// name
+		$this->moduleName = "Fluxinet";
 		// initialize
-        $this->instance_initialize();
-    }
+		$this->instance_initialize();
+	}
 
 }
 
-?>

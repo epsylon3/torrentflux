@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -27,88 +25,94 @@ class FluxdRssad extends FluxdServiceMod
 	// private fields
 
 	// basedir
-	var $_basedir = ".fluxd/rssad/";
+	protected $_basedir = ".fluxd/rssad/";
 
 	// jobs-delim
-	var $_delimJobs = "|";
+	protected $_delimJobs = "|";
 
 	// job-delim
-	var $_delimJob = "#";
+	protected $_delimJob = "#";
 
 	// =========================================================================
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return FluxdRssad
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return FluxdRssad
+	 */
+	public static function getInstance()
+	{
 		global $instanceFluxdRssad;
 		// initialize if needed
 		if (!isset($instanceFluxdRssad))
 			FluxdRssad::initialize();
 		return $instanceFluxdRssad;
-    }
+	}
 
-    /**
-     * initialize FluxdRssad.
-     */
-    function initialize() {
-    	global $instanceFluxdRssad;
-    	// create instance
-    	if (!isset($instanceFluxdRssad))
-    		$instanceFluxdRssad = new FluxdRssad();
-    }
+	/**
+	 * initialize FluxdRssad.
+	 */
+	public static function initialize()
+	{
+		global $instanceFluxdRssad;
+		// create instance
+		if (!isset($instanceFluxdRssad))
+			$instanceFluxdRssad = new FluxdRssad();
+	}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-    function getState() {
+	public static function getState()
+	{
 		global $instanceFluxdRssad;
 		return (isset($instanceFluxdRssad))
 			? $instanceFluxdRssad->state
 			: FLUXDMOD_STATE_NULL;
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	public static function getMessages()
+	{
 		global $instanceFluxdRssad;
 		return (isset($instanceFluxdRssad))
 			? $instanceFluxdRssad->messages
 			: array();
-    }
+	}
 
 	/**
 	 * getModState
 	 *
 	 * @return state
 	 */
-	function getModState() {
+	public static function getModState()
+	{
 		global $instanceFluxdRssad;
 		return (isset($instanceFluxdRssad))
 			? $instanceFluxdRssad->modstate
 			: FLUXDMOD_STATE_NULL;
 	}
 
-    /**
-     * isRunning
-     *
-     * @return boolean
-     */
-    function isRunning() {
+	/**
+	 * isRunning
+	 *
+	 * @return boolean
+	 */
+	public static function isRunning()
+	{
 		global $instanceFluxdRssad;
 		return (isset($instanceFluxdRssad))
 			? ($instanceFluxdRssad->modstate == FLUXDMOD_STATE_RUNNING)
 			: false;
-    }
+	}
 
 	/**
 	 * check if filter exists
@@ -116,7 +120,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function filterExists($filtername) {
+	public static function filterExists($filtername)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_filterExists($filtername);
 	}
@@ -128,7 +133,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $new
 	 * @param boolean
 	 */
-	function filterIdCheck($id, $new = false) {
+	public static function filterIdCheck($id, $new = false)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_filterIdCheck($id, $new);
 	}
@@ -138,7 +144,8 @@ class FluxdRssad extends FluxdServiceMod
 	 *
 	 * @return filter-list as array or false on error / no files
 	 */
-	function filterGetList() {
+	public static function filterGetList()
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_filterGetList();
 	}
@@ -149,7 +156,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return filter as string or false on error / no files
 	 */
-	function filterGetContent($filtername) {
+	public static function filterGetContent($filtername)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_filterGetContent($filtername);
 	}
@@ -161,7 +169,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $content
 	 * @return boolean
 	 */
-	function filterSave($filtername, $content) {
+	public static function filterSave($filtername, $content)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_filterSave($filtername, $content);
 	}
@@ -172,7 +181,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function filterDelete($filtername) {
+	public static function filterDelete($filtername)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_filterDelete($filtername);
 	}
@@ -182,7 +192,8 @@ class FluxdRssad extends FluxdServiceMod
 	 *
 	 * @return job-list as array or false on error / no files
 	 */
-	function jobsGetList() {
+	public static function jobsGetList()
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_jobsGetList();
 	}
@@ -193,7 +204,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $jobnumber
 	 * @return job as array or false on error
 	 */
-	function jobGetContent($jobnumber) {
+	public static function jobGetContent($jobnumber)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_jobGetContent($jobnumber);
 	}
@@ -207,7 +219,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function jobAdd($savedir, $url, $filtername, $checkdir = false) {
+	public static function jobAdd($savedir, $url, $filtername, $checkdir = false)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_jobAdd($savedir, $url, $filtername, $checkdir);
 	}
@@ -221,7 +234,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function jobUpdate($jobNumber, $savedir, $url, $filtername, $checkdir = false) {
+	public static function jobUpdate($jobNumber, $savedir, $url, $filtername, $checkdir = false)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_jobUpdate($jobNumber, $savedir, $url, $filtername, $checkdir);
 	}
@@ -232,7 +246,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $jobNumber
 	 * @return boolean
 	 */
-	function jobDelete($jobNumber) {
+	public static function jobDelete($jobNumber)
+	{
 		global $instanceFluxdRssad;
 		return $instanceFluxdRssad->instance_jobDelete($jobNumber);
 	}
@@ -241,21 +256,22 @@ class FluxdRssad extends FluxdServiceMod
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function FluxdRssad() {
-    	global $cfg;
-    	// name
-        $this->moduleName = "Rssad";
+	/**
+	 * ctor
+	 */
+	public function __construct()
+	{
+		global $cfg;
+		// name
+		$this->moduleName = "Rssad";
 		// initialize
-        $this->instance_initialize();
-         // check our base-dir
-        if (!(checkDirectory($cfg["path"].$this->_basedir))) {
-        	array_push($this->messages , "Rssad base-dir ".$this->_basedir." error.");
-            $this->state = FLUXDMOD_STATE_ERROR;
-        }
-    }
+		$this->instance_initialize();
+		// check our base-dir
+		if (!(checkDirectory($cfg["path"].$this->_basedir))) {
+			array_push($this->messages , "Rssad base-dir ".$this->_basedir." error.");
+			$this->state = FLUXDMOD_STATE_ERROR;
+		}
+	}
 
 	// =========================================================================
 	// public methods
@@ -267,7 +283,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function instance_filterExists($filtername) {
+	public function instance_filterExists($filtername)
+	{
 		global $cfg;
 		// filter-file
 		$file = $cfg["path"].$this->_basedir.$filtername.".dat";
@@ -282,7 +299,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $new
 	 * @param boolean
 	 */
-	function instance_filterIdCheck($id, $new = false) {
+	public function instance_filterIdCheck($id, $new = false)
+	{
 		// sanity-checks
 		if (strpos(urldecode($id), "/") !== false)
 			return false;
@@ -302,7 +320,8 @@ class FluxdRssad extends FluxdServiceMod
 	 *
 	 * @return filter-list as array or false on error / no files
 	 */
-	function instance_filterGetList() {
+	public function instance_filterGetList()
+	{
 		global $cfg;
 		$dirFilter = $cfg["path"].$this->_basedir;
 		if (is_dir($dirFilter)) {
@@ -330,7 +349,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return filter as string or false on error / no files
 	 */
-	function instance_filterGetContent($filtername) {
+	public function instance_filterGetContent($filtername)
+	{
 		global $cfg;
 		// filter-file
 		$file = $cfg["path"].$this->_basedir.$filtername.".dat";
@@ -360,7 +380,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $content
 	 * @return boolean
 	 */
-	function instance_filterSave($filtername, $content) {
+	public function instance_filterSave($filtername, $content)
+	{
 		global $cfg;
 		// filter-file
 		$file = $cfg["path"].$this->_basedir.$filtername.".dat";
@@ -372,7 +393,7 @@ class FluxdRssad extends FluxdServiceMod
 			AuditAction($cfg["constants"]["error"], "Rssad Filter Save-Error : ".$msg);
 			return false;
 		}
-        $result = @fwrite($handle, str_replace("\r\n", "\n", $content));
+		$result = @fwrite($handle, str_replace("\r\n", "\n", $content));
 		@fclose($handle);
 		if ($result === false) {
 			$msg = "cannot write content to ".$file.".";
@@ -392,7 +413,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function instance_filterDelete($filtername) {
+	public function instance_filterDelete($filtername)
+	{
 		global $cfg;
 		$extAry = array('.dat', '.hist', '.log');
 		// count files
@@ -428,7 +450,8 @@ class FluxdRssad extends FluxdServiceMod
 	 *
 	 * @return job-list as array or false on error / no files
 	 */
-	function instance_jobsGetList() {
+	public function instance_jobsGetList()
+	{
 		global $cfg;
 		// job1|job2|job3
 		// savedir#url#filtername
@@ -462,7 +485,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $jobnumber
 	 * @return job as array or false on error
 	 */
-	function instance_jobGetContent($jobnumber) {
+	public function instance_jobGetContent($jobnumber)
+	{
 		$jobInt = intval($jobnumber);
 		if ($jobInt > 0) {
 			$jobs = $this->instance_jobsGetList();
@@ -483,7 +507,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function instance_jobAdd($savedir, $url, $filtername, $checkdir = false) {
+	public function instance_jobAdd($savedir, $url, $filtername, $checkdir = false)
+	{
 		if ((strlen($savedir) > 0) && (strlen($url) > 0) && (strlen($filtername) > 0)) {
 			$jobsString = "";
 			$jobs = $this->instance_jobsGetList();
@@ -522,7 +547,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $filtername
 	 * @return boolean
 	 */
-	function instance_jobUpdate($jobNumber, $savedir, $url, $filtername, $checkdir = false) {
+	public function instance_jobUpdate($jobNumber, $savedir, $url, $filtername, $checkdir = false)
+	{
 		if (($jobNumber > 0) && (strlen($savedir) > 0) && (strlen($url) > 0) && (strlen($filtername) > 0)) {
 			$jobs = $this->instance_jobsGetList();
 			if (($jobs !== false) && (count($jobs) > 0)) {
@@ -573,7 +599,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $jobNumber
 	 * @return boolean
 	 */
-	function instance_jobDelete($jobNumber) {
+	public function instance_jobDelete($jobNumber)
+	{
 		if ($jobNumber > 0) {
 			$jobs = $this->instance_jobsGetList();
 			if (($jobs !== false) && (count($jobs) > 0)) {
@@ -603,7 +630,7 @@ class FluxdRssad extends FluxdServiceMod
 		}
 	}
 
-    // =========================================================================
+	// =========================================================================
 	// private methods
 	// =========================================================================
 
@@ -613,7 +640,8 @@ class FluxdRssad extends FluxdServiceMod
 	 * @param $content
 	 * @return boolean
 	 */
-	function _jobsUpdate($content) {
+	protected function _jobsUpdate($content)
+	{
 		global $cfg;
 		$jobsSane = array();
 		$jobs = explode($this->_delimJobs, trim($content));
@@ -653,4 +681,3 @@ class FluxdRssad extends FluxdServiceMod
 
 }
 
-?>

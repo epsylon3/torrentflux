@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -40,11 +38,11 @@ class Xfer
 	// public fields
 
 	// stats-arrays
-	var $xfer = array();
-	var $xfer_total = array();
+	public $xfer = array();
+	public $xfer_total = array();
 
 	// newday-flag
-	var $xfer_newday = 0;
+	public $xfer_newday = 0;
 
 	// =========================================================================
 	// public static methods
@@ -55,7 +53,8 @@ class Xfer
 	 *
 	 * @return Xfer
 	 */
-	function getInstance() {
+	public static function getInstance()
+	{
 		global $instanceXfer;
 		// initialize if needed
 		if (!isset($instanceXfer))
@@ -66,7 +65,8 @@ class Xfer
 	/**
 	 * initialize Xfer.
 	 */
-	function initialize() {
+	public static function initialize()
+	{
 		global $instanceXfer;
 		// create instance
 		if (!isset($instanceXfer))
@@ -76,7 +76,8 @@ class Xfer
 	/**
 	 * init Xfer (login-task).
 	 */
-	function init() {
+	public static function init()
+	{
 		global $db;
 		// if xfer is empty, insert a zero record for today
 		$xferRecord = $db->GetRow("SELECT 1 FROM tf_xfer");
@@ -89,7 +90,8 @@ class Xfer
 	 *
 	 * @return int
 	 */
-	function getNewday() {
+	public static function getNewday()
+	{
 		global $instanceXfer;
 		return (isset($instanceXfer))
 			? $instanceXfer->xfer_newday
@@ -99,7 +101,8 @@ class Xfer
 	/**
 	 * sets new-day
 	 */
-	function setNewday() {
+	public static function setNewday()
+	{
 		global $instanceXfer, $db;
 		// initialize if needed
 		if (!isset($instanceXfer))
@@ -114,7 +117,8 @@ class Xfer
 	 *
 	 * @return array
 	 */
-	function getStats() {
+	public static function getStats()
+	{
 		global $instanceXfer;
 		return (isset($instanceXfer))
 			? $instanceXfer->xfer
@@ -126,7 +130,8 @@ class Xfer
 	 *
 	 * @return array
 	 */
-	function getStatsTotal() {
+	public static function getStatsTotal()
+	{
 		global $instanceXfer;
 		return (isset($instanceXfer))
 			? $instanceXfer->xfer_total
@@ -138,7 +143,8 @@ class Xfer
 	 *
 	 * @return array
 	 */
-	function getStatsFormatted() {
+	public static function getStatsFormatted()
+	{
 		global $cfg, $instanceXfer;
 		return array(
 			/* global */
@@ -175,7 +181,8 @@ class Xfer
 	 *
 	 * @return true or function exits with error
 	 */
-	function resetStats() {
+	public static function resetStats()
+	{
 		global $db;
 		// exec delete
 		$db->Execute("DELETE FROM tf_xfer");
@@ -193,7 +200,8 @@ class Xfer
 	 * @param $username
 	 * @return number
 	 */
-	function getUsage($username = "") {
+	public static function getUsage($username = "")
+	{
 		global $db;
 		// sql-state
 		$sql = "SELECT SUM(download / 1048576) AS download, SUM(upload / 1048576) AS upload FROM tf_xfer";
@@ -220,7 +228,8 @@ class Xfer
 	 * @param $dateEnd
 	 * @return array
 	 */
-	function getUsageByDate($username = "", $dateBegin = "", $dateEnd = "") {
+	public static function getUsageByDate($username = "", $dateBegin = "", $dateEnd = "")
+	{
 		global $db;
 		// sql-state
 		$sql = "SELECT SUM(download) AS download, SUM(upload) AS upload, date FROM tf_xfer";
@@ -248,7 +257,8 @@ class Xfer
 	 * @param $uptotal
 	 * @param $downtotal
 	 */
-	function update1($entry, $transferowner, $client, $hash, $uptotal, $downtotal) {
+	public static function update1($entry, $transferowner, $client, $hash, $uptotal, $downtotal)
+	{
 		global $instanceXfer;
 		// initialize if needed
 		if (!isset($instanceXfer))
@@ -260,7 +270,8 @@ class Xfer
 	/**
 	 * xfer update 2
 	 */
-	function update2() {
+	public static function update2()
+	{
 		global $instanceXfer;
 		// initialize if needed
 		if (!isset($instanceXfer))
@@ -276,7 +287,8 @@ class Xfer
 	 * @param $down
 	 * @param $up
 	 */
-	function save($user, $down, $up) {
+	public static function save($user, $down, $up)
+	{
 		global $db;
 		// just to be safe..
 		if (empty($down)) $down = "0";
@@ -294,8 +306,7 @@ class Xfer
 	/**
 	 * ctor
 	 */
-	function Xfer() {
-	}
+	public function __construct() {}
 
 	// =========================================================================
 	// public methods
@@ -312,7 +323,8 @@ class Xfer
 	 * @param $uptotal
 	 * @param $downtotal
 	 */
-	function instance_update1($entry, $transferowner, $client, $hash, $uptotal, $downtotal) {
+	public function instance_update1($entry, $transferowner, $client, $hash, $uptotal, $downtotal)
+	{
 		global $cfg, $db;
 		$ch = ClientHandler::getInstance($client);
 		$transferTotalsCurrent = $ch->getTransferCurrentOP($entry, $hash, $uptotal, $downtotal);
@@ -338,7 +350,8 @@ class Xfer
 	/**
 	 * xfer update 2
 	 */
-	function instance_update2() {
+	public function instance_update2()
+	{
 		global $cfg, $db;
 		//XFER: if a new day but no .stat files where found put blank entry into the
 		// DB for today to indicate accounting has been done for the new day
@@ -363,7 +376,8 @@ class Xfer
 	 * @param $start
 	 * @param $period
 	 */
-	function _getUsage($start, $period) {
+	protected function _getUsage($start, $period)
+	{
 		global $db;
 		$sql = "SELECT user_id, SUM(download) AS download, SUM(upload) AS upload FROM tf_xfer WHERE date >= ".$db->qstr($start)." AND user_id != '' GROUP BY user_id";
 		$rtnValue = $db->GetAll($sql);
@@ -373,14 +387,15 @@ class Xfer
 	}
 
 	/**
-	 *  Adds download/upload into correct usage_array (total, month, etc)
+	 * Adds download/upload into correct usage_array (total, month, etc)
 	 *
 	 * @param $user
 	 * @param $download
 	 * @param $upload
 	 * @param $period
 	 */
-	function _sumUsage($user, $download, $upload, $period) {
+	protected function _sumUsage($user, $download, $upload, $period)
+	{
 
 		if (!isset($this->xfer[$user]))
 			$this->xfer[$user] = array();
@@ -394,6 +409,7 @@ class Xfer
 
 		if (!isset($this->xfer_total[$period]))
 			$this->xfer_total[$period] = array();
+
 		$this->xfer_total[$period]['download'] = $download + (float) @ $this->xfer_total[$period]['download'];
 		$this->xfer_total[$period]['upload'] = $upload + (float) @ $this->xfer_total[$period]['upload'];
 		$this->xfer_total[$period]['total'] = ($download + $upload) + (float) @ $this->xfer_total[$period]['total'];
@@ -401,4 +417,3 @@ class Xfer
 
 }
 
-?>

@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -27,97 +25,103 @@ class FluxdWatch extends FluxdServiceMod
 	// private fields
 
 	// jobs-delim
-	var $_delimJobs = ";";
+	protected $_delimJobs = ";";
 
 	// job-delim
-	var $_delimJob = ":";
+	protected $_delimJob = ":";
 
 	// component-delim
-	var $_delimComponent = "=";
-
+	protected $_delimComponent = "=";
 
 
 	// =========================================================================
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return FluxdWatch
-     */
-    function getInstance() {
+	/**
+	 * accessor for singleton
+	 *
+	 * @return FluxdWatch
+	 */
+	public static function getInstance()
+	{
 		global $instanceFluxdWatch;
 		// initialize if needed
 		if (!isset($instanceFluxdWatch))
 			FluxdWatch::initialize();
 		return $instanceFluxdWatch;
-    }
+	}
 
-    /**
-     * initialize FluxdWatch.
-     */
-    function initialize() {
-    	global $instanceFluxdWatch;
-    	// create instance
-    	if (!isset($instanceFluxdWatch))
-    		$instanceFluxdWatch = new FluxdWatch();
-    }
+	/**
+	 * initialize FluxdWatch.
+	 */
+	public static function initialize()
+	{
+		global $instanceFluxdWatch;
+		// create instance
+		if (!isset($instanceFluxdWatch))
+			$instanceFluxdWatch = new FluxdWatch();
+	}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-    function getState() {
+	public static function getState()
+	{
 		global $instanceFluxdWatch;
 		return (isset($instanceFluxdWatch))
 			? $instanceFluxdWatch->state
 			: FLUXDMOD_STATE_NULL;
-    }
+	}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	public static function getMessages()
+	{
 		global $instanceFluxdWatch;
 		return (isset($instanceFluxdWatch))
 			? $instanceFluxdWatch->messages
 			: array();
-    }
+	}
 
 	/**
 	 * getModState
 	 *
 	 * @return state
 	 */
-	function getModState() {
+	public static function getModState()
+	{
 		global $instanceFluxdWatch;
 		return (isset($instanceFluxdWatch))
 			? $instanceFluxdWatch->modstate
 			: FLUXDMOD_STATE_NULL;
 	}
 
-    /**
-     * isRunning
-     *
-     * @return boolean
-     */
-    function isRunning() {
+	/**
+	 * isRunning
+	 *
+	 * @return boolean
+	 */
+	public static function isRunning()
+	{
 		global $instanceFluxdWatch;
 		return (isset($instanceFluxdWatch))
 			? ($instanceFluxdWatch->modstate == FLUXDMOD_STATE_RUNNING)
 			: false;
-    }
+	}
 
 	/**
 	 * get jobs-list
 	 *
 	 * @return jobs-list as array or false on error
 	 */
-	function jobsGetList() {
+	public static function jobsGetList()
+	{
 		global $instanceFluxdWatch;
 		return $instanceFluxdWatch->instance_jobsGetList();
 	}
@@ -128,7 +132,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $jobnumber
 	 * @return job as array or false on error
 	 */
-	function jobGetContent($jobnumber) {
+	public static function jobGetContent($jobnumber)
+	{
 		global $instanceFluxdWatch;
 		return $instanceFluxdWatch->instance_jobGetContent($jobnumber);
 	}
@@ -142,7 +147,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $checkdir
 	 * @return boolean
 	 */
-	function jobAdd($watchdir, $user, $profile, $checkdir = false) {
+	public static function jobAdd($watchdir, $user, $profile, $checkdir = false)
+	{
 		global $instanceFluxdWatch;
 		return $instanceFluxdWatch->instance_jobAdd($watchdir, $user, $profile, $checkdir);
 	}
@@ -157,7 +163,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $checkdir
 	 * @return boolean
 	 */
-	function jobUpdate($jobnumber, $watchdir, $user, $profile, $checkdir = false) {
+	public static function jobUpdate($jobnumber, $watchdir, $user, $profile, $checkdir = false)
+	{
 		global $instanceFluxdWatch;
 		return $instanceFluxdWatch->instance_jobUpdate($jobnumber, $watchdir, $user, $profile, $checkdir);
 	}
@@ -168,7 +175,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $jobnumber
 	 * @return boolean
 	 */
-	function jobDelete($jobnumber) {
+	public static function jobDelete($jobnumber)
+	{
 		global $instanceFluxdWatch;
 		return $instanceFluxdWatch->instance_jobDelete($jobnumber);
 	}
@@ -179,16 +187,16 @@ class FluxdWatch extends FluxdServiceMod
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function FluxdWatch() {
-    	// name
-        $this->moduleName = "Watch";
+	/**
+	 * ctor
+	 */
+	public function __construct()
+	{
+		// name
+		$this->moduleName = "Watch";
 		// initialize
-        $this->instance_initialize();
-    }
-
+		$this->instance_initialize();
+	}
 
 
 	// =========================================================================
@@ -200,7 +208,8 @@ class FluxdWatch extends FluxdServiceMod
 	 *
 	 * @return jobs-list as array or false on error
 	 */
-	function instance_jobsGetList() {
+	public function instance_jobsGetList()
+	{
 		global $cfg;
 		// Jobs: job1;job2;job3
 		// Job:  U=user:[P=profile:]D=watchdir
@@ -257,7 +266,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $jobnumber
 	 * @return job as array or false on error
 	 */
-	function instance_jobGetContent($jobnumber) {
+	public function instance_jobGetContent($jobnumber)
+	{
 		$jobInt = intval($jobnumber);
 		if ($jobInt > 0) {
 			$jobs = $this->instance_jobsGetList();
@@ -276,7 +286,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $checkdir
 	 * @return boolean
 	 */
-	function instance_jobAdd($watchdir, $user, $profile, $checkdir = false) {
+	public function instance_jobAdd($watchdir, $user, $profile, $checkdir = false)
+	{
 		if (strlen($watchdir) > 0 && strlen($user) > 0) {
 			$watchdir = checkDirPathString($watchdir);
 
@@ -321,7 +332,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $checkdir
 	 * @return boolean
 	 */
-	function instance_jobUpdate($jobnumber, $watchdir, $user, $profile, $checkdir = false) {
+	public function instance_jobUpdate($jobnumber, $watchdir, $user, $profile, $checkdir = false)
+	{
 		$jobInt = intval($jobnumber);
 		if ($jobInt > 0 && strlen($watchdir) > 0 && strlen($user) > 0) {
 			$watchdir = checkDirPathString($watchdir);
@@ -364,7 +376,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $jobnumber
 	 * @return boolean
 	 */
-	function instance_jobDelete($jobnumber) {
+	public function instance_jobDelete($jobnumber)
+	{
 		$jobInt = intval($jobnumber);
 		if ($jobInt > 0) {
 			$jobs = $this->instance_jobsGetList();
@@ -388,7 +401,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $jobs jobs-list as array (each item being a job as array)
 	 * @return string
 	 */
-	function _jobsSerialize($jobs) {
+	protected function _jobsSerialize($jobs)
+	{
 		$return = '';
 
 		foreach ($jobs as $job) {
@@ -420,7 +434,8 @@ class FluxdWatch extends FluxdServiceMod
 	 * @param $jobs jobs-list as array
 	 * @return boolean
 	 */
-	function _jobsUpdateSetting($jobs) {
+	protected function _jobsUpdateSetting($jobs)
+	{
 		global $cfg;
 
 		// build setting value
@@ -439,4 +454,3 @@ class FluxdWatch extends FluxdServiceMod
 
 }
 
-?>

@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -37,28 +35,28 @@ class Fluxd
 	// public fields
 
 	// state
-	var $state = FLUXD_STATE_NULL;
+	public $state = FLUXD_STATE_NULL;
 
 	// messages-array
-	var $messages = array();
+	public $messages = array();
 
 	// private fields
 
 	// pid
-	var $_pid = "";
+	protected $_pid = "";
 
 	// some path-vars for Fluxd
-	var $_pathDataDir = "";
-	var $_pathPidFile = "";
-	var $_pathSocket = "";
-	var $_pathLogFile = "";
-	var $_pathLogFileError = "";
+	protected $_pathDataDir = "";
+	protected $_pathPidFile = "";
+	protected $_pathSocket = "";
+	protected $_pathLogFile = "";
+	protected $_pathLogFileError = "";
 
 	// mod-list, only loaded first time it is needed
-	var $_modList = null;
+	protected $_modList = null;
 
 	// socket-timeout
-	var $_socketTimeout = 5;
+	protected $_socketTimeout = 5;
 
 	// =========================================================================
 	// public static methods
@@ -69,7 +67,8 @@ class Fluxd
 	 *
 	 * @return Fluxd
 	 */
-	function getInstance() {
+	public static function getInstance()
+	{
 		global $instanceFluxd;
 		// initialize if needed
 		if (!isset($instanceFluxd))
@@ -80,7 +79,8 @@ class Fluxd
 	/**
 	 * initialize Fluxd.
 	 */
-	function initialize() {
+	public static function initialize()
+	{
 		global $instanceFluxd;
 		// create instance
 		if (!isset($instanceFluxd))
@@ -92,7 +92,8 @@ class Fluxd
 	 *
 	 * @return int
 	 */
-	function getState() {
+	public static function getState()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->state;
 	}
@@ -102,7 +103,8 @@ class Fluxd
 	 *
 	 * @return array
 	 */
-	function getMessages() {
+	public static function getMessages()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->messages;
 	}
@@ -112,7 +114,8 @@ class Fluxd
 	 *
 	 * @return boolean
 	 */
-	function isRunning() {
+	public static function isRunning()
+	{
 		global $instanceFluxd;
 		return ($instanceFluxd->state == FLUXD_STATE_RUNNING);
 	}
@@ -122,7 +125,8 @@ class Fluxd
 	 *
 	 * @return boolean
 	 */
-	function start() {
+	public static function start()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_start();
 	}
@@ -130,7 +134,8 @@ class Fluxd
 	/**
 	 * stop
 	 */
-	function stop() {
+	public static function stop()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_stop();
 	}
@@ -140,7 +145,8 @@ class Fluxd
 	 *
 	 * @return int with pid
 	 */
-	function getPid() {
+	public static function getPid()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_getPid();
 	}
@@ -150,7 +156,8 @@ class Fluxd
 	 *
 	 * @return string
 	 */
-	function status() {
+	public static function status()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_status();
 	}
@@ -161,7 +168,8 @@ class Fluxd
 	 * @param name of service-module
 	 * @return int with mod-state
 	 */
-	function modState($mod) {
+	public static function modState($mod)
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_modState($mod);
 	}
@@ -171,7 +179,8 @@ class Fluxd
 	 *
 	 * @return array with mod-list
 	 */
-	function modList() {
+	public static function modList()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_modList();
 	}
@@ -182,7 +191,8 @@ class Fluxd
 	 * @param name of service-module
 	 * @return int with mod-state
 	 */
-	function modStatePoll($mod) {
+	public static function modStatePoll($mod)
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_modStatePoll($mod);
 	}
@@ -192,7 +202,8 @@ class Fluxd
 	 *
 	 * @return array with mod-list
 	 */
-	function modListPoll() {
+	public static function modListPoll()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_modListPoll();
 	}
@@ -202,7 +213,8 @@ class Fluxd
 	 *
 	 * @return boolean
 	 */
-	function isReadyToStart() {
+	public static function isReadyToStart()
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_isReadyToStart();
 	}
@@ -213,7 +225,8 @@ class Fluxd
 	 * @param $key, $value
 	 * @return Null
 	 */
-	function setConfig($key, $value) {
+	public static function setConfig($key, $value)
+	{
 		global $instanceFluxd;
 		$instanceFluxd->instance_setConfig($key, $value);
 	}
@@ -221,7 +234,8 @@ class Fluxd
 	/**
 	 * reloadDBCache
 	 */
-	function reloadDBCache() {
+	public static function reloadDBCache()
+	{
 		global $instanceFluxd;
 		$instanceFluxd->instance_reloadDBCache();
 	}
@@ -229,7 +243,8 @@ class Fluxd
 	/**
 	 * reloadModules
 	 */
-	function reloadModules() {
+	public static function reloadModules()
+	{
 		global $instanceFluxd;
 		$instanceFluxd->instance_reloadModules();
 	}
@@ -241,7 +256,8 @@ class Fluxd
 	 * @param $withTS
 	 * @return boolean
 	 */
-	function logMessage($message, $withTS = true) {
+	public static function logMessage($message, $withTS = true)
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_logMessage($message, $withTS);
 	}
@@ -253,7 +269,8 @@ class Fluxd
 	 * @param $withTS
 	 * @return boolean
 	 */
-	function logError($message, $withTS = true) {
+	public static function logError($message, $withTS = true)
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_logError($message, $withTS);
 	}
@@ -265,7 +282,8 @@ class Fluxd
 	 * @param $read does this command return something ?
 	 * @return string with retval or null if error
 	 */
-	function sendCommand($command, $read = 0) {
+	public static function sendCommand($command, $read = 0)
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_sendCommand($command, $read);
 	}
@@ -277,7 +295,8 @@ class Fluxd
 	 * @param $read does this command return something ?
 	 * @return string with retval or null if error
 	 */
-	function sendServiceCommand($mod, $command, $read = 0) {
+	public static function sendServiceCommand($mod, $command, $read = 0)
+	{
 		global $instanceFluxd;
 		return $instanceFluxd->instance_sendCommand('!'.$mod.':'.$command, $read);
 	}
@@ -289,7 +308,8 @@ class Fluxd
 	/**
 	 * ctor
 	 */
-	function Fluxd() {
+	public function __construct()
+	{
 		global $cfg;
 		// paths
 		$this->_pathDataDir = $cfg["path"] . '.fluxd/';
@@ -311,7 +331,8 @@ class Fluxd
 	 *
 	 * @return boolean
 	 */
-	function instance_start() {
+	public function instance_start()
+	{
 		global $cfg;
 		if ($this->state == FLUXD_STATE_RUNNING) {
 			AuditAction($cfg["constants"]["error"], "fluxd already started");
@@ -408,7 +429,8 @@ class Fluxd
 	/**
 	 * instance_stop
 	 */
-	function instance_stop() {
+	public function instance_stop()
+	{
 		global $cfg;
 		if ($this->state == FLUXD_STATE_RUNNING) {
 			AuditAction($cfg["constants"]["fluxd"], "Stopping fluxd");
@@ -447,7 +469,8 @@ class Fluxd
 	 *
 	 * @return string with pid
 	 */
-	function instance_getPid() {
+	public function instance_getPid()
+	{
 		if ($this->_pid != "") {
 			return $this->_pid;
 		} else {
@@ -461,7 +484,8 @@ class Fluxd
 	 *
 	 * @return string
 	 */
-	function instance_status() {
+	public function instance_status()
+	{
 		return ($this->state == FLUXD_STATE_RUNNING)
 			? $this->instance_sendCommand('status', 1)
 			: "";
@@ -473,7 +497,8 @@ class Fluxd
 	 * @param name of service-module
 	 * @return string with mod-state
 	 */
-	function instance_modState($mod) {
+	public function instance_modState($mod)
+	{
 		if (is_null($this->_modList))
 			$this->_modList = $this->instance_modListPoll();
 		return $this->_modList[$mod];
@@ -484,7 +509,8 @@ class Fluxd
 	 *
 	 * @return array with mod-list
 	 */
-	function instance_modList() {
+	public function instance_modList()
+	{
 		if (is_null($this->_modList))
 			$this->_modList = $this->instance_modListPoll();
 		return $this->_modList;
@@ -496,7 +522,8 @@ class Fluxd
 	 * @param name of service-module
 	 * @return string with mod-state
 	 */
-	function instance_modStatePoll($mod) {
+	public function instance_modStatePoll($mod)
+	{
 		return ($this->state == FLUXD_STATE_RUNNING)
 			? $this->instance_sendCommand('modstate '.$mod, 1)
 			: 0;
@@ -507,7 +534,8 @@ class Fluxd
 	 *
 	 * @return array with mod-list
 	 */
-	function instance_modListPoll() {
+	public function instance_modListPoll()
+	{
 		global $cfg;
 		$retVal = array();
 		// get modlist
@@ -533,7 +561,8 @@ class Fluxd
 	 *
 	 * @return boolean
 	 */
-	function instance_isReadyToStart() {
+	public function instance_isReadyToStart()
+	{
 		return ($this->state == FLUXD_STATE_RUNNING)
 			? false
 			: (!($this->instance_sendCommand('worker', 0)));
@@ -545,7 +574,8 @@ class Fluxd
 	 * @param $key, $value
 	 * @return Null
 	 */
-	function instance_setConfig($key, $value) {
+	public function instance_setConfig($key, $value)
+	{
 	   if ($this->state == FLUXD_STATE_RUNNING)
 		   $this->instance_sendCommand('set '.$key.' '.$value, 0);
 	}
@@ -553,7 +583,8 @@ class Fluxd
 	/**
 	 * instance_reloadDBCache
 	 */
-	function instance_reloadDBCache() {
+	public function instance_reloadDBCache()
+	{
 		if ($this->state == FLUXD_STATE_RUNNING)
 			$this->instance_sendCommand('reloadDBCache', 0);
 	}
@@ -561,7 +592,8 @@ class Fluxd
 	/**
 	 * instance_reloadModules
 	 */
-	function instance_reloadModules() {
+	public function instance_reloadModules()
+	{
 		if ($this->state == FLUXD_STATE_RUNNING)
 			$this->instance_sendCommand('reloadModules', 0);
 	}
@@ -573,7 +605,8 @@ class Fluxd
 	 * @param $withTS
 	 * @return boolean
 	 */
-	function instance_logMessage($message, $withTS = true) {
+	public function instance_logMessage($message, $withTS = true)
+	{
 		return $this->_log($this->_pathLogFile, $message, $withTS);
 	}
 
@@ -584,7 +617,8 @@ class Fluxd
 	 * @param $withTS
 	 * @return boolean
 	 */
-	function instance_logError($message, $withTS = true) {
+	public function instance_logError($message, $withTS = true)
+	{
 		return $this->_log($this->_pathLogFileError, $message, $withTS);
 	}
 
@@ -595,7 +629,8 @@ class Fluxd
 	 * @param $read does this command return something ?
 	 * @return string with retval or null if error
 	 */
-	function instance_sendCommand($command, $read = 0) {
+	public function instance_sendCommand($command, $read = 0)
+	{
 		if ($this->state == FLUXD_STATE_RUNNING) {
 			// create socket
 			$socket = @socket_create(AF_UNIX, SOCK_STREAM, 0);
@@ -658,7 +693,8 @@ class Fluxd
 	 *
 	 * @return boolean
 	 */
-	function _isRunning() {
+	protected function _isRunning()
+	{
 		return file_exists($this->_pathPidFile);
 	}
 
@@ -670,7 +706,8 @@ class Fluxd
 	 * @param $withTS
 	 * @return boolean
 	 */
-	function _log($logFile, $message, $withTS = false) {
+	protected function _log($logFile, $message, $withTS = false)
+	{
 		$content = "";
 		if ($withTS)
 			$content .= @date("[Y/m/d - H:i:s]");
@@ -689,4 +726,3 @@ class Fluxd
 
 }
 
-?>

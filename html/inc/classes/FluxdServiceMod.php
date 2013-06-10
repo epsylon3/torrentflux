@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -31,97 +29,98 @@ class FluxdServiceMod
 	// public fields
 
 	// module-name
-	var $moduleName = "";
+	public $moduleName = "";
 
-    // state
-    var $state = FLUXDMOD_STATE_NULL;
+	// state
+	public $state = FLUXDMOD_STATE_NULL;
 
-    // messages-array
-    var $messages = array();
+	// messages-array
+	public $messages = array();
 
-    // modstate
-    var $modstate = FLUXDMOD_STATE_NULL;
+	// modstate
+	public $modstate = FLUXDMOD_STATE_NULL;
 
 	// =========================================================================
 	// public static methods
 	// =========================================================================
 
-    /**
-     * accessor for singleton
-     *
-     * @return FluxdServiceMod
-     */
-    function getInstance() {}
+	/**
+	 * accessor for singleton
+	 *
+	 * @return FluxdServiceMod
+	 */
+	public static function getInstance() {}
 
-    /**
-     * initialize FluxdServiceMod.
-     */
-    function initialize() {}
+	/**
+	 * initialize FluxdServiceMod.
+	 */
+	public static function initialize() {}
 
 	/**
 	 * getState
 	 *
 	 * @return state
 	 */
-	function getState() {}
+	public static function getState() {}
 
-    /**
-     * getMessages
-     *
-     * @return array
-     */
-    function getMessages() {}
+	/**
+	 * getMessages
+	 *
+	 * @return array
+	 */
+	public static function getMessages() {}
 
 	/**
 	 * getModState
 	 *
 	 * @return state
 	 */
-	function getModState() {}
+	public static function getModState() {}
 
-    /**
-     * isRunning
-     *
-     * @return boolean
-     */
-    function isRunning() {}
+	/**
+	 * isRunning
+	 *
+	 * @return boolean
+	 */
+	public static function isRunning() {}
 
-    /**
-     * initialize a Fluxd-Service-mod.
-     *
-     * @param $type
-     */
-    function initializeServiceMod($type) {
-    	global $cfg;
-    	if (in_array($type, $cfg['fluxdServiceModList'])) {
+	/**
+	 * initialize a Fluxd-Service-mod.
+	 *
+	 * @param $type
+	 */
+	public static function initializeServiceMod($type)
+	{
+		global $cfg;
+		if (in_array($type, $cfg['fluxdServiceModList'])) {
 			require_once('inc/classes/FluxdServiceMod.'.$type.'.php');
 			eval('Fluxd'.$type.'::initialize();');
-    	}
-    }
+		}
+	}
 
 	// =========================================================================
 	// ctor
 	// =========================================================================
 
-    /**
-     * ctor
-     */
-    function FluxdServiceMod() {
-        die('base class -- dont do this');
-    }
+	/**
+	 * ctor
+	 */
+	public function __construct()
+	{
+		die('base class -- dont do this');
+	}
 
 	// =========================================================================
 	// public methods
 	// =========================================================================
 
-    /**
-     * initialize the FluxdServiceMod.
-     */
-    function instance_initialize() {
-        // modstate-init
-        $this->modstate = Fluxd::modState($this->moduleName);
-    }
-
+	/**
+	 * initialize the FluxdServiceMod.
+	 */
+	public function instance_initialize()
+	{
+		// modstate-init
+		$this->modstate = Fluxd::modState($this->moduleName);
+	}
 }
 
-?>

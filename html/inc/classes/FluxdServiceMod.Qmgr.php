@@ -1,7 +1,5 @@
 <?php
 
-/* $Id$ */
-
 /*******************************************************************************
 
  LICENSE
@@ -33,7 +31,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 *
 	 * @return FluxdQmgr
 	 */
-	function getInstance() {
+	public static function getInstance()
+	{
 		global $instanceFluxdQmgr;
 		// initialize if needed
 		if (!isset($instanceFluxdQmgr))
@@ -44,7 +43,8 @@ class FluxdQmgr extends FluxdServiceMod
 	/**
 	 * initialize FluxdQmgr.
 	 */
-	function initialize() {
+	public static function initialize()
+	{
 		global $instanceFluxdQmgr;
 		// create instance
 		if (!isset($instanceFluxdQmgr))
@@ -56,7 +56,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 *
 	 * @return state
 	 */
-	function getState() {
+	public static function getState()
+	{
 		global $instanceFluxdQmgr;
 		return (isset($instanceFluxdQmgr))
 			? $instanceFluxdQmgr->state
@@ -68,7 +69,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 *
 	 * @return array
 	 */
-	function getMessages() {
+	public static function getMessages()
+	{
 		global $instanceFluxdQmgr;
 		return (isset($instanceFluxdQmgr))
 			? $instanceFluxdQmgr->messages
@@ -80,7 +82,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 *
 	 * @return state
 	 */
-	function getModState() {
+	public static function getModState()
+	{
 		global $instanceFluxdQmgr;
 		return (isset($instanceFluxdQmgr))
 			? $instanceFluxdQmgr->modstate
@@ -92,7 +95,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 *
 	 * @return boolean
 	 */
-	function isRunning() {
+	public static function isRunning()
+	{
 		global $instanceFluxdQmgr;
 		return (isset($instanceFluxdQmgr))
 			? ($instanceFluxdQmgr->modstate == FLUXDMOD_STATE_RUNNING)
@@ -105,7 +109,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $user
 	 * @return string
 	 */
-	function getQueuedTransfers($user = "") {
+	public static function getQueuedTransfers($user = "")
+	{
 		global $instanceFluxdQmgr;
 		return (isset($instanceFluxdQmgr))
 			? $instanceFluxdQmgr->instance_getQueuedTransfers($user)
@@ -118,7 +123,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $user
 	 * @return int
 	 */
-	function countQueuedTransfers($user = "") {
+	public static function countQueuedTransfers($user = "")
+	{
 		global $instanceFluxdQmgr;
 		return (isset($instanceFluxdQmgr))
 			? $instanceFluxdQmgr->instance_countQueuedTransfers($user)
@@ -131,7 +137,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $transfer
 	 * @param $user
 	 */
-	function enqueueTransfer($transfer, $user) {
+	public static function enqueueTransfer($transfer, $user)
+	{
 		global $instanceFluxdQmgr;
 		if (isset($instanceFluxdQmgr))
 			$instanceFluxdQmgr->instance_enqueueTransfer($transfer, $user);
@@ -143,7 +150,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $transfer
 	 * @param $user
 	 */
-	function dequeueTransfer($transfer, $user) {
+	public static function dequeueTransfer($transfer, $user)
+	{
 		global $instanceFluxdQmgr;
 		if (isset($instanceFluxdQmgr))
 			$instanceFluxdQmgr->instance_dequeueTransfer($transfer, $user);
@@ -156,7 +164,7 @@ class FluxdQmgr extends FluxdServiceMod
 	/**
 	 * ctor
 	 */
-	function FluxdQmgr() {
+	public function __construct() {
 		// name
 		$this->moduleName = "Qmgr";
 		// initialize
@@ -173,7 +181,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $user
 	 * @return string
 	 */
-	function instance_getQueuedTransfers($user = "") {
+	public function instance_getQueuedTransfers($user = "")
+	{
 		return ($this->modstate == FLUXDMOD_STATE_RUNNING)
 			? Fluxd::sendServiceCommand($this->moduleName, 'list-queue', 1)
 			: "";
@@ -185,7 +194,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $user
 	 * @return int
 	 */
-	function instance_countQueuedTransfers($user = "") {
+	public function instance_countQueuedTransfers($user = "")
+	{
 		return ($this->modstate == FLUXDMOD_STATE_RUNNING)
 			? Fluxd::sendServiceCommand($this->moduleName, 'count-queue', 1)
 			: 0;
@@ -197,7 +207,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $transfer
 	 * @param $user
 	 */
-	function instance_enqueueTransfer($transfer, $user) {
+	public function instance_enqueueTransfer($transfer, $user)
+	{
 		if ($this->modstate == FLUXDMOD_STATE_RUNNING) {
 			// send command
 			Fluxd::sendServiceCommand($this->moduleName, 'enqueue;'.$transfer.';'.$user, 0);
@@ -212,7 +223,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 * @param $transfer
 	 * @param $user
 	 */
-	function instance_dequeueTransfer($transfer, $user) {
+	public function instance_dequeueTransfer($transfer, $user)
+	{
 		global $cfg;
 		if ($this->modstate == FLUXDMOD_STATE_RUNNING) {
 			if (isTransferRunning($transfer)) {
@@ -242,7 +254,8 @@ class FluxdQmgr extends FluxdServiceMod
 	 *
 	 * @param $transfer
 	 */
-	function _updateStatFile($transfer) {
+	protected function _updateStatFile($transfer)
+	{
 		global $transfers;
 		$modded = 0;
 		// create sf object
@@ -282,4 +295,3 @@ class FluxdQmgr extends FluxdServiceMod
 
 }
 
-?>
