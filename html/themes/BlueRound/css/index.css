@@ -15,10 +15,9 @@ div.upload_file {
 div.upload_file div {
 	overflow:hidden;
 	width:246px;
-    white-space: nowrap;
-    direction: rtl;
+	white-space: nowrap;
+	direction: rtl;
 }
-
 div.upload_file input[type="file"] {
 	opacity: 0; filter:alpha(opacity: 0);
 	margin:0; padding:0;
@@ -41,7 +40,6 @@ input[type="text"] {
 	border-color:#ccc;
 	background-color:#fcfcfc;
 }
-
 ul.maintabs li {
 	list-style: none;
 	display: inline;
@@ -49,7 +47,6 @@ ul.maintabs li {
 	font-weight: bold;
 	padding : 8px;
 }
-
 ul.maintabs {
 	padding-top: 16px;
 	padding-bottom: 16px;
