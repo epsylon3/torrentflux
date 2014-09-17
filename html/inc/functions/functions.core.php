@@ -626,4 +626,14 @@ function GetSpeedInBytes($inValue) {
 	return ($arTemp[1] == "kB/s") ? $arTemp[0] * 1024 : $arTemp[0];
 }
 
+/**
+ * Safe Get for Array values
+ */
+function ArrayGet($arr, $key, $default=false)
+{
+	if (!isset($arr[$key]))
+		return $default;
+	return $arr[$key];
+}
+
 ?>

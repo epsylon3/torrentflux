@@ -20,6 +20,8 @@
 
 *******************************************************************************/
 
+require_once("inc/functions/functions.core.php");
+
 require_once("inc/classes/Transmission.class.php");
 
 // Transmission RPC functions
@@ -583,7 +585,6 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		}
 
 		//convertTimeText
-		require_once("inc/functions/functions.core.php");
 		foreach ($tfs as $hash => $t) {
 			if (!isset($hashes[$hash]))
 				continue;
@@ -591,7 +592,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			$transfer = $hashes[$hash];
 			$sf = new StatFile($transfer);
 
-			$sf->running      = $t['running'];
+			$sf->running      = ArrayGet($t,'running',0);
 			$sf->percent_done = round($t['percentDone'] * 100, 2);
 			if ($t['status'] == 8 || $t['status'] == 9) {
 				$sf->sharing = round($t['uploadRatio'] * 100, 2);
