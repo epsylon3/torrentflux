@@ -1,6 +1,6 @@
-<?php
+ï»¿<?php
 
-/* $Id$ */
+/* $Id: lang-polish.php 3111 2007-06-16 23:49:48Z b4rt $ */
 
 /**************************************************************************/
 /* TorrentFlux - PHP Torrent Client
@@ -22,31 +22,31 @@
 /*
 /**************************************************************************/
 
-define("_CHARSET","iso-8859-2"); // if you don't know... then leave this as is.
+define("_CHARSET","utf-8"); // if you don't know... then leave this as is.
 define("_SELECTFILE","Wybierz Metafile do wczytania");
 define("_URLFILE","Adres URL z plikiem Torrenta");
 define("_UPLOAD","Wczytaj");
 define("_GETFILE","Pobierz");
 define("_LINKS","Linki");
-define("_ONLINE","Dostêpni");
-define("_OFFLINE","Niedostêpni");
-define("_STORAGE","Zajête");
+define("_ONLINE","DostÄ™pni");
+define("_OFFLINE","NiedostÄ™pni");
+define("_STORAGE","ZajÄ™te");
 define("_DRIVESPACE","Miejce na dysku");
 define("_SERVERSTATS","Statystyki serwera / Kto");
 define("_DIRECTORYLIST","Katalog");
 define("_ALL","Wszystko");
-define("_PAGEWILLREFRESH","Strona odswie¿a siê co");
+define("_PAGEWILLREFRESH","Strona odswieÅ¼a siÄ™ co");
 define("_SECONDS","sekund");
-define("_TURNONREFRESH","W³±cz od¶wie¿anie strony");
-define("_TURNOFFREFRESH","Wy³±cz od¶wie¿anie strony");
+define("_TURNONREFRESH","WÅ‚Ä…cz odÅ›wieÅ¼anie strony");
+define("_TURNOFFREFRESH","WyÅ‚Ä…cz odÅ›wieÅ¼anie strony");
 define("_WARNING","UWAGA");
 define("_DRIVESPACEUSED","Brak miejsca na dysku!");
-define("_ADMINMESSAGE","Masz w skrzynce wiadomo¶æ od administratora");
+define("_ADMINMESSAGE","Masz w skrzynce wiadomoÅ›Ä‡ od administratora");
 define("_TORRENTS","Torrenty");
-define("_UPLOADHISTORY","Historia Przesy³ania");
-define("_MYPROFILE","Edytuj Mój Profil");
+define("_UPLOADHISTORY","Historia PrzesyÅ‚ania");
+define("_MYPROFILE","Edytuj MÃ³j Profil");
 define("_ADMINISTRATION","Administracja");
-define("_SENDMESSAGETO","Wy¶lij Wiadomo¶æ do");
+define("_SENDMESSAGETO","WyÅ›lij WiadomoÅ›Ä‡ do");
 define("_TRANSFERFILE","Plik Transfer");
 define("_FILESIZE","Rozmiar Pliku");
 define("_STATUS","Status");
@@ -55,94 +55,95 @@ define("_BADFILE","uszkodzony plik");
 define("_DATETIMEFORMAT","Y/m/d - H:i:s");
 define("_DATEFORMAT","Y/m/d");
 define("_ESTIMATEDTIME","Szacowany Czas");
-define("_DOWNLOADSPEED","Prêdko¶æ ¶ci±gania");
-define("_UPLOADSPEED","Prêdko¶æ przesy³ania");
-define("_SHARING","Udostêpnione");
-define("_USER","U¿ytkownik");
-define("_DONE","UKOÑCZONY");
+define("_DOWNLOADSPEED","PrÄ™dkoÅ›Ä‡ Å›ciÄ…gania");
+define("_UPLOADSPEED","PrÄ™dkoÅ›Ä‡ przesyÅ‚ania");
+define("_SHARING","UdostÄ™pnione");
+define("_USER","UÅ¼ytkownik");
+define("_DONE","UKOÅƒCZONY");
 define("_INCOMPLETE","NIEKOMPLETNY");
 define("_NEW","NOWY");
-define("_TRANSFERDETAILS","Szczegó³y Transfer");
+define("_TRANSFERDETAILS","SzczegÃ³Å‚y Transferu");
 define("_STOPTRANSFER","Zatrzymaj Transfer");
 define("_RUNTRANSFER","Uruchom Transfer");
-define("_SEEDTRANSFER","Udostêpnij Transfer");
-define("_DELETE","Usuñ");
+define("_SEEDTRANSFER","UdostÄ™pnij Transfer");
+define("_DELETE","UsuÅ„");
 define("_ABOUTTODELETE","Usuwasz plik");
-define("_NOTOWNER","Nie jeste¶ w³a¶cicielem tego Transfer");
-define("_MESSAGETOALL","Ta wiadomo¶æ zosta³a wys³ana do WSZYSTKICH");
-define("_HASBEENUSED","ju¿ instnieje.");
-define("_RETURNTOEDIT","Powrót do Edycji");
-define("_ADMINUSERACTIVITY","Administracja - Aktywno¶æ U¿ytkowników");
+define("_NOTOWNER","Nie jesteÅ› wÅ‚aÅ›cicielem tego Transferu");
+define("_MESSAGETOALL","Ta wiadomoÅ›Ä‡ zostaÅ‚a wysÅ‚ana do WSZYSTKICH");
+define("_TRYDIFFERENTUSERID","BÅ‚Ä…d: SprÃ³buj inne ID UÅ¼ytkownika.");
+define("_HASBEENUSED","juÅ¼ instnieje.");
+define("_RETURNTOEDIT","PowrÃ³t do Edycji");
+define("_ADMINUSERACTIVITY","Administracja - AktywnoÅ›ci UÅ¼ytkownikÃ³w");
 define("_ADMIN_MENU","admin");
-define("_ACTIVITY_MENU","aktywno¶æ");
+define("_ACTIVITY_MENU","aktywnoÅ›Ä‡");
 define("_LINKS_MENU","linki");
-define("_NEWUSER_MENU","nowy u¿ytkownik");
+define("_NEWUSER_MENU","nowy uÅ¼ytkownik");
 define("_BACKUP_MENU","kopia zapasowa");
-define("_ALLUSERS","Wszyscy U¿ytkownicy");
+define("_ALLUSERS","Wszyscy UÅ¼ytkownicy");
 define("_NORECORDSFOUND","BRAK");
 define("_SHOWPREVIOUS","Poprzednia");
-define("_SHOWMORE","Poka¿ wiêcej");
-define("_ACTIVITYSEARCH","Przeszukiwanie Aktywno¶ci");
+define("_SHOWMORE","PokaÅ¼ wiÄ™cej");
+define("_ACTIVITYSEARCH","Przeszukiwanie AktywnoÅ›ci");
 define("_FILE","Plik");
 define("_ACTION","Akcja");
 define("_SEARCH","Szukaj");
-define("_ACTIVITYLOG","Aktywno¶æ - Ostatnie");
+define("_ACTIVITYLOG","AktywnoÅ›Ä‡ - Ostatnie");
 define("_DAYS","Dni");
 define("_IP","IP");
 define("_TIMESTAMP","Data i Czas");
-define("_USERDETAILS","Szczegó³y U¿ytkownia");
+define("_USERDETAILS","SzczegÃ³Å‚y UÅ¼ytkownia");
 define("_HITS","Akcje");
-define("_UPLOADACTIVITY","Aktywno¶æ Przesy³ania");
+define("_UPLOADACTIVITY","AktywnoÅ›Ä‡ PrzesyÅ‚ania");
 define("_JOINED","Utworzony"); // header for the date when the user joined (became a member)
 define("_LASTVISIT","Logowanie"); // header for when the user last visited the site
-define("_USERSACTIVITY","Aktywno¶æ"); // used for popup to display Activity next to users name
+define("_USERSACTIVITY","AktywnoÅ›Ä‡"); // used for popup to display Activity next to users name
 define("_NORMALUSER","Normalny"); // used to describe a normal user's account type
 define("_ADMINISTRATOR","Administrator"); // used to describe an administrator's account type
 define("_SUPERADMIN","Super Admin"); // used to describe Super Admin's account type
 define("_EDIT","Edytuj");
-define("_USERADMIN","Administracja - U¿ytkownik Admin"); // title of page for user administration
-define("_EDITUSER","Edytuj U¿ytkowika");
-define("_UPLOADPARTICIPATION","Udzia³ w Przesyle");
-define("_UPLOADS","Przes³anych"); // Number of uploads a user has contributed
-define("_PERCENTPARTICIPATION","Procent Udzia³u");
-define("_PARTICIPATIONSTATEMENT","Udzia³ i Przesy³ przez ostatnie"); // ends with 15 Days
-define("_TOTALPAGEVIEWS","Liczba Od¶wie¿eñ Strony");
+define("_USERADMIN","Administracja - UÅ¼ytkownik Admin"); // title of page for user administration
+define("_EDITUSER","Edytuj UÅ¼ytkowika");
+define("_UPLOADPARTICIPATION","UdziaÅ‚ w Przesyle");
+define("_UPLOADS","PrzesÅ‚anych"); // Number of uploads a user has contributed
+define("_PERCENTPARTICIPATION","Procent UdziaÅ‚Ã³w");
+define("_PARTICIPATIONSTATEMENT","UdziaÅ‚ i PrzesyÅ‚ przez ostatnie"); // ends with 15 Days
+define("_TOTALPAGEVIEWS","Liczba Odwiedzin Strony");
 define("_THEME","Temat");
-define("_USERTYPE","Typ U¿ytkownika");
-define("_NEWPASSWORD","Nowe Has³o");
-define("_CONFIRMPASSWORD","Powtórz Has³o");
-define("_HIDEOFFLINEUSERS","Ukryj U¿ytkowników Niedostêpnych");
+define("_USERTYPE","Typ UÅ¼ytkownika");
+define("_NEWPASSWORD","Nowe HasÅ‚o");
+define("_CONFIRMPASSWORD","PowtÃ³rz HasÅ‚o");
+define("_HIDEOFFLINEUSERS","Ukryj UÅ¼ytkownikÃ³w NiedostÄ™pnych");
 define("_UPDATE","Uaktualnij");
-define("_USERIDREQUIRED","ID U¿ytkownika jest wymagane.");
-define("_PASSWORDLENGTH","Has³o musi siê sk³adaæ z 6 lub wiêcej znaków.");
-define("_PASSWORDNOTMATCH","Has³a musz± byæ identyczne.");
-define("_PLEASECHECKFOLLOWING","Sprawd¼ poni¿sze b³êdy"); // Displays errors after this statement
-define("_NEWUSER","Nowy U¿ytkownik");
-define("_PASSWORD","Has³o");
-define("_CREATE","Utwórz"); // button text to create a new user
+define("_USERIDREQUIRED","ID UÅ¼ytkownika jest wymagane.");
+define("_PASSWORDLENGTH","HasÅ‚o musi siÄ™ skÅ‚adaÄ‡ z 6 lub wiÄ™cej znakÃ³w.");
+define("_PASSWORDNOTMATCH","HasÅ‚a muszÄ… byÄ‡ identyczne.");
+define("_PLEASECHECKFOLLOWING","SprawdÅº poniÅ¼sze bÅ‚Ä™dy"); // Displays errors after this statement
+define("_NEWUSER","Nowy UÅ¼ytkownik");
+define("_PASSWORD","HasÅ‚o");
+define("_CREATE","UtwÃ³rz"); // button text to create a new user
 define("_ADMINEDITLINKS","Administracja - Edytuj Linki");
-define("_FULLURLLINK","Pe³ny URL Linka");
-define("_BACKTOPARRENT","Katalog Wy¿ej");  // indicates going back to parent directory
-define("_DOWNLOADDETAILS","Szczegó³y ¦ci±gania");
-define("_PERCENTDONE","Ukoñczono");
-define("_RETURNTOTRANSFERS","Powrót do Transfers"); // Link at the bottom of each page
+define("_FULLURLLINK","PeÅ‚ny URL Linka");
+define("_BACKTOPARRENT","Katalog WyÅ¼ej");  // indicates going back to parent directory
+define("_DOWNLOADDETAILS","SzczegÃ³Å‚y Å›ciÄ…gania");
+define("_PERCENTDONE","UkoÅ„czono");
+define("_RETURNTOTRANSFERS","PowrÃ³t do Transfers"); // Link at the bottom of each page
 define("_DATE","Data");
 define("_WROTE","zapisano");  // Used in a reply to tag what the user had writen
-define("_SENDMESSAGETITLE","Wy¶lij Wiadomo¶æ");  // Title of page
+define("_SENDMESSAGETITLE","WyÅ›lij WiadomoÅ›Ä‡");  // Title of page
 define("_TO","Do");
 define("_FROM","Od");
-define("_YOURMESSAGE","Twoja Wiadomo¶æ");
-define("_SENDTOALLUSERS","Wy¶lij do Wszystkich");
-define("_FORCEUSERSTOREAD","Wymu¶ Odebranie tej Wiadomo¶ci"); // Admin option in messaging
-define("_SEND","Wy¶lij");  // Button to send private message
+define("_YOURMESSAGE","Twoja WiadomoÅ›Ä‡");
+define("_SENDTOALLUSERS","WyÅ›lij do Wszystkich");
+define("_FORCEUSERSTOREAD","WymuÅ› Odebranie tej WiadomoÅ›ci"); // Admin option in messaging
+define("_SEND","WyÅ›lij");  // Button to send private message
 define("_PROFILE","Profil");
 define("_PROFILEUPDATEDFOR","Profil Zaktualizowany dla");  // Profile updated for 'username'
 define("_REPLY","Odpowiedz");  // popup text for reply button
-define("_MESSAGE","Wiadomo¶æ");
-define("_MESSAGES","Wiadomo¶ci");  // plural (more than one)
-define("_RETURNTOMESSAGES","Powrót do Wiadomo¶ci");
-define("_COMPOSE","Utwórz");  // As in 'Compose a message' for button
-define("_LANGUAGE","Jêzyk"); // label
+define("_MESSAGE","WiadomoÅ›Ä‡");
+define("_MESSAGES","WiadomoÅ›ci");  // plural (more than one)
+define("_RETURNTOMESSAGES","PowrÃ³t do WiadomoÅ›ci");
+define("_COMPOSE","UtwÃ³rz");  // As in 'Compose a message' for button
+define("_LANGUAGE","JÄ™zyk"); // label
 define("_CURRENTDOWNLOAD","Current Download");
 define("_CURRENTUPLOAD","Current Upload");
 define("_SERVERLOAD","Server Load");
@@ -198,7 +199,5 @@ define('_ID_CONNECTIONS','Connections');
 define('_ID_HOST','Host');
 define('_ID_HOSTS','Hosts');
 define('_ID_IMAGES','Images');
-
-include('lang-common.php');
 
 ?>
