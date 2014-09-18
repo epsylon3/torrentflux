@@ -101,7 +101,7 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 		if (!is_dir($cfg['path'].$cfg['user'])) {
 			mkdir($cfg['path'].$cfg['user'],0777);
 		}
-		
+
 		$this->command = "";
 		if (getOwner($transfer) != $cfg['user']) {
 			//directory must be changed for different users ?
@@ -112,10 +112,16 @@ class ClientHandlerTransmissionRPC extends ClientHandler
 			$this->savepath = ($cfg["enable_home_dirs"] != 0)
 				? $cfg['path'].$this->owner."/"
 				: $cfg['path'].$cfg["path_incoming"]."/";
-			
+
 			$this->command = "re-downloading to ".$this->savepath;
 			
 		} else {
+
+			// ensure savepath is correct...
+			$this->savepath = ($cfg["enable_home_dirs"] != 0)
+				? $cfg['path'].$cfg['user']."/"
+				: $cfg['path'].$cfg["path_incoming"]."/";
+
 			$this->command = "downloading to ".$this->savepath;
 		}
 
