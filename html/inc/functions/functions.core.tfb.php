@@ -118,7 +118,7 @@ function tfb_isValidTransfer($transfer) {
  * @return string
  */
 function tfb_clean_accents($inName) {
-	return remove_accents($outName);
+	return remove_accents($inName);
 }
 
 /**
@@ -219,15 +219,15 @@ function tfb_htmlencodekeepspaces($str) {
  * @return string
  */
 function tfb_shellencode($str) {
-  $str = (string)$str;
-  return isset($str) && strlen($str) > 0 ? mb_escapeshellarg($str) : "''";
+	$str = (string)$str;
+	return strlen($str) > 0 ? mb_escapeshellarg($str) : "''";
 }
 
 // http://markushedlund.com/dev-tech/php-escapeshellarg-with-unicodeutf-8-support
 // By default escapeshellarg will strip any unicode characters.
 // The code below is translated from the C source of PHP.
 function mb_escapeshellarg($arg) {
-	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+	if (isWinOS()) {
 		return '"' . str_replace(array('"', '%'), array('', ''), $arg) . '"';
 	} else {
 		return "'" . str_replace("'", "'\\''", $arg) . "'";
