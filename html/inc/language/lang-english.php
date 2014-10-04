@@ -19,7 +19,7 @@
 /* And, if you use HTML code, please double check it.
 /**************************************************************************/
 
-define("_CHARSET","iso-8859-1");  // if you don't know... then leave this as is.
+define('_CHARSET','utf-8');  // if you don't know... then leave this as is.
 
 //please edit lang-common.php for default english
 
