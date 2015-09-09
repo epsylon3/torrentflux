@@ -281,7 +281,7 @@ CREATE TABLE tf_log (
   user_id VARCHAR(32) NOT NULL default '',
   file VARCHAR(200) NOT NULL default '',
   action VARCHAR(200) NOT NULL default '',
-  ip VARCHAR(15) NOT NULL default '',
+  ip VARCHAR(46) NOT NULL default '',
   ip_resolved VARCHAR(200) NOT NULL default '',
   user_agent VARCHAR(200) NOT NULL default '',
   time VARCHAR(14) NOT NULL default '0',
@@ -295,7 +295,7 @@ CREATE TABLE tf_messages (
   from_user VARCHAR(32) NOT NULL default '',
   message TEXT,
   IsNew int(11) default NULL,
-  ip VARCHAR(15) NOT NULL default '',
+  ip VARCHAR(46) NOT NULL default '',
   time VARCHAR(14) NOT NULL default '0',
   force_read TINYINT(1) default '0',
   PRIMARY KEY  (mid)
@@ -471,7 +471,7 @@ CREATE TABLE tf_log (
   user_id VARCHAR(32) NOT NULL default '',
   file VARCHAR(200) NOT NULL default '',
   action VARCHAR(200) NOT NULL default '',
-  ip VARCHAR(15) NOT NULL default '',
+  ip VARCHAR(46) NOT NULL default '',
   ip_resolved VARCHAR(200) NOT NULL default '',
   user_agent VARCHAR(200) NOT NULL default '',
   time VARCHAR(14) NOT NULL default '0'
@@ -484,7 +484,7 @@ CREATE TABLE tf_messages (
   from_user VARCHAR(32) NOT NULL default '',
   message TEXT,
   IsNew INT(11) default NULL,
-  ip VARCHAR(15) NOT NULL default '',
+  ip VARCHAR(46) NOT NULL default '',
   time VARCHAR(14) NOT NULL default '0',
   force_read INTEGER default '0'
 )");
@@ -660,7 +660,7 @@ CREATE TABLE tf_log (
   user_id VARCHAR(32) NOT NULL DEFAULT '',
   file VARCHAR(200) NOT NULL DEFAULT '',
   action VARCHAR(200) NOT NULL DEFAULT '',
-  ip VARCHAR(15) NOT NULL DEFAULT '',
+  ip VARCHAR(46) NOT NULL DEFAULT '',
   ip_resolved VARCHAR(200) NOT NULL DEFAULT '',
   user_agent VARCHAR(200) NOT NULL DEFAULT '',
   time VARCHAR(14) NOT NULL DEFAULT '0',
@@ -675,7 +675,7 @@ CREATE TABLE tf_messages (
   from_user VARCHAR(32) NOT NULL DEFAULT '',
   message TEXT,
   IsNew INTEGER DEFAULT NULL,
-  ip VARCHAR(15) NOT NULL DEFAULT '',
+  ip VARCHAR(46) NOT NULL DEFAULT '',
   time VARCHAR(14) NOT NULL DEFAULT '0',
   force_read SMALLINT DEFAULT '0',
   PRIMARY KEY (mid)
